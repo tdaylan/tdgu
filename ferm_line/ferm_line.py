@@ -1,8 +1,3 @@
-
-# coding: utf-8
-
-# In[1]:
-
 # plotting
 import matplotlib as mpl
 mpl.use('Agg')
@@ -48,8 +43,6 @@ import tdpy.mcmc
 import cProfile, pstats, cPickle
 
 
-# In[2]:
-
 def retr_axes():
 
     reco = 8
@@ -74,8 +67,6 @@ def retr_axes():
     
     return reco, evtc, numbevtt, numbevtt, evtt, numbener, minmener, maxmener, binsener, meanener, diffener, indxener, numbside, numbpixl, apix
 
-
-# In[3]:
 
 def make_maps():
     
@@ -111,8 +102,6 @@ def make_maps():
     pool.close()
     pool.join()
 
-
-# In[4]:
 
 def make_maps_sing(indxproc):
 
@@ -150,9 +139,6 @@ def make_maps_sing(indxproc):
             cmnd = 'gtexpcube2 infile=' + live + ' outfile=' + expo + ' cmap=' + cntstemp +                 ' irfs=CALDB evtype=%03d bincalc=CENTER' % evtt[m]
             os.system(cmnd)
 
-
-
-# In[5]:
 
 def prep_maps():
     
@@ -220,8 +206,6 @@ def prep_maps():
     pf.writeto(path, expo, clobber=True)
 
 
-# In[6]:
-
 def plot_datacntsmean(thisdatacntsmean, rtag):
 
     figr, axcl = plt.subplots(numbevtt, 1, figsize=(10, 20))
@@ -238,9 +222,6 @@ def plot_datacntsmean(thisdatacntsmean, rtag):
     plt.savefig(plotpath + 'datameancnts' + rtag + '.png')
     plt.close(figr)
           
-
-
-# In[7]:
 
 def retr_datapara():
 
@@ -344,69 +325,117 @@ def defn_almcpara(typepara, cntrpara, dictpara, namepara, minmpara, maxmpara, sc
         varipara[k] = 1e-2
 
 
+def retr_aexp(scaldevi, stdv, skew, bias, slop):
 
-# In[8]:
+    
+    aexp = slop / stdv / sp.special.gamma(1. / slop) * skew / (1. + skew**2)
+    indxscalfrwd = where(scaldevi - bias > 0.)
+    indxscalback = where(scaldevi - bias <= 0.)
+    aexp[indxscalfrwd] *= exp(-(skew[indxscalfrwd] / stdv[indxscalfrwd])**slop[indxscalfrwd] * (scaldevi[indxscalfrwd] - bias[indxscalfrwd])**slop[indxscalfrwd])
+    aexp[indxscalback] *= exp(-(1. / skew[indxscalback] / stdv[indxscalback])**slop[indxscalback] * (bias[indxscalback] - scaldevi[indxscalback])**slop[indxscalback])
 
-def retr_fermedfn(enercntr, enerdevi):
-   
-    thismeanener = array([0.3, 1., 3., 10., 100.])
-    thisnumbener = thismeanener.size
+    return aexp
 
-    path = os.environ["PNTS_TRAN_DATA_PATH"] + '/irf/edisp_P8R2_SOURCE_V6_EDISP.fits'
 
-    #strgscal
-    strgformpara = ['F', 'S1', 'K1', 'BIAS', 'PINDEX1', 'S2', 'K2', 'BIAS2', 'PINDEX2']
+def retr_fermedfn(thisener, cntrener=None):
+  
+    if cntrener == None:
+        cntrener = sqrt(thisener[0] * thisener[-1])
+    enerdevi = thisener - cntrener
 
-    hdun = pf.open(path)
+    numbevtt = 4
+    indxevtt = arange(numbevtt)
+    
+    thisnumbener = thisener.size
 
-    minmenerirfn = hdun['ENERGY DISPERSION_EDISP0'].data['ENERG_LO'].flatten() * 1e-3 # [GeV]
-    maxmenerirfn = hdun['ENERGY DISPERSION_EDISP0'].data['ENERG_HI'].flatten() * 1e-3 # [GeV]
-    meanenerirfn = sqrt(minmenerirfn * maxmenerirfn)
+    ctht = linspace(0.7, 1., 20)
 
-    global numbformpara, numbscalpara, formpara, scalpara, scalfact
+    path = os.environ["PCAT_DATA_PATH"] + '/irf/edisp_P8R2_SOURCE_V6_EDISP.fits'
+
+    #strgformpara = ['F', 'S1', 'K1', 'BIAS', 'PINDEX1', 'S2', 'K2', 'BIAS2', 'PINDEX2']
+    strgformpara = ['F', 'S1', 'S2', 'K1', 'K2', 'BIAS', 'BIAS2', 'PINDEX1', 'PINDEX2']
+
+    listhdun = pf.open(path)
+
+    numbctht = 8
     numbformpara = 9
     numbscalpara = 6
-    formpara = zeros((thisnumbener, numbevtt, numbformpara))
+    frac = zeros((thisnumbener, numbctht, numbevtt))
+    stdv = zeros((2, thisnumbener, numbctht, numbevtt))
+    skew = zeros((2, thisnumbener, numbctht, numbevtt))
+    bias = zeros((2, thisnumbener, numbctht, numbevtt))
+    slop = zeros((2, thisnumbener, numbctht, numbevtt))
     scalpara = zeros((numbevtt, numbscalpara))
     for m in indxevtt:
-        for k in range(numbformpara):
-            formparatemp = hdun['ENERGY DISPERSION_EDISP0'].data[strgformpara[k]].squeeze()
-            formpara[:, m, k] = interp(thismeanener, meanenerirfn, mean(formparatemp, 0))
-        scalpara[m, :] = hdun['EDISP_SCALING_PARAMS_EDISP0'].data['EDISPSCALE']
-
-            
-    scalfact = scalpara[0] * log(meanener[:, None])**2 +             scalpara[1] * cos(thet[None, :])**2 +             scalpara[2] * log(meanener[:, None]) +             scalpara[3] * cos(thetthet[None, :]) +             scalpara[4] * log(meanener[:, None]) * cos(thetthet[None, :]) +             scalpara[5]
-            
-    scaldevi = enerdevi[:, None] / meanener[:, None] / scaldevi
-    # convert N_tail to f_core
-    for m in indxevtt:
-        for i in indxener:
-            fermform[i, m, 1] = retr_anglfromscal(fermform[i, m, 1], i, m) # [rad]
-            fermform[i, m, 3] = retr_anglfromscal(fermform[i, m, 3], i, m) # [rad]
-            fermform[i, m, 0] = 1. / (1. + fermform[i, m, 0] * fermform[i, m, 3]**2 / fermform[i, m, 1]**2)
-    
-    # store the fermi PSF parameters
-    for m in indxevtt:
-        for k in range(nfermformpara):
-            fermpsfipara[m*nfermformpara*numbener+indxener*nfermformpara+k] = fermform[:, m, k]
         
-    frac = fermform[:, :, 0]
-    sigc = fermform[:, :, 1]
-    gamc = fermform[:, :, 2]
-    sigt = fermform[:, :, 3]
-    gamt = fermform[:, :, 4]
-    
-    psfn = retr_doubking(angldisp[None, :, None], frac[:, None, :], sigc[:, None, :], gamc[:, None, :],                          sigt[:, None, :], gamt[:, None, :])
+        # form parameters
+        ## get HDU
+        hdun = listhdun['ENERGY DISPERSION_EDISP%d' % m]
+
+        ## get energy and angle axes
+        if m == 0:
+            minmcthtirfn = hdun.data['CTHETA_LO'].flatten()
+            maxmcthtirfn = hdun.data['CTHETA_HI'].flatten()
+            cthtirfn = sqrt(minmcthtirfn * maxmcthtirfn)
+            minmenerirfn = hdun.data['ENERG_LO'].flatten() * 1e-3 # [GeV]
+            maxmenerirfn = hdun.data['ENERG_HI'].flatten() * 1e-3 # [GeV]
+            meanenerirfn = sqrt(minmenerirfn * maxmenerirfn)
+          
+        ## get form parameters
+        for k in range(numbformpara):
+            formparatemp = interp1d(meanenerirfn, hdun.data[strgformpara[k]].squeeze(), axis=1)(thisener).T
+            if k == 0:
+                frac[:, :, m] = formparatemp
+            if k == 1:
+                stdv[0, :, :, m] = formparatemp
+            if k == 2:
+                stdv[1, :, :, m] = formparatemp
+            if k == 3:
+                skew[0, :, :, m] = formparatemp
+            if k == 4:
+                skew[1, :, :, m] = formparatemp
+            if k == 5:
+                bias[0, :, :, m] = formparatemp
+            if k == 6:
+                bias[1, :, :, m] = formparatemp
+            if k == 7:
+                slop[0, :, :, m] = formparatemp
+            if k == 8:
+                slop[1, :, :, m] = formparatemp
+
+        # scale parameters
+        scalpara[m, :] = listhdun['EDISP_SCALING_PARAMS_EDISP%d' % m].data['EDISPSCALE']
+
+    scalfact = scalpara[None, None, :, 0] * log(thisener[:, None, None])**2 + \
+               scalpara[None, None, :, 1] * cthtirfn[None, :, None]**2 + \
+               scalpara[None, None, :, 2] * log(thisener[:, None, None]) + \
+               scalpara[None, None, :, 3] * cthtirfn[None, :, None] + \
+               scalpara[None, None, :, 4] * log(thisener[:, None, None]) * cthtirfn[None, :, None] + \
+               scalpara[None, None, :, 5]
             
-    return psfn
+    scaldevi = enerdevi[:, None, None] / cntrener / scalfact
+    
+    edfn = frac * retr_aexp(scaldevi, stdv[0, :, :, :], skew[0, :, :, :], bias[0, :, :, :], slop[0, :, :, :]) + \
+                    (1. - frac) * retr_aexp(scaldevi, stdv[1, :, :, :], skew[1, :, :, :], bias[1, :, :, :], slop[1, :, :, :])
+  
+    edfn = mean(edfn, axis=1)
+
+    return edfn
 
 
-# In[9]:
+def plot_fermedfn():
 
-#retr_fermedfn()
+    cntrener = 60.
+    meanener = linspace(55., 65., 10)
+    fermedfn = retr_fermedfn(meanener, cntrener=cntrener)
+
+    figr, axis = plt.subplots()
+    axis.plot(meanener, fermedfn)
+    axis.set_xlabel(r'$E_\gamma$ [GeV]')
+    plt.savefig(plotpath + 'fermedfn_%.3g.png' % cntrener)
+    plt.close(figr) 
 
 
-# In[10]:
 
 def writ_maps():
 
@@ -437,22 +466,12 @@ def writ_maps():
         pf.writeto(pathexpo, expotemp, clobber=True)
 
 
-
-# In[11]:
-
-#writ_maps()
-
-
-# In[12]:
-
 def retr_linecnts(thisener, enercntr):
     
     linecnts = 1. / sqrt(2. * pi * stdvdisp[None, :]**2) *         exp(-0.5 * (thisener[:, None] - enercntr)**2 / stdvdisp[None, :]**2)
     
     return linecnts
 
-
-# In[13]:
 
 def retr_llik_ubnd(sampvarb):
     
@@ -468,8 +487,6 @@ def retr_llik_ubnd(sampvarb):
     
     return llik
 
-
-# In[14]:
 
 def retr_modlcnts(sampvarb):
     
@@ -510,8 +527,6 @@ def retr_modlcnts(sampvarb):
     return modlcnts
 
 
-# In[15]:
-
 def retr_llik(sampvarb, init=False):
     
     global swepcntr
@@ -527,9 +542,6 @@ def retr_llik(sampvarb, init=False):
     return llik, sampcalc
     
 
-
-# In[16]:
-
 def plot_enertempline():
     
     figr, axis = plt.subplots()
@@ -538,8 +550,6 @@ def plot_enertempline():
     plt.savefig(plotpath + 'enertempline_' + strgenercntr + '.png')
     plt.close(figr) 
 
-
-# In[17]:
 
 def plot_cnts(thiscnts, strg):
 
@@ -554,8 +564,6 @@ def plot_cnts(thiscnts, strg):
     plt.close(figr)
 
 
-# In[18]:
-
 def retr_numbalmc(maxmsphl):
     
     numbalmc = maxmsphl * (maxmsphl + 1) / 2 + maxmsphl + 1
@@ -568,9 +576,6 @@ def retr_numbalmp(maxmsphl, numbalmc):
     
     return numbalmp
 
-
-
-# In[19]:
 
 def plot_sphl():
 
@@ -597,10 +602,6 @@ def plot_sphl():
     plt.savefig(plotpath + 'sphl.png')
 
     
-
-
-# In[20]:
-
 def init():
     
     global reco, evtc, numbevtt, numbevtt, evtt, numbener, minmener, maxmener, binsener, meanener, diffener, indxener, numbside, numbpixl, apix
@@ -662,7 +663,11 @@ def init():
     
     global almcimag
     almcimag = zeros(numbalmc)
+   
+
     
+    plot_fermedfn()
+
     global enercntr, enertempline, modltype, strgenercntr, rtag, indxenercntr
     listindxenercntr = array([numbener / 2]) # array([58., 60., 62.])
     listenercntr = meanener[listindxenercntr]
@@ -748,34 +753,11 @@ def init():
     plt.close(figr) 
         
 
-
-# In[21]:
-
 if __name__ == '__main__':
     
     pass
 
+    #writ_maps()
     #make_maps()
     #prep_maps()
     init()
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
