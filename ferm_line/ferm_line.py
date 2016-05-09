@@ -657,7 +657,7 @@ def init():
     # common MCMC settings 
     verbtype = 1
     factthin = 1
-    numbproc = 1
+    numbproc = 10
     optiprop = True
     
     global almcimag
@@ -687,7 +687,7 @@ def init():
             namepara, strgpara, minmpara, maxmpara, scalpara, lablpara, unitpara, varindxpara, dictpara = datapara
             numbpara = len(lablpara)
 
-            numbswep = 1000 * numbpara
+            numbswep = 10000 * numbpara
             plotperd = numbswep / 10
             numbburn = numbswep / 10
             numbsamp = tdpy.mcmc.retr_numbsamp(numbswep, numbburn, factthin)
