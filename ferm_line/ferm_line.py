@@ -687,7 +687,7 @@ def init():
             namepara, strgpara, minmpara, maxmpara, scalpara, lablpara, unitpara, varindxpara, dictpara = datapara
             numbpara = len(lablpara)
 
-            numbswep = 1 * numbpara
+            numbswep = 1000 * numbpara
             plotperd = numbswep / 10
             numbburn = numbswep / 10
             numbsamp = tdpy.mcmc.retr_numbsamp(numbswep, numbburn, factthin)
