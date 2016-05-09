@@ -619,7 +619,7 @@ def init():
     extt = [-180., 180., -90., 90.]
     
     global numbalmc, maxmsphl, numbalmp
-    maxmsphl = 2
+    maxmsphl = 4
     numbalmc = retr_numbalmc(maxmsphl)
     numbalmp = retr_numbalmp(maxmsphl, numbalmc)
     
@@ -687,7 +687,7 @@ def init():
             namepara, strgpara, minmpara, maxmpara, scalpara, lablpara, unitpara, varindxpara, dictpara = datapara
             numbpara = len(lablpara)
 
-            numbswep = 10 * numbpara
+            numbswep = 10000 * numbpara
             plotperd = numbswep / 10
             numbburn = numbswep / 10
             numbsamp = tdpy.mcmc.retr_numbsamp(numbswep, numbburn, factthin)
