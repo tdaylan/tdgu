@@ -655,10 +655,10 @@ def init():
     stdvdisp = array([7., 5., 3., 1.])
    
     # common MCMC settings 
-    verbtype = 3
+    verbtype = 1
     factthin = 1
     numbproc = 1
-    optiprop = False
+    optiprop = True
     
     global almcimag
     almcimag = zeros(numbalmc)
@@ -693,12 +693,12 @@ def init():
             numbsamp = tdpy.mcmc.retr_numbsamp(numbswep, numbburn, factthin)
 
             pathmedisamp = os.environ["FERM_LINE_DATA_PATH"] + '/medisamp%s.fits' % rtag
+            thissamp = empty((numbproc, numbpara))
             if os.path.isfile(pathmedisamp):
                 print 'Loading initial sample from the previous run.'
                 thissampvarb = pf.getdata(pathmedisamp)
-                thissamp = tdpy.mcmc.cdfn_samp(thissampvarb, datapara)
+                thissamp[:] = tdpy.mcmc.cdfn_samp(thissampvarb, datapara)[None, :]
             else:
-                thissamp = empty((numbproc, numbpara))
                 if modltype == 'nullmod0' or modltype == 'altrmod0' or modltype == 'nullmod1' or modltype == 'altrmod1':
                     thissamp[:, 0:2] = rand(2 * numbproc)
                     thissamp[:, 2:] = 0.5
