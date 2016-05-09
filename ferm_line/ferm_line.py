@@ -653,19 +653,17 @@ def init():
     
     global stdvdisp
     stdvdisp = array([7., 5., 3., 1.])
-    
-    verbtype = 1
+   
+    # common MCMC settings 
+    verbtype = 3
     factthin = 1
     numbproc = 1
-
- 
-    optiprop = True
+    optiprop = False
     
     global almcimag
     almcimag = zeros(numbalmc)
     
     global enercntr, enertempline, modltype, strgenercntr, rtag, indxenercntr
-
     listindxenercntr = array([numbener / 2]) # array([58., 60., 62.])
     listenercntr = meanener[listindxenercntr]
     numbenercntr = listenercntr.size
@@ -689,7 +687,7 @@ def init():
             namepara, strgpara, minmpara, maxmpara, scalpara, lablpara, unitpara, varindxpara, dictpara = datapara
             numbpara = len(lablpara)
 
-            numbswep = 10 * numbpara
+            numbswep = 1 * numbpara
             plotperd = numbswep / 10
             numbburn = numbswep / 10
             numbsamp = tdpy.mcmc.retr_numbsamp(numbswep, numbburn, factthin)
@@ -715,7 +713,7 @@ def init():
                 numbplotside = numbpara
             
             
-            sampbund = tdpy.mcmc.mcmc_wrap(numbproc, numbswep, retr_llik, datapara, thissamp=thissamp, numbburn=numbburn, \
+            sampbund = tdpy.mcmc.init(numbproc, numbswep, retr_llik, datapara, thissamp=thissamp, numbburn=numbburn, \
                 factthin=factthin, optiprop=optiprop, verbtype=verbtype, plotpath=plotpath, rtag=rtag, numbplotside=numbplotside)
 
             listsampvarb = sampbund[0]
