@@ -473,21 +473,6 @@ def retr_linecnts(thisener, enercntr):
     return linecnts
 
 
-def retr_llik_ubnd(sampvarb):
-    
-    enercntr = sampvarb[0]
-    slopback = sampvarb[1]
-    #linewdth = sampvarb[3]
-    
-    backcntsintp = enerdata**(-slopback)
-    linecntsintp = retr_linecnts(enerdata, enercntr, normline, stdvdisp)
-    modlcntsintp = linecntsintp + backcntsintp
-    
-    llik = sum(exp(-modlcntsintp))
-    
-    return llik
-
-
 def retr_modlcnts(sampvarb):
     
     global almcimag
@@ -524,20 +509,22 @@ def retr_modlcnts(sampvarb):
         else:
             modlcnts += modlcntstemp * enertemppowr[:, None, None]
     
+    if lliktype == 'bind':
+        llik = sum(datacnts * log(modlcnts) - modlcnts)
+    else:
+        llik = sum(exp(-modlcntsintp))
+    
     return modlcnts
 
 
 def retr_llik(sampvarb, init=False):
     
-    global swepcntr
-    
     modlcnts = retr_modlcnts(sampvarb)
-    
-    llik = sum(datacnts * log(modlcnts) - modlcnts)
-    
-    swepcntr += 1
-    
-    sampcalc = []
+   
+    if lliktype == 'bind':
+        llik = sum(datacnts * log(modlcnts) - modlcnts)
+    else:
+        llik = sum(exp(-modlcntsintp))
     
     return llik, sampcalc
     
@@ -626,9 +613,11 @@ def init():
     
     plot_sphl()
     
-    global swepcntr, plotperd
-    swepcntr = 0
-
+    global sampcalc
+    sampcalc = []
+   
+    global lliktype
+    lliktype = 'bind'
 
     global modlcntstemp
     modlcntstemp = empty((numbener, numbpixl, numbevtt))
@@ -743,7 +732,6 @@ def init():
     print listlevi.T
     
     bayefact = exp(listlevi[1, :] - listlevi[0, :])
-    
     
     figr, axis = plt.subplots()
     axis.plot(listenercntr, bayefact)
