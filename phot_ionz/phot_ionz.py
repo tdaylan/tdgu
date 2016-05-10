@@ -1,19 +1,3 @@
-
-# coding: utf-8
-
-# In[70]:
-
-get_ipython().run_cell_magic(u'javascript', u'', u'IPython.OutputArea.auto_scroll_threshold = 9999;')
-
-
-# In[71]:
-
-get_ipython().magic(u'matplotlib inline')
-get_ipython().magic(u"config InlineBackend.figure_format = 'retina'")
-
-
-# In[72]:
-
 import os, time
 
 from numpy import *
@@ -25,7 +9,8 @@ from scipy.interpolate import interp1d, interp2d, RectBivariateSpline
 
 import pyfits as pf
 
-import tdpy_util
+import tdpy.util
+import tdpy.mcmc
 
 # plotting
 import matplotlib.pyplot as plt
@@ -33,8 +18,6 @@ import matplotlib as mpl
 import seaborn as sns
 sns.set(context='poster', style='ticks', color_codes=True)
 
-
-# In[73]:
 
 # determine the thermal state of the IGM due to photoheating
 ## blazar heating rate
@@ -58,7 +41,7 @@ sns.set(context='poster', style='ticks', color_codes=True)
     
 
     #if makeplot:
-    #    puc_heat_plot
+    #    plot_heat
     
     
     # density - temperature relation
@@ -82,7 +65,7 @@ sns.set(context='poster', style='ticks', color_codes=True)
     #  endfor    
 
     #if makeplot:
-    #    pucr_patch_plot 
+    #    plot_ptch 
     #
     #
     #  # thermal evolution of the IGM at the mean overdensity patch
@@ -102,12 +85,10 @@ sns.set(context='poster', style='ticks', color_codes=True)
     #  tempbl = puc_temp_solve()
     #
     #if makeplot:
-    #    puc_temp_plot 
+    #    plot_temp 
 
 
-# In[74]:
-
-def eden_egbl():
+def retr_edenegbl():
     
     path = os.environ["PHOT_IONZ_DATA_PATH"] + '/egbl.csv'
     egbldata = loadtxt(path)
@@ -126,23 +107,20 @@ def eden_egbl():
     return edenegbl
         
 
-
-def eden_cmbr():
+def retr_edencmbr():
     
     edencmbr = 8. * pi * enpi[:, None]**2 / (velolght * plnkcons)**3 / (exp(enpi[:,None] / tempcmbrnunc / boltcons / (1. + reds[None, :])) - 1.) # [1/cm^3/MeV]
     
     return edencmbr
 
 
-# In[75]:
+def plot_edot():
 
-def edot_plot():
-
-    sec2gyr = 3.171e-17 # [s/Gyrs]
+    sec2gyr = 3.171e-17 # [s/Gyrs]
     
-    ndengas = [0.01, 1., 100.] # [1/cm^3]
-    edengas = [1e-8, 1e-6, 1e-4] # [MeV/cm^3]
-    intsmag = [1e-10, 1e-8, 1e-6] # [muG]
+    ndengas = [0.01, 1., 100.] # [1/cm^3]
+    edengas = [1e-8, 1e-6, 1e-4] # [MeV/cm^3]
+    intsmag = [1e-10, 1e-8, 1e-6] # [muG]
     
     time = enel[:,None] / retr_edot(intsmag, ndengas, edenrad) * sec2gyr
     timediff = zscldif**2 / diffnor / (enel * 1e-3)**diffind
@@ -166,8 +144,6 @@ def edot_plot():
     plt.close()
 
 
-# In[76]:
-
 def retr_psec(thiswnum):
 
     q = thiswnum / 0.15
@@ -180,8 +156,6 @@ def retr_psec(thiswnum):
     
     return psec, tranfunc
 
-
-# In[77]:
 
 def retr_llik(sampvarb):
 
@@ -241,8 +215,6 @@ def retr_llik(sampvarb):
     
     return lpos, sampcalc
 
-
-# In[78]:
 
 def retr_hmfn():
       
@@ -400,8 +372,6 @@ def retr_hmfn():
     return diffnhaldiffmass, peakhght
 
 
-# In[79]:
-
 def retr_fluxphothm12():
     
     # Haardt & Madau 2012 quasar + galaxy UV/X-ray background flux
@@ -443,8 +413,6 @@ def retr_fluxphothm12():
     #phemisryd[:,1] = interpolate(phqgemis, interpol(indgen(378), enemishm, 1. * enerrydb), interpol(indgen(59), redhm, red)) 
 
 
-# In[80]:
-
 def plot_matr(ax, xdat, ydat, labl, loc=1):
     
     listlinestyl = [':', '--', '-']
@@ -464,8 +432,6 @@ def plot_matr(ax, xdat, ydat, labl, loc=1):
         line.append(plt.Line2D((0,1),(0,0), color=listcolr[l]))
     ax.legend(line, labl, loc=loc, ncol=2) 
 
-
-# In[81]:
 
 def retr_fluxphotdmat(csecvelo, csecfrac, masspart, dmatslop):
     
@@ -516,8 +482,7 @@ def retr_fluxphotdmat(csecvelo, csecfrac, masspart, dmatslop):
         for d in range(nmass):
             for c in range(nreds):
                 for m in range(nmpol):
-                    emiselechalohost[a, d, c, :, m] = csecvelohalo[d, c, :, m] / masspart**2 *                         multintp[a] * fesc[a, d, c, :] * edendmathalo[d, c, :]**2 # [1/s/cm^3/MeV]
-
+                    emiselechalohost[a, d, c, :, m] = csecvelohalo[d, c, :, m] / masspart**2 *    multintp[a] * fesc[a, d, c, :] * edendmathalo[d, c, :]**2 # [1/s/cm^3/MeV]
                     for f in range(nmass):
                         if f < d:
                             emiselechalotemp[a, d, f, c, :, m] = 0.
@@ -526,8 +491,8 @@ def retr_fluxphotdmat(csecvelo, csecfrac, masspart, dmatslop):
                   
                     emiselechalo[a, d, c, :, m] = emiselechalohost[a, d, c, :, m] + emiselechalosubh[a, d, c, :, m]
                     
-                    diffemiselechalodiffrsph[a, d, c, :, m] = 4. * pi * rsph[d, c, :]**2 *                         emiselechalo[a, d, c, :, m] * kprc2cmet**2 # [1/s/kpc/MeV]
-                    lumielechalo[a, d, c, m] =                         trapz(diffemiselechalodiffrsph[a, d, c, :, m] * kprc2cmet, rsph[d, c, :]) # [1/s/MeV]
+                    diffemiselechalodiffrsph[a, d, c, :, m] = 4. * pi * rsph[d, c, :]**2 *    emiselechalo[a, d, c, :, m] * kprc2cmet**2 # [1/s/kpc/MeV]
+                    lumielechalo[a, d, c, m] =    trapz(diffemiselechalodiffrsph[a, d, c, :, m] * kprc2cmet, rsph[d, c, :]) # [1/s/MeV]
 
     emiselechaloenel = trapz(emiselechalo, enel, axis=0) # [1/s/cm^3]
     lumielechaloenel = trapz(lumielechalo, enel, axis=0) # [1/s]
@@ -560,7 +525,7 @@ def retr_fluxphotdmat(csecvelo, csecfrac, masspart, dmatslop):
         for d in range(nmass):
             for c in range(nreds):
                 for m in range(nmpol):
-                    diffemiselecclmpdiffmass[a, :, c, m] = diffnhaldiffmass[:, c] *                         lumielechalo[a, :, c, m] / kprc2cmet**3 * (1. + reds[c])**3 # [1/cm^3/s/MeV/Msun]
+                    diffemiselecclmpdiffmass[a, :, c, m] = diffnhaldiffmass[:, c] *    lumielechalo[a, :, c, m] / kprc2cmet**3 * (1. + reds[c])**3 # [1/cm^3/s/MeV/Msun]
     emiselecclmp = trapz(diffemiselecclmpdiffmass, mass, axis=1) # [1/cm^3/s/MeV]
     emiselecclmpenel = trapz(emiselecclmp, enel, axis=0) # [1/cm^3/s]
     diffemiselecclmpdiffmassenel = trapz(diffemiselecclmpdiffmass, enel, axis=0) # [1/cm^3/s/Msun]
@@ -620,9 +585,6 @@ def retr_fluxphotdmat(csecvelo, csecfrac, masspart, dmatslop):
     
     return ionr, fluxphot
         
-
-
-# In[82]:
 
 def plot_halo():
 
@@ -715,7 +677,7 @@ def plot_halo():
     for d, axrow in enumerate(axgrd):
         for p, ax in enumerate(axrow):
             for c in range(njredslate):
-                ax.loglog(rsph[jmass[d], jredslate[c], :], emiselechaloenel[jmass[d], jredslate[c], :, p],                           label=strgredslate[c])
+                ax.loglog(rsph[jmass[d], jredslate[c], :], emiselechaloenel[jmass[d], jredslate[c], :, p],      label=strgredslate[c])
             ax.set_xlabel('$r$ [kpc]')
             if d == 0:
                 ax.set_title(strgmpol[p])
@@ -734,7 +696,7 @@ def plot_halo():
     for d, axrow in enumerate(axgrd):
         for p, ax in enumerate(axrow):
             for c in range(njredslate):
-                ax.loglog(rsph[jmass[d], jredslate[c],:], diffemiselechalodiffrsphenel[jmass[d], jredslate[c],:,p],                           label=strgredslate[c])
+                ax.loglog(rsph[jmass[d], jredslate[c],:], diffemiselechalodiffrsphenel[jmass[d], jredslate[c],:,p],      label=strgredslate[c])
             ax.set_xlabel('$r$ [kpc]')
             if d == 0:
                 ax.set_title(strgmpol[p])
@@ -856,7 +818,7 @@ def plot_elec_flux():
     fig.suptitle('Differential $e^-/e^+$ number density in the IGM', fontsize=18)
     for p, ax in enumerate(axrow):
         for c in range(njredslate):
-            ax.loglog(enel[0:nenel-1], enel[0:nenel-1] * ndenelecsavg[0:nenel-1,jredslate[c],p],                       label=strgredslate[c])
+            ax.loglog(enel[0:nenel-1], enel[0:nenel-1] * ndenelecsavg[0:nenel-1,jredslate[c],p],  label=strgredslate[c])
         ax.set_xlabel(r'$E_e$ [GeV]')
         ax.set_title(strgmpol[p])
         if p == 0:
@@ -895,9 +857,9 @@ def plot_invrcomp():
     ax.set_title('Spectrum of IC scattered CMB photons')
 
     listlabl = []
-    listlabl.append('$E_e$ = ' + tdpy_util.mexp(enel[jenel[0]] * 1e-3) + ' GeV')
-    listlabl.append('$E_e$ = ' + tdpy_util.mexp(enel[jenel[1]] * 1e-3) + ' GeV')
-    listlabl.append('$E_e$ = ' + tdpy_util.mexp(enel[jenel[2]] * 1e-3) + ' GeV')
+    listlabl.append('$E_e$ = ' + tdpy.util.mexp(enel[jenel[0]] * 1e-3) + ' GeV')
+    listlabl.append('$E_e$ = ' + tdpy.util.mexp(enel[jenel[1]] * 1e-3) + ' GeV')
+    listlabl.append('$E_e$ = ' + tdpy.util.mexp(enel[jenel[2]] * 1e-3) + ' GeV')
     listlabl.extend(strgredslate)
     
     listline = []
@@ -1078,9 +1040,6 @@ def plot_ionr():
     plt.close() 
         
 
-
-# In[83]:
-
 def retr_fluxphotexpr():
  
     name = os.environ["PHOT_IONZ_DATA_PATH"] + '/xray_background.dat'
@@ -1098,20 +1057,6 @@ def retr_fluxphotexpr():
     
     return fluxphotexpr, fluxphotexprvari, fenph
 
-
-# In[84]:
-
-def cdfn_logu(data, minmdata, maxmdata):
-    dataunit = log(data / minmdata) / log(maxmdata / minmdata)
-    return dataunit
-
-
-def icdf_logu(dataunit, minmdata, maxmdata):
-    data = minmdata * exp(dataunit * log(maxmdata / minmdata))
-    return data
-
-
-# In[85]:
 
 def retr_mocksampvarb():
     
@@ -1180,8 +1125,6 @@ def retr_datapara():
     return datapara
 
 
-# In[86]:
-
 def retr_fluxphotdmatintp(csecvelo, csecfrac, masspart, dmatslop):
     
 
@@ -1210,8 +1153,6 @@ def retr_fluxphotdmatintp(csecvelo, csecfrac, masspart, dmatslop):
     return fluxphotdmatintp
 
 
-# In[87]:
-
 def plot_sfrd():
     
     fig, ax = plt.subplots()
@@ -1225,10 +1166,6 @@ def plot_sfrd():
     plt.savefig(plotpath + 'sfrd.png')
     plt.close()
 
-    
-
-
-# In[88]:
 
 def plot_hm12(fluxphotdmat=None, listfluxphotdmat=None):
     fig, ax = plt.subplots()
@@ -1251,13 +1188,13 @@ def plot_hm12(fluxphotdmat=None, listfluxphotdmat=None):
 
     listcolr = ['b', 'g', 'r']
     for c in range(njredslate):
-        ax.loglog(enph * 1e6, enph * fluxphothm12[:, jredslate[c]],                          label='Haardt & Madau (2012), ' + strgredslate[c])
+        ax.loglog(enph * 1e6, enph * fluxphothm12[:, jredslate[c]],     label='Haardt & Madau (2012), ' + strgredslate[c])
 
         if fluxphotdmat != None:
             ax.loglog(enph * 1e6, enph * fluxphotdmat[:, jredslate[c]], label='DM, ' + strgredslate[c])
 
         if listfluxphotdmat != None:
-            tdpy_util.plot_braz(ax, enph * 1e6, enph[None, :] * listfluxphotdmat[:, :, jredslate[c]],                                 lcol=listcolr[c], alpha=0.5, dcol=listcolr[c], mcol='black')
+            tdpy.mcmc.plot_braz(ax, enph * 1e6, enph[None, :] * listfluxphotdmat[:, :, jredslate[c]],            lcol=listcolr[c], alpha=0.5, dcol=listcolr[c], mcol='black')
             
     ax.set_xlabel(r'$E_\gamma$ [eV]')
     ax.set_ylabel(r'$EdN/dE$ [1/cm$^2$/s/sr]')
@@ -1265,10 +1202,6 @@ def plot_hm12(fluxphotdmat=None, listfluxphotdmat=None):
     plt.savefig(plotpath + 'fluxphothm12.png')
     plt.close()
 
-    
-
-
-# In[89]:
 
 def init(cnfg):
     
@@ -1337,7 +1270,7 @@ def init(cnfg):
     odenrmsq8mpc = 0.83 # rms density fluctuation in spheres of radius 8/h Mpc
     psecindx = 0.96 # spectral index of the primordial power spectrum
     hubbcons = 0.704 # reduced Hubble constant
-    tempcmbrnunc = 2.725 # CMB temperature today [K]
+    tempcmbrnunc = 2.725 # CMB temperature today [K]
     shtrwgth = 0.707 # Sheth-Tormen
     shtrnorm = 0.3222 # Sheth-Tormen
     shtrindx = 0.3 # Sheth-Tormen
@@ -1440,7 +1373,7 @@ def init(cnfg):
     strgmass = []
     for d in range(njmass):
         jmass.append(argmin(abs(mass - massprox[d])))
-        strgmass.append('$M$ = ' + tdpy_util.mexp(massprox[d]) + r' $M_\odot$')
+        strgmass.append('$M$ = ' + tdpy.util.mexp(massprox[d]) + r' $M_\odot$')
 
             
     minmcden = 10**11. # [1/cm^2]
@@ -1477,7 +1410,7 @@ def init(cnfg):
     rsph = zeros((nmass, nreds, nrsph))
     for c in range(nreds):
         for d in range(nmass):             
-            rsph[d, c, :] = logspace(log10(minmrsph[d,c]), log10(maxmrsph[d,c]), nrsph) # [kpc]
+            rsph[d, c, :] = logspace(log10(minmrsph[d,c]), log10(maxmrsph[d,c]), nrsph) # [kpc]
 
     
     frph = enph / plnkcons # [Hz]
@@ -1503,10 +1436,10 @@ def init(cnfg):
         nanch = len(anchlist)
         fig, ax = plt.subplots()
         for a, anch in enumerate(anchlist):
-            multp4dm, enelscalp4dm, massp4dm = tdpy_util.retr_p4dm_spec(anch)
+            multp4dm, enelscalp4dm, massp4dm = tdpy.util.retr_p4dm_spec(anch)
             for k in range(nmasspart):
                 jmassp4dm = argmin(abs(massp4dm - masspart[k]))
-                ax.loglog(enelscalp4dm * masspart[k] * 1e-3, multp4dm[:, jmassp4dm], color=colorlist[a],                           ls=linelist[k], label=anchlabl[a] + ', ' + masspartlabl[k])
+                ax.loglog(enelscalp4dm * masspart[k] * 1e-3, multp4dm[:, jmassp4dm], color=colorlist[a],      ls=linelist[k], label=anchlabl[a] + ', ' + masspartlabl[k])
         ax.set_xlim([0.05, 1e3]) 
         ax.set_ylim([1e-1, 5e2])
         ax.set_xlabel('$E$ [GeV]')
@@ -1515,14 +1448,12 @@ def init(cnfg):
         ax.legend(ncol=4, loc=2)
         plt.savefig(plotpath + 'multp4dm.png')
         plt.close()
-
-
     
-    multp4dm, enelscalp4dm, massp4dm  = tdpy_util.retr_p4dm_spec(anch)
+    multp4dm, enelscalp4dm, massp4dm  = tdpy.util.retr_p4dm_spec(anch)
 
     #if makeplot:
-        #edot_plot
-        #galprop_plot
+        #plot_edot
+        #plot_galprop
 
     # Haardt Madau 2012 quasar and galaxy background model
     global fluxphothm12
@@ -1539,12 +1470,12 @@ def init(cnfg):
     
     # CMB energy density
     global edencmbr
-    edencmbr = eden_cmbr() # [1/cm^3/MeV]
+    edencmbr = retr_edencmbr() # [1/cm^3/MeV]
     edencmbrenpi = trapz(enpi[:, None] * edencmbr, enpi, axis=0) # [MeV/cm^3]
     
     # EGBL energy density
     global edenegbl
-    edenegbl = eden_egbl() # [1/cm^3/MeV]
+    edenegbl = retr_edenegbl() # [1/cm^3/MeV]
     edenegblenpi = trapz(enpi[:, None] * edenegbl, enpi, axis=0) # [MeV/cm^3]
     
     # Energy loss rate on EGBL
@@ -1794,12 +1725,12 @@ def init(cnfg):
     thissampvarb[1] = csecfracpivt
     thissampvarb[2] = masspartpivt
     thissampvarb[3] = dmatsloppivt
-    thissamp = tdpy_util.cdfn_samp(thissampvarb, datapara)
+    thissamp = tdpy.mcmc.cdfn_samp(thissampvarb, datapara)
 
     nsamp = (nswep - nburn) / nthin
     
 
-    sampbund = tdpy_util.mcmc(nswep, retr_llik, datapara, optiprop=optiprop,                               thissamp=thissamp, nburn=nburn,                               nthin=nthin, verbtype=verbtype,                               nsampcalc=nsampcalc, plotpath=plotpath)
+    sampbund = tdpy.mcmc.init(nswep, retr_llik, datapara, optiprop=optiprop,          thissamp=thissamp, nburn=nburn,          nthin=nthin, verbtype=verbtype,          nsampcalc=nsampcalc, plotpath=plotpath)
     
     listsampvarb = sampbund[0]
     listsamp = sampbund[1]
@@ -1822,7 +1753,7 @@ def init(cnfg):
     ax.loglog(enph[fenph] * 1e6, enph[fenph] * fluxphotexpr, label='ROSAT')
     
     ax.loglog(enph * 1e6, enph * fluxphothm12[:, 0], label='Haardt & Madau (2012)')
-    tdpy_util.plot_braz(ax, enph * 1e6, enph[None, :] * listfluxphotdmat[:, :, 0], alpha=0.5, mcol='black')
+    tdpy.mcmc.plot_braz(ax, enph * 1e6, enph[None, :] * listfluxphotdmat[:, :, 0], alpha=0.5, mcol='black')
 
     ax.set_xlabel(r'$E_\gamma$ [eV]')
     ax.set_ylabel(r'$EdN/dE$ [1/cm$^2$/s/sr]')
@@ -1832,14 +1763,12 @@ def init(cnfg):
     
     strgpara = lablpara + ' ' + unitpara
     path = os.environ["PHOT_IONZ_DATA_PATH"] + '/png/mcmc'
-    tdpy_util.plot_mcmc(listsampvarb, strgpara, scalpara=scalpara, path=path, quan=True)
+    tdpy.mcmc.plot_grid(listsampvarb, strgpara, scalpara=scalpara, path=path, quan=True)
 
     for k in range(npara):
         path = plotpath + namepara[k] + '.png'
-        tdpy_util.plot_trac(listsampvarb[:, k], strgpara[k], scalpara=scalpara[k], path=path, quan=True)
+        tdpy.mcmc.plot_trac(listsampvarb[:, k], strgpara[k], scalpara=scalpara[k], path=path, quan=True)
 
-
-# In[90]:
 
 def retr_cnfg(               datatype='inpt',               datalabl='PIXIE',               nswep=100,               nburn=None,               nthin=None,               nfreqexpr=100,               minmfreqexpr=1e9,               maxmfreqexpr=1e13,               plotperd=10000,               verbtype=1,               makeplot=False,               ):
         
@@ -1867,25 +1796,14 @@ def retr_cnfg(               datatype='inpt',               datalabl='PIXIE',   
     return cnfg
 
 
-
-# In[91]:
-
 def cnfg_nomi():
     
-    cnfg = retr_cnfg(                      nswep=100000,                      verbtype=0,                      nburn=0,                      nthin=1,                      makeplot=True                     )
+    cnfg = retr_cnfg( nswep=100000, verbtype=0, nburn=0, nthin=1, makeplot=True                     )
     
     init(cnfg)
     
 
-
-# In[92]:
-
 if __name__ == '__main__':
     
     cnfg_nomi()
-
-
-# In[ ]:
-
-
 
