@@ -360,12 +360,12 @@ def retr_fluxdeca(fluxodisgren, ampldeca, timedeca):
 
 
 def plot_llik():
-    lliktopo = zeros((nbins + 1, nbins + 1, nbins + 1, nbins + 1))
+    lliktopo = zeros((numbbins + 1, numbbins + 1, numbbins + 1, numbbins + 1))
     thissamp = zeros(numbpara)
-    for a in range(nbins + 1):
-        for b in range(nbins + 1):
-            for c in range(nbins + 1):
-                for d in range(nbins + 1):
+    for a in range(numbbins + 1):
+        for b in range(numbbins + 1):
+            for c in range(numbbins + 1):
+                for d in range(numbbins + 1):
                     thissamp[0] = binstimedeca[a]
                     thissamp[1] = binsampldeca[b]
                     thissamp[2] = binstempcmbr[c]
@@ -550,15 +550,15 @@ def plot_resi_post(freqexpr, dataflux, listresiflux,              freqmodl, list
     ax[1].errorbar(freqexpr * 1e-9, dataflux * 1e-6, ls='none',                    yerr=datafluxstdv*1e-6, xerr=datafluxstdv*1e-9,                    #label=datalabl, \
                    marker='o', markersize=5, color='k')
     
-    tdpy_util.plot_braz(ax[1], freqmodl * 1e-9, listfluxtotl * 1e-6, lcol='salmon',                         alpha=0.5, dcol='red', mcol='black')
+    tdpy.mcmc.plot_braz(ax[1], freqmodl * 1e-9, listfluxtotl * 1e-6, lcol='salmon',    alpha=0.5, dcol='red', mcol='black')
     if inclcmbrmono:
-        tdpy_util.plot_braz(ax[1], freqmodl * 1e-9, listfluxcmbr * 1e-6, lcol='lightblue',                             alpha=0.5, dcol='blue', mcol='black')
-    tdpy_util.plot_braz(ax[1], freqmodl * 1e-9, listfluxdustcold * 1e-6, lcol='lightgreen',                         alpha=0.5, dcol='green', mcol='black')
-    tdpy_util.plot_braz(ax[1], freqmodl * 1e-9, listfluxdustwarm * 1e-6, lcol='lightgreen',                         alpha=0.5, dcol='green', mcol='black')
-    tdpy_util.plot_braz(ax[1], freqmodl * 1e-9, listfluxsync * 1e-6, lcol='lightyellow',                         alpha=0.5, dcol='yellow', mcol='black')
-    tdpy_util.plot_braz(ax[1], freqmodl * 1e-9, listfluxfree * 1e-6, lcol='lightcoral',                         alpha=0.5, dcol='coral', mcol='black')
-    tdpy_util.plot_braz(ax[1], freqmodl * 1e-9, listfluxydis * 1e-6, lcol='lightyellow',                         alpha=0.5, dcol='yellow', mcol='black')
-    tdpy_util.plot_braz(ax[1], freqmodl * 1e-9, listfluxdeca * 1e-6, lcol='lightcyan',                         alpha=0.5, dcol='cyan', mcol='black')
+        tdpy.mcmc.plot_braz(ax[1], freqmodl * 1e-9, listfluxcmbr * 1e-6, lcol='lightblue',        alpha=0.5, dcol='blue', mcol='black')
+    tdpy.mcmc.plot_braz(ax[1], freqmodl * 1e-9, listfluxdustcold * 1e-6, lcol='lightgreen',    alpha=0.5, dcol='green', mcol='black')
+    tdpy.mcmc.plot_braz(ax[1], freqmodl * 1e-9, listfluxdustwarm * 1e-6, lcol='lightgreen',    alpha=0.5, dcol='green', mcol='black')
+    tdpy.mcmc.plot_braz(ax[1], freqmodl * 1e-9, listfluxsync * 1e-6, lcol='lightyellow',    alpha=0.5, dcol='yellow', mcol='black')
+    tdpy.mcmc.plot_braz(ax[1], freqmodl * 1e-9, listfluxfree * 1e-6, lcol='lightcoral',    alpha=0.5, dcol='coral', mcol='black')
+    tdpy.mcmc.plot_braz(ax[1], freqmodl * 1e-9, listfluxydis * 1e-6, lcol='lightyellow',    alpha=0.5, dcol='yellow', mcol='black')
+    tdpy.mcmc.plot_braz(ax[1], freqmodl * 1e-9, listfluxdeca * 1e-6, lcol='lightcyan',    alpha=0.5, dcol='cyan', mcol='black')
     
     ax[1].set_xscale('log')
     ax[1].set_yscale('log')
@@ -567,7 +567,7 @@ def plot_resi_post(freqexpr, dataflux, listresiflux,              freqmodl, list
     ax[1].set_ylim([1e-7, 1e4])
     ax[1].legend(loc=9, ncol=4)
 
-    tdpy_util.plot_braz(ax[0], freqexpr * 1e-9, listresiflux, lcol='lightgrey',                         alpha=0.5, dcol='darkgrey', mcol='black')
+    tdpy.mcmc.plot_braz(ax[0], freqexpr * 1e-9, listresiflux, lcol='lightgrey',    alpha=0.5, dcol='darkgrey', mcol='black')
     ax[0].set_ylabel(r'$I_\nu^{res}$ [Jy/sr]')
     ax[0].axhline(0., ls='--', color='black', alpha=0.1)
 
@@ -658,7 +658,7 @@ def retr_ydis_trac():
 
     for a in range(njenerpart):
         for f in range(njredsinpt):
-            plt.plot(freqphot[:,jenerpart[a]] * 1e-9, spec[:,jenerpart[a],jredsinpt[f]] * enerphot[:,jenerpart[a]],                      label='$E_{inj} = %.3g, z_{inp} = %.3g$' %                      (enerpart[jenerpart[a]], redsinpt[jredsinpt[f]]))
+            plt.plot(freqphot[:,jenerpart[a]] * 1e-9, spec[:,jenerpart[a],jredsinpt[f]] * enerphot[:,jenerpart[a]], label='$E_{inj} = %.3g, z_{inp} = %.3g$' % (enerpart[jenerpart[a]], redsinpt[jredsinpt[f]]))
             plt.plot(freqphot[:,jenerpart[a]] * 1e-9, specchek[:,jenerpart[a],jredsinpt[f]] * enerphot[:,jenerpart[a]], '--')
         plt.xlabel(r'$\nu_\gamma$ [GHz]')
         plt.xscale('log')
@@ -675,7 +675,7 @@ def retr_ydis_trac():
     for a in range(njenerpart):
         for c in range(njredsoutp):
             for f in range(njredsinpt):
-                plt.plot(freqphot[:,jenerpart[a]] * 1e-9, diffydisdiffreds[:,jredsinpt[f],jenerpart[a],jredsoutp[c]],                          label='$z_{out} = %.3g, E_{inj} = %.3g, z_{inp} = %.3g$' %                          (redsoutp[jredsoutp[c]], enerpart[jenerpart[a]], redsinpt[jredsinpt[f]]))
+                plt.plot(freqphot[:,jenerpart[a]] * 1e-9, diffydisdiffreds[:,jredsinpt[f],jenerpart[a],jredsoutp[c]],     label='$z_{out} = %.3g, E_{inj} = %.3g, z_{inp} = %.3g$' %     (redsoutp[jredsoutp[c]], enerpart[jenerpart[a]], redsinpt[jredsinpt[f]]))
             plt.xlabel(r'$\nu_\gamma$ [GHz]')
             plt.xscale('log')
             plt.legend(loc=10, bbox_to_anchor=[1.3,0.5])
@@ -689,7 +689,7 @@ def retr_ydis_trac():
     for a in range(njenerpart):
         for c in range(njredsoutp):
             for f in range(njredsinpt):
-                plt.plot(freqphot[:,jenerpart[a]] * 1e-9, ydis[:,jredsinpt[f],jenerpart[a],jredsoutp[c]],                          label='$z_{out} = %.3g, E_{inj} = %.3g, z_{inp} = %.3g$' %                          (redsoutp[jredsoutp[c]], enerpart[jenerpart[a]], redsinpt[jredsinpt[f]]))
+                plt.plot(freqphot[:,jenerpart[a]] * 1e-9, ydis[:,jredsinpt[f],jenerpart[a],jredsoutp[c]],     label='$z_{out} = %.3g, E_{inj} = %.3g, z_{inp} = %.3g$' %     (redsoutp[jredsoutp[c]], enerpart[jenerpart[a]], redsinpt[jredsinpt[f]]))
             plt.xlabel(r'$\nu_\gamma$ [GHz]')
             plt.xscale('log')
             plt.legend(loc=10, bbox_to_anchor=[1.3,0.5])
@@ -705,7 +705,7 @@ def retr_ydis_trac():
 def plot_cmbrtemppsec():
     
     nside = 256
-    lghp, bghp, nside, npixl, apix = tdpy_util.retr_heal(nside) 
+    lghp, bghp, nside, npixl, apix = tdpy.util.retr_heal(nside) 
 
     fname = os.environ["CMBR_DIST_DATA_PATH"] + '/dat/COM_PowerSpect_CMB-TT-loL-full_R2.01.txt'
     plnkdata = loadtxt(fname)
@@ -717,13 +717,13 @@ def plot_cmbrtemppsec():
     clhphigh = plnkdata[:, 1]
 
     flux = hp.synfast(clhphigh, nside)
-    fluxcart = tdpy_util.retr_cart(flux)
+    fluxcart = tdpy.util.retr_cart(flux)
     fig, ax = plt.subplots()
     imag = ax.imshow(fluxcart, origin='lower', cmap='Reds')
     plt.colorbar(imag, ax=ax, fraction=0.05)
 
     flux = hp.synfast(clhploww, nside)
-    fluxcart = tdpy_util.retr_cart(flux)
+    fluxcart = tdpy.util.retr_cart(flux)
     fig, ax = plt.subplots()
     imag = ax.imshow(fluxcart, origin='lower', cmap='Reds')
     plt.colorbar(imag, ax=ax, fraction=0.05)
@@ -802,9 +802,9 @@ def retr_fluxdust(thisfreq, dustodep, dustemisrati, dustpowrfrac, dustwarmindx, 
     fluxdustcoldfact = dustpowrfrac * dustemisrati * (freqmodl / 3e12)**dustcoldindx
     fluxdustwarmfact = (1. - dustpowrfrac) * (freqmodl / 3e12)**dustwarmindx
         
-    fluxdustcold = dustodep * fluxdustcoldfact * retr_plnkfunc(thisfreq, dustcoldtemp) * 1e26                            / (fluxdustcoldfact + fluxdustwarmfact)
+    fluxdustcold = dustodep * fluxdustcoldfact * retr_plnkfunc(thisfreq, dustcoldtemp) * 1e26       / (fluxdustcoldfact + fluxdustwarmfact)
         
-    fluxdustwarm = dustodep * fluxdustwarmfact * retr_plnkfunc(thisfreq, dustwarmtemp) * 1e26                            / (fluxdustcoldfact + fluxdustwarmfact)
+    fluxdustwarm = dustodep * fluxdustwarmfact * retr_plnkfunc(thisfreq, dustwarmtemp) * 1e26       / (fluxdustcoldfact + fluxdustwarmfact)
         
     fluxdust = fluxdustcold + fluxdustwarm
     
@@ -815,7 +815,7 @@ def retr_llik(sampvarb, init=False):
     
     if samptype == 'emce':
         global swepcntr, thisswepcntr
-        nextswepcntr = int(20. * swepcntr / (nswep * nwalk)) * 5
+        nextswepcntr = int(20. * swepcntr / (numbswep * nwalk)) * 5
         if nextswepcntr > thisswepcntr:
             print '%3d%% completed.' % nextswepcntr
             thisswepcntr = nextswepcntr
@@ -938,6 +938,7 @@ def retr_datapara():
     unitpara[6] = ''
     varipara[6] = 8e-6
     
+    dictpara['syncnorm'] = 7
     namepara[7] = 'syncnorm'
     minmpara[7] = 1e3
     maxmpara[7] = 1e7
@@ -946,6 +947,7 @@ def retr_datapara():
     unitpara[7] = ''
     varipara[7] = 2e-6
     
+    dictpara['syncindx'] = 8
     namepara[8] = 'syncindx'
     minmpara[8] = -1.5
     maxmpara[8] = 0.
@@ -954,6 +956,7 @@ def retr_datapara():
     unitpara[8] = ''
     varipara[8] = 8e-6
     
+    dictpara['emmefree'] = 9
     namepara[9] = 'emmefree'
     minmpara[9] = 1e0
     maxmpara[9] = 1e4
@@ -962,6 +965,7 @@ def retr_datapara():
     unitpara[9] = '[pc/cm$^6$]'
     varipara[9] = 5e-5
     
+    dictpara['tempfree'] = 10
     namepara[10] = 'tempfree'
     minmpara[10] = 1e1
     maxmpara[10] = 1e3
@@ -970,6 +974,7 @@ def retr_datapara():
     unitpara[10] = '[K]'
     varipara[10] = 1e-3
     
+    dictpara['ydisampl'] = 11
     namepara[11] = 'ydisampl'
     minmpara[11] = 1e-9
     maxmpara[11] = 1e-5
@@ -978,6 +983,7 @@ def retr_datapara():
     unitpara[11] = ''
     varipara[11] = 1e-3
     
+    dictpara['ampldeca'] = 12
     namepara[12] = 'ampldeca'
     minmpara[12] = 1e-7
     maxmpara[12] = 1e-3
@@ -986,6 +992,7 @@ def retr_datapara():
     unitpara[12] = '[eV]'
     varipara[12] = 2e-1
     
+    dictpara['timedeca'] = 13
     namepara[13] = 'timedeca'
     minmpara[13] = 1e8
     maxmpara[13] = 1e12
@@ -994,7 +1001,8 @@ def retr_datapara():
     unitpara[13] = '[s]'
     varipara[13] = 2e-1
     
-    datapara = namepara, minmpara, maxmpara, scalpara, lablpara, unitpara, varipara, dictpara
+    strgpara = lablpara + ' ' + unitpara
+    datapara = namepara, strgpara, minmpara, maxmpara, scalpara, lablpara, unitpara, varipara, dictpara
     
     return datapara
 
@@ -1022,20 +1030,20 @@ def init(cnfg):
     
     global datatype, exprtype, datalabl, verbtype, makeplot
     global datafluxstdv, dataflux, freqexpr, freqexprstdv
-    global nfreqexpr, inclcmbrmono, nswep, samptype
-    global minmfreqexpr, maxmfreqexpr, nfreqexpr, exprfluxstdvinst, exprfluxstdvfrac
+    global numbfreqexpr, inclcmbrmono, numbswep, samptype
+    global minmfreqexpr, maxmfreqexpr, numbfreqexpr, exprfluxstdvinst, exprfluxstdvfrac
     
     datatype = cnfg['datatype']
     exprtype = cnfg['exprtype']
     datalabl = cnfg['datalabl']
     
-    nswep = cnfg['nswep']
-    nburn = cnfg['nburn']
-    nthin = cnfg['nthin']
+    numbswep = cnfg['numbswep']
+    numbburn = cnfg['numbburn']
+    factthin = cnfg['factthin']
     samptype = cnfg['samptype']
     
     freqexpr = cnfg['freqexpr']
-    nfreqexpr = cnfg['nfreqexpr']
+    numbfreqexpr = cnfg['numbfreqexpr']
     minmfreqexpr = cnfg['minmfreqexpr']
     maxmfreqexpr = cnfg['maxmfreqexpr']
 
@@ -1062,7 +1070,7 @@ def init(cnfg):
     os.system(cmnd)
     
     if freqexpr == None:
-        freqexpr = logspace(log10(minmfreqexpr), log10(maxmfreqexpr), nfreqexpr) # [Hz]
+        freqexpr = logspace(log10(minmfreqexpr), log10(maxmfreqexpr), numbfreqexpr) # [Hz]
     
     global freqmodl, minmfreqmodl, maxmfreqmodl
     nfreqmodl = 1000
@@ -1076,10 +1084,10 @@ def init(cnfg):
     velolght = 3e8 # [m/s]
     mp2m = 3.1e22 # [Mpc/m]
     yr2s = 364. * 3600. * 24. # [year/s]
-    plnkcons = 6.63e-34 # [J s]
+    plnkcons = 6.63e-34 # [J s]
     boltcons = 1.38e-23 # [J/K]
     freqpivt = 1e12 # [Hz]
-    tempcmbrconc = 2.725 # Planck concordance model temperature of the CMB today [K]
+    tempcmbrconc = 2.725 # Planck concordance model temperature of the CMB today [K]
     boltconsnatu = 8.6173e-5 # Boltzmann constant [eV/K]
     massprot = 9.38e8 # [eV]
     
@@ -1151,19 +1159,19 @@ def init(cnfg):
         #plot_grnf()
         #plot_cros_plnk()
 
-    global nbins
-    nbins = 20
+    global numbbins
+    numbbins = 20
     
     global minmpara, maxmpara, scalpara, namepara, lablpara, unitpara, varipara, dictpara, indxpara, numbpara
     mocksampvarb = retr_mocksampvarb()
     datapara = retr_datapara()
-    namepara, minmpara, maxmpara, scalpara, lablpara, unitpara, varipara, dictpara = datapara
+    namepara, strgpara, minmpara, maxmpara, scalpara, lablpara, unitpara, varipara, dictpara = datapara
     numbpara = len(lablpara)
     indxpara = arange(numbpara)
     
     
     thissampvarb = copy(mocksampvarb)
-    thissamp = tdpy_util.cdfn_samp(thissampvarb, datapara)
+    thissamp = tdpy.mcmc.cdfn_samp(thissampvarb, datapara)
 
     if verbtype > 1:
         print 'thissampvarb'
@@ -1213,17 +1221,17 @@ def init(cnfg):
         
     #plot_llik()
     
-    nfreqexpr = freqexpr.size
+    numbfreqexpr = freqexpr.size
 
     # sampler setup
-    numbsamp = (nswep - nburn) / nthin
+    numbsamp = tdpy.mcmc.retr_numbsamp(numbswep, numbburn, factthin)
     nproc = 1
 
     global swepcntr
     swepcntr = 0
     
     global listflux
-    listflux = zeros((numbsamp, nfreqexpr))
+    listflux = zeros((numbsamp, numbfreqexpr))
     
     global listsampunitfull
     listsampunitfull = []
@@ -1233,6 +1241,7 @@ def init(cnfg):
     else:
         numbsampcalc = 0
 
+    numbproc = 1
     if samptype == 'emce':
         
         global thisswepcntr, nwalk
@@ -1241,11 +1250,12 @@ def init(cnfg):
         initsamp = thissampvarb[None, :] * (1. + 1e-2 * randn(nwalk * numbpara).reshape((nwalk, numbpara)))
         sampler = emcee.EnsembleSampler(nwalk, numbpara, retr_llik)
         
-        sampler.run_mcmc(initsamp, nswep)
+        sampler.run_mcmc(initsamp, numbswep)
         listsampvarb = sampler.flatchain
         
     else:
-        sampbund = tdpy_util.mcmc(nswep, retr_llik, datapara, optiprop=optiprop,                                   thissamp=thissamp, nburn=nburn,                                   nthin=nthin, verbtype=verbtype,                                   numbsampcalc=numbsampcalc, plotpath=plotpath)
+        sampbund = tdpy.mcmc.init(numbproc, numbswep, retr_llik, datapara, numbburn=numbburn, \
+                                        factthin=factthin, optiprop=optiprop, verbtype=verbtype, plotpath=plotpath, rtag=rtag)
         listsampvarb = sampbund[0]
         listsamp = sampbund[1]
         listsampcalc = sampbund[2]
@@ -1254,9 +1264,9 @@ def init(cnfg):
         listjsampvari = sampbund[5]
         
         path = plotpath + 'llik.png'
-        tdpy_util.plot_trac(listllik, 'P(D|x)', path=path, quan=True)
+        tdpy.mcmc.plot_trac(listllik, 'P(D|x)', path=path, quan=True)
 
-        binstime = linspace(0., nswep - 1., 10)
+        binstime = linspace(0., numbswep - 1., 10)
         fig, axgr = plt.subplots(7, 2, figsize=(14, 36))
         jlistaccp = where(listaccp == True)[0]
         for a, axrw in enumerate(axgr):
@@ -1310,14 +1320,6 @@ def init(cnfg):
         strgparatran[jparalogt] += 'log(' + lablpara[jparalogt] + ' / ' + lablpara[jparalogt] + r'$^{mock}$)' 
 
 
-        for k in range(numbpara):
-            path = plotpath + namepara[k] + '.png'
-            tdpy_util.plot_trac(listsampvarbtran[:, k], strgparatran[k], scalpara=scalparatran[k],                                 truepara=mocksampvarbtran[k], path=path, quan=True)
-            
-        
-        path = plotpath + 'mcmc'
-        tdpy_util.plot_mcmc(listsampvarbtran, strgparatran, truepara=mocksampvarbtran, path=path,                             scalpara=scalparatran, quan=True, nplot=numbpara)
-
         
         if savepost:
             listfluxtotl = empty((numbsamp, nfreqmodl))
@@ -1328,7 +1330,7 @@ def init(cnfg):
             listfluxfree = empty((numbsamp, nfreqmodl))
             listfluxydis = empty((numbsamp, nfreqmodl))
             listfluxdeca = empty((numbsamp, nfreqmodl))
-            listresiflux = empty((numbsamp, nfreqexpr))
+            listresiflux = empty((numbsamp, numbfreqexpr))
             for k in range(numbsamp):
                 listfluxtotl[k, :] = listsampcalc[0][k]
                 listfluxcmbr[k, :] = listsampcalc[1][k]
@@ -1349,11 +1351,11 @@ def init(cnfg):
 
 def intr_fluxdust():
     
-    nbins = 4
+    numbbins = 4
     
     logtminmdustodep = log10(minmpara[dictpara['dustodep']])
     logtmaxmdustodep = log10(maxmpara[dictpara['dustodep']])
-    ndustodep = (logtmaxmdustodep - logtminmdustodep) / nbins
+    ndustodep = (logtmaxmdustodep - logtminmdustodep) / numbbins
     
     print 'logtminmdustodep'
     print logtminmdustodep
@@ -1365,23 +1367,23 @@ def intr_fluxdust():
     
     logtminmdustemisrati = log10(minmpara[dictpara['dustemisrati']])
     logtmaxmdustemisrati = log10(maxmpara[dictpara['dustemisrati']])
-    ndustemisrati = (logtmaxmdustemisrati - logtminmdustemisrati) / nbins
+    ndustemisrati = (logtmaxmdustemisrati - logtminmdustemisrati) / numbbins
     
     minmdustpowrfrac = minmpara[dictpara['dustpowrfrac']]
     maxmdustpowrfrac = maxmpara[dictpara['dustpowrfrac']]
-    ndustpowrfrac = (maxmdustpowrfrac - minmdustpowrfrac) / nbins
+    ndustpowrfrac = (maxmdustpowrfrac - minmdustpowrfrac) / numbbins
     
     minmdustwarmindx = minmpara[dictpara['dustwarmindx']]
     maxmdustwarmindx = maxmpara[dictpara['dustwarmindx']]
-    ndustwarmindx = (maxmdustwarmindx - minmdustwarmindx) / nbins
+    ndustwarmindx = (maxmdustwarmindx - minmdustwarmindx) / numbbins
 
     minmdustwarmtemp = minmpara[dictpara['dustwarmtemp']]
     maxmdustwarmtemp = maxmpara[dictpara['dustwarmtemp']]
-    ndustwarmtemp = (maxmdustwarmtemp - minmdustwarmtemp) / nbins
+    ndustwarmtemp = (maxmdustwarmtemp - minmdustwarmtemp) / numbbins
     
     minmdustcoldindx = minmpara[dictpara['dustcoldindx']]
     maxmdustcoldindx = maxmpara[dictpara['dustcoldindx']]
-    ndustcoldindx = (maxmdustcoldindx - minmdustcoldindx) / nbins
+    ndustcoldindx = (maxmdustcoldindx - minmdustcoldindx) / numbbins
     
     temp = interact(plot_fluxdust_wrap,                     #logtdustodep=(logtminmdustodep, logtmaxmdustodep, ndustodep), \
                     #logtdustemisrati=(logtminmdustemisrati, logtmaxmdustemisrati, ndustemisrati), \
@@ -1391,8 +1393,8 @@ def intr_fluxdust():
                     dustcoldindx=(minmdustcoldindx, maxmdustcoldindx, ndustcoldindx))
 
 
-def plot_fluxdust_wrap(                        # logtdustodep, logtdustemisrati, dustpowrfrac, dustwarmindx, dustwarmtemp, \
-                       dustcoldindx):
+def plot_fluxdust_wrap(   # logtdustodep, logtdustemisrati, dustpowrfrac, dustwarmindx, dustwarmtemp, \
+  dustcoldindx):
     
     logtdustodep = -4.
     logtdustemisrati  = 1.
@@ -1406,8 +1408,8 @@ def plot_fluxdust(dustodep, dustemisrati, dustpowrfrac, dustwarmindx, dustwarmte
     
 
     fluxdust, fluxdustcold, fluxdustwarm = retr_fluxdust(freqmodl, dustodep, 
-                                                         dustemisrati, dustpowrfrac, \
-                                                         dustwarmindx, dustwarmtemp, dustcoldindx)
+                  dustemisrati, dustpowrfrac, \
+                  dustwarmindx, dustwarmtemp, dustcoldindx)
     
     fig, ax = plt.subplots(figsize=(12, 6))
     ax.loglog(freqmodl * 1e-9, 1e-6 * fluxdust, label='Total')
@@ -1432,8 +1434,8 @@ def retr_plnkflux():
 def retr_plnkfreq():
     
     freqexpr = array([3e10, 4.4e10, 7e10, 1e11, 1.43e11, 2.17e11, 3.53e11, 5.45e11, 8.57e11]) # [Hz]
-    nfreqexpr = freqexpr.size
-    freqexprstdv = empty(nfreqexpr)
+    numbfreqexpr = freqexpr.size
+    freqexprstdv = empty(numbfreqexpr)
     freqexprstdv[:3] = 0.2
     freqexprstdv[3:] = 0.33
     
@@ -1502,8 +1504,6 @@ def plot_plnktran():
     plt.show()
 
 
-# In[36]:
-
 def retr_plnktran():
     
     freq = []
@@ -1530,10 +1530,7 @@ def retr_plnktran():
     return freq, tran
     
 
-
-# In[37]:
-
-def retr_cnfg(               samptype='emce',               datatype='mock',               exprtype='pixi',               datalabl='PIXIE',               nswep=100000,               nburn=0,               nthin=1,               exprflux=None,               exprfluxstdv=None,               freqexpr=None,               nfreqexpr=None,               freqexprstdv=None,               minmfreqexpr=None,               maxmfreqexpr=None,               exprfluxstdvinst=None,               exprfluxstdvfrac=None,               inclcmbrmono=None,               plotperd=10000,               verbtype=1,               optiprop=False,               makeplot=False,               ):
+def retr_cnfg(               samptype='emce',               datatype='mock',               exprtype='pixi',               datalabl='PIXIE',               numbswep=100000,               numbburn=0,               factthin=1,               exprflux=None,               exprfluxstdv=None,               freqexpr=None,               numbfreqexpr=None,               freqexprstdv=None,               minmfreqexpr=None,               maxmfreqexpr=None,               exprfluxstdvinst=None,               exprfluxstdvfrac=None,               inclcmbrmono=None,               plotperd=10000,               verbtype=1,               optiprop=False,               makeplot=False,               ):
         
     cnfg = dict()
     
@@ -1543,14 +1540,14 @@ def retr_cnfg(               samptype='emce',               datatype='mock',    
     cnfg['datalabl'] = datalabl
 
     # sampler setup
-    cnfg['nswep'] = nswep
-    cnfg['nburn'] = nburn
-    cnfg['nthin'] = nthin
+    cnfg['numbswep'] = numbswep
+    cnfg['numbburn'] = numbburn
+    cnfg['factthin'] = factthin
     cnfg['samptype'] = samptype
 
     # frequency axis
     cnfg['freqexpr'] = freqexpr
-    cnfg['nfreqexpr'] = nfreqexpr
+    cnfg['numbfreqexpr'] = numbfreqexpr
     cnfg['minmfreqexpr'] = minmfreqexpr
     cnfg['maxmfreqexpr'] = maxmfreqexpr
     
@@ -1574,16 +1571,12 @@ def retr_cnfg(               samptype='emce',               datatype='mock',    
     return cnfg
 
 
-# In[38]:
-
 def retr_rtag():
     
-    rtag = samptype + '_%d_%03.1f_%03.1f_%03.1f_%03.1f' % (nfreqexpr, log10(minmfreqexpr), log10(maxmfreqexpr),                                        log10(exprfluxstdvinst * 1e3), -log10(exprfluxstdvfrac))
+    rtag = samptype + '_%d_%03.1f_%03.1f_%03.1f_%03.1f' % (numbfreqexpr, log10(minmfreqexpr), log10(maxmfreqexpr), log10(exprfluxstdvinst * 1e3), -log10(exprfluxstdvfrac))
   
     return rtag
 
-
-# In[39]:
 
 def chek_plnk():
     
@@ -1594,10 +1587,10 @@ def chek_plnk():
     freqexpr, freqexprstdv, exprfluxstdvinst, exprfluxstdvfrac = retr_plnkfreq()
 
     freqtran, tran = retr_plnktran()
-    nfreqexpr = freqexpr.size
+    numbfreqexpr = freqexpr.size
 
-    #bolo = empty(nfreqexpr)
-    #for i in range(nfreqexpr):
+    #bolo = empty(numbfreqexpr)
+    #for i in range(numbfreqexpr):
     #    bolo[i] = trapz(tran[i][1:] * exprflux[0, i] * freqexpr[i] / freqtran[i][1:], freqtran[i][1:])
     #    plt.loglog(freqtran[i] * 1e-9, tran[i])  
     #plt.show()
@@ -1614,8 +1607,6 @@ def chek_plnk():
     plt.show()
 
 
-# In[40]:
-
 def plot_cros_plnk():
 
     plnkflux, plnkfluxstdv = retr_plnkflux()
@@ -1627,11 +1618,8 @@ def plot_cros_plnk():
         strgpara.append(r'$\mathcal{I}_{%d}$' % (freqexpr[k] / 1e9))
     scalpara = ['self'] * nfreqplnk
     path = os.environ["CMBR_DIST_DATA_PATH"] + '/png/plnkcros'
-    tdpy_util.plot_mcmc(plnkflux * 1e-6, strgpara, path=path, scalpara=scalpara)
+    tdpy.mcmc.plot_grid(plnkflux * 1e-6, strgpara, path=path, scalpara=scalpara)
     
-
-
-# In[41]:
 
 def cnfg_arca():
 
@@ -1640,21 +1628,20 @@ def cnfg_arca():
     cnfg['fluxarca'] = 24.1 * (freqarca / 0.31e9)**(-2.6)
 
 
-
-# In[42]:
-
 def cnfg_plnk_mock():
 
     freqexpr, freqexprstdv, exprfluxstdvinst, exprfluxstdvfrac = retr_plnkfreq()
-    nfreqexpr = freqexpr.size
+    numbfreqexpr = freqexpr.size
     
-    cnfg = retr_cnfg(                     freqexpr=freqexpr,                      inclcmbrmono=False,                      freqexprstdv=freqexprstdv,                      exprfluxstdvinst=exprfluxstdvinst,                      exprfluxstdvfrac=exprfluxstdvfrac                     )
-    
+    cnfg = retr_cnfg( \
+                     freqexpr=freqexpr, \
+                     inclcmbrmono=False, \
+                     freqexprstdv=freqexprstdv, \
+                     exprfluxstdvinst=exprfluxstdvinst, \
+                     exprfluxstdvfrac=exprfluxstdvfrac \
+                    )
     statpara = init(cnfg)
     
-
-
-# In[43]:
 
 def cnfg_plnk_expr():
     
@@ -1665,46 +1652,50 @@ def cnfg_plnk_expr():
     exprfluxstdv = exprfluxstdv[0, :]
     
     freqexpr, freqexprstdv, exprfluxstdvinst, exprfluxstdvfrac = retr_plnkfreq()
-    nfreqexpr = freqexpr.size
+    numbfreqexpr = freqexpr.size
 
-    cnfg = retr_cnfg(                     nswep=100,                      datatype='inpt',                      inclcmbrmono=False,                      freqexpr=freqexpr,                      freqexprstdv=freqexprstdv,                      exprfluxstdvinst=exprfluxstdvinst,                      exprfluxstdvfrac=exprfluxstdvfrac,                      exprflux=exprflux,                      exprfluxstdv=exprfluxstdv                     )
+    cnfg = retr_cnfg( \
+                     numbswep=100, \
+                     datatype='inpt', \
+                     inclcmbrmono=False, \
+                     freqexpr=freqexpr, \
+                     freqexprstdv=freqexprstdv, \
+                     exprfluxstdvinst=exprfluxstdvinst, \
+                     exprfluxstdvfrac=exprfluxstdvfrac, \
+                     exprflux=exprflux, \
+                     exprfluxstdv=exprfluxstdv \
+                    )
     
     statpara = init(cnfg)
     
-
-
-# In[44]:
 
 def cnfg_pixi_mock():
     
     minmfreqexpr = 3e10 # [Hz]
     maxmfreqexpr = 6e12 # [Hz]
     
-    nfreqexpr = 400
+    numbfreqexpr = 400
     
-    freqexprstdv = ones(nfreqexpr) * 0.01
+    freqexprstdv = ones(numbfreqexpr) * 0.01
     
     exprfluxstdvinst = 5e0 # [Jy/sr]
     exprfluxstdvfrac = 1e-20
 
     
-    cnfg = retr_cnfg(                     nswep=5000,                      verbtype=1,                      makeplot=True,                      inclcmbrmono=True,                      optiprop=True,                      nfreqexpr=nfreqexpr,                      minmfreqexpr=minmfreqexpr,                      maxmfreqexpr=maxmfreqexpr,                      freqexprstdv=freqexprstdv,                      exprfluxstdvinst=exprfluxstdvinst,                      exprfluxstdvfrac=exprfluxstdvfrac                     )
+    cnfg = retr_cnfg(                     numbswep=5000, verbtype=1, makeplot=True, inclcmbrmono=True, optiprop=True, numbfreqexpr=numbfreqexpr, minmfreqexpr=minmfreqexpr, maxmfreqexpr=maxmfreqexpr, freqexprstdv=freqexprstdv, exprfluxstdvinst=exprfluxstdvinst, exprfluxstdvfrac=exprfluxstdvfrac                     )
     
     statpara = init(cnfg)
     
 
-
-# In[45]:
-
 def cnfg_pixi_mock_stdv(samptype):
     
     if samptype == 'emce':
-        nswep = 100
+        numbswep = 10
     else:
-        nswep = 10000
+        numbswep = 100
         
     datapara = retr_datapara()
-    namepara, minmpara, maxmpara, scalpara, lablpara, unitpara, varipara, dictpara = datapara
+    namepara, strgpara, minmpara, maxmpara, scalpara, lablpara, unitpara, varipara, dictpara = datapara
     numbpara = len(lablpara)
     
     strgpertpara = [r'$\nu_{min}$', r'$\nu_{max}$', r'$N_\nu$', r'$\sigma$', r'$\sigma_f$']
@@ -1712,7 +1703,7 @@ def cnfg_pixi_mock_stdv(samptype):
     npert = 1
     arryminmfreqexpr = logspace(log10(3e9), log10(3e11), npert)
     arrymaxmfreqexpr = logspace(log10(1.5e12), log10(6e12), npert)
-    arrynfreqexpr = linspace(100, 700, npert)
+    arrynumbfreqexpr = linspace(100, 700, npert)
     arryexprfluxstdvinst = logspace(log10(5e0), log10(5e4), npert)
     
     arryexprfluxstdvfrac = logspace(-10., -6., npert)
@@ -1722,7 +1713,7 @@ def cnfg_pixi_mock_stdv(samptype):
         
         minmfreqexpr = 3e10 # [Hz]
         maxmfreqexpr = 3e12 # [Hz]
-        nfreqexpr = 400
+        numbfreqexpr = 400
         exprfluxstdvinst = 5e0 # [Jy/sr]
         exprfluxstdvfrac = 0.
         
@@ -1733,15 +1724,28 @@ def cnfg_pixi_mock_stdv(samptype):
             if k == 1:
                 maxmfreqexpr = arrymaxmfreqexpr[l]
             if k == 2:
-                nfreqexpr = arrynfreqexpr[l]
+                numbfreqexpr = arrynumbfreqexpr[l]
             if k == 3:
                 exprfluxstdvinst = arryexprfluxstdvinst[l]
             if k == 4:
                 exprfluxstdvfrac = arryexprfluxstdvfrac[l]
 
-            freqexprstdv = ones(nfreqexpr) * 0.01
+            freqexprstdv = ones(numbfreqexpr) * 0.01
             
-            cnfg = retr_cnfg(                             nswep=nswep,                              samptype=samptype,                              verbtype=1,                              makeplot=True,                              inclcmbrmono=True,                              optiprop=False,                              nfreqexpr=nfreqexpr,                              minmfreqexpr=minmfreqexpr,                              maxmfreqexpr=maxmfreqexpr,                              freqexprstdv=freqexprstdv,                              exprfluxstdvinst=exprfluxstdvinst,                              exprfluxstdvfrac=exprfluxstdvfrac                             )
+            cnfg = retr_cnfg( \
+                             numbswep=numbswep, \
+                             samptype=samptype, \
+                             verbtype=1, \
+                             makeplot=True, \
+                             inclcmbrmono=True, \
+                             optiprop=False, \
+                             numbfreqexpr=numbfreqexpr, \
+                             minmfreqexpr=minmfreqexpr, \
+                             maxmfreqexpr=maxmfreqexpr, \
+                             freqexprstdv=freqexprstdv, \
+                             exprfluxstdvinst=exprfluxstdvinst, \
+                             exprfluxstdvfrac=exprfluxstdvfrac \
+                            )
 
             statparagrid[k, l, :, :] = init(cnfg)
               
@@ -1756,7 +1760,7 @@ def cnfg_pixi_mock_stdv(samptype):
         if k == 1:
             xaxi = arrymaxmfreqexpr
         if k == 2:
-            xaxi = arrynfreqexpr
+            xaxi = arrynumbfreqexpr
         if k == 3:
             xaxi = arryexprfluxstdvinst
         if k == 4:
@@ -1792,14 +1796,14 @@ def plot_plnkmaps():
     for k in range(9):
         hp.visufunc.mollview(exprflux[:, k])
         plt.show()
-        hmapcart = tdpy_util.retr_cart(exprflux[:, k])
+        hmapcart = tdpy.util.retr_cart(exprflux[:, k])
         plt.imshow(hmapcart)
 
 
 if __name__ == '__main__':   
     
-    cnfg_pixi_mock_stdv('emce')
-    #cnfg_pixi_mock_stdv('self')
+    cnfg_pixi_mock_stdv('tdpy')
+    #cnfg_pixi_mock_stdv('emce')
     #cnfg_pixi_mock()
     #cnfg_plnk_expr()
     #intr_fluxdust()
