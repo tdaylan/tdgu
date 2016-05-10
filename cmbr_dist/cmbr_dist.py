@@ -1,16 +1,3 @@
-
-# coding: utf-8
-
-# # CMB Spectral Distortions
-
-# In[1]:
-
-#%matplotlib inline
-#%config InlineBackend.figure_format = 'retina'
-
-
-# In[2]:
-
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
@@ -29,24 +16,17 @@ import os
 import pyfits as pf
 import healpy as hp
 
-import tdpy_util
-
-from ipywidgets import *
-
+import tdpy.util
+import tdpy.mcmc
 
 import emcee
-
 
 import seaborn as sns
 sns.set(context='poster', style='dark', color_codes=True)
 
-
-# In[3]:
-
 def plot_intr(eventype='norm'):
     
     with plt.xkcd():
-
 
         def sigd(varb, varbcntr):
             sigd = 1. / (1 + exp(-0.1 * (varb - varbcntr)))
@@ -58,7 +38,6 @@ def plot_intr(eventype='norm'):
         rele = sigd(redsxkcd, 300.) - sigd(redsxkcd, 500.) + sigd(redsxkcd, 950.)
 
         ax.plot(redsxkcd, rele)
-
 
         ax.text(200, -0.1, "z=One Million")
         ax.text(450, -0.1, "z=One Thousand")
@@ -90,9 +69,6 @@ def plot_intr(eventype='norm'):
         plt.savefig(os.environ["CMBR_DIST_DATA_PATH"] + '/png/talkintr_%s.png' % eventype)
         plt.close()
 
-
-
-# In[4]:
 
 def plot_grnf():
     
@@ -133,8 +109,6 @@ def plot_grnf():
         plt.savefig(plotpath + 'fulldist.png')
         plt.close()
 
-
-# In[5]:
 
 def plot_timescal():
     
@@ -181,16 +155,12 @@ def plot_timescal():
     plt.close()
 
 
-# In[6]:
-
 def plot_dist(dist):
     fig, ax = plt.subplots()
     ax.set_xscale('log')
     ax.set_xlabel(r'$\nu$ [GHz]')
     ax.set_ylabel(r'$\Delta I_\nu$ [Jy/sr]')
 
-
-# In[7]:
 
 def plot_pure_dist():
     fig, ax = plt.subplots()
@@ -213,8 +183,6 @@ def plot_pure_dist():
     plt.savefig(plotpath + 'puredist.png')
     plt.close()
 
-
-# In[8]:
 
 def plot_heat():
     
@@ -291,8 +259,6 @@ def plot_heat():
     plt.close()
 
 
-# In[9]:
-
 def plot_deca():
     
     ndeca = 40
@@ -340,8 +306,6 @@ def plot_deca():
         plt.close()
 
 
-# In[10]:
-
 def plot_sampdist():
     diffdistdiffreds = heat[None, :, :] * fluxodisgren[:, :, None]
     dist = zeros((nfreq, ninjetype))
@@ -382,9 +346,6 @@ def plot_sampdist():
             plt.close(fig)
         
 
-
-# In[11]:
-
 def retr_fluxdeca(fluxodisgren, ampldeca, timedeca):
 
     ratedeca = 1. / timedeca
@@ -397,8 +358,6 @@ def retr_fluxdeca(fluxodisgren, ampldeca, timedeca):
 
     return fluxdeca
 
-
-# In[12]:
 
 def plot_llik():
     lliktopo = zeros((nbins + 1, nbins + 1, nbins + 1, nbins + 1))
@@ -433,8 +392,6 @@ def plot_llik():
     plt.close() 
 
 
-# In[13]:
-
 def retr_occp(sfrq, dist=False):
 
     occpplnk = 1. / (exp(sfrq) - 1.)
@@ -448,8 +405,6 @@ def retr_occp(sfrq, dist=False):
         return occpplnk
 
 
-# In[14]:
-
 def retr_fluxcmbr(thisfreq, tempcmbr):
     
     sfrq = plnkcons * thisfreq / boltcons / tempcmbr
@@ -460,8 +415,6 @@ def retr_fluxcmbr(thisfreq, tempcmbr):
     
     return fluxcmbr
 
-
-# In[15]:
 
 def retr_fluxgren(thisfreq, tempcmbr, disttype):
     
@@ -481,9 +434,6 @@ def retr_fluxgren(thisfreq, tempcmbr, disttype):
     elif disttype == 'ydisodis':
         return fluxydisgren, fluxodisgren
 
-
-
-# In[16]:
 
 def retr_fluxsync(thisfreq, syncnorm, syncindx):
     
@@ -508,8 +458,6 @@ def retr_fluxfree(thisfreq, emmefree, tempfree):
     return fluxfree
 
 
-# In[17]:
-
 def retr_plnkfunc(thisfreq, temp):
     
     thissfrq = plnkcons * thisfreq / boltcons / temp
@@ -518,8 +466,6 @@ def retr_plnkfunc(thisfreq, temp):
     
     return plnk
 
-
-# In[18]:
 
 def plot_temp():
     
@@ -557,9 +503,6 @@ def plot_temp():
     plt.close()
     
 
-
-# In[19]:
-
 def plot_silkscal():
     
     wnumsilk = (5.92e10)**(-0.5) * (1. + reds)**1.5
@@ -594,8 +537,6 @@ def plot_silkscal():
     fig.subplots_adjust(top=0.9)
     plt.close()
 
-
-# In[20]:
 
 def plot_resi_post(freqexpr, dataflux, listresiflux,              freqmodl, listfluxtotl, listfluxcmbr, listfluxdustwarm, listfluxdustcold,              listfluxsync, listfluxfree, listfluxydis, listfluxdeca, path):
 
@@ -636,8 +577,6 @@ def plot_resi_post(freqexpr, dataflux, listresiflux,              freqmodl, list
         plt.savefig(path)
         plt.close(fig)
 
-
-# In[21]:
 
 def plot_resi(freqexpr, freqexprstdv, dataflux, datafluxstdv, resiflux, datalabl, freqmodl,
               modlfluxtotl, modlfluxcmbr, modlfluxdustcold, modlfluxdustwarm, modlfluxsync, \
@@ -683,10 +622,6 @@ def plot_resi(freqexpr, freqexprstdv, dataflux, datafluxstdv, resiflux, datalabl
         plt.savefig(path)
         plt.close(fig)
 
-    
-
-
-# In[22]:
 
 def retr_ydis_trac():
     
@@ -767,8 +702,6 @@ def retr_ydis_trac():
     ax.set_yscale('log')
 
 
-# In[23]:
-
 def plot_cmbrtemppsec():
     
     nside = 256
@@ -799,9 +732,6 @@ def plot_cmbrtemppsec():
     ax.plot(lmodhigh, clhphigh)
     ax.plot(lmodloww, clhploww)               
 
-
-
-# In[24]:
 
 def retr_flux(thisfreq, thispara):
 
@@ -863,8 +793,6 @@ def retr_flux(thisfreq, thispara):
     return fluxtotl, fluxcmbr, fluxdustcold, fluxdustwarm, fluxsync, fluxfree, fluxydis, fluxdeca
 
 
-# In[25]:
-
 def retr_fluxdust(thisfreq, dustodep, dustemisrati, dustpowrfrac, dustwarmindx, dustwarmtemp, dustcoldindx):
 
     factwarm = (sp.special.zetac(4. + dustwarmindx) + 1) * sp.special.gamma(4. + dustwarmindx)
@@ -882,8 +810,6 @@ def retr_fluxdust(thisfreq, dustodep, dustemisrati, dustpowrfrac, dustwarmindx, 
     
     return fluxdust, fluxdustcold, fluxdustwarm
 
-
-# In[26]:
 
 def retr_llik(sampvarb, init=False):
     
@@ -912,8 +838,6 @@ def retr_llik(sampvarb, init=False):
     else:
         return llik, sampcalc
 
-
-# In[27]:
 
 def retr_mocksampvarb():
     
@@ -1075,8 +999,6 @@ def retr_datapara():
     return datapara
 
 
-# In[28]:
-
 def retr_egbl(thisfreq):
     
     path = os.environ['CMBR_DIST_DATA_PATH'] + '/egbl.csv'
@@ -1095,9 +1017,6 @@ def retr_egbl(thisfreq):
 
     return fluxegbl
         
-
-
-# In[29]:
 
 def init(cnfg):
     
@@ -1428,9 +1347,6 @@ def init(cnfg):
     return statpara
     
 
-
-# In[30]:
-
 def intr_fluxdust():
     
     nbins = 4
@@ -1505,8 +1421,6 @@ def plot_fluxdust(dustodep, dustemisrati, dustpowrfrac, dustwarmindx, dustwarmte
     plt.show()
 
 
-# In[31]:
-
 def retr_plnkflux():
     
     plnkflux = loadtxt(os.environ["CMBR_DIST_DATA_PATH"] + '/plnkflux.dat')
@@ -1514,8 +1428,6 @@ def retr_plnkflux():
 
     return plnkflux, plnkfluxstdv
 
-
-# In[32]:
 
 def retr_plnkfreq():
     
@@ -1530,9 +1442,6 @@ def retr_plnkfreq():
     
     return freqexpr, freqexprstdv, exprfluxstdvinst, exprfluxstdvfrac
     
-
-
-# In[33]:
 
 def writ_plnk():
 
@@ -1575,12 +1484,6 @@ def writ_plnk():
     savetxt(path, fluxstdv)
 
 
-# In[34]:
-
-#writ_plnk()
-
-
-# In[35]:
 
 def plot_plnktran():
     
@@ -1881,24 +1784,6 @@ def cnfg_pixi_mock_stdv(samptype):
         plt.close(fig)
 
 
-# In[46]:
-
-if __name__ == '__main__':   
-    
-    cnfg_pixi_mock_stdv('emce')
-    #cnfg_pixi_mock_stdv('self')
-    #cnfg_pixi_mock()
-    #cnfg_plnk_expr()
-    
-    if os.uname()[1] == 'fink1.rc.fas.harvard.edu':
-        cmnd = 'cp -r ' + os.environ["CMBR_DIST_DATA_PATH"] + '/png/* /n/pan/www/tansu/png/cmbr_dist/'
-        os.system(cmnd)
-        
-  
-
-
-# In[47]:
-
 def plot_plnkmaps():
     
     exprflux, exprfluxstdv = retr_plnkflux()
@@ -1911,7 +1796,17 @@ def plot_plnkmaps():
         plt.imshow(hmapcart)
 
 
-# In[48]:
+if __name__ == '__main__':   
+    
+    cnfg_pixi_mock_stdv('emce')
+    #cnfg_pixi_mock_stdv('self')
+    #cnfg_pixi_mock()
+    #cnfg_plnk_expr()
+    #intr_fluxdust()
+    #writ_plnk()
+    
+    if os.uname()[1] == 'fink1.rc.fas.harvard.edu':
+        cmnd = 'cp -r ' + os.environ["CMBR_DIST_DATA_PATH"] + '/png/* /n/pan/www/tansu/png/cmbr_dist/'
+        os.system(cmnd)
 
-#intr_fluxdust()
 
