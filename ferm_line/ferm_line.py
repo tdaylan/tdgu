@@ -426,12 +426,14 @@ def retr_fermedfn(thisener, cntrener=None):
 def plot_fermedfn():
 
     cntrener = 60.
-    meanener = linspace(55., 65., 10)
-    fermedfn = retr_fermedfn(meanener, cntrener=cntrener)
+    meanener = linspace(1., 100., 1000)
+    fermedfn = retr_fermedfn(meanener, cntrener=cntrener)[:, 2:]
+    print fermedfn.shape
 
     figr, axis = plt.subplots()
     axis.plot(meanener, fermedfn)
     axis.set_xlabel(r'$E_\gamma$ [GeV]')
+    plt.xlim([20., 100.])
     plt.savefig(plotpath + 'fermedfn_%.3g.png' % cntrener)
     plt.close(figr) 
 
@@ -670,7 +672,7 @@ def init():
         
         plot_enertempline()
   
-        listmodltype = ['nullmod2', 'altrmod2']
+        listmodltype = ['nullmod0', 'altrmod0']
         for k, modltype in enumerate(listmodltype):
 
             rtag = '_%s_%s_%02d' % (modltype, strgenercntr, maxmsphl)
@@ -679,7 +681,7 @@ def init():
             namepara, strgpara, minmpara, maxmpara, scalpara, lablpara, unitpara, varindxpara, dictpara = datapara
             numbpara = len(lablpara)
 
-            numbswep = 1000 * numbpara
+            numbswep = 10000 * numbpara
             plotperd = numbswep / 10
             numbburn = numbswep / 10
             numbsamp = tdpy.mcmc.retr_numbsamp(numbswep, numbburn, factthin)
