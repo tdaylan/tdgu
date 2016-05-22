@@ -48,14 +48,16 @@ def retr_axes():
     reco = 8
     evtc = 128
     
-    numbener = 20
-    minmener = 55. # [GeV]
-    maxmener = 65. # [GeV]
+    # temp
+    minmener = 10. # [GeV]
+    maxmener = 1000. # [GeV]
+    resoener = 0.1
+    numbener = int(4. * (maxmener / minmener) / resoener)
     binsener = logspace(log10(minmener), log10(maxmener), numbener + 1)
     meanener = sqrt(binsener[1:] * binsener[0:-1])
     diffener = binsener[1:] - binsener[0:-1]
     indxener = arange(numbener)
-    
+
     global indxevtt
     evtt = array([64, 128, 256, 512])
     numbevtt = evtt.size
@@ -119,24 +121,27 @@ def make_maps_sing(indxproc):
             cnts = os.environ["FERMI_DATA"] + 'exposure/ferm_line/cnts_pass8_evtc128_evtt%03d_week%03d.fits' % (evtt[m], t)
             expo = os.environ["FERMI_DATA"] + 'exposure/ferm_line/expo_pass8_evtc128_evtt%03d_week%03d.fits' % (evtt[m], t)
 
-            cmnd = 'gtselect infile=' + evnt + ' outfile=' + sele +                 ' ra=INDEF dec=INDEF rad=INDEF tmin=INDEF tmax=INDEF' +                 ' emin=%d emax=%d zmax=90 evclass=%d evtype=%d' % (minmener * 1e3, maxmener * 1e3, evtc, evtt[m])
+            cmnd = 'gtselect infile=' + evnt + ' outfile=' + sele + ' ra=INDEF dec=INDEF rad=INDEF tmin=INDEF tmax=INDEF' + \
+                        ' emin=%d emax=%d zmax=90 evclass=%d evtype=%d' % (minmener * 1e3, maxmener * 1e3, evtc, evtt[m])
             os.system(cmnd)
 
-            cmnd = 'gtmktime evfile=' + sele + ' scfile=' + spac + ' filter="DATA_QUAL==1 && LAT_CONFIG==1"' +                 ' outfile=' + filt + ' roicut=no'
+            cmnd = 'gtmktime evfile=' + sele + ' scfile=' + spac + ' filter="DATA_QUAL==1 && LAT_CONFIG==1"' + ' outfile=' + filt + ' roicut=no'
 
             os.system(cmnd)
             
             if bind or (t == 0 and m == 0):
                 cntstemp = os.environ["FERMI_DATA"] + 'exposure/ferm_line/cnts.fits'
-                cmnd = 'gtbin evfile=' + filt + ' scfile=' + spac + ' outfile=' + cntstemp +                     ' ebinalg=LOG emin=%d emax=%d enumbins=%d algorithm=HEALPIX'                     % (minmener * 1e3, maxmener * 1e3, numbener) +                     ' hpx_ordering_scheme=RING coordsys=GAL hpx_order=8 hpx_ebin=yes'
+                cmnd = 'gtbin evfile=' + filt + ' scfile=' + spac + ' outfile=' + cntstemp + \
+                            ' ebinalg=LOG emin=%d emax=%d enumbins=%d algorithm=HEALPIX' % (minmener * 1e3, maxmener * 1e3, numbener) + \
+                            ' hpx_ordering_scheme=RING coordsys=GAL hpx_order=8 hpx_ebin=yes'
                 os.system(cmnd)
             else:
                 cntstemp = cnts
 
-            cmnd = 'gtltcube evfile=' + filt + ' scfile=' + spac + ' outfile=' + live +                 ' dcostheta=0.025 binsz=1'
+            cmnd = 'gtltcube evfile=' + filt + ' scfile=' + spac + ' outfile=' + live + ' dcostheta=0.025 binsz=1'
             os.system(cmnd)
 
-            cmnd = 'gtexpcube2 infile=' + live + ' outfile=' + expo + ' cmap=' + cntstemp +                 ' irfs=CALDB evtype=%03d bincalc=CENTER' % evtt[m]
+            cmnd = 'gtexpcube2 infile=' + live + ' outfile=' + expo + ' cmap=' + cntstemp + ' irfs=CALDB evtype=%03d bincalc=CENTER' % evtt[m]
             os.system(cmnd)
 
 
@@ -208,7 +213,7 @@ def prep_maps():
 
 def plot_datacntsmean(thisdatacntsmean, rtag):
 
-    figr, axcl = plt.subplots(numbevtt, 1, figsize=(10, 20))
+    figr, axcl = plt.subplots(numbevtt, 1, figsize=(10, 25))
     for m, axis in enumerate(axcl):
         xdat = meanener
         ydat = thisdatacntsmean[:, m]
@@ -217,9 +222,11 @@ def plot_datacntsmean(thisdatacntsmean, rtag):
         axis.set_xlabel('E [GeV]')
         axis.set_xlim([minmener, maxmener])
         axis.set_title('EDISP%d' % m)
+        axis.set_xscale('log')
+        axis.set_yscale('log')
     figr.text(0.05, 0.5, '$N$', ha='center', va='center', rotation=90)
-    plt.subplots_adjust(hspace=0.1)
-    plt.savefig(plotpath + 'datameancnts' + rtag + '.png')
+    plt.subplots_adjust(hspace=0.3)
+    plt.savefig(pathplot + 'datameancnts' + rtag + '.png')
     plt.close(figr)
           
 
@@ -264,21 +271,21 @@ def retr_datapara():
             
         dictpara['normback'] = 1
         namepara[1] = 'normback'
-        minmpara[1] = 1e-1
-        maxmpara[1] = 1e1
+        minmpara[1] = 1e-3
+        maxmpara[1] = 1e0
         scalpara[1] = 'logt'
         lablpara[1] = r'$A_b$'
         unitpara[1] = ''
-        varipara[1] = 1e-2
+        varipara[1] = 1e-1
 
         cntrpara += 1
     
     if modltype == 'nullmod1' or modltype == 'altrmod1' or modltype == 'nullmod2' or modltype == 'altrmod2':
-        defn_almcpara('powrspec', cntrpara, dictpara, namepara,                       minmpara, maxmpara, scalpara, lablpara, unitpara, varipara)
+        defn_almcpara('powrspec', cntrpara, dictpara, namepara, minmpara, maxmpara, scalpara, lablpara, unitpara, varipara)
         cntrpara += numbalmp
         
     if modltype == 'altrmod0' or modltype == 'altrmod1' or modltype == 'altrmod2':
-        defn_almcpara('linespec', cntrpara, dictpara, namepara,                       minmpara, maxmpara, scalpara, lablpara, unitpara, varipara)
+        defn_almcpara('linespec', cntrpara, dictpara, namepara, minmpara, maxmpara, scalpara, lablpara, unitpara, varipara)
         
     strgpara = lablpara + ' ' + unitpara
     datapara = namepara, strgpara, minmpara, maxmpara, scalpara, lablpara, unitpara, varipara, dictpara
@@ -322,7 +329,7 @@ def defn_almcpara(typepara, cntrpara, dictpara, namepara, minmpara, maxmpara, sc
         else:
             lablpara[k] += '}'
         unitpara[k] = ''
-        varipara[k] = 1e-2
+        varipara[k] = 1e-5
 
 
 def retr_aexp(scaldevi, stdv, skew, bias, slop):
@@ -337,22 +344,14 @@ def retr_aexp(scaldevi, stdv, skew, bias, slop):
     return aexp
 
 
-def retr_fermedfn(thisener, cntrener=None):
+def retr_fermedfn(thisener, enercntr):
   
-    if cntrener == None:
-        cntrener = sqrt(thisener[0] * thisener[-1])
-    enerdevi = thisener - cntrener
+    enerdevi = thisener - enercntr
 
-    numbevtt = 4
-    indxevtt = arange(numbevtt)
-    
     thisnumbener = thisener.size
 
-    ctht = linspace(0.7, 1., 20)
+    path = os.environ["PCAT_DATA_PATH"] + '/irfn/edisp_P8R2_SOURCE_V6_EDISP.fits'
 
-    path = os.environ["PCAT_DATA_PATH"] + '/irf/edisp_P8R2_SOURCE_V6_EDISP.fits'
-
-    #strgformpara = ['F', 'S1', 'K1', 'BIAS', 'PINDEX1', 'S2', 'K2', 'BIAS2', 'PINDEX2']
     strgformpara = ['F', 'S1', 'S2', 'K1', 'K2', 'BIAS', 'BIAS2', 'PINDEX1', 'PINDEX2']
 
     listhdun = pf.open(path)
@@ -360,11 +359,11 @@ def retr_fermedfn(thisener, cntrener=None):
     numbctht = 8
     numbformpara = 9
     numbscalpara = 6
-    frac = zeros((thisnumbener, numbctht, numbevtt))
-    stdv = zeros((2, thisnumbener, numbctht, numbevtt))
-    skew = zeros((2, thisnumbener, numbctht, numbevtt))
-    bias = zeros((2, thisnumbener, numbctht, numbevtt))
-    slop = zeros((2, thisnumbener, numbctht, numbevtt))
+    frac = zeros((numbenerwndw, numbctht, numbevtt))
+    stdv = zeros((2, numbenerwndw, numbctht, numbevtt))
+    skew = zeros((2, numbenerwndw, numbctht, numbevtt))
+    bias = zeros((2, numbenerwndw, numbctht, numbevtt))
+    slop = zeros((2, numbenerwndw, numbctht, numbevtt))
     scalpara = zeros((numbevtt, numbscalpara))
     for m in indxevtt:
         
@@ -380,28 +379,28 @@ def retr_fermedfn(thisener, cntrener=None):
             minmenerirfn = hdun.data['ENERG_LO'].flatten() * 1e-3 # [GeV]
             maxmenerirfn = hdun.data['ENERG_HI'].flatten() * 1e-3 # [GeV]
             meanenerirfn = sqrt(minmenerirfn * maxmenerirfn)
-          
+
         ## get form parameters
         for k in range(numbformpara):
-            formparatemp = interp1d(meanenerirfn, hdun.data[strgformpara[k]].squeeze(), axis=1)(thisener).T
+            formparatemp = interp1d(meanenerirfn, hdun.data[strgformpara[k]].squeeze(), axis=1)(enercntr)
             if k == 0:
-                frac[:, :, m] = formparatemp
+                frac[:, :, m] = formparatemp[None, :]
             if k == 1:
-                stdv[0, :, :, m] = formparatemp
+                stdv[0, :, :, m] = formparatemp[None, :]
             if k == 2:
-                stdv[1, :, :, m] = formparatemp
+                stdv[1, :, :, m] = formparatemp[None, :]
             if k == 3:
-                skew[0, :, :, m] = formparatemp
+                skew[0, :, :, m] = formparatemp[None, :]
             if k == 4:
-                skew[1, :, :, m] = formparatemp
+                skew[1, :, :, m] = formparatemp[None, :]
             if k == 5:
-                bias[0, :, :, m] = formparatemp
+                bias[0, :, :, m] = formparatemp[None, :]
             if k == 6:
-                bias[1, :, :, m] = formparatemp
+                bias[1, :, :, m] = formparatemp[None, :]
             if k == 7:
-                slop[0, :, :, m] = formparatemp
+                slop[0, :, :, m] = formparatemp[None, :]
             if k == 8:
-                slop[1, :, :, m] = formparatemp
+                slop[1, :, :, m] = formparatemp[None, :]
 
         # scale parameters
         scalpara[m, :] = listhdun['EDISP_SCALING_PARAMS_EDISP%d' % m].data['EDISPSCALE']
@@ -413,30 +412,29 @@ def retr_fermedfn(thisener, cntrener=None):
                scalpara[None, None, :, 4] * log(thisener[:, None, None]) * cthtirfn[None, :, None] + \
                scalpara[None, None, :, 5]
             
-    scaldevi = enerdevi[:, None, None] / cntrener / scalfact
+    scaldevi = enerdevi[:, None, None] / enercntr / scalfact
     
-    edfn = frac * retr_aexp(scaldevi, stdv[0, :, :, :], skew[0, :, :, :], bias[0, :, :, :], slop[0, :, :, :]) + \
-                    (1. - frac) * retr_aexp(scaldevi, stdv[1, :, :, :], skew[1, :, :, :], bias[1, :, :, :], slop[1, :, :, :])
-  
+    edfncom0 = frac[:, :, :] * retr_aexp(scaldevi, stdv[0, :, :, :], skew[0, :, :, :], bias[0, :, :, :], slop[0, :, :, :])
+    edfncom1 = (1. - frac[:, :, :]) * retr_aexp(scaldevi, stdv[1, :, :, :], skew[1, :, :, :], bias[1, :, :, :], slop[1, :, :, :])
+    edfn = edfncom0 + edfncom1
+    
+    edfncom0 = mean(edfncom0, axis=1)
+    edfncom1 = mean(edfncom1, axis=1)
     edfn = mean(edfn, axis=1)
 
-    return edfn
+    return edfn, edfncom0, edfncom1
 
 
-def plot_fermedfn():
-
-    cntrener = 60.
-    meanener = linspace(1., 100., 1000)
-    fermedfn = retr_fermedfn(meanener, cntrener=cntrener)[:, 2:]
-    print fermedfn.shape
+def plot_thisedfn():
 
     figr, axis = plt.subplots()
-    axis.plot(meanener, fermedfn)
+    axis.plot(thismeanener, thisedfn[:, 0])
+    axis.plot(thismeanener, thisedfncom0[:, 0])
+    axis.plot(thismeanener, thisedfncom1[:, 0])
     axis.set_xlabel(r'$E_\gamma$ [GeV]')
-    plt.xlim([20., 100.])
-    plt.savefig(plotpath + 'fermedfn_%.3g.png' % cntrener)
+    plt.xlim([thisbinsener[0], thisbinsener[-1]])
+    plt.savefig(pathplot + 'thisedfn_%s.png' % thisstrgenercntr)
     plt.close(figr) 
-
 
 
 def writ_maps():
@@ -477,20 +475,19 @@ def retr_linecnts(thisener, enercntr):
 
 def retr_modlcnts(sampvarb):
     
-    global almcimag
-    
-    modlcnts = zeros((numbener, numbpixl, numbevtt))
+    global modlcnts, almcimag
     
     slopback = sampvarb[0]
-    enertemppowr = (meanener / enercntr)**(-slopback)
+    enertemppowr = (thismeanener / thisenercntr)**(-slopback)
     
     cntr = 1
     
     if modltype != 'nullmod2' and modltype != 'altrmod2':
-        
         normback = sampvarb[1]
-        modlcnts = normback * fdfmcnts * enertemppowr[:, None, None]
+        modlcnts[:] = normback * fdfmflux[None, :, None] * thisexpo * thisdiffener[:, None, None] * apix * enertemppowr[:, None, None]
         cntr += 1
+    else:
+        modlcnts[:] = 0.
         
     if modltype == 'nullmod0':
         numbiter = 0
@@ -500,56 +497,55 @@ def retr_modlcnts(sampvarb):
         numbiter = 2
         
     for k in range(numbiter):
-
+        
         almcreal = sampvarb[cntr:cntr+numbalmc]
         almcimag[maxmsphl+1:] = sampvarb[cntr+numbalmc:cntr+numbalmp]
         almc = almcreal + almcimag * 1j
-        modlcntstemp[:] = hp.alm2map(almc, numbside, verbose=False)[None, :, None]
+        modlcntstemp = hp.alm2map(almc, numbside, verbose=False)
         cntr += numbalmp
-        if k == 0:
-            modlcnts += modlcntstemp * enertempline[:, None, :]
+        if k == 1 or modltype == 'altrmod0':
+            modlcnts[:] += modlcntstemp[None, :, None] * thisedfn[:, None, :]
         else:
-            modlcnts += modlcntstemp * enertemppowr[:, None, None]
-    
-    if lliktype == 'bind':
-        llik = sum(datacnts * log(modlcnts) - modlcnts)
-    else:
-        llik = sum(exp(-modlcntsintp))
-    
+            modlcnts[:] += modlcntstemp[None, :, None] * enertemppowr[:, None, None]
+       
+        if False:
+            print 'k ', k
+            print 'almc'
+            print almc
+    if False:
+        print 'sampvarb'
+        print sampvarb
+        print 'modltype'
+        print modltype
+        print 'modlcnts'
+        print amin(modlcnts), amax(modlcnts), mean(modlcnts)
+        print
+
     return modlcnts
 
 
 def retr_llik(sampvarb, init=False):
     
-    modlcnts = retr_modlcnts(sampvarb)
-   
+    modlcntstemp = retr_modlcnts(sampvarb)
+
     if lliktype == 'bind':
-        llik = sum(datacnts * log(modlcnts) - modlcnts)
+        llik = sum(thisdatacnts * log(modlcntstemp) - modlcntstemp)
     else:
         llik = sum(exp(-modlcntsintp))
     
     return llik, sampcalc
     
 
-def plot_enertempline():
-    
-    figr, axis = plt.subplots()
-    axis.plot(meanener, enertempline)
-    axis.set_xlabel(r'$E_\gamma$ [GeV]')
-    plt.savefig(plotpath + 'enertempline_' + strgenercntr + '.png')
-    plt.close(figr) 
-
-
 def plot_cnts(thiscnts, strg):
 
-    cart = tdpy.util.retr_cart(sum(thiscnts[indxenercntr, :, :], 1))
+    cart = tdpy.util.retr_cart(sum(thiscnts[indxenerwndwplot, :, :], 1))
 
     figr, axis = plt.subplots()
     
     imag = plt.imshow(cart, origin='lower', cmap='Reds', extent=extt)
     plt.colorbar(imag, fraction=0.05)
 
-    plt.savefig(plotpath + '%scnts%s.png' % (strg, rtag))
+    plt.savefig(pathplot + '%scnts%s.png' % (strg, rtag))
     plt.close(figr)
 
 
@@ -588,28 +584,34 @@ def plot_sphl():
     axis.set_xlabel('$l$')
     axis.set_title('')
     plt.subplots_adjust(hspace=0.1)
-    plt.savefig(plotpath + 'sphl.png')
+    plt.savefig(pathplot + 'sphl.png')
+   
 
-    
-def init():
-    
+def init( \
+         methtype='mock', \
+         datatype='mock', \
+        ):
+
     global reco, evtc, numbevtt, numbevtt, evtt, numbener, minmener, maxmener, binsener, meanener, diffener, indxener, numbside, numbpixl, apix
     reco, evtc, numbevtt, numbevtt, evtt, numbener, minmener, maxmener, binsener, meanener, diffener, indxener, numbside, numbpixl, apix = retr_axes()
 
-    global plotpath, plotpath
-    if os.uname()[1] == 'fink1.rc.fas.harvard.edu' and getpass.getuser() == 'tansu':
-        plotfold = '/n/pan/www/tansu/png/ferm_line/'
-    else:
-        plotfold = os.environ["FERM_LINE_DATA_PATH"] + '/png/'
-    plotpath = plotfold
-    cmnd = 'mkdir -p ' + plotpath
+    global indxpixl
+    indxpixl = arange(numbpixl)
+    
+    global pathbase, pathplot
+    pathbase = os.environ["FERM_LINE_DATA_PATH"]
+    pathplot = pathbase + '/png/'
+    cmnd = 'mkdir -p ' + pathplot
     os.system(cmnd)
+    if os.uname()[1] == 'fink1.rc.fas.harvard.edu' and getpass.getuser() == 'tansu':
+        cmnd = 'mv ' + pathplot + '/* /n/pan/www/tansu/png/ferm_line/'
+        os.system(cmnd)
     
     global extt
     extt = [-180., 180., -90., 90.]
     
     global numbalmc, maxmsphl, numbalmp
-    maxmsphl = 4
+    maxmsphl = 1
     numbalmc = retr_numbalmc(maxmsphl)
     numbalmp = retr_numbalmp(maxmsphl, numbalmc)
     
@@ -621,113 +623,177 @@ def init():
     global lliktype
     lliktype = 'bind'
 
-    global modlcntstemp
-    modlcntstemp = empty((numbener, numbpixl, numbevtt))
-    
     global datacnts, datacntsmean
 
     global enerpivt, indxenerpivt
     indxenerpivt = numbener / 2
     enerpivt = meanener[indxenerpivt]
     
-    strgflux = '/flux%03d.fits' % numbside
-    strgexpo = '/expo%03d.fits' % numbside   
-    dataflux = pf.getdata(os.environ["FERM_LINE_DATA_PATH"] + strgflux)
-    expo = pf.getdata(os.environ["FERM_LINE_DATA_PATH"] + strgexpo)
+    global numbenerwndw, numbenerwndwside
+    numbenerwndw = 10 * int(0.03 * numbener) + 1
+    numbenerwndwside = (numbenerwndw - 1) / 2
     
+    strgexpo = '/expo%03d.fits' % numbside   
+    expo = pf.getdata(os.environ["FERM_LINE_DATA_PATH"] + strgexpo)
+    expotemp = copy(expo)
+    expo = empty((numbener, numbpixl, numbevtt))
+    expo[:] = expotemp[0, :, :][None, :, :]
+
     global fdfmflux, fdfmcnts
     path = os.environ["FERM_LINE_DATA_PATH"] + '/fdfm%03d.fits' % numbside
     fdfmflux = pf.getdata(path)
     fdfmcnts = fdfmflux[None, :, None] * expo * diffener[:, None, None] * apix
-    datacnts = dataflux * expo * diffener[:, None, None] * apix
+    
+    # common MCMC settings 
+    verbtype = 3
+    factthin = 1
+    numbproc = 1
+    optiprop = False
+    
+    global edfn
+
+    global almcimag
+    almcimag = zeros(numbalmc)
+
+    global modlcnts
+    modlcnts = empty((numbenerwndw, numbpixl, numbevtt))
+    
+    # energy axis label
+    global strgenercntr
+    strgenercntr = ['%.3g' % meanener[i] for i in indxener]
+
+    global indxenerwndwplot
+    indxenerwndwplot = numbenerwndw / 2
+
+    global thisindxenercntr, thisminmindxener, thismaxmindxener, thisindxener, \
+        thisdatacnts, thisexpo, thisfdfmcnts, thisenercntr, thismeanener, thisbinsener, thisdiffener, thisedfn, thisedfncom0, thisedfncom1, thisstrgenercntr
+
+    global enercntr, modltype, rtag, indxenercntr
+    numbenercntr = 20
+    listindxenercntr = linspace(numbenerwndw, numbener - numbenerwndw, numbenercntr).astype(int)
+
+    # get data counts
+    if datatype == 'mock':
+        datacnts = zeros_like(expo)
+        ## temp -- FDM morphology should be energy dependent
+        mockenertemppowr = meanener**(-2.6) * 1e5
+        fdfmcnts = fdfmflux[None, :, None] * expo * diffener[:, None, None] * apix * mockenertemppowr[:, None, None]
+        mockcnts = fdfmcnts
+        for i in indxener:
+            for j in indxpixl:
+                for m in indxevtt:
+                    datacnts[i, j, m] = poisson(mockcnts[i, j, m])
+    else:
+        strgflux = '/flux%03d.fits' % numbside
+        dataflux = pf.getdata(os.environ["FERM_LINE_DATA_PATH"] + strgflux)
+        datacnts = dataflux * expo * diffener[:, None, None] * apix
+
+    # plot data counts
     datacntsmean = sum(datacnts, 1)
     plot_datacntsmean(datacntsmean, '_init')
     
-    global stdvdisp
-    stdvdisp = array([7., 5., 3., 1.])
-   
-    # common MCMC settings 
-    verbtype = 1
-    factthin = 1
-    numbproc = 1
-    optiprop = True
-    
-    global almcimag
-    almcimag = zeros(numbalmc)
-   
-    plot_fermedfn()
-
-    global enercntr, enertempline, modltype, strgenercntr, rtag, indxenercntr
-    listindxenercntr = array([numbener / 2]) # array([58., 60., 62.])
+    # temp
+    listindxenercntr = listindxenercntr[numbenercntr/2-1:numbenercntr/2+2]
     listenercntr = meanener[listindxenercntr]
     numbenercntr = listenercntr.size
     listlevi = zeros((2, numbenercntr))
+    
+
     for n, enercntr in enumerate(listenercntr):
 
-        indxenercntr = listindxenercntr[n]
+        thisindxenercntr = listindxenercntr[n]
+        thisminmindxener = thisindxenercntr - numbenerwndwside
+        thismaxmindxener = thisindxenercntr + numbenerwndwside
+        thisindxener = arange(thisminmindxener, thismaxmindxener + 1)
+
+        indxmesh = meshgrid(thisindxener, indxpixl, indxevtt, indexing='ij')
+        thisdatacnts = datacnts[indxmesh]
+        thisexpo = expo[indxmesh]
+        thisfdfmcnts = fdfmcnts[indxmesh]
+
+        thisenercntr = meanener[thisindxenercntr]
         
-        enertempline = retr_linecnts(meanener, enercntr)
+        thismeanener = meanener[thisminmindxener:thismaxmindxener+1]
+        thisbinsener = binsener[thisminmindxener:thismaxmindxener+2]
+        thisdiffener = diffener[thisminmindxener:thismaxmindxener+1]
 
-        strgenercntr = '%04d' % enercntr
+        thisedfn, thisedfncom0, thisedfncom1 = retr_fermedfn(thismeanener, thisenercntr)
         
-        plot_enertempline()
-  
-        listmodltype = ['nullmod0', 'altrmod0']
-        for k, modltype in enumerate(listmodltype):
+        thisstrgenercntr = strgenercntr[thisindxenercntr]
+    
+    almc()
 
-            rtag = '_%s_%s_%02d' % (modltype, strgenercntr, maxmsphl)
-                    
-            datapara = retr_datapara()
-            namepara, strgpara, minmpara, maxmpara, scalpara, lablpara, unitpara, varindxpara, dictpara = datapara
-            numbpara = len(lablpara)
+def diff():
 
-            numbswep = 10000 * numbpara
-            plotperd = numbswep / 10
-            numbburn = numbswep / 10
-            numbsamp = tdpy.mcmc.retr_numbsamp(numbswep, numbburn, factthin)
+    for j in indxpixl:
+        
+        sampbund = tdpy.mcmc.init(numbproc, numbswep, retr_llik, datapara, thissamp=thissamp, numbburn=numbburn, \
+            factthin=factthin, optiprop=optiprop, verbtype=verbtype, pathbase=pathbase, rtag=rtag, numbplotside=numbplotside)
 
-            pathmedisamp = os.environ["FERM_LINE_DATA_PATH"] + '/medisamp%s.fits' % rtag
-            thissamp = empty((numbproc, numbpara))
-            if os.path.isfile(pathmedisamp):
-                print 'Loading initial sample from the previous run.'
-                thissampvarb = pf.getdata(pathmedisamp)
-                thissamp[:] = tdpy.mcmc.cdfn_samp(thissampvarb, datapara)[None, :]
-            else:
-                if modltype == 'nullmod0' or modltype == 'altrmod0' or modltype == 'nullmod1' or modltype == 'altrmod1':
-                    thissamp[:, 0:2] = rand(2 * numbproc)
-                    thissamp[:, 2:] = 0.5
-                if modltype == 'nullmod2' or modltype == 'altrmod2':
-                    thissamp[:, 0] = rand(numbproc)
-                    thissamp[:, 1] = 1.
-                    thissamp[:, 2:] = 0.5
-                    
-            if numbpara > 10:
-                numbplotside = 10
-            else:
-                numbplotside = numbpara
-            
-            
-            sampbund = tdpy.mcmc.init(numbproc, numbswep, retr_llik, datapara, thissamp=thissamp, numbburn=numbburn, \
-                factthin=factthin, optiprop=optiprop, verbtype=verbtype, plotpath=plotpath, rtag=rtag, numbplotside=numbplotside)
+    diffmaps = flux
 
-            listsampvarb = sampbund[0]
-            listsamp = sampbund[1]
-            listsampcalc = sampbund[2]
-            listllik = sampbund[3]
-            listaccp = sampbund[4]
-            listjsampvari = sampbund[5]
-            propeffi = sampbund[6]
-            levi = sampbund[7]
-            info = sampbund[8]
+
+def almc():
+
+    plot_thisedfn()
+
+    listmodltype = ['nullmod0', 'altrmod0']
+    #listmodltype = ['nullmod2', 'altrmod2']
+    #listmodltype = ['nullmod2']
+    for k, modltype in enumerate(listmodltype):
+
+        rtag = '_%s_%s_%02d' % (modltype, thisstrgenercntr, maxmsphl)
                 
-            listlevi[k, n] = levi
+        datapara = retr_datapara()
+        namepara, strgpara, minmpara, maxmpara, scalpara, lablpara, unitpara, varindxpara, dictpara = datapara
+        numbpara = len(lablpara)
+
+        numbswep = 1000 * numbpara
+        plotperd = numbswep / 10
+        numbburn = numbswep / 10
+        numbsamp = tdpy.mcmc.retr_numbsamp(numbswep, numbburn, factthin)
+
+        pathmedisamp = os.environ["FERM_LINE_DATA_PATH"] + '/medisamp%s.fits' % rtag
+        thissamp = empty((numbproc, numbpara))
+        if os.path.isfile(pathmedisamp):
+            print 'Loading initial sample from the previous run.'
+            thissampvarb = pf.getdata(pathmedisamp)
+            thissamp[:] = tdpy.mcmc.cdfn_samp(thissampvarb, datapara)[None, :]
+        else:
+            if modltype == 'nullmod0' or modltype == 'altrmod0' or modltype == 'nullmod1' or modltype == 'altrmod1':
+                thissamp[:, 0:2] = rand(2 * numbproc)
+                thissamp[:, 2:] = 0.5
+            if modltype == 'nullmod2' or modltype == 'altrmod2':
+                thissamp[:, 0] = rand(numbproc)
+                thissamp[:, 1] = 1.
+                thissamp[:, 2:] = 0.5
+                
+        if numbpara > 10:
+            numbplotside = 10
+        else:
+            numbplotside = numbpara
         
-            medisampvarb = percentile(listsampvarb, 50., axis=0)
-            pf.writeto(pathmedisamp, medisampvarb, clobber=True)
+        sampbund = tdpy.mcmc.init(numbproc, numbswep, retr_llik, datapara, thissamp=thissamp, numbburn=numbburn, \
+            factthin=factthin, optiprop=optiprop, verbtype=verbtype, pathbase=pathbase, rtag=rtag, numbplotside=numbplotside)
+
+        listsampvarb = sampbund[0]
+        listsamp = sampbund[1]
+        listsampcalc = sampbund[2]
+        listllik = sampbund[3]
+        listaccp = sampbund[4]
+        listjsampvari = sampbund[5]
+        propeffi = sampbund[6]
+        levi = sampbund[7]
+        info = sampbund[8]
             
-            medimodlcnts = retr_modlcnts(medisampvarb)
-            plot_cnts(medimodlcnts, 'medimodl')
-            plot_cnts(datacnts - medimodlcnts, 'mediresi')
+        listlevi[k, n] = levi
+    
+        medisampvarb = percentile(listsampvarb, 50., axis=0)
+        pf.writeto(pathmedisamp, medisampvarb, clobber=True)
+        
+        medimodlcnts = retr_modlcnts(medisampvarb)
+        plot_cnts(medimodlcnts, 'medimodl')
+        plot_cnts(thisdatacnts - medimodlcnts, 'mediresi')
 
     print listlevi.T
     
@@ -737,7 +803,7 @@ def init():
     axis.plot(listenercntr, bayefact)
     axis.set_xlabel(r'$E_\gamma$ [GeV]')
     axis.set_ylabel('BF')
-    plt.savefig(plotpath + 'bayefact.png')
+    plt.savefig(pathplot + 'bayefact.png')
     plt.close(figr) 
         
 
@@ -748,4 +814,4 @@ if __name__ == '__main__':
     #writ_maps()
     #make_maps()
     #prep_maps()
-    init()
+    init('mock')
