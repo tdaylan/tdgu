@@ -483,8 +483,8 @@ def retr_llik(sampvarb, init=False):
     
     modlcntstemp = retr_modlcnts(sampvarb)
 
-    if lliktype == 'bind':
-        llik = sum(thisdatacnts * log(modlcntstemp) - modlcntstemp)
+    if gdat.lliktype == 'bind':
+        llik = sum(gdat.datacntswndw * log(modlcntstemp) - modlcntstemp)
     else:
         llik = sum(exp(-modlcntsintp))
     
@@ -786,9 +786,11 @@ def almc(gdattemp):
         medisampvarb = percentile(listsampvarb, 50., axis=0)
         pf.writeto(pathmedisamp, medisampvarb, clobber=True)
         
-        medimodlcnts = retr_modlcnts(medisampvarb)
-        plot_cnts(medimodlcnts, 'medimodl')
-        plot_cnts(thisdatacnts - medimodlcnts, 'mediresi')
+        gdat.medicntswndw = retr_modlcnts(medisampvarb)
+        gdat.resicntswndw = gdat.datacntswndw - gdat.medicntswndw
+        plot_cnts(gdat.datacntswndw, 'datacnts')
+        plot_cnts(gdat.modlcntswndw, 'modlcnts')
+        plot_cnts(gdat.resicntswndw, 'resicnts')
 
     print listlevi.T
     
