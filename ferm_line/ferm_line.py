@@ -43,45 +43,13 @@ import tdpy.mcmc
 import cProfile, pstats, cPickle
 
 
-def retr_axes():
-
-    reco = 8
-    evtc = 128
-    
-    # temp
-    minmener = 10. # [GeV]
-    maxmener = 1000. # [GeV]
-    resoener = 0.1
-    numbener = int(4. * (maxmener / minmener) / resoener)
-    binsener = logspace(log10(minmener), log10(maxmener), numbener + 1)
-    meanener = sqrt(binsener[1:] * binsener[0:-1])
-    diffener = binsener[1:] - binsener[0:-1]
-    indxener = arange(numbener)
-
-    global indxevtt
-    evtt = array([64, 128, 256, 512])
-    numbevtt = evtt.size
-    indxevtt = arange(numbevtt)
-    
-    numbside = 8
-    numbpixl = numbside**2 * 12
-    apix = 4. * pi / numbpixl
-    
-    return reco, evtc, numbevtt, numbevtt, evtt, numbener, minmener, maxmener, binsener, meanener, diffener, indxener, numbside, numbpixl, apix
-
-
 def make_maps():
     
-    global bind
     bind = False
     
     cmnd = 'mkdir -p $FERMI_DATA/exposure/ferm_line'
     os.system(cmnd)
     
-    global reco, evtc, numbevtt, numbevtt, evtt, numbener, minmener, maxmener, binsener, meanener, diffener, indxener, numbside, numbpixl, apix
-    reco, evtc, numbevtt, numbevtt, evtt, numbener, minmener, maxmener, binsener, meanener, diffener, indxener, numbside, numbpixl, apix = retr_axes()
-
-    global liststrgener, liststrgchan
     liststrgener = ['ENERGY%d' % (k + 1) for k in indxener]
     liststrgchan = ['CHANNEL%d' % (k + 1) for k in indxener]
     
@@ -90,7 +58,6 @@ def make_maps():
     maxmweek = 411
     weekpart = (maxmweek - minmweek) / numbproc
     
-    global listweek
     listweek = []
     for k in range(numbproc):
         listweek.append(arange(minmweek + k * weekpart, minmweek + (k + 1) * weekpart))
@@ -147,9 +114,6 @@ def make_maps_sing(indxproc):
 
 def prep_maps():
     
-
-    global reco, evtc, numbevtt, numbevtt, evtt, numbener, minmener, maxmener, binsener, meanener, diffener, indxener, numbside, numbpixl, apix
-    reco, evtc, numbevtt, numbevtt, evtt, numbener, minmener, maxmener, binsener, meanener, diffener, indxener, numbside, numbpixl, apix = retr_axes()
 
     liststrgener = ['ENERGY%d' % (k + 1) for k in indxener]
     liststrgchan = ['CHANNEL%d' % (k + 1) for k in indxener]
@@ -211,51 +175,45 @@ def prep_maps():
     pf.writeto(path, expo, clobber=True)
 
 
-def plot_datacntsmean(thisdatacntsmean, rtag):
+def plot_datacntsmean(gdat):
 
-    figr, axcl = plt.subplots(numbevtt, 1, figsize=(10, 25))
+    figr, axcl = plt.subplots(gdat.numbevtt, 1, figsize=(10, 25))
     for m, axis in enumerate(axcl):
-        xdat = meanener
-        ydat = thisdatacntsmean[:, m]
-        yerr = sqrt(thisdatacntsmean[:, m])
+        xdat = gdat.meanenerwndw
+        ydat = gdat.datacntsmeanwndw[:, m]
+        yerr = sqrt(gdat.datacntsmeanwndw[:, m])
         axis.errorbar(xdat, ydat, yerr=yerr, marker='o', ls='', elinewidth=2, capsize=20)
         axis.set_xlabel('E [GeV]')
-        axis.set_xlim([minmener, maxmener])
+        axis.set_xlim([gdat.minmenerwndw, gdat.maxmenerwndw])
         axis.set_title('EDISP%d' % m)
         axis.set_xscale('log')
         axis.set_yscale('log')
     figr.text(0.05, 0.5, '$N$', ha='center', va='center', rotation=90)
     plt.subplots_adjust(hspace=0.3)
-    plt.savefig(pathplot + 'datameancnts' + rtag + '.png')
+    plt.savefig(gdat.pathplot + 'datameancnts_%.3g.png' % gdat.enercntrwndw)
     plt.close(figr)
           
 
-def retr_datapara():
+def retr_datapara(gdat):
 
-
-    if modltype == 'nullmod0':
-        numbpara = 2
-    if modltype == 'altrmod0':
-        numbpara = 2 + numbalmp
+    if gdat.modltype == 'nullmod0':
+        gdat.numbpara = 2
+    if gdat.modltype == 'altrmod0':
+        gdat.numbpara = 2 + gdat.numbalmp
         
-    if modltype == 'nullmod1':
-        numbpara = 2 + numbalmp
-    if modltype == 'altrmod1':
-        numbpara = 2 + 2 * numbalmp
+    if gdat.modltype == 'nullmod1':
+        gdat.numbpara = 2 + gdat.numbalmp
+    if gdat.modltype == 'altrmod1':
+        gdat.numbpara = 2 + 2 * gdat.numbalmp
 
-    if modltype == 'nullmod2':
-        numbpara = 1 + numbalmp
-    if modltype == 'altrmod2':
-        numbpara = 1 + 2 * numbalmp
-        
     dictpara = dict()
-    minmpara = zeros(numbpara)
-    maxmpara = zeros(numbpara)
-    namepara = empty(numbpara, dtype=object)
-    scalpara = empty(numbpara, dtype=object)
-    lablpara = empty(numbpara, dtype=object)
-    unitpara = empty(numbpara, dtype=object)
-    varipara = zeros(numbpara)
+    minmpara = zeros(gdat.numbpara)
+    maxmpara = zeros(gdat.numbpara)
+    namepara = empty(gdat.numbpara, dtype=object)
+    scalpara = empty(gdat.numbpara, dtype=object)
+    lablpara = empty(gdat.numbpara, dtype=object)
+    unitpara = empty(gdat.numbpara, dtype=object)
+    varipara = zeros(gdat.numbpara)
     
     dictpara['slopback'] = 0
     namepara[0] = 'slopback'
@@ -267,7 +225,7 @@ def retr_datapara():
     varipara[0] = 1e-1
 
     cntrpara = 1
-    if modltype == 'altrmod0' or modltype == 'nullmod0' or modltype == 'altrmod1' or modltype == 'nullmod1':
+    if gdat.modltype == 'altrmod0' or gdat.modltype == 'nullmod0' or gdat.modltype == 'altrmod1' or gdat.modltype == 'nullmod1':
             
         dictpara['normback'] = 1
         namepara[1] = 'normback'
@@ -280,11 +238,11 @@ def retr_datapara():
 
         cntrpara += 1
     
-    if modltype == 'nullmod1' or modltype == 'altrmod1' or modltype == 'nullmod2' or modltype == 'altrmod2':
+    if gdat.modltype == 'nullmod1' or gdat.modltype == 'altrmod1':
         defn_almcpara('powrspec', cntrpara, dictpara, namepara, minmpara, maxmpara, scalpara, lablpara, unitpara, varipara)
         cntrpara += numbalmp
         
-    if modltype == 'altrmod0' or modltype == 'altrmod1' or modltype == 'altrmod2':
+    if gdat.modltype == 'altrmod0' or gdat.modltype == 'altrmod1':
         defn_almcpara('linespec', cntrpara, dictpara, namepara, minmpara, maxmpara, scalpara, lablpara, unitpara, varipara)
         
     strgpara = lablpara + ' ' + unitpara
@@ -295,7 +253,6 @@ def retr_datapara():
 
 def defn_almcpara(typepara, cntrpara, dictpara, namepara, minmpara, maxmpara, scalpara, lablpara, unitpara, varipara):
     
-    global listsphm
     listsphl, listsphm = hp.Alm.getlm(maxmsphl)
     listsphl = tile(listsphl, 2)
     listsphm = tile(listsphm, 2)
@@ -344,7 +301,7 @@ def retr_aexp(scaldevi, stdv, skew, bias, slop):
     return aexp
 
 
-def retr_fermedfn(thisener, enercntr):
+def retr_fermedfn(gdat, thisener, enercntr):
   
     enerdevi = thisener - enercntr
 
@@ -359,13 +316,13 @@ def retr_fermedfn(thisener, enercntr):
     numbctht = 8
     numbformpara = 9
     numbscalpara = 6
-    frac = zeros((numbenerwndw, numbctht, numbevtt))
-    stdv = zeros((2, numbenerwndw, numbctht, numbevtt))
-    skew = zeros((2, numbenerwndw, numbctht, numbevtt))
-    bias = zeros((2, numbenerwndw, numbctht, numbevtt))
-    slop = zeros((2, numbenerwndw, numbctht, numbevtt))
-    scalpara = zeros((numbevtt, numbscalpara))
-    for m in indxevtt:
+    frac = zeros((thisnumbener, numbctht, gdat.numbevtt))
+    stdv = zeros((2, thisnumbener, numbctht, gdat.numbevtt))
+    skew = zeros((2, thisnumbener, numbctht, gdat.numbevtt))
+    bias = zeros((2, thisnumbener, numbctht, gdat.numbevtt))
+    slop = zeros((2, thisnumbener, numbctht, gdat.numbevtt))
+    scalpara = zeros((gdat.numbevtt, numbscalpara))
+    for m in gdat.indxevtt:
         
         # form parameters
         ## get HDU
@@ -425,15 +382,15 @@ def retr_fermedfn(thisener, enercntr):
     return edfn, edfncom0, edfncom1
 
 
-def plot_thisedfn():
+def plot_edfnwndw(gdat):
 
     figr, axis = plt.subplots()
-    axis.plot(thismeanener, thisedfn[:, 0])
-    axis.plot(thismeanener, thisedfncom0[:, 0])
-    axis.plot(thismeanener, thisedfncom1[:, 0])
+    axis.plot(gdat.meanenerwndw, gdat.edfnwndw[:, 0])
+    axis.plot(gdat.meanenerwndw, gdat.edfncom0wndw[:, 0])
+    axis.plot(gdat.meanenerwndw, gdat.edfncom1wndw[:, 0])
     axis.set_xlabel(r'$E_\gamma$ [GeV]')
-    plt.xlim([thisbinsener[0], thisbinsener[-1]])
-    plt.savefig(pathplot + 'thisedfn_%s.png' % thisstrgenercntr)
+    plt.xlim([gdat.binsenerwndw[0], gdat.binsenerwndw[-1]])
+    plt.savefig(gdat.pathplot + 'edfnwndw_%s.png' % gdat.strgenercntrwndw)
     plt.close(figr) 
 
 
@@ -475,23 +432,21 @@ def retr_linecnts(thisener, enercntr):
 
 def retr_modlcnts(sampvarb):
     
-    global modlcnts, almcimag
-    
     slopback = sampvarb[0]
-    enertemppowr = (thismeanener / thisenercntr)**(-slopback)
+    enertemppowr = (gdat.meanenerwndw / gdat.enercntrwndw)**(-slopback)
     
     cntr = 1
     
-    if modltype != 'nullmod2' and modltype != 'altrmod2':
+    if gdat.modltype != 'nullmod2' and gdat.modltype != 'altrmod2':
         normback = sampvarb[1]
-        modlcnts[:] = normback * fdfmflux[None, :, None] * thisexpo * thisdiffener[:, None, None] * apix * enertemppowr[:, None, None]
+        gdat.modlcnts[:] = normback * gdat.fdfmflux[None, :, None] * gdat.expowndw * gdat.diffenerwndw[:, None, None] * gdat.apix * enertemppowr[:, None, None]
         cntr += 1
     else:
-        modlcnts[:] = 0.
+        gdat.modlcnts[:] = 0.
         
-    if modltype == 'nullmod0':
+    if gdat.modltype == 'nullmod0':
         numbiter = 0
-    elif modltype == 'altrmod0' or modltype == 'nullmod1' or modltype == 'nullmod2':
+    elif gdat.modltype == 'altrmod0' or gdat.modltype == 'nullmod1' or gdat.modltype == 'nullmod2':
         numbiter = 1
     else:
         numbiter = 2
@@ -503,10 +458,10 @@ def retr_modlcnts(sampvarb):
         almc = almcreal + almcimag * 1j
         modlcntstemp = hp.alm2map(almc, numbside, verbose=False)
         cntr += numbalmp
-        if k == 1 or modltype == 'altrmod0':
-            modlcnts[:] += modlcntstemp[None, :, None] * thisedfn[:, None, :]
+        if k == 1 or gdat.modltype == 'altrmod0':
+            gdat.modlcnts[:] += modlcntstemp[None, :, None] * gdat.edfnwndw[:, None, :]
         else:
-            modlcnts[:] += modlcntstemp[None, :, None] * enertemppowr[:, None, None]
+            gdat.modlcnts[:] += modlcntstemp[None, :, None] * enertemppowr[:, None, None]
        
         if False:
             print 'k ', k
@@ -516,12 +471,12 @@ def retr_modlcnts(sampvarb):
         print 'sampvarb'
         print sampvarb
         print 'modltype'
-        print modltype
+        print gdat.modltype
         print 'modlcnts'
-        print amin(modlcnts), amax(modlcnts), mean(modlcnts)
+        print amin(gdat.modlcnts), amax(gdat.modlcnts), mean(gdat.modlcnts)
         print
 
-    return modlcnts
+    return gdat.modlcnts
 
 
 def retr_llik(sampvarb, init=False):
@@ -545,7 +500,7 @@ def plot_cnts(thiscnts, strg):
     imag = plt.imshow(cart, origin='lower', cmap='Reds', extent=extt)
     plt.colorbar(imag, fraction=0.05)
 
-    plt.savefig(pathplot + '%scnts%s.png' % (strg, rtag))
+    plt.savefig(gdat.pathplot + '%scnts%s.png' % (strg, gdat.rtag))
     plt.close(figr)
 
 
@@ -562,7 +517,7 @@ def retr_numbalmp(maxmsphl, numbalmc):
     return numbalmp
 
 
-def plot_sphl():
+def plot_sphl(gdat):
 
     listmaxmsphl = logspace(0., 2., 20)
     listnumbalmc = retr_numbalmc(listmaxmsphl)
@@ -584,197 +539,237 @@ def plot_sphl():
     axis.set_xlabel('$l$')
     axis.set_title('')
     plt.subplots_adjust(hspace=0.1)
-    plt.savefig(pathplot + 'sphl.png')
+    plt.savefig(gdat.pathplot + 'sphl.png')
    
 
+class globdatastrt(object):
+    
+    def __init__(self):
+        pass
+
+
 def init( \
-         methtype='mock', \
+         methtype='almc', \
          datatype='mock', \
         ):
 
-    global reco, evtc, numbevtt, numbevtt, evtt, numbener, minmener, maxmener, binsener, meanener, diffener, indxener, numbside, numbpixl, apix
-    reco, evtc, numbevtt, numbevtt, evtt, numbener, minmener, maxmener, binsener, meanener, diffener, indxener, numbside, numbpixl, apix = retr_axes()
-
-    global indxpixl
-    indxpixl = arange(numbpixl)
+    # initialize the global object 
+    gdat = globdatastrt()
     
-    global pathbase, pathplot
-    pathbase = os.environ["FERM_LINE_DATA_PATH"]
-    pathplot = pathbase + '/png/'
-    cmnd = 'mkdir -p ' + pathplot
+    # event class
+    #gdat.reco = 8
+    #gdat.evtc = 128
+    
+    # energy axis
+    gdat.minmener = 10. # [GeV]
+    gdat.maxmener = 1000. # [GeV]
+    gdat.resoener = 0.1
+    gdat.numbener = int(4. * (gdat.maxmener / gdat.minmener) / gdat.resoener)
+    gdat.binsener = logspace(log10(gdat.minmener), log10(gdat.maxmener), gdat.numbener + 1)
+    gdat.meanener = sqrt(gdat.binsener[1:] * gdat.binsener[0:-1])
+    gdat.diffener = gdat.binsener[1:] - gdat.binsener[0:-1]
+    gdat.indxener = arange(gdat.numbener)
+    #gdat.indxenerpivt = gdat.numbener / 2
+    #gdat.enerpivt = gdat.meanener[gdat.indxenerpivt]
+
+    # event type axis
+    gdat.evtt = array([64, 128, 256, 512])
+    gdat.numbevtt = gdat.evtt.size
+    gdat.indxevtt = arange(gdat.numbevtt)
+    
+    # healpix setup
+    gdat.numbside = 8
+    gdat.numbpixl = gdat.numbside**2 * 12
+    gdat.indxpixl = arange(gdat.numbpixl)
+    gdat.apix = 4. * pi / gdat.numbpixl
+    
+    # base project path
+    gdat.pathbase = os.environ["FERM_LINE_DATA_PATH"]
+    
+    # plot setup
+    ## ROI settings
+    gdat.exttrofi = [-180., 180., -90., 90.]
+    ## prepare plot folder
+    gdat.pathplot = gdat.pathbase + '/png/'
+    cmnd = 'mkdir -p ' + gdat.pathplot
     os.system(cmnd)
     if os.uname()[1] == 'fink1.rc.fas.harvard.edu' and getpass.getuser() == 'tansu':
-        cmnd = 'mv ' + pathplot + '/* /n/pan/www/tansu/png/ferm_line/'
+        cmnd = 'mv ' + gdat.pathplot + '/* /n/pan/www/tansu/png/ferm_line/'
         os.system(cmnd)
     
-    global extt
-    extt = [-180., 180., -90., 90.]
+    # maximum multipole moment
+    gdat.maxmsphl = 1
+
+    # number of alm coefficients
+    gdat.numbalmc = retr_numbalmc(gdat.maxmsphl)
+
+    # number of parameters
+    gdat.numbalmp = retr_numbalmp(gdat.maxmsphl, gdat.numbalmc)
     
-    global numbalmc, maxmsphl, numbalmp
-    maxmsphl = 1
-    numbalmc = retr_numbalmc(maxmsphl)
-    numbalmp = retr_numbalmp(maxmsphl, numbalmc)
+    # initial plots
+    ## spherical harmonics
+    plot_sphl(gdat)
     
-    plot_sphl()
-    
-    global sampcalc
-    sampcalc = []
+    # auxiliary variables to be collected during sampling
+    gdat.sampcalc = []
    
-    global lliktype
-    lliktype = 'bind'
+    gdat.lliktype = 'bind'
 
-    global datacnts, datacntsmean
-
-    global enerpivt, indxenerpivt
-    indxenerpivt = numbener / 2
-    enerpivt = meanener[indxenerpivt]
+    # energy window
+    ## number of energy bins in the sliding window
+    gdat.numbenerwndw = 10 * int(0.03 * gdat.numbener) + 1
+    gdat.indxenerwndwplot = gdat.numbenerwndw / 2
+    ## hald of the sliding window
+    gdat.numbenerwndwside = (gdat.numbenerwndw - 1) / 2
     
-    global numbenerwndw, numbenerwndwside
-    numbenerwndw = 10 * int(0.03 * numbener) + 1
-    numbenerwndwside = (numbenerwndw - 1) / 2
+    # exposure
     
-    strgexpo = '/expo%03d.fits' % numbside   
-    expo = pf.getdata(os.environ["FERM_LINE_DATA_PATH"] + strgexpo)
-    expotemp = copy(expo)
-    expo = empty((numbener, numbpixl, numbevtt))
-    expo[:] = expotemp[0, :, :][None, :, :]
+    # temp
+    strgexpo = '/expo%03d.fits' % gdat.numbside   
+    gdat.expo = pf.getdata(os.environ["FERM_LINE_DATA_PATH"] + strgexpo)
+    expotemp = copy(gdat.expo)
+    gdat.expo = empty((gdat.numbener, gdat.numbpixl, gdat.numbevtt))
+    gdat.expo[:] = expotemp[0, :, :][None, :, :]
 
-    global fdfmflux, fdfmcnts
-    path = os.environ["FERM_LINE_DATA_PATH"] + '/fdfm%03d.fits' % numbside
-    fdfmflux = pf.getdata(path)
-    fdfmcnts = fdfmflux[None, :, None] * expo * diffener[:, None, None] * apix
+    # data
+    path = os.environ["FERM_LINE_DATA_PATH"] + '/fdfm%03d.fits' % gdat.numbside
+    
+    gdat.fdfmflux = pf.getdata(path)
+
+    gdat.fdfmcnts = gdat.fdfmflux[None, :, None] * gdat.expo * gdat.diffener[:, None, None] * gdat.apix
     
     # common MCMC settings 
-    verbtype = 3
-    factthin = 1
-    numbproc = 1
-    optiprop = False
+    gdat.verbtype = 3
+    gdat.factthin = 1
+    gdat.numbproc = 1
+    gdat.optiprop = False
     
-    global edfn
-
-    global almcimag
-    almcimag = zeros(numbalmc)
-
-    global modlcnts
-    modlcnts = empty((numbenerwndw, numbpixl, numbevtt))
+    # convenience data structure
+    ## alm coefficients
+    gdat.almcimag = zeros(gdat.numbalmc)
+    # model counts
+    gdat.modlcnts = empty((gdat.numbenerwndw, gdat.numbpixl, gdat.numbevtt))
     
     # energy axis label
-    global strgenercntr
-    strgenercntr = ['%.3g' % meanener[i] for i in indxener]
+    gdat.strgenercntr = ['%.3g' % gdat.meanener[i] for i in gdat.indxener]
 
-    global indxenerwndwplot
-    indxenerwndwplot = numbenerwndw / 2
-
-    global thisindxenercntr, thisminmindxener, thismaxmindxener, thisindxener, \
-        thisdatacnts, thisexpo, thisfdfmcnts, thisenercntr, thismeanener, thisbinsener, thisdiffener, thisedfn, thisedfncom0, thisedfncom1, thisstrgenercntr
-
-    global enercntr, modltype, rtag, indxenercntr
-    numbenercntr = 20
-    listindxenercntr = linspace(numbenerwndw, numbener - numbenerwndw, numbenercntr).astype(int)
+    # center energies
+    gdat.numbenercntr = 20
+    gdat.listindxenercntr = linspace(gdat.numbenerwndw, gdat.numbener - gdat.numbenerwndw, gdat.numbenercntr).astype(int)
 
     # get data counts
     if datatype == 'mock':
-        datacnts = zeros_like(expo)
+        gdat.datacnts = zeros_like(gdat.expo)
         ## temp -- FDM morphology should be energy dependent
-        mockenertemppowr = meanener**(-2.6) * 1e5
-        fdfmcnts = fdfmflux[None, :, None] * expo * diffener[:, None, None] * apix * mockenertemppowr[:, None, None]
-        mockcnts = fdfmcnts
-        for i in indxener:
-            for j in indxpixl:
-                for m in indxevtt:
-                    datacnts[i, j, m] = poisson(mockcnts[i, j, m])
+        mockenertemppowr = gdat.meanener**(-2.6) * 1e5
+        gdat.fdfmcnts = gdat.fdfmflux[None, :, None] * gdat.expo * gdat.diffener[:, None, None] * gdat.apix * mockenertemppowr[:, None, None]
+        gdat.mockcnts = gdat.fdfmcnts
+        for i in gdat.indxener:
+            for j in gdat.indxpixl:
+                for m in gdat.indxevtt:
+                    gdat.datacnts[i, j, m] = poisson(gdat.mockcnts[i, j, m])
     else:
-        strgflux = '/flux%03d.fits' % numbside
-        dataflux = pf.getdata(os.environ["FERM_LINE_DATA_PATH"] + strgflux)
-        datacnts = dataflux * expo * diffener[:, None, None] * apix
+        strgflux = '/flux%03d.fits' % gdat.numbside
+        gdat.dataflux = pf.getdata(os.environ["FERM_LINE_DATA_PATH"] + strgflux)
+        gdat.datacnts = gdat.dataflux * gdat.expo * gdat.diffener[:, None, None] * gdat.apix
 
     # plot data counts
-    datacntsmean = sum(datacnts, 1)
-    plot_datacntsmean(datacntsmean, '_init')
+    gdat.datacntsmean = sum(gdat.datacnts, 1)
+    
+    # model types
+    gdat.listmodltype = ['nullmod0', 'altrmod0']
+    #listmodltype = ['nullmod1', 'altrmod1']
     
     # temp
-    listindxenercntr = listindxenercntr[numbenercntr/2-1:numbenercntr/2+2]
-    listenercntr = meanener[listindxenercntr]
-    numbenercntr = listenercntr.size
-    listlevi = zeros((2, numbenercntr))
+    gdat.listindxenercntr = gdat.listindxenercntr[gdat.numbenercntr/2-1:gdat.numbenercntr/2+2]
+    gdat.listenercntr = gdat.meanener[gdat.listindxenercntr]
+    gdat.numbenercntr = gdat.listenercntr.size
+    gdat.listlevi = zeros((2, gdat.numbenercntr))
     
+    for n, gdat.enercntrwndw in enumerate(gdat.listenercntr):
 
-    for n, enercntr in enumerate(listenercntr):
+        # get window variables
+        gdat.indxenercntrwndw = gdat.listindxenercntr[n]
+        gdat.minmindxenerwndw = gdat.indxenercntrwndw - gdat.numbenerwndwside
+        gdat.maxmindxenerwndw = gdat.indxenercntrwndw + gdat.numbenerwndwside
+        gdat.indxenerwndw = arange(gdat.minmindxenerwndw, gdat.maxmindxenerwndw + 1)
 
-        thisindxenercntr = listindxenercntr[n]
-        thisminmindxener = thisindxenercntr - numbenerwndwside
-        thismaxmindxener = thisindxenercntr + numbenerwndwside
-        thisindxener = arange(thisminmindxener, thismaxmindxener + 1)
-
-        indxmesh = meshgrid(thisindxener, indxpixl, indxevtt, indexing='ij')
-        thisdatacnts = datacnts[indxmesh]
-        thisexpo = expo[indxmesh]
-        thisfdfmcnts = fdfmcnts[indxmesh]
-
-        thisenercntr = meanener[thisindxenercntr]
+        indxmesh = meshgrid(gdat.indxenerwndw, gdat.indxpixl, gdat.indxevtt, indexing='ij')
+        gdat.datacntswndw = gdat.datacnts[indxmesh]
+        gdat.expowndw = gdat.expo[indxmesh]
+        gdat.fdfmcntswndw = gdat.fdfmcnts[indxmesh]
         
-        thismeanener = meanener[thisminmindxener:thismaxmindxener+1]
-        thisbinsener = binsener[thisminmindxener:thismaxmindxener+2]
-        thisdiffener = diffener[thisminmindxener:thismaxmindxener+1]
+        indxmesh = meshgrid(gdat.indxenerwndw, gdat.indxevtt, indexing='ij')
+        gdat.datacntsmeanwndw = gdat.datacntsmean[indxmesh]
 
-        thisedfn, thisedfncom0, thisedfncom1 = retr_fermedfn(thismeanener, thisenercntr)
+        gdat.enercntrwndw = gdat.meanener[gdat.indxenercntrwndw]
         
-        thisstrgenercntr = strgenercntr[thisindxenercntr]
-    
-    almc()
+        gdat.minmenerwndw = gdat.binsener[gdat.minmindxenerwndw]
+        gdat.maxmenerwndw = gdat.binsener[gdat.maxmindxenerwndw+1]
+        
+        gdat.meanenerwndw = gdat.meanener[gdat.minmindxenerwndw:gdat.maxmindxenerwndw+1]
+        gdat.binsenerwndw = gdat.binsener[gdat.minmindxenerwndw:gdat.maxmindxenerwndw+2]
+        gdat.diffenerwndw = gdat.diffener[gdat.minmindxenerwndw:gdat.maxmindxenerwndw+1]
 
-def diff():
+        gdat.edfnwndw, gdat.edfncom0wndw, gdat.edfncom1wndw = retr_fermedfn(gdat, gdat.meanenerwndw, gdat.enercntrwndw)
+        
+        gdat.strgenercntrwndw = gdat.strgenercntr[gdat.indxenercntrwndw]
+   
+        plot_edfnwndw(gdat)
+        plot_datacntsmean(gdat)
+
+        if methtype == 'almc':
+            almc(gdat)
+        if methtype == 'diff':
+            diff(gdat)
+
+
+def diff(gdattemp):
+    global gdat
+    gdat = gdattemp
 
     for j in indxpixl:
         
         sampbund = tdpy.mcmc.init(numbproc, numbswep, retr_llik, datapara, thissamp=thissamp, numbburn=numbburn, \
-            factthin=factthin, optiprop=optiprop, verbtype=verbtype, pathbase=pathbase, rtag=rtag, numbplotside=numbplotside)
+            factthin=factthin, optiprop=optiprop, verbtype=verbtype, pathbase=pathbase, rtag=gdat.rtag, numbplotside=numbplotside)
 
     diffmaps = flux
 
 
-def almc():
+def almc(gdattemp):
+    global gdat
+    gdat = gdattemp
 
-    plot_thisedfn()
+    for k, gdat.modltype in enumerate(gdat.listmodltype):
 
-    listmodltype = ['nullmod0', 'altrmod0']
-    #listmodltype = ['nullmod2', 'altrmod2']
-    #listmodltype = ['nullmod2']
-    for k, modltype in enumerate(listmodltype):
-
-        rtag = '_%s_%s_%02d' % (modltype, thisstrgenercntr, maxmsphl)
+        gdat.rtag = '_%s_%s_%02d' % (gdat.modltype, gdat.strgenercntrwndw, gdat.maxmsphl)
                 
-        datapara = retr_datapara()
+        datapara = retr_datapara(gdat)
         namepara, strgpara, minmpara, maxmpara, scalpara, lablpara, unitpara, varindxpara, dictpara = datapara
-        numbpara = len(lablpara)
+        gdat.numbpara = len(lablpara)
 
-        numbswep = 1000 * numbpara
-        plotperd = numbswep / 10
-        numbburn = numbswep / 10
-        numbsamp = tdpy.mcmc.retr_numbsamp(numbswep, numbburn, factthin)
+        gdat.numbswep = 1000 * gdat.numbpara
+        gdat.plotperd = gdat.numbswep / 10
+        gdat.numbburn = gdat.numbswep / 10
+        gdat.numbsamp = tdpy.mcmc.retr_numbsamp(gdat.numbswep, gdat.numbburn, gdat.factthin)
 
-        pathmedisamp = os.environ["FERM_LINE_DATA_PATH"] + '/medisamp%s.fits' % rtag
-        thissamp = empty((numbproc, numbpara))
+        pathmedisamp = os.environ["FERM_LINE_DATA_PATH"] + '/medisamp%s.fits' % gdat.rtag
+        thissamp = empty((gdat.numbproc, gdat.numbpara))
         if os.path.isfile(pathmedisamp):
             print 'Loading initial sample from the previous run.'
             thissampvarb = pf.getdata(pathmedisamp)
             thissamp[:] = tdpy.mcmc.cdfn_samp(thissampvarb, datapara)[None, :]
         else:
-            if modltype == 'nullmod0' or modltype == 'altrmod0' or modltype == 'nullmod1' or modltype == 'altrmod1':
-                thissamp[:, 0:2] = rand(2 * numbproc)
-                thissamp[:, 2:] = 0.5
-            if modltype == 'nullmod2' or modltype == 'altrmod2':
-                thissamp[:, 0] = rand(numbproc)
-                thissamp[:, 1] = 1.
+            if gdat.modltype == 'nullmod0' or gdat.modltype == 'altrmod0' or gdat.modltype == 'nullmod1' or gdat.modltype == 'altrmod1':
+                thissamp[:, 0:2] = rand(2 * gdat.numbproc)
                 thissamp[:, 2:] = 0.5
                 
-        if numbpara > 10:
+        if gdat.numbpara > 10:
             numbplotside = 10
         else:
-            numbplotside = numbpara
-        
-        sampbund = tdpy.mcmc.init(numbproc, numbswep, retr_llik, datapara, thissamp=thissamp, numbburn=numbburn, \
-            factthin=factthin, optiprop=optiprop, verbtype=verbtype, pathbase=pathbase, rtag=rtag, numbplotside=numbplotside)
+            numbplotside = gdat.numbpara
+        sampbund = tdpy.mcmc.init(gdat.numbproc, gdat.numbswep, retr_llik, datapara, thissamp=thissamp, numbburn=gdat.numbburn, \
+            factthin=gdat.factthin, optiprop=gdat.optiprop, verbtype=gdat.verbtype, pathbase=gdat.pathbase, rtag=gdat.rtag, numbplotside=numbplotside)
 
         listsampvarb = sampbund[0]
         listsamp = sampbund[1]
@@ -803,7 +798,7 @@ def almc():
     axis.plot(listenercntr, bayefact)
     axis.set_xlabel(r'$E_\gamma$ [GeV]')
     axis.set_ylabel('BF')
-    plt.savefig(pathplot + 'bayefact.png')
+    plt.savefig(gdat.pathplot + 'bayefact.png')
     plt.close(figr) 
         
 
@@ -814,4 +809,4 @@ if __name__ == '__main__':
     #writ_maps()
     #make_maps()
     #prep_maps()
-    init('mock')
+    init(methtype='almc')
