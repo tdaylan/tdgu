@@ -575,8 +575,8 @@ def init( \
     #gdat.evtc = 128
     
     # energy axis
-    gdat.minmener = 10. # [GeV]
-    gdat.maxmener = 1000. # [GeV]
+    gdat.minmener = 30. # [GeV]
+    gdat.maxmener = 300. # [GeV]
     gdat.resoener = 0.1
     gdat.numbener = int(4. * (gdat.maxmener / gdat.minmener) / gdat.resoener)
     gdat.binsener = logspace(log10(gdat.minmener), log10(gdat.maxmener), gdat.numbener + 1)
@@ -645,12 +645,17 @@ def init( \
     gdat.expo = empty((gdat.numbener, gdat.numbpixl, gdat.numbevtt))
     gdat.expo[:] = expotemp[0, :, :][None, :, :]
 
-    # data
-    path = os.environ["FERM_LINE_DATA_PATH"] + '/fdfm%03d.fits' % gdat.numbside
+    # diffuse model
+    fdfmfluxtemp = tdpy.util.retr_fdfm(gdat.binsener, numbside=gdat.numbside)  
+    gdat.fdfmflux = empty((gdat.numbener, gdat.numbpixl, gdat.numbevtt))
+    for m in gdat.indxevtt:
+        gdat.fdfmflux[:, :, m] = fdfmfluxtemp
     
-    gdat.fdfmflux = pf.getdata(path)
-
-    gdat.fdfmcnts = gdat.fdfmflux[None, :, None] * gdat.expo * gdat.diffener[:, None, None] * gdat.apix
+    # temp
+    #path = os.environ["FERM_LINE_DATA_PATH"] + '/fdfm%03d.fits' % gdat.numbside
+    #gdat.fdfmflux = pf.getdata(path)
+    
+    gdat.fdfmcnts = gdat.fdfmflux * gdat.expo * gdat.diffener[:, None, None] * gdat.apix
     
     # common MCMC settings 
     gdat.verbtype = 1
