@@ -253,18 +253,18 @@ def retr_datapara(gdat):
 
 def defn_almcpara(typepara, cntrpara, dictpara, namepara, minmpara, maxmpara, scalpara, lablpara, unitpara, varipara):
     
-    listsphl, listsphm = hp.Alm.getlm(maxmsphl)
+    listsphl, listsphm = hp.Alm.getlm(gdat.maxmsphl)
     listsphl = tile(listsphl, 2)
     listsphm = tile(listsphm, 2)
 
     temp = []
-    for k in range(numbalmc):
-        if listsphm[numbalmc+k] == 0:
-            temp.append(numbalmc + k)
+    for k in range(gdat.numbalmc):
+        if listsphm[gdat.numbalmc+k] == 0:
+            temp.append(gdat.numbalmc + k)
     listsphl = delete(listsphl, temp)
     listsphm = delete(listsphm, temp)
 
-    maxmindxpara = cntrpara + numbalmp
+    maxmindxpara = cntrpara + gdat.numbalmp
         
     for k in range(cntrpara, maxmindxpara):
         dictpara['para%04d' % k] = k
@@ -276,12 +276,12 @@ def defn_almcpara(typepara, cntrpara, dictpara, namepara, minmpara, maxmpara, sc
             strg = '$a^{P}'
         if typepara == 'linespec':
             strg = '$a^{L}'
-        if k < cntrpara + numbalmc:
+        if k < cntrpara + gdat.numbalmc:
             lablpara[k] = 'Re{'
         else:
             lablpara[k] = 'Im{' 
         lablpara[k] += '%s_{%d%d}$' % (strg, listsphl[k - cntrpara],   listsphm[k - cntrpara])
-        if k < numbalmc:
+        if k < gdat.numbalmc:
             lablpara[k] += '}'
         else:
             lablpara[k] += '}'
@@ -291,7 +291,6 @@ def defn_almcpara(typepara, cntrpara, dictpara, namepara, minmpara, maxmpara, sc
 
 def retr_aexp(scaldevi, stdv, skew, bias, slop):
 
-    
     aexp = slop / stdv / sp.special.gamma(1. / slop) * skew / (1. + skew**2)
     indxscalfrwd = where(scaldevi - bias > 0.)
     indxscalback = where(scaldevi - bias <= 0.)
@@ -362,6 +361,21 @@ def retr_fermedfn(gdat, thisener, enercntr):
         # scale parameters
         scalpara[m, :] = listhdun['EDISP_SCALING_PARAMS_EDISP%d' % m].data['EDISPSCALE']
 
+        
+    print 'hey'
+    print mean(frac, axis=1)
+    for k in range(2):
+        print 'stdv'
+        print mean(stdv, axis=1)
+        print 'skew'
+        print mean(skew, axis=1)
+        print 'bias'
+        print mean(bias, axis=1)
+        print 'slop'
+        print mean(slop, axis=1)
+        print
+    print 
+    print
     scalfact = scalpara[None, None, :, 0] * log(thisener[:, None, None])**2 + \
                scalpara[None, None, :, 1] * cthtirfn[None, :, None]**2 + \
                scalpara[None, None, :, 2] * log(thisener[:, None, None]) + \
@@ -453,11 +467,11 @@ def retr_modlcnts(sampvarb):
         
     for k in range(numbiter):
         
-        almcreal = sampvarb[cntr:cntr+numbalmc]
-        almcimag[maxmsphl+1:] = sampvarb[cntr+numbalmc:cntr+numbalmp]
-        almc = almcreal + almcimag * 1j
-        modlcntstemp = hp.alm2map(almc, numbside, verbose=False)
-        cntr += numbalmp
+        almcreal = sampvarb[cntr:cntr+gdat.numbalmc]
+        gdat.almcimag[gdat.maxmsphl+1:] = sampvarb[cntr+gdat.numbalmc:cntr+gdat.numbalmp]
+        almc = almcreal + gdat.almcimag * 1j
+        modlcntstemp = hp.alm2map(almc, gdat.numbside, verbose=False)
+        cntr += gdat.numbalmp
         if k == 1 or gdat.modltype == 'altrmod0':
             gdat.modlcnts[:] += modlcntstemp[None, :, None] * gdat.edfnwndw[:, None, :]
         else:
@@ -488,16 +502,16 @@ def retr_llik(sampvarb, init=False):
     else:
         llik = sum(exp(-modlcntsintp))
     
-    return llik, sampcalc
+    return llik, gdat.sampcalc
     
 
 def plot_cnts(thiscnts, strg):
 
-    cart = tdpy.util.retr_cart(sum(thiscnts[indxenerwndwplot, :, :], 1))
+    cart = tdpy.util.retr_cart(sum(thiscnts[gdat.indxenerwndwplot, :, :], 1))
 
     figr, axis = plt.subplots()
     
-    imag = plt.imshow(cart, origin='lower', cmap='Reds', extent=extt)
+    imag = plt.imshow(cart, origin='lower', cmap='Reds', extent=gdat.exttrofi)
     plt.colorbar(imag, fraction=0.05)
 
     plt.savefig(gdat.pathplot + '%scnts%s.png' % (strg, gdat.rtag))
@@ -639,10 +653,10 @@ def init( \
     gdat.fdfmcnts = gdat.fdfmflux[None, :, None] * gdat.expo * gdat.diffener[:, None, None] * gdat.apix
     
     # common MCMC settings 
-    gdat.verbtype = 3
+    gdat.verbtype = 1
     gdat.factthin = 1
     gdat.numbproc = 1
-    gdat.optiprop = False
+    gdat.optiprop = True
     
     # convenience data structure
     ## alm coefficients
@@ -686,10 +700,10 @@ def init( \
     gdat.numbenercntr = gdat.listenercntr.size
     gdat.listlevi = zeros((2, gdat.numbenercntr))
     
-    for n, gdat.enercntrwndw in enumerate(gdat.listenercntr):
+    for gdat.thisindxener, gdat.enercntrwndw in enumerate(gdat.listenercntr):
 
         # get window variables
-        gdat.indxenercntrwndw = gdat.listindxenercntr[n]
+        gdat.indxenercntrwndw = gdat.listindxenercntr[gdat.thisindxener]
         gdat.minmindxenerwndw = gdat.indxenercntrwndw - gdat.numbenerwndwside
         gdat.maxmindxenerwndw = gdat.indxenercntrwndw + gdat.numbenerwndwside
         gdat.indxenerwndw = arange(gdat.minmindxenerwndw, gdat.maxmindxenerwndw + 1)
@@ -748,7 +762,7 @@ def almc(gdattemp):
         namepara, strgpara, minmpara, maxmpara, scalpara, lablpara, unitpara, varindxpara, dictpara = datapara
         gdat.numbpara = len(lablpara)
 
-        gdat.numbswep = 1000 * gdat.numbpara
+        gdat.numbswep = 100 * gdat.numbpara
         gdat.plotperd = gdat.numbswep / 10
         gdat.numbburn = gdat.numbswep / 10
         gdat.numbsamp = tdpy.mcmc.retr_numbsamp(gdat.numbswep, gdat.numbburn, gdat.factthin)
@@ -781,23 +795,23 @@ def almc(gdattemp):
         levi = sampbund[7]
         info = sampbund[8]
             
-        listlevi[k, n] = levi
+        gdat.listlevi[k, gdat.thisindxener] = levi
     
         medisampvarb = percentile(listsampvarb, 50., axis=0)
         pf.writeto(pathmedisamp, medisampvarb, clobber=True)
         
-        gdat.medicntswndw = retr_modlcnts(medisampvarb)
-        gdat.resicntswndw = gdat.datacntswndw - gdat.medicntswndw
+        gdat.modlcntswndw = retr_modlcnts(medisampvarb)
+        gdat.resicntswndw = gdat.datacntswndw - gdat.modlcntswndw
         plot_cnts(gdat.datacntswndw, 'datacnts')
         plot_cnts(gdat.modlcntswndw, 'modlcnts')
         plot_cnts(gdat.resicntswndw, 'resicnts')
 
-    print listlevi.T
+    print gdat.listlevi.T
     
-    bayefact = exp(listlevi[1, :] - listlevi[0, :])
+    bayefact = exp(gdat.listlevi[1, :] - gdat.listlevi[0, :])
     
     figr, axis = plt.subplots()
-    axis.plot(listenercntr, bayefact)
+    axis.plot(gdat.listenercntr, bayefact)
     axis.set_xlabel(r'$E_\gamma$ [GeV]')
     axis.set_ylabel('BF')
     plt.savefig(gdat.pathplot + 'bayefact.png')
