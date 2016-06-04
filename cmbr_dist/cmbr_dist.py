@@ -821,17 +821,17 @@ def retr_llik(sampvarb, init=False):
             thisswepcntr = nextswepcntr
         swepcntr += 1
 
-    modlfluxtotl, modlfluxcmbr, modlfluxdustcold, modlfluxdustwarm, modlfluxsync,           modlfluxfree, modlfluxydis, modlfluxdeca = retr_flux(freqmodl, sampvarb)
+    modlfluxtotl, modlfluxcmbr, modlfluxdustcold, modlfluxdustwarm, modlfluxsync, modlfluxfree, modlfluxydis, modlfluxdeca = retr_flux(freqmodl, sampvarb)
        
     modlfluxintp = interp1d(freqmodl, modlfluxtotl)(freqexpr)
     resiflux = dataflux - modlfluxintp
 
-    llik = sum(-log(sqrt(2. * pi) * datafluxstdv) - 0.5 *                (modlfluxintp - dataflux) / datafluxstdv**2 * (modlfluxintp - dataflux))
+    llik = sum(-log(sqrt(2. * pi) * datafluxstdv) - 0.5 * (modlfluxintp - dataflux) / datafluxstdv**2 * (modlfluxintp - dataflux))
 
     if savepost:
-        sampcalc = []
+        sampcalc = modlfluxtotl, modlfluxcmbr, modlfluxdustcold, modlfluxdustwarm, modlfluxsync, modlfluxfree, modlfluxydis, modlfluxdeca, resiflux
     else:
-        sampcalc = modlfluxtotl, modlfluxcmbr, modlfluxdustcold, modlfluxdustwarm, modlfluxsync,             modlfluxfree, modlfluxydis, modlfluxdeca, resiflux
+        sampcalc = []
 
     if samptype == 'emce':
         return llik
@@ -1230,11 +1230,6 @@ def init(cnfg):
     global listsampunitfull
     listsampunitfull = []
     
-    if savepost:
-        numbsampcalc = 9
-    else:
-        numbsampcalc = 0
-
     numbproc = 1
     if samptype == 'emce':
         
@@ -1498,7 +1493,28 @@ def retr_plnktran():
     return freq, tran
     
 
-def retr_cnfg(               samptype='emce',               datatype='mock',               exprtype='pixi',               datalabl='PIXIE',               numbswep=100000,               numbburn=0,               factthin=1,               exprflux=None,               exprfluxstdv=None,               freqexpr=None,               numbfreqexpr=None,               freqexprstdv=None,               minmfreqexpr=None,               maxmfreqexpr=None,               exprfluxstdvinst=None,               exprfluxstdvfrac=None,               inclcmbrmono=None,               plotperd=10000,               verbtype=1,               optiprop=False,               makeplot=False,               ):
+def retr_cnfg(samptype='emce', \
+              datatype='mock', \
+              exprtype='pixi', \
+              datalabl='PIXIE', \
+              numbswep=100000, \
+              numbburn=0, \
+              factthin=1, \
+              exprflux=None, \
+              exprfluxstdv=None, \
+              freqexpr=None, \
+              numbfreqexpr=None, \
+              freqexprstdv=None, \
+              minmfreqexpr=None, \
+              maxmfreqexpr=None, \
+              exprfluxstdvinst=None, \
+              exprfluxstdvfrac=None, \
+              inclcmbrmono=None, \
+              plotperd=10000, \
+              verbtype=1, \
+              optiprop=True, \
+              makeplot=False, \
+              ):
         
     cnfg = dict()
     
@@ -1548,9 +1564,9 @@ def retr_rtag():
 
 def chek_plnk():
     
-    jpixl = random_integers(0, 12*256**2, size=100)
-    exprflux = loadtxt(os.environ["CMBR_DIST_DATA_PATH"] + '/plnkflux.dat')[jpixl, :]
-    exprfluxstdv = loadtxt(os.environ["CMBR_DIST_DATA_PATH"] + '/plnkfluxstdv.dat')[jpixl, :]
+    indxpixltemp = random_integers(0, 12*256**2, size=100)
+    exprflux = loadtxt(os.environ["CMBR_DIST_DATA_PATH"] + '/plnkflux.dat')[indxpixltemp, :]
+    exprfluxstdv = loadtxt(os.environ["CMBR_DIST_DATA_PATH"] + '/plnkfluxstdv.dat')[indxpixltemp, :]
 
     freqexpr, freqexprstdv, exprfluxstdvinst, exprfluxstdvfrac = retr_plnkfreq()
 
@@ -1648,9 +1664,19 @@ def cnfg_pixi_mock():
     
     exprfluxstdvinst = 5e0 # [Jy/sr]
     exprfluxstdvfrac = 1e-20
-
     
-    cnfg = retr_cnfg(                     numbswep=5000, verbtype=1, makeplot=True, inclcmbrmono=True, optiprop=True, numbfreqexpr=numbfreqexpr, minmfreqexpr=minmfreqexpr, maxmfreqexpr=maxmfreqexpr, freqexprstdv=freqexprstdv, exprfluxstdvinst=exprfluxstdvinst, exprfluxstdvfrac=exprfluxstdvfrac                     )
+    cnfg = retr_cnfg( \
+                     numbswep=5000, \
+                     verbtype=1, \
+                     makeplot=True, \
+                     inclcmbrmono=True, \
+                     numbfreqexpr=numbfreqexpr, \
+                     minmfreqexpr=minmfreqexpr, \
+                     maxmfreqexpr=maxmfreqexpr, \
+                     freqexprstdv=freqexprstdv, \
+                     exprfluxstdvinst=exprfluxstdvinst, \
+                     exprfluxstdvfrac=exprfluxstdvfrac \
+                     )
     
     statpara = init(cnfg)
     
@@ -1706,7 +1732,6 @@ def cnfg_pixi_mock_stdv(samptype):
                              verbtype=1, \
                              makeplot=True, \
                              inclcmbrmono=True, \
-                             optiprop=False, \
                              numbfreqexpr=numbfreqexpr, \
                              minmfreqexpr=minmfreqexpr, \
                              maxmfreqexpr=maxmfreqexpr, \
@@ -1716,7 +1741,6 @@ def cnfg_pixi_mock_stdv(samptype):
                             )
 
             statparagrid[k, l, :, :] = init(cnfg)
-              
 
     for k in range(npertpara):
         
@@ -1780,5 +1804,4 @@ if __name__ == '__main__':
     if os.uname()[1] == 'fink1.rc.fas.harvard.edu':
         cmnd = 'cp -r ' + os.environ["CMBR_DIST_DATA_PATH"] + '/png/* /n/pan/www/tansu/png/cmbr_dist/'
         os.system(cmnd)
-
 

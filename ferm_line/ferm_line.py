@@ -361,21 +361,21 @@ def retr_fermedfn(gdat, thisener, enercntr):
         # scale parameters
         scalpara[m, :] = listhdun['EDISP_SCALING_PARAMS_EDISP%d' % m].data['EDISPSCALE']
 
-        
-    print 'hey'
-    print mean(frac, axis=1)
-    for k in range(2):
-        print 'stdv'
-        print mean(stdv, axis=1)
-        print 'skew'
-        print mean(skew, axis=1)
-        print 'bias'
-        print mean(bias, axis=1)
-        print 'slop'
-        print mean(slop, axis=1)
+    if False: 
+        print 'hey'
+        print mean(frac, axis=1)
+        for k in range(2):
+            print 'stdv'
+            print mean(stdv, axis=1)
+            print 'skew'
+            print mean(skew, axis=1)
+            print 'bias'
+            print mean(bias, axis=1)
+            print 'slop'
+            print mean(slop, axis=1)
+            print
+        print 
         print
-    print 
-    print
     scalfact = scalpara[None, None, :, 0] * log(thisener[:, None, None])**2 + \
                scalpara[None, None, :, 1] * cthtirfn[None, :, None]**2 + \
                scalpara[None, None, :, 2] * log(thisener[:, None, None]) + \
@@ -722,10 +722,10 @@ def init( \
     gdat.numbenercntr = gdat.listenercntr.size
     gdat.listlevi = empty(2)
     
-    for gdat.thisindxener, gdat.enercntrwndw in enumerate(gdat.listenercntr):
+    for gdat.thisindxenercntr, gdat.enercntrwndw in enumerate(gdat.listenercntr):
 
         # get window variables
-        gdat.indxenercntrwndw = gdat.listindxenercntr[gdat.thisindxener]
+        gdat.indxenercntrwndw = gdat.listindxenercntr[gdat.thisindxenercntr]
         gdat.minmindxenerwndw = gdat.indxenercntrwndw - gdat.numbenerwndwside
         gdat.maxmindxenerwndw = gdat.indxenercntrwndw + gdat.numbenerwndwside
         gdat.indxenerwndw = arange(gdat.minmindxenerwndw, gdat.maxmindxenerwndw + 1)
@@ -787,7 +787,7 @@ def almc(gdattemp):
 
     for k, gdat.modltype in enumerate(gdat.listmodltype):
 
-        gdat.rtag = '_%s_%s_%02d' % (gdat.modltype, gdat.strgenercntrwndw, gdat.maxmsphl)
+        gdat.rtag = '%s_%s_%02d' % (gdat.modltype, gdat.strgenercntrwndw, gdat.maxmsphl)
                 
         datapara = retr_datapara(gdat)
         namepara, strgpara, minmpara, maxmpara, scalpara, lablpara, unitpara, varindxpara, dictpara = datapara
@@ -837,7 +837,13 @@ def almc(gdattemp):
         plot_cnts(gdat.modlcntswndw, 'modlcnts')
         plot_cnts(gdat.resicntswndw, 'resicnts')
 
-    gdat.bayefact[gdat.thisindxener] = exp(gdat.listlevi[1] - gdat.listlevi[0])
+    print 'hey'
+    print 'gdat.thisindxenercntr'
+    print gdat.thisindxenercntr
+    print 'gdat.bayefact'
+    print gdat.bayefact
+    print 
+    gdat.bayefact[gdat.thisindxenercntr] = exp(gdat.listlevi[1] - gdat.listlevi[0])
     
 
 if __name__ == '__main__':
