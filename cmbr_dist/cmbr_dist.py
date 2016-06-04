@@ -85,7 +85,7 @@ def plot_grnf():
     ax[1].plot(reds, vifm * vift + vify - vift, 'y')
     ax[1].set_xscale('log')
     ax[1].set_ylabel('$\mathcal{J}_B\mathcal{J}_\mu + \mathcal{J}_y - \mathcal{J}_B$')
-    plt.savefig(plotpath + 'visifunc.png')
+    plt.savefig(pathplot + 'visifunc.png')
     plt.close()
 
     with sns.color_palette("Blues", njreds):
@@ -106,7 +106,7 @@ def plot_grnf():
         strg = r'$\Delta I_\nu^G = \mathcal{J}_\mu \mathcal{J}_B I^M(\nu) + \mathcal{J}_y I^Y(\nu)$'
         fig.text(0.15, 0.42, strg, va='center', fontsize=18)
 
-        plt.savefig(plotpath + 'fulldist.png')
+        plt.savefig(pathplot + 'fulldist.png')
         plt.close()
 
 
@@ -151,7 +151,7 @@ def plot_timescal():
     ax_.set_xlabel('$t$ [yr]')
 
     fig.subplots_adjust(top=0.85)
-    plt.savefig(plotpath + 'timescal.png')
+    plt.savefig(pathplot + 'timescal.png')
     plt.close()
 
 
@@ -180,7 +180,7 @@ def plot_pure_dist():
     ax_.set_xlim([amin(sfrqconc), amax(sfrqconc)])
     ax_.set_xlabel('$x$')
     ax_.set_xscale('log')
-    plt.savefig(plotpath + 'puredist.png')
+    plt.savefig(pathplot + 'puredist.png')
     plt.close()
 
 
@@ -223,7 +223,7 @@ def plot_heat():
     ax_.set_xlim([amax(time[0:-1]), amin(time[0:-1])])
     ax_.set_xlabel('$t$ [yr]')
 
-    plt.savefig(plotpath + 'heatrate.png')
+    plt.savefig(pathplot + 'heatrate.png')
     plt.close()
     
     edendmatextd = omegdmat * edencrit * (1. + redsextd)**3
@@ -255,7 +255,7 @@ def plot_heat():
     ax_.set_xlabel('$t$ [s]')
     ax_.axvline(1., ls='--', color='grey')
     ax_.annotate('BBN', xy=[1., 1e-12], xytext=[1e2, 1e-12], arrowprops=dict(arrowstyle="->"), fontsize=20)
-    plt.savefig(plotpath + 'heatextd.png')
+    plt.savefig(pathplot + 'heatextd.png')
     plt.close()
 
 
@@ -290,7 +290,7 @@ def plot_deca():
         ax_.set_xlim([amax(time[0:-1]), amin(time[0:-1])])
         ax_.set_xlabel('$t$ [yr]')
 
-    plt.savefig(plotpath + 'heatdeca.png')
+    plt.savefig(pathplot + 'heatdeca.png')
     plt.close()
     
 
@@ -323,7 +323,7 @@ def plot_sampdist():
     ax.axhline(-5., ls='--', color='grey')
     ax.fill_between(freqmodl * 1e-9, ones_like(freqmodl) * 5., ones_like(freqmodl) * -5., color='grey')
     ax.text(2, 10, r'PIXIE 1-$\sigma$ sensitivity', color='grey', fontsize=20)
-    plt.savefig(plotpath + 'totldist.png')
+    plt.savefig(pathplot + 'totldist.png')
     plt.close()
     
     
@@ -342,7 +342,7 @@ def plot_sampdist():
             ax.set_title(heatstrg[k])
 
             plt.legend(loc=2, ncol=2)
-            plt.savefig(plotpath + 'diffdistdifflred_' + heatrtag[k] + '_%d.png' % jreds[c])
+            plt.savefig(pathplot + 'diffdistdifflred_' + heatrtag[k] + '_%d.png' % jreds[c])
             plt.close(fig)
         
 
@@ -499,7 +499,7 @@ def plot_temp():
     ax_.set_xlabel(r'$E_\gamma$ [eV]')
 
     ax.legend(loc=2)
-    plt.savefig(plotpath + 'tempevol.png')
+    plt.savefig(pathplot + 'tempevol.png')
     plt.close()
     
 
@@ -533,7 +533,7 @@ def plot_silkscal():
     ax_.set_ylabel(r'$\lambda$ [Mpc]')
     ax.set_title('Silk dissipation scale', fontsize=20)
 
-    plt.savefig(plotpath + 'wlensilk.png')
+    plt.savefig(pathplot + 'wlensilk.png')
     fig.subplots_adjust(top=0.9)
     plt.close()
 
@@ -625,7 +625,7 @@ def plot_resi(freqexpr, freqexprstdv, dataflux, datafluxstdv, resiflux, datalabl
 
 def retr_ydis_trac():
     
-    path = plotpath + 'electron_photonspectrum_results.fits'
+    path = pathplot + 'electron_photonspectrum_results.fits'
     data, hdr = pf.getdata(path, 1, header=True)
 
     redsoutp = data['OUTPUT_REDSHIFT'].squeeze()
@@ -815,7 +815,7 @@ def retr_llik(sampvarb, init=False):
     
     if samptype == 'emce':
         global swepcntr, thisswepcntr
-        nextswepcntr = int(20. * swepcntr / (numbswep * nwalk)) * 5
+        nextswepcntr = int(20. * swepcntr / (numbswep * numbwalk)) * 5
         if nextswepcntr > thisswepcntr:
             print '%3d%% completed.' % nextswepcntr
             thisswepcntr = nextswepcntr
@@ -1064,19 +1064,20 @@ def init(cnfg):
     
     rtag = retr_rtag()
     
-    global plotpath
-    plotpath = os.environ["CMBR_DIST_DATA_PATH"] + '/png/' + rtag + '/'
-    cmnd = 'mkdir -p ' + plotpath
+    global pathplot
+    pathbase = os.environ["CMBR_DIST_DATA_PATH"]
+    pathplot = pathbase + '/png/' + rtag + '/'
+    cmnd = 'mkdir -p ' + pathplot
     os.system(cmnd)
     
     if freqexpr == None:
         freqexpr = logspace(log10(minmfreqexpr), log10(maxmfreqexpr), numbfreqexpr) # [Hz]
     
     global freqmodl, minmfreqmodl, maxmfreqmodl
-    nfreqmodl = 1000
+    numbfreqmodl = 1000
     minmfreqmodl = 1e9
     maxmfreqmodl = 1e13
-    freqmodl = logspace(log10(minmfreqmodl), log10(maxmfreqmodl), nfreqmodl) # [Hz]
+    freqmodl = logspace(log10(minmfreqmodl), log10(maxmfreqmodl), numbfreqmodl) # [Hz]
     
     
     # physical constants
@@ -1169,7 +1170,6 @@ def init(cnfg):
     numbpara = len(lablpara)
     indxpara = arange(numbpara)
     
-    
     thissampvarb = copy(mocksampvarb)
     thissamp = tdpy.mcmc.cdfn_samp(thissampvarb, datapara)
 
@@ -1179,13 +1179,11 @@ def init(cnfg):
         print 'thissamp'
         print thissamp
 
-        
     path = os.environ["CMBR_DIST_DATA_PATH"] + '/pixifluxstdv.csv'
     exprfluxstdvinstfreq = loadtxt(path)
     
     exprfluxstdvinstfreq = interp1d(exprfluxstdvinstfreq[:, 0] * 1e9, exprfluxstdvinstfreq[:, 1] * 1e26)(freqexpr)
     exprfluxstdvinstfreq = exprfluxstdvinstfreq / exprfluxstdvinstfreq[0]
-    
     
     if datatype == 'mock':
          
@@ -1197,27 +1195,23 @@ def init(cnfg):
         if exprtype == 'plnk':
             datafluxstdv = mockfluxintp * exprfluxstdvfrac + exprfluxstdvinst
             
-            
-            
         dataflux = mockfluxintp + datafluxstdv * randn(datafluxstdv.size)
         
         # temp
         #fluxegbl = retr_egbl(freqexpr)
         #dataflux += fluxegbl
         
-        
-        
         resiflux = dataflux - mockfluxintp
-        path = plotpath + 'mockresi.png'
+        path = pathplot + 'mockresi.png'
         # temp
         # path = None
-        plot_resi(freqexpr, freqexprstdv, dataflux, datafluxstdv, resiflux, 'Mock', freqmodl,               mockfluxtotl, mockfluxcmbr, mockfluxdustcold, mockfluxdustwarm, mockfluxsync,               mockfluxfree, mockfluxydis, mockfluxdeca, path=path)
+        plot_resi(freqexpr, freqexprstdv, dataflux, datafluxstdv, resiflux, 'Mock', freqmodl, \
+            mockfluxtotl, mockfluxcmbr, mockfluxdustcold, mockfluxdustwarm, mockfluxsync, mockfluxfree, mockfluxydis, mockfluxdeca, path=path)
     
     else:
         
         datafluxstdv = exprfluxstdv
         dataflux = exprflux
-        
         
     #plot_llik()
     
@@ -1244,53 +1238,29 @@ def init(cnfg):
     numbproc = 1
     if samptype == 'emce':
         
-        global thisswepcntr, nwalk
+        global thisswepcntr, numbwalk
         thisswepcntr = -1.
-        nwalk = 100
-        initsamp = thissampvarb[None, :] * (1. + 1e-2 * randn(nwalk * numbpara).reshape((nwalk, numbpara)))
-        sampler = emcee.EnsembleSampler(nwalk, numbpara, retr_llik)
+        numbwalk = 100
+        initsamp = thissampvarb[None, :] * (1. + 1e-2 * randn(numbwalk * numbpara).reshape((numbwalk, numbpara)))
+        sampler = emcee.EnsembleSampler(numbwalk, numbpara, retr_llik)
         
         sampler.run_mcmc(initsamp, numbswep)
         listsampvarb = sampler.flatchain
         
     else:
         sampbund = tdpy.mcmc.init(numbproc, numbswep, retr_llik, datapara, numbburn=numbburn, \
-                                        factthin=factthin, optiprop=optiprop, verbtype=verbtype, plotpath=plotpath, rtag=rtag)
+                                        factthin=factthin, optiprop=optiprop, verbtype=verbtype, pathbase=pathbase, rtag=rtag)
         listsampvarb = sampbund[0]
         listsamp = sampbund[1]
         listsampcalc = sampbund[2]
         listllik = sampbund[3]
         listaccp = sampbund[4]
         listjsampvari = sampbund[5]
-        
-        path = plotpath + 'llik.png'
-        tdpy.mcmc.plot_trac(listllik, 'P(D|x)', path=path, quan=True)
-
-        binstime = linspace(0., numbswep - 1., 10)
-        fig, axgr = plt.subplots(7, 2, figsize=(14, 36))
-        jlistaccp = where(listaccp == True)[0]
-        for a, axrw in enumerate(axgr):
-            for b, ax in enumerate(axrw):
-                k = 2 * a + b
-                jlistpara = where(listjsampvari == k)[0]
-                jlistintc = intersect1d(jlistaccp, jlistpara, assume_unique=True)
-                ax.hist(jlistpara, binstime, color='b')
-                ax.hist(jlistintc, binstime, color='g')
-                ax.set_title(lablpara[k])
-        plt.subplots_adjust(hspace=0.3)
-        plt.savefig(plotpath + 'propeffi.png')
-        plt.close(fig)
-
-
-        
-
 
     statpara = zeros((numbpara, 3))
     statpara[:, 0] = percentile(listsampvarb, 10., axis=0)
     statpara[:, 1] = percentile(listsampvarb, 50., axis=0)
     statpara[:, 2] = percentile(listsampvarb, 90., axis=0)
-    
-    
 
     # smooth the posterior using the KDE
     #meshtimedeca, meshampl = meshgrid(binstimedeca, binsampldeca)
@@ -1299,7 +1269,6 @@ def init(cnfg):
     #sampsmth = reshape(kernel(grid).T, meshtimedeca.shape)
 
     if makeplot:
-
 
         jparaself = where(scalpara == 'self')[0]
         jparalogt = where(scalpara == 'logt')[0]
@@ -1318,18 +1287,16 @@ def init(cnfg):
         strgparatran[0:numbpara-3] += r'$10^6 \times$ '
         strgparatran[jparaself] += '(' + lablpara[jparaself] + ' / ' + lablpara[jparaself] + r'$^{mock}$ - 1)'
         strgparatran[jparalogt] += 'log(' + lablpara[jparalogt] + ' / ' + lablpara[jparalogt] + r'$^{mock}$)' 
-
-
         
         if savepost:
-            listfluxtotl = empty((numbsamp, nfreqmodl))
-            listfluxcmbr = empty((numbsamp, nfreqmodl))
-            listfluxdustcold = empty((numbsamp, nfreqmodl))
-            listfluxdustwarm = empty((numbsamp, nfreqmodl))
-            listfluxsync = empty((numbsamp, nfreqmodl))
-            listfluxfree = empty((numbsamp, nfreqmodl))
-            listfluxydis = empty((numbsamp, nfreqmodl))
-            listfluxdeca = empty((numbsamp, nfreqmodl))
+            listfluxtotl = empty((numbsamp, numbfreqmodl))
+            listfluxcmbr = empty((numbsamp, numbfreqmodl))
+            listfluxdustcold = empty((numbsamp, numbfreqmodl))
+            listfluxdustwarm = empty((numbsamp, numbfreqmodl))
+            listfluxsync = empty((numbsamp, numbfreqmodl))
+            listfluxfree = empty((numbsamp, numbfreqmodl))
+            listfluxydis = empty((numbsamp, numbfreqmodl))
+            listfluxdeca = empty((numbsamp, numbfreqmodl))
             listresiflux = empty((numbsamp, numbfreqexpr))
             for k in range(numbsamp):
                 listfluxtotl[k, :] = listsampcalc[0][k]
@@ -1342,8 +1309,9 @@ def init(cnfg):
                 listfluxdeca[k, :] = listsampcalc[7][k]
                 listresiflux[k, :] = listsampcalc[8][k]
 
-            path = plotpath + 'postresi.png'
-            plot_resi_post(freqexpr, dataflux, listresiflux,                  freqmodl, listfluxtotl, listfluxcmbr, listfluxdustwarm, listfluxdustcold,                  listfluxsync, listfluxfree, listfluxydis, listfluxdeca, path)
+            path = pathplot + 'postresi.png'
+            plot_resi_post(freqexpr, dataflux, listresiflux, freqmodl, listfluxtotl, listfluxcmbr, listfluxdustwarm, listfluxdustcold, \
+                listfluxsync, listfluxfree, listfluxydis, listfluxdeca, path)
     
 
     return statpara
