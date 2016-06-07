@@ -22,7 +22,7 @@ import tdpy.mcmc
 import emcee
 
 import seaborn as sns
-sns.set(context='poster', style='dark', color_codes=True)
+sns.set(context='poster', style='ticks', color_codes=True)
 
 def plot_intr(eventype='norm'):
     
@@ -1243,7 +1243,7 @@ def init(cnfg):
         listsampvarb = sampler.flatchain
         
     else:
-        sampbund = tdpy.mcmc.init(numbproc, numbswep, retr_llik, datapara, numbburn=numbburn, \
+        sampbund = tdpy.mcmc.init(numbproc, numbswep, retr_llik, datapara, numbburn=numbburn, factpropeffi=3., \
                                         factthin=factthin, optiprop=optiprop, verbtype=verbtype, pathbase=pathbase, rtag=rtag)
         listsampvarb = sampbund[0]
         listsamp = sampbund[1]
@@ -1265,8 +1265,8 @@ def init(cnfg):
 
     if makeplot:
 
-        jparaself = where(scalpara == 'self')[0]
-        jparalogt = where(scalpara == 'logt')[0]
+        indxparaself = where(scalpara == 'self')[0]
+        indxparalogt = where(scalpara == 'logt')[0]
 
         listsampvarbtran = empty_like(listsampvarb)
         strgparatran = empty(numbpara, dtype=object)
@@ -1274,14 +1274,14 @@ def init(cnfg):
         scalparatran = empty(numbpara, dtype=object)
         scalparatran[:] = 'self'
 
-        listsampvarbtran[:, jparaself] = listsampvarb[:, jparaself] / mocksampvarb[None, jparaself] - 1.
-        listsampvarbtran[:, jparalogt] = log10(listsampvarb[:, jparalogt] / mocksampvarb[None, jparalogt])
+        listsampvarbtran[:, indxparaself] = listsampvarb[:, indxparaself] / mocksampvarb[None, indxparaself] - 1.
+        listsampvarbtran[:, indxparalogt] = log10(listsampvarb[:, indxparalogt] / mocksampvarb[None, indxparalogt])
         listsampvarbtran[:, 0:numbpara-3] *= 1e6
 
         strgparatran[:] = ''
         strgparatran[0:numbpara-3] += r'$10^6 \times$ '
-        strgparatran[jparaself] += '(' + lablpara[jparaself] + ' / ' + lablpara[jparaself] + r'$^{mock}$ - 1)'
-        strgparatran[jparalogt] += 'log(' + lablpara[jparalogt] + ' / ' + lablpara[jparalogt] + r'$^{mock}$)' 
+        strgparatran[indxparaself] += '(' + lablpara[indxparaself] + ' / ' + lablpara[indxparaself] + r'$^{mock}$ - 1)'
+        strgparatran[indxparalogt] += 'log(' + lablpara[indxparalogt] + ' / ' + lablpara[indxparalogt] + r'$^{mock}$)' 
         
         if savepost:
             listfluxtotl = empty((numbsamp, numbfreqmodl))
@@ -1512,8 +1512,8 @@ def retr_cnfg(samptype='emce', \
               inclcmbrmono=None, \
               plotperd=10000, \
               verbtype=1, \
-              optiprop=True, \
-              makeplot=False, \
+              optiprop=False, \
+              makeplot=True, \
               ):
         
     cnfg = dict()
@@ -1558,7 +1558,7 @@ def retr_cnfg(samptype='emce', \
 def retr_rtag():
     
     rtag = samptype + '_%d_%03.1f_%03.1f_%03.1f_%03.1f' % (numbfreqexpr, log10(minmfreqexpr), log10(maxmfreqexpr), log10(exprfluxstdvinst * 1e3), -log10(exprfluxstdvfrac))
-  
+ 
     return rtag
 
 
@@ -1668,7 +1668,6 @@ def cnfg_pixi_mock():
     cnfg = retr_cnfg( \
                      numbswep=5000, \
                      verbtype=1, \
-                     makeplot=True, \
                      inclcmbrmono=True, \
                      numbfreqexpr=numbfreqexpr, \
                      minmfreqexpr=minmfreqexpr, \
@@ -1686,32 +1685,32 @@ def cnfg_pixi_mock_stdv(samptype):
     if samptype == 'emce':
         numbswep = 10
     else:
-        numbswep = 100
+        numbswep = 10000
         
     datapara = retr_datapara()
     namepara, strgpara, minmpara, maxmpara, scalpara, lablpara, unitpara, varipara, dictpara = datapara
     numbpara = len(lablpara)
     
     strgpertpara = [r'$\nu_{min}$', r'$\nu_{max}$', r'$N_\nu$', r'$\sigma$', r'$\sigma_f$']
-    npertpara = 4
-    npert = 1
-    arryminmfreqexpr = logspace(log10(3e9), log10(3e11), npert)
-    arrymaxmfreqexpr = logspace(log10(1.5e12), log10(6e12), npert)
-    arrynumbfreqexpr = linspace(100, 700, npert)
-    arryexprfluxstdvinst = logspace(log10(5e0), log10(5e4), npert)
+    numbpertpara = 4
+    numbpert = 1
+    arryminmfreqexpr = logspace(log10(3e9), log10(3e11), numbpert)
+    arrymaxmfreqexpr = logspace(log10(1.5e12), log10(6e12), numbpert)
+    arrynumbfreqexpr = linspace(100, 700, numbpert)
+    arryexprfluxstdvinst = logspace(log10(5e0), log10(5e4), numbpert)
     
-    arryexprfluxstdvfrac = logspace(-10., -6., npert)
+    arryexprfluxstdvfrac = logspace(-10., -6., numbpert)
     
-    statparagrid = zeros((npertpara, npert, numbpara, 3))
-    for k in range(npertpara):
+    statparagrid = zeros((numbpertpara, numbpert, numbpara, 3))
+    for k in range(numbpertpara):
         
         minmfreqexpr = 3e10 # [Hz]
         maxmfreqexpr = 3e12 # [Hz]
         numbfreqexpr = 400
         exprfluxstdvinst = 5e0 # [Jy/sr]
-        exprfluxstdvfrac = 0.
+        exprfluxstdvfrac = 1e-10
         
-        for l in range(npert):
+        for l in range(numbpert):
             
             if k == 0:
                 minmfreqexpr = arryminmfreqexpr[l]
@@ -1730,7 +1729,6 @@ def cnfg_pixi_mock_stdv(samptype):
                              numbswep=numbswep, \
                              samptype=samptype, \
                              verbtype=1, \
-                             makeplot=True, \
                              inclcmbrmono=True, \
                              numbfreqexpr=numbfreqexpr, \
                              minmfreqexpr=minmfreqexpr, \
@@ -1742,7 +1740,7 @@ def cnfg_pixi_mock_stdv(samptype):
 
             statparagrid[k, l, :, :] = init(cnfg)
 
-    for k in range(npertpara):
+    for k in range(numbpertpara):
         
         path = os.environ["CMBR_DIST_DATA_PATH"] + '/png/stdv%d.png' % k
         fig, axgr = plt.subplots(numbpara / 2, 2, figsize=(14, numbpara * 3))
@@ -1794,9 +1792,9 @@ def plot_plnkmaps():
 
 if __name__ == '__main__':   
     
-    cnfg_pixi_mock_stdv('tdpy')
+    #cnfg_pixi_mock_stdv('tdpy')
     #cnfg_pixi_mock_stdv('emce')
-    #cnfg_pixi_mock()
+    cnfg_pixi_mock()
     #cnfg_plnk_expr()
     #intr_fluxdust()
     #writ_plnk()

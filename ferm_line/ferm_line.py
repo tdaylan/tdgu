@@ -687,7 +687,7 @@ def init( \
     gdat.strgenercntr = ['%.3g' % gdat.meanener[i] for i in gdat.indxener]
 
     # center energies
-    gdat.numbenercntr = 20
+    gdat.numbenercntr = 2
     gdat.listindxenercntr = linspace(gdat.numbenerwndw, gdat.numbener - gdat.numbenerwndw, gdat.numbenercntr).astype(int)
 
     # get data counts
@@ -715,6 +715,9 @@ def init( \
     #listmodltype = ['nullmod1', 'altrmod1']
     
     gdat.bayefact = empty(gdat.numbenercntr)
+    print 'hey'
+    print 'gdat.bayefact'
+    print gdat.bayefact
 
     # temp
     gdat.listindxenercntr = gdat.listindxenercntr[gdat.numbenercntr/2-1:gdat.numbenercntr/2+2]
@@ -760,6 +763,12 @@ def init( \
             diff(gdat)
 
     figr, axis = plt.subplots()
+    print 'hey'
+    print 'figure'
+    print 'gdat.listenercntr'
+    print gdat.listenercntr
+    print 'gdat.bayefact'
+    print gdat.bayefact
     axis.plot(gdat.listenercntr, gdat.bayefact)
     axis.set_xlabel(r'$E_\gamma$ [GeV]')
     axis.set_ylabel('BF')
