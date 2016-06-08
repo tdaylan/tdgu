@@ -779,14 +779,10 @@ def init( \
 def diff(gdattemp):
     global gdat
     gdat = gdattemp
-
     for k, gdat.modltype in enumerate(gdat.listmodltype):
-
         for j in indxpixl:
-            
             sampbund = tdpy.mcmc.init(numbproc, numbswep, retr_llik, datapara, thissamp=thissamp, numbburn=numbburn, \
                 factthin=factthin, optiprop=optiprop, verbtype=verbtype, pathbase=pathbase, rtag=gdat.rtag, numbplotside=numbplotside)
-
     diffmaps = flux
 
 
@@ -802,7 +798,7 @@ def almc(gdattemp):
         namepara, strgpara, minmpara, maxmpara, scalpara, lablpara, unitpara, varindxpara, dictpara = datapara
         gdat.numbpara = len(lablpara)
 
-        gdat.numbswep = 100 * gdat.numbpara
+        gdat.numbswep = 10000 * gdat.numbpara
         gdat.plotperd = gdat.numbswep / 10
         gdat.numbburn = gdat.numbswep / 10
         gdat.numbsamp = tdpy.mcmc.retr_numbsamp(gdat.numbswep, gdat.numbburn, gdat.factthin)

@@ -1493,7 +1493,7 @@ def retr_plnktran():
     return freq, tran
     
 
-def retr_cnfg(samptype='emce', \
+def retr_cnfg(samptype='tdpy', \
               datatype='mock', \
               exprtype='pixi', \
               datalabl='PIXIE', \
