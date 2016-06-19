@@ -136,7 +136,7 @@ def plot_edot():
     ax.set_ylabel(r'$\tau$ [Gyrs]')
     ax.legend()
     
-    plt.savefig(pathplot + 'edotelec.png')
+    plt.savefig(pathplot + 'edotelec.pdf')
     plt.close()
 
 
@@ -199,9 +199,11 @@ def retr_llik(sampvarb):
         print
         print
         print
-        
+     
+    # temp
     sampcalc = [fluxphotdmatintp[:, 0]]
-    
+    #sampcalc = []
+
     return lpos, sampcalc
 
 
@@ -253,7 +255,7 @@ def retr_hmfn():
         ax.set_ylabel('$D(z)$')
         ax.set_title('Growth factor')
         ax.legend()
-        plt.savefig(pathplot + 'grwf.png')
+        plt.savefig(pathplot + 'grwf.pdf')
         plt.close()
         
         fig, ax = plt.subplots()
@@ -264,7 +266,7 @@ def retr_hmfn():
         ax.loglog(massprim, wnumhalo, ls='--')
         ax.set_ylabel('$k_H$ [Mpc$^{-1}$]')
         ax.legend()
-        plt.savefig(pathplot + 'rsphhalo.png')
+        plt.savefig(pathplot + 'rsphhalo.pdf')
         plt.close()
         
         fig, ax = plt.subplots()
@@ -272,7 +274,7 @@ def retr_hmfn():
         ax.set_ylabel('P(k) [Mpc$^3$]')
         ax.loglog(wnum, psec)
         ax.set_title('Primordial Matter Power Spectrum')
-        plt.savefig(pathplot + 'psec.png')
+        plt.savefig(pathplot + 'psec.pdf')
         plt.close()
         
         fig, ax = plt.subplots()
@@ -280,7 +282,7 @@ def retr_hmfn():
         ax.set_xlabel('$k$ [Mpc$^{-1}$]')
         ax.set_ylabel('$T(k)$')
         ax.loglog(wnum, tranfunc)
-        plt.savefig(pathplot + 'tranfunc.png')
+        plt.savefig(pathplot + 'tranfunc.pdf')
         plt.close()
         
         fig, ax = plt.subplots()
@@ -290,7 +292,7 @@ def retr_hmfn():
         for d in range(numbmassplot):
             ax.loglog(wnum, funcwndw[:, indxmassplot[d]]**2, label=strgmass[d])
         ax.legend(loc=3)
-        plt.savefig(pathplot + 'funcwndw.png')
+        plt.savefig(pathplot + 'funcwndw.pdf')
         plt.close()
         
         fig, ax = plt.subplots()
@@ -300,7 +302,7 @@ def retr_hmfn():
         for d in range(numbmassplot):
             ax.loglog(wnum, diffflucdiffwnum[:, indxmassplot[d]], label=strgmass[d])
         ax.legend(loc=3)
-        plt.savefig(pathplot + 'diffflucdiffwnum.png')
+        plt.savefig(pathplot + 'diffflucdiffwnum.pdf')
         plt.close()
         
         fig, ax = plt.subplots()
@@ -309,7 +311,7 @@ def retr_hmfn():
         ax.set_xlabel(r'$M [M_\odot]$')
         ax.set_ylabel(r'd$\log\sigma$/d$M$')
         ax.legend()
-        plt.savefig(pathplot + 'difflogtflucdiffmass.png')
+        plt.savefig(pathplot + 'difflogtflucdiffmass.pdf')
         plt.close()
         
         fig, ax = plt.subplots()
@@ -319,14 +321,14 @@ def retr_hmfn():
         ax.set_ylabel(r'$\sigma$')
         ax.axhline(odencoll, ls='--', label='Critical linear overdensity at collapse')
         ax.legend()
-        plt.savefig(pathplot + 'fluc.png')
+        plt.savefig(pathplot + 'fluc.pdf')
         plt.close()
         
         fig, ax = plt.subplots()
         ax.loglog(fluc[:-1, 0], funcfluc[:, 0])
         ax.set_xlabel(r'$\sigma$')
         ax.set_ylabel('$f(\sigma)$')
-        plt.savefig(pathplot + 'funcfluc.png')
+        plt.savefig(pathplot + 'funcfluc.pdf')
         plt.close()
         
         datamsm1 = loadtxt(os.environ["PHOT_IONZ_DATA_PATH"] + '/msm1.csv')
@@ -346,7 +348,7 @@ def retr_hmfn():
         ax.set_ylabel('$dN_h/d\log M$ [1/Mpc$^3$]')
         ax.set_xlabel('$M [M_\odot]$')     
         ax.legend()
-        plt.savefig(pathplot + 'diffnhaldiffmass.png')
+        plt.savefig(pathplot + 'diffnhaldiffmass.pdf')
         plt.close()
 
     return diffnhaldiffmass, peakhght
@@ -583,7 +585,7 @@ def plot_halo():
     
     ax.legend(listline, listlabl)
 
-    plt.savefig(pathplot + 'halo.png')
+    plt.savefig(pathplot + 'halo.pdf')
     plt.close()
 
     # substructure
@@ -604,7 +606,7 @@ def plot_halo():
     ax.set_yscale('log')
     ax.set_xlabel('$r$ [kpc]')
     ax.set_ylabel(r'$\rho(r,M,z)$ [MeV/cm$^3$]')
-    plt.savefig(pathplot + 'edendmathalo.png')
+    plt.savefig(pathplot + 'edendmathalo.pdf')
     plt.close()
 
     fig, ax = plt.subplots()
@@ -614,7 +616,7 @@ def plot_halo():
     ax.set_yscale('log')
     ax.set_xlabel('$r$ [kpc]')
     ax.set_ylabel('$v^2 (M,z,r)$')
-    plt.savefig(pathplot + 'rvelvarihalo.png')
+    plt.savefig(pathplot + 'rvelvarihalo.pdf')
     plt.close()
 
     # virial and scale radii
@@ -625,7 +627,7 @@ def plot_halo():
     ax.set_ylabel('$r_{vir}(M,z)$ [kpc]')
     ax.set_title('Halo Virial Radius')
     ax.legend(loc=2)
-    plt.savefig(pathplot + 'rsphviri.png')
+    plt.savefig(pathplot + 'rsphviri.pdf')
     plt.close()
 
     # e^-/e^+ emissivity in a halo
@@ -642,7 +644,7 @@ def plot_halo():
             if d == numbmassplot / 2:
                 ax.set_ylabel(r'$dN_e/dtdV (M,z,r)$ [1/s/cm$^3$]')
     ax.legend()
-    plt.savefig(pathplot + 'emiselechaloenel.png')
+    plt.savefig(pathplot + 'emiselechaloenel.pdf')
     plt.close()
 
     # e^-/e^+ differential luminosity of a halo
@@ -659,7 +661,7 @@ def plot_halo():
             if d == numbmassplot / 2:
                 ax.set_ylabel(r'$dN_e/dtd\log r$ [1/s]')
     ax.legend()
-    plt.savefig(pathplot + 'diffemiselechalodiffrsphenel.png')
+    plt.savefig(pathplot + 'diffemiselechalodiffrsphenel.pdf')
     plt.close()
 
     # e^-/e^+ luminosity of a halo
@@ -673,7 +675,7 @@ def plot_halo():
         if p == 0:
             ax.set_ylabel('$dN_e/dt (M,z)$ [1/s]')
     ax.legend(loc=2)
-    plt.savefig(pathplot + 'lumielechaloenel.png')
+    plt.savefig(pathplot + 'lumielechaloenel.pdf')
     plt.close()
 
     # spatially averaged e^-/e^+ differential emissivity
@@ -688,7 +690,7 @@ def plot_halo():
             ax.set_ylabel(r'$dN_e/dtdVd\log M$ [1/s/cm$^3$]')
             ax.legend()
         ax.set_ylim([1e-36, 1e-28])
-    plt.savefig(pathplot + 'diffemiselecclmpdiffmassenel.png')
+    plt.savefig(pathplot + 'diffemiselecclmpdiffmassenel.pdf')
     plt.close()
 
     ylabel = '$dN_e/dVdt (z)$ [1/cm$^3$/s]'
@@ -707,7 +709,7 @@ def plot_halo():
         ax.loglog(redssfrd, emiselecsfrd, markersize=10,                   label='Star Formation', color='black', ls='none', marker='o')
         if p == 0:
             ax.legend(loc=1)
-    plt.savefig(pathplot + 'emiselecenel.png')
+    plt.savefig(pathplot + 'emiselecenel.pdf')
     plt.close()
 
     ylabel = '$dN_e/dVdt (z)$ [1/cm$^3$/s]'
@@ -725,7 +727,7 @@ def plot_halo():
         ax.loglog(redssfrd, emiselecsfrd / (1. + redssfrd)**3, markersize=10,                   label='Star Formation', color='black', ls='none', marker='o')
         if p == 0:
             ax.legend(loc=1)
-    plt.savefig(pathplot + 'emiselecenelcomo.png')
+    plt.savefig(pathplot + 'emiselecenelcomo.pdf')
     plt.close()
 
     # Mean DM relative velocity variance in a halo
@@ -736,7 +738,7 @@ def plot_halo():
     ax.set_ylabel('$\sigma_v$')
     ax.set_xlabel(r'$M$ $[M_\odot]$')
     ax.legend(loc=2)
-    plt.savefig(pathplot + 'rvelvarihavg.png')
+    plt.savefig(pathplot + 'rvelvarihavg.pdf')
     plt.close()
 
     # Mean DM relative velocity variance
@@ -748,7 +750,7 @@ def plot_halo():
     ax.loglog(reds, sqrt(rvelvariiavgsmth))
     ax.loglog(reds, sqrt(rvelvariiavg))
     ax.set_ylabel('$\sigma_v$')
-    plt.savefig(pathplot + 'rvelvariiavg.png')
+    plt.savefig(pathplot + 'rvelvariiavg.pdf')
     plt.close()
 
     
@@ -765,7 +767,7 @@ def plot_elec_flux():
         if p == 0:
             ax.set_ylabel(r'$dN_e/dV/d\log E$ [1/cm$^3$]')
     ax.legend(loc=2)
-    plt.savefig(pathplot + 'ndiffenelecsavg.png')
+    plt.savefig(pathplot + 'ndiffenelecsavg.pdf')
     plt.close()
 
     # e^-/e^+ number density in the IGM
@@ -777,7 +779,7 @@ def plot_elec_flux():
         ax.set_title(strgmpol[p])
         if p == 0:
             ax.set_ylabel('$dN_e/dV (z)$ [1/cm$^3$]')
-    plt.savefig(pathplot + 'ndiffenelecsavgenel.png')
+    plt.savefig(pathplot + 'ndiffenelecsavgenel.pdf')
     plt.close() 
     
         
@@ -808,7 +810,7 @@ def plot_invrcomp():
         listline.append(plt.Line2D((0,1),(0,0), color=listcolr[k]))
     ax.legend(listline, listlabl, loc=9, ncol=2) 
     
-    plt.savefig(pathplot + 'specinvccatl.png')
+    plt.savefig(pathplot + 'specinvccatl.pdf')
     plt.close() 
     
 
@@ -830,7 +832,7 @@ def plot_igma():
     ax.set_xscale('log')
     ax.set_yscale('log')
     plt.colorbar(imag, ax=ax, fraction=0.04)
-    plt.savefig(pathplot + 'diffnabsdiffcdendiffreds.png')
+    plt.savefig(pathplot + 'diffnabsdiffcdendiffreds.pdf')
     plt.close() 
     
     fig, ax = plt.subplots(figsize=(14, 14))
@@ -848,7 +850,7 @@ def plot_igma():
     ax.set_xscale('log')
     ax.set_yscale('log')
     plt.colorbar(imag, ax=ax, fraction=0.04)
-    plt.savefig(pathplot + 'diffoptddiffcdendiffredsrydb.png')
+    plt.savefig(pathplot + 'diffoptddiffcdendiffredsrydb.pdf')
     plt.close() 
     
     fig, ax = plt.subplots()
@@ -859,7 +861,7 @@ def plot_igma():
     ax.set_ylabel(r'$d\tau / d\log z$')
     ax.set_ylim([None, 1.])
     ax.set_title('Optical depth per decade in redshift at 1 Rydberg')
-    plt.savefig(pathplot + 'diffoptddiffredsrydb.png')
+    plt.savefig(pathplot + 'diffoptddiffredsrydb.pdf')
     plt.close() 
         
     fig, ax = plt.subplots()
@@ -871,7 +873,7 @@ def plot_igma():
     ax.set_ylabel(r'$\tau$')
     ax.set_ylim([None, 1.])
     ax.set_title('Optical depth at 1 Rydberg')
-    plt.savefig(pathplot + 'odep.png')
+    plt.savefig(pathplot + 'odep.pdf')
     plt.close() 
     
     
@@ -886,7 +888,7 @@ def plot_fluxphot():
         ax.set_xlabel('$E_\gamma$ [eV]')
         ax.set_ylabel(r'$dN_\gamma/dtdVd\log E_\gamma$ [1/s]')
     ax.legend()
-    plt.savefig(pathplot + 'emisphot.png')
+    plt.savefig(pathplot + 'emisphot.pdf')
     plt.close() 
     
     # photon emissivity 
@@ -897,7 +899,7 @@ def plot_fluxphot():
         ax.set_xlabel('$z$')
         ax.set_ylabel(r'$dN_\gamma/dtdV$ [1/cm$^3$/s]')
     ax.legend()
-    plt.savefig(pathplot + 'emisphotrydb.png')
+    plt.savefig(pathplot + 'emisphotrydb.pdf')
     plt.close() 
     
     # differential photon flux 
@@ -909,7 +911,7 @@ def plot_fluxphot():
         ax.set_xlabel('$E_\gamma$ [eV]')
         ax.set_ylabel(r'$dN_\gamma/dtdAd\log E_\gamma$ [1/cm$^2$/s/sr]')
     ax.legend()
-    plt.savefig(pathplot + 'fluxphot.png')
+    plt.savefig(pathplot + 'fluxphot.pdf')
     plt.close() 
     
     # differential photon flux at 1 Ryd
@@ -920,7 +922,7 @@ def plot_fluxphot():
         ax.set_xlabel('$z$')
         ax.set_ylabel(r'$dN_\gamma/dtdAd\log E_\gamma$ [1/cm$^2$/s/sr]')
     ax.legend()
-    plt.savefig(pathplot + 'fluxphotrydb.png')
+    plt.savefig(pathplot + 'fluxphotrydb.pdf')
     plt.close() 
     
     # integrated photon flux 
@@ -931,7 +933,7 @@ def plot_fluxphot():
         ax.set_xlabel('$z$')
         ax.set_ylabel(r'$dN_\gamma/dtdA (z)$ [1/cm$^2$/s/sr]')
     ax.legend()
-    plt.savefig(pathplot + 'fluxphotenph.png')
+    plt.savefig(pathplot + 'fluxphotenph.pdf')
     plt.close() 
 
         
@@ -946,7 +948,7 @@ def plot_ionr():
         ax.set_ylabel(r'$d\Gamma/d\log E_\gamma$ [1/s/H]')
         ax.axvline(enerrydb * 1e6, ls='--', color='grey')
     ax.legend()
-    plt.savefig(pathplot + 'diffionrdiffenph.png')
+    plt.savefig(pathplot + 'diffionrdiffenph.pdf')
     plt.close() 
         
     listname = ['ionrbolt.csv', 'ionrbeck.csv', 'ionrfauc.csv']
@@ -972,7 +974,7 @@ def plot_ionr():
             ax.errorbar(xdat, ydat, yerr=yerr, ls='', marker=listmrkr[k])
 
     ax.legend()
-    plt.savefig(pathplot + 'ionr.png')
+    plt.savefig(pathplot + 'ionr.pdf')
     plt.close() 
         
 
@@ -1096,7 +1098,7 @@ def plot_sfrd():
     
     ax.set_xlabel('$z$')
     ax.set_ylabel(r'SFRD [erg/Mpc$^3$/yr]')
-    plt.savefig(pathplot + 'sfrd.png')
+    plt.savefig(pathplot + 'sfrd.pdf')
     plt.close()
 
 
@@ -1128,7 +1130,7 @@ def plot_hm12(fluxphotdmat=None, listfluxphotdmat=None):
     ax.set_xlabel(r'$E_\gamma$ [eV]')
     ax.set_ylabel(r'$EdN/dE$ [1/cm$^2$/s/sr]')
     ax.legend()
-    plt.savefig(pathplot + 'fluxphothm12.png')
+    plt.savefig(pathplot + 'fluxphothm12.pdf')
     plt.close()
 
 
@@ -1144,7 +1146,7 @@ def init(cnfg):
 
     global pathplot
     pathbase = os.environ["PHOT_IONZ_DATA_PATH"]
-    pathplot = pathbase + '/png/'
+    pathplot = pathbase + '/imag/'
 
     global minmpara, maxmpara, scalpara, namepara, lablpara, unitpara, varipara, dictpara, ipara, numbpara
     mocksampvarb = retr_mocksampvarb()
@@ -1375,7 +1377,7 @@ def init(cnfg):
         ax.set_ylabel(r'$dN/d\log E$')
         ax.set_title('Prompt product spectrum per annihilation')
         ax.legend(ncol=4, loc=2)
-        plt.savefig(pathplot + 'multp4dm.png')
+        plt.savefig(pathplot + 'multp4dm.pdf')
         plt.close()
     
     multp4dm, enelscalp4dm, massp4dm = tdpy.util.retr_p4dm_spec(anch)
@@ -1420,7 +1422,7 @@ def init(cnfg):
         ax.set_title('Extragalactic Background Radiation')
         ax.set_ylim([1e-1, 1e6])
         leg = ax.legend(loc=2)
-        plt.savefig(pathplot + 'edencmbr.png')
+        plt.savefig(pathplot + 'edencmbr.pdf')
         plt.close()
 
     # halo mass function
@@ -1682,15 +1684,15 @@ def init(cnfg):
     ax.set_xlabel(r'$E_\gamma$ [eV]')
     ax.set_ylabel(r'$EdN/dE$ [1/cm$^2$/s/sr]')
     ax.legend()
-    plt.savefig(pathplot + 'fluxphotpost.png')
+    plt.savefig(pathplot + 'fluxphotpost.pdf')
     plt.close()
     
     strgpara = lablpara + ' ' + unitpara
-    path = os.environ["PHOT_IONZ_DATA_PATH"] + '/png/mcmc'
+    path = os.environ["PHOT_IONZ_DATA_PATH"] + '/imag/mcmc'
     tdpy.mcmc.plot_grid(listsampvarb, strgpara, scalpara=scalpara, path=path, quan=True)
 
     for k in indxpara:
-        path = pathplot + namepara[k] + '.png'
+        path = pathplot + namepara[k] + '.pdf'
         tdpy.mcmc.plot_trac(listsampvarb[:, k], strgpara[k], scalpara=scalpara[k], path=path, quan=True)
 
 
@@ -1727,8 +1729,8 @@ def retr_cnfg( \
 def cnfg_nomi():
     
     cnfg = retr_cnfg( \
-                     numbswep=100000, \
-                     verbtype=0, \
+                     numbswep=10, \
+                     verbtype=2, \
                      numbburn=0, \
                      factthin=1, \
                      makeplot=True, \
