@@ -22,23 +22,23 @@ sns.set(context='poster', style='ticks', color_codes=True)
 ## blazar heating rate
     
     #plheatbl = 10**(0.0315 * (1. + red)**3 - 0.512 * (1. + red)**2 + 2.27 * (1. + red) - 2.38) / 3.154e22 # [MeV/s]
-    #plheatbl[where(reds gt 5.7)] = 0.
+    #plheatbl[where(gdat.meanreds gt 5.7)] = 0.
     
 ## photoheating rate
     
-    #  phheatdm = zeros(numbreds)
-    #  phheatqg = zeros(numbreds)
-    #  phheatqghm = zeros(numbreds)
-    #  phheatqs = zeros(numbreds)
+    #  phheatdm = zeros(gdat.numbreds)
+    #  phheatqg = zeros(gdat.numbreds)
+    #  phheatqghm = zeros(gdat.numbreds)
+    #  phheatqs = zeros(gdat.numbreds)
     #  for c=0, nred-1 do begin
-    #    phheatdm[c] = trapz(enph, pucr_phheatint(phdmflux[:,c]), xr=[ryd, enph[numbenph-1]]) # [MeV/s]
-    #    phheatqg[c] = trapz(enph, pucr_phheatint(phqgflux[:,c]), xr=[ryd, enph[numbenph-1]]) # [MeV/s]
-    #    phheatqghm[c] = trapz(enph, pucr_phheatint(phqgfluxhm[:,c]), xr=[ryd, enph[numbenph-1]]) # [MeV/s]
-    #    phheatqs[c] = trapz(enph, pucr_phheatint(phqsflux[:,c]), xr=[ryd, enph[numbenph-1]]) # [MeV/s]
+    #    phheatdm[c] = trapz(gdat.meanenph, pucr_phheatint(phdmflux[:,c]), xr=[ryd, gdat.meanenph[gdat.numbenph-1]]) # [MeV/s]
+    #    phheatqg[c] = trapz(gdat.meanenph, pucr_phheatint(phqgflux[:,c]), xr=[ryd, gdat.meanenph[gdat.numbenph-1]]) # [MeV/s]
+    #    phheatqghm[c] = trapz(gdat.meanenph, pucr_phheatint(phqgfluxhm[:,c]), xr=[ryd, gdat.meanenph[gdat.numbenph-1]]) # [MeV/s]
+    #    phheatqs[c] = trapz(gdat.meanenph, pucr_phheatint(phqsflux[:,c]), xr=[ryd, gdat.meanenph[gdat.numbenph-1]]) # [MeV/s]
     #  endfor
     
 
-    #if makeplot:
+    #if gdat.makeplot:
     #    plot_heat
     
     
@@ -46,14 +46,14 @@ sns.set(context='poster', style='ticks', color_codes=True)
     
     #  npatch = 100
     #  initreds = 20.
-    #  mindif = min(abs(reds - initred), jredtemp)
+    #  mindif = min(abs(gdat.meanreds - initred), jredtemp)
     #  temp = cmbt
     #
     #  puc_lambda
     #  heat = phheatdm
-    #  temppatchdm = zeros((npatch, numbreds))
-    # dpatchdensdzarr = zeros((npatch, numbreds))
-    #  patchdensarr = zeros((npatch, numbreds))
+    #  temppatchdm = zeros((npatch, gdat.numbreds))
+    # dpatchdensdzarr = zeros((npatch, gdat.numbreds))
+    #  patchdensarr = zeros((npatch, gdat.numbreds))
     #  for i=0, npatch-1 do begin
     #    patchdensarr[i,:] = 1. / ((1. + lambda[i,0] * grwf) * (1. + lambda[i,1] * grwf) * (1. + lambda[i,2] * grwf)) - 1.
     #    dpatchdensdzarr[i,:] = deriv(red, patchdensarr[i,:])
@@ -62,7 +62,7 @@ sns.set(context='poster', style='ticks', color_codes=True)
     #    temppatchdm[i,:] = puc_temp_solve
     #  endfor    
 
-    #if makeplot:
+    #if gdat.makeplot:
     #    plot_ptch 
     #
     #
@@ -82,7 +82,7 @@ sns.set(context='poster', style='ticks', color_codes=True)
     #  heat = plheatbl * ionfrac
     #  tempbl = puc_temp_solve()
     #
-    #if makeplot:
+    #if gdat.makeplot:
     #    plot_temp 
 
 
@@ -91,22 +91,22 @@ def retr_edenegbl():
     path = os.environ["PHOT_IONZ_DATA_PATH"] + '/egbl.csv'
     egbldata = loadtxt(path)
     wlenegbl = egbldata[:, 0] * 1e-4 # [cm]
-    freqegbl = flipud(velolght / wlenegbl) # [Hz]
-    enpiegbl = plnkcons * freqegbl # [MeV]
+    freqegbl = flipud(gdat.velolght / wlenegbl) # [Hz]
+    enpiegbl = gdat.plnkcons * freqegbl # [MeV]
     fluxegbl = egbldata[:, 1] # [W/m^2/sr]
-    edenegbltemp = flipud(fluxegbl) * 2. * pi / velolght / 1e4 * 1.6e13 / enpiegbl**2 # [1/cm^3/MeV]
-    edenegbl = zeros((numbenpi, numbreds))
-    for c in indxreds:
-        enpitemp = enpi / (1. + reds[c]) # [MeV]
-        indxenpitemp = where((enpitemp < max(enpiegbl)) & (enpitemp > min(enpiegbl)))
-        edenegbl[indxenpitemp,c] = interp1d(enpiegbl, edenegbltemp)(enpitemp[indxenpitemp]) * (1. + reds[c])**2 # [1/cm^3/MeV]
+    edenegbltemp = flipud(fluxegbl) * 2. * pi / gdat.velolght / 1e4 * 1.6e13 / enpiegbl**2 # [1/cm^3/MeV]
+    edenegbl = zeros((numbgdat.meanenpi, gdat.numbreds))
+    for c in gdat.indxreds:
+        enpitemp = gdat.meanenpi / (1. + gdat.meanreds[c]) # [MeV]
+        indxenpitemp = where((enpitemp < max(enpiegbl)) & (enpitemp > min(enpiegbl)))[0]
+        edenegbl[indxenpitemp, c] = interp1d(enpiegbl, edenegbltemp)(enpitemp[indxenpitemp]) * (1. + gdat.meanreds[c])**2 # [1/cm^3/MeV]
 
     return edenegbl
         
 
 def retr_edencmbr():
     
-    edencmbr = 8. * pi * enpi[:, None]**2 / (velolght * plnkcons)**3 / (exp(enpi[:,None] / tempcmbrnunc / boltcons / (1. + reds[None, :])) - 1.) # [1/cm^3/MeV]
+    edencmbr = 8. * pi * gdat.meanenpi[:, None]**2 / (gdat.velolght * gdat.plnkcons)**3 / (exp(gdat.meanenpi[:, None] / gdat.tempcmbrnunc / gdat.boltcons / (1. + gdat.meanreds[None, :])) - 1.) # [1/cm^3/MeV]
     
     return edencmbr
 
@@ -130,17 +130,17 @@ def plot_edot():
     for a in range(nintsmag):
         labels.append([r'Synch, $B_$ = %.2g $\mu$G' % intsmag[a]])
         
-    fig, ax = plt.subplots(figsize=(7,7))
-    ax.loglog(enel, time)
-    ax.set_xlabel('$E_e$ [MeV]')
-    ax.set_ylabel(r'$\tau$ [Gyrs]')
-    ax.legend()
+    figr, axis = plt.subplots(figsize=(7,7))
+    axis.loglog(enel, time)
+    axis.set_xlabel('$E_e$ [MeV]')
+    axis.set_ylabel(r'$\tau$ [Gyrs]')
+    axis.legend()
     
-    plt.savefig(pathplot + 'edotelec.pdf')
+    plt.savefig(gdat.pathplot + 'edotelec.pdf')
     plt.close()
 
 
-def retr_psec(thiswnum):
+def retr_psec(gdat, thiswnum):
 
     q = thiswnum / 0.15
     cq = 14.4 + 325 / (1. + 60.5 * q**1.11)
@@ -152,15 +152,15 @@ def retr_psec(thiswnum):
     return psec, tranfunc
 
 
-def retr_llik(sampvarb):
+def retr_llik(gdat, sampvarb):
 
     csecvelo = sampvarb[0]
     csecfrac = sampvarb[1]
-    masspart = sampvarb[2]
+    gdat.meanmasspart = sampvarb[2]
     dmatslop = sampvarb[3]
     fluxphotdmatintp = fluxphotdmat[:, :, 0] * csecvelo / csecvelopivt + fluxphotdmat[:, :, 1] * csecfrac / csecfracpivt
-    fluxphotmodl = fluxphothm12[fenph, 0] + fluxphotdmatintp[fenph, 0]
-    lpos = sum(-log(sqrt(2. * pi * fluxphotexprvari)) - 0.5 * (fluxphotexpr - fluxphotmodl)**2 / fluxphotexprvari)
+    fluxphotmodl = gdat.fluxphothm12[gdat.indxenphexpr, 0] + fluxphotdmatintp[gdat.indxenphexpr, 0]
+    lpos = sum(-log(sqrt(2. * pi * gdat.fluxphotexprvari)) - 0.5 * (gdat.fluxphotexpr - fluxphotmodl)**2 / gdat.fluxphotexprvari)
     
     if False:
         
@@ -173,22 +173,20 @@ def retr_llik(sampvarb):
         print csecvelo / csecvelopivt
         print 'csecfrac / csecfracpivt'
         print csecfrac / csecfracpivt
-        print 'fluxphotdmat[fenph, 0, 0]'
-        print fluxphotdmat[fenph, 0, 0]
-        print 'fluxphotdmat[fenph, 0, 1]'
-        print fluxphotdmat[fenph, 0, 1]
+        print 'fluxphotdmat[gdat.indxenphexpr, 0, 0]'
+        print fluxphotdmat[gdat.indxenphexpr, 0, 0]
+        print 'fluxphotdmat[gdat.indxenphexpr, 0, 1]'
+        print fluxphotdmat[gdat.indxenphexpr, 0, 1]
         print 'fluxphotdmatintp'
         print fluxphotdmatintp
-        print 'fluxphothm12[fenph, 0]'
-        print fluxphothm12[fenph, 0]
+        print 'gdat.fluxphothm12[gdat.indxenphexpr, 0]'
+        print gdat.fluxphothm12[gdat.indxenphexpr, 0]
         print 'fluxphotmodl'
         print fluxphotmodl
-        print 'fluxphothm12[fenph, 0]'
-        print fluxphothm12[fenph, 0]
-        print 'fluxphotexpr'
-        print fluxphotexpr
-        print 'fluxphotexprvari'
-        print fluxphotexprvari
+        print 'gdat.fluxphotexpr'
+        print gdat.fluxphotexpr
+        print 'gdat.fluxphotexprvari'
+        print gdat.fluxphotexprvari
         print 'lpos'
         print lpos
         print
@@ -207,195 +205,194 @@ def retr_llik(sampvarb):
     return lpos, sampcalc
 
 
-def retr_hmfn():
+def retr_hmfn(gdat):
       
     # growth factor
-    grwf = zeros(numbreds) # growth factor
-    for c in indxreds:
-        diffgrwfdiffreds = funchubb[c] * (1. + reds) / funchubb**3
-        grwf[c] = trapz(diffgrwfdiffreds[c:], reds[c:])
+    grwf = zeros(gdat.numbreds) # growth factor
+    for c in gdat.indxreds:
+        diffgrwfdiffreds = funchubb[c] * (1. + gdat.meanreds) / funchubb**3
+        grwf[c] = trapz(diffgrwfdiffreds[c:], gdat.meanreds[c:])
     grwf /= grwf[0]
     
-    # radius, wavelength and wavenumber corresponding to the halo mass
-    rsphhalo = (3. * massprim * solm2mgev / 4. / pi / omegdmat / edencritnunc / odenviri)**(1./3.) / kprc2cmet / 1e3 # [Mpc]
+    # radius, wavelength and wavenumber corresponding to the halo gdat.meanmass
+    rsphhalo = (3. * gdat.meanmassprim * gdat.solm2mgev / 4. / pi / gdat.omegdmat / gdat.edencritnunc / gdat.odenviri)**(1./3.) / gdat.kprc2cmet / 1e3 # [Mpc]
     wlenhalo = 4. * rsphhalo
-    wnumhalo = 2. * pi / wlenhalo
+    gdat.meanwnumhalo = 2. * pi / wlenhalo
 
     # power spectrum of density fluctuations
     psec, tranfunc = retr_psec(wnum)
 
     # RMS density fluctuations
-    fluc = zeros(numbmass + 1)
-    diffflucdiffwnum = zeros((numbwnum, numbmass + 1))
-    funcwndw = zeros((numbwnum, numbmass + 1))
-    for d in range(numbmass + 1):
-        wang = wnum * wlenhalo[d]
+    fluc = zeros(gdat.numbmass + 1)
+    diffflucdiffwnum = zeros((gdat.numbwnum, gdat.numbmass + 1))
+    funcwndw = zeros((gdat.numbwnum, gdat.numbmass + 1))
+    for d in range(gdat.numbmass + 1):
+        wang = gdat.meanwnum * wlenhalo[d]
         funcwndw[:, d] = 3. * (sin(wang) - wang * cos(wang)) / wang**3
-        diffflucdiffwnum[:, d] = wnum**2 * psec * funcwndw[:, d]**2 / 2. / pi**2
-        fluc[d] = sqrt(trapz(diffflucdiffwnum[:, d], wnum, axis=0))
+        diffflucdiffwnum[:, d] = gdat.meanwnum**2 * psec * funcwndw[:, d]**2 / 2. / pi**2
+        fluc[d] = sqrt(trapz(diffflucdiffwnum[:, d], gdat.meanwnum, axis=0))
     # temp
-    fluc *= 0.55 / interp1d(massprim, fluc)(1e15)
-    #fluc *= odenrmsq8mpc / interp1d(rsphhalo, fluc)(8. / hubbcons)
+    fluc *= 0.55 / interp1d(gdat.meanmassprim, fluc)(1e15)
+    #fluc *= odenrmsq8mpc / interp1d(rsphhalo, fluc)(8. / gdat.hubbcons)
     fluc = fluc[:, None] * grwf[None, :]
 
-    # halo mass function
-    difflogtflucdiffmass = -diff(log(fluc), axis=0) / diff(massprim)[:, None]
+    # halo gdat.meanmass function
+    difflogtflucdiffmass = -diff(log(fluc), axis=0) / diff(gdat.meanmassprim)[:, None]
     peakhght = odencoll / fluc[:-1, :]
     funcfluc = shtrnorm * sqrt(2. * shtrwgth / pi) * (1. + (1. / peakhght**2 / shtrwgth)**shtrindx) *         peakhght * exp(-shtrwgth * peakhght**2 / 2.)
         
     # temp
     fudgfact = 1.8
-    diffnhaldiffmass = fudgfact * funcfluc * edendmat[None, :] * kprc2cmet**3 / solm2mgev / mass[:, None] *         difflogtflucdiffmass # [1/kpc^3/Msun]
+    diffnhaldiffmass = fudgfact * funcfluc * gdat.edendmat[None, :] * gdat.kprc2cmet**3 / gdat.solm2mgev / gdat.meanmass[:, None] *         difflogtflucdiffmass # [1/kpc^3/Msun]
         
-    if makeplot:
+    if gdat.makeplot:
         
-        fig, ax = plt.subplots()
-        ax.loglog(reds, grwf)
-        ax.set_xlabel(r'$z$')
-        ax.set_ylabel('$D(z)$')
-        ax.set_title('Growth factor')
-        ax.legend()
-        plt.savefig(pathplot + 'grwf.pdf')
+        figr, axis = plt.subplots()
+        axis.loglog(gdat.meanreds, grwf)
+        axis.set_xlabel(r'$z$')
+        axis.set_ylabel('$D(z)$')
+        axis.set_title('Growth factor')
+        axis.legend()
+        plt.savefig(gdat.pathplot + 'grwf.pdf')
         plt.close()
         
-        fig, ax = plt.subplots()
-        ax.loglog(massprim, rsphhalo)
-        ax.set_xlabel(r'$M [M_\odot]$')
-        ax.set_ylabel('$r_H$ [Mpc]')
-        ax = ax.twinx()
-        ax.loglog(massprim, wnumhalo, ls='--')
-        ax.set_ylabel('$k_H$ [Mpc$^{-1}$]')
-        ax.legend()
-        plt.savefig(pathplot + 'rsphhalo.pdf')
+        figr, axis = plt.subplots()
+        axis.loglog(gdat.meanmassprim, rsphhalo)
+        axis.set_xlabel(r'$M [M_\odot]$')
+        axis.set_ylabel('$r_H$ [Mpc]')
+        axistwin = axis.twinx()
+        axistwin.loglog(gdat.meanmassprim, gdat.meanwnumhalo, ls='--')
+        axistwin.set_ylabel('$k_H$ [Mpc$^{-1}$]')
+        axistwin.legend()
+        plt.savefig(gdat.pathplot + 'rsphhalo.pdf')
         plt.close()
         
-        fig, ax = plt.subplots()
-        ax.set_xlabel('$k$ [Mpc$^{-1}$]')
-        ax.set_ylabel('P(k) [Mpc$^3$]')
-        ax.loglog(wnum, psec)
-        ax.set_title('Primordial Matter Power Spectrum')
-        plt.savefig(pathplot + 'psec.pdf')
+        figr, axis = plt.subplots()
+        axis.set_xlabel('$k$ [Mpc$^{-1}$]')
+        axis.set_ylabel('P(k) [Mpc$^3$]')
+        axis.loglog(wnum, psec)
+        axis.set_title('Primordial Matter Power Spectrum')
+        plt.savefig(gdat.pathplot + 'psec.pdf')
         plt.close()
         
-        fig, ax = plt.subplots()
-        ax.set_title('Transfer function')
-        ax.set_xlabel('$k$ [Mpc$^{-1}$]')
-        ax.set_ylabel('$T(k)$')
-        ax.loglog(wnum, tranfunc)
-        plt.savefig(pathplot + 'tranfunc.pdf')
+        figr, axis = plt.subplots()
+        axis.set_title('Transfer function')
+        axis.set_xlabel('$k$ [Mpc$^{-1}$]')
+        axis.set_ylabel('$T(k)$')
+        axis.loglog(wnum, tranfunc)
+        plt.savefig(gdat.pathplot + 'tranfunc.pdf')
         plt.close()
         
-        fig, ax = plt.subplots()
-        ax.set_title('Window function')
-        ax.set_xlabel('$k$ [Mpc$^{-1}$]')
-        ax.set_ylabel('$W(kR)$')
-        for d in range(numbmassplot):
-            ax.loglog(wnum, funcwndw[:, indxmassplot[d]]**2, label=strgmass[d])
-        ax.legend(loc=3)
-        plt.savefig(pathplot + 'funcwndw.pdf')
+        figr, axis = plt.subplots()
+        axis.set_title('Window function')
+        axis.set_xlabel('$k$ [Mpc$^{-1}$]')
+        axis.set_ylabel('$W(kR)$')
+        for d in range(gdat.numbmassplot):
+            axis.loglog(wnum, funcwndw[:, indxmassplot[d]]**2, label=gdat.strgmass[d])
+        axis.legend(loc=3)
+        plt.savefig(gdat.pathplot + 'funcwndw.pdf')
         plt.close()
         
-        fig, ax = plt.subplots()
-        ax.set_title('Contribution of spatial scales to the RMS density fluctuations')
-        ax.set_xlabel('$k$ [Mpc$^{-1}$]')
-        ax.set_ylabel('$d\sigma^2/dk(M)$')
-        for d in range(numbmassplot):
-            ax.loglog(wnum, diffflucdiffwnum[:, indxmassplot[d]], label=strgmass[d])
-        ax.legend(loc=3)
-        plt.savefig(pathplot + 'diffflucdiffwnum.pdf')
+        figr, axis = plt.subplots()
+        axis.set_title('Contribution of spatial scales to the RMS density fluctuations')
+        axis.set_xlabel('$k$ [Mpc$^{-1}$]')
+        axis.set_ylabel('$d\sigma^2/dk(M)$')
+        for d in range(gdat.numbmassplot):
+            axis.loglog(wnum, diffflucdiffwnum[:, indxmassplot[d]], label=gdat.strgmass[d])
+        axis.legend(loc=3)
+        plt.savefig(gdat.pathplot + 'diffflucdiffwnum.pdf')
         plt.close()
         
-        fig, ax = plt.subplots()
-        for c in range(numbredsplotlate):
-            ax.loglog(mass, difflogtflucdiffmass[:, indxredsplotlate[c]], label=strgredslate[c])
-        ax.set_xlabel(r'$M [M_\odot]$')
-        ax.set_ylabel(r'd$\log\sigma$/d$M$')
-        ax.legend()
-        plt.savefig(pathplot + 'difflogtflucdiffmass.pdf')
+        figr, axis = plt.subplots()
+        for c in range(gdat.numbredsplotlate):
+            axis.loglog(gdat.meanmass, difflogtflucdiffmass[:, gdat.indxredsplotlate[c]], label=gdat.strgredslate[c])
+        axis.set_xlabel(r'$M [M_\odot]$')
+        axis.set_ylabel(r'd$\log\sigma$/d$M$')
+        axis.legend()
+        plt.savefig(gdat.pathplot + 'difflogtflucdiffmass.pdf')
         plt.close()
         
-        fig, ax = plt.subplots()
-        for c in range(numbredsplotlate):
-            ax.loglog(massprim, fluc[:, indxredsplotlate[c]], label=strgredslate[c])
-        ax.set_xlabel(r'$M [M_\odot]$')
-        ax.set_ylabel(r'$\sigma$')
-        ax.axhline(odencoll, ls='--', label='Critical linear overdensity at collapse')
-        ax.legend()
-        plt.savefig(pathplot + 'fluc.pdf')
+        figr, axis = plt.subplots()
+        for c in range(gdat.numbredsplotlate):
+            axis.loglog(gdat.meanmassprim, fluc[:, gdat.indxredsplotlate[c]], label=gdat.strgredslate[c])
+        axis.set_xlabel(r'$M [M_\odot]$')
+        axis.set_ylabel(r'$\sigma$')
+        axis.axis.line(odencoll, ls='--', label='Critical linear overdensity at collapse')
+        axis.legend()
+        plt.savefig(gdat.pathplot + 'fluc.pdf')
         plt.close()
         
-        fig, ax = plt.subplots()
-        ax.loglog(fluc[:-1, 0], funcfluc[:, 0])
-        ax.set_xlabel(r'$\sigma$')
-        ax.set_ylabel('$f(\sigma)$')
-        plt.savefig(pathplot + 'funcfluc.pdf')
+        figr, axis = plt.subplots()
+        axis.loglog(fluc[:-1, 0], funcfluc[:, 0])
+        axis.set_xlabel(r'$\sigma$')
+        axis.set_ylabel('$f(\sigma)$')
+        plt.savefig(gdat.pathplot + 'funcfluc.pdf')
         plt.close()
         
         datamsm1 = loadtxt(os.environ["PHOT_IONZ_DATA_PATH"] + '/msm1.csv')
         datamsm2 = loadtxt(os.environ["PHOT_IONZ_DATA_PATH"] + '/msm2.csv')
 
-        fig, ax = plt.subplots()
-        fig.suptitle('Halo mass function', fontsize=18)
-        ax.errorbar(datamsm1[:, 0], datamsm1[:, 1] / datamsm1[:, 0], ls='', yerr=sqrt(datamsm1[:, 1] / datamsm1[:, 0]), # / (500 / 0.7)**3), \
+        figr, axis = plt.subplots()
+        fig.suptitle('Halo gdat.meanmass function', fontsize=18)
+        axis.errorbar(datamsm1[:, 0], datamsm1[:, 1] / datamsm1[:, 0], ls='', yerr=sqrt(datamsm1[:, 1] / datamsm1[:, 0]), # / (500 / 0.7)**3), \
                     marker='o', markersize=5, color='black', label=r'MS-I, $z = 0$')
-        ax.errorbar(datamsm2[:, 0], datamsm2[:, 1] / datamsm2[:, 0], ls='', yerr=sqrt(datamsm2[:, 1] / datamsm2[:, 0]), # / (100 / 0.7)**3), \
+        axis.errorbar(datamsm2[:, 0], datamsm2[:, 1] / datamsm2[:, 0], ls='', yerr=sqrt(datamsm2[:, 1] / datamsm2[:, 0]), # / (100 / 0.7)**3), \
                     marker='D', markersize=5, color='grey', label=r'MS-II, $z = 0$')
-        ax.set_xscale('log')
-        ax.set_yscale('log')
-        for c in range(numbredsplotlate):
-            plot = ax.loglog(mass, mass * diffnhaldiffmass[:, indxredsplotlate[c]] * 1e9, label=strgredslate[c])
-        ax.set_ylim([1e-9, 1e5])
-        ax.set_ylabel('$dN_h/d\log M$ [1/Mpc$^3$]')
-        ax.set_xlabel('$M [M_\odot]$')     
-        ax.legend()
-        plt.savefig(pathplot + 'diffnhaldiffmass.pdf')
+        axis.set_xscale('log')
+        axis.set_yscale('log')
+        for c in range(gdat.numbredsplotlate):
+            plot = axis.loglog(gdat.meanmass, gdat.meanmass * diffnhaldiffmass[:, gdat.indxredsplotlate[c]] * 1e9, label=gdat.strgredslate[c])
+        axis.set_ylim([1e-9, 1e5])
+        axis.set_ylabel('$dN_h/d\log M$ [1/Mpc$^3$]')
+        axis.set_xlabel('$M [M_\odot]$')     
+        axis.legend()
+        plt.savefig(gdat.pathplot + 'diffnhaldiffmass.pdf')
         plt.close()
 
     return diffnhaldiffmass, peakhght
 
 
-def retr_fluxphothm12():
+def retr_fluxphothm12(gdat):
     
     # Haardt & Madau 2012 quasar + galaxy UV/X-ray background flux
     name = os.environ["PHOT_IONZ_DATA_PATH"] + '/photfluxhm12.dat'
     tabl = loadtxt(name)
 
     wlenhm12 = tabl[1:576, 0] # [A]
-    freqhm12 = velolght / flipud(wlenhm12) * cmet2angs # [Hz]
-    enphhm12 = plnkcons * freqhm12 # [MeV]
-    redshm12 = tabl[0, 0:60]
-    fluxphothm12 = flipud(tabl[1:576, 1:61]) # [erg/cm^2/s/Hz/sr]
-    fluxphothm12 *= ergs2mgev / plnkcons / enphhm12[:, None] # [1/cm^2/s/sr/MeV]
+    freqhm12 = gdat.velolght / flipud(wlenhm12) * gdat.cmet2angs # [Hz]
+    gdat.enphhm12 = gdat.plnkcons * freqhm12 # [MeV]
+    gdat.redshm12 = tabl[0, 0:60]
+    gdat.fluxphothm12 = flipud(tabl[1:576, 1:61]) # [erg/cm^2/s/Hz/sr]
+    gdat.fluxphothm12 *= gdat.ergs2mgev / gdat.plnkcons / gdat.enphhm12[:, None] # [1/cm^2/s/sr/MeV]
     
-    enphhm12, jenphhm12 = unique(enphhm12, return_index=True)
-    fluxphothm12 = fluxphothm12[jenphhm12, :]
+    gdat.enphhm12, gdat.indxenphhm12 = unique(gdat.enphhm12, return_index=True)
+    gdat.fluxphothm12 = gdat.fluxphothm12[gdat.indxenphhm12, :]
 
-    fluxphothm12 = interp2d(enphhm12, redshm12, fluxphothm12.T)(enph, reds).T
+    gdat.fluxphothm12 = interp2d(gdat.enphhm12, gdat.redshm12, gdat.fluxphothm12.T)(gdat.meanenph, gdat.meanreds).T
 
-    return fluxphothm12
     
     # quasar photon emissivity
-    #  phqsemis1 = 10**24.6 * erg2mev / (kprc2cmet*1d3)**3 * (1. + reds)**7.68 * exp(-0.28 * reds) / (exp(1.77 * reds) + 26.3) # [1/cm^3/s/Hz/MeV]
-    #  phqsemis = ((enph / enerrydb)**(-0.44) * frph) # phqsemis1 # [/cm^3/s/MeV]
-    #  ienph = where(enph gt plnkcons * velolght / 1.3e-5)
-    #  phqsemis[ienph,:] = ((enph[ienph] / enerrydb)**(-1.57) * frph) # phqsemis1 # [1/cm^3/s/MeV]
+    #  phqsemis1 = 10**24.6 * erg2mev / (gdat.kprc2cmet*1d3)**3 * (1. + gdat.meanreds)**7.68 * exp(-0.28 * gdat.meanreds) / (exp(1.77 * gdat.meanreds) + 26.3) # [1/cm^3/s/Hz/MeV]
+    #  phqsemis = ((gdat.meanenph / gdat.enerrydb)**(-0.44) * frph) # phqsemis1 # [/cm^3/s/MeV]
+    #  ienph = where(gdat.meanenph gt gdat.plnkcons * gdat.velolght / 1.3e-5)
+    #  phqsemis[ienph,:] = ((gdat.meanenph[ienph] / gdat.enerrydb)**(-1.57) * frph) # phqsemis1 # [1/cm^3/s/MeV]
     #
     #
     # Haardt & Madau 2012 quasar + galaxy UV/X-ray background emissivity
 
     #hmemis = read_ascii('$PHOT_IONZ_DATA_PATH/dat/qgemis.dat') 
     #wlemishm = phqgemisdat.field01[0,1:378] # [Angstrom]
-    #fremishm = reverse(reform(velolght / (wlemishm * 1e-8))) # [Hz]
-    #enemishm = plnkcons * fremishm # [MeV]
+    #fremishm = reverse(reform(gdat.velolght / (wlemishm * 1e-8))) # [Hz]
+    #enemishm = gdat.plnkcons * fremishm # [MeV]
     #phqgemis = phqgemisdat.field01[1:59,1:378] # [erg/Mpc^3/s/Hz]
     #phqgemis = transpose(phqgemis)
     #phqgemis = reverse(phqgemis,1)
     #phqgemis *=  2.12e-68 * fremishm * (1. + zeros(60)) # [1/cm^3/s/MeV]
-    #phemis[:,:,1] = interpolate(phqgemis, interpol(indgen(378), enemishm, enph), interpol(indgen(59), redhm, red)) 
-    #phemisryd[:,1] = interpolate(phqgemis, interpol(indgen(378), enemishm, 1. * enerrydb), interpol(indgen(59), redhm, red)) 
+    #phemis[:,:,1] = interpolate(phqgemis, interpol(indgen(378), enemishm, gdat.meanenph), interpol(indgen(59), redhm, red)) 
+    #phemisryd[:,1] = interpolate(phqgemis, interpol(indgen(378), enemishm, 1. * gdat.enerrydb), interpol(indgen(59), redhm, red)) 
 
 
-def plot_matr(ax, xdat, ydat, labl, loc=1):
+def plot_matr(gdat, axis, xdat, ydat, labl, loc=1):
     
     listlinestyl = [':', '--', '-']
     listcolr = ['b', 'r', 'g']
@@ -403,105 +400,100 @@ def plot_matr(ax, xdat, ydat, labl, loc=1):
     for i in range(3):
         for  j in range(3):
             if len(xdat.shape) == 3:
-                ax.plot(xdat[i, j, :], ydat[i, j, :], color=listcolr[j], ls=listlinestyl[i])
+                axis.plot(xdat[i, j, :], ydat[i, j, :], color=listcolr[j], ls=listlinestyl[i])
             else:
-                ax.plot(xdat, ydat[i, j, :], color=c[j], ls=ls[i])
+                axis.plot(xdat, ydat[i, j, :], color=c[j], ls=ls[i])
 
     line = []
     for k in arange(3):
         line.append(plt.Line2D((0,1),(0,0), color='k', ls=listlinestyl[k]))
     for l in range(3):
         line.append(plt.Line2D((0,1),(0,0), color=listcolr[l]))
-    ax.legend(line, labl, loc=loc, ncol=2) 
+    axis.legend(line, labl, loc=loc, ncol=2) 
 
 
-def retr_fluxphotdmat(csecvelo, csecfrac, masspart, dmatslop):
+def retr_fluxphotdmat(gdat, csecvelo, csecfrac, meanmasspart, dmatslop):
     
     # run tag
-    global rtag
-    rtag = propmodl + '_' + concmodl + '_' + subsmodl + '_' + igmamodl + '_massandm%.3g_' % masspart + anch + \
+    rtag = propmodl + '_' + concmodl + '_' + subsmodl + '_' + igmamodl + '_massandm%.3g_' % gdat.meanmasspart + anch + \
         '_csecvelo%.3g'  % -log10(csecvelo) + '_csecfrac%.3g' % -log10(csecfrac)
     
     # DM annihilation spectrum
-    multintptemp = interp1d(massp4dm, multp4dm, axis=1)(masspart) / masspart / enelscalp4dm
-    indxeneltemp = where((enel > amin(enelscalp4dm * masspart)) & (enel < amax(enelscalp4dm * masspart)))[0]
-    multintp = zeros(numbenel)
-    multintp[indxeneltemp] = interp1d(enelscalp4dm * masspart, multintptemp)(enel[indxeneltemp])
+    multintptemp = interp1d(gdat.meanmassp4dm, multp4dm, axis=1)(gdat.meanmasspart) / gdat.meanmasspart / enelscalp4dm
+    indxeneltemp = where((enel > amin(enelscalp4dm * gdat.meanmasspart)) & (enel < amax(enelscalp4dm * gdat.meanmasspart)))[0]
+    multintp = zeros(gdat.numbenel)
+    multintp[indxeneltemp] = interp1d(enelscalp4dm * gdat.meanmasspart, multintptemp)(enel[indxeneltemp])
     
     # energy density and velocity variance in DM halos
-    global edendmathalo, velovarihalo, rvelvarihalo
-    velovarihalo = zeros((numbmass, numbreds, numbrsph))
-    edendmathalo = zeros((numbmass, numbreds, numbrsph))
-    for d in range(numbmass):
-        for c in indxreds:
-            edendmathalonorm = odenviri * edendmat[c] * conc[d, c]**3 / 3. / (log(1. + conc[d, c]) - conc[d, c] / (1. + conc[d, c])) # [MeV/cm^3]
+    velovarihalo = zeros((gdat.numbmass, gdat.numbreds, gdat.numbrsph))
+    gdat.edendmathalo = zeros((gdat.numbmass, gdat.numbreds, gdat.numbrsph))
+    for d in range(gdat.numbmass):
+        for c in gdat.indxreds:
+            gdat.edendmathalonorm = gdat.odenviri * gdat.edendmat[c] * conc[d, c]**3 / 3. / (log(1. + conc[d, c]) - conc[d, c] / (1. + conc[d, c])) # [MeV/cm^3]
             rsphscal = rsphviri[d, c] / conc[d, c] # [kpc]
             rsphnorm = rsph[d, c, :] / rsphscal # [1]
-            edendmathalo[d, c, :] = edendmathalonorm / rsphnorm / (1. + rsphnorm)**2 # [MeV/cm^3]
-            edendemcnorm = (2. * demccons - 3.)**3 / 4. / (5. - 2. * demccons) * edendmathalonorm # [MeV/cm^3]
+            gdat.edendmathalo[d, c, :] = gdat.edendmathalonorm / rsphnorm / (1. + rsphnorm)**2 # [MeV/cm^3]
+            edendemcnorm = (2. * demccons - 3.)**3 / 4. / (5. - 2. * demccons) * gdat.edendmathalonorm # [MeV/cm^3]
             rsphdemc = (5. - 2. * demccons) / (2. * demccons - 3.) * rsphscal # [kpc]
-            velovarihalo[d, c, :] = 4. * pi * gravconsredu / 200. * 81. * edendemcnorm**(1. / 3.) * rsphdemc**2 * (edendmathalo[d, c, :] \
-                * (rsph[d, c, :] / rsphdemc)**demccons)**(2. / 3.) /                 velolght**2 * kprc2cmet**2 # [1] 
+            velovarihalo[d, c, :] = 4. * pi * gravconsredu / 200. * 81. * edendemcnorm**(1. / 3.) * rsphdemc**2 * (gdat.edendmathalo[d, c, :] \
+                * (rsph[d, c, :] / rsphdemc)**demccons)**(2. / 3.) /                 gdat.velolght**2 * gdat.kprc2cmet**2 # [1] 
     rvelvarihalo = demcsigm * velovarihalo
           
     # DM annihilation cross section
-    csecvelohalo = zeros((numbmass, numbreds, numbrsph, numbmpol))
+    csecvelohalo = zeros((gdat.numbmass, gdat.numbreds, gdat.numbrsph, numbmpol))
     csecvelohalo[:, :, :, 0] = csecvelo
     csecvelohalo[:, :, :, 1] = csecvelo * csecfrac * rvelvarihalo
 
     # electron emissivity in DM halo
-    global emiselechaloenel, diffemiselechalodiffrsphenel, lumielechaloenel, diffemiselecclmpdiffmassenel, emiselecenel, emiselecclmpenel, \
-        emiselecsmthenel, rvelvarihavg, rvelvariiavg, rvelvariiavgsmth, rvelvariiavgclmp, ndiffenelecsavg, ndiffenelecsavgenel, emisphot, \
-        emisphotrydb, fluxphot, fluxphotrydb, fluxphotenph, diffionrdiffenph, ionr
         
-    emiselechalohost = zeros((numbenel, numbmass, numbreds, numbrsph, numbmpol))
-    emiselechalosubh = zeros((numbenel, numbmass, numbreds, numbrsph, numbmpol))
-    emiselechalotemp = zeros((numbenel, numbmass, numbmass, numbreds, numbrsph, numbmpol))
-    emiselechalo = zeros((numbenel, numbmass, numbreds, numbrsph, numbmpol))
-    diffemiselechalodiffrsph = zeros((numbenel, numbmass, numbreds, numbrsph, numbmpol))
-    lumielechalo = zeros((numbenel, numbmass, numbreds, numbmpol))
-    for a in range(numbenel):
-        for d in range(numbmass):
-            for c in indxreds:
+    emiselechalohost = zeros((gdat.numbenel, gdat.numbmass, gdat.numbreds, gdat.numbrsph, numbmpol))
+    emiselechalosubh = zeros((gdat.numbenel, gdat.numbmass, gdat.numbreds, gdat.numbrsph, numbmpol))
+    emiselechalotemp = zeros((gdat.numbenel, gdat.numbmass, gdat.numbmass, gdat.numbreds, gdat.numbrsph, numbmpol))
+    emiselechalo = zeros((gdat.numbenel, gdat.numbmass, gdat.numbreds, gdat.numbrsph, numbmpol))
+    diffemiselechalodiffrsph = zeros((gdat.numbenel, gdat.numbmass, gdat.numbreds, gdat.numbrsph, numbmpol))
+    lumielechalo = zeros((gdat.numbenel, gdat.numbmass, gdat.numbreds, numbmpol))
+    for a in range(gdat.numbenel):
+        for d in range(gdat.numbmass):
+            for c in gdat.indxreds:
                 for m in range(numbmpol):
-                    emiselechalohost[a, d, c, :, m] = csecvelohalo[d, c, :, m] / masspart**2 *    multintp[a] * fesc[a, d, c, :] * edendmathalo[d, c, :]**2 # [1/s/cm^3/MeV]
-                    for f in range(numbmass):
+                    emiselechalohost[a, d, c, :, m] = csecvelohalo[d, c, :, m] / gdat.meanmasspart**2 *    multintp[a] * fesc[a, d, c, :] * gdat.edendmathalo[d, c, :]**2 # [1/s/cm^3/MeV]
+                    for f in range(gdat.numbmass):
                         if f < d:
                             emiselechalotemp[a, d, f, c, :, m] = 0.
-                    indxmassplot = where(mass[f] < mass[d])[0]
-                    emiselechalosubh[a, d, c, :, m] = trapz(emiselechalotemp[a, d, :, c, :, m], mass, axis=0)
+                    indxmassplot = where(gdat.meanmass[f] < gdat.meanmass[d])[0]
+                    emiselechalosubh[a, d, c, :, m] = trapz(emiselechalotemp[a, d, :, c, :, m], gdat.meanmass, axis=0)
                     emiselechalo[a, d, c, :, m] = emiselechalohost[a, d, c, :, m] + emiselechalosubh[a, d, c, :, m]
-                    diffemiselechalodiffrsph[a, d, c, :, m] = 4. * pi * rsph[d, c, :]**2 *    emiselechalo[a, d, c, :, m] * kprc2cmet**2 # [1/s/kpc/MeV]
-                    lumielechalo[a, d, c, m] =    trapz(diffemiselechalodiffrsph[a, d, c, :, m] * kprc2cmet, rsph[d, c, :]) # [1/s/MeV]
+                    diffemiselechalodiffrsph[a, d, c, :, m] = 4. * pi * rsph[d, c, :]**2 *    emiselechalo[a, d, c, :, m] * gdat.kprc2cmet**2 # [1/s/kpc/MeV]
+                    lumielechalo[a, d, c, m] =    trapz(diffemiselechalodiffrsph[a, d, c, :, m] * gdat.kprc2cmet, rsph[d, c, :]) # [1/s/MeV]
     emiselechaloenel = trapz(emiselechalo, enel, axis=0) # [1/s/cm^3]
     lumielechaloenel = trapz(lumielechalo, enel, axis=0) # [1/s]
     diffemiselechalodiffrsphenel = trapz(diffemiselechalodiffrsph, enel, axis=0) # [1/s/cm^3]
     
     # mean DM relative velocity
-    diffrvelvarihavgdiffrsph = zeros((numbmass, numbreds, numbrsph))
-    rvelvarihavg = zeros((numbmass, numbreds))
-    for d in range(numbmass):
-        for c in indxreds:
+    diffrvelvarihavgdiffrsph = zeros((gdat.numbmass, gdat.numbreds, gdat.numbrsph))
+    rvelvarihavg = zeros((gdat.numbmass, gdat.numbreds))
+    for d in range(gdat.numbmass):
+        for c in gdat.indxreds:
             diffrvelvarihavgdiffrsph[d, c, :] = 3. * rsph[d, c, :]**2 * rvelvarihalo[d, c, :] / amax(rsph[d, c, :])**3
             rvelvarihavg[d, c] = trapz(diffrvelvarihavgdiffrsph[d, c, :], rsph[d, c, :]) # [1]
 
     # spatially averaged electron emissivity    
     ## smooth component
     # temp -- add p-wave to the smth component
-    emiselecsmth = zeros((numbenel, numbreds, numbmpol))
-    for c in indxreds:
+    emiselecsmth = zeros((gdat.numbenel, gdat.numbreds, numbmpol))
+    for c in gdat.indxreds:
         for m in range(numbmpol):
-            emiselecsmth[:, c, m] = csecvelo * edendmat[c]**2 / masspart**2 * multintp # [1/cm^3/s/MeV]
+            emiselecsmth[:, c, m] = csecvelo * gdat.edendmat[c]**2 / gdat.meanmasspart**2 * multintp # [1/cm^3/s/MeV]
     emiselecsmthenel = trapz(emiselecsmth, enel, axis=0) # [1/cm^3/s]
 
     ## clumpy component
-    diffemiselecclmpdiffmass = zeros((numbenel, numbmass, numbreds, numbmpol))
-    for a in range(numbenel):
-        for d in range(numbmass):
-            for c in indxreds:
+    diffemiselecclmpdiffmass = zeros((gdat.numbenel, gdat.numbmass, gdat.numbreds, numbmpol))
+    for a in range(gdat.numbenel):
+        for d in range(gdat.numbmass):
+            for c in gdat.indxreds:
                 for m in range(numbmpol):
-                    diffemiselecclmpdiffmass[a, :, c, m] = diffnhaldiffmass[:, c] * lumielechalo[a, :, c, m] / kprc2cmet**3 * (1. + reds[c])**3 # [1/cm^3/s/MeV/Msun]
-    emiselecclmp = trapz(diffemiselecclmpdiffmass, mass, axis=1) # [1/cm^3/s/MeV]
+                    diffemiselecclmpdiffmass[a, :, c, m] = diffnhaldiffmass[:, c] * lumielechalo[a, :, c, m] / gdat.kprc2cmet**3 * (1. + gdat.meanreds[c])**3 # [1/cm^3/s/MeV/Msun]
+    emiselecclmp = trapz(diffemiselecclmpdiffmass, gdat.meanmass, axis=1) # [1/cm^3/s/MeV]
     emiselecclmpenel = trapz(emiselecclmp, enel, axis=0) # [1/cm^3/s]
     diffemiselecclmpdiffmassenel = trapz(diffemiselecclmpdiffmass, enel, axis=0) # [1/cm^3/s/Msun]
     ## total
@@ -510,62 +502,62 @@ def retr_fluxphotdmat(csecvelo, csecfrac, masspart, dmatslop):
 
     # dark matter velocity variance
     diffrvelvariiavgdiffmass = diffnhaldiffmass * rvelvarihavg * 4. * pi * amax(rsph, axis=2)**3 / 3. # [1/Msun]
-    rvelvariiavgclmp = trapz(diffrvelvariiavgdiffmass, mass, axis=0) # [1]
-    tempiavgsmth = tempcmbrnunc * (1. + reds) / (1. + 1e9  / (1. + reds) / (1. + ((1. + reds) / 1e9)**2.5))
-    rvelvariiavgsmth = 3. * boltcons * tempiavgsmth / masspart
+    rvelvariiavgclmp = trapz(diffrvelvariiavgdiffmass, gdat.meanmass, axis=0) # [1]
+    tempiavgsmth = gdat.tempcmbrnunc * (1. + gdat.meanreds) / (1. + 1e9  / (1. + gdat.meanreds) / (1. + ((1. + gdat.meanreds) / 1e9)**2.5))
+    rvelvariiavgsmth = 3. * gdat.boltcons * tempiavgsmth / gdat.meanmasspart
     rvelvariiavg = rvelvariiavgsmth + rvelvariiavgclmp
 
     # mean electron number density in the IGM
-    ndiffenelecsavg = zeros((numbenel, numbreds, numbmpol))
-    for c in indxreds:
+    ndiffenelecsavg = zeros((gdat.numbenel, gdat.numbreds, numbmpol))
+    for c in gdat.indxreds:
         for m in range(numbmpol):
-            for i in range(numbenel-1):
-                ndiffenelecsavg[i, c, m] = trapz(emiselec[i:numbenel, c, m], enel[i:numbenel], axis=0) / edotegbl[i, c] # [1/cm^3/MeV]
+            for i in range(gdat.numbenel-1):
+                ndiffenelecsavg[i, c, m] = trapz(emiselec[i:gdat.numbenel, c, m], enel[i:gdat.numbenel], axis=0) / edotegbl[i, c] # [1/cm^3/MeV]
     ndiffenelecsavgenel = trapz(ndiffenelecsavg, enel, axis=0) # [1/cm^3]
 
     # photon emissivity
     emisphot = trapz(specinvc[:, :, :, None] * ndiffenelecsavg[None, :, :, :], enel, axis=1) # [1/cm^3/s/MeV]
-    emisphotrydb = interp1d(enph, emisphot, axis=0)(enerrydb) # [1/cm^3/s/MeV]
-    emisphotenph = trapz(emisphot, enph, axis=0) # [1/cm^3/s]
+    emisphotrydb = interp1d(gdat.meanenph, emisphot, axis=0)(gdat.enerrydb) # [1/cm^3/s/MeV]
+    emisphotenph = trapz(emisphot, gdat.meanenph, axis=0) # [1/cm^3/s]
 
     # photon flux 
-    difffluxphotdiffreds = zeros((numbenph, numbreds, numbreds, numbmpol))
-    fluxphot = zeros((numbenph, numbreds, numbmpol))
-    for a in range(numbenph):
-        for c in indxreds:
-            enphshft = enph[a] * (1. + reds[c]) / (1. + reds)
-            indxredsshft = where((minmenph < enphshft) & (enphshft < maxmenph))[0]
-            if indxredsshft.size == 0:
+    difffluxphotdiffreds = zeros((gdat.numbenph, gdat.numbreds, gdat.numbreds, numbmpol))
+    fluxphot = zeros((gdat.numbenph, gdat.numbreds, numbmpol))
+    for a in range(gdat.numbenph):
+        for c in gdat.indxreds:
+            gdat.meanenphshft = gdat.meanenph[a] * (1. + gdat.meanreds[c]) / (1. + gdat.meanreds)
+            gdat.indxredsshft = where((minmenph < gdat.meanenphshft) & (gdat.meanenphshft < maxmenph))[0]
+            if gdat.indxredsshft.size == 0:
                 continue
             for m in range(numbmpol):
-                emisphotintp = interp1d(enph, emisphot[:, c, m])(enphshft[indxredsshft]) # [1/cm^3/s/MeV]
-                difffluxphotdiffreds[a, c, indxredsshft, m] = velolght * timehubb[indxredsshft] / 4. / pi * emisphotintp * exp(-odep[a, c, indxredsshft]) * \
-                    (1. + reds[c])**3 / (1. + reds[indxredsshft])**4 # [1/cm^2/s/sr/MeV]
-                fluxphot[a, c, m] = trapz(difffluxphotdiffreds[a, c, :, m], reds) # [1/cm^2/s/sr/MeV]  
-    fluxphotrydb = interp1d(enph, fluxphot, axis=0)(enerrydb) # [1/cm^2/s/sr/MeV]
-    fluxphotenph = trapz(fluxphot, enph, axis=0) # [1/cm^2/s/sr]
+                emisphotintp = interp1d(gdat.meanenph, emisphot[:, c, m])(gdat.meanenphshft[gdat.indxredsshft]) # [1/cm^3/s/MeV]
+                difffluxphotdiffreds[a, c, gdat.indxredsshft, m] = gdat.velolght * timehubb[gdat.indxredsshft] / 4. / pi * emisphotintp * exp(-odep[a, c, gdat.indxredsshft]) * \
+                    (1. + gdat.meanreds[c])**3 / (1. + gdat.meanreds[gdat.indxredsshft])**4 # [1/cm^2/s/sr/MeV]
+                fluxphot[a, c, m] = trapz(difffluxphotdiffreds[a, c, :, m], gdat.meanreds) # [1/cm^2/s/sr/MeV]  
+    fluxphotrydb = interp1d(gdat.meanenph, fluxphot, axis=0)(gdat.enerrydb) # [1/cm^2/s/sr/MeV]
+    fluxphotenph = trapz(fluxphot, gdat.meanenph, axis=0) # [1/cm^2/s/sr]
 
     # photo-ionization rate
-    diffionrdiffenph = 4. * pi * csecionz[:, None, None] * fluxphot # [1/s/MeV]
-    ionr = trapz(diffionrdiffenph, enph, axis=0) # [1/s]
+    diffionrdiffenph = 4. * pi * gdat.csecionz[:, None, None] * fluxphot # [1/s/MeV]
+    ionr = trapz(diffionrdiffenph, gdat.meanenph, axis=0) # [1/s]
     
     return ionr, fluxphot
         
 
-def plot_halo():
+def plot_halo(gdat):
 
     listlinestyl = [':', '--', '-']
     listcolr = ['b', 'g', 'r']
     
     # concentration parameter
-    fig, ax = plt.subplots()
+    figr, axis = plt.subplots()
     for m in range(nconcmodl):
-        for c in range(numbredsplotlate):
-            ax.loglog(mass, conccatl[:, indxredsplotlate[c], m], ls=listlinestyl[m], color=listcolr[c])
-    ax.set_xlabel('$M [M_\odot]$')
-    ax.set_ylabel('$c(M,z)$')
-    ax.set_title('Mean halo concentration', fontsize=18)
-    ax.set_ylim([1., None])
+        for c in range(gdat.numbredsplotlate):
+            axis.loglog(gdat.meanmass, conccatl[:, gdat.indxredsplotlate[c], m], ls=listlinestyl[m], color=listcolr[c])
+    axis.set_xlabel('$M [M_\odot]$')
+    axis.set_ylabel('$c(M,z)$')
+    axis.set_title('Mean halo concentration', fontsize=18)
+    axis.set_ylim([1., None])
 
     listline = []
     listline.append(mpl.lines.Line2D([], [], ls=listlinestyl[0], color='black'))
@@ -579,387 +571,387 @@ def plot_halo():
     listlabl.append('Sanchez-Conde & Prada 2014')
     listlabl.append('Duffy et al. 2008')
     listlabl.append('Comerford & Natarajan 2007')
-    listlabl.append(strgredslate[0])
-    listlabl.append(strgredslate[1])
-    listlabl.append(strgredslate[2])
+    listlabl.append(gdat.strgredslate[0])
+    listlabl.append(gdat.strgredslate[1])
+    listlabl.append(gdat.strgredslate[2])
     
-    ax.legend(listline, listlabl)
+    axis.legend(listline, listlabl)
 
-    plt.savefig(pathplot + 'halo.pdf')
+    plt.savefig(gdat.pathplot + 'halo.pdf')
     plt.close()
 
     # substructure
-    #fig, ax = plt.subplots()
-    #ax.loglog(rsph, subfs)
-    #ax.loglog(rsph, subbfrsp)           
-    #ax.set_xlabel('$r$ [kpc]')
-    #ax.set_ylabel('$f_s(r)$')
+    #figr, axis = plt.subplots()
+    #axis.loglog(rsph, subfs)
+    #axis.loglog(rsph, subbfrsp)           
+    #axis.set_xlabel('$r$ [kpc]')
+    #axis.set_ylabel('$f_s(r)$')
 
     # DM energy density and relative velocity variance in halos
-    temp = meshgrid(indxmassplot, indxredsplotlate, indexing='ij')
-    labl = strgmass + strgredslate
+    temp = meshgrid(indxmassplot, gdat.indxredsplotlate, indexing='ij')
+    labl = gdat.strgmass + gdat.strgredslate
 
-    fig, ax = plt.subplots()
+    figr, axis = plt.subplots()
     fig.suptitle('DM energy density in halos', fontsize=18)                
-    plot_matr(ax, rsph[temp[0], temp[1], :], edendmathalo[temp[0], temp[1], :],               labl=labl, loc=3)
-    ax.set_xscale('log')
-    ax.set_yscale('log')
-    ax.set_xlabel('$r$ [kpc]')
-    ax.set_ylabel(r'$\rho(r,M,z)$ [MeV/cm$^3$]')
-    plt.savefig(pathplot + 'edendmathalo.pdf')
+    plot_matr(axis, rsph[temp[0], temp[1], :], gdat.edendmathalo[temp[0], temp[1], :],               labl=labl, loc=3)
+    axis.set_xscale('log')
+    axis.set_yscale('log')
+    axis.set_xlabel('$r$ [kpc]')
+    axis.set_ylabel(r'$\rho(r,M,z)$ [MeV/cm$^3$]')
+    plt.savefig(gdat.pathplot + 'gdat.edendmathalo.pdf')
     plt.close()
 
-    fig, ax = plt.subplots()
+    figr, axis = plt.subplots()
     fig.suptitle('DM relative velocity variance in halos', fontsize=18)
-    plot_matr(ax, rsph[temp[0], temp[1], :], rvelvarihalo[temp[0], temp[1], :], labl=labl, loc=2)
-    ax.set_xscale('log')
-    ax.set_yscale('log')
-    ax.set_xlabel('$r$ [kpc]')
-    ax.set_ylabel('$v^2 (M,z,r)$')
-    plt.savefig(pathplot + 'rvelvarihalo.pdf')
+    plot_matr(axis, rsph[temp[0], temp[1], :], rvelvarihalo[temp[0], temp[1], :], labl=labl, loc=2)
+    axis.set_xscale('log')
+    axis.set_yscale('log')
+    axis.set_xlabel('$r$ [kpc]')
+    axis.set_ylabel('$v^2 (M,z,r)$')
+    plt.savefig(gdat.pathplot + 'rvelvarihalo.pdf')
     plt.close()
 
     # virial and scale radii
-    fig, ax = plt.subplots()
-    for c in range(numbredsplotlate):
-        ax.loglog(mass, rsphviri[:, indxredsplotlate[c]], label=strgredslate[c])
-    ax.set_xlabel('$M [M_\odot]$')
-    ax.set_ylabel('$r_{vir}(M,z)$ [kpc]')
-    ax.set_title('Halo Virial Radius')
-    ax.legend(loc=2)
-    plt.savefig(pathplot + 'rsphviri.pdf')
+    figr, axis = plt.subplots()
+    for c in range(gdat.numbredsplotlate):
+        axis.loglog(gdat.meanmass, rsphviri[:, gdat.indxredsplotlate[c]], label=gdat.strgredslate[c])
+    axis.set_xlabel('$M [M_\odot]$')
+    axis.set_ylabel('$r_{vir}(M,z)$ [kpc]')
+    axis.set_title('Halo Virial Radius')
+    axis.legend(loc=2)
+    plt.savefig(gdat.pathplot + 'rsphviri.pdf')
     plt.close()
 
     # e^-/e^+ emissivity in a halo
-    fig, axgrd = plt.subplots(numbmassplot, numbmpol, sharey='row', sharex='all', figsize=(14,21))
+    fig, axisgrid = plt.subplots(gdat.numbmassplot, numbmpol, sharey='row', sharex='all', figsize=(14,21))
     fig.suptitle('$e^-/e^+$ emissivity in a halo', fontsize=18)
-    for d, axrow in enumerate(axgrd):
-        for p, ax in enumerate(axrow):
-            for c in range(numbredsplotlate):
-                ax.loglog(rsph[indxmassplot[d], indxredsplotlate[c], :], emiselechaloenel[indxmassplot[d], indxredsplotlate[c], :, p],      label=strgredslate[c])
-            ax.set_xlabel('$r$ [kpc]')
+    for d, axisrows in enumerate(axisgrid):
+        for p, axis in enumerate(axisrows):
+            for c in range(gdat.numbredsplotlate):
+                axis.loglog(rsph[indxmassplot[d], gdat.indxredsplotlate[c], :], emiselechaloenel[indxmassplot[d], gdat.indxredsplotlate[c], :, p],      label=gdat.strgredslate[c])
+            axis.set_xlabel('$r$ [kpc]')
             if d == 0:
-                ax.set_title(strgmpol[p])
-            ax.text(0.23, 0.15, strgmass[d], ha='center', va='center', transform = ax.transAxes)
-            if d == numbmassplot / 2:
-                ax.set_ylabel(r'$dN_e/dtdV (M,z,r)$ [1/s/cm$^3$]')
-    ax.legend()
-    plt.savefig(pathplot + 'emiselechaloenel.pdf')
+                axis.set_title(strgmpol[p])
+            axis.text(0.23, 0.15, gdat.strgmass[d], ha='center', va='center', transform = axis.transAxes)
+            if d == gdat.numbmassplot / 2:
+                axis.set_ylabel(r'$dN_e/dtdV (M,z,r)$ [1/s/cm$^3$]')
+    axis.legend()
+    plt.savefig(gdat.pathplot + 'emiselechaloenel.pdf')
     plt.close()
 
     # e^-/e^+ differential luminosity of a halo
-    fig, axgrd = plt.subplots(numbmassplot, numbmpol, sharey='row', sharex='all', figsize=(14,21))
+    fig, axisgrid = plt.subplots(gdat.numbmassplot, numbmpol, sharey='row', sharex='all', figsize=(14,21))
     fig.suptitle('$e^-/e^+$ differential luminosity in a halo', fontsize=18)
-    for d, axrow in enumerate(axgrd):
-        for p, ax in enumerate(axrow):
-            for c in range(numbredsplotlate):
-                ax.loglog(rsph[indxmassplot[d], indxredsplotlate[c],:], diffemiselechalodiffrsphenel[indxmassplot[d], indxredsplotlate[c],:,p],      label=strgredslate[c])
-            ax.set_xlabel('$r$ [kpc]')
+    for d, axisrows in enumerate(axisgrid):
+        for p, axis in enumerate(axisrows):
+            for c in range(gdat.numbredsplotlate):
+                axis.loglog(rsph[indxmassplot[d], gdat.indxredsplotlate[c],:], diffemiselechalodiffrsphenel[indxmassplot[d], gdat.indxredsplotlate[c],:,p],      label=gdat.strgredslate[c])
+            axis.set_xlabel('$r$ [kpc]')
             if d == 0:
-                ax.set_title(strgmpol[p])
-            ax.text(0.23, 0.12, strgmass[d], ha='center', va='center', transform = ax.transAxes)
-            if d == numbmassplot / 2:
-                ax.set_ylabel(r'$dN_e/dtd\log r$ [1/s]')
-    ax.legend()
-    plt.savefig(pathplot + 'diffemiselechalodiffrsphenel.pdf')
+                axis.set_title(strgmpol[p])
+            axis.text(0.23, 0.12, gdat.strgmass[d], ha='center', va='center', transform = axis.transAxes)
+            if d == gdat.numbmassplot / 2:
+                axis.set_ylabel(r'$dN_e/dtd\log r$ [1/s]')
+    axis.legend()
+    plt.savefig(gdat.pathplot + 'diffemiselechalodiffrsphenel.pdf')
     plt.close()
 
     # e^-/e^+ luminosity of a halo
-    fig, axrow = plt.subplots(1, numbmpol, sharey='row', sharex='all', figsize=(14,7))
+    fig, axisrows = plt.subplots(1, numbmpol, sharey='row', sharex='all', figsize=(14,7))
     fig.suptitle('$e^-/e^+$ luminosity of a DM halo', fontsize=18)
-    for p, ax in enumerate(axrow):
-        for c in range(numbredsplotlate):
-            ax.loglog(mass, lumielechaloenel[:, indxredsplotlate[c],p], label=strgredslate[c])
-        ax.set_xlabel(r'$M$ $[M_\odot]$')
-        ax.set_title(strgmpol[p])
+    for p, axis in enumerate(axisrows):
+        for c in range(gdat.numbredsplotlate):
+            axis.loglog(gdat.meanmass, lumielechaloenel[:, gdat.indxredsplotlate[c],p], label=gdat.strgredslate[c])
+        axis.set_xlabel(r'$M$ $[M_\odot]$')
+        axis.set_title(strgmpol[p])
         if p == 0:
-            ax.set_ylabel('$dN_e/dt (M,z)$ [1/s]')
-    ax.legend(loc=2)
-    plt.savefig(pathplot + 'lumielechaloenel.pdf')
+            axis.set_ylabel('$dN_e/dt (M,z)$ [1/s]')
+    axis.legend(loc=2)
+    plt.savefig(gdat.pathplot + 'lumielechaloenel.pdf')
     plt.close()
 
     # spatially averaged e^-/e^+ differential emissivity
-    fig, axrow = plt.subplots(1, numbmpol, sharey='row', figsize=(14,7))
-    fig.suptitle('$e^-/e^+$ emissivity due to DM annihilation per decade in halo mass', fontsize=18)
-    for p, ax in enumerate(axrow):
-        for c in range(numbredsplotlate):
-            ax.loglog(mass, mass * diffemiselecclmpdiffmassenel[:, indxredsplotlate[c],p], label=strgredslate[c])
-        ax.set_xlabel(r'$M$ $[M_\odot]$')
-        ax.set_title(strgmpol[p])
+    fig, axisrows = plt.subplots(1, numbmpol, sharey='row', figsize=(14,7))
+    fig.suptitle('$e^-/e^+$ emissivity due to DM annihilation per decade in halo gdat.meanmass', fontsize=18)
+    for p, axis in enumerate(axisrows):
+        for c in range(gdat.numbredsplotlate):
+            axis.loglog(gdat.meanmass, gdat.meanmass * diffemiselecclmpdiffmassenel[:, gdat.indxredsplotlate[c],p], label=gdat.strgredslate[c])
+        axis.set_xlabel(r'$M$ $[M_\odot]$')
+        axis.set_title(strgmpol[p])
         if p == 0:
-            ax.set_ylabel(r'$dN_e/dtdVd\log M$ [1/s/cm$^3$]')
-            ax.legend()
-        ax.set_ylim([1e-36, 1e-28])
-    plt.savefig(pathplot + 'diffemiselecclmpdiffmassenel.pdf')
+            axis.set_ylabel(r'$dN_e/dtdVd\log M$ [1/s/cm$^3$]')
+            axis.legend()
+        axis.set_ylim([1e-36, 1e-28])
+    plt.savefig(gdat.pathplot + 'diffemiselecclmpdiffmassenel.pdf')
     plt.close()
 
     ylabel = '$dN_e/dVdt (z)$ [1/cm$^3$/s]'
     listvarb = [emiselecenel, emiselecclmpenel, emiselecsmthenel]
     listlabl = ['Total', 'Clumpy', 'Smooth']
-    fig, axrow = plt.subplots(1, 2, figsize=(14,7))
+    fig, axisrows = plt.subplots(1, 2, figsize=(14,7))
     fig.suptitle('Spatially averaged $e^-/e^+$ emissivity', fontsize=18)
-    for p, ax in enumerate(axrow):
-        ax.set_xlabel('$z$')
+    for p, axis in enumerate(axisrows):
+        axis.set_xlabel('$z$')
         for g in range(3):
-            ax.loglog(reds, listvarb[g].squeeze()[:, p], label=listlabl[g])
+            axis.loglog(gdat.meanreds, listvarb[g].squeeze()[:, p], label=listlabl[g])
         if p == 0:
-            ax.set_ylabel(ylabel)
-        ax.set_title(strgmpol[p])
-        ax.set_ylim([1e-36, 1e-24])
-        ax.loglog(redssfrd, emiselecsfrd, markersize=10,                   label='Star Formation', color='black', ls='none', marker='o')
+            axis.set_ylabel(ylabel)
+        axis.set_title(strgmpol[p])
+        axis.set_ylim([1e-36, 1e-24])
+        axis.loglog(gdat.meanredssfrd, emiselecsfrd, markersize=10,                   label='Star Formation', color='black', ls='none', marker='o')
         if p == 0:
-            ax.legend(loc=1)
-    plt.savefig(pathplot + 'emiselecenel.pdf')
+            axis.legend(loc=1)
+    plt.savefig(gdat.pathplot + 'emiselecenel.pdf')
     plt.close()
 
     ylabel = '$dN_e/dVdt (z)$ [1/cm$^3$/s]'
     listvarb = [emiselecenel, emiselecclmpenel, emiselecsmthenel]
-    fig, axrow = plt.subplots(1, 2, figsize=(14,7))
+    fig, axisrows = plt.subplots(1, 2, figsize=(14,7))
     fig.suptitle('Spatially averaged $e^-/e^+$ comoving emissivity', fontsize=18)
-    for p, ax in enumerate(axrow):
-        ax.set_xlabel('$z$')
+    for p, axis in enumerate(axisrows):
+        axis.set_xlabel('$z$')
         for g in range(3):
-            ax.loglog(reds, listvarb[g].squeeze()[:, p] / (1. + reds)**3, label=listlabl[g])
+            axis.loglog(gdat.meanreds, listvarb[g].squeeze()[:, p] / (1. + gdat.meanreds)**3, label=listlabl[g])
         if p == 0:
-            ax.set_ylabel(ylabel)
-        ax.set_title(strgmpol[p])
-        ax.set_ylim([1e-36, 1e-24])
-        ax.loglog(redssfrd, emiselecsfrd / (1. + redssfrd)**3, markersize=10,                   label='Star Formation', color='black', ls='none', marker='o')
+            axis.set_ylabel(ylabel)
+        axis.set_title(strgmpol[p])
+        axis.set_ylim([1e-36, 1e-24])
+        axis.loglog(gdat.meanredssfrd, emiselecsfrd / (1. + gdat.meanredssfrd)**3, markersize=10,                   label='Star Formation', color='black', ls='none', marker='o')
         if p == 0:
-            ax.legend(loc=1)
-    plt.savefig(pathplot + 'emiselecenelcomo.pdf')
+            axis.legend(loc=1)
+    plt.savefig(gdat.pathplot + 'emiselecenelcomo.pdf')
     plt.close()
 
     # Mean DM relative velocity variance in a halo
-    fig, ax = plt.subplots(figsize=(7, 7))
-    for c in range(numbredsplotlate):
-        ax.loglog(mass, sqrt(rvelvarihavg[:, indxredsplotlate[c]]), label=strgredslate[c])
-    ax.set_title('Mean DM relative velocity variance in a halo', fontsize=18)
-    ax.set_ylabel('$\sigma_v$')
-    ax.set_xlabel(r'$M$ $[M_\odot]$')
-    ax.legend(loc=2)
-    plt.savefig(pathplot + 'rvelvarihavg.pdf')
+    figr, axis = plt.subplots(figsize=(7, 7))
+    for c in range(gdat.numbredsplotlate):
+        axis.loglog(gdat.meanmass, sqrt(rvelvarihavg[:, gdat.indxredsplotlate[c]]), label=gdat.strgredslate[c])
+    axis.set_title('Mean DM relative velocity variance in a halo', fontsize=18)
+    axis.set_ylabel('$\sigma_v$')
+    axis.set_xlabel(r'$M$ $[M_\odot]$')
+    axis.legend(loc=2)
+    plt.savefig(gdat.pathplot + 'rvelvarihavg.pdf')
     plt.close()
 
     # Mean DM relative velocity variance
-    fig, ax = plt.subplots(figsize=(7, 7))
-    ax.set_title('Spatially averaged RMS relative velocity of DM', fontsize=18)
-    ax.set_xlabel('$z$')
-    ax.set_ylim([1e-12, 1.])
-    ax.loglog(reds, sqrt(rvelvariiavgclmp))
-    ax.loglog(reds, sqrt(rvelvariiavgsmth))
-    ax.loglog(reds, sqrt(rvelvariiavg))
-    ax.set_ylabel('$\sigma_v$')
-    plt.savefig(pathplot + 'rvelvariiavg.pdf')
+    figr, axis = plt.subplots(figsize=(7, 7))
+    axis.set_title('Spatially averaged RMS relative velocity of DM', fontsize=18)
+    axis.set_xlabel('$z$')
+    axis.set_ylim([1e-12, 1.])
+    axis.loglog(gdat.meanreds, sqrt(rvelvariiavgclmp))
+    axis.loglog(gdat.meanreds, sqrt(rvelvariiavgsmth))
+    axis.loglog(gdat.meanreds, sqrt(rvelvariiavg))
+    axis.set_ylabel('$\sigma_v$')
+    plt.savefig(gdat.pathplot + 'rvelvariiavg.pdf')
     plt.close()
 
     
-def plot_elec_flux():
+def plot_elec_flux(gdat):
     
     # e^-/e^+ number density in the IGM
-    fig, axrow = plt.subplots(1, numbmpol, sharey='all', figsize=(14,7))
+    fig, axisrows = plt.subplots(1, numbmpol, sharey='all', figsize=(14,7))
     fig.suptitle('Differential $e^-/e^+$ number density in the IGM', fontsize=18)
-    for p, ax in enumerate(axrow):
-        for c in range(numbredsplotlate):
-            ax.loglog(enel[0:numbenel-1], enel[0:numbenel-1] * ndiffenelecsavg[0:numbenel-1,indxredsplotlate[c],p],  label=strgredslate[c])
-        ax.set_xlabel(r'$E_e$ [GeV]')
-        ax.set_title(strgmpol[p])
+    for p, axis in enumerate(axisrows):
+        for c in range(gdat.numbredsplotlate):
+            axis.loglog(enel[0:gdat.numbenel-1], enel[0:gdat.numbenel-1] * ndiffenelecsavg[0:gdat.numbenel-1,gdat.indxredsplotlate[c],p],  label=gdat.strgredslate[c])
+        axis.set_xlabel(r'$E_e$ [GeV]')
+        axis.set_title(strgmpol[p])
         if p == 0:
-            ax.set_ylabel(r'$dN_e/dV/d\log E$ [1/cm$^3$]')
-    ax.legend(loc=2)
-    plt.savefig(pathplot + 'ndiffenelecsavg.pdf')
+            axis.set_ylabel(r'$dN_e/dV/d\log E$ [1/cm$^3$]')
+    axis.legend(loc=2)
+    plt.savefig(gdat.pathplot + 'ndiffenelecsavg.pdf')
     plt.close()
 
     # e^-/e^+ number density in the IGM
-    fig, axrow = plt.subplots(1, numbmpol, sharey='all', figsize=(14,7))
+    fig, axisrows = plt.subplots(1, numbmpol, sharey='all', figsize=(14,7))
     fig.suptitle('$e^-/e^+$ number density in the IGM', fontsize=18)
-    for p, ax in enumerate(axrow):
-        ax.loglog(reds, ndiffenelecsavgenel[:, p])
-        ax.set_xlabel('$z$')
-        ax.set_title(strgmpol[p])
+    for p, axis in enumerate(axisrows):
+        axis.loglog(gdat.meanreds, ndiffenelecsavgenel[:, p])
+        axis.set_xlabel('$z$')
+        axis.set_title(strgmpol[p])
         if p == 0:
-            ax.set_ylabel('$dN_e/dV (z)$ [1/cm$^3$]')
-    plt.savefig(pathplot + 'ndiffenelecsavgenel.pdf')
+            axis.set_ylabel('$dN_e/dV (z)$ [1/cm$^3$]')
+    plt.savefig(gdat.pathplot + 'ndiffenelecsavgenel.pdf')
     plt.close() 
     
         
-def plot_invrcomp():
+def plot_invrcomp(gdat):
 
     listlinestyl = ['-', '--', '-.']
     listcolr = ['b', 'g', 'r']
     
-    fig, ax = plt.subplots()
-    for b in range(numbenelplot):
-        for c in range(numbredsplotlate):
-            ax.loglog(enph * 1e6, enph * sum(specinvccatl[:, indxenelplot[b], indxredsplotlate[c], :], 1), ls=listlinestyl[b], c=listcolr[c])
-    ax.set_xlabel('$E_\gamma$ [eV]')
-    ax.set_ylabel(r'$dN_\gamma/dtd\log E_\gamma$ [1/s]')
-    ax.set_ylim([1e-15, 1e-7])
-    ax.set_title('Spectrum of IC scattered CMB photons')
+    figr, axis = plt.subplots()
+    for b in range(gdat.numbenelplot):
+        for c in range(gdat.numbredsplotlate):
+            axis.loglog(gdat.meanenph * 1e6, gdat.meanenph * sum(specinvccatl[:, indxenelplot[b], gdat.indxredsplotlate[c], :], 1), ls=listlinestyl[b], c=listcolr[c])
+    axis.set_xlabel('$E_\gamma$ [eV]')
+    axis.set_ylabel(r'$dN_\gamma/dtd\log E_\gamma$ [1/s]')
+    axis.set_ylim([1e-15, 1e-7])
+    axis.set_title('Spectrum of IC scattered CMB photons')
 
     listlabl = []
     listlabl.append('$E_e$ = ' + tdpy.util.mexp(enel[indxenelplot[0]] * 1e-3) + ' GeV')
     listlabl.append('$E_e$ = ' + tdpy.util.mexp(enel[indxenelplot[1]] * 1e-3) + ' GeV')
     listlabl.append('$E_e$ = ' + tdpy.util.mexp(enel[indxenelplot[2]] * 1e-3) + ' GeV')
-    listlabl.extend(strgredslate)
+    listlabl.extend(gdat.strgredslate)
     
     listline = []
     for k in arange(3):
         listline.append(plt.Line2D((0,1),(0,0), color='black', ls=listlinestyl[k]))
     for k in range(3):
         listline.append(plt.Line2D((0,1),(0,0), color=listcolr[k]))
-    ax.legend(listline, listlabl, loc=9, ncol=2) 
+    axis.legend(listline, listlabl, loc=9, ncol=2) 
     
-    plt.savefig(pathplot + 'specinvccatl.pdf')
+    plt.savefig(gdat.pathplot + 'specinvccatl.pdf')
     plt.close() 
     
 
-def plot_igma():
+def plot_igma(gdat):
       
-    extt = [amin(reds), amax(reds), amin(cden), amax(cden)]
+    extt = [gdat.minmreds, gdat.maxmreds, gdat.minmcden, gdat.maxmcden]
     
-    fig, ax = plt.subplots(figsize=(14, 14))
-    fig.suptitle('Absorber abundance per decade in column density and redshift at 1 Rydberg')
-    zdat = reds[None, :] * cden[:, None] * diffnabsdiffcdendiffreds
-    imag = ax.imshow(zdat, extent=extt, cmap='Reds', norm=mpl.colors.LogNorm(), aspect='auto')
+    figr, axis = plt.subplots(figsize=(14, 14))
+    fig.suptitle('Absorber abundance per decade in column density and gdat.meanredshift at 1 Rydberg')
+    zdat = gdat.meanreds[None, :] * cden[:, None] * diffnabsdiffcdendiffreds
+    imag = axis.imshow(zdat, extent=extt, cmap='Reds', norm=mpl.colors.LogNorm(), aspect='auto')
     for k in range(cdenbrek.size):
-        ax.axhline(cdenbrek[k], color='grey', ls='--')
-    for k in range(redsbrek.size):
-        ax.axvline(redsbrek[k], color='grey', ls='--')
-    ax.set_ylabel('$N_{HI}$ [cm$^{-2}$]')
-    ax.set_xlabel('$z$')
-    ax.set_title('$d^2N_{abs}/d\log N_{HI}/d\log z$')
-    ax.set_xscale('log')
-    ax.set_yscale('log')
-    plt.colorbar(imag, ax=ax, fraction=0.04)
-    plt.savefig(pathplot + 'diffnabsdiffcdendiffreds.pdf')
+        axis.axis.line(cdenbrek[k], color='grey', ls='--')
+    for k in range(gdat.meanredsbrek.size):
+        axis.axis.line(gdat.meanredsbrek[k], color='grey', ls='--')
+    axis.set_ylabel('$N_{HI}$ [cm$^{-2}$]')
+    axis.set_xlabel('$z$')
+    axis.set_title('$d^2N_{abs}/d\log N_{HI}/d\log z$')
+    axis.set_xscale('log')
+    axis.set_yscale('log')
+    plt.colorbar(imag, axis, fraction=0.04)
+    plt.savefig(gdat.pathplot + 'diffnabsdiffcdendiffreds.pdf')
     plt.close() 
     
-    fig, ax = plt.subplots(figsize=(14, 14))
-    fig.suptitle('Optical depth per decade in column density and redshift at 1 Rydberg')
-    zdat = reds[None, :] * cden[:, None] * diffoptddiffcdendiffredsrydb
+    figr, axis = plt.subplots(figsize=(14, 14))
+    fig.suptitle('Optical depth per decade in column density and gdat.meanredshift at 1 Rydberg')
+    zdat = gdat.meanreds[None, :] * cden[:, None] * diffoptddiffcdendiffredsrydb
     zdat[where(zdat > 1.)] = 1.
-    imag = ax.imshow(zdat, extent=extt, cmap='Reds', norm=mpl.colors.LogNorm(), aspect='auto')
+    imag = axis.imshow(zdat, extent=extt, cmap='Reds', norm=mpl.colors.LogNorm(), aspect='auto')
     for k in range(cdenbrek.size):
-        ax.axhline(cdenbrek[k], color='grey', ls='--')
-    for k in range(redsbrek.size):
-        ax.axvline(redsbrek[k], color='grey', ls='--')
-    ax.set_ylabel('$N_{HI}$ [cm$^{-2}$]')
-    ax.set_xlabel('$z$')
-    ax.set_title(r'$d^2\tau_{abs}/d\log N_{HI}/d\log z$')
-    ax.set_xscale('log')
-    ax.set_yscale('log')
-    plt.colorbar(imag, ax=ax, fraction=0.04)
-    plt.savefig(pathplot + 'diffoptddiffcdendiffredsrydb.pdf')
+        axis.axis.line(cdenbrek[k], color='grey', ls='--')
+    for k in range(gdat.meanredsbrek.size):
+        axis.axis.line(gdat.meanredsbrek[k], color='grey', ls='--')
+    axis.set_ylabel('$N_{HI}$ [cm$^{-2}$]')
+    axis.set_xlabel('$z$')
+    axis.set_title(r'$d^2\tau_{abs}/d\log N_{HI}/d\log z$')
+    axis.set_xscale('log')
+    axis.set_yscale('log')
+    plt.colorbar(imag, axis, fraction=0.04)
+    plt.savefig(gdat.pathplot + 'diffoptddiffcdendiffredsrydb.pdf')
     plt.close() 
     
-    fig, ax = plt.subplots()
-    ax.loglog(reds, reds * diffoptddiffredsrydb)
-    for k in range(redsbrek.size):
-        ax.axvline(redsbrek[k], color='grey', ls='--')
-    ax.set_xlabel('$z$')
-    ax.set_ylabel(r'$d\tau / d\log z$')
-    ax.set_ylim([None, 1.])
-    ax.set_title('Optical depth per decade in redshift at 1 Rydberg')
-    plt.savefig(pathplot + 'diffoptddiffredsrydb.pdf')
+    figr, axis = plt.subplots()
+    axis.loglog(gdat.meanreds, gdat.meanreds * diffoptddiffredsrydb)
+    for k in range(gdat.meanredsbrek.size):
+        axis.axis.line(gdat.meanredsbrek[k], color='grey', ls='--')
+    axis.set_xlabel('$z$')
+    axis.set_ylabel(r'$d\tau / d\log z$')
+    axis.set_ylim([None, 1.])
+    axis.set_title('Optical depth per decade in gdat.meanredshift at 1 Rydberg')
+    plt.savefig(gdat.pathplot + 'diffoptddiffredsrydb.pdf')
     plt.close() 
         
-    fig, ax = plt.subplots()
-    for c in range(numbredsplotlate):
-        ax.loglog(reds[indxredsplotlate[c]:], odeprydb[indxredsplotlate[c], indxredsplotlate[c]:], label=strgredslate[c])
-    for k in range(redsbrek.size):
-        ax.axvline(redsbrek[k], color='grey', ls='--')
-    ax.set_xlabel('$z$')
-    ax.set_ylabel(r'$\tau$')
-    ax.set_ylim([None, 1.])
-    ax.set_title('Optical depth at 1 Rydberg')
-    plt.savefig(pathplot + 'odep.pdf')
+    figr, axis = plt.subplots()
+    for c in range(gdat.numbredsplotlate):
+        axis.loglog(gdat.meanreds[gdat.indxredsplotlate[c]:], odeprydb[gdat.indxredsplotlate[c], gdat.indxredsplotlate[c]:], label=gdat.strgredslate[c])
+    for k in range(gdat.meanredsbrek.size):
+        axis.axis.line(gdat.meanredsbrek[k], color='grey', ls='--')
+    axis.set_xlabel('$z$')
+    axis.set_ylabel(r'$\tau$')
+    axis.set_ylim([None, 1.])
+    axis.set_title('Optical depth at 1 Rydberg')
+    plt.savefig(gdat.pathplot + 'odep.pdf')
     plt.close() 
     
     
-def plot_fluxphot():
+def plot_fluxphot(gdat):
     
     # differential photon emissivity 
-    fig, axrow = plt.subplots(1, 2, sharey='all', figsize=(14,7))
+    fig, axisrows = plt.subplots(1, 2, sharey='all', figsize=(14,7))
     fig.suptitle('Differential photon emissivity', fontsize=18)
-    for i, ax in enumerate(axrow):
-        for c in range(numbredsplotlate):
-            plot = ax.loglog(enph * 1e6, enph * emisphot[:, indxredsplotlate[c], i], label=strgredslate[c])
-        ax.set_xlabel('$E_\gamma$ [eV]')
-        ax.set_ylabel(r'$dN_\gamma/dtdVd\log E_\gamma$ [1/s]')
-    ax.legend()
-    plt.savefig(pathplot + 'emisphot.pdf')
+    for i, axis in enumerate(axisrows):
+        for c in range(gdat.numbredsplotlate):
+            plot = axis.loglog(gdat.meanenph * 1e6, gdat.meanenph * emisphot[:, gdat.indxredsplotlate[c], i], label=gdat.strgredslate[c])
+        axis.set_xlabel('$E_\gamma$ [eV]')
+        axis.set_ylabel(r'$dN_\gamma/dtdVd\log E_\gamma$ [1/s]')
+    axis.legend()
+    plt.savefig(gdat.pathplot + 'emisphot.pdf')
     plt.close() 
     
     # photon emissivity 
-    fig, axrow = plt.subplots(1, 2, sharey='all', figsize=(14,7))
+    fig, axisrows = plt.subplots(1, 2, sharey='all', figsize=(14,7))
     fig.suptitle('Photon emissivity', fontsize=18)
-    for i, ax in enumerate(axrow):
-        plot = ax.loglog(reds, enerrydb * emisphotrydb[:, i])
-        ax.set_xlabel('$z$')
-        ax.set_ylabel(r'$dN_\gamma/dtdV$ [1/cm$^3$/s]')
-    ax.legend()
-    plt.savefig(pathplot + 'emisphotrydb.pdf')
+    for i, axis in enumerate(axisrows):
+        plot = axis.loglog(gdat.meanreds, gdat.enerrydb * emisphotrydb[:, i])
+        axis.set_xlabel('$z$')
+        axis.set_ylabel(r'$dN_\gamma/dtdV$ [1/cm$^3$/s]')
+    axis.legend()
+    plt.savefig(gdat.pathplot + 'emisphotrydb.pdf')
     plt.close() 
     
     # differential photon flux 
-    fig, axrow = plt.subplots(1, numbmpol, sharey='all', figsize=(14, 7))
+    fig, axisrows = plt.subplots(1, numbmpol, sharey='all', figsize=(14, 7))
     fig.suptitle('Cosmic UV/X-ray background flux per decade in photon energy')
-    for m, ax in enumerate(axrow):
-        for c in range(numbredsplotlate):
-            plot = ax.loglog(enph * 1e6, enph * fluxphot[:, indxredsplotlate[c], m], label=strgredslate[c])
-        ax.set_xlabel('$E_\gamma$ [eV]')
-        ax.set_ylabel(r'$dN_\gamma/dtdAd\log E_\gamma$ [1/cm$^2$/s/sr]')
-    ax.legend()
-    plt.savefig(pathplot + 'fluxphot.pdf')
+    for m, axis in enumerate(axisrows):
+        for c in range(gdat.numbredsplotlate):
+            plot = axis.loglog(gdat.meanenph * 1e6, gdat.meanenph * fluxphot[:, gdat.indxredsplotlate[c], m], label=gdat.strgredslate[c])
+        axis.set_xlabel('$E_\gamma$ [eV]')
+        axis.set_ylabel(r'$dN_\gamma/dtdAd\log E_\gamma$ [1/cm$^2$/s/sr]')
+    axis.legend()
+    plt.savefig(gdat.pathplot + 'fluxphot.pdf')
     plt.close() 
     
     # differential photon flux at 1 Ryd
-    fig, axrow = plt.subplots(1, numbmpol, sharey='all', figsize=(14, 7))
+    fig, axisrows = plt.subplots(1, numbmpol, sharey='all', figsize=(14, 7))
     fig.suptitle('Photon flux at 1 Rydberg')
-    for m, ax in enumerate(axrow):
-        plot = ax.loglog(reds, enerrydb * fluxphotrydb[:, m])
-        ax.set_xlabel('$z$')
-        ax.set_ylabel(r'$dN_\gamma/dtdAd\log E_\gamma$ [1/cm$^2$/s/sr]')
-    ax.legend()
-    plt.savefig(pathplot + 'fluxphotrydb.pdf')
+    for m, axis in enumerate(axisrows):
+        plot = axis.loglog(gdat.meanreds, gdat.enerrydb * fluxphotrydb[:, m])
+        axis.set_xlabel('$z$')
+        axis.set_ylabel(r'$dN_\gamma/dtdAd\log E_\gamma$ [1/cm$^2$/s/sr]')
+    axis.legend()
+    plt.savefig(gdat.pathplot + 'fluxphotrydb.pdf')
     plt.close() 
     
     # integrated photon flux 
-    fig, axrow = plt.subplots(1, 2, sharey='all', figsize=(14,7))
+    fig, axisrows = plt.subplots(1, 2, sharey='all', figsize=(14,7))
     fig.suptitle('Integral photon flux')
-    for m, ax in enumerate(axrow):
-        plot = ax.loglog(reds, fluxphotenph[:, m])
-        ax.set_xlabel('$z$')
-        ax.set_ylabel(r'$dN_\gamma/dtdA (z)$ [1/cm$^2$/s/sr]')
-    ax.legend()
-    plt.savefig(pathplot + 'fluxphotenph.pdf')
+    for m, axis in enumerate(axisrows):
+        plot = axis.loglog(gdat.meanreds, fluxphotenph[:, m])
+        axis.set_xlabel('$z$')
+        axis.set_ylabel(r'$dN_\gamma/dtdA (z)$ [1/cm$^2$/s/sr]')
+    axis.legend()
+    plt.savefig(gdat.pathplot + 'fluxphotenph.pdf')
     plt.close() 
 
         
-def plot_ionr():
+def plot_ionr(gdat):
 
-    fig, axrow = plt.subplots(1, numbmpol, sharey='all', figsize=(14,7))
+    fig, axisrows = plt.subplots(1, numbmpol, sharey='all', figsize=(14,7))
     fig.suptitle('Differential meta-galactic ionization rate per decade in photon energy', fontsize=18)
-    for i, ax in enumerate(axrow):
-        for c in indxredsplot:
-            plot = ax.loglog(enph * 1e6, diffionrdiffenph[:,indxredsplotlate[c],i], label=strgredslate[c])
-        ax.set_xlabel('$E_\gamma [eV]$')
-        ax.set_ylabel(r'$d\Gamma/d\log E_\gamma$ [1/s/H]')
-        ax.axvline(enerrydb * 1e6, ls='--', color='grey')
-    ax.legend()
-    plt.savefig(pathplot + 'diffionrdiffenph.pdf')
+    for i, axis in enumerate(axisrows):
+        for c in gdat.indxredsplot:
+            plot = axis.loglog(gdat.meanenph * 1e6, diffionrdiffenph[:,gdat.indxredsplotlate[c],i], label=gdat.strgredslate[c])
+        axis.set_xlabel('$E_\gamma [eV]$')
+        axis.set_ylabel(r'$d\Gamma/d\log E_\gamma$ [1/s/H]')
+        axis.axis.line(gdat.enerrydb * 1e6, ls='--', color='grey')
+    axis.legend()
+    plt.savefig(gdat.pathplot + 'diffionrdiffenph.pdf')
     plt.close() 
         
     listname = ['ionrbolt.csv', 'ionrbeck.csv', 'ionrfauc.csv']
     listlabl = ['Bolton & Haehnelt (2007)', 'Becker et al. (2007)', 'Faucher-Giguere (2008)']
     listmrkr = ['o', 'D', 'x']
     
-    fig, axrow = plt.subplots(1, numbmpol, sharey='all', figsize=(14,7))
-    for i, ax in enumerate(axrow):
-        plot = ax.loglog(reds, ionr[:,i])
-        ax.set_xlabel('$z$')
-        ax.set_ylabel(r'$\Gamma$ [1/s/H]')
+    fig, axisrows = plt.subplots(1, numbmpol, sharey='all', figsize=(14,7))
+    for i, axis in enumerate(axisrows):
+        plot = axis.loglog(gdat.meanreds, ionr[:,i])
+        axis.set_xlabel('$z$')
+        axis.set_ylabel(r'$\Gamma$ [1/s/H]')
         
         for k, name in enumerate(listname):
             path = os.environ["PHOT_IONZ_DATA_PATH"] + '/' + name
@@ -971,32 +963,30 @@ def plot_ionr():
             yerr[0, :] = data[ndata:2*ndata, 1]
             yerr[1, :] = data[2*ndata:3*ndata, 1]
             yerr = abs(yerr - ydat)
-            ax.errorbar(xdat, ydat, yerr=yerr, ls='', marker=listmrkr[k])
+            axis.errorbar(xdat, ydat, yerr=yerr, ls='', marker=listmrkr[k])
 
-    ax.legend()
-    plt.savefig(pathplot + 'ionr.pdf')
+    axis.legend()
+    plt.savefig(gdat.pathplot + 'ionr.pdf')
     plt.close() 
         
 
-def retr_fluxphotexpr():
+def retr_fluxphotexpr(gdat):
  
     name = os.environ["PHOT_IONZ_DATA_PATH"] + '/xray_background.dat'
     tabl = loadtxt(name)
     
-    enphexpr = tabl[:,0]
-    enphexpr *= 1e-6 # [MeV]
-    fluxphotexpr = tabl[:, 1]
-    fluxphotexpr *= 1e-3 / enphexpr**2 # [1/cm^2/s/sr/MeV]
+    gdat.meanenphexpr = tabl[:,0]
+    gdat.meanenphexpr *= 1e-6 # [MeV]
+    gdat.fluxphotexpr = tabl[:, 1]
+    gdat.fluxphotexpr *= 1e-3 / gdat.meanenphexpr**2 # [1/cm^2/s/sr/MeV]
 
-    fenph = where((min(enphexpr) < enph) & (enph < max(enphexpr)))[0]
+    gdat.indxenphexpr = where((amin(gdat.meanenphexpr) < gdat.meanenph) & (gdat.meanenph < amax(gdat.meanenphexpr)))[0]
     
-    fluxphotexpr = interp1d(enphexpr, fluxphotexpr)(enph[fenph])
-    fluxphotexprvari = (fluxphotexpr * 1.)**2
+    gdat.fluxphotexpr = interp1d(gdat.meanenphexpr, gdat.fluxphotexpr)(gdat.meanenph[gdat.indxenphexpr])
+    gdat.fluxphotexprvari = (gdat.fluxphotexpr * 1.)**2
     
-    return fluxphotexpr, fluxphotexprvari, fenph
 
-
-def retr_mocksampvarb():
+def retr_mocksampvarb(gdat):
     
     numbpara = 4
     mocksampvarb = empty(numbpara)
@@ -1008,57 +998,58 @@ def retr_mocksampvarb():
     return mocksampvarb
 
 
-def retr_datapara():
+def retr_datapara(gdat):
     
     numbpara = 4
+
+    datapara = tdpy.util.gdatstrt()
+
+    datapara.indx = dict()
+    datapara.minm = zeros(numbpara)
+    datapara.maxm = zeros(numbpara)
+    datapara.name = empty(numbpara, dtype=object)
+    datapara.scal = empty(numbpara, dtype=object)
+    datapara.labl = empty(numbpara, dtype=object)
+    datapara.unit = empty(numbpara, dtype=object)
+    datapara.vari = zeros(numbpara)
+
+    datapara.indx['csecvelo'] = 0
+    datapara.name[0] = 'csecvelo'
+    datapara.minm[0] = 3e-32
+    datapara.maxm[0] = 3e-20
+    datapara.scal[0] = 'logt'
+    datapara.labl[0] = '$a$'
+    datapara.unit[0] = '[cm$^3$/s]'
+    datapara.vari[0] = 3e-1
     
-    dictpara = dict()
-    minmpara = zeros(numbpara)
-    maxmpara = zeros(numbpara)
-    namepara = empty(numbpara, dtype=object)
-    scalpara = empty(numbpara, dtype=object)
-    lablpara = empty(numbpara, dtype=object)
-    unitpara = empty(numbpara, dtype=object)
-    varipara = zeros(numbpara)
-
-    dictpara['csecvelo'] = 0
-    namepara[0] = 'csecvelo'
-    minmpara[0] = 3e-32
-    maxmpara[0] = 3e-20
-    scalpara[0] = 'logt'
-    lablpara[0] = '$a$'
-    unitpara[0] = '[cm$^3$/s]'
-    varipara[0] = 3e-1
+    datapara.indx['csecfrac'] = 1
+    datapara.name[1] = 'csecfrac'
+    datapara.minm[1] = 1e-2
+    datapara.maxm[1] = 1e10
+    datapara.scal[1] = 'logt'
+    datapara.labl[1] = '$b/a$'
+    datapara.unit[1] = ''
+    datapara.vari[1] = 3e-1
     
-    dictpara['csecfrac'] = 1
-    namepara[1] = 'csecfrac'
-    minmpara[1] = 1e-2
-    maxmpara[1] = 1e10
-    scalpara[1] = 'logt'
-    lablpara[1] = '$b/a$'
-    unitpara[1] = ''
-    varipara[1] = 3e-1
-     
-    dictpara['masspart'] = 2
-    namepara[2] = 'masspart'
-    minmpara[2] = 1e4
-    maxmpara[2] = 1e6
-    scalpara[2] = 'logt'
-    lablpara[2] = '$M$'
-    unitpara[2] = '[MeV]'
-    varipara[2] = 3e-1
+    datapara.indx['masspart'] = 2
+    datapara.name[2] = 'masspart'
+    datapara.minm[2] = 1e4
+    datapara.maxm[2] = 1e6
+    datapara.scal[2] = 'logt'
+    datapara.labl[2] = '$M$'
+    datapara.unit[2] = '[MeV]'
+    datapara.vari[2] = 3e-1
 
-    dictpara['dmatslop'] = 3
-    namepara[3] = 'dmatslop'
-    minmpara[3] = 0.8
-    maxmpara[3] = 1.5
-    scalpara[3] = 'self'
-    lablpara[3] = r'$\gamma$'
-    unitpara[3] = ''
-    varipara[3] = 3e-1
+    datapara.indx['dmatslop'] = 3
+    datapara.name[3] = 'dmatslop'
+    datapara.minm[3] = 0.8
+    datapara.maxm[3] = 1.5
+    datapara.scal[3] = 'self'
+    datapara.labl[3] = r'$\gamma$'
+    datapara.unit[3] = ''
+    datapara.vari[3] = 3e-1
 
-    strgpara = namepara + ' ' + lablpara
-    datapara = namepara, strgpara, minmpara, maxmpara, scalpara, lablpara, unitpara, varipara, dictpara
+    datapara.strg = datapara.name + ' ' + datapara.labl
     
     return datapara
 
@@ -1088,26 +1079,31 @@ def retr_fluxphotdmatintp(csecvelo, csecfrac, masspart, dmatslop):
     return fluxphotdmatintp
 
 
-def plot_sfrd():
+def plot_sfrd(gdat):
     
-    fig, ax = plt.subplots()
-    ax.set_title('Star Formation Rate Density')
+    figr, axis = plt.subplots()
+    axis.set_title('Star Formation Rate Density')
     
-    ax.plot(redssfrd, sfrd)
-    ax.set_yscale('log')
+    axis.plot(gdat.meanredssfrd, sfrd)
+    axis.set_yscale('log')
     
-    ax.set_xlabel('$z$')
-    ax.set_ylabel(r'SFRD [erg/Mpc$^3$/yr]')
-    plt.savefig(pathplot + 'sfrd.pdf')
+    axis.set_xlabel('$z$')
+    axis.set_ylabel(r'SFRD [erg/Mpc$^3$/yr]')
+    plt.savefig(gdat.pathplot + 'sfrd.pdf')
     plt.close()
 
 
-def plot_hm12(fluxphotdmat=None, listfluxphotdmat=None):
-    fig, ax = plt.subplots()
-    ax.set_title('UV/X-ray photon background')
+def plot_hm12(gdat, fluxphotdmat=None, listfluxphotdmat=None):
     
-    ax.fill_between(enph[fenph] * 1e6, enph[fenph] * (fluxphotexpr + sqrt(fluxphotexprvari)), enph[fenph] * (fluxphotexpr - sqrt(fluxphotexprvari)), color='lightblue')
-    ax.loglog(enph[fenph] * 1e6, enph[fenph] * fluxphotexpr, label='ROSAT')
+    figr, axis = plt.subplots()
+    axis.set_title('UV/X-ray photon background')
+    
+    xdat = gdat.meanenph[gdat.indxenphexpr] * 1e6
+    ydatlowr = gdat.meanenph[gdat.indxenphexpr] * (gdat.fluxphotexpr - sqrt(gdat.fluxphotexprvari))
+    ydatuppr = gdat.meanenph[gdat.indxenphexpr] * (gdat.fluxphotexpr + sqrt(gdat.fluxphotexprvari))
+    axis.fill_between(xdat, ydatuppr, ydatlowr, color='lightblue')
+    
+    axis.loglog(gdat.meanenph[gdat.indxenphexpr] * 1e6, gdat.meanenph[gdat.indxenphexpr] * gdat.fluxphotexpr, label='ROSAT')
     
     listname = ['moretotl', 'moreothr', 'more']
     listlabl = ['Total XRB, Moretti et al. (2009)', 'Unresolved XRB, Worsley et al. (2006)', 'Unresolved XRB, Moretti et al. (2012)']
@@ -1115,79 +1111,55 @@ def plot_hm12(fluxphotdmat=None, listfluxphotdmat=None):
     for k, name in enumerate(listname):
         path = os.environ["PHOT_IONZ_DATA_PATH"] + '/' + name + '.csv'
         datamore = loadtxt(path)
-        enphmore = datamore[:, 0] * 1e-3 # [MeV]
-        fluxphotmore = ergs2mgev * (180. / pi)**2 * datamore[:, 1] / enphmore**2 # [1/cm^2/s/sr/MeV]
-        #ax.fill_between(enphmore * 1e6, 2. * enphmore * fluxphotmore, 0.5 * enphmore * fluxphotmore, color='lightgreen')
-        ax.loglog(enphmore * 1e6, enphmore * fluxphotmore, label=listlabl[k], color=listcolr[k])
+        gdat.meanenphmore = datamore[:, 0] * 1e-3 # [MeV]
+        fluxphotmore = gdat.ergs2mgev * (180. / pi)**2 * datamore[:, 1] / gdat.meanenphmore**2 # [1/cm^2/s/sr/MeV]
+        #axis.fill_between(gdat.meanenphmore * 1e6, 2. * gdat.meanenphmore * fluxphotmore, 0.5 * gdat.meanenphmore * fluxphotmore, color='lightgreen')
+        axis.loglog(gdat.meanenphmore * 1e6, gdat.meanenphmore * fluxphotmore, label=listlabl[k], color=listcolr[k])
 
     listcolr = ['b', 'g', 'r']
-    for c in range(numbredsplotlate):
-        ax.loglog(enph * 1e6, enph * fluxphothm12[:, indxredsplotlate[c]],     label='Haardt & Madau (2012), ' + strgredslate[c])
+    for c in range(gdat.numbredsplotlate):
+        axis.loglog(gdat.meanenph * 1e6, gdat.meanenph * gdat.fluxphothm12[:, gdat.indxredsplotlate[c]], label='Haardt & Madau (2012), ' + gdat.strgredslate[c])
         if fluxphotdmat != None:
-            ax.loglog(enph * 1e6, enph * fluxphotdmat[:, indxredsplotlate[c]], label='DM, ' + strgredslate[c])
+            axis.loglog(gdat.meanenph * 1e6, gdat.meanenph * fluxphotdmat[:, gdat.indxredsplotlate[c]], label='DM, ' + gdat.strgredslate[c])
         if listfluxphotdmat != None:
-            tdpy.mcmc.plot_braz(ax, enph * 1e6, enph[None, :] * listfluxphotdmat[:, :, indxredsplotlate[c]],            lcol=listcolr[c], alpha=0.5, dcol=listcolr[c], mcol='black')
-    ax.set_xlabel(r'$E_\gamma$ [eV]')
-    ax.set_ylabel(r'$EdN/dE$ [1/cm$^2$/s/sr]')
-    ax.legend()
-    plt.savefig(pathplot + 'fluxphothm12.pdf')
+            tdpy.mcmc.plot_braz(axis, gdat.meanenph * 1e6, gdat.meanenph[None, :] * listfluxphotdmat[:, :, gdat.indxredsplotlate[c]], \
+                    lcol=listcolr[c], alpha=0.5, dcol=listcolr[c], mcol='black')
+    axis.set_xlabel(r'$E_\gamma$ [eV]')
+    axis.set_ylabel(r'$EdN/dE$ [1/cm$^2$/s/sr]')
+    axis.legend()
+    plt.savefig(gdat.pathplot + 'gdat.pdf')
     plt.close()
 
 
-def init(cnfg):
-    
-    global makeplot, verbtype
-    makeplot = cnfg['makeplot']
-    verbtype = cnfg['verbtype']
-    
-    numbswep = cnfg['numbswep']
-    numbburn = cnfg['numbburn']
-    factthin = cnfg['factthin']
+def init( \
+         datatype='inpt', \
+         datalabl='XMM-Newton', \
+         numbswep=100, \
+         numbburn=None, \
+         factthin=None, \
+         plotperd=10000, \
+         verbtype=1, \
+         makeplot=False, \
+        ):
 
-    global pathplot
-    pathbase = os.environ["PHOT_IONZ_DATA_PATH"]
-    pathplot = pathbase + '/imag/'
+    gdat = tdpy.util.gdatstrt()
 
-    global minmpara, maxmpara, scalpara, namepara, lablpara, unitpara, varipara, dictpara, ipara, numbpara
-    mocksampvarb = retr_mocksampvarb()
-    datapara = retr_datapara()
-    namepara, strgpara, minmpara, maxmpara, scalpara, lablpara, unitpara, varipara, dictpara = datapara
-    numbpara = len(lablpara)
-    indxpara = arange(numbpara)
+    gdat.pathbase = os.environ["PHOT_IONZ_DATA_PATH"]
+    gdat.pathplot = gdat.pathbase + '/imag/'
+
+    gdat.makeplot = makeplot
+
+    mocksampvarb = retr_mocksampvarb(gdat)
+    datapara = retr_datapara(gdat)
+    gdat.numbpara = len(datapara.name)
+    gdat.indxpara = arange(gdat.numbpara)
     
-    global strgmpol
     strgmpol = ['s-wave', 'p-wave']
     
-    # conversion factors
-    global cmet2angs, cmet2angs, ergs2mgev, myrs2secd, solm2mgev,     kprc2cmet, magf2mage, evee2rydb
-    
-    # fundamental constants
-    global masselec, velolght, strtcons, hubbcons, plnkcons, boltcons, gravconsredu
-    global csecthom, csecionz, enerrydb
-    
-    # astrophyical constants 
-    global massmilk, radisolr
-    
-    # cosmological constants
-    global omegdene, omegcurv, omegdmat, edencritnunc, tempcmbrnunc
-    global shtrnorm, shtrwgth, shtrindx
-    
-    global odenviri, odencoll
-     
-    # cosmological parameters
-    global odenrmsq8mpc, psecindx
-    
-    global anch
     anch = 'b'
     
-    # axes
-    global numbreds, numbradi, numbrsph, numbzaxi, numbenph, numbenel, numbenpi, numbcden, numbmass, numbwnum
-    global reds, radi, rsph, zaxi, enph, enel, enpi, cden, mass, massprim, wnum
-    global indxredsplot, indxredsplotlate, indxmassplot, indxenelplot
-    global numbredsplot, numbredsplotlate, numbmassplot, numbenelplot
-    global strgredslate 
+    # axis.s
     
-    global demccons, demcsigm
     demccons = 35. / 18.
     demcsigm = 6.
     gravlght = 1.19e-34 # [cm^3/MeV/s^2]
@@ -1195,244 +1167,222 @@ def init(cnfg):
     # constants
     ## cosmological constants
 
-    omegbmat = 0.049 # baryonic matter abundance today
-    omegdmat = 0.26 # dark matter abundance today
-    omegradi = 4.8e-5 # radiation abundance today
-    omegdene = 0.69 # dark energy abundance today
-    odenrmsq8mpc = 0.83 # rms density fluctuation in spheres of radius 8/h Mpc
-    psecindx = 0.96 # spectral index of the primordial power spectrum
-    hubbcons = 0.704 # reduced Hubble constant
-    tempcmbrnunc = 2.725 # CMB temperature today [K]
-    shtrwgth = 0.707 # Sheth-Tormen
-    shtrnorm = 0.3222 # Sheth-Tormen
-    shtrindx = 0.3 # Sheth-Tormen
+    gdat.omegbmat = 0.049 # baryonic matter abundance today
+    gdat.omegdmat = 0.26 # dark matter abundance today
+    gdat.omegradi = 4.8e-5 # radiation abundance today
+    gdat.omegdene = 0.69 # dark energy abundance today
+    gdat.odenrmsq8mpc = 0.83 # rms density fluctuation in spheres of radius 8/h Mpc
+    gdat.psecindx = 0.96 # spectral index of the primordial power spectrum
+    gdat.hubbcons = 0.704 # reduced Hubble constant
+    gdat.tempcmbrnunc = 2.725 # CMB temperature today [K]
+    gdat.shtrwgth = 0.707 # Sheth-Tormen
+    gdat.shtrnorm = 0.3222 # Sheth-Tormen
+    gdat.shtrindx = 0.3 # Sheth-Tormen
     
-    omegmatt = omegbmat + omegdmat
+    gdat.omegmatt = gdat.omegbmat + gdat.omegdmat
     
-    masselec = 0.511 # electron mass [MeV]
-    velolght = 2.998e10 # speed of light [cm/s]
-    strtcons = 7.297e-3 # fine structure constant
+    gdat.masselec = 0.511 # electron gdat.meanmass [MeV]
+    gdat.velolght = 2.998e10 # speed of light [cm/s]
+    gdat.strtcons = 7.297e-3 # fine structure constant
     
-    odencoll = 1.686 # linear overdensity at collapse
-    odenviri = 18. * pi**2 # overdensity at virialization
+    gdat.odencoll = 1.686 # linear overdensity at collapse
+    gdat.odenviri = 18. * pi**2 # overdensity at virialization
     
-    radisolr = 8.5 # radial distance from the GC to the Sun [kpc]
-    edencritnunc = 5.3e-3 # critical density of the Universe [MeV/cm^3]
+    gdat.radisolr = 8.5 # radial distance from the GC to the Sun [kpc]
+    gdat.edencritnunc = 5.3e-3 # critical density of the Universe [MeV/cm^3]
 
-    csecthom = 6.65e-25 # [cm^2] Thompson cross section 
-    csecionz = 6.3e-18 # [cm^2] neutral Hydrogen photon-ionization cross section at 13.6 eV 
-    enerrydb = 13.5984e-6 # Rydberg energy [MeV]
+    gdat.csecthom = 6.65e-25 # [cm^2] Thompson cross section 
+    gdat.csecionzrydb = 6.3e-18 # [cm^2] neutral Hydrogen photon-ionization cross section at 13.6 eV 
+    gdat.enerrydb = 13.5984e-6 # Rydberg energy [MeV]
 
-    plnkcons = 4.136e-21 # Planck constant [MeV s]
-    boltcons = 8.6173e-11 # Boltzmann constant [MeV/K]
+    gdat.plnkcons = 4.136e-21 # Planck constant [MeV s]
+    gdat.boltcons = 8.6173e-11 # Boltzmann constant [MeV/K]
 
-    massmilk = 1e12 # mass of the Milky Way [Msun]
+    gdat.massmilk = 1e12 # gdat.meanmass of the Milky Way [Msun]
 
-    ergs2mgev = 6.241509e5 # conversion factor from erg to MeV
-    myrs2secd = 3.154e13 # million year per second
-    solm2mgev = 1.115e60 # Solar mass in MeVc^2
-    kprc2cmet = 3.086e21 # conversion factor from kpc to cm
-    magffac = 4.966835e-8 # [(MeV/cm^3)/(muG^2/mu0)] 
+    gdat.ergs2mgev = 6.241509e5 # conversion factor from erg to MeV
+    gdat.myrs2secd = 3.154e13 # million year per second
+    gdat.solm2mgev = 1.115e60 # Solar gdat.meanmass in MeVc^2
+    gdat.kprc2cmet = 3.086e21 # conversion factor from kpc to cm
+    gdat.magffac = 4.966835e-8 # [(MeV/cm^3)/(muG^2/mu0)] 
     
-    demccons = 35. / 18. # Dehnen McLaughlin profile index
-    sigm = 6. # ratio of mean squared relative velocity to 1-particle velocity variance
-    gravconsredu = 1.19e-34 # [cm^3/MeV/s^2]
-    cmet2angs = 1e8
+    gdat.demccons = 35. / 18. # Dehnen McLaughlin profile index
+    gdat.sigm = 6. # ratio of mean squared relative velocity to 1-particle velocity variance
+    gdat.gravconsredu = 1.19e-34 # [cm^3/MeV/s^2]
+    gdat.cmet2angs = 1e8
     
-    # axes
+    # axis.s
     # temp
-    numbradi = 50
-    numbrsph = 50
-    numbzaxi = 50
-    numbenph = 50
-    numbenel = 50
-    numbenpi = 50
-    numbcden = 50
-    numbreds = 50
-    numbmass = 50
-    numbwnum = 500
+    gdat.numbradi = 50
+    gdat.numbrsph = 50
+    gdat.numbzaxi = 50
+    gdat.numbenph = 50
+    gdat.numbenel = 50
+    gdat.numbenpi = 50
+    gdat.numbcden = 50
+    gdat.numbreds = 50
+    gdat.numbmass = 50
+    gdat.numbwnum = 500
   
-    global indxradi, indxrsph, indxzaxi, indxenph, indxenel, indxenpi, indxcden, indxreds, indxmass, indxwnum
-    indxradi = arange(numbradi)
-    indxrsph = arange(numbrsph)
-    indxzaxi = arange(numbzaxi)
-    indxenph = arange(numbenph)
-    indxenel = arange(numbenel)
-    indxenpi = arange(numbenpi)
-    indxcden = arange(numbcden)
-    indxreds = arange(numbreds)
-    indxmass = arange(numbmass)
-    indxwnum = arange(numbwnum)
+    gdat.indxradi = arange(gdat.numbradi)
+    gdat.indxrsph = arange(gdat.numbrsph)
+    gdat.indxzaxi = arange(gdat.numbzaxi)
+    gdat.indxenph = arange(gdat.numbenph)
+    gdat.indxenel = arange(gdat.numbenel)
+    gdat.indxenpi = arange(gdat.numbenpi)
+    gdat.indxcden = arange(gdat.numbcden)
+    gdat.indxreds = arange(gdat.numbreds)
+    gdat.indxmass = arange(gdat.numbmass)
+    gdat.indxwnum = arange(gdat.numbwnum)
 
-    global minmenph, maxmenph
-    minmenph = 1e-6 # [MeV]
-    maxmenph = 1e-1 # [MeV]
-    enph = logspace(log10(minmenph), log10(maxmenph), numbenph)
-    jenph = [0, numbenph/2, numbenph-1]
-    njenph = len(jenph)
+    gdat.minmenph = 1e-6 # [MeV]
+    gdat.maxmenph = 1e-1 # [MeV]
+    gdat.meanenph = logspace(log10(gdat.minmenph), log10(gdat.maxmenph), gdat.numbenph)
+    gdat.indxenphplot = array([0, gdat.numbenph / 2, gdat.numbenph - 1])
 
-    global minmenel, maxmenel
-    minmenel = 5e1 # [MeV]
-    maxmenel = 1e5 # [MeV]
-    enel = logspace(log10(minmenel), log10(maxmenel), numbenel)
-    diffenel = enel[1:numbenel-1] - enel[0:numbenel-2]
-    indxenelplot = [0, numbenel / 4, numbenel / 2]
-    numbenelplot = len(indxenelplot)
+    gdat.minmenel = 5e1 # [MeV]
+    gdat.maxmenel = 1e5 # [MeV]
+    gdat.meanenel = logspace(log10(gdat.minmenel), log10(gdat.maxmenel), gdat.numbenel)
+    gdat.diffenel = gdat.meanenel[1:] - gdat.meanenel[:-1]
+    gdat.indxenelplot = array([0, gdat.numbenel / 4, gdat.numbenel / 2])
 
-    global minmreds, maxmreds
-    minmreds = 1e-1
-    maxmreds = 1e2
-    reds = logspace(log10(minmreds), log10(maxmreds), numbreds)
+    gdat.minmreds = 1e-1
+    gdat.maxmreds = 1e2
+    gdat.meanreds = logspace(log10(gdat.minmreds), log10(gdat.maxmreds), gdat.numbreds)
     
-    redsprox = [0., 1e3, 1e6]
-    numbredsplot = len(redsprox)
-    indxredsplot = []
-    for k in indxredsplot:
-        indxredsplot.append(argmin(abs(reds - redsprox[k])))
+    gdat.redsplotprox = array([0., 1e3, 1e6])
+    gdat.numbredsplot = gdat.redsplotprox.size
+    gdat.indxredsplot = empty(gdat.numbredsplot, dtype=int)
+    for n, reds in enumerate(gdat.redsplotprox):
+        gdat.indxredsplot[n] = argmin(fabs(gdat.meanreds - reds))
         
-    redslateprox = [0.1, 2., 6.]
-    numbredsplotlate = len(redslateprox)
-    indxredsplotlate = []
-    strgredslate = []
-    for k in range(numbredsplotlate):
-        indxredsplotlate.append(argmin(abs(reds - redslateprox[k])))
-        strgredslate.append('$z = %.3g$' % redslateprox[k])
+    gdat.meanredslateprox = array([0.1, 2., 6.])
+    gdat.numbredsplotlate = len(gdat.meanredslateprox)
+    gdat.indxredsplotlate = []
+    gdat.strgredslate = []
+    for k in range(gdat.numbredsplotlate):
+        gdat.indxredsplotlate.append(argmin(abs(gdat.meanreds - gdat.meanredslateprox[k])))
+        gdat.strgredslate.append('$z = %.3g$' % gdat.meanredslateprox[k])
         
-    global minmmass, maxmmass
     minmmass = 1e8 # [Solar Mass]
     maxmmass = 1e16 # [Solar Mass]
-    massprim = logspace(log10(minmmass), log10(maxmmass), numbmass + 1)
-    mass = massprim[:-1]
+    gdat.meanmassprim = logspace(log10(minmmass), log10(maxmmass), gdat.numbmass + 1)
+    gdat.meanmass = gdat.meanmassprim[:-1]
     
-    massprox = [1e10, 1e12, 1e15]
-    numbmassplot = len(massprox)
+    gdat.meanmassprox = [1e10, 1e12, 1e15]
+    gdat.numbmassplot = len(gdat.meanmassprox)
     indxmassplot = []
-    global strgmass
-    strgmass = []
-    for d in range(numbmassplot):
-        indxmassplot.append(argmin(abs(mass - massprox[d])))
-        strgmass.append('$M$ = ' + tdpy.util.mexp(massprox[d]) + r' $M_\odot$')
+    gdat.strgmass = []
+    for d in range(gdat.numbmassplot):
+        indxmassplot.append(argmin(abs(gdat.meanmass - gdat.meanmassprox[d])))
+        gdat.strgmass.append('$M$ = ' + tdpy.util.mexp(gdat.meanmassprox[d]) + r' $M_\odot$')
             
     minmcden = 10**11. # [1/cm^2]
     maxmcden = 10**22. # [1/cm^2]
-    cden = logspace(log10(minmcden), log10(maxmcden), numbcden)
+    cden = logspace(log10(minmcden), log10(maxmcden), gdat.numbcden)
 
-    minmenpi = 1e-12 # [MeV]
-    maxmenpi = 1e-5 # [MeV]
-    enpi = logspace(log10(minmenpi), log10(maxmenpi), numbenpi)
+    gdat.minmenpi = 1e-12 # [MeV]
+    gdat.maxmenpi = 1e-5 # [MeV]
+    gdat.meanenpi = logspace(log10(gdat.minmenpi), log10(gdat.maxmenpi), gdat.numbenpi)
 
-    # wavenumber axis
-    minmwnum = 1e-4
-    maxmwnum = 1e4
-    wnum = logspace(log10(minmwnum), log10(maxmwnum), numbwnum)
+    # wavenumber axis.s
+    gdat.minmwnum = 1e-4
+    gdat.maxmwnum = 1e4
+    gdat.meanwnum = logspace(log10(gdat.minmwnum), log10(gdat.maxmwnum), gdat.numbwnum)
     
-    global edenbmat, edendmat, edenmatt, edenradi, edendene
-    edenbmat = omegbmat * edencritnunc * (1. + reds)**3
-    edendmat = omegdmat * edencritnunc * (1. + reds)**3
-    edenmatt = omegmatt * edencritnunc * (1. + reds)**3
-    edenradi = omegradi * edencritnunc * (1. + reds)**4
-    edendene = omegdene * edencritnunc
+    gdat.edenbmat = gdat.omegbmat * gdat.edencritnunc * (1. + gdat.meanreds)**3
+    gdat.edendmat = gdat.omegdmat * gdat.edencritnunc * (1. + gdat.meanreds)**3
+    gdat.edenmatt = gdat.omegmatt * gdat.edencritnunc * (1. + gdat.meanreds)**3
+    gdat.edenradi = gdat.omegradi * gdat.edencritnunc * (1. + gdat.meanreds)**4
+    gdat.edendene = gdat.omegdene * gdat.edencritnunc
     
-    global edendmatnunc
-    edendmatnunc = omegdmat * edencritnunc
+    gdat.edendmatnunc = gdat.omegdmat * gdat.edencritnunc
     
-    global rsphviri
-    rsphviri = (3. * mass[:, None] * solm2mgev / 4. / pi / odenviri / edendmat / kprc2cmet**3)**(1. / 3.) # [kpc]
+    rsphviri = (3. * gdat.meanmass[:, None] * gdat.solm2mgev / 4. / pi / gdat.odenviri / gdat.edendmat / gdat.kprc2cmet**3)**(1. / 3.) # [kpc]
     minmrsph = rsphviri * 1e-3
     maxmrsph = rsphviri * 1e1
-    rsph = zeros((numbmass, numbreds, numbrsph))
-    for c in indxreds:
-        for d in range(numbmass):             
-            rsph[d, c, :] = logspace(log10(minmrsph[d,c]), log10(maxmrsph[d,c]), numbrsph) # [kpc]
+    rsph = zeros((gdat.numbmass, gdat.numbreds, gdat.numbrsph))
+    for c in gdat.indxreds:
+        for d in range(gdat.numbmass):             
+            rsph[d, c, :] = logspace(log10(minmrsph[d,c]), log10(maxmrsph[d,c]), gdat.numbrsph) # [kpc]
     
-    frph = enph / plnkcons # [Hz]
-    csecionz = csecionz * (enerrydb / enph)**3
+    frph = gdat.meanenph / gdat.plnkcons # [Hz]
+    gdat.csecionz = gdat.csecionzrydb * (gdat.enerrydb / gdat.meanenph)**3
     
-    global timehubbnunc, funchubb, timehubb
-    timehubbnunc = 1. / (100. * hubbcons / (kprc2cmet / 1e2))
-    funchubb = sqrt(omegdene + omegdmat * (1. + reds**3) + omegradi * (1. + reds**4))
+    timehubbnunc = 1. / (100. * gdat.hubbcons / (gdat.kprc2cmet / 1e2))
+    funchubb = sqrt(gdat.omegdene + gdat.omegdmat * (1. + gdat.meanreds**3) + gdat.omegradi * (1. + gdat.meanreds**4))
     timehubb = timehubbnunc / funchubb
     
     # plot annihilation spectrum
-    if makeplot:
+    if gdat.makeplot:
         anchlabl = ['$e^-e^+$', r'$\mu\bar{\mu}$', r'$\tau^-\tau^+$', r'$b\bar{b}$']
-        masspartlabl = ['10 GeV', '100 GeV', '1 TeV']
+        gdat.meanmasspartlabl = ['10 GeV', '100 GeV', '1 TeV']
         anchlist = ['e', 'mu', 'tau', 'b']
         colorlist = ['b', 'g', 'r', 'm']
         linelist = ['-', '--', '-.']
-        masspart = array([1e4, 1e5, 1e6])
-        numbmasspart = masspart.size
+        gdat.meanmasspart = array([1e4, 1e5, 1e6])
+        gdat.numbmasspart = gdat.meanmasspart.size
 
-        global multp4dm, enelscalp4dm, massp4dm
         numbanch = len(anchlist)
-        fig, ax = plt.subplots()
+        figr, axis = plt.subplots()
         for a, anch in enumerate(anchlist):
-            multp4dm, enelscalp4dm, massp4dm = tdpy.util.retr_p4dm_spec(anch)
-            for k in range(numbmasspart):
-                indxmassplotp4dm = argmin(abs(massp4dm - masspart[k]))
-                ax.loglog(enelscalp4dm * masspart[k] * 1e-3, multp4dm[:, indxmassplotp4dm], color=colorlist[a], ls=linelist[k], label=anchlabl[a] + ', ' + masspartlabl[k])
-        ax.set_xlim([0.05, 1e3]) 
-        ax.set_ylim([1e-1, 5e2])
-        ax.set_xlabel('$E$ [GeV]')
-        ax.set_ylabel(r'$dN/d\log E$')
-        ax.set_title('Prompt product spectrum per annihilation')
-        ax.legend(ncol=4, loc=2)
-        plt.savefig(pathplot + 'multp4dm.pdf')
+            multp4dm, enelscalp4dm, gdat.meanmassp4dm = tdpy.util.retr_p4dm_spec(anch)
+            for k in range(gdat.numbmasspart):
+                indxmassplotp4dm = argmin(abs(gdat.meanmassp4dm - gdat.meanmasspart[k]))
+                axis.loglog(enelscalp4dm * gdat.meanmasspart[k] * 1e-3, multp4dm[:, indxmassplotp4dm], color=colorlist[a], ls=linelist[k], label=anchlabl[a] + ', ' + gdat.meanmasspartlabl[k])
+        axis.set_xlim([0.05, 1e3]) 
+        axis.set_ylim([1e-1, 5e2])
+        axis.set_xlabel('$E$ [GeV]')
+        axis.set_ylabel(r'$dN/d\log E$')
+        axis.set_title('Prompt product spectrum per annihilation')
+        axis.legend(ncol=4, loc=2)
+        plt.savefig(gdat.pathplot + 'multp4dm.pdf')
         plt.close()
     
-    multp4dm, enelscalp4dm, massp4dm = tdpy.util.retr_p4dm_spec(anch)
+    multp4dm, enelscalp4dm, gdat.meanmassp4dm = tdpy.util.retr_p4dm_spec(anch)
 
-    #if makeplot:
+    #if gdat.makeplot:
         #plot_edot
         #plot_galprop
 
     # Haardt Madau 2012 quasar and galaxy background model
-    global fluxphothm12
-    fluxphothm12 = retr_fluxphothm12()
+    retr_fluxphothm12(gdat)
     
     # experimental background
-    global fluxphotexpr, fluxphotexprvari, fenph
-    fluxphotexpr, fluxphotexprvari, fenph = retr_fluxphotexpr()
+    retr_fluxphotexpr(gdat)
     
-    if makeplot:
-        plot_hm12()
+    if gdat.makeplot:
+        plot_hm12(gdat)
     
     # CMB energy density
-    global edencmbr
-    edencmbr = retr_edencmbr() # [1/cm^3/MeV]
-    edencmbrenpi = trapz(enpi[:, None] * edencmbr, enpi, axis=0) # [MeV/cm^3]
+    gdat.edencmbr = retr_edencmbr(gdat) # [1/cm^3/MeV]
+    gdat.edencmbrenpi = trapz(gdat.meanenpi[:, None] * gdat.edencmbr, gdat.meanenpi, axis=0) # [MeV/cm^3]
     
     # EGBL energy density
-    global edenegbl
-    edenegbl = retr_edenegbl() # [1/cm^3/MeV]
-    edenegblenpi = trapz(enpi[:, None] * edenegbl, enpi, axis=0) # [MeV/cm^3]
+    gdat.edenegbl = retr_edenegbl(gdat) # [1/cm^3/MeV]
+    gdat.edenegblenpi = trapz(gdat.meanenpi[:, None] * gdat.edenegbl, gdat.meanenpi, axis=0) # [MeV/cm^3]
     
     # Energy loss rate on EGBL
-    global edotegbl
     # temp
-    edotegbl = 4. * csecthom * velolght / 3. / masselec**2 * edencmbrenpi[None, :] * enel[:,None]**2 # [MeV/s]
+    edotegbl = 4. * csecthom * gdat.velolght / 3. / gdat.masselec**2 * edencmbrgdat.meanenpi[None, :] * enel[:,None]**2 # [MeV/s]
  
-    if makeplot:
-        fig, ax = plt.subplots()
-        for c in range(numbredsplotlate):
-            plot = ax.loglog(enpi * 1e6, enpi * edencmbr[:, indxredsplotlate[c]], label=strgredslate[c])
-            plot_ = ax.loglog(enpi * 1e6, enpi * edenegbl[:, indxredsplotlate[c]], '--', color=plot[0].get_color())
-        ax.set_xlabel('$E_\gamma$ [eV]')
-        ax.set_ylabel(r'$dN_\gamma/dVd\log E_\gamma$ [1/cm$^3$]')
-        ax.set_title('Extragalactic Background Radiation')
-        ax.set_ylim([1e-1, 1e6])
-        leg = ax.legend(loc=2)
-        plt.savefig(pathplot + 'edencmbr.pdf')
+    if gdat.makeplot:
+        figr, axis = plt.subplots()
+        for c in range(gdat.numbredsplotlate):
+            plot = axis.loglog(gdat.meanenpi * 1e6, gdat.meanenpi * gdat.edencmbr[:, gdat.indxredsplotlate[c]], label=gdat.strgredslate[c])
+            plot_ = axis.loglog(gdat.meanenpi * 1e6, gdat.meanenpi * gdat.edenegbl[:, gdat.indxredsplotlate[c]], '--', color=plot[0].get_color())
+        axis.set_xlabel('$E_\gamma$ [eV]')
+        axis.set_ylabel(r'$dN_\gamma/dVd\log E_\gamma$ [1/cm$^3$]')
+        axis.set_title('Extragalactic Background Radiation')
+        axis.set_ylim([1e-1, 1e6])
+        leg = axis.legend(loc=2)
+        plt.savefig(gdat.pathplot + 'edencmbr.pdf')
         plt.close()
 
-    # halo mass function
-    global diffnhaldiffmass, peakhght
-    diffnhaldiffmass, peakhght = retr_hmfn()
+    # halo gdat.meanmass function
+    diffnhaldiffmass, peakhght = retr_hmfn(gdat)
     
-    global numbmpol    
     numbmpol = 2
-    
-    global propmodl, concmodl, subsmodl, igmamodl, conc
 
     propmodl = 'effi'
     concmodl = 'duff'
@@ -1440,38 +1390,36 @@ def init(cnfg):
     igmamodl = 'clum'
 
     # halo concentration model
-    global conccatl, conc, nconcmodl
     nconcmodl = 3
-    conccatl = zeros((numbmass, numbreds, nconcmodl))
+    conccatl = zeros((gdat.numbmass, gdat.numbreds, nconcmodl))
 
     ## Sanchez-Conde & Prada 2014
     cona = [37.5153, -1.5093, 1.636e-2, 3.66e-4, -2.89237e-5, 5.32e-7]
     for k in range(6):
-        conccatl[:, :, 0] += cona[k] * log(mass[:, None] / hubbcons)**k * funchubb[None, :]**(-2./3.)
+        conccatl[:, :, 0] += cona[k] * log(gdat.meanmass[:, None] / gdat.hubbcons)**k * funchubb[None, :]**(-2./3.)
     if concmodl == 'sanc':
         conc = conccatl[:, :, 0]
 
     ## Duffy et al. 2007
-    cmind = -0.081
-    crind = -0.71
-    cmpiv = 2e12 / hubbcons
-    cmnor = 7.8
-    conccatl[:,:,1] = cmnor * outer((mass / cmpiv)**cmind, (1. + reds)**crind)
+    gdat.concmassslop = -0.081
+    gdat.concredsslop = -0.71
+    gdat.concmasspivt = 2e12 / gdat.hubbcons
+    gdat.concnorm = 7.8
+    conccatl[:,:,1] = gdat.concnorm * outer((gdat.meanmass / gdat.concmasspivt)**gdat.concmassslop, (1. + gdat.meanreds)**gdat.concredsslop)
     if concmodl == 'duff':
         conc = conccatl[:,:,1]
 
     ## Comerford & Natarajan 2007
-    cmind = -0.15
-    crind = -1.
-    cmpiv = 1.3e13 / hubbcons
-    cmnor = 14.5
-    conccatl[:, :, 2] = cmnor * (mass[:, None] / cmpiv)**cmind * (1. + reds[None, :])**crind
+    gdat.concmassslop = -0.15
+    gdat.concredsslop = -1.
+    gdat.concmasspivt = 1.3e13 / gdat.hubbcons
+    gdat.concnorm = 14.5
+    conccatl[:, :, 2] = gdat.concnorm * (gdat.meanmass[:, None] / gdat.concmasspivt)**gdat.concmassslop * (1. + gdat.meanreds[None, :])**gdat.concredsslop
     if concmodl == 'come':
         conc = conccatl[:,:,2]
 
     # substructure model
-    global subs
-    subs = ones((numbmass, numbreds, numbrsph))
+    subs = ones((gdat.numbmass, gdat.numbreds, gdat.numbrsph))
     if subsmodl == 'none':
         subs[:] = 1.
     
@@ -1481,8 +1429,7 @@ def init(cnfg):
     gasdn = 1. # [1/cm^3]
 
     # cosmic raw propagation model
-    global fesc
-    fesc = zeros((numbenel, numbmass, numbreds, numbrsph))
+    fesc = zeros((gdat.numbenel, gdat.numbmass, gdat.numbreds, gdat.numbrsph))
     if propmodl == 'effi':
         fesc[:] = 1.
     else:
@@ -1509,124 +1456,123 @@ def init(cnfg):
             delta = 0.46
             lz = 8. # [kpc]
         
-        fesc = retr_fesc()
+        fesc = retr_fesc(gdat)
         
     # IGM effective optical depth model
-    global cdenbrek, redsbrek
     cdenbrek = array([10**15., 10**17.5, 10**19., 10**20.3])
-    redsbrek = array([1.56, 5.5])
-    global odep, odeprydb
-    odep = zeros((numbenph, numbreds, numbreds))
-    odeprydb = zeros((numbreds, numbreds))
+    gdat.meanredsbrek = array([1.56, 5.5])
+    odep = zeros((gdat.numbenph, gdat.numbreds, gdat.numbreds))
+    odeprydb = zeros((gdat.numbreds, gdat.numbreds))
     if igmamodl == 'clum':
         
-        global diffnabsdiffcdendiffreds, diffoptddiffcdendiffredsrydb, diffoptddiffredsrydb
-        diffnabsdiffcdendiffreds = zeros((numbcden, numbreds))
+        diffnabsdiffcdendiffreds = zeros((gdat.numbcden, gdat.numbreds))
 
         # lower Lyman - alpha forest
         indxcdentemp = where(cden < 10**15.)[0]
 
-        indxredstemp = where((reds > 1.56) & (reds < 5.5))[0]
-        indxtemp = meshgrid(indxcdentemp, indxredstemp, indexing='ij')
-        diffnabsdiffcdendiffreds[indxtemp] = 10**7.079 * cden[indxcdentemp, None]**(-1.5) * (1. + reds[None, indxredstemp])**3
+        gdat.indxredstemp = where((gdat.meanreds > 1.56) & (gdat.meanreds < 5.5))[0]
+        indxtemp = meshgrid(indxcdentemp, gdat.indxredstemp, indexing='ij')
+        diffnabsdiffcdendiffreds[indxtemp] = 10**7.079 * cden[indxcdentemp, None]**(-1.5) * (1. + gdat.meanreds[None, gdat.indxredstemp])**3
 
-        indxredstemp = where(reds < 1.56)[0]
-        indxtemp = meshgrid(indxcdentemp, indxredstemp, indexing='ij')
-        diffnabsdiffcdendiffreds[indxtemp] = 10**8.238 * cden[indxcdentemp, None]**(-1.5) * (1. + reds[None, indxredstemp])**0.16
+        gdat.indxredstemp = where(gdat.meanreds < 1.56)[0]
+        indxtemp = meshgrid(indxcdentemp, gdat.indxredstemp, indexing='ij')
+        diffnabsdiffcdendiffreds[indxtemp] = 10**8.238 * cden[indxcdentemp, None]**(-1.5) * (1. + gdat.meanreds[None, gdat.indxredstemp])**0.16
 
-        indxredstemp = where(reds > 5.5)[0]
-        indxtemp = meshgrid(indxcdentemp, indxredstemp, indexing='ij')
-        diffnabsdiffcdendiffreds[indxtemp] = 10**1.470 * cden[indxcdentemp, None]**(-1.5) * (1. + reds[None, indxredstemp])**9.9
+        gdat.indxredstemp = where(gdat.meanreds > 5.5)[0]
+        indxtemp = meshgrid(indxcdentemp, gdat.indxredstemp, indexing='ij')
+        diffnabsdiffcdendiffreds[indxtemp] = 10**1.470 * cden[indxcdentemp, None]**(-1.5) * (1. + gdat.meanreds[None, gdat.indxredstemp])**9.9
 
         # upper Lyman - alpha forest
         indxcdentemp = where((cden > 10**15.) & (cden < 10**17.5))[0]
         
-        indxredstemp = where((reds > 1.56) & (reds < 5.5))[0]
-        indxtemp = meshgrid(indxcdentemp, indxredstemp, indexing='ij')
-        diffnabsdiffcdendiffreds[indxtemp] = 10**14.58 * cden[indxcdentemp, None]**(-2.) * (1. + reds[None, indxredstemp])**3.
+        gdat.indxredstemp = where((gdat.meanreds > 1.56) & (gdat.meanreds < 5.5))[0]
+        indxtemp = meshgrid(indxcdentemp, gdat.indxredstemp, indexing='ij')
+        diffnabsdiffcdendiffreds[indxtemp] = 10**14.58 * cden[indxcdentemp, None]**(-2.) * (1. + gdat.meanreds[None, gdat.indxredstemp])**3.
 
-        indxredstemp = where(reds < 1.56)[0]
-        indxtemp = meshgrid(indxcdentemp, indxredstemp, indexing='ij')
-        diffnabsdiffcdendiffreds[indxtemp] = 10**15.74 * cden[indxcdentemp, None]**(-2.) * (1. + reds[None, indxredstemp])**0.16
+        gdat.indxredstemp = where(gdat.meanreds < 1.56)[0]
+        indxtemp = meshgrid(indxcdentemp, gdat.indxredstemp, indexing='ij')
+        diffnabsdiffcdendiffreds[indxtemp] = 10**15.74 * cden[indxcdentemp, None]**(-2.) * (1. + gdat.meanreds[None, gdat.indxredstemp])**0.16
 
-        indxredstemp = where(reds > 5.5)[0]
-        indxtemp = meshgrid(indxcdentemp, indxredstemp, indexing='ij')
-        diffnabsdiffcdendiffreds[indxtemp] = 10**8.97 * cden[indxcdentemp, None]**(-2.) * (1. + reds[None, indxredstemp])**9.9
+        gdat.indxredstemp = where(gdat.meanreds > 5.5)[0]
+        indxtemp = meshgrid(indxcdentemp, gdat.indxredstemp, indexing='ij')
+        diffnabsdiffcdendiffreds[indxtemp] = 10**8.97 * cden[indxcdentemp, None]**(-2.) * (1. + gdat.meanreds[None, gdat.indxredstemp])**9.9
 
         # Super Lyman limit systems
         indxcdentemp = where((cden > 10**19.) & (cden < 10**20.3))[0]
 
-        indxredstemp = where(reds > 1.56)[0]
-        indxtemp = meshgrid(indxcdentemp, indxredstemp, indexing='ij')
-        diffnabsdiffcdendiffreds[indxtemp] = 10**(-0.347) * cden[indxcdentemp, None]**(-1.05) * (1. + reds[None, indxredstemp])**1.27
+        gdat.indxredstemp = where(gdat.meanreds > 1.56)[0]
+        indxtemp = meshgrid(indxcdentemp, gdat.indxredstemp, indexing='ij')
+        diffnabsdiffcdendiffreds[indxtemp] = 10**(-0.347) * cden[indxcdentemp, None]**(-1.05) * (1. + gdat.meanreds[None, gdat.indxredstemp])**1.27
 
-        indxredstemp = where(reds < 1.56)[0]
-        indxtemp = meshgrid(indxcdentemp, indxredstemp, indexing='ij')
-        diffnabsdiffcdendiffreds[indxtemp] = 10**(0.107) * cden[indxcdentemp, None]**(-1.05) * (1. + reds[None, indxredstemp])**0.16
+        gdat.indxredstemp = where(gdat.meanreds < 1.56)[0]
+        indxtemp = meshgrid(indxcdentemp, gdat.indxredstemp, indexing='ij')
+        diffnabsdiffcdendiffreds[indxtemp] = 10**(0.107) * cden[indxcdentemp, None]**(-1.05) * (1. + gdat.meanreds[None, gdat.indxredstemp])**0.16
 
         # Damped Lyman alpha systems
         indxcdentemp = where(cden > 10**20.3)[0]
 
-        indxredstemp = where(reds > 1.56)[0]
-        indxtemp = meshgrid(indxcdentemp, indxredstemp, indexing='ij')
-        diffnabsdiffcdendiffreds[indxtemp] = 10**18.94 * cden[indxcdentemp, None]**(-2.) * (1. + reds[None, indxredstemp])**1.27
+        gdat.indxredstemp = where(gdat.meanreds > 1.56)[0]
+        indxtemp = meshgrid(indxcdentemp, gdat.indxredstemp, indexing='ij')
+        diffnabsdiffcdendiffreds[indxtemp] = 10**18.94 * cden[indxcdentemp, None]**(-2.) * (1. + gdat.meanreds[None, gdat.indxredstemp])**1.27
 
-        indxredstemp = where(reds < 1.56)[0]
-        indxtemp = meshgrid(indxcdentemp, indxredstemp, indexing='ij')
-        diffnabsdiffcdendiffreds[indxtemp] = 10**19.393 * cden[indxcdentemp, None]**(-2.) * (1. + reds[None, indxredstemp])**0.16
+        gdat.indxredstemp = where(gdat.meanreds < 1.56)[0]
+        indxtemp = meshgrid(indxcdentemp, gdat.indxredstemp, indexing='ij')
+        diffnabsdiffcdendiffreds[indxtemp] = 10**19.393 * cden[indxcdentemp, None]**(-2.) * (1. + gdat.meanreds[None, gdat.indxredstemp])**0.16
 
-        diffoptddiffcdendiffreds = diffnabsdiffcdendiffreds[:, None, :] * (1. - exp(-cden[:, None, None] * csecionz[None, :, None]))
+        diffoptddiffcdendiffreds = diffnabsdiffcdendiffreds[:, None, :] * (1. - exp(-cden[:, None, None] * gdat.csecionz[None, :, None]))
         diffoptddiffreds = trapz(diffoptddiffcdendiffreds, cden, axis=0)
-        diffoptddiffredsrydb = interp1d(enph, diffoptddiffreds, axis=0)(enerrydb)
-        diffoptddiffcdendiffredsrydb = interp1d(enph, diffoptddiffcdendiffreds, axis=1)(enerrydb)
-        odep = zeros((numbenph, numbreds, numbreds))
-        for c in indxreds:
-            for g in range(c + 1, numbreds):
-                odep[:, c, g] = trapz(diffoptddiffreds[:, c:g], reds[c:g], axis=1)
-        odeprydb = interp1d(enph, odep, axis=0)(enerrydb)
+        diffoptddiffredsrydb = interp1d(gdat.meanenph, diffoptddiffreds, axis=0)(gdat.enerrydb)
+        diffoptddiffcdendiffredsrydb = interp1d(gdat.meanenph, diffoptddiffcdendiffreds, axis=1)(gdat.enerrydb)
+        odep = zeros((gdat.numbenph, gdat.numbreds, gdat.numbreds))
+        for c in gdat.indxreds:
+            for g in range(c + 1, gdat.numbreds):
+                odep[:, c, g] = trapz(diffoptddiffreds[:, c:g], gdat.meanreds[c:g], axis=1)
+        odeprydb = interp1d(gdat.meanenph, odep, axis=0)(gdat.enerrydb)
         
-        if makeplot:
-            plot_igma()
+        if gdat.makeplot:
+            plot_igma(gdat)
                 
     # compute the differential ICS power as a function of final photon and electron energies
-    global specinvc, specinvccatlenph, specinvccatl
-    specinvccatl = zeros((numbenph, numbenel, numbreds, 2))
-    nqics = 100
-    maxmqics = 1.
-    for b in range(numbenel):
-        for a in range(numbenph):
-            elecrelefact = enel[b] / masselec
-            eps = enph[a] / enel[b]
+    specinvccatl = zeros((gdat.numbenph, gdat.numbenel, gdat.numbreds, 2))
+    gdat.numbqics = 100
+    gdat.maxmqics = 1.
+    for b in gdat.indxenel:
+        for a in gdat.indxenph:
+            elecrelefact = enel[b] / gdat.masselec
+            eps = gdat.meanenph[a] / enel[b]
             if eps >= 1.:
                 continue
-            for c in indxreds:
+            for c in gdat.indxreds:
                 minmqics = 1. / 4. / elecrelefact**2
-                qics = logspace(log10(minmqics), log10(maxmqics), nqics)
-                enpitemp = masselec**2 / 4. / enel[b] * eps / (1. - eps) / qics
-                qfac = 2. * qics * log(qics) + qics + 1. - 2. * qics**2 + eps**2 * (1. - qics) / 2. / (1. - eps)
-                specinvctemp = 3. * csecthom * velolght / 4. / elecrelefact**2 *                     (enph[a] - enpitemp) * qfac / qics / enph[a] # [cm^3/s]
-                jqics = where((enpitemp < max(enpi)) & (enpitemp > min(enpi)))[0]
-                specinvccatl[a, b, c, 0] = trapz(specinvctemp[jqics] * interp1d(enpi, edencmbr[:,c])(enpitemp[jqics]), qics[jqics]) # [1/s/MeV] 
-                specinvccatl[a, b, c, 1] = trapz(specinvctemp[jqics] * interp1d(enpi, edenegbl[:,c])(enpitemp[jqics]), qics[jqics]) # [1/s/MeV]
+                meanqics = logspace(log10(minmqics), log10(gdat.maxmqics), gdat.numbqics)
+                enpitemp = gdat.masselec**2 / 4. / enel[b] * eps / (1. - eps) / meanqics
+                qfac = 2. * meanqics * log(qics) + meanqics + 1. - 2. * meanqics**2 + eps**2 * (1. - meanqics) / 2. / (1. - eps)
+                specinvctemp = 3. * csecthom * gdat.velolght / 4. / elecrelefact**2 * (gdat.meanenph[a] - gdat.meanenpitemp) * qfac / meanqics / gdat.meanenph[a] # [cm^3/s]
+                indxqicstemp = where((enpitemp < gdat.maxmenpi) & (enpitemp > gdat.minmenpi))[0]
+                
+                # interpolate the energy densities to the current redshift
+                edencmbrtemp = interp1d(gdat.meanenpi, gdat.edencmbr[:, c])(gdat.meanenpitemp[indxqicstemp])
+                edenegbltemp = interp1d(gdat.meanenpi, gdat.edenegbl[:, c])(gdat.meanenpitemp[indxqicstemp])
+
+                # integrate contibutions from previous redshift
+                specinvccatl[a, b, c, 0] = trapz(specinvctemp[indxqicstemp] * edencmbrtemp, meanqics[indxqicstemp]) # [1/s/MeV] 
+                specinvccatl[a, b, c, 1] = trapz(specinvctemp[indxqicstemp] * edenegbltemp, meanqics[indxqicstemp]) # [1/s/MeV]
         
     # temp
     specinvc = specinvccatl[:, :, :, 0]
-    specinvccatlenph = trapz(specinvccatl, enph, axis=0) # [1/s]
+    specinvccatlenph = trapz(specinvccatl, gdat.meanenph, axis=0) # [1/s]
     
     # star formation rate density
-    global sfrd, redssfrd, emiselecsfrd
     path = os.environ["PHOT_IONZ_DATA_PATH"] + '/sfrd.csv'
     sfrddata = loadtxt(path)
-    redssfrd = sfrddata[:, 0]
+    gdat.meanredssfrd = sfrddata[:, 0]
     sfrd = sfrddata[:, 1]
-    emiselecsfrd = 1e51 * ergs2mgev / (1e3 * kprc2cmet)**3 / (1e-6 * myrs2secd) * 0.15 * sfrd * 1e-2 * (1. + redssfrd)**3
+    emiselecsfrd = 1e51 * gdat.ergs2mgev / (1e3 * gdat.kprc2cmet)**3 / (1e-6 * gdat.myrs2secd) * 0.15 * sfrd * 1e-2 * (1. + gdat.meanredssfrd)**3
          
-    global csecvelopivt, csecfracpivt, masspartpivt, dmatsloppivt
     csecvelopivt = 3e-26
     csecfracpivt = 1e4
-    masspartpivt = 1e4
+    gdat.meanmasspartpivt = 1e4
     dmatsloppivt = 1.
-    global ionrdmat, fluxphotdmat
     
     path = os.environ["PHOT_IONZ_DATA_PATH"] + '/data.fits'
     # temp
@@ -1634,17 +1580,17 @@ def init(cnfg):
         ionrdmat = pf.getdata(path, 0)
         fluxphotdmat = pf.getdata(path, 1)
     else:
-        ionrdmat, fluxphotdmat = retr_fluxphotdmat(csecvelopivt, csecfracpivt, masspartpivt, dmatsloppivt)
+        ionrdmat, fluxphotdmat = retr_fluxphotdmat(csecvelopivt, csecfracpivt, gdat.meanmasspartpivt, dmatsloppivt)
         pf.append(path, ionrdmat)
         pf.append(path, fluxphotdmat)
 
-        if makeplot:
-            plot_halo()
-            plot_elec_flux()
-            plot_invrcomp()
-            plot_fluxphot()
-            plot_ionr()
-            plot_sfrd()
+        if gdat.makeplot:
+            plot_halo(gdat)
+            plot_elec_flux(gdat)
+            plot_invrcomp(gdat)
+            plot_fluxphot(gdat)
+            plot_ionr(gdat)
+            plot_sfrd(gdat)
 
     optiprop = False
 
@@ -1652,15 +1598,15 @@ def init(cnfg):
     thissampvarb = zeros(numbpara)
     thissampvarb[0] = csecvelopivt
     thissampvarb[1] = csecfracpivt
-    thissampvarb[2] = masspartpivt
+    thissampvarb[2] = gdat.meanmasspartpivt
     thissampvarb[3] = dmatsloppivt
     thissamp = empty((numbproc, numbpara))
     thissamp[0, :] = tdpy.mcmc.cdfn_samp(thissampvarb, datapara)
 
-    numbsamp = (numbswep - numbburn) / factthin
+    numbsamp = (gdat.numbswep - gdat.numbburn) / gdat.factthin
     numbplotside = numbpara
-    sampbund = tdpy.mcmc.init(numbproc, numbswep, retr_llik, datapara, thissamp=thissamp, numbburn=numbburn, \
-                factthin=factthin, optiprop=optiprop, verbtype=verbtype, pathbase=pathbase, rtag=rtag, numbplotside=numbplotside)
+    sampbund = tdpy.mcmc.init(numbproc, gdat.numbswep, retr_llik, datapara, thissamp=thissamp, numbburn=gdat.numbburn, \
+                factthin=gdat.factthin, optiprop=optiprop, verbtype=gdat.verbtype, pathbase=gdat.pathbase, rtag=rtag, numbplotside=numbplotside)
     
     listsampvarb = sampbund[0]
     listsamp = sampbund[1]
@@ -1671,73 +1617,42 @@ def init(cnfg):
     
     listfluxphotdmat = listsampcalc[0]
             
-    fig, ax = plt.subplots()
-    ax.set_title('UV/X-ray photon background')
+    figr, axis = plt.subplots()
+    axis.set_title('UV/X-ray photon background')
     
-    ax.fill_between(enph[fenph] * 1e6, enph[fenph] * (fluxphotexpr + sqrt(fluxphotexprvari)), enph[fenph] * (fluxphotexpr - sqrt(fluxphotexprvari)), color='lightblue')
+    uppr = gdat.meanenph[gdat.indxenphexpr] * (gdat.fluxphotexpr + sqrt(gdat.fluxphotexprvari))
+    lowr = gdat.meanenph[gdat.indxenphexpr] * (gdat.fluxphotexpr - sqrt(gdat.fluxphotexprvari))
+    axis.fill_between(gdat.meanenph[gdat.indxenphexpr] * 1e6, uppr, lowr, color='lightblue')
     
-    ax.loglog(enph[fenph] * 1e6, enph[fenph] * fluxphotexpr, label='ROSAT')
+    axis.loglog(gdat.meanenph[gdat.indxenphexpr] * 1e6, gdat.fluxphothm12[gdat.indxenphexpr] * gdat.fluxphotexpr, label='ROSAT')
     
-    ax.loglog(enph * 1e6, enph * fluxphothm12[:, 0], label='Haardt & Madau (2012)')
-    tdpy.mcmc.plot_braz(ax, enph * 1e6, enph[None, :] * listfluxphotdmat[:, :, 0], alpha=0.5, mcol='black')
+    axis.loglog(gdat.meanenph * 1e6, gdat.meanenph * gdat.fluxphothm12[:, 0], label='Haardt & Madau (2012)')
+    tdpy.mcmc.plot_braz(axis, gdat.meanenph * 1e6, gdat.meanenph[None, :] * listfluxphotdmat[:, :, 0], alpha=0.5, mcol='black')
 
-    ax.set_xlabel(r'$E_\gamma$ [eV]')
-    ax.set_ylabel(r'$EdN/dE$ [1/cm$^2$/s/sr]')
-    ax.legend()
-    plt.savefig(pathplot + 'fluxphotpost.pdf')
+    axis.set_xlabel(r'$E_\gamma$ [eV]')
+    axis.set_ylabel(r'$EdN/dE$ [1/cm$^2$/s/sr]')
+    axis.legend()
+    plt.savefig(gdat.pathplot + 'fluxphotpost.pdf')
     plt.close()
     
-    strgpara = lablpara + ' ' + unitpara
     path = os.environ["PHOT_IONZ_DATA_PATH"] + '/imag/mcmc'
     tdpy.mcmc.plot_grid(listsampvarb, strgpara, scalpara=scalpara, path=path, quan=True)
 
     for k in indxpara:
-        path = pathplot + namepara[k] + '.pdf'
+        path = gdat.pathplot + namepara[k] + '.pdf'
         tdpy.mcmc.plot_trac(listsampvarb[:, k], strgpara[k], scalpara=scalpara[k], path=path, quan=True)
-
-
-def retr_cnfg( \
-              datatype='inpt', \
-              datalabl='PIXIE', \
-              numbswep=100, \
-              numbburn=None, \
-              factthin=None, \
-              plotperd=10000, \
-              verbtype=1, \
-              makeplot=False, \
-             ):
-        
-    cnfg = dict()
-    
-    # data type and label
-    cnfg['datatype'] = datatype
-    cnfg['datalabl'] = datalabl
-
-    # sampler setup
-    cnfg['numbswep'] = numbswep
-    cnfg['numbburn'] = numbburn
-    cnfg['factthin'] = factthin
-
-    #
-    cnfg['plotperd'] = plotperd
-    cnfg['verbtype'] = verbtype
-    cnfg['makeplot'] = makeplot
-    
-    return cnfg
 
 
 def cnfg_nomi():
     
-    cnfg = retr_cnfg( \
-                     numbswep=10, \
-                     verbtype=2, \
-                     numbburn=0, \
-                     factthin=1, \
-                     makeplot=True, \
-                    )
-    
-    init(cnfg)
-    
+    init( \
+         numbswep=10, \
+         verbtype=2, \
+         numbburn=0, \
+         factthin=1, \
+         makeplot=True, \
+        )
+
 
 if __name__ == '__main__':
     
