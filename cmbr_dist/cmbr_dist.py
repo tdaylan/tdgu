@@ -1043,22 +1043,6 @@ def init( \
     
     gdat = tdpy.util.gdatstrt()
     
-    factthin = cnfg['factthin']
-    freqexpr = cnfg['freqexpr']
-    numbfreqexpr = cnfg['numbfreqexpr']
-    minmfreqexpr = cnfg['minmfreqexpr']
-    maxmfreqexpr = cnfg['maxmfreqexpr']
-    freqexprstdv = cnfg['freqexprstdv']
-    exprfluxstdvfrac = cnfg['exprfluxstdvfrac']
-    exprfluxstdvinst = cnfg['exprfluxstdvinst']
-    exprflux = cnfg['exprflux']
-    exprfluxstdv = cnfg['exprfluxstdv']
-    inclcmbrmono = cnfg['inclcmbrmono']
-    plotperd = cnfg['plotperd']
-    verbtype = cnfg['verbtype']
-    makeplot = cnfg['makeplot']
-    optiprop = cnfg['optiprop']
-    
     rtag = retr_rtag()
     
     pathbase = os.environ["CMBR_DIST_DATA_PATH"]
@@ -1614,7 +1598,7 @@ def cnfg_pixi_mock_stdv():
             freqexprstdv = ones(numbfreqexpr) * 0.01
             
             statparagrid[k, l, :, :] = init( \
-                                            gdat.numbswep=gdat.numbswep, \
+                                            numbswep=gdat.numbswep, \
                                             verbtype=1, \
                                             inclcmbrmono=True, \
                                             numbfreqexpr=numbfreqexpr, \

@@ -86,7 +86,7 @@ sns.set(context='poster', style='ticks', color_codes=True)
     #    plot_temp 
 
 
-def retr_edenegbl():
+def retr_edenegbl(gdat):
     
     path = os.environ["PHOT_IONZ_DATA_PATH"] + '/egbl.csv'
     egbldata = loadtxt(path)
@@ -95,7 +95,7 @@ def retr_edenegbl():
     enpiegbl = gdat.plnkcons * freqegbl # [MeV]
     fluxegbl = egbldata[:, 1] # [W/m^2/sr]
     edenegbltemp = flipud(fluxegbl) * 2. * pi / gdat.velolght / 1e4 * 1.6e13 / enpiegbl**2 # [1/cm^3/MeV]
-    edenegbl = zeros((numbgdat.meanenpi, gdat.numbreds))
+    edenegbl = zeros((gdat.numbenpi, gdat.numbreds))
     for c in gdat.indxreds:
         enpitemp = gdat.meanenpi / (1. + gdat.meanreds[c]) # [MeV]
         indxenpitemp = where((enpitemp < max(enpiegbl)) & (enpitemp > min(enpiegbl)))[0]
@@ -104,14 +104,15 @@ def retr_edenegbl():
     return edenegbl
         
 
-def retr_edencmbr():
+def retr_edencmbr(gdat):
     
-    edencmbr = 8. * pi * gdat.meanenpi[:, None]**2 / (gdat.velolght * gdat.plnkcons)**3 / (exp(gdat.meanenpi[:, None] / gdat.tempcmbrnunc / gdat.boltcons / (1. + gdat.meanreds[None, :])) - 1.) # [1/cm^3/MeV]
+    edencmbr = 8. * pi * gdat.meanenpi[:, None]**2 / (gdat.velolght * gdat.plnkcons)**3 / (exp(gdat.meanenpi[:, None] / \
+                        gdat.tempcmbrnunc / gdat.boltcons / (1. + gdat.meanreds[None, :])) - 1.) # [1/cm^3/MeV]
     
     return edencmbr
 
 
-def plot_edot():
+def plot_edot(gdat):
 
     sec2gyr = 3.171e-17 # [s/Gyrs]
     
