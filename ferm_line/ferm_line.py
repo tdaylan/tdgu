@@ -190,7 +190,7 @@ def plot_datacntsmean(gdat):
         axis.set_yscale('log')
     figr.text(0.05, 0.5, '$N$', ha='center', va='center', rotation=90)
     plt.subplots_adjust(hspace=0.3)
-    plt.savefig(gdat.pathplot + 'datameancnts_%.3g.png' % gdat.enercntrwndw)
+    plt.savefig(gdat.pathplot + 'datameancnts_%.3g.pdf' % gdat.enercntrwndw)
     plt.close(figr)
           
 
@@ -206,52 +206,55 @@ def retr_datapara(gdat):
     if gdat.modltype == 'altrmod1':
         gdat.numbpara = 2 + 2 * gdat.numbalmp
 
-    dictpara = dict()
-    minmpara = zeros(gdat.numbpara)
-    maxmpara = zeros(gdat.numbpara)
-    namepara = empty(gdat.numbpara, dtype=object)
-    scalpara = empty(gdat.numbpara, dtype=object)
-    lablpara = empty(gdat.numbpara, dtype=object)
-    unitpara = empty(gdat.numbpara, dtype=object)
-    varipara = zeros(gdat.numbpara)
+    datapara = tdpy.util.gdatstrt()
+
+    datapara.indx = dict()
+    datapara.minm = zeros(gdat.numbpara)
+    datapara.maxm = zeros(gdat.numbpara)
+    datapara.name = empty(gdat.numbpara, dtype=object)
+    datapara.scal = empty(gdat.numbpara, dtype=object)
+    datapara.labl = empty(gdat.numbpara, dtype=object)
+    datapara.unit = empty(gdat.numbpara, dtype=object)
+    datapara.vari = zeros(gdat.numbpara)
+    datapara.true = empty(gdat.numbpara)
+    datapara.true[:] = None
     
-    dictpara['slopback'] = 0
-    namepara[0] = 'slopback'
-    minmpara[0] = 1.5
-    maxmpara[0] = 4.
-    scalpara[0] = 'self'
-    lablpara[0] = r'$\alpha_b$'
-    unitpara[0] = ''
-    varipara[0] = 1e-1
+    datapara.indx['slopback'] = 0
+    datapara.name[0] = 'slopback'
+    datapara.minm[0] = 1.5
+    datapara.maxm[0] = 4.
+    datapara.scal[0] = 'self'
+    datapara.labl[0] = r'$\alpha_b$'
+    datapara.unit[0] = ''
+    datapara.vari[0] = 1e-1
 
     cntrpara = 1
     if gdat.modltype == 'altrmod0' or gdat.modltype == 'nullmod0' or gdat.modltype == 'altrmod1' or gdat.modltype == 'nullmod1':
             
-        dictpara['normback'] = 1
-        namepara[1] = 'normback'
-        minmpara[1] = 1e-3
-        maxmpara[1] = 1e0
-        scalpara[1] = 'logt'
-        lablpara[1] = r'$A_b$'
-        unitpara[1] = ''
-        varipara[1] = 1e-1
+        datapara.indx['normback'] = 1
+        datapara.name[1] = 'normback'
+        datapara.minm[1] = 1e-3
+        datapara.maxm[1] = 1e0
+        datapara.scal[1] = 'logt'
+        datapara.labl[1] = r'$A_b$'
+        datapara.unit[1] = ''
+        datapara.vari[1] = 1e-1
 
         cntrpara += 1
     
     if gdat.modltype == 'nullmod1' or gdat.modltype == 'altrmod1':
-        defn_almcpara('powrspec', cntrpara, dictpara, namepara, minmpara, maxmpara, scalpara, lablpara, unitpara, varipara)
+        defn_almcpara('powrspec', cntrpara, datapara)
         cntrpara += gdat.numbalmp
         
     if gdat.modltype == 'altrmod0' or gdat.modltype == 'altrmod1':
-        defn_almcpara('linespec', cntrpara, dictpara, namepara, minmpara, maxmpara, scalpara, lablpara, unitpara, varipara)
+        defn_almcpara('linespec', cntrpara, datapara)
         
-    strgpara = lablpara + ' ' + unitpara
-    datapara = namepara, strgpara, minmpara, maxmpara, scalpara, lablpara, unitpara, varipara, dictpara
+    datapara.strg = datapara.labl + ' ' + datapara.unit
     
     return datapara
 
 
-def defn_almcpara(typepara, cntrpara, dictpara, namepara, minmpara, maxmpara, scalpara, lablpara, unitpara, varipara):
+def defn_almcpara(typepara, cntrpara, datapara):
     
     listsphl, listsphm = hp.Alm.getlm(gdat.maxmsphl)
     listsphl = tile(listsphl, 2)
@@ -267,26 +270,26 @@ def defn_almcpara(typepara, cntrpara, dictpara, namepara, minmpara, maxmpara, sc
     maxmindxpara = cntrpara + gdat.numbalmp
         
     for k in range(cntrpara, maxmindxpara):
-        dictpara['para%04d' % k] = k
-        namepara[k] = 'para%04d' % k
-        minmpara[k] = -100.
-        maxmpara[k] = 100.
-        scalpara[k] = 'self'
+        datapara.indx['para%04d' % k] = k
+        datapara.name[k] = 'para%04d' % k
+        datapara.minm[k] = -100.
+        datapara.maxm[k] = 100.
+        datapara.scal[k] = 'self'
         if typepara == 'powrspec':
             strg = '$a^{P}'
         if typepara == 'linespec':
             strg = '$a^{L}'
         if k < cntrpara + gdat.numbalmc:
-            lablpara[k] = 'Re{'
+            datapara.labl[k] = 'Re{'
         else:
-            lablpara[k] = 'Im{' 
-        lablpara[k] += '%s_{%d%d}$' % (strg, listsphl[k - cntrpara],   listsphm[k - cntrpara])
+            datapara.labl[k] = 'Im{' 
+        datapara.labl[k] += '%s_{%d%d}$' % (strg, listsphl[k - cntrpara],   listsphm[k - cntrpara])
         if k < gdat.numbalmc:
-            lablpara[k] += '}'
+            datapara.labl[k] += '}'
         else:
-            lablpara[k] += '}'
-        unitpara[k] = ''
-        varipara[k] = 1e-5
+            datapara.labl[k] += '}'
+        datapara.unit[k] = ''
+        datapara.vari[k] = 1e-5
 
 
 def retr_aexp(scaldevi, stdv, skew, bias, slop):
@@ -408,7 +411,7 @@ def plot_edfnwndw(gdat):
     axis.set_xlabel(r'$E_\gamma$ [GeV]')
     axis.set_yscale('log')
     plt.xlim([gdat.binsenerwndw[0], gdat.binsenerwndw[-1]])
-    plt.savefig(gdat.pathplot + 'edfnwndw_%s.png' % gdat.strgenercntrwndw)
+    plt.savefig(gdat.pathplot + 'edfnwndw_%s.pdf' % gdat.strgenercntrwndw)
     plt.close(figr) 
 
     figr, axis = plt.subplots()
@@ -420,7 +423,7 @@ def plot_edfnwndw(gdat):
     plt.xlim([-15., 15.])
     plt.ylim([1e-6, 1e0])
     axis.set_yscale('log')
-    plt.savefig(gdat.pathplot + 'edfnwndwscal_%s.png' % gdat.strgenercntrwndw)
+    plt.savefig(gdat.pathplot + 'edfnwndwscal_%s.pdf' % gdat.strgenercntrwndw)
     plt.close(figr) 
 
 
@@ -527,7 +530,7 @@ def plot_cnts(thiscnts, strg):
     imag = plt.imshow(cart, origin='lower', cmap='Reds', extent=gdat.exttrofi)
     plt.colorbar(imag, fraction=0.05)
 
-    plt.savefig(gdat.pathplot + '%scnts%s.png' % (strg, gdat.rtag))
+    plt.savefig(gdat.pathplot + '%scnts%s.pdf' % (strg, gdat.rtag))
     plt.close(figr)
 
 
@@ -566,7 +569,7 @@ def plot_sphl(gdat):
     axis.set_xlabel('$l$')
     axis.set_title('')
     plt.subplots_adjust(hspace=0.1)
-    plt.savefig(gdat.pathplot + 'sphl.png')
+    plt.savefig(gdat.pathplot + 'sphl.pdf')
    
 
 class globdatastrt(object):
@@ -593,8 +596,8 @@ def init( \
     gdat.resoener = 0.1
     gdat.numbener = int(4. * (gdat.maxmener / gdat.minmener) / gdat.resoener)
     gdat.binsener = logspace(log10(gdat.minmener), log10(gdat.maxmener), gdat.numbener + 1)
-    gdat.meanener = sqrt(gdat.binsener[1:] * gdat.binsener[0:-1])
-    gdat.diffener = gdat.binsener[1:] - gdat.binsener[0:-1]
+    gdat.meanener = sqrt(gdat.binsener[1:] * gdat.binsener[:-1])
+    gdat.diffener = gdat.binsener[1:] - gdat.binsener[:-1]
     gdat.indxener = arange(gdat.numbener)
     #gdat.indxenerpivt = gdat.numbener / 2
     #gdat.enerpivt = gdat.meanener[gdat.indxenerpivt]
@@ -617,11 +620,11 @@ def init( \
     ## ROI settings
     gdat.exttrofi = [-180., 180., -90., 90.]
     ## prepare plot folder
-    gdat.pathplot = gdat.pathbase + '/png/'
+    gdat.pathplot = gdat.pathbase + '/imag/'
     cmnd = 'mkdir -p ' + gdat.pathplot
     os.system(cmnd)
     if os.uname()[1] == 'fink1.rc.fas.harvard.edu' and getpass.getuser() == 'tansu':
-        cmnd = 'mv ' + gdat.pathplot + '/* /n/pan/www/tansu/png/ferm_line/'
+        cmnd = 'mv ' + gdat.pathplot + '/* /n/pan/www/tansu/imag/ferm_line/'
         os.system(cmnd)
     
     # maximum multipole moment
@@ -772,7 +775,7 @@ def init( \
     axis.plot(gdat.listenercntr, gdat.bayefact)
     axis.set_xlabel(r'$E_\gamma$ [GeV]')
     axis.set_ylabel('BF')
-    plt.savefig(gdat.pathplot + 'bayefact.png')
+    plt.savefig(gdat.pathplot + 'bayefact.pdf')
     plt.close(figr) 
         
 
@@ -781,7 +784,7 @@ def diff(gdattemp):
     gdat = gdattemp
     for k, gdat.modltype in enumerate(gdat.listmodltype):
         for j in indxpixl:
-            sampbund = tdpy.mcmc.init(numbproc, numbswep, retr_llik, datapara, thissamp=thissamp, numbburn=numbburn, \
+            sampbund = tdpy.mcmc.init(numbproc, numbswep, retr_llik, datapara, initsamp=thissamp, numbburn=numbburn, \
                 factthin=factthin, optiprop=optiprop, verbtype=verbtype, pathbase=pathbase, rtag=gdat.rtag, numbplotside=numbplotside)
     diffmaps = flux
 
@@ -795,10 +798,9 @@ def almc(gdattemp):
         gdat.rtag = '%s_%s_%02d' % (gdat.modltype, gdat.strgenercntrwndw, gdat.maxmsphl)
                 
         datapara = retr_datapara(gdat)
-        namepara, strgpara, minmpara, maxmpara, scalpara, lablpara, unitpara, varindxpara, dictpara = datapara
-        gdat.numbpara = len(lablpara)
+        gdat.numbpara = len(datapara.name)
 
-        gdat.numbswep = 10000 * gdat.numbpara
+        gdat.numbswep = 100 * gdat.numbpara
         gdat.plotperd = gdat.numbswep / 10
         gdat.numbburn = gdat.numbswep / 10
         gdat.numbsamp = tdpy.mcmc.retr_numbsamp(gdat.numbswep, gdat.numbburn, gdat.factthin)
@@ -811,14 +813,14 @@ def almc(gdattemp):
             thissamp[:] = tdpy.mcmc.cdfn_samp(thissampvarb, datapara)[None, :]
         else:
             if gdat.modltype == 'nullmod0' or gdat.modltype == 'altrmod0' or gdat.modltype == 'nullmod1' or gdat.modltype == 'altrmod1':
-                thissamp[:, 0:2] = rand(2 * gdat.numbproc)
+                thissamp[:, :2] = rand(2 * gdat.numbproc)
                 thissamp[:, 2:] = 0.5
                 
         if gdat.numbpara > 10:
             numbplotside = 10
         else:
             numbplotside = gdat.numbpara
-        sampbund = tdpy.mcmc.init(gdat.numbproc, gdat.numbswep, retr_llik, datapara, thissamp=thissamp, numbburn=gdat.numbburn, \
+        sampbund = tdpy.mcmc.init(gdat.numbproc, gdat.numbswep, retr_llik, datapara, initsamp=thissamp, numbburn=gdat.numbburn, \
             factthin=gdat.factthin, optiprop=gdat.optiprop, verbtype=gdat.verbtype, pathbase=gdat.pathbase, rtag=gdat.rtag, numbplotside=numbplotside)
 
         listsampvarb = sampbund[0]

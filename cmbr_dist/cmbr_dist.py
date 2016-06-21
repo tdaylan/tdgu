@@ -74,15 +74,15 @@ def plot_grnf():
     
     fig, ax = plt.subplots(2,1, sharex='all')
     fig.suptitle('CMB distortion visibility', fontsize=25)
-    ax[0].plot(reds, vify, label=r'$\mathcal{J}_y(z_i) = \left(1 + \left(\frac{1+z_i}{6\times10^4}\right)\right)^{-1}$')
-    ax[0].plot(reds, vift, label=r'$\mathcal{J_B}(z_i) = \exp\left(-\frac{z_i}{2\times10^6}\right)^{2.5}$')
-    ax[0].plot(reds, vifm, label=r'$\mathcal{J}_\mu(z_i) = 1 - \exp\left(-\frac{1+z_i}{6\times10^4}\right)^{1.88}$')
-    ax[0].plot(reds, vifm * vift, label=r'$\mathcal{J}_B(z_i)\mathcal{J}_\mu(z_i)$')
+    ax[0].plot(gdat.meanreds, gdat.vify, label=r'$\mathcal{J}_y(z_i) = \left(1 + \left(\frac{1+z_i}{6\times10^4}\right)\right)^{-1}$')
+    ax[0].plot(gdat.meanreds, gdat.vift, label=r'$\mathcal{J_B}(z_i) = \exp\left(-\frac{z_i}{2\times10^6}\right)^{2.5}$')
+    ax[0].plot(gdat.meanreds, gdat.vifm, label=r'$\mathcal{J}_\mu(z_i) = 1 - \exp\left(-\frac{1+z_i}{6\times10^4}\right)^{1.88}$')
+    ax[0].plot(gdat.meanreds, gdat.vifm * gdat.vift, label=r'$\mathcal{J}_B(z_i)\mathcal{J}_\mu(z_i)$')
     ax[0].set_xscale('log')
     ax[1].set_xlabel('$z$')
     ax[0].set_ylabel(r'$\mathcal{J}(z)$')
     ax[0].legend(fontsize=16, loc='center left', bbox_to_anchor=[0.,0.5])
-    ax[1].plot(reds, vifm * vift + vify - vift, 'y')
+    ax[1].plot(gdat.meanreds, gdat.vifm * gdat.vift + gdat.vify - gdat.vift, 'y')
     ax[1].set_xscale('log')
     ax[1].set_ylabel('$\mathcal{J}_B\mathcal{J}_\mu + \mathcal{J}_y - \mathcal{J}_B$')
     plt.savefig(pathplot + 'visifunc.png')
@@ -91,11 +91,11 @@ def plot_grnf():
     with sns.color_palette("Blues", njreds):
         fig, ax = plt.subplots(2, 1, sharex='all')
         for c in range(njreds):
-            ax[0].plot(freqmodl * 1e-9, 1e-6 * fluxfdisgrenconc[:,jreds[c]], label='$z$ = %3.1g' % reds[jreds[c]])
+            ax[0].plot(freqmodl * 1e-9, 1e-6 * fluxfdisgrenconc[:,jreds[c]], label='$z$ = %3.1g' % gdat.meanreds[jreds[c]])
         ax[0].set_xscale('log')
         ax[0].set_title('Full distortion')
         for c in range(njreds):
-            ax[1].plot(freqmodl * 1e-9, 1e-6 * fluxodisgrenconc[:,jreds[c]], label='$z$ = %3.1g' % reds[jreds[c]])
+            ax[1].plot(freqmodl * 1e-9, 1e-6 * fluxodisgrenconc[:,jreds[c]], label='$z$ = %3.1g' % gdat.meanreds[jreds[c]])
         ax[1].set_xscale('log')
         ax[1].set_xlabel(r'$\nu$ [GHz]')
         ax[1].set_title('Observable distortion')
@@ -112,28 +112,28 @@ def plot_grnf():
 
 def plot_timescal():
     
-    timedcom = 1e13 * (reds / 9e3)**(-5.) 
-    timebrem = 1e2 * (reds / 1e7)**(-2.5)
+    timedcom = 1e13 * (gdat.meanreds / 9e3)**(-5.) 
+    timebrem = 1e2 * (gdat.meanreds / 1e7)**(-2.5)
 
-    timecomp = 1e-10 * (reds / 6e5)**(-4.)
-    timecoul = 1e-3 * (reds / 1e3)**(-1.5)
+    timecomp = 1e-10 * (gdat.meanreds / 6e5)**(-4.)
+    timecoul = 1e-3 * (gdat.meanreds / 1e3)**(-1.5)
 
-    timebose = 4e-7 * (reds / 1e7)**(-4.)
+    timebose = 4e-7 * (gdat.meanreds / 1e7)**(-4.)
 
-    timether0 = 5e12 * (reds / 1e3)**(-4.)
-    timether1 = 5e-3 * (reds / 1e7)**(-5)
+    timether0 = 5e12 * (gdat.meanreds / 1e3)**(-4.)
+    timether1 = 5e-3 * (gdat.meanreds / 1e7)**(-5)
     timether = minimum(timether0, timether1)
 
     fig, ax = plt.subplots()
     fig.suptitle('Time scales relevant to Comptonization in the early Universe', fontsize=20)
 
-    #ax.loglog(reds, timebrem, label='Bremsstrahlung')
-    #ax.loglog(reds, timedcom, label='Double Compton')
-    #ax.loglog(reds, timecomp, label='Compton')
-    ax.loglog(reds, timecoul, label='Coulomb')
-    ax.loglog(reds, timebose, label='Compton')
-    ax.loglog(reds, timether, label='Thermalization')
-    ax.loglog(reds, timehubb / yr2s, color='black', label='Hubble')
+    #ax.loglog(gdat.meanreds, timebrem, label='Bremsstrahlung')
+    #ax.loglog(gdat.meanreds, timedcom, label='Double Compton')
+    #ax.loglog(gdat.meanreds, timecomp, label='Compton')
+    ax.loglog(gdat.meanreds, timecoul, label='Coulomb')
+    ax.loglog(gdat.meanreds, timebose, label='Compton')
+    ax.loglog(gdat.meanreds, timether, label='Thermalization')
+    ax.loglog(gdat.meanreds, timehubb / yr2s, color='black', label='Hubble')
 
     line0 = ax.axvline(5e4, ls='--', color='grey')
     line1 = ax.axvline(2e6, ls='-.', color='grey')
@@ -147,7 +147,7 @@ def plot_timescal():
 
     ax_ = ax.twiny()
     ax_.set_xscale('log')
-    ax_.set_xlim([amax(time[0:-1]), amin(time[0:-1])])
+    ax_.set_xlim([amax(gdat.time[:-1]), amin(gdat.time[:-1])])
     ax_.set_xlabel('$t$ [yr]')
 
     fig.subplots_adjust(top=0.85)
@@ -186,7 +186,9 @@ def plot_pure_dist():
 
 def plot_heat():
     
-    heatstrg = ['Silk damping',                 r's-wave annihilation, $<\sigma v> = 3 \times 10^{-26}$ cm$^3$/s',                 r'p-wave annihilation (S-enhanced), $<\sigma v> = 3 \times 10^{-31}$ cm$^3$/s',                 r'p-wave annihilation, $<\sigma v> = 3 \times 10^{-36}$ cm$^3$/s',                 r'Decay, $\tau = 1$ year']
+    heatstrg = ['Silk damping', r's-wave annihilation, $<\sigma v> = 3 \times 10^{-26}$ cm$^3$/s', \
+                   r'p-wave annihilation (S-enhanced), $<\sigma v> = 3 \times 10^{-31}$ cm$^3$/s', \
+                   r'p-wave annihilation, $<\sigma v> = 3 \times 10^{-36}$ cm$^3$/s', r'Decay, $\tau = 1$ year']
     heatrtag = ['silk', 'swav', 'pwrl', 'pwnr', 'deca']
 
     csecdmatswav = 3e-20
@@ -196,23 +198,23 @@ def plot_heat():
     massdmat = 1e11 # [eV]
     timedeca = 1. # [yr]
     ratedeca = 1. / timedeca
-    redsdeca = interp1d(time[::-1], reds[::-1])(timedeca)
+    redsdeca = interp1d(gdat.time[::-1], gdat.meanreds[::-1])(timedeca)
     ndendmat = edendmat / massdmat
 
     ninjetype = 5
-    heat = zeros((nreds, ninjetype))
+    heat = zeros((gdat.nreds, ninjetype))
     heat[:, 0] = 0.1 * edendmat / massdmat * ratedeca
     heat[:, 1] = ndendmat**2 * csecdmatswav
-    heat[:, 2] = ndendmat**2 * csecdmatpwrl * (1. + reds)
-    heat[:, 3] = ndendmat**2 * csecdmatpwnr * (1. + reds)**2
-    heat[:, 4] = 0.05 * ndendmat * ratedeca * exp(-(redsdeca / reds)**2)
+    heat[:, 2] = ndendmat**2 * csecdmatpwrl * (1. + gdat.meanreds)
+    heat[:, 3] = ndendmat**2 * csecdmatpwnr * (1. + gdat.meanreds)**2
+    heat[:, 4] = 0.05 * ndendmat * ratedeca * exp(-(redsdeca / gdat.meanreds)**2)
 
     for k in range(ninjetype):
-        heat[:, k] *= timehubb / (1. + reds) / edenradi
+        heat[:, k] *= timehubb / (1. + gdat.meanreds) / edenradi
 
     fig, ax = plt.subplots()
     for k in range(1, ninjetype):
-        ax.loglog(reds, reds * heat[:, k], label=heatstrg[k])
+        ax.loglog(gdat.meanreds, gdat.meanreds * heat[:, k], label=heatstrg[k])
     ax.set_xlabel(r'$z$')
     ax.set_ylabel(r'$d\kappa/d\ln z$')
     ax.set_ylim([1e-12, 1e-6])
@@ -220,30 +222,30 @@ def plot_heat():
 
     ax_ = ax.twiny()
     ax_.set_xscale('log')
-    ax_.set_xlim([amax(time[0:-1]), amin(time[0:-1])])
+    ax_.set_xlim([amax(gdat.time[:-1]), amin(gdat.time[:-1])])
     ax_.set_xlabel('$t$ [yr]')
 
     plt.savefig(pathplot + 'heatrate.png')
     plt.close()
     
-    edendmatextd = omegdmat * edencrit * (1. + redsextd)**3
-    edenradiextd = omegradi * edencrit * (1. + redsextd)**4
+    edendmatextd = omegdmat * edencrit * (1. + gdat.meanredsextd)**3
+    edenradiextd = omegradi * edencrit * (1. + gdat.meanredsextd)**4
     ndendmatextd = edendmatextd / massdmat
-    timehubbextd = 4.5e17 * (omegmatt * (1. + redsextd)**3 + omegradi * (1. + redsextd)**4.)**(-0.5)
-    timeextd = zeros_like(redsextd)
-    for c in range(nreds-1):
-        timeextd[c] = trapz(timehubbextd[c:] / (1. + redsextd[c:]), redsextd[c:])
+    timehubbextd = 4.5e17 * (omegmatt * (1. + gdat.meanredsextd)**3 + omegradi * (1. + gdat.meanredsextd)**4.)**(-0.5)
+    timeextd = zeros_like(gdat.meanredsextd)
+    for c in range(gdat.nreds-1):
+        timeextd[c] = trapz(timehubbextd[c:] / (1. + gdat.meanredsextd[c:]), gdat.meanredsextd[c:])
 
-    heatextd = zeros((nreds, ninjetype))
+    heatextd = zeros((gdat.nreds, ninjetype))
     heatextd[:, 1] = ndendmatextd**2 * csecdmatswav
-    heatextd[:, 2] = ndendmatextd**2 * csecdmatpwrl * (1. + redsextd)
-    heatextd[:, 3] = ndendmatextd**2 * csecdmatpwnr * (1. + redsextd)**2
+    heatextd[:, 2] = ndendmatextd**2 * csecdmatpwrl * (1. + gdat.meanredsextd)
+    heatextd[:, 3] = ndendmatextd**2 * csecdmatpwnr * (1. + gdat.meanredsextd)**2
     for k in range(1, 4):
-        heatextd[:, k] *= timehubbextd / (1. + redsextd) / edenradiextd
+        heatextd[:, k] *= timehubbextd / (1. + gdat.meanredsextd) / edenradiextd
 
     fig, ax = plt.subplots()
     for k in range(1, 4):
-        ax.loglog(redsextd, redsextd * heatextd[:, k], label=heatstrg[k])
+        ax.loglog(gdat.meanredsextd, gdat.meanredsextd * heatextd[:, k], label=heatstrg[k])
     ax.set_xlabel(r'$z$')
     ax.set_ylabel(r'$d\kappa/d\ln z$')
     #ax.set_ylim([1e-12, 1e-1])
@@ -251,7 +253,7 @@ def plot_heat():
 
     ax_ = ax.twiny()
     ax_.set_xscale('log')
-    ax_.set_xlim([amax(timeextd[0:-1]), amin(timeextd[0:-1])])
+    ax_.set_xlim([amax(timeextd[:-1]), amin(timeextd[:-1])])
     ax_.set_xlabel('$t$ [s]')
     ax_.axvline(1., ls='--', color='grey')
     ax_.annotate('BBN', xy=[1., 1e-12], xytext=[1e2, 1e-12], arrowprops=dict(arrowstyle="->"), fontsize=20)
@@ -267,11 +269,11 @@ def plot_deca():
     jdeca = array([0, 9, 19, 29])
     njdeca = 4
     
-    dist = zeros((nreds, ndeca))
+    dist = zeros((gdat.nreds, ndeca))
     heat = zeros((nreds, ndeca))
     redsdeca = zeros(ndeca)
     for k in range(ndeca):
-        disttemp, heattemp, redsdecatemp = retr_fluxdeca(fluxodisgrenconc, ampldeca, timedecalist[k])
+        disttemp, heattemp, redsdecatemp = retr_fluxdeca(gdat, fluxodisgrenconc, ampldeca, timedecalist[k])
         heatdeca[:, k] = heattemp
         heatdeca[:, k] = dist
         redsdeca[k] = redsdecatemp
@@ -279,7 +281,7 @@ def plot_deca():
 
     fig, ax = plt.subplots()
     for k in range(njdeca):
-        ax.loglog(reds, reds * heatdeca[:, jdeca[k]], label=r'$\tau = %d$ yr' % timedecalist[jdeca[k]])
+        ax.loglog(gdat.meanreds, gdat.meanreds * heatdeca[:, jdeca[k]], label=r'$\tau = %d$ yr' % timedecalist[jdeca[k]])
         ax.set_xlabel(r'$z$')
         ax.set_ylabel(r'$d\kappa/d\ln z$')
         ax.set_ylim([1e-10, 1e-6])
@@ -287,7 +289,7 @@ def plot_deca():
 
         ax_ = ax.twiny()
         ax_.set_xscale('log')
-        ax_.set_xlim([amax(time[0:-1]), amin(time[0:-1])])
+        ax_.set_xlim([amax(gdat.time[:-1]), amin(gdat.time[:-1])])
         ax_.set_xlabel('$t$ [yr]')
 
     plt.savefig(pathplot + 'heatdeca.png')
@@ -298,7 +300,7 @@ def plot_deca():
     with sns.color_palette("Blues", njreds): 
         fig, ax = plt.subplots()    
         for k in range(timedecaplot.size):
-            ax.loglog(freqmodl * 1e-9, abs(retr_fluxdeca(fluxodisgren, 1., timedecaplot[k])), label='$t = %.3g$' % timedecaplot[k])
+            ax.loglog(freqmodl * 1e-9, abs(retr_fluxdeca(gdat, fluxodisgren, 1., timedecaplot[k])), label='$t = %.3g$' % timedecaplot[k])
         ax.set_xscale('log')
         ax.set_xlabel(r'$\nu$ [GHz]')
         ax.set_ylabel(r'$\Delta I_\nu$ [Jy/sr]')
@@ -310,7 +312,7 @@ def plot_sampdist():
     diffdistdiffreds = heat[None, :, :] * fluxodisgren[:, :, None]
     dist = zeros((nfreq, ninjetype))
     for k in range(ninjetype):
-        dist[:, k] = trapz(diffdistdiffreds[:, :, k], reds, axis=1)
+        dist[:, k] = trapz(diffdistdiffreds[:, :, k], gdat.meanreds, axis=1)
 
     fig, ax = plt.subplots()
     for k in range(1, ninjetype):
@@ -327,13 +329,13 @@ def plot_sampdist():
     plt.close()
     
     
-    diffdistdifflred = heat[None, :, :] * fluxodisgren[:, :, None] * reds[None, :, None]
+    diffdistdifflred = heat[None, :, :] * fluxodisgren[:, :, None] * gdat.meanreds[None, :, None]
     for k in range(1, 2):
         ylim = [amin(diffdistdifflred[:, :, k]), amax(diffdistdifflred[:, :, k])]
         for c in range(njreds):
             fig, ax = plt.subplots()
-            ax.plot(freqmodl * 1e-9, diffdistdifflred[:, nreds-1-jreds[c], k])
-            text = plt.figtext(0.2, 0.8, '$z_i$ = %.3g' % reds[nreds-jreds[c]-1], fontsize=20)
+            ax.plot(freqmodl * 1e-9, diffdistdifflred[:, numbreds-1-jreds[c], k])
+            text = plt.figtext(0.2, 0.8, '$z_i$ = %.3g' % gdat.meanreds[nreds-jreds[c]-1], fontsize=20)
 
             ax.set_xscale('log')
             ax.set_xlabel(r'$\nu$ [GHz]')
@@ -346,15 +348,15 @@ def plot_sampdist():
             plt.close(fig)
         
 
-def retr_fluxdeca(fluxodisgren, ampldeca, timedeca):
+def retr_fluxdeca(gdat, fluxodisgren, ampldeca, timedeca):
 
     ratedeca = 1. / timedeca
-    redsdeca = interp1d(time, reds)(timedeca)
+    redsdeca = interp1d(gdat.time, gdat.meanreds)(timedeca)
     
-    heatdeca = ampldeca * ndenbmat * ratedeca * exp(-timedeca / time) * timehubb / (1. + reds) / edenradi
+    heatdeca = ampldeca * ndenbmat * ratedeca * exp(-timedeca / time) * timehubb / (1. + gdat.meanreds) / edenradi
 
     difffluxdecadiffreds = heatdeca[None, :] * fluxodisgren
-    fluxdeca = trapz(difffluxdecadiffreds, reds, axis=1)
+    fluxdeca = trapz(difffluxdecadiffreds, gdat.meanreds, axis=1)
 
     return fluxdeca
 
@@ -405,29 +407,29 @@ def retr_occp(sfrq, dist=False):
         return occpplnk
 
 
-def retr_fluxcmbr(thisfreq, tempcmbr):
+def retr_fluxcmbr(gdat, thisfreq, tempcmbr):
     
-    sfrq = plnkcons * thisfreq / boltcons / tempcmbr
+    sfrq = gdat.plnkcons * thisfreq / gdat.boltcons / tempcmbr
     
     occpplnk = retr_occp(sfrq)
 
-    fluxcmbr = 2. * plnkcons * thisfreq**3 / velolght**2 * occpplnk * 1e26
+    fluxcmbr = 2. * gdat.plnkcons * thisfreq**3 / gdat.velolght**2 * occpplnk * 1e26
     
     return fluxcmbr
 
 
-def retr_fluxgren(thisfreq, tempcmbr, disttype):
+def retr_fluxgren(gdat, thisfreq, tempcmbr, disttype):
     
-    sfrq = plnkcons * thisfreq / boltcons / tempcmbr
+    sfrq = gdat.plnkcons * thisfreq / gdat.boltcons / tempcmbr
 
     occpplnk, occptdis, occpydis, occpmdis = retr_occp(sfrq, dist=True)
     
-    fluxtdisgren = 0.25 * 2. * plnkcons * thisfreq**3 / velolght**2 * occptdis * 1e26
-    fluxydisgren = 0.25 * 2. * plnkcons * thisfreq**3 / velolght**2 * occpydis * 1e26
-    fluxmdisgren = 1.41 * 2. * plnkcons * thisfreq**3 / velolght**2 * occpmdis * 1e26
+    fluxtdisgren = 0.25 * 2. * gdat.plnkcons * thisfreq**3 / gdat.velolght**2 * occptdis * 1e26
+    fluxydisgren = 0.25 * 2. * gdat.plnkcons * thisfreq**3 / gdat.velolght**2 * occpydis * 1e26
+    fluxmdisgren = 1.41 * 2. * gdat.plnkcons * thisfreq**3 / gdat.velolght**2 * occpmdis * 1e26
     
-    fluxfdisgren = vifm[None, :] * vift[None, :] * fluxmdisgren[:, None] +         vify[None, :] * fluxydisgren[:, None] + (1. - vift[None, :]) * fluxtdisgren[:, None]
-    fluxodisgren = vifm[None, :] * vift[None, :] * fluxmdisgren[:, None] + vify[None, :] * fluxydisgren[:, None]
+    fluxfdisgren = gdat.vifm[None, :] * gdat.vift[None, :] * fluxmdisgren[:, None] + gdat.vify[None, :] * fluxydisgren[:, None] + (1. - gdat.vift[None, :]) * fluxtdisgren[:, None]
+    fluxodisgren = gdat.vifm[None, :] * gdat.vift[None, :] * fluxmdisgren[:, None] + gdat.vify[None, :] * fluxydisgren[:, None]
     
     if disttype == 'full':
         return fluxtdisgren, fluxydisgren, fluxmdisgren, fluxfdisgren, fluxodisgren
@@ -442,9 +444,9 @@ def retr_fluxsync(thisfreq, syncnorm, syncindx):
     return fluxsync
   
     
-def retr_fluxfree(thisfreq, emmefree, tempfree):
+def retr_fluxfree(gdat, thisfreq, emmefree, tempfree):
     
-    thisplnkfunc = retr_plnkfunc(thisfreq, tempfree) * 1e26
+    thisplnkfunc = retr_plnkfunc(gdat, thisfreq, tempfree) * 1e26
     
     #print 'thisplnkfunc'
     #print thisplnkfunc
@@ -458,11 +460,11 @@ def retr_fluxfree(thisfreq, emmefree, tempfree):
     return fluxfree
 
 
-def retr_plnkfunc(thisfreq, temp):
+def retr_plnkfunc(gdat, thisfreq, temp):
     
-    thissfrq = plnkcons * thisfreq / boltcons / temp
+    thissfrq = gdat.plnkcons * thisfreq / gdat.boltcons / temp
     
-    plnk = 2. * plnkcons * thisfreq**3 / velolght**2 / (exp(thissfrq) - 1.)
+    plnk = 2. * gdat.plnkcons * thisfreq**3 / gdat.velolght**2 / (exp(thissfrq) - 1.)
     
     return plnk
 
@@ -470,28 +472,28 @@ def retr_plnkfunc(thisfreq, temp):
 def plot_temp():
     
     #def difftempdmatdiffreds(tempdmat, thisreds):
-    #    thishubb = interp1d(reds, hubb)(thisreds)
+    #    thishubb = interp1d(gdat.meanreds, hubb)(thisreds)
     #    difftempdmatdiffreds = -2. * thishubb * tempdmat# + gamm * b * (tempbmat - tempdmat)
     #    return difftempdmatdiffreds
     #inittempdmat = array([3000.])
-    #tempdmat = odeint(difftempdmatdiffreds, inittempdmat, reds)
+    #tempdmat = odeint(difftempdmatdiffreds, inittempdmat, gdat.meanreds)
 
-    tempmatt = tempcmbrconc * (1. + reds) / (1. + 119.  / (1. + reds) / (1. + ((1. + reds) / 115.)**1.5))
-    tempdmatcold = tempcmbrconc * (1. + reds) / (1. + 1e9  / (1. + reds) / (1. + ((1. + reds) / 1e9)**2.5))
-    tempdmatwarm = tempcmbrconc * (1. + reds) / (1. + 5e6  / (1. + reds) / (1. + ((1. + reds) / 5e6)**2.5))
-    tempcmbr = tempcmbrconc * (1. + reds)
+    tempmatt = gdat.tempcmbrconc * (1. + gdat.meanreds) / (1. + 119.  / (1. + gdat.meanreds) / (1. + ((1. + gdat.meanreds) / 115.)**1.5))
+    tempdmatcold = gdat.tempcmbrconc * (1. + gdat.meanreds) / (1. + 1e9  / (1. + gdat.meanreds) / (1. + ((1. + gdat.meanreds) / 1e9)**2.5))
+    tempdmatwarm = gdat.tempcmbrconc * (1. + gdat.meanreds) / (1. + 5e6  / (1. + gdat.meanreds) / (1. + ((1. + gdat.meanreds) / 5e6)**2.5))
+    tempcmbr = gdat.tempcmbrconc * (1. + gdat.meanreds)
 
     fig, ax = plt.subplots()
-    ax.loglog(reds, tempcmbr, label='CMB')
-    ax.loglog(reds, tempdmatwarm, label='WDM')
-    ax.loglog(reds, tempdmatcold, label='CDM')
-    ax.loglog(reds, tempmatt, label='Baryonic matter')
+    ax.loglog(gdat.meanreds, tempcmbr, label='CMB')
+    ax.loglog(gdat.meanreds, tempdmatwarm, label='WDM')
+    ax.loglog(gdat.meanreds, tempdmatcold, label='CDM')
+    ax.loglog(gdat.meanreds, tempmatt, label='Baryonic matter')
     ax.set_yscale('log')
     ax.set_xscale('log')
     ax.set_xlabel(r'$z$')
     ax.set_ylabel(r'T(z) [K]')
 
-    enerradilate = tempcmbrconc * (1. + reds) * boltconsnatu
+    enerradilate = gdat.tempcmbrconc * (1. + gdat.meanreds) * gdat.boltconsnatu
 
     ax_ = ax.twiny()
     ax_.set_xscale('log')
@@ -505,23 +507,23 @@ def plot_temp():
 
 def plot_silkscal():
     
-    wnumsilk = (5.92e10)**(-0.5) * (1. + reds)**1.5
+    wnumsilk = (5.92e10)**(-0.5) * (1. + gdat.meanreds)**1.5
     wlensilk = 2. * pi / wnumsilk
 
-    wlenahor = (1. + reds) * time * yr2s / mp2m * velolght / sqrt(3. * (1. + edenbmat / edenradi))
+    wlenahor = (1. + gdat.meanreds) * gdat.time * yr2s / mp2m * gdat.velolght / sqrt(3. * (1. + edenbmat / edenradi))
     wnumahor = 2. * pi / wlenahor
 
-    wlenphor = (1. + reds) * time * yr2s / mp2m * velolght
+    wlenphor = (1. + gdat.meanreds) * gdat.time * yr2s / mp2m * gdat.velolght
     wnumphor = 2. * pi / wlenphor
 
     fig, ax = plt.subplots()
-    ax.loglog(reds, wnumsilk, label='Dissipation scale')
+    ax.loglog(gdat.meanreds, wnumsilk, label='Dissipation scale')
     ax.set_ylabel('$k$ [Mpc$^{-1}$]')
     ax.set_xlabel('$z$')
     ax.axvline(5e4, ls='--', color='black')
     ax.axvline(2e6, ls='--', color='black')
-    ax.axhline(interp1d(reds, wnumsilk)(5e4), ls='--', color='black')
-    ax.axhline(interp1d(reds, wnumsilk)(2e6), ls='--', color='black')
+    ax.axhline(interp1d(gdat.meanreds, wnumsilk)(5e4), ls='--', color='black')
+    ax.axhline(interp1d(gdat.meanreds, wnumsilk)(2e6), ls='--', color='black')
 
     plt.figtext(0.19, 0.2, 'y-type distortion', fontsize=20)
     plt.figtext(0.52, 0.2, r'$\mu$-type distortion', fontsize=20)
@@ -631,7 +633,7 @@ def retr_ydis_trac():
     enerpart = 10**data['LOG10ENERGY'].squeeze()
     redsinpt = data['INPUT_REDSHIFT'].squeeze()
     enerphot = data['PHOTON_ENERGY'].squeeze()
-    freqphot = enerphot / plnkcons
+    freqphot = enerphot / gdat.plnkcons
 
     nredsoutp = redsoutp.size
     nenerpart = enerpart.size
@@ -645,7 +647,7 @@ def retr_ydis_trac():
     jenerpart = [k * nenerpart / njenerpart for k in range(njenerpart)]
     jredsinpt = [k * nredsinpt / njredsinpt for k in range(njredsinpt)]
 
-    specchek = 8. * pi * enerphot[:,:,None]**2 / (velolght * plnkcons)**3 / (exp(enerphot[:,:,None] / tempcmbrnunc / boltcons / (1. + redsinpt[None,None,:])) - 1.) # [1/cm^3/eV]
+    specchek = 8. * pi * enerphot[:,:,None]**2 / (gdat.velolght * gdat.plnkcons)**3 / (exp(enerphot[:,:,None] / tempcmbrnunc / gdat.boltcons / (1. + redsinpt[None,None,:])) - 1.) # [1/cm^3/eV]
 
     diffydisdiffreds = data['YDISTORTION'].squeeze()
     ydis = data['CUMULATIVE_YDISTORTION'].squeeze()
@@ -734,7 +736,7 @@ def plot_cmbrtemppsec():
     ax.plot(lmodloww, clhploww)               
 
 
-def retr_flux(thisfreq, thispara):
+def retr_flux(gdat, thisfreq, thispara):
 
     tempcmbr = thispara[0]
     dustodep = thispara[1]
@@ -751,7 +753,7 @@ def retr_flux(thisfreq, thispara):
     ampldeca = thispara[12]
     timedeca = thispara[13]
 
-    if verbtype > 1:
+    if gdat.verbtype > 1:
         print 'tempcmbr: ', tempcmbr
         print 'dustodep: ', dustodep
         print 'dustemisrati: ', dustemisrati
@@ -768,24 +770,24 @@ def retr_flux(thisfreq, thispara):
         print 'timedeca: ', timedeca
         
     # CMB
-    fluxcmbr = retr_fluxcmbr(thisfreq, tempcmbr)
+    fluxcmbr = retr_fluxcmbr(gdat, thisfreq, tempcmbr)
 
     # dust
-    fluxdust, fluxdustcold, fluxdustwarm = retr_fluxdust(thisfreq, dustodep, dustemisrati, dustpowrfrac, dustwarmindx, dustwarmtemp, dustcoldindx)
+    fluxdust, fluxdustcold, fluxdustwarm = retr_fluxdust(gdat, thisfreq, dustodep, dustemisrati, dustpowrfrac, dustwarmindx, dustwarmtemp, dustcoldindx)
    
     # synchrotron
     fluxsync = retr_fluxsync(thisfreq, syncnorm, syncindx)
     
     # Bremsstrahlung
-    fluxfree = retr_fluxfree(thisfreq, emmefree, tempfree)
+    fluxfree = retr_fluxfree(gdat, thisfreq, emmefree, tempfree)
         
-    fluxydisgren, fluxodisgren = retr_fluxgren(thisfreq, tempcmbr, disttype='ydisodis')
+    fluxydisgren, fluxodisgren = retr_fluxgren(gdat, thisfreq, tempcmbr, disttype='ydisodis')
     
     # free y-distortion
     fluxydis = ydisampl * fluxydisgren
     
     # Particle decay
-    fluxdeca = retr_fluxdeca(fluxodisgren, ampldeca, timedeca)
+    fluxdeca = retr_fluxdeca(gdat, fluxodisgren, ampldeca, timedeca)
     
     fluxtotl = fluxdust + fluxsync + fluxfree + fluxydis + fluxdeca
     if inclcmbrmono:
@@ -794,19 +796,19 @@ def retr_flux(thisfreq, thispara):
     return fluxtotl, fluxcmbr, fluxdustcold, fluxdustwarm, fluxsync, fluxfree, fluxydis, fluxdeca
 
 
-def retr_fluxdust(thisfreq, dustodep, dustemisrati, dustpowrfrac, dustwarmindx, dustwarmtemp, dustcoldindx):
+def retr_fluxdust(gdat, thisfreq, dustodep, dustemisrati, dustpowrfrac, dustwarmindx, dustwarmtemp, dustcoldindx):
 
     factwarm = (sp.special.zetac(4. + dustwarmindx) + 1) * sp.special.gamma(4. + dustwarmindx)
     factcold = (sp.special.zetac(4. + dustcoldindx) + 1) * sp.special.gamma(4. + dustcoldindx)
-    dustcoldtemp = (factwarm / factcold / dustemisrati * (plnkcons * freqpivt / boltcons)**(dustcoldindx - dustwarmindx) * \
+    dustcoldtemp = (factwarm / factcold / dustemisrati * (gdat.plnkcons * gdat.freqpivt / gdat.boltcons)**(dustcoldindx - dustwarmindx) * \
             dustwarmtemp**(4. + dustwarmindx))**(1. / (4. + dustcoldindx))
     
-    fluxdustcoldfact = dustpowrfrac * dustemisrati * (freqmodl / 3e12)**dustcoldindx
-    fluxdustwarmfact = (1. - dustpowrfrac) * (freqmodl / 3e12)**dustwarmindx
+    fluxdustcoldfact = dustpowrfrac * dustemisrati * (thisfreq / 3e12)**dustcoldindx
+    fluxdustwarmfact = (1. - dustpowrfrac) * (thisfreq / 3e12)**dustwarmindx
         
-    fluxdustcold = dustodep * fluxdustcoldfact * retr_plnkfunc(thisfreq, dustcoldtemp) * 1e26 / (fluxdustcoldfact + fluxdustwarmfact)
+    fluxdustcold = dustodep * fluxdustcoldfact * retr_plnkfunc(gdat, thisfreq, dustcoldtemp) * 1e26 / (fluxdustcoldfact + fluxdustwarmfact)
         
-    fluxdustwarm = dustodep * fluxdustwarmfact * retr_plnkfunc(thisfreq, dustwarmtemp) * 1e26 / (fluxdustcoldfact + fluxdustwarmfact)
+    fluxdustwarm = dustodep * fluxdustwarmfact * retr_plnkfunc(gdat, thisfreq, dustwarmtemp) * 1e26 / (fluxdustcoldfact + fluxdustwarmfact)
         
     fluxdust = fluxdustcold + fluxdustwarm
     
@@ -815,7 +817,7 @@ def retr_fluxdust(thisfreq, dustodep, dustemisrati, dustpowrfrac, dustwarmindx, 
 
 def retr_llik(sampvarb, init=False):
     
-    modlfluxtotl, modlfluxcmbr, modlfluxdustcold, modlfluxdustwarm, modlfluxsync, modlfluxfree, modlfluxydis, modlfluxdeca = retr_flux(freqmodl, sampvarb)
+    modlfluxtotl, modlfluxcmbr, modlfluxdustcold, modlfluxdustwarm, modlfluxsync, modlfluxfree, modlfluxydis, modlfluxdeca = retr_flux(gdat, freqmodl, sampvarb)
        
     modlfluxintp = interp1d(freqmodl, modlfluxtotl)(freqexpr)
     resiflux = dataflux - modlfluxintp
@@ -1004,7 +1006,7 @@ def retr_egbl(thisfreq):
     path = os.environ['CMBR_DIST_DATA_PATH'] + '/egbl.csv'
     egbldata = loadtxt(path)
     wlenegbl = egbldata[:, 0] * 1e-6 # [m]
-    freqegbl = flipud(velolght / wlenegbl) # [Hz]
+    freqegbl = flipud(gdat.velolght / wlenegbl) # [Hz]
     
     minmfreqegbl = amin(freqegbl)
     maxmfreqegbl = amax(freqegbl)
@@ -1042,16 +1044,26 @@ def init( \
         ):
     
     gdat = tdpy.util.gdatstrt()
+   
+    gdat.datatype = datatype
+    gdat.verbtype = verbtype
     
-    rtag = retr_rtag()
-    
+    gdat.numbfreqexpr = numbfreqexpr
+    gdat.freqexprstdv = freqexprstdv
+    gdat.minmfreqexpr = minmfreqexpr
+    gdat.maxmfreqexpr = maxmfreqexpr
+    gdat.exprfluxstdvinst = exprfluxstdvinst
+    gdat.exprfluxstdvfrac = exprfluxstdvfrac
+
+    rtag = retr_rtag(gdat)
+
     pathbase = os.environ["CMBR_DIST_DATA_PATH"]
     pathplot = pathbase + '/png/' + rtag + '/'
     cmnd = 'mkdir -p ' + pathplot
     os.system(cmnd)
     
     if freqexpr == None:
-        freqexpr = logspace(log10(minmfreqexpr), log10(maxmfreqexpr), numbfreqexpr) # [Hz]
+        freqexpr = logspace(log10(gdat.minmfreqexpr), log10(gdat.maxmfreqexpr), gdat.numbfreqexpr) # [Hz]
     
     numbfreqmodl = 1000
     minmfreqmodl = 1e9
@@ -1059,14 +1071,14 @@ def init( \
     freqmodl = logspace(log10(minmfreqmodl), log10(maxmfreqmodl), numbfreqmodl) # [Hz]
     
     # physical constants
-    velolght = 3e8 # [m/s]
+    gdat.velolght = 3e8 # [m/s]
     mp2m = 3.1e22 # [Mpc/m]
     yr2s = 364. * 3600. * 24. # [year/s]
-    plnkcons = 6.63e-34 # [J s]
-    boltcons = 1.38e-23 # [J/K]
-    freqpivt = 1e12 # [Hz]
-    tempcmbrconc = 2.725 # Planck concordance model temperature of the CMB today [K]
-    boltconsnatu = 8.6173e-5 # Boltzmann constant [eV/K]
+    gdat.plnkcons = 6.63e-34 # [J s]
+    gdat.boltcons = 1.38e-23 # [J/K]
+    gdat.freqpivt = 1e12 # [Hz]
+    gdat.tempcmbrconc = 2.725 # Planck concordance model temperature of the CMB today [K]
+    gdat.boltconsnatu = 8.6173e-5 # Boltzmann constant [eV/K]
     massprot = 9.38e8 # [eV]
     
     # distortion related constants
@@ -1077,26 +1089,26 @@ def init( \
     savepost = False
     
     # redshift axis
-    nreds = 100
+    numbreds = 100
     minmreds = 1e2
     maxmreds = 1e10
-    reds = logspace(log10(minmreds), log10(maxmreds), nreds)
-    njreds = 10
-    jreds = [k * nreds / njreds for k in range(njreds)]
-    diffreds = reds[1:] - reds[0:-1]
-    redsextd = logspace(2., 10., nreds)
+    gdat.meanreds = logspace(log10(minmreds), log10(maxmreds), numbreds)
+    numbredsplot = 10
+    indxredsplot = [k * numbreds / numbredsplot for k in range(numbredsplot)]
+    diffreds = gdat.meanreds[1:] - gdat.meanreds[:-1]
+    gdat.meanredsextd = logspace(2., 10., numbreds)
     
     # time
-    timehubb = 4.5e17 * (0.27 * (1. + reds)**3 + 9.2e-5 * (1. + reds)**4.)**(-0.5)
-    time = zeros_like(reds)
-    for c in range(nreds-1):
-        time[c] = trapz(timehubb[c:] / (1. + reds[c:]), reds[c:])
+    timehubb = 4.5e17 * (0.27 * (1. + gdat.meanreds)**3 + 9.2e-5 * (1. + gdat.meanreds)**4.)**(-0.5)
+    gdat.time = zeros(numbreds)
+    for c in range(numbreds-1):
+        gdat.time[c] = trapz(timehubb[c:] / (1. + gdat.meanreds[c:]), gdat.meanreds[c:])
         
     thertempantntemp = (1.76e-11 * freqmodl)**2 * exp(1.76e-11 * freqmodl) / (exp(1.76e-11 * freqmodl) - 1.)**2
     antntempflux = 0.0307 * (freqmodl / 1e9)**2
 
     # scaled frequency axis
-    sfrqconc = plnkcons * freqmodl / boltcons / tempcmbrconc
+    sfrqconc = gdat.plnkcons * freqmodl / gdat.boltcons / gdat.tempcmbrconc
     
     # cosmological constants
     edencrit = 4e9 # [eV/m^3]
@@ -1108,20 +1120,20 @@ def init( \
     omegdene = 0.69
 
     # cosmological setup
-    edenbmat = omegbmat * edencrit * (1. + reds)**3
-    edendmat = omegdmat * edencrit * (1. + reds)**3
-    edenmatt = omegmatt * edencrit * (1. + reds)**3
-    edenradi = omegradi * edencrit * (1. + reds)**4
+    edenbmat = omegbmat * edencrit * (1. + gdat.meanreds)**3
+    edendmat = omegdmat * edencrit * (1. + gdat.meanreds)**3
+    edenmatt = omegmatt * edencrit * (1. + gdat.meanreds)**3
+    edenradi = omegradi * edencrit * (1. + gdat.meanreds)**4
     edendene = omegdene * edencrit
     ndenbmat = edenbmat / massprot
     
     # distortion visibility function
-    vifm = 1. - exp(-((1. + reds) / 5.8e4)**1.88)
-    vify = 1. / (1. + ((1. + reds) / 6e4)**2.58)
-    vift = exp(-(reds / redsdism)**2.5)
+    gdat.vifm = 1. - exp(-((1. + gdat.meanreds) / 5.8e4)**1.88)
+    gdat.vify = 1. / (1. + ((1. + gdat.meanreds) / 6e4)**2.58)
+    gdat.vift = exp(-(gdat.meanreds / redsdism)**2.5)
     
-    fluxcmbrconc = retr_fluxcmbr(freqmodl, tempcmbrconc)
-    fluxtdisgrenconc, fluxydisgrenconc, fluxmdisgrenconc, fluxfdisgrenconc, fluxodisgrenconc = retr_fluxgren(freqmodl, tempcmbrconc, disttype='full')
+    fluxcmbrconc = retr_fluxcmbr(gdat, freqmodl, gdat.tempcmbrconc)
+    fluxtdisgrenconc, fluxydisgrenconc, fluxmdisgrenconc, fluxfdisgrenconc, fluxodisgrenconc = retr_fluxgren(gdat, freqmodl, gdat.tempcmbrconc, disttype='full')
         
     #if makeplot:
         #plot_pure_dist()
@@ -1132,33 +1144,33 @@ def init( \
     
     mocksampvarb = retr_mocksampvarb()
     datapara = retr_datapara()
-    numbpara = len(lablpara)
+    numbpara = len(datapara.name)
     indxpara = arange(numbpara)
     
     thissampvarb = copy(mocksampvarb)
     thissamp = tdpy.mcmc.cdfn_samp(thissampvarb, datapara)
 
-    if verbtype > 1:
+    if gdat.verbtype > 1:
         print 'thissampvarb'
         print thissampvarb
         print 'thissamp'
         print thissamp
 
     path = os.environ["CMBR_DIST_DATA_PATH"] + '/pixifluxstdv.csv'
-    exprfluxstdvinstfreq = loadtxt(path)
+    gdat.exprfluxstdvinstfreq = loadtxt(path)
     
-    exprfluxstdvinstfreq = interp1d(exprfluxstdvinstfreq[:, 0] * 1e9, exprfluxstdvinstfreq[:, 1] * 1e26)(freqexpr)
-    exprfluxstdvinstfreq = exprfluxstdvinstfreq / exprfluxstdvinstfreq[0]
+    gdat.exprfluxstdvinstfreq = interp1d(gdat.exprfluxstdvinstfreq[:, 0] * 1e9, gdat.exprfluxstdvinstfreq[:, 1] * 1e26)(freqexpr)
+    gdat.exprfluxstdvinstfreq = gdat.exprfluxstdvinstfreq / gdat.exprfluxstdvinstfreq[0]
     
     if gdat.datatype == 'mock':
          
-        mockfluxtotl, mockfluxcmbr, mockfluxdustcold, mockfluxdustwarm,             mockfluxsync, mockfluxfree, mockfluxydis, mockfluxdeca = retr_flux(freqmodl, mocksampvarb)
+        mockfluxtotl, mockfluxcmbr, mockfluxdustcold, mockfluxdustwarm, mockfluxsync, mockfluxfree, mockfluxydis, mockfluxdeca = retr_flux(gdat, freqmodl, mocksampvarb)
         mockfluxintp = interp1d(freqmodl, mockfluxtotl)(freqexpr)
                 
         if gdat.exprtype == 'pixi':
-            datafluxstdv = mockfluxintp * exprfluxstdvfrac + exprfluxstdvinstfreq * exprfluxstdvinst
+            datafluxstdv = mockfluxintp * gdat.exprfluxstdvfrac + gdat.exprfluxstdvinstfreq * gdat.exprfluxstdvinst
         if gdat.exprtype == 'plnk':
-            datafluxstdv = mockfluxintp * exprfluxstdvfrac + exprfluxstdvinst
+            datafluxstdv = mockfluxintp * gdat.exprfluxstdvfrac + gdat.exprfluxstdvinst
             
         dataflux = mockfluxintp + datafluxstdv * randn(datafluxstdv.size)
         
@@ -1180,7 +1192,7 @@ def init( \
         
     #plot_llik()
     
-    numbfreqexpr = freqexpr.size
+    gdat.numbfreqexpr = freqexpr.size
 
     # sampler setup
     numbsamp = tdpy.mcmc.retr_numbsamp(gdat.numbswep, gdat.numbburn, factthin)
@@ -1188,13 +1200,13 @@ def init( \
 
     swepcntr = 0
     
-    listflux = zeros((numbsamp, numbfreqexpr))
+    listflux = zeros((numbsamp, gdat.numbfreqexpr))
     
     listsampunitfull = []
     
     numbproc = 1
     sampbund = tdpy.mcmc.init(numbproc, gdat.numbswep, retr_llik, datapara, numbburn=gdat.numbburn, factpropeffi=3., \
-                                    factthin=factthin, optiprop=optiprop, verbtype=verbtype, pathbase=pathbase, rtag=rtag)
+                                    factthin=factthin, optiprop=optiprop, verbtype=gdat.verbtype, pathbase=pathbase, rtag=rtag)
     listsampvarb = sampbund[0]
     listsamp = sampbund[1]
     listsampcalc = sampbund[2]
@@ -1226,10 +1238,10 @@ def init( \
 
         listsampvarbtran[:, indxparaself] = listsampvarb[:, indxparaself] / mocksampvarb[None, indxparaself] - 1.
         listsampvarbtran[:, indxparalogt] = log10(listsampvarb[:, indxparalogt] / mocksampvarb[None, indxparalogt])
-        listsampvarbtran[:, 0:numbpara-3] *= 1e6
+        listsampvarbtran[:, :numbpara-3] *= 1e6
 
         strgparatran[:] = ''
-        strgparatran[0:numbpara-3] += r'$10^6 \times$ '
+        strgparatran[:numbpara-3] += r'$10^6 \times$ '
         strgparatran[indxparaself] += '(' + lablpara[indxparaself] + ' / ' + lablpara[indxparaself] + r'$^{mock}$ - 1)'
         strgparatran[indxparalogt] += 'log(' + lablpara[indxparalogt] + ' / ' + lablpara[indxparalogt] + r'$^{mock}$)' 
         
@@ -1242,7 +1254,7 @@ def init( \
             listfluxfree = empty((numbsamp, numbfreqmodl))
             listfluxydis = empty((numbsamp, numbfreqmodl))
             listfluxdeca = empty((numbsamp, numbfreqmodl))
-            listresiflux = empty((numbsamp, numbfreqexpr))
+            listresiflux = empty((numbsamp, gdat.numbfreqexpr))
             for k in range(numbsamp):
                 listfluxtotl[k, :] = listsampcalc[0][k]
                 listfluxcmbr[k, :] = listsampcalc[1][k]
@@ -1312,10 +1324,7 @@ def plot_fluxdust_wrap(   # logtdustodep, logtdustemisrati, dustpowrfrac, dustwa
     
 def plot_fluxdust(dustodep, dustemisrati, dustpowrfrac, dustwarmindx, dustwarmtemp, dustcoldindx):
     
-
-    fluxdust, fluxdustcold, fluxdustwarm = retr_fluxdust(freqmodl, dustodep, 
-                  dustemisrati, dustpowrfrac, \
-                  dustwarmindx, dustwarmtemp, dustcoldindx)
+    fluxdust, fluxdustcold, fluxdustwarm = retr_fluxdust(gdat, freqmodl, dustodep, dustemisrati, dustpowrfrac, dustwarmindx, dustwarmtemp, dustcoldindx)
     
     fig, ax = plt.subplots(figsize=(12, 6))
     ax.loglog(freqmodl * 1e-9, 1e-6 * fluxdust, label='Total')
@@ -1340,22 +1349,22 @@ def retr_plnkflux():
 def retr_plnkfreq():
     
     freqexpr = array([3e10, 4.4e10, 7e10, 1e11, 1.43e11, 2.17e11, 3.53e11, 5.45e11, 8.57e11]) # [Hz]
-    numbfreqexpr = freqexpr.size
-    freqexprstdv = empty(numbfreqexpr)
+    gdat.numbfreqexpr = freqexpr.size
+    freqexprstdv = empty(gdat.numbfreqexpr)
     freqexprstdv[:3] = 0.2
     freqexprstdv[3:] = 0.33
     
-    exprfluxstdvinst = 5e3 # [Jy/sr]
-    exprfluxstdvfrac = 1e-3
+    gdat.exprfluxstdvinst = 5e3 # [Jy/sr]
+    gdat.exprfluxstdvfrac = 1e-3
     
-    return freqexpr, freqexprstdv, exprfluxstdvinst, exprfluxstdvfrac
+    return freqexpr, freqexprstdv, gdat.exprfluxstdvinst, gdat.exprfluxstdvfrac
     
 
 def writ_plnk():
 
     nfreqplnk = 9
     
-    freqexpr, freqexprstdv, exprfluxstdvinst, exprfluxstdvfrac = retr_plnkfreq()
+    freqexpr, freqexprstdv, gdat.exprfluxstdvinst, gdat.exprfluxstdvfrac = retr_plnkfreq()
 
     nside = 256
     npixl = nside**2 * 12
@@ -1427,7 +1436,7 @@ def retr_plnktran():
     path = os.environ["CMBR_DIST_DATA_PATH"] + '/HFI_RIMO_R1.10.fits'
     for i in range(6):
         data, hdr = pf.getdata(path, i+2, header=True)
-        freqtemp = 1e2 * velolght * data['WAVENUMBER']
+        freqtemp = 1e2 * gdat.velolght * data['WAVENUMBER']
         trantemp = data['TRANSMISSION']
         trantemp /= trapz(trantemp, freqtemp) 
         freq.append(freqtemp)
@@ -1436,9 +1445,10 @@ def retr_plnktran():
     return freq, tran
     
 
-def retr_rtag():
+def retr_rtag(gdat):
     
-    rtag = '_%d_%03.1f_%03.1f_%03.1f_%03.1f' % (numbfreqexpr, log10(minmfreqexpr), log10(maxmfreqexpr), log10(exprfluxstdvinst * 1e3), -log10(exprfluxstdvfrac))
+    rtag = '_%d_%03.1f_%03.1f_%03.1f_%03.1f' % (gdat.numbfreqexpr, log10(gdat.minmfreqexpr), log10(gdat.maxmfreqexpr), \
+                log10(gdat.exprfluxstdvinst * 1e3), -log10(gdat.exprfluxstdvfrac))
  
     return rtag
 
@@ -1449,13 +1459,13 @@ def chek_plnk():
     exprflux = loadtxt(os.environ["CMBR_DIST_DATA_PATH"] + '/plnkflux.dat')[indxpixltemp, :]
     exprfluxstdv = loadtxt(os.environ["CMBR_DIST_DATA_PATH"] + '/plnkfluxstdv.dat')[indxpixltemp, :]
 
-    freqexpr, freqexprstdv, exprfluxstdvinst, exprfluxstdvfrac = retr_plnkfreq()
+    freqexpr, freqexprstdv, gdat.exprfluxstdvinst, gdat.exprfluxstdvfrac = retr_plnkfreq()
 
     freqtran, tran = retr_plnktran()
-    numbfreqexpr = freqexpr.size
+    gdat.numbfreqexpr = freqexpr.size
 
-    #bolo = empty(numbfreqexpr)
-    #for i in range(numbfreqexpr):
+    #bolo = empty(gdat.numbfreqexpr)
+    #for i in range(gdat.numbfreqexpr):
     #    bolo[i] = trapz(tran[i][1:] * exprflux[0, i] * freqexpr[i] / freqtran[i][1:], freqtran[i][1:])
     #    plt.loglog(freqtran[i] * 1e-9, tran[i])  
     #plt.show()
@@ -1495,15 +1505,15 @@ def cnfg_arca():
 
 def cnfg_plnk_mock():
 
-    freqexpr, freqexprstdv, exprfluxstdvinst, exprfluxstdvfrac = retr_plnkfreq()
-    numbfreqexpr = freqexpr.size
+    freqexpr, freqexprstdv, gdat.exprfluxstdvinst, gdat.exprfluxstdvfrac = retr_plnkfreq()
+    gdat.numbfreqexpr = freqexpr.size
     
     statpara = init( \
                     freqexpr=freqexpr, \
                     inclcmbrmono=False, \
                     freqexprstdv=freqexprstdv, \
-                    exprfluxstdvinst=exprfluxstdvinst, \
-                    exprfluxstdvfrac=exprfluxstdvfrac \
+                    exprfluxstdvinst=gdat.exprfluxstdvinst, \
+                    exprfluxstdvfrac=gdat.exprfluxstdvfrac \
                    )
     
 
@@ -1515,8 +1525,8 @@ def cnfg_plnk_expr():
     exprflux = exprflux[0, :]
     exprfluxstdv = exprfluxstdv[0, :]
     
-    freqexpr, freqexprstdv, exprfluxstdvinst, exprfluxstdvfrac = retr_plnkfreq()
-    numbfreqexpr = freqexpr.size
+    freqexpr, freqexprstdv, gdat.exprfluxstdvinst, gdat.exprfluxstdvfrac = retr_plnkfreq()
+    gdat.numbfreqexpr = freqexpr.size
 
     cnfg = init( \
                 numbswep=100, \
@@ -1524,8 +1534,8 @@ def cnfg_plnk_expr():
                 inclcmbrmono=False, \
                 freqexpr=freqexpr, \
                 freqexprstdv=freqexprstdv, \
-                exprfluxstdvinst=exprfluxstdvinst, \
-                exprfluxstdvfrac=exprfluxstdvfrac, \
+                exprfluxstdvinst=gdat.exprfluxstdvinst, \
+                exprfluxstdvfrac=gdat.exprfluxstdvfrac, \
                 exprflux=exprflux, \
                 exprfluxstdv=exprfluxstdv \
                )
@@ -1535,7 +1545,6 @@ def cnfg_pixi_mock():
     
     minmfreqexpr = 3e10 # [Hz]
     maxmfreqexpr = 6e12 # [Hz]
-    
     numbfreqexpr = 400
     
     freqexprstdv = ones(numbfreqexpr) * 0.01
@@ -1585,17 +1594,17 @@ def cnfg_pixi_mock_stdv():
         for l in range(numbpert):
             
             if k == 0:
-                minmfreqexpr = arryminmfreqexpr[l]
+                gdat.minmfreqexpr = arrygdat.minmfreqexpr[l]
             if k == 1:
-                maxmfreqexpr = arrymaxmfreqexpr[l]
+                gdat.maxmfreqexpr = arrygdat.maxmfreqexpr[l]
             if k == 2:
-                numbfreqexpr = arrynumbfreqexpr[l]
+                gdat.numbfreqexpr = arrygdat.numbfreqexpr[l]
             if k == 3:
-                exprfluxstdvinst = arryexprfluxstdvinst[l]
+                gdat.exprfluxstdvinst = arrygdat.exprfluxstdvinst[l]
             if k == 4:
-                exprfluxstdvfrac = arryexprfluxstdvfrac[l]
+                gdat.exprfluxstdvfrac = arrygdat.exprfluxstdvfrac[l]
 
-            freqexprstdv = ones(numbfreqexpr) * 0.01
+            freqexprstdv = ones(gdat.numbfreqexpr) * 0.01
             
             statparagrid[k, l, :, :] = init( \
                                             numbswep=gdat.numbswep, \
@@ -1615,15 +1624,15 @@ def cnfg_pixi_mock_stdv():
         fig, axgr = plt.subplots(numbpara / 2, 2, figsize=(14, numbpara * 3))
 
         if k == 0:
-            xaxi = arryminmfreqexpr
+            xaxi = arrygdat.minmfreqexpr
         if k == 1:
-            xaxi = arrymaxmfreqexpr
+            xaxi = arrygdat.maxmfreqexpr
         if k == 2:
-            xaxi = arrynumbfreqexpr
+            xaxi = arrygdat.numbfreqexpr
         if k == 3:
-            xaxi = arryexprfluxstdvinst
+            xaxi = arrygdat.exprfluxstdvinst
         if k == 4:
-            xaxi = arryexprfluxstdvfrac
+            xaxi = arrygdat.exprfluxstdvfrac
             
         for a, axrw in enumerate(axgr):
             for b, ax in enumerate(axrw):
