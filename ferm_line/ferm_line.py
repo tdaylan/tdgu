@@ -509,7 +509,7 @@ def retr_modlcnts(sampvarb):
     return gdat.modlcnts
 
 
-def retr_llik(sampvarb, init=False):
+def retr_llik(sampvarb, gdat):
     
     modlcntstemp = retr_modlcnts(sampvarb)
 
@@ -518,7 +518,9 @@ def retr_llik(sampvarb, init=False):
     else:
         llik = sum(exp(-modlcntsintp))
     
-    return llik, gdat.sampcalc
+    sampcalc = []
+
+    return llik, sampcalc
     
 
 def plot_cnts(thiscnts, strg):
@@ -784,7 +786,7 @@ def diff(gdattemp):
     gdat = gdattemp
     for k, gdat.modltype in enumerate(gdat.listmodltype):
         for j in indxpixl:
-            sampbund = tdpy.mcmc.init(numbproc, numbswep, retr_llik, datapara, initsamp=thissamp, numbburn=numbburn, \
+            sampbund = tdpy.mcmc.init(numbproc, numbswep, retr_llik, datapara, initsamp=thissamp, numbburn=numbburn, gdatextr=gdat, \
                 factthin=factthin, optiprop=optiprop, verbtype=verbtype, pathbase=pathbase, rtag=gdat.rtag, numbplotside=numbplotside)
     diffmaps = flux
 

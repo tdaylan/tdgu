@@ -153,7 +153,7 @@ def retr_psec(gdat, thiswnum):
     return psec, tranfunc
 
 
-def retr_llik(gdat, sampvarb):
+def retr_llik(sampvarb, gdat):
 
     csecvelo = sampvarb[0]
     csecfrac = sampvarb[1]
@@ -814,10 +814,10 @@ def plot_igma(gdat):
     
     figr, axis = plt.subplots(figsize=(14, 14))
     figr.suptitle('Absorber abundance per decade in column density and gdat.meanredshift at 1 Rydberg')
-    zdat = gdat.meanreds[None, :] * gdat.meancden[:, None] * diffnabsdiffcdendiffreds
+    zdat = gdat.meanreds[None, :] * gdat.meancden[:, None] * gdat.diffnabsdiffcdendiffreds
     imag = axis.imshow(zdat, extent=extt, cmap='Reds', norm=mpl.colors.LogNorm(), aspect='auto')
-    for k in range(cdenbrek.size):
-        axis.axhline(cdenbrek[k], color='grey', ls='--')
+    for k in range(gdat.cdenbrek.size):
+        axis.axhline(gdat.cdenbrek[k], color='grey', ls='--')
     for k in range(gdat.meanredsbrek.size):
         axis.axvline(gdat.meanredsbrek[k], color='grey', ls='--')
     axis.set_ylabel('$N_{HI}$ [cm$^{-2}$]')
@@ -825,17 +825,17 @@ def plot_igma(gdat):
     axis.set_title('$d^2N_{abs}/d\log N_{HI}/d\log z$')
     axis.set_xscale('log')
     axis.set_yscale('log')
-    plt.colorbar(imag, axis, fraction=0.04)
+    plt.colorbar(imag, ax=axis, fraction=0.04)
     plt.savefig(gdat.pathplot + 'diffnabsdiffcdendiffreds.pdf')
     plt.close() 
     
     figr, axis = plt.subplots(figsize=(14, 14))
     figr.suptitle('Optical depth per decade in column density and gdat.meanredshift at 1 Rydberg')
-    zdat = gdat.meanreds[None, :] * gdat.meancden[:, None] * diffoptddiffcdendiffredsrydb
+    zdat = gdat.meanreds[None, :] * gdat.meancden[:, None] * gdat.diffoptddiffcdendiffredsrydb
     zdat[where(zdat > 1.)] = 1.
     imag = axis.imshow(zdat, extent=extt, cmap='Reds', norm=mpl.colors.LogNorm(), aspect='auto')
-    for k in range(cdenbrek.size):
-        axis.axhline(cdenbrek[k], color='grey', ls='--')
+    for k in range(gdat.cdenbrek.size):
+        axis.axhline(gdat.cdenbrek[k], color='grey', ls='--')
     for k in range(gdat.meanredsbrek.size):
         axis.axvline(gdat.meanredsbrek[k], color='grey', ls='--')
     axis.set_ylabel('$N_{HI}$ [cm$^{-2}$]')
@@ -843,12 +843,12 @@ def plot_igma(gdat):
     axis.set_title(r'$d^2\tau_{abs}/d\log N_{HI}/d\log z$')
     axis.set_xscale('log')
     axis.set_yscale('log')
-    plt.colorbar(imag, axis, fraction=0.04)
+    plt.colorbar(imag, ax=axis, fraction=0.04)
     plt.savefig(gdat.pathplot + 'diffoptddiffcdendiffredsrydb.pdf')
     plt.close() 
     
     figr, axis = plt.subplots()
-    axis.loglog(gdat.meanreds, gdat.meanreds * diffoptddiffredsrydb)
+    axis.loglog(gdat.meanreds, gdat.meanreds * gdat.diffoptddiffredsrydb)
     for k in range(gdat.meanredsbrek.size):
         axis.axvline(gdat.meanredsbrek[k], color='grey', ls='--')
     axis.set_xlabel('$z$')
@@ -860,7 +860,7 @@ def plot_igma(gdat):
         
     figr, axis = plt.subplots()
     for c in range(gdat.numbredsplotlate):
-        axis.loglog(gdat.meanreds[gdat.indxredsplotlate[c]:], odeprydb[gdat.indxredsplotlate[c], gdat.indxredsplotlate[c]:], label=gdat.strgredslate[c])
+        axis.loglog(gdat.meanreds[gdat.indxredsplotlate[c]:], gdat.odeprydb[gdat.indxredsplotlate[c], gdat.indxredsplotlate[c]:], label=gdat.strgredslate[c])
     for k in range(gdat.meanredsbrek.size):
         axis.axvline(gdat.meanredsbrek[k], color='grey', ls='--')
     axis.set_xlabel('$z$')
@@ -1462,75 +1462,75 @@ def init( \
         fesc = retr_fesc(gdat)
         
     # IGM effective optical depth model
-    cdenbrek = array([10**15., 10**17.5, 10**19., 10**20.3])
+    gdat.cdenbrek = array([10**15., 10**17.5, 10**19., 10**20.3])
     gdat.meanredsbrek = array([1.56, 5.5])
     odep = zeros((gdat.numbenph, gdat.numbreds, gdat.numbreds))
-    odeprydb = zeros((gdat.numbreds, gdat.numbreds))
+    gdat.odeprydb = zeros((gdat.numbreds, gdat.numbreds))
     if igmamodl == 'clum':
         
-        diffnabsdiffcdendiffreds = zeros((gdat.numbcden, gdat.numbreds))
+        gdat.diffnabsdiffcdendiffreds = zeros((gdat.numbcden, gdat.numbreds))
 
         # lower Lyman - alpha forest
-        indxcdentemp = where(cden < 10**15.)[0]
+        indxcdentemp = where(gdat.meancden < 10**15.)[0]
 
         gdat.indxredstemp = where((gdat.meanreds > 1.56) & (gdat.meanreds < 5.5))[0]
         indxtemp = meshgrid(indxcdentemp, gdat.indxredstemp, indexing='ij')
-        diffnabsdiffcdendiffreds[indxtemp] = 10**7.079 * cden[indxcdentemp, None]**(-1.5) * (1. + gdat.meanreds[None, gdat.indxredstemp])**3
+        gdat.diffnabsdiffcdendiffreds[indxtemp] = 10**7.079 * gdat.meancden[indxcdentemp, None]**(-1.5) * (1. + gdat.meanreds[None, gdat.indxredstemp])**3
 
         gdat.indxredstemp = where(gdat.meanreds < 1.56)[0]
         indxtemp = meshgrid(indxcdentemp, gdat.indxredstemp, indexing='ij')
-        diffnabsdiffcdendiffreds[indxtemp] = 10**8.238 * cden[indxcdentemp, None]**(-1.5) * (1. + gdat.meanreds[None, gdat.indxredstemp])**0.16
+        gdat.diffnabsdiffcdendiffreds[indxtemp] = 10**8.238 * gdat.meancden[indxcdentemp, None]**(-1.5) * (1. + gdat.meanreds[None, gdat.indxredstemp])**0.16
 
         gdat.indxredstemp = where(gdat.meanreds > 5.5)[0]
         indxtemp = meshgrid(indxcdentemp, gdat.indxredstemp, indexing='ij')
-        diffnabsdiffcdendiffreds[indxtemp] = 10**1.470 * cden[indxcdentemp, None]**(-1.5) * (1. + gdat.meanreds[None, gdat.indxredstemp])**9.9
+        gdat.diffnabsdiffcdendiffreds[indxtemp] = 10**1.470 * gdat.meancden[indxcdentemp, None]**(-1.5) * (1. + gdat.meanreds[None, gdat.indxredstemp])**9.9
 
         # upper Lyman - alpha forest
-        indxcdentemp = where((cden > 10**15.) & (cden < 10**17.5))[0]
+        indxcdentemp = where((gdat.meancden > 10**15.) & (gdat.meancden < 10**17.5))[0]
         
         gdat.indxredstemp = where((gdat.meanreds > 1.56) & (gdat.meanreds < 5.5))[0]
         indxtemp = meshgrid(indxcdentemp, gdat.indxredstemp, indexing='ij')
-        diffnabsdiffcdendiffreds[indxtemp] = 10**14.58 * cden[indxcdentemp, None]**(-2.) * (1. + gdat.meanreds[None, gdat.indxredstemp])**3.
+        gdat.diffnabsdiffcdendiffreds[indxtemp] = 10**14.58 * gdat.meancden[indxcdentemp, None]**(-2.) * (1. + gdat.meanreds[None, gdat.indxredstemp])**3.
 
         gdat.indxredstemp = where(gdat.meanreds < 1.56)[0]
         indxtemp = meshgrid(indxcdentemp, gdat.indxredstemp, indexing='ij')
-        diffnabsdiffcdendiffreds[indxtemp] = 10**15.74 * cden[indxcdentemp, None]**(-2.) * (1. + gdat.meanreds[None, gdat.indxredstemp])**0.16
+        gdat.diffnabsdiffcdendiffreds[indxtemp] = 10**15.74 * gdat.meancden[indxcdentemp, None]**(-2.) * (1. + gdat.meanreds[None, gdat.indxredstemp])**0.16
 
         gdat.indxredstemp = where(gdat.meanreds > 5.5)[0]
         indxtemp = meshgrid(indxcdentemp, gdat.indxredstemp, indexing='ij')
-        diffnabsdiffcdendiffreds[indxtemp] = 10**8.97 * cden[indxcdentemp, None]**(-2.) * (1. + gdat.meanreds[None, gdat.indxredstemp])**9.9
+        gdat.diffnabsdiffcdendiffreds[indxtemp] = 10**8.97 * gdat.meancden[indxcdentemp, None]**(-2.) * (1. + gdat.meanreds[None, gdat.indxredstemp])**9.9
 
         # Super Lyman limit systems
-        indxcdentemp = where((cden > 10**19.) & (cden < 10**20.3))[0]
+        indxcdentemp = where((gdat.meancden > 10**19.) & (gdat.meancden < 10**20.3))[0]
 
         gdat.indxredstemp = where(gdat.meanreds > 1.56)[0]
         indxtemp = meshgrid(indxcdentemp, gdat.indxredstemp, indexing='ij')
-        diffnabsdiffcdendiffreds[indxtemp] = 10**(-0.347) * cden[indxcdentemp, None]**(-1.05) * (1. + gdat.meanreds[None, gdat.indxredstemp])**1.27
+        gdat.diffnabsdiffcdendiffreds[indxtemp] = 10**(-0.347) * gdat.meancden[indxcdentemp, None]**(-1.05) * (1. + gdat.meanreds[None, gdat.indxredstemp])**1.27
 
         gdat.indxredstemp = where(gdat.meanreds < 1.56)[0]
         indxtemp = meshgrid(indxcdentemp, gdat.indxredstemp, indexing='ij')
-        diffnabsdiffcdendiffreds[indxtemp] = 10**(0.107) * cden[indxcdentemp, None]**(-1.05) * (1. + gdat.meanreds[None, gdat.indxredstemp])**0.16
+        gdat.diffnabsdiffcdendiffreds[indxtemp] = 10**(0.107) * gdat.meancden[indxcdentemp, None]**(-1.05) * (1. + gdat.meanreds[None, gdat.indxredstemp])**0.16
 
         # Damped Lyman alpha systems
-        indxcdentemp = where(cden > 10**20.3)[0]
+        indxcdentemp = where(gdat.meancden > 10**20.3)[0]
 
         gdat.indxredstemp = where(gdat.meanreds > 1.56)[0]
         indxtemp = meshgrid(indxcdentemp, gdat.indxredstemp, indexing='ij')
-        diffnabsdiffcdendiffreds[indxtemp] = 10**18.94 * cden[indxcdentemp, None]**(-2.) * (1. + gdat.meanreds[None, gdat.indxredstemp])**1.27
+        gdat.diffnabsdiffcdendiffreds[indxtemp] = 10**18.94 * gdat.meancden[indxcdentemp, None]**(-2.) * (1. + gdat.meanreds[None, gdat.indxredstemp])**1.27
 
         gdat.indxredstemp = where(gdat.meanreds < 1.56)[0]
         indxtemp = meshgrid(indxcdentemp, gdat.indxredstemp, indexing='ij')
-        diffnabsdiffcdendiffreds[indxtemp] = 10**19.393 * cden[indxcdentemp, None]**(-2.) * (1. + gdat.meanreds[None, gdat.indxredstemp])**0.16
+        gdat.diffnabsdiffcdendiffreds[indxtemp] = 10**19.393 * gdat.meancden[indxcdentemp, None]**(-2.) * (1. + gdat.meanreds[None, gdat.indxredstemp])**0.16
 
-        diffoptddiffcdendiffreds = diffnabsdiffcdendiffreds[:, None, :] * (1. - exp(-cden[:, None, None] * gdat.csecionz[None, :, None]))
-        diffoptddiffreds = trapz(diffoptddiffcdendiffreds, cden, axis=0)
-        diffoptddiffredsrydb = interp1d(gdat.meanenph, diffoptddiffreds, axis=0)(gdat.enerrydb)
-        diffoptddiffcdendiffredsrydb = interp1d(gdat.meanenph, diffoptddiffcdendiffreds, axis=1)(gdat.enerrydb)
+        diffoptddiffcdendiffreds = gdat.diffnabsdiffcdendiffreds[:, None, :] * (1. - exp(-gdat.meancden[:, None, None] * gdat.csecionz[None, :, None]))
+        diffoptddiffreds = trapz(diffoptddiffcdendiffreds, gdat.meancden, axis=0)
+        gdat.diffoptddiffredsrydb = interp1d(gdat.meanenph, diffoptddiffreds, axis=0)(gdat.enerrydb)
+        gdat.diffoptddiffcdendiffredsrydb = interp1d(gdat.meanenph, diffoptddiffcdendiffreds, axis=1)(gdat.enerrydb)
         odep = zeros((gdat.numbenph, gdat.numbreds, gdat.numbreds))
         for c in gdat.indxreds:
             for g in range(c + 1, gdat.numbreds):
                 odep[:, c, g] = trapz(diffoptddiffreds[:, c:g], gdat.meanreds[c:g], axis=1)
-        odeprydb = interp1d(gdat.meanenph, odep, axis=0)(gdat.enerrydb)
+        gdat.odeprydb = interp1d(gdat.meanenph, odep, axis=0)(gdat.enerrydb)
         
         if gdat.makeplot:
             plot_igma(gdat)
@@ -1549,13 +1549,13 @@ def init( \
                 minmqics = 1. / 4. / elecrelefact**2
                 meanqics = logspace(log10(minmqics), log10(gdat.maxmqics), gdat.numbqics)
                 enpitemp = gdat.masselec**2 / 4. / gdat.meanenel[b] * eps / (1. - eps) / meanqics
-                qfac = 2. * meanqics * log(qics) + meanqics + 1. - 2. * meanqics**2 + eps**2 * (1. - meanqics) / 2. / (1. - eps)
-                specinvctemp = 3. * gdat.csecthom * gdat.velolght / 4. / elecrelefact**2 * (gdat.meanenph[a] - gdat.meanenpitemp) * qfac / meanqics / gdat.meanenph[a] # [cm^3/s]
+                qfac = 2. * meanqics * log(meanqics) + meanqics + 1. - 2. * meanqics**2 + eps**2 * (1. - meanqics) / 2. / (1. - eps)
+                specinvctemp = 3. * gdat.csecthom * gdat.velolght / 4. / elecrelefact**2 * (gdat.meanenph[a] - enpitemp) * qfac / meanqics / gdat.meanenph[a] # [cm^3/s]
                 indxqicstemp = where((enpitemp < gdat.maxmenpi) & (enpitemp > gdat.minmenpi))[0]
                 
                 # interpolate the energy densities to the current redshift
-                edencmbrtemp = interp1d(gdat.meanenpi, gdat.edencmbr[:, c])(gdat.meanenpitemp[indxqicstemp])
-                edenegbltemp = interp1d(gdat.meanenpi, gdat.edenegbl[:, c])(gdat.meanenpitemp[indxqicstemp])
+                edencmbrtemp = interp1d(gdat.meanenpi, gdat.edencmbr[:, c])(enpitemp[indxqicstemp])
+                edenegbltemp = interp1d(gdat.meanenpi, gdat.edenegbl[:, c])(enpitemp[indxqicstemp])
 
                 # integrate contibutions from previous redshift
                 specinvccatl[a, b, c, 0] = trapz(specinvctemp[indxqicstemp] * edencmbrtemp, meanqics[indxqicstemp]) # [1/s/MeV] 
@@ -1608,7 +1608,7 @@ def init( \
 
     numbsamp = (gdat.numbswep - gdat.numbburn) / gdat.factthin
     numbplotside = numbpara
-    sampbund = tdpy.mcmc.init(numbproc, gdat.numbswep, retr_llik, datapara, thissamp=thissamp, numbburn=gdat.numbburn, \
+    sampbund = tdpy.mcmc.init(numbproc, gdat.numbswep, retr_llik, datapara, thissamp=thissamp, numbburn=gdat.numbburn, gdatextr=gdat, \
                 factthin=gdat.factthin, optiprop=optiprop, verbtype=gdat.verbtype, pathbase=gdat.pathbase, rtag=rtag, numbplotside=numbplotside)
     
     listsampvarb = sampbund[0]
