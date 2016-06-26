@@ -390,7 +390,7 @@ def plot_llik():
     ax.set_xlabel(r"$\tau_X$ [year]")
     ax.set_xscale('log')
     ax.set_yscale('log')
-    #plt.colorbar(imag, ax=ax)
+    #plt.colorbar(imag, axis=axis)
     plt.close() 
 
 
@@ -590,8 +590,8 @@ def plot_dataflux(gdat):
     if gdat.datatype == 'mock':
         axisgridtemp = mpl.gridspec.GridSpec(2, 1, height_ratios=[1, 3]) 
         axis = [] 
-        axis.append(plt.subplot(gs[1], sharex=ax[0]))
-        axis.append(plt.subplot(gs[0]))
+        axis.append(plt.subplot(axisgridtemp[0]))
+        axis.append(plt.subplot(axisgridtemp[1], sharex=axis[0]))
 
     yerr = gdat.datafluxstdv * 1e-6
     xerr = gdat.datafluxstdv * 1e-9
@@ -727,13 +727,13 @@ def plot_cmbrtemppsec():
     fluxcart = tdpy.util.retr_cart(flux)
     fig, ax = plt.subplots()
     imag = ax.imshow(fluxcart, origin='lower', cmap='Reds')
-    plt.colorbar(imag, ax=ax, fraction=0.05)
+    plt.colorbar(imag, ax=axis, fraction=0.05)
 
     flux = hp.synfast(clhploww, nside)
     fluxcart = tdpy.util.retr_cart(flux)
     fig, ax = plt.subplots()
     imag = ax.imshow(fluxcart, origin='lower', cmap='Reds')
-    plt.colorbar(imag, ax=ax, fraction=0.05)
+    plt.colorbar(imag, ax=axis, fraction=0.05)
 
     fig, ax = plt.subplots()
     ax.plot(lmodhigh, clhphigh)
@@ -1072,7 +1072,7 @@ def init( \
     os.system(cmnd)
     
     if freqexpr == None:
-        freqexpr = logspace(log10(gdat.minmfreqexpr), log10(gdat.maxmfreqexpr), gdat.numbfreqexpr) # [Hz]
+        gdat.freqexpr = logspace(log10(gdat.minmfreqexpr), log10(gdat.maxmfreqexpr), gdat.numbfreqexpr) # [Hz]
     
     numbfreqmodl = 1000
     gdat.minmfreqmodl = 1e9
@@ -1165,11 +1165,10 @@ def init( \
         print 'thissamp'
         print thissamp
 
+    # get expected instrumental uncertainty for PIXIE
     path = os.environ["CMBR_DIST_DATA_PATH"] + '/pixifluxstdv.csv'
     gdat.exprfluxstdvinstfreq = loadtxt(path)
-    
     gdat.exprfluxstdvinstfreq = interp1d(gdat.exprfluxstdvinstfreq[:, 0] * 1e9, gdat.exprfluxstdvinstfreq[:, 1] * 1e26)(freqexpr)
-    gdat.exprfluxstdvinstfreq = gdat.exprfluxstdvinstfreq / gdat.exprfluxstdvinstfreq[0]
     
     if gdat.datatype == 'mock':
          

@@ -822,7 +822,7 @@ def almc(gdattemp):
             numbplotside = 10
         else:
             numbplotside = gdat.numbpara
-        sampbund = tdpy.mcmc.init(gdat.numbproc, gdat.numbswep, retr_llik, datapara, initsamp=thissamp, numbburn=gdat.numbburn, \
+        sampbund = tdpy.mcmc.init(gdat.numbproc, gdat.numbswep, retr_llik, datapara, initsamp=thissamp, numbburn=gdat.numbburn, gdatextr=gdat, \
             factthin=gdat.factthin, optiprop=gdat.optiprop, verbtype=gdat.verbtype, pathbase=gdat.pathbase, rtag=gdat.rtag, numbplotside=numbplotside)
 
         listsampvarb = sampbund[0]
