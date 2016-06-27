@@ -216,8 +216,8 @@ def retr_hmfn(gdat):
     grwf /= grwf[0]
     
     # radius, wavelength and wavenumber corresponding to the halo gdat.meanmass
-    rsphhalo = (3. * gdat.meanmassprim * gdat.solm2mgev / 4. / pi / gdat.omegdmat / gdat.edencritnunc / gdat.odenviri)**(1./3.) / gdat.kprc2cmet / 1e3 # [Mpc]
-    wlenhalo = 4. * rsphhalo
+    gdat.rsphhalo = (3. * gdat.meanmassprim * gdat.solm2mgev / 4. / pi / gdat.omegdmat / gdat.edencritnunc / gdat.odenviri)**(1./3.) / gdat.kprc2cmet / 1e3 # [Mpc]
+    wlenhalo = 4. * gdat.rsphhalo
     wnumhalo = 2. * pi / wlenhalo
 
     # power spectrum of density fluctuations
@@ -234,7 +234,7 @@ def retr_hmfn(gdat):
         fluc[d] = sqrt(trapz(diffflucdiffwnum[:, d], gdat.meanwnum, axis=0))
     # temp
     fluc *= 0.55 / interp1d(gdat.meanmassprim, fluc)(1e15)
-    #fluc *= odenrmsq8mpc / interp1d(rsphhalo, fluc)(8. / gdat.hubbcons)
+    #fluc *= odenrmsq8mpc / interp1d(gdat.rsphhalo, fluc)(8. / gdat.hubbcons)
     fluc = fluc[:, None] * grwf[None, :]
 
     # halo gdat.meanmass function
@@ -258,7 +258,7 @@ def retr_hmfn(gdat):
         plt.close()
         
         figr, axis = plt.subplots()
-        axis.loglog(gdat.meanmassprim, rsphhalo)
+        axis.loglog(gdat.meanmassprim, gdat.rsphhalo)
         axis.set_xlabel(r'$M [M_\odot]$')
         axis.set_ylabel('$r_H$ [Mpc]')
         axistwin = axis.twinx()
@@ -420,25 +420,25 @@ def retr_fluxphotdmat(gdat):
         '_csecvelo%.3g'  % -log10(gdat.csecvelo) + '_csecfrac%.3g' % -log10(gdat.csecfrac)
     
     # DM annihilation spectrum
-    multintptemp = interp1d(gdat.masspartp4dm, multp4dm, axis=1)(gdat.masspart) / gdat.masspart / enelscalp4dm
-    indxeneltemp = where((enel > amin(enelscalp4dm * gdat.masspart)) & (enel < amax(enelscalp4dm * gdat.masspart)))[0]
+    multintptemp = interp1d(gdat.masspartp4dm, gdat.multp4dm, axis=1)(gdat.masspart) / gdat.masspart / gdat.enelscalp4dm
+    indxeneltemp = where((gdat.meanenel > amin(gdat.enelscalp4dm * gdat.masspart)) & (gdat.meanenel < amax(gdat.enelscalp4dm * gdat.masspart)))[0]
     multintp = zeros(gdat.numbenel)
-    multintp[indxeneltemp] = interp1d(enelscalp4dm * gdat.masspart, multintptemp)(enel[indxeneltemp])
+    multintp[indxeneltemp] = interp1d(gdat.enelscalp4dm * gdat.masspart, multintptemp)(gdat.meanenel[indxeneltemp])
     
     # energy density and velocity variance in DM halos
     velovarihalo = zeros((gdat.numbmass, gdat.numbreds, gdat.numbrsph))
     gdat.edendmathalo = zeros((gdat.numbmass, gdat.numbreds, gdat.numbrsph))
     for d in range(gdat.numbmass):
         for c in gdat.indxreds:
-            gdat.edendmathalonorm = gdat.odenviri * gdat.edendmat[c] * conc[d, c]**3 / 3. / (log(1. + conc[d, c]) - conc[d, c] / (1. + conc[d, c])) # [MeV/cm^3]
-            rsphscal = rsphviri[d, c] / conc[d, c] # [kpc]
-            rsphnorm = rsph[d, c, :] / rsphscal # [1]
-            gdat.edendmathalo[d, c, :] = gdat.edendmathalonorm / rsphnorm / (1. + rsphnorm)**2 # [MeV/cm^3]
-            edendemcnorm = (2. * demccons - 3.)**3 / 4. / (5. - 2. * demccons) * gdat.edendmathalonorm # [MeV/cm^3]
-            rsphdemc = (5. - 2. * demccons) / (2. * demccons - 3.) * rsphscal # [kpc]
-            velovarihalo[d, c, :] = 4. * pi * gravconsredu / 200. * 81. * edendemcnorm**(1. / 3.) * rsphdemc**2 * (gdat.edendmathalo[d, c, :] \
-                * (rsph[d, c, :] / rsphdemc)**demccons)**(2. / 3.) /                 gdat.velolght**2 * gdat.kprc2cmet**2 # [1] 
-    rvelvarihalo = demcsigm * velovarihalo
+            gdat.edendmathalonorm = gdat.odenviri * gdat.edendmat[c] * gdat.conc[d, c]**3 / 3. / (log(1. + gdat.conc[d, c]) - gdat.conc[d, c] / (1. + gdat.conc[d, c])) # [MeV/cm^3]
+            gdat.rsphscal = gdat.rsphviri[d, c] / gdat.conc[d, c] # [kpc]
+            gdat.rsphnorm = gdat.rsph[d, c, :] / gdat.rsphscal # [1]
+            gdat.edendmathalo[d, c, :] = gdat.edendmathalonorm / gdat.rsphnorm / (1. + gdat.rsphnorm)**2 # [MeV/cm^3]
+            edendemcnorm = (2. * gdat.demccons - 3.)**3 / 4. / (5. - 2. * gdat.demccons) * gdat.edendmathalonorm # [MeV/cm^3]
+            gdat.rsphdemc = (5. - 2. * gdat.demccons) / (2. * gdat.demccons - 3.) * gdat.rsphscal # [kpc]
+            velovarihalo[d, c, :] = 4. * pi * gdat.gravconsredu / 200. * 81. * edendemcnorm**(1. / 3.) * gdat.rsphdemc**2 * (gdat.edendmathalo[d, c, :] \
+                * (gdat.rsph[d, c, :] / gdat.rsphdemc)**gdat.demccons)**(2. / 3.) / gdat.velolght**2 * gdat.kprc2cmet**2 # [1] 
+    rvelvarihalo = gdat.demcsigm * velovarihalo
           
     # DM annihilation cross section
     gdat.csecvelohalo = zeros((gdat.numbmass, gdat.numbreds, gdat.numbrsph, numbmpol))
@@ -464,8 +464,8 @@ def retr_fluxphotdmat(gdat):
                     gdat.indxmassplot = where(gdat.meanmass[f] < gdat.meanmass[d])[0]
                     emiselechalosubh[a, d, c, :, m] = trapz(emiselechalotemp[a, d, :, c, :, m], gdat.meanmass, axis=0)
                     emiselechalo[a, d, c, :, m] = emiselechalohost[a, d, c, :, m] + emiselechalosubh[a, d, c, :, m]
-                    diffemiselechalodiffrsph[a, d, c, :, m] = 4. * pi * rsph[d, c, :]**2 *    emiselechalo[a, d, c, :, m] * gdat.kprc2cmet**2 # [1/s/kpc/MeV]
-                    lumielechalo[a, d, c, m] =    trapz(diffemiselechalodiffrsph[a, d, c, :, m] * gdat.kprc2cmet, rsph[d, c, :]) # [1/s/MeV]
+                    diffemiselechalodiffrsph[a, d, c, :, m] = 4. * pi * gdat.rsph[d, c, :]**2 *    emiselechalo[a, d, c, :, m] * gdat.kprc2cmet**2 # [1/s/kpc/MeV]
+                    lumielechalo[a, d, c, m] =    trapz(diffemiselechalodiffrsph[a, d, c, :, m] * gdat.kprc2cmet, gdat.rsph[d, c, :]) # [1/s/MeV]
     emiselechaloenel = trapz(emiselechalo, gdat.meanenel, axis=0) # [1/s/cm^3]
     lumielechaloenel = trapz(lumielechalo, gdat.meanenel, axis=0) # [1/s]
     diffemiselechalodiffrsphenel = trapz(diffemiselechalodiffrsph, gdat.meanenel, axis=0) # [1/s/cm^3]
@@ -475,8 +475,8 @@ def retr_fluxphotdmat(gdat):
     rvelvarihavg = zeros((gdat.numbmass, gdat.numbreds))
     for d in range(gdat.numbmass):
         for c in gdat.indxreds:
-            diffrvelvarihavgdiffrsph[d, c, :] = 3. * rsph[d, c, :]**2 * rvelvarihalo[d, c, :] / amax(rsph[d, c, :])**3
-            rvelvarihavg[d, c] = trapz(diffrvelvarihavgdiffrsph[d, c, :], rsph[d, c, :]) # [1]
+            diffrvelvarihavgdiffrsph[d, c, :] = 3. * gdat.rsph[d, c, :]**2 * rvelvarihalo[d, c, :] / amax(gdat.rsph[d, c, :])**3
+            rvelvarihavg[d, c] = trapz(diffrvelvarihavgdiffrsph[d, c, :], gdat.rsph[d, c, :]) # [1]
 
     # spatially averaged electron emissivity    
     ## smooth component
@@ -502,7 +502,7 @@ def retr_fluxphotdmat(gdat):
     emiselecenel = emiselecsmthenel + emiselecclmpenel
 
     # dark matter velocity variance
-    diffrvelvariiavgdiffmass = diffnhaldiffmass * rvelvarihavg * 4. * pi * amax(rsph, axis=2)**3 / 3. # [1/Msun]
+    diffrvelvariiavgdiffmass = diffnhaldiffmass * rvelvarihavg * 4. * pi * amax(gdat.rsph, axis=2)**3 / 3. # [1/Msun]
     rvelvariiavgclmp = trapz(diffrvelvariiavgdiffmass, gdat.meanmass, axis=0) # [1]
     tempiavgsmth = gdat.tempcmbrnunc * (1. + gdat.meanreds) / (1. + 1e9  / (1. + gdat.meanreds) / (1. + ((1. + gdat.meanreds) / 1e9)**2.5))
     rvelvariiavgsmth = 3. * gdat.boltcons * tempiavgsmth / gdat.masspart
@@ -554,7 +554,7 @@ def plot_halo(gdat):
     figr, axis = plt.subplots()
     for m in range(gdat.numbconcmodl):
         for c in range(gdat.numbredsplotlate):
-            axis.loglog(gdat.meanmass, conccatl[:, gdat.indxredsplotlate[c], m], ls=listlinestyl[m], color=listcolr[c])
+            axis.loglog(gdat.meanmass, gdat.conccatl[:, gdat.indxredsplotlate[c], m], ls=listlinestyl[m], color=listcolr[c])
     axis.set_xlabel('$M [M_\odot]$')
     axis.set_ylabel('$c(M,z)$')
     axis.set_title('Mean halo concentration', fontsize=18)
@@ -584,7 +584,7 @@ def plot_halo(gdat):
     # substructure
     #figr, axis = plt.subplots()
     #axis.loglog(rsph, subfs)
-    #axis.loglog(rsph, subbfrsp)           
+    #axis.loglog(gdat.rsph, subbfrsp)           
     #axis.set_xlabel('$r$ [kpc]')
     #axis.set_ylabel('$f_s(r)$')
 
@@ -594,7 +594,7 @@ def plot_halo(gdat):
 
     figr, axis = plt.subplots()
     figr.suptitle('DM energy density in halos', fontsize=18)                
-    plot_matr(axis, rsph[temp[0], temp[1], :], gdat.edendmathalo[temp[0], temp[1], :],               labl=labl, loc=3)
+    plot_matr(axis, gdat.rsph[temp[0], temp[1], :], gdat.edendmathalo[temp[0], temp[1], :],               labl=labl, loc=3)
     axis.set_xscale('log')
     axis.set_yscale('log')
     axis.set_xlabel('$r$ [kpc]')
@@ -604,7 +604,7 @@ def plot_halo(gdat):
 
     figr, axis = plt.subplots()
     figr.suptitle('DM relative velocity variance in halos', fontsize=18)
-    plot_matr(axis, rsph[temp[0], temp[1], :], rvelvarihalo[temp[0], temp[1], :], labl=labl, loc=2)
+    plot_matr(axis, gdat.rsph[temp[0], temp[1], :], rvelvarihalo[temp[0], temp[1], :], labl=labl, loc=2)
     axis.set_xscale('log')
     axis.set_yscale('log')
     axis.set_xlabel('$r$ [kpc]')
@@ -615,7 +615,7 @@ def plot_halo(gdat):
     # virial and scale radii
     figr, axis = plt.subplots()
     for c in range(gdat.numbredsplotlate):
-        axis.loglog(gdat.meanmass, rsphviri[:, gdat.indxredsplotlate[c]], label=gdat.strgredslate[c])
+        axis.loglog(gdat.meanmass, gdat.rsphviri[:, gdat.indxredsplotlate[c]], label=gdat.strgredslate[c])
     axis.set_xlabel('$M [M_\odot]$')
     axis.set_ylabel('$r_{vir}(M,z)$ [kpc]')
     axis.set_title('Halo Virial Radius')
@@ -629,7 +629,7 @@ def plot_halo(gdat):
     for d, axisrows in enumerate(axisgrid):
         for p, axis in enumerate(axisrows):
             for c in range(gdat.numbredsplotlate):
-                axis.loglog(rsph[gdat.indxmassplot[d], gdat.indxredsplotlate[c], :], emiselechaloenel[gdat.indxmassplot[d], gdat.indxredsplotlate[c], :, p],      label=gdat.strgredslate[c])
+                axis.loglog(gdat.rsph[gdat.indxmassplot[d], gdat.indxredsplotlate[c], :], emiselechaloenel[gdat.indxmassplot[d], gdat.indxredsplotlate[c], :, p],      label=gdat.strgredslate[c])
             axis.set_xlabel('$r$ [kpc]')
             if d == 0:
                 axis.set_title(strgmpol[p])
@@ -646,7 +646,7 @@ def plot_halo(gdat):
     for d, axisrows in enumerate(axisgrid):
         for p, axis in enumerate(axisrows):
             for c in range(gdat.numbredsplotlate):
-                axis.loglog(rsph[gdat.indxmassplot[d], gdat.indxredsplotlate[c], :], diffemiselechalodiffrsphenel[gdat.indxmassplot[d], gdat.indxredsplotlate[c], :, p], \
+                axis.loglog(gdat.rsph[gdat.indxmassplot[d], gdat.indxredsplotlate[c], :], diffemiselechalodiffrsphenel[gdat.indxmassplot[d], gdat.indxredsplotlate[c], :, p], \
                                     label=gdat.strgredslate[c])
             axis.set_xlabel('$r$ [kpc]')
             if d == 0:
@@ -1160,10 +1160,7 @@ def init( \
     
     gdat.anch = 'b'
     
-    # axis.s
-    
-    demccons = 35. / 18.
-    demcsigm = 6.
+    gdat.demcsigm = 6.
     gravlght = 1.19e-34 # [cm^3/MeV/s^2]
     
     # constants
@@ -1300,13 +1297,13 @@ def init( \
     
     gdat.edendmatnunc = gdat.omegdmat * gdat.edencritnunc
     
-    rsphviri = (3. * gdat.meanmass[:, None] * gdat.solm2mgev / 4. / pi / gdat.odenviri / gdat.edendmat / gdat.kprc2cmet**3)**(1. / 3.) # [kpc]
-    minmrsph = rsphviri * 1e-3
-    maxmrsph = rsphviri * 1e1
-    rsph = zeros((gdat.numbmass, gdat.numbreds, gdat.numbrsph))
+    gdat.rsphviri = (3. * gdat.meanmass[:, None] * gdat.solm2mgev / 4. / pi / gdat.odenviri / gdat.edendmat / gdat.kprc2cmet**3)**(1. / 3.) # [kpc]
+    minmrsph = gdat.rsphviri * 1e-3
+    maxmrsph = gdat.rsphviri * 1e1
+    gdat.rsph = zeros((gdat.numbmass, gdat.numbreds, gdat.numbrsph))
     for c in gdat.indxreds:
         for d in range(gdat.numbmass):             
-            rsph[d, c, :] = logspace(log10(minmrsph[d,c]), log10(maxmrsph[d,c]), gdat.numbrsph) # [kpc]
+            gdat.rsph[d, c, :] = logspace(log10(minmrsph[d,c]), log10(maxmrsph[d,c]), gdat.numbrsph) # [kpc]
     
     frph = gdat.meanenph / gdat.plnkcons # [Hz]
     gdat.csecionz = gdat.csecionzrydb * (gdat.enerrydb / gdat.meanenph)**3
@@ -1339,7 +1336,7 @@ def init( \
         plt.savefig(gdat.pathplot + 'multp4dm.pdf')
         plt.close()
     
-    multp4dm, enelscalp4dm, gdat.masspartp4dm = tdpy.util.retr_p4dm_spec(gdat.anch)
+    gdat.multp4dm, gdat.enelscalp4dm, gdat.masspartp4dm = tdpy.util.retr_p4dm_spec(gdat.anch)
 
     #if gdat.makeplot:
         #plot_edot
@@ -1391,32 +1388,32 @@ def init( \
 
     # halo concentration model
     gdat.numbconcmodl = 3
-    conccatl = zeros((gdat.numbmass, gdat.numbreds, gdat.numbconcmodl))
+    gdat.conccatl = zeros((gdat.numbmass, gdat.numbreds, gdat.numbconcmodl))
 
     ## Sanchez-Conde & Prada 2014
     cona = [37.5153, -1.5093, 1.636e-2, 3.66e-4, -2.89237e-5, 5.32e-7]
     for k in range(6):
-        conccatl[:, :, 0] += cona[k] * log(gdat.meanmass[:, None] / gdat.hubbcons)**k * gdat.funchubb[None, :]**(-2./3.)
+        gdat.conccatl[:, :, 0] += cona[k] * log(gdat.meanmass[:, None] / gdat.hubbcons)**k * gdat.funchubb[None, :]**(-2./3.)
     if gdat.concmodl == 'sanc':
-        conc = conccatl[:, :, 0]
+        gdat.conc = gdat.conccatl[:, :, 0]
 
     ## Duffy et al. 2007
     gdat.concmassslop = -0.081
     gdat.concredsslop = -0.71
     gdat.concmasspivt = 2e12 / gdat.hubbcons
     gdat.concnorm = 7.8
-    conccatl[:,:,1] = gdat.concnorm * outer((gdat.meanmass / gdat.concmasspivt)**gdat.concmassslop, (1. + gdat.meanreds)**gdat.concredsslop)
+    gdat.conccatl[:,:,1] = gdat.concnorm * outer((gdat.meanmass / gdat.concmasspivt)**gdat.concmassslop, (1. + gdat.meanreds)**gdat.concredsslop)
     if gdat.concmodl == 'duff':
-        conc = conccatl[:,:,1]
+        gdat.conc = gdat.conccatl[:,:,1]
 
     ## Comerford & Natarajan 2007
     gdat.concmassslop = -0.15
     gdat.concredsslop = -1.
     gdat.concmasspivt = 1.3e13 / gdat.hubbcons
     gdat.concnorm = 14.5
-    conccatl[:, :, 2] = gdat.concnorm * (gdat.meanmass[:, None] / gdat.concmasspivt)**gdat.concmassslop * (1. + gdat.meanreds[None, :])**gdat.concredsslop
+    gdat.conccatl[:, :, 2] = gdat.concnorm * (gdat.meanmass[:, None] / gdat.concmasspivt)**gdat.concmassslop * (1. + gdat.meanreds[None, :])**gdat.concredsslop
     if gdat.concmodl == 'come':
-        conc = conccatl[:,:,2]
+        gdat.conc = gdat.conccatl[:,:,2]
 
     # substructure model
     subs = ones((gdat.numbmass, gdat.numbreds, gdat.numbrsph))

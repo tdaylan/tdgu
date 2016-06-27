@@ -1,28 +1,4 @@
-import matplotlib as mpl
-mpl.use('Agg')
-import matplotlib.pyplot as plt
-
-import numpy as np
-from numpy import *
-from numpy.random import *
-
-import scipy as sp
-from scipy.optimize import optimize
-from scipy.special import erf, zetac, gamma
-from scipy.interpolate import *
-from scipy.integrate import odeint  
-
-import os
-import pyfits as pf
-import healpy as hp
-
-import tdpy.util
-import tdpy.mcmc
-
-import emcee
-
-import seaborn as sns
-sns.set(context='poster', style='ticks', color_codes=True)
+from commimpt import *
 
 def plot_intr(eventype='norm'):
     
@@ -595,6 +571,19 @@ def plot_dataflux(gdat):
 
     yerr = gdat.datafluxstdv * 1e-6
     xerr = gdat.datafluxstdv * 1e-9
+   
+    if False:
+        print 'hey'
+        print 'gdat.freqexpr'
+        print gdat.freqexpr
+        print 'gdat.dataflux'
+        print gdat.dataflux
+        print 'xerr'
+        print xerr
+        print 'yerr'
+        print yerr
+        print
+
     axis[0].errorbar(gdat.freqexpr * 1e-9, gdat.dataflux * 1e-6, ls='none', xerr=xerr, yerr=yerr, label=gdat.datalabl, marker='o', markersize=5, color='k')
     
     if gdat.datatype == 'mock':
@@ -1175,11 +1164,14 @@ def init( \
         mockfluxtotl, mockfluxcmbr, mockfluxdustcold, mockfluxdustwarm, mockfluxsync, mockfluxfree, mockfluxydis, mockfluxdeca = retr_flux(gdat, gdat.freqmodl, mocksampvarb)
         mockfluxintp = interp1d(gdat.freqmodl, mockfluxtotl)(freqexpr)
                 
+        show(gdat.freqmodl, freqexpr)
+        
         if gdat.exprtype == 'pixi':
             gdat.datafluxstdv = mockfluxintp * gdat.exprfluxstdvfrac + gdat.exprfluxstdvinstfreq * gdat.exprfluxstdvinst
         if gdat.exprtype == 'plnk':
             gdat.datafluxstdv = mockfluxintp * gdat.exprfluxstdvfrac + gdat.exprfluxstdvinst
             
+        
         gdat.dataflux = mockfluxintp + gdat.datafluxstdv * randn(gdat.datafluxstdv.size)
         
         # temp
@@ -1189,13 +1181,14 @@ def init( \
         gdat.resiflux = gdat.dataflux - mockfluxintp
         gdat.path = pathplot + 'mockresi.png'
         # temp
-        plot_dataflux(gdat)
     
     else:
         
         gdat.datafluxstdv = exprfluxstdv
         gdat.dataflux = exprflux
-        
+    
+    plot_dataflux(gdat)
+    
     #plot_llik()
     
     gdat.numbfreqexpr = freqexpr.size

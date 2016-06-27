@@ -38,6 +38,8 @@ import functools
 import tdpy.util
 import tdpy.mcmc
 
+from tdpy.util import show
+
 import warnings
 warnings.simplefilter(action = "ignore", category = FutureWarning)
 
