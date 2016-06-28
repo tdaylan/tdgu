@@ -572,7 +572,7 @@ def plot_dataflux(gdat):
     yerr = gdat.datafluxstdv * 1e-6
     xerr = gdat.datafluxstdv * 1e-9
    
-    if False:
+    if True:
         print 'hey'
         print 'gdat.freqexpr'
         print gdat.freqexpr
