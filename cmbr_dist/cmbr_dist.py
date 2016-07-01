@@ -1018,8 +1018,6 @@ def init( \
          exprtype='pixi', \
          datalabl='PIXIE', \
          numbswep=100000, \
-         numbburn=0, \
-         factthin=1, \
          exprflux=None, \
          exprfluxstdv=None, \
          freqexpr=None, \
@@ -1030,9 +1028,7 @@ def init( \
          exprfluxstdvinst=None, \
          exprfluxstdvfrac=None, \
          inclcmbrmono=True, \
-         plotperd=10000, \
          verbtype=1, \
-         optiprop=False, \
          makeplot=True, \
         ):
     
@@ -1194,7 +1190,6 @@ def init( \
     gdat.numbfreqexpr = freqexpr.size
 
     # sampler setup
-    numbsamp = tdpy.mcmc.retr_numbsamp(numbswep, numbburn, factthin)
     nproc = 1
 
     swepcntr = 0
@@ -1204,8 +1199,8 @@ def init( \
     listsampunitfull = []
     
     numbproc = 1
-    sampbund = tdpy.mcmc.init(numbproc, numbswep, retr_llik, datapara, numbburn=numbburn, gdatextr=gdat, factpropeffi=3., \
-                                    factthin=factthin, optiprop=optiprop, verbtype=gdat.verbtype, pathbase=pathbase, rtag=rtag)
+    sampbund = tdpy.mcmc.init(retr_llik, datapara, numbproc=numbproc, numbswep=numbswep, gdatextr=gdat, factpropeffi=3., \
+                                            verbtype=gdat.verbtype, pathbase=pathbase, rtag=rtag)
     listsampvarb = sampbund[0]
     listsamp = sampbund[1]
     listsampcalc = sampbund[2]
@@ -1213,6 +1208,8 @@ def init( \
     listaccp = sampbund[4]
     listjsampvari = sampbund[5]
 
+    numbsamp = listsamp.shape[0]
+    
     statpara = zeros((numbpara, 3))
     statpara[:, 0] = percentile(listsampvarb, 10., axis=0)
     statpara[:, 1] = percentile(listsampvarb, 50., axis=0)

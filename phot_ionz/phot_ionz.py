@@ -1,22 +1,4 @@
-import os, time
-
-from numpy import *
-from numpy.random import *
-from numpy.random import choice
-
-import scipy as sp
-from scipy.interpolate import interp1d, interp2d, RectBivariateSpline
-
-import pyfits as pf
-
-import tdpy.util
-import tdpy.mcmc
-
-# plotting
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-import seaborn as sns
-sns.set(context='poster', style='ticks', color_codes=True)
+from commimpt import *
 
 # determine the thermal state of the IGM due to photoheating
 ## blazar heating rate
@@ -1137,9 +1119,6 @@ def init( \
          datatype='inpt', \
          datalabl='XMM-Newton', \
          numbswep=100, \
-         numbburn=None, \
-         factthin=None, \
-         plotperd=10000, \
          verbtype=1, \
          makeplot=False, \
         ):
@@ -1604,10 +1583,9 @@ def init( \
     thissamp = empty((numbproc, numbpara))
     thissamp[0, :] = tdpy.mcmc.cdfn_samp(thissampvarb, datapara)
 
-    numbsamp = (gdat.numbswep - gdat.numbburn) / gdat.factthin
     numbplotside = numbpara
-    sampbund = tdpy.mcmc.init(numbproc, gdat.numbswep, retr_llik, datapara, thissamp=thissamp, numbburn=gdat.numbburn, gdatextr=gdat, \
-                factthin=gdat.factthin, optiprop=optiprop, verbtype=gdat.verbtype, pathbase=gdat.pathbase, rtag=rtag, numbplotside=numbplotside)
+    sampbund = tdpy.mcmc.init(retr_llik, datapara, thissamp=thissamp, numbswep=gdat.numbswep, gdatextr=gdat, \
+                                    verbtype=gdat.verbtype, pathbase=gdat.pathbase, rtag=rtag, numbplotside=numbplotside)
     
     listsampvarb = sampbund[0]
     listsamp = sampbund[1]
@@ -1617,6 +1595,8 @@ def init( \
     listjsampvari = sampbund[5]
     
     listfluxphotdmat = listsampcalc[0]
+    
+    numbsamp = listsamp.shape[0]
             
     figr, axis = plt.subplots()
     axis.set_title('UV/X-ray photon background')
@@ -1649,8 +1629,6 @@ def cnfg_nomi():
     init( \
          numbswep=10, \
          verbtype=2, \
-         numbburn=0, \
-         factthin=1, \
          makeplot=True, \
         )
 
