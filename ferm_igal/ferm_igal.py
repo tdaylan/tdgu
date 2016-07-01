@@ -51,7 +51,7 @@ def retr_datapara(gdat):
     for n in gdat.indxpara:
         datapara.indx['norm%04d' % n] = n
         datapara.name[n] = 'norm%04d' % n
-        datapara.minm[n] = 1e-3
+        datapara.minm[n] = 1e-7
         datapara.maxm[n] = 1e1
         datapara.scal[n] = 'logt'
         if n // gdat.numbener == 0:
@@ -102,8 +102,8 @@ def plot_backspec(gdat, indxpixlmean):
     listyerr = zeros((2, numbvarb, gdat.numbener))
     
     for n in gdat.indxback:
-        listydat[n, :] = postnormback[0, n, :] * gdat.backfluxmean[n]
-        listyerr[:, n, :] = retr_errrvarb(postnormback[:, n, :]) * gdat.backfluxmean[n]
+        listydat[n, :] = gdat.postnormback[0, n, :] * gdat.backfluxmean[n]
+        listyerr[:, n, :] = retr_errrvarb(gdat.postnormback[:, n, :]) * gdat.backfluxmean[n]
     listydat[-1, :] = gdat.datafluxmean
     listyerr[:, -1, :] = retr_errrvarb(postpntsfluxmean)
     
@@ -300,6 +300,12 @@ def init( \
     medimodlfluxtotl = sum(medimodlflux, axis=0)
     mediresiflux = gdat.dataflux - medimodlfluxtotl
 
+    gdat.postsampvarb = tdpy.util.retr_postvarb(listsampvarb)
+
+    print 'hey'
+    print gdat.postsampvarb.shape
+    gdat.postnormback = gdat.postsampvarb.reshape((3, numbsamp, gdat.numbback, gdat.numbener))
+
     for i in gdat.indxener:
         for m in gdat.indxevtt:
             
@@ -330,7 +336,7 @@ def init( \
 def cnfg_nomi():
     
     init( \
-         numbswep=100000, \
+         numbswep=10000, \
          verbtype=1, \
          makeplot=True, \
         )
