@@ -33,10 +33,11 @@ def make_maps_pss8pnts():
     gdat.photpath = ['photon']
     gdat.strgregi = [' ra=INDEF dec=INDEF rad=INDEF ']
     gdat.strgener = ['gtbndefn_pnts.fits']
+    gdat.numside = [256]
     gdat.evtt = [4, 8, 16, 32]
-    gdat.test = True
+    gdat.test = False
     
-    make_maps_main(gdat)
+    tdpy.util.make_maps_main(gdat)
 
 
 def make_maps_pss8back():
@@ -53,10 +54,11 @@ def make_maps_pss8back():
     gdat.photpath = ['photon']
     gdat.strgregi = [' ra=INDEF dec=INDEF rad=INDEF ']
     gdat.strgener = ['gtbndefn_back.fits']
+    gdat.numbside = [256]
     gdat.evtt = [4, 8, 16, 32]
-    gdat.test = True
+    gdat.test = False
 
-    make_maps_main(gdat)
+    tdpy.util.make_maps_main(gdat)
 
 
 def retr_llik(sampvarb, gdat):
@@ -399,7 +401,7 @@ if __name__ == '__main__':
     
     pass
     #defn_gtbn()
-    make__nomi()
-    cnfg_nomi()
+    make_maps_pss8back()
+    #cnfg_nomi()
 
 
