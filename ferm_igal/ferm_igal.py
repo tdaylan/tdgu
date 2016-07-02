@@ -19,6 +19,46 @@ def retr_modlflux(gdat, sampvarb):
     return modlflux
 
 
+def make_maps_pss8pnts():
+    
+    gdat = tdpy.util.gdatstrt()
+    
+    gdat.rtag = ['pss8pnts']
+    gdat.reco = [8]
+    gdat.evtc = [128]
+    gdat.strgtime = ['tmin=INDEF tmax=INDEF']
+    gdat.weekinit = [11]
+    gdat.weekfinl = [411]
+    gdat.listtimefrac = [1.]
+    gdat.photpath = ['photon']
+    gdat.strgregi = [' ra=INDEF dec=INDEF rad=INDEF ']
+    gdat.strgener = ['gtbndefn_pnts.fits']
+    gdat.evtt = [4, 8, 16, 32]
+    gdat.test = True
+    
+    make_maps_main(gdat)
+
+
+def make_maps_pss8back():
+    
+    gdat = tdpy.util.gdatstrt()
+    
+    gdat.rtag = ['pss8back']
+    gdat.reco = [8]
+    gdat.evtc = [128]
+    gdat.strgtime = ['tmin=INDEF tmax=INDEF']
+    gdat.weekinit = [11]
+    gdat.weekfinl = [411]
+    gdat.listtimefrac = [1.]
+    gdat.photpath = ['photon']
+    gdat.strgregi = [' ra=INDEF dec=INDEF rad=INDEF ']
+    gdat.strgener = ['gtbndefn_back.fits']
+    gdat.evtt = [4, 8, 16, 32]
+    gdat.test = True
+
+    make_maps_main(gdat)
+
+
 def retr_llik(sampvarb, gdat):
 
     modlflux = retr_modlflux(gdat, sampvarb)
@@ -354,10 +394,12 @@ def cnfg_nomi():
          makeplot=True, \
         )
 
-defn_gtbn()
 
 if __name__ == '__main__':
     
+    pass
+    #defn_gtbn()
+    make__nomi()
     cnfg_nomi()
 
 
