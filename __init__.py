@@ -46,6 +46,3 @@ warnings.simplefilter(action = "ignore", category = FutureWarning)
 
 np.set_printoptions(linewidth=180)
 
-
-
-

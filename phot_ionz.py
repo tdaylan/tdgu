@@ -1,4 +1,4 @@
-from commimpt import *
+from __init__ import *
 
 # determine the thermal state of the IGM due to photoheating
 ## blazar heating rate

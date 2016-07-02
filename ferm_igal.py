@@ -1,4 +1,4 @@
-from commimpt import *
+from __init__ import *
 
 def retr_modlflux(gdat, sampvarb):
 
