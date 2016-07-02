@@ -51,8 +51,8 @@ def retr_datapara(gdat):
     for n in gdat.indxpara:
         datapara.indx['norm%04d' % n] = n
         datapara.name[n] = 'norm%04d' % n
-        datapara.minm[n] = 1e-7
-        datapara.maxm[n] = 1e1
+        datapara.minm[n] = 1e-9
+        datapara.maxm[n] = 1e-3
         datapara.scal[n] = 'logt'
         if n // gdat.numbener == 0:
             strg = 'isot'
@@ -75,6 +75,19 @@ def retr_rtag(gdat):
     gdat.rtag = '%d_%d_%s' % (gdat.numbproc, gdat.numbswep, gdat.datatype)
 
 
+def defn_gtbn():
+    
+    numbener = 30
+    minmener = 0.1
+    maxmener = 100.
+    binsener = logspace(log10(minmener), log10(maxmener), numbener + 1)
+    lowrener = binsener[:-1]
+    upprener = binsener[1:]
+    limtener = stack((lowrener, upprener), axis=1)
+    path = os.environ["TDPY_DATA_PATH"] + '/gtbndefn_back.dat'
+    savetxt(path, limtener, fmt='%10.5g')
+
+
 def retr_ener(gdat):
 
     gdat.binsenerfull = array([0.1, 0.3, 1., 3., 10., 100.])
@@ -91,9 +104,8 @@ def retr_ener(gdat):
 
 def plot_backspec(gdat, indxpixlmean):
     
-    listlinestyl = [':', '--', '-.', '-']
-    listcolr = ['b', 'g', 'r', 'black']
-    listlabl = ['Isotropic', 'Planck Dust Radiance', 'NFW', 'Data']
+    listcolr = ['b', 'g', 'r', 'm', 'black']
+    listlabl = ['Isotropic', 'Planck', r'WISE 12$\mu$m', 'NFW', 'Data']
 
     figr, axis = plt.subplots()
     
@@ -101,17 +113,18 @@ def plot_backspec(gdat, indxpixlmean):
     listydat = empty((numbvarb, gdat.numbener))
     listyerr = zeros((2, numbvarb, gdat.numbener))
     
+    datafluxmean = mean(sum(gdat.datacnts, 2) / sum(gdat.expo, 2), 1) / gdat.apix / gdat.diffener
     for n in gdat.indxback:
-        listydat[n, :] = gdat.postnormback[0, n, :] * gdat.backfluxmean[n]
-        listyerr[:, n, :] = retr_errrvarb(gdat.postnormback[:, n, :]) * gdat.backfluxmean[n]
-    listydat[-1, :] = gdat.datafluxmean
-    listyerr[:, -1, :] = retr_errrvarb(postpntsfluxmean)
+        listydat[n, :] = gdat.postnormback[0, n, :]
+        listyerr[:, n, :] = tdpy.util.retr_errrvarb(gdat.postnormback[:, n, :])
+    listydat[-1, :] = datafluxmean
+    listyerr[:, -1, :] = mean(sqrt(sum(gdat.datacnts, 2)) / sum(gdat.expo, 2) / gdat.apix / gdat.diffener[:, None], 1)
     
     xdat = gdat.meanener
     for k in range(numbvarb):
         ydat = gdat.meanener**2 * listydat[k, :]
         yerr = gdat.meanener**2 * listyerr[:, k, :]
-        axis.errorbar(xdat, ydat, yerr=yerr, marker='o', markersize=5, ls=listlinestyl[k], color=listcolr[k], label=listlabl[k])
+        axis.errorbar(xdat, ydat, yerr=yerr, marker='o', markersize=5, color=listcolr[k], label=listlabl[k])
 
     # Fermi-LAT results
     # temp
@@ -228,69 +241,71 @@ def init( \
     for c in gdat.indxback:
 
         if c == 0:
-            strg = 'isottemp.fits'
+            strg = 'isottemp'
         if c == 1:
-            strg = 'plnkdust.fits'
+            strg = 'plnkdust'
         if c == 2:
-            strg = 'wisestar.fits'
+            strg = 'wisestar'
         if c == 3:
-            strg = 'darktemp.fits'
-
-        pathtemp = os.environ["FERM_IGAL_DATA_PATH"] + '/' + strg
-        if os.path.isfile(pathtemp):
-            fluxback = pf.getdata(pathtemp)
+            strg = 'darktemp'
+        # temp -- ROI should be fixed at 40 X 40 degree^2
+        path = os.environ["FERM_IGAL_DATA_PATH"] + '/' + strg + '.fits'
+        if os.path.isfile(path):
+            fluxback = pf.getdata(path)
         else:
             if c == 0:
-                fluxbacktemp = ones((gdat.numbpixlfull))
+                fluxbackorig = ones((gdat.numbpixlfull))
             if c == 1:
-                path = os.environ["FERM_IGAL_DATA_PATH"] + '/' + gdat.strgback[c]
-                fluxbacktemp = pf.getdata(path, 1)['RADIANCE']
-                fluxbacktemp = hp.ud_grade(fluxbacktemp, gdat.numbside, order_in='NESTED', order_out='RING')
+                pathtemp = os.environ["FERM_IGAL_DATA_PATH"] + '/' + gdat.strgback[c]
+                fluxbackorig = pf.getdata(pathtemp, 1)['RADIANCE']
+                fluxbackorig = hp.ud_grade(fluxbackorig, gdat.numbside, order_in='NESTED', order_out='RING')
             if c == 2:
-                path = os.environ["FERM_IGAL_DATA_PATH"] + '/' + gdat.strgback[c]
-                fluxbacktemp = pf.getdata(path, 0)
-                fluxbacktemp = hp.ud_grade(fluxbacktemp, gdat.numbside, order_in='RING', order_out='RING')
+                pathtemp = os.environ["FERM_IGAL_DATA_PATH"] + '/' + gdat.strgback[c]
+                fluxbackorig = pf.getdata(pathtemp, 0)
+                fluxbackorig = hp.ud_grade(fluxbackorig, gdat.numbside, order_in='RING', order_out='RING')
             if c == 3:
-                fluxbacktemp = tdpy.util.retr_nfwp(1., gdat.numbside)
+                fluxbackorig = tdpy.util.retr_nfwp(1., gdat.numbside)
 
+            # normalize the templates
+            fluxbackorig /= mean(fluxbackorig[gdat.indxpixlrofi])
+            
+            # smooth the templates
             fluxback = empty((gdat.numbenerfull, gdat.numbpixlfull, gdat.numbevttfull))
             for i in gdat.indxenerfull:
                 for m in gdat.indxevttfull:
-                    fluxback[i, :, m] = fluxbacktemp
-            maxmmpol = 3 * gdat.numbside - 1
-            fluxback = tdpy.util.smth_ferm(fluxback, gdat.meanenerfull, gdat.indxevttfull, maxmmpol=maxmmpol)
-
+                    fluxback[i, :, m] = fluxbackorig
+            fluxback = tdpy.util.smth_ferm(fluxback, gdat.meanenerfull, gdat.indxevttfull)
             # temp
             fluxback[where(fluxback < 0.)] = 0.
 
-            pf.writeto(pathtemp, fluxback, clobber=True)
+            pf.writeto(path, fluxback, clobber=True)
 
+        # take only the energy bins, spatial pixels and event types of interest
         fluxback = fluxback[indxdatacubefilt]
-        fluxback *= mean(mean(gdat.dataflux, 1), 1)[:, None, None] / mean(fluxback)
         indxdatacubetemp = meshgrid(array([c]), gdat.indxener, gdat.indxpixl, gdat.indxevtt, indexing='ij')
         gdat.fluxback[indxdatacubetemp] = fluxback
+        
+    # get data structure
+    datapara = retr_datapara(gdat)
+    
+    gdat.pathbase = os.environ["FERM_IGAL_DATA_PATH"]
+    gdat.pathplot = gdat.pathbase + '/imag/%s/' % gdat.rtag
+    cmnd = 'mkdir -p ' + gdat.pathplot
+    os.system(cmnd)
 
     # plot the input spatial templates
     for c in gdat.indxback:
         for i in gdat.indxener:
             for m in gdat.indxevtt:
-                path = os.environ["FERM_IGAL_DATA_PATH"] + '/imag/%s/fluxback_%d%d%d.pdf' % (gdat.rtag, c, i, m)
+                path = gdat.pathplot + 'fluxback_%d%d%d.pdf' % (c, i, m)
                 tdpy.util.plot_heal(path, gdat.fluxback[c, i, :, m], indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
                                                                                 minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
             
-    # get data structure
-    datapara = retr_datapara(gdat)
-    
-    gdat.pathbase = os.environ["FERM_IGAL_DATA_PATH"]
-    gdat.pathplot = gdat.pathbase + '/imag/'
-
-    optiprop = True
-
     initsamp = rand(gdat.numbproc * gdat.numbpara).reshape((gdat.numbproc, gdat.numbpara))
 
     numbplotside = gdat.numbpara
     chan = tdpy.mcmc.init(retr_llik, datapara, numbproc=gdat.numbproc, numbswep=gdat.numbswep, initsamp=initsamp, gdatextr=gdat, \
-                optiprop=optiprop, verbtype=gdat.verbtype, pathbase=gdat.pathbase, rtag=gdat.rtag, numbplotside=numbplotside)
+                verbtype=gdat.verbtype, pathbase=gdat.pathbase, rtag=gdat.rtag, numbplotside=numbplotside)
     
     listsampvarb, listsamp, listsampcalc, listllik, listaccp, listindxparamodi, propeffi, levi, info, gmrbstat = chan
     numbsamp = listsamp.shape[0]
@@ -302,24 +317,22 @@ def init( \
 
     gdat.postsampvarb = tdpy.util.retr_postvarb(listsampvarb)
 
-    print 'hey'
-    print gdat.postsampvarb.shape
-    gdat.postnormback = gdat.postsampvarb.reshape((3, numbsamp, gdat.numbback, gdat.numbener))
+    gdat.postnormback = gdat.postsampvarb.reshape((3, gdat.numbback, gdat.numbener))
 
     for i in gdat.indxener:
         for m in gdat.indxevtt:
             
-            path = os.environ["FERM_IGAL_DATA_PATH"] + '/imag/%s/dataflux_%d%d.pdf' % (gdat.rtag, i, m)
+            path = gdat.pathplot + 'dataflux_%d%d.pdf' % (i, m)
             tdpy.util.plot_heal(path, gdat.dataflux[i, :, m] * 1e6, indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
                             minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, satu=True)
             for c in gdat.indxback:
-                path = os.environ["FERM_IGAL_DATA_PATH"] + '/imag/%s/medimodlflux_%d%d%d.pdf' % (gdat.rtag, c, i, m)
+                path = gdat.pathplot + 'medimodlflux_%d%d%d.pdf' % (c, i, m)
                 tdpy.util.plot_heal(path, medimodlflux[c, i, :, m] * 1e6, indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
                                 minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, satu=True)
-            path = os.environ["FERM_IGAL_DATA_PATH"] + '/imag/%s/medimodlfluxtotl_%d%d.pdf' % (gdat.rtag, i, m)
+            path = gdat.pathplot + 'medimodlfluxtotl_%d%d.pdf' % (i, m)
             tdpy.util.plot_heal(path, medimodlfluxtotl[i, :, m] * 1e6, indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
                             minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, satu=True)
-            path = os.environ["FERM_IGAL_DATA_PATH"] + '/imag/%s/mediresiflux_%d%d.pdf' % (gdat.rtag, i, m)
+            path = gdat.pathplot + 'mediresiflux_%d%d.pdf' % (i, m)
             tdpy.util.plot_heal(path, mediresiflux[i, :, m] * 1e6, indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
                             minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, satu=True, resi=True)
     
@@ -336,13 +349,15 @@ def init( \
 def cnfg_nomi():
     
     init( \
-         numbswep=10000, \
+         numbswep=300000, \
          verbtype=1, \
          makeplot=True, \
         )
 
+defn_gtbn()
 
 if __name__ == '__main__':
     
     cnfg_nomi()
+
 
