@@ -28,7 +28,7 @@ def make_maps_pss8pnts():
     gdat.evtc = [128]
     gdat.strgtime = ['tmin=INDEF tmax=INDEF']
     gdat.weekinit = [11]
-    gdat.weekfinl = [411]
+    gdat.weekfinl = [422]
     gdat.listtimefrac = [1.]
     gdat.photpath = ['photon']
     gdat.strgregi = [' ra=INDEF dec=INDEF rad=INDEF ']
@@ -49,7 +49,7 @@ def make_maps_pss8back():
     gdat.evtc = [128]
     gdat.strgtime = ['tmin=INDEF tmax=INDEF']
     gdat.weekinit = [11]
-    gdat.weekfinl = [411]
+    gdat.weekfinl = [422]
     gdat.listtimefrac = [1.]
     gdat.photpath = ['photon']
     gdat.strgregi = [' ra=INDEF dec=INDEF rad=INDEF ']
@@ -99,9 +99,13 @@ def retr_datapara(gdat):
         if n // gdat.numbener == 0:
             strg = 'isot'
         if n // gdat.numbener == 1:
-            strg = 'plnk'
+            strg = 'fdfm'
         if n // gdat.numbener == 2:
+            strg = 'plnk'
+        if n // gdat.numbener == 3:
             strg = 'wise'
+        if n // gdat.numbener == 4:
+            strg = 'dark'
         datapara.labl[n] = '$A_{%d}^{%s}$' % (n % gdat.numbener, strg)
         datapara.unit[n] = ''
         datapara.vari[n] = 1e-1
@@ -146,8 +150,8 @@ def retr_ener(gdat):
 
 def plot_backspec(gdat, indxpixlmean):
     
-    listcolr = ['b', 'g', 'r', 'm', 'black']
-    listlabl = ['Isotropic', 'Planck', r'WISE 12$\mu$m', 'NFW', 'Data']
+    listcolr = ['b', 'g', 'r', 'm', 'y', 'black']
+    listlabl = ['Isotropic', 'FDM', 'Planck', r'WISE 12$\mu$m', 'NFW', 'Data']
 
     figr, axis = plt.subplots()
     
@@ -193,7 +197,7 @@ def plot_backspec(gdat, indxpixlmean):
     axis.set_xlabel('E [GeV]')
     axis.set_xscale('log')
     axis.set_ylabel('$E^2dN/dAdtd\Omega dE$ [GeV/cm$^2$/s/sr]')
-    axis.legend()
+    axis.legend(loc=4, ncol=2)
 
     path = gdat.pathplot + 'backspec.pdf'
     plt.tight_layout()
@@ -209,7 +213,7 @@ def init( \
          makeplot=False, \
          strgexpr='fermflux_cmp0_igal.fits', \
          strgexpo='fermexpo_cmp0_igal.fits', \
-         strgback=['isottemp', 'HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'darktemp'], \
+         strgback=['isottemp', 'fdfmtemp', 'HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'darktemp'], \
          indxenerincl=arange(1, 4), \
          indxevttincl=arange(3, 4), \
          maxmgang=20.
@@ -285,10 +289,12 @@ def init( \
         if c == 0:
             strg = 'isottemp'
         if c == 1:
-            strg = 'plnkdust'
+            strg = 'fdfmtemp'
         if c == 2:
-            strg = 'wisestar'
+            strg = 'plnkdust'
         if c == 3:
+            strg = 'wisestar'
+        if c == 4:
             strg = 'darktemp'
         # temp -- ROI should be fixed at 40 X 40 degree^2
         path = os.environ["FERM_IGAL_DATA_PATH"] + '/' + strg + '.fits'
@@ -298,24 +304,33 @@ def init( \
             if c == 0:
                 fluxbackorig = ones((gdat.numbpixlfull))
             if c == 1:
+                fluxbackorig = tdpy.util.retr_fdfm(gdat.binsenerfull) 
+            if c == 2:
                 pathtemp = os.environ["FERM_IGAL_DATA_PATH"] + '/' + gdat.strgback[c]
                 fluxbackorig = pf.getdata(pathtemp, 1)['RADIANCE']
                 fluxbackorig = hp.ud_grade(fluxbackorig, gdat.numbside, order_in='NESTED', order_out='RING')
-            if c == 2:
+            if c == 3:
                 pathtemp = os.environ["FERM_IGAL_DATA_PATH"] + '/' + gdat.strgback[c]
                 fluxbackorig = pf.getdata(pathtemp, 0)
                 fluxbackorig = hp.ud_grade(fluxbackorig, gdat.numbside, order_in='RING', order_out='RING')
-            if c == 3:
+            if c == 4:
                 fluxbackorig = tdpy.util.retr_nfwp(1., gdat.numbside)
 
             # normalize the templates
-            fluxbackorig /= mean(fluxbackorig[gdat.indxpixlrofi])
+            if c == 1:
+                for i in gdat.indxener:
+                    fluxbackorig[i, :] /= mean(fluxbackorig[i, gdat.indxpixlrofi])
+            else:
+                fluxbackorig /= mean(fluxbackorig[gdat.indxpixlrofi])
             
             # smooth the templates
             fluxback = empty((gdat.numbenerfull, gdat.numbpixlfull, gdat.numbevttfull))
-            for i in gdat.indxenerfull:
-                for m in gdat.indxevttfull:
-                    fluxback[i, :, m] = fluxbackorig
+            for m in gdat.indxevttfull:
+                if c == 1:
+                    fluxback[:, :, m] = fluxbackorig
+                else:
+                    for i in gdat.indxenerfull:
+                        fluxback[i, :, m] = fluxbackorig
             fluxback = tdpy.util.smth_ferm(fluxback, gdat.meanenerfull, gdat.indxevttfull)
             # temp
             fluxback[where(fluxback < 0.)] = 0.
@@ -391,7 +406,7 @@ def init( \
 def cnfg_nomi():
     
     init( \
-         numbswep=300000, \
+         numbswep=500000, \
          verbtype=1, \
          makeplot=True, \
         )
@@ -401,7 +416,7 @@ if __name__ == '__main__':
     
     pass
     #defn_gtbn()
-    make_maps_pss8back()
-    #cnfg_nomi()
+    #make_maps_pss8back()
+    cnfg_nomi()
 
 
