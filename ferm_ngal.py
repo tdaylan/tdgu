@@ -119,27 +119,6 @@ def prep_maps():
             pf.writeto(path, flux, clobber=True)
 
 
-def writ_isot():
-    
-    global reco, evtc, numbevtt, numbevtt, evtt, numbener, minmener, maxmener, binsener, meanener, diffener, indxener, nside, numbpixl, apix
-    reco, evtc, numbevtt, numbevtt, evtt, numbener, minmener, maxmener, binsener, meanener, diffener, indxener, nside, numbpixl, apix = retr_axes()
-
-    # isotropic background
-    path = os.environ["PCAT_DATA_PATH"] + '/iso_P8R2_ULTRACLEAN_V6_v06.txt'
-    isotdata = loadtxt(path)
-    enerisot = isotdata[:, 0] * 1e-3 # [GeV]
-    isotflux = isotdata[:, 1] * 1e3 # [1/cm^2/s/sr/GeV]
-    isotfluxheal = empty((numbener, numbpixl, numbevtt))
-    nsampbins = 10
-    enersamp = logspace(log10(amin(binsener)), log10(amax(binsener)), nsampbins * numbener)
-    isotflux = interpolate.interp1d(enerisot, isotflux)(enersamp)
-    for i in range(numbener):
-        isotfluxheal[i, :, :] = trapz(isotflux[i*nsampbins:(i+1)*nsampbins], enersamp[i*nsampbins:(i+1)*nsampbins]) / diffener[i]
-        
-    path = os.environ["PCAT_DATA_PATH"] + '/fermisotflux.fits'
-    pf.writeto(path, isotfluxheal, clobber=True)
-
-
 def writ_fdfm():
     
     nside = 256
@@ -204,4 +183,157 @@ def prep_dust():
     pf.writeto(path, dustngal, clobber=True)
     
     
+def cnfg_ferm_info():
+    
+    minmflux = array([3e-10, 1e-10, 3e-11, 1e-11])
+    numbruns = minmflux.size
+    maxmnumbpnts = zeros(numbruns, dtype=int) + 1000
+    numbswep = zeros(numbruns, dtype=int) + 2000000
+    numbburn = numbswep / 2
+    
+    numbiter = minmflux.size
+
+    listlevi = zeros(numbiter)
+    listinfo = zeros(numbiter)
+    
+    strgexpo='fermexpo_cmp0_ngal.fits'
+    strgexpr='fermflux_cmp0_ngal.fits'
+
+    indxenerincl = arange(2, 3)
+    indxevttincl = arange(3, 4)
+    numbener = indxenerincl.size
+    
+    path = os.environ["FERM_NGAL_DATA_PATH"]
+    strgback = [path + '/fermisotflux.fits', path + '/fermfdfmflux_ngal.fits']
+
+    for k in range(numbiter):
+        
+        gridchan = pcat.main.init( \
+                                  psfntype='doubking', \
+                                  numbswep=numbswep[k], \
+                                  numbburn=numbburn[k], \
+                                  probprop=array([0.01, 0.01, 0., 0., 1., 1., 0, 0, 1., 1., 1., 1.], dtype=float), \
+                                  trueinfo=True, \
+                                  randinit=False, \
+                                  makeplot=True, \
+                                  maxmgang=10., \
+                                  maxmnumbpnts=array([maxmnumbpnts[k]]), \
+                                  indxenerincl=indxenerincl, \
+                                  indxevttincl=indxevttincl, \
+                                  minmflux=minmflux[k], \
+                                  maxmflux=1e-7, \
+                                  regitype='ngal', \
+                                  maxmnormback=array([5., 5.]), \
+                                  minmnormback=array([0.2, 0.2]), \
+                                  strgexpo=strgexpo, \
+                                  datatype='inpt', \
+                                  strgexpr=strgexpr, \
+                                 )
+        
+        listlevi[k] = gridchan[-2]
+        listinfo[k] = gridchan[-1]
+
+    plot_minmfluxinfo(minmflux, listinfo, listlevi)
+
+
+def intr_ferm_expr_ngal( \
+                        strgexpr='fermflux_cmp0_ngal.fits', \
+                        strgexpo='fermexpo_cmp0_ngal.fits', \
+                        strgback=None, \
+                       ): 
+
+    if strgback == None:
+        path = os.environ["FERM_NGAL_DATA_PATH"]
+        strgback = [path + '/fermisotflux.fits', path + '/fermfdfmflux_ngal.fits']
+
+    karg = {}
+    karg['psfntype'] = 'doubking'
+    karg['numbswep'] = 2000000
+    karg['randinit'] = False
+    # temp
+    karg['boolproppsfn'] = False
+    karg['maxmgang'] = 20.
+    karg['initfdfnslop'] = array([1.9])
+    karg['initfdfnnorm'] = array([300])
+    karg['maxmnumbpnts'] = array([500])
+    karg['indxenerincl'] = arange(1, 4)
+    karg['indxevttincl'] = arange(2, 4)
+    karg['minmflux'] = 3e-11
+    karg['maxmflux'] = 1e-7
+    karg['regitype'] = 'ngal'
+    karg['maxmnormback'] = array([2., 2.])
+    karg['minmnormback'] = array([0.5, 0.5])
+    karg['strgback'] = strgback
+    karg['strgexpo'] = strgexpo
+    karg['datatype'] = 'inpt'
+    karg['strgexpr'] = strgexpr
+
+    return karg
+
+
+def cnfg_ferm_expr_ngal():
+    karg = intr_ferm_expr_ngal()
+    pcat.main.init(**karg)
+
+
+def cnfg_ferm_expr_ngal_cmp1():
+    karg = intr_ferm_expr_ngal(strgexpr='fermflux_cmp1_ngal.fits', strgexpo='fermexpo_cmp1_ngal.fits')
+    pcat.main.init(**karg)
+
+
+def cnfg_ferm_expr_ngal_cmp2():
+    karg = intr_ferm_expr_ngal(strgexpr='fermflux_cmp2_ngal.fits', strgexpo='fermexpo_cmp2_ngal.fits')
+    pcat.main.init(**karg)
+
+
+def cnfg_ferm_expr_ngal_cmp3():
+    karg = intr_ferm_expr_ngal(strgexpr='fermflux_cmp3_ngal.fits', strgexpo='fermexpo_cmp3_ngal.fits')
+    pcat.main.init(**karg)
+
+
+def cnfg_ferm_expr_ngal_full():
+    karg = intr_ferm_expr_ngal(strgexpr='fermflux_full_ngal.fits', strgexpo='fermexpo_full_ngal.fits')
+    pcat.main.init(**karg)
+
+
+def cnfg_ferm_mock_ngal():
+     
+    indxenerincl = arange(1, 4)
+    indxevttincl = arange(2, 4)
+    numbener = indxenerincl.size
+
+    minmflux = 3e-11
+    maxmflux = 1e-7
+    mockfdfnslop = array([1.9])
+    
+    path = os.environ["FERM_NGAL_DATA_PATH"]
+    strgback = [path + '/fermisotflux.fits', path + '/fermfdfmflux_ngal.fits']
+      
+    pcat.main.init(psfntype='doubking', \
+                   numbswep=200000, \
+                   randinit=False, \
+                   trueinfo=True, \
+                   maxmgang=20., \
+                   indxenerincl=indxenerincl, \
+                   indxevttincl=indxevttincl, \
+                   mocknumbpnts=array([300]), \
+                   maxmnumbpnts=array([600]), \
+                   minmflux=minmflux, \
+                   maxmflux=maxmflux, \
+                   regitype='ngal', \
+                   maxmnormback=array([2., 2.]), \
+                   minmnormback=array([0.5, 0.5]), \
+                   strgexpo='fermexpo_cmp0_ngal.fits', \
+                   datatype='mock', \
+                   numbsideheal=256, \
+                   mockfdfnslop=mockfdfnslop, \
+                   mocknormback=ones((2, numbener)), \
+                  )
+
+    
+if len(sys.argv) > 1:
+    name = globals().copy()
+    name.get(sys.argv[1])()
+else:
+    pass
 

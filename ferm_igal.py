@@ -93,9 +93,13 @@ def retr_datapara(gdat):
     for n in gdat.indxpara:
         datapara.indx['norm%04d' % n] = n
         datapara.name[n] = 'norm%04d' % n
-        datapara.minm[n] = 1e-9
-        datapara.maxm[n] = 1e-3
         datapara.scal[n] = 'logt'
+        if n // gdat.numbener == 0 or n // gdat.numbener == 1:
+            datapara.minm[n] = 1e-3
+            datapara.maxm[n] = 1e1
+        else:
+            datapara.minm[n] = 1e-9
+            datapara.maxm[n] = 1e-3
         if n // gdat.numbener == 0:
             strg = 'isot'
         if n // gdat.numbener == 1:
@@ -213,7 +217,7 @@ def init( \
          makeplot=False, \
          strgexpr='fermflux_cmp0_igal.fits', \
          strgexpo='fermexpo_cmp0_igal.fits', \
-         strgback=['isottemp', 'fdfmtemp', 'HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'darktemp'], \
+         strgback=['isotflux', 'fdfmflux', 'HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'darktemp'], \
          indxenerincl=arange(1, 4), \
          indxevttincl=arange(3, 4), \
          maxmgang=20.
@@ -287,9 +291,9 @@ def init( \
     for c in gdat.indxback:
 
         if c == 0:
-            strg = 'isottemp'
+            strg = 'isotflux'
         if c == 1:
-            strg = 'fdfmtemp'
+            strg = 'fdfmflux'
         if c == 2:
             strg = 'plnkdust'
         if c == 3:
@@ -302,7 +306,7 @@ def init( \
             fluxback = pf.getdata(path)
         else:
             if c == 0:
-                fluxbackorig = ones((gdat.numbpixlfull))
+                fluxbackorig = tdpy.util.retr_isot(gdat.binsenerfull)
             if c == 1:
                 fluxbackorig = tdpy.util.retr_fdfm(gdat.binsenerfull) 
             if c == 2:
@@ -317,16 +321,13 @@ def init( \
                 fluxbackorig = tdpy.util.retr_nfwp(1., gdat.numbside)
 
             # normalize the templates
-            if c == 1:
-                for i in gdat.indxener:
-                    fluxbackorig[i, :] /= mean(fluxbackorig[i, gdat.indxpixlrofi])
-            else:
+            if c != 0 and c != 1:
                 fluxbackorig /= mean(fluxbackorig[gdat.indxpixlrofi])
             
             # smooth the templates
             fluxback = empty((gdat.numbenerfull, gdat.numbpixlfull, gdat.numbevttfull))
             for m in gdat.indxevttfull:
-                if c == 1:
+                if c == 0 or c == 1:
                     fluxback[:, :, m] = fluxbackorig
                 else:
                     for i in gdat.indxenerfull:
@@ -403,6 +404,112 @@ def init( \
     plot_backspec(gdat, indxpixlmean)
 
 
+def cnfg_ferm_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
+    
+    path = os.environ["FERM_IGAL_DATA_PATH"]
+    strgback = [path + '/isotflux.fits', path + '/fdfmflux.fits']
+
+    pcat.main.init( \
+              psfntype='doubking', \
+              numbswep=2000, \
+              numbswepplot=400, \
+              randinit=False, \
+              trueinfo=True, \
+              maxmgang=20., \
+              indxenerincl=arange(1, 4), \
+              indxevttincl=arange(2, 4), \
+              minmflux=3e-11, \
+              maxmflux=3e-6, \
+              minmsind=array([1.2]), \
+              maxmsind=array([4.2]), \
+              regitype='igal', \
+              maxmnormback=array([5., 5.]), \
+              minmnormback=array([.2, .2]), \
+              strgexpo=strgexpo, \
+              strgback=strgback, \
+              datatype='inpt', \
+              strgexpr=strgexpr, \
+             )
+    
+    
+def cnfg_ferm_mock_igal_brok():
+     
+    indxenerincl = arange(1, 4)
+    indxevttincl = arange(2, 4)
+    numbener = indxenerincl.size
+
+    minmflux = 3e-11
+    maxmflux = 1e-7
+
+    mockfdfnslop = array([2.])
+    listfdfnbrek = array([1e-10, 3e-10, 1e-9])
+    mockfdfnsloplowr = array([0.75])
+    mockfdfnslopuppr = array([2.])
+
+    for fdfnbrek in listfdfnbrek:
+        init(psfntype='doubking', \
+    		 numbswep=400000, \
+             numbburn=0, \
+             randinit=False, \
+             # temp
+             boolproppsfn=False, \
+             trueinfo=True, \
+             maxmgang=20., \
+             fdfntype='brok', \
+             indxenerincl=indxenerincl, \
+             indxevttincl=indxevttincl, \
+             maxmnumbpnts=array([600]), \
+             minmflux=minmflux, \
+             maxmflux=maxmflux, \
+             regitype='ngal', \
+             maxmnormback=array([2., 2.]), \
+             minmnormback=array([0.5, 0.5]), \
+             strgexpo='fermexpo_cmp0_ngal.fits', \
+             datatype='mock', \
+             mockfdfntype='brok', \
+             mocknumbpnts=array([300]), \
+             numbsideheal=256, \
+             mockfdfnslop=mockfdfnslop, \
+             mockfdfnsloplowr=mockfdfnsloplowr, \
+             mockfdfnslopuppr=mockfdfnslopuppr, \
+             mockfdfnbrek=array([fdfnbrek]), \
+             mocknormback=ones((2, numbener)), \
+            )
+
+
+def cnfg_ferm_mock_igal():
+     
+    indxevttincl = arange(2, 4)
+    indxenerincl = arange(1, 4)
+    numbener = indxenerincl.size
+
+    minmflux = 5e-11
+    maxmflux = 3e-7
+    mockfdfnslop = array([1.9])
+      
+    pcat.main.init( \
+                   psfntype='doubking', \
+                   numbswep=1000000, \
+                   randinit=False, \
+                   trueinfo=True, \
+                   maxmgang=20., \
+                   indxevttincl=indxevttincl, \
+                   indxenerincl=indxenerincl, \
+                   numbsideheal=256, \
+                   mocknumbpnts=array([800]), \
+                   maxmnumbpnts=array([1200]), \
+                   minmflux=minmflux, \
+                   maxmflux=maxmflux, \
+                   mocknormback=ones((2, numbener)), \
+                   maxmnormback=array([2., 2.]), \
+                   mockfdfnslop=mockfdfnslop, \
+                   minmnormback=array([0.5, 0.5]), \
+                   strgexpo='fermexpo_cmp0_igal.fits', \
+                   regitype='igal', \
+                   datatype='mock', \
+                  )
+
+
 def cnfg_nomi():
     
     init( \
@@ -412,11 +519,11 @@ def cnfg_nomi():
         )
 
 
-if __name__ == '__main__':
-    
+if len(sys.argv) > 1:
+    name = globals().copy()
+    name.get(sys.argv[1])()
+else:
     pass
-    #defn_gtbn()
     #make_maps_pss8back()
     cnfg_nomi()
-
 
