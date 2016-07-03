@@ -420,8 +420,6 @@ def cnfg_ferm_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_c
               indxevttincl=arange(2, 4), \
               minmflux=3e-11, \
               maxmflux=3e-6, \
-              minmsind=array([1.2]), \
-              maxmsind=array([4.2]), \
               regitype='igal', \
               maxmnormback=array([5., 5.]), \
               minmnormback=array([.2, .2]), \
