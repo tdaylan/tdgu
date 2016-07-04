@@ -152,6 +152,12 @@ def retr_ener(gdat):
     gdat.indxener = arange(gdat.numbener)
     
 
+def prep_maps():
+    
+    tdpy.util.prep_maps('rec7', 'pnts', 'igal', os.environ["FERM_IGAL_DATA_PATH"])
+    tdpy.util.prep_maps('rec7', 'back', 'igal', os.environ["FERM_IGAL_DATA_PATH"])
+
+
 def plot_backspec(gdat, indxpixlmean):
     
     listcolr = ['black', 'b', 'g', 'r', 'm', 'y'][:gdat.numbback+1]
@@ -219,7 +225,7 @@ def init( \
          makeplot=False, \
          strgexpr='fermflux_cmp0_igal.fits', \
          strgexpo='fermexpo_cmp0_igal.fits', \
-         strgback=['isotflux', 'fdfmflux', 'HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'darktemp'], \
+         strgback=['isotflux', 'fdfmflux', 'HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'lambda_sfd_ebv.fits', 'darktemp'], \
          indxenerincl=arange(1, 4), \
          indxevttincl=arange(3, 4), \
          maxmgang=20.
@@ -308,7 +314,10 @@ def init( \
         if c == 3:
             strg = 'wisestar'
         if c == 4:
+            strg = 'finkdust'
+        if c == 5:
             strg = 'darktemp'
+
         # temp -- ROI should be fixed at 40 X 40 degree^2
         path = os.environ["FERM_IGAL_DATA_PATH"] + '/' + strg + '.fits'
         if os.path.isfile(path):
@@ -327,6 +336,10 @@ def init( \
                 fluxbackorig = pf.getdata(pathtemp, 0)
                 fluxbackorig = hp.ud_grade(fluxbackorig, gdat.numbside, order_in='RING', order_out='RING')
             if c == 4:
+                pathtemp = os.environ["FERM_IGAL_DATA_PATH"] + '/' + gdat.strgback[c]
+                fluxbackorig = pf.getdata(pathtemp)['TEMPERATURE']
+                fluxbackorig = hp.ud_grade(fluxbackorig, gdat.numbside, order_in='NESTED', order_out='RING')
+            if c == 5:
                 fluxbackorig = tdpy.util.retr_nfwp(1., gdat.numbside)
 
             # normalize the templates
@@ -514,7 +527,6 @@ def cnfg_nomi():
     init( \
          verbtype=1, \
          makeplot=True, \
-         #strgback=['isotflux', 'fdfmflux', 'HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'darktemp'], \
          strgback=['isotflux', 'fdfmflux'], \
         )
 
