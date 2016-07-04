@@ -8,12 +8,12 @@ def retr_modlflux(gdat, sampvarb):
     return modlflux
 
 
-def make_maps_back():
+def make_maps_back_rec7():
     
     gdat = tdpy.util.gdatstrt()
     
     gdat.timetype = ['tim0']
-    gdat.enertype = ['pnts']
+    gdat.enertype = ['back']
     gdat.recotype = ['rec7']
     gdat.evtc = [2]
     gdat.strgtime = ['tmin=239155201 tmax=364953603']
@@ -22,9 +22,30 @@ def make_maps_back():
     gdat.timefrac = [1.]
     gdat.photpath = ['p7v6c']
     gdat.strgregi = [' ra=INDEF dec=INDEF rad=INDEF ']
-    gdat.strgener = ['gtbndefn_pnts.fits']
+    gdat.strgener = ['gtbndefn_back.fits']
     gdat.numbside = [256]
-    gdat.test = True
+    gdat.test = False
+    
+    tdpy.util.make_maps_main(gdat, os.environ["FERM_IGAL_DATA_PATH"])
+
+
+def make_maps_back_rec8():
+    
+    gdat = tdpy.util.gdatstrt()
+    
+    gdat.timetype = ['tim0']
+    gdat.enertype = ['back']
+    gdat.recotype = ['rec8']
+    gdat.evtc = [128]
+    gdat.strgtime = ['tmin=INDEF tmax=INDEF']
+    gdat.weekinit = [11]
+    gdat.weekfinl = [422]
+    gdat.timefrac = [1.]
+    gdat.photpath = ['photon']
+    gdat.strgregi = [' ra=INDEF dec=INDEF rad=INDEF ']
+    gdat.strgener = ['gtbndefn_back.fits']
+    gdat.numbside = [256]
+    gdat.test = False
     
     tdpy.util.make_maps_main(gdat, os.environ["FERM_IGAL_DATA_PATH"])
 
