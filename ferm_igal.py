@@ -95,7 +95,7 @@ def retr_datapara(gdat):
         datapara.name[n] = 'norm%04d' % n
         datapara.scal[n] = 'logt'
         if n // gdat.numbener == 0 or n // gdat.numbener == 1:
-            datapara.minm[n] = 1e-3
+            datapara.minm[n] = 1e-4
             datapara.maxm[n] = 1e1
         else:
             datapara.minm[n] = 1e-9
@@ -154,8 +154,8 @@ def retr_ener(gdat):
 
 def plot_backspec(gdat, indxpixlmean):
     
-    listcolr = ['b', 'g', 'r', 'm', 'y', 'black']
-    listlabl = ['Isotropic', 'FDM', 'Planck', r'WISE 12$\mu$m', 'NFW', 'Data']
+    listcolr = ['black', 'b', 'g', 'r', 'm', 'y'][:gdat.numbback+1]
+    listlabl = ['Data', 'Isotropic', 'FDM', 'Planck', r'WISE 12$\mu$m', 'NFW'][:gdat.numbback+1]
 
     figr, axis = plt.subplots()
     
@@ -163,12 +163,14 @@ def plot_backspec(gdat, indxpixlmean):
     listydat = empty((numbvarb, gdat.numbener))
     listyerr = zeros((2, numbvarb, gdat.numbener))
     
-    datafluxmean = mean(sum(gdat.datacnts, 2) / sum(gdat.expo, 2), 1) / gdat.apix / gdat.diffener
+    listydat[0, :] = mean(sum(gdat.datacnts, 2) / sum(gdat.expo, 2), 1) / gdat.apix / gdat.diffener
+    listyerr[:, 0, :] = mean(sqrt(sum(gdat.datacnts, 2)) / sum(gdat.expo, 2), 1) / gdat.apix / gdat.diffener
     for n in gdat.indxback:
-        listydat[n, :] = gdat.postnormback[0, n, :]
-        listyerr[:, n, :] = tdpy.util.retr_errrvarb(gdat.postnormback[:, n, :])
-    listydat[-1, :] = datafluxmean
-    listyerr[:, -1, :] = mean(sqrt(sum(gdat.datacnts, 2)) / sum(gdat.expo, 2) / gdat.apix / gdat.diffener[:, None], 1)
+        if n == 0 or n == 1:
+            listydat[n+1, :] = gdat.postnormback[0, n, :] * mean(mean(gdat.fluxback[n, :, :, :], 1), 1)
+        else:
+            listydat[n+1, :] = gdat.postnormback[0, n, :]
+        listyerr[:, n+1, :] = tdpy.util.retr_errrvarb(gdat.postnormback[:, n, :])
     
     xdat = gdat.meanener
     for k in range(numbvarb):
@@ -211,7 +213,7 @@ def plot_backspec(gdat, indxpixlmean):
 
 def init( \
          numbproc=1, \
-         numbswep=10000, \
+         numbswep=None, \
          datatype='inpt', \
          verbtype=1, \
          makeplot=False, \
@@ -237,11 +239,9 @@ def init( \
     gdat.indxevttincl = indxevttincl
     gdat.maxmgang = maxmgang
 
-    # setup
-    retr_rtag(gdat)
-    
     gdat.numbback = len(strgback)
     gdat.indxback = arange(gdat.numbback)
+
     retr_ener(gdat)
 
     ## event type
@@ -269,6 +269,15 @@ def init( \
     maxmbgal = gdat.maxmgang
 
     indxdatacubefilt = meshgrid(gdat.indxenerincl, gdat.indxpixlrofi, gdat.indxevttincl, indexing='ij')
+    
+    # get data structure
+    datapara = retr_datapara(gdat)
+    
+    if gdat.numbswep == None:
+        gdat.numbswep = 4 * gdat.numbpara * 10000
+
+    # setup
+    retr_rtag(gdat)
     
     ## data
     if gdat.datatype == 'inpt':
@@ -343,9 +352,6 @@ def init( \
         indxdatacubetemp = meshgrid(array([c]), gdat.indxener, gdat.indxpixl, gdat.indxevtt, indexing='ij')
         gdat.fluxback[indxdatacubetemp] = fluxback
         
-    # get data structure
-    datapara = retr_datapara(gdat)
-    
     gdat.pathbase = os.environ["FERM_IGAL_DATA_PATH"]
     gdat.pathplot = gdat.pathbase + '/imag/%s/' % gdat.rtag
     cmnd = 'mkdir -p ' + gdat.pathplot
@@ -397,11 +403,11 @@ def init( \
     # make plots of the spectra of spatially averaged background components
     plot_backspec(gdat, gdat.indxpixlrofi)
     
-    indxpixlmean = where(abs(gdat.bgalheal) < 2.)[0]
-    plot_backspec(gdat, indxpixlmean)
-    
-    indxpixlmean = where((abs(gdat.lgalheal) < 5.) & (abs(gdat.bgalheal) < 5.))[0]
-    plot_backspec(gdat, indxpixlmean)
+    # temp
+    #indxpixlmean = where(abs(gdat.bgalheal) < 2.)[0]
+    #plot_backspec(gdat, indxpixlmean)
+    #indxpixlmean = where((abs(gdat.lgalheal) < 5.) & (abs(gdat.bgalheal) < 5.))[0]
+    #plot_backspec(gdat, indxpixlmean)
 
 
 def cnfg_ferm_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
@@ -506,9 +512,10 @@ def cnfg_ferm_mock_igal():
 def cnfg_nomi():
     
     init( \
-         numbswep=500000, \
          verbtype=1, \
          makeplot=True, \
+         #strgback=['isotflux', 'fdfmflux', 'HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'darktemp'], \
+         strgback=['isotflux', 'fdfmflux'], \
         )
 
 

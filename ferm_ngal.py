@@ -47,15 +47,21 @@ def make_maps_pss7pnts():
     make_maps_main(gdat)
 
 
-def prep_maps():
+def prep_maps(reco, enertype, regitype):
     
-    global reco, evtc, numbevtt, numbevtt, evtt, numbener, minmener, maxmener, binsener, meanener, diffener, indxener, nside, numbpixl, apix
-    reco, evtc, numbevtt, numbevtt, evtt, numbener, minmener, maxmener, binsener, meanener, diffener, indxener, nside, numbpixl, apix = retr_axes()
+    if enertype == 'back':
+        numbener = 30
+        minmener = 0.1
+        maxmener = 100.
+        binsener = logspace(log10(minmener), log10(maxmener), numbener)
+    else:
+        binsener = array([0.1, 0.3, 1., 3., 10., 100.])
 
+    evtt = array([4, 8, 16, 32])
+    
     liststrgener = ['ENERGY1', 'ENERGY2', 'ENERGY3', 'ENERGY4', 'ENERGY5']
     liststrgchan = ['CHANNEL1', 'CHANNEL2', 'CHANNEL3', 'CHANNEL4', 'CHANNEL5']
     listdatatype = ['cmp0', 'cmp1', 'cmp2', 'cmp3', 'full']
-    listregitype = ['igal', 'ngal']
     
     cnts = zeros((numbener, numbpixl, numbevtt))
     expo = zeros((numbener, numbpixl, numbevtt))
@@ -65,7 +71,7 @@ def prep_maps():
     
         for m in indxevtt:
 
-            if datatype != 'full':
+            if reco == 7:
                 if m < 2:
                     continue
                 elif m == 2:
@@ -75,12 +81,12 @@ def prep_maps():
             else:
                 thisevtt = evtt[m]
 
-            path = os.environ["PCAT_DATA_PATH"] + '/expo_evtt%03d_%s.fits' % (thisevtt, datatype)
+            path = os.environ["PCAT_DATA_PATH"] + '/expo_evtt%03d_pss%d_%s.fits' % (thisevtt, reco, enertype)
             expoarry = pf.getdata(path, 1)
             for i in indxener:
                 expo[i, :, m] = expoarry[liststrgener[i]]
 
-            path = os.environ["PCAT_DATA_PATH"] + '/cnts_evtt%03d_%s.fits' % (thisevtt, datatype)
+            path = os.environ["PCAT_DATA_PATH"] + '/cnts_evtt%03d_pss%d_%s.fits' % (thisevtt, reco, enertype)
             cntsarry = pf.getdata(path)
             for i in indxener:
                 cnts[i, :, m] = cntsarry[liststrgchan[i]]
@@ -89,34 +95,33 @@ def prep_maps():
         flux[indxexpo] = cnts[indxexpo] / expo[indxexpo] / apix
         flux /= diffener[:, None, None]
 
-        for regitype in listregitype:
-            if regitype == 'ngal':
-                for i in indxener:
-                    for m in indxevtt:
-                        
-                        if datatype != 'full':
-                            if m < 2:
-                                continue
-                            elif m == 2:
-                                thisevtt = 2
-                            elif m == 3:
-                                thisevtt = 1
-                        else:
-                            thisevtt = evtt[m]
+        if regitype == 'ngal':
+            for i in indxener:
+                for m in indxevtt:
+                    
+                    if reco == 7:
+                        if m < 2:
+                            continue
+                        elif m == 2:
+                            thisevtt = 2
+                        elif m == 3:
+                            thisevtt = 1
+                    else:
+                        thisevtt = evtt[m]
 
-                        almc = hp.map2alm(flux[i, :, m])
-                        hp.rotate_alm(almc, 0., 0.5 * pi, 0.)
-                        flux[i, :, m] = hp.alm2map(almc, nside)
+                    almc = hp.map2alm(flux[i, :, m])
+                    hp.rotate_alm(almc, 0., 0.5 * pi, 0.)
+                    flux[i, :, m] = hp.alm2map(almc, nside)
 
-                        almc = hp.map2alm(expo[i, :, m])
-                        hp.rotate_alm(almc, 0., 0.5 * pi, 0.)
-                        expo[i, :, m] = hp.alm2map(almc, nside)
+                    almc = hp.map2alm(expo[i, :, m])
+                    hp.rotate_alm(almc, 0., 0.5 * pi, 0.)
+                    expo[i, :, m] = hp.alm2map(almc, nside)
 
-            path = os.environ["PCAT_DATA_PATH"] + '/fermexpo_%s_%s.fits' % (datatype, regitype)
-            pf.writeto(path, expo, clobber=True)
+        path = os.environ["PCAT_DATA_PATH"] + '/fermexpo_pss%d_%s.fits' % (reco, enertype)
+        pf.writeto(path, expo, clobber=True)
 
-            path = os.environ["PCAT_DATA_PATH"] + '/fermflux_%s_%s.fits' % (datatype, regitype)
-            pf.writeto(path, flux, clobber=True)
+        path = os.environ["PCAT_DATA_PATH"] + '/fermflux_pss%d_%s.fits' % (reco, enertype)
+        pf.writeto(path, flux, clobber=True)
 
 
 def writ_fdfm():
