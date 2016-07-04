@@ -414,7 +414,7 @@ def init( \
     #plot_backspec(gdat, indxpixlmean)
 
 
-def cnfg_ferm_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
+def pcat_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
     pcat.main.init( \
               psfntype='doubking', \
@@ -437,7 +437,7 @@ def cnfg_ferm_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_c
              )
     
     
-def cnfg_ferm_mock_igal_brok():
+def pcat_mock_igal_brok():
      
     indxenerincl = arange(1, 4)
     indxevttincl = arange(2, 4)
@@ -480,7 +480,7 @@ def cnfg_ferm_mock_igal_brok():
             )
 
 
-def cnfg_ferm_mock_igal():
+def pcat_mock_igal():
      
     indxevttincl = arange(2, 4)
     indxenerincl = arange(1, 4)

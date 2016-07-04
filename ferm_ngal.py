@@ -52,7 +52,7 @@ def plot_spec():
                     axis.plot(gdat.meanener, fluxtemp, marker=listmrkr[k], color=listcolr[k], label=listlabl[k])
 
     
-def cnfg_ferm_info():
+def pcat_info():
     
     minmflux = array([3e-10, 1e-10, 3e-11, 1e-11])
     numbruns = minmflux.size
@@ -135,27 +135,27 @@ def intr_ferm_expr_ngal( \
     return karg
 
 
-def cnfg_ferm_expr_ngal():
+def pcat_expr_ngal():
     karg = intr_ferm_expr_ngal()
     pcat.main.init(**karg)
 
 
-def cnfg_ferm_expr_ngal_cmp1():
+def pcat_expr_ngal_cmp1():
     karg = intr_ferm_expr_ngal(strgexpr='fermflux_cmp1_ngal.fits', strgexpo='fermexpo_cmp1_ngal.fits')
     pcat.main.init(**karg)
 
 
-def cnfg_ferm_expr_ngal_cmp2():
+def pcat_expr_ngal_cmp2():
     karg = intr_ferm_expr_ngal(strgexpr='fermflux_cmp2_ngal.fits', strgexpo='fermexpo_cmp2_ngal.fits')
     pcat.main.init(**karg)
 
 
-def cnfg_ferm_expr_ngal_cmp3():
+def pcat_expr_ngal_cmp3():
     karg = intr_ferm_expr_ngal(strgexpr='fermflux_cmp3_ngal.fits', strgexpo='fermexpo_cmp3_ngal.fits')
     pcat.main.init(**karg)
 
 
-def cnfg_ferm_mock_ngal():
+def pcat_mock_ngal():
      
     indxenerincl = arange(1, 4)
     indxevttincl = arange(2, 4)
