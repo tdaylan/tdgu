@@ -5,25 +5,14 @@ def retr_modlflux(gdat, sampvarb):
     norm = sampvarb.reshape((gdat.numbback, gdat.numbener))
     modlflux = norm[:, :, None, None] * gdat.fluxback
    
-    if False:
-        print 'retr_modlflux'
-        print 'norm'
-        print norm
-        print 'modlflux'
-        print amin(modlflux[0, :, :, :]), amax(modlflux[0, :, :, :])
-        print amin(modlflux[1, :, :, :]), amax(modlflux[1, :, :, :])
-        print 'modlfluxtotl'
-        print amin(modlfluxtotl), amax(modlfluxtotl)
-        print 
-
     return modlflux
 
 
-def make_maps_pss8pnts():
+def make_maps_pnts():
     
     gdat = tdpy.util.gdatstrt()
     
-    gdat.rtag = ['pss8pnts']
+    gdat.rtag = ['']
     gdat.reco = [8]
     gdat.evtc = [128]
     gdat.strgtime = ['tmin=INDEF tmax=INDEF']
@@ -40,11 +29,11 @@ def make_maps_pss8pnts():
     tdpy.util.make_maps_main(gdat)
 
 
-def make_maps_pss8back():
+def make_maps_back():
     
     gdat = tdpy.util.gdatstrt()
     
-    gdat.rtag = ['pss8back']
+    gdat.rtag = ['']
     gdat.reco = [8]
     gdat.evtc = [128]
     gdat.strgtime = ['tmin=INDEF tmax=INDEF']
@@ -108,6 +97,8 @@ def retr_datapara(gdat):
             strg = 'plnk'
         if n // gdat.numbener == 3:
             strg = 'wise'
+        if n // gdat.numbener == 5:
+            strg = 'fink'
         if n // gdat.numbener == 4:
             strg = 'dark'
         datapara.labl[n] = '$A_{%d}^{%s}$' % (n % gdat.numbener, strg)
@@ -536,6 +527,5 @@ if len(sys.argv) > 1:
     name.get(sys.argv[1])()
 else:
     pass
-    #make_maps_pss8back()
     cnfg_nomi()
 
