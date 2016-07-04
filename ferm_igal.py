@@ -8,7 +8,7 @@ def retr_modlflux(gdat, sampvarb):
     return modlflux
 
 
-def make_maps_back_rec7():
+def make_maps_rec7_back():
     
     gdat = tdpy.util.gdatstrt()
     
@@ -29,7 +29,7 @@ def make_maps_back_rec7():
     tdpy.util.make_maps_main(gdat, os.environ["FERM_IGAL_DATA_PATH"])
 
 
-def make_maps_back_rec8():
+def make_maps_rec8_back():
     
     gdat = tdpy.util.gdatstrt()
     
