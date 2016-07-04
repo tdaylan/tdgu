@@ -406,13 +406,9 @@ def init( \
 
 def cnfg_ferm_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
-    path = os.environ["FERM_IGAL_DATA_PATH"]
-    strgback = [path + '/isotflux.fits', path + '/fdfmflux.fits']
-
     pcat.main.init( \
               psfntype='doubking', \
-              numbswep=2000, \
-              numbswepplot=400, \
+              numbswep=2000000, \
               randinit=False, \
               trueinfo=True, \
               maxmgang=20., \
@@ -420,11 +416,12 @@ def cnfg_ferm_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_c
               indxevttincl=arange(2, 4), \
               minmflux=3e-11, \
               maxmflux=3e-6, \
+              pathdata=os.environ["FERM_IGAL_DATA_PATH"], \
               regitype='igal', \
               maxmnormback=array([5., 5.]), \
               minmnormback=array([.2, .2]), \
+              strgback=['isotflux.fits', 'fdfmflux.fits'], \
               strgexpo=strgexpo, \
-              strgback=strgback, \
               datatype='inpt', \
               strgexpr=strgexpr, \
              )
@@ -435,9 +432,6 @@ def cnfg_ferm_mock_igal_brok():
     indxenerincl = arange(1, 4)
     indxevttincl = arange(2, 4)
     numbener = indxenerincl.size
-
-    minmflux = 3e-11
-    maxmflux = 1e-7
 
     mockfdfnslop = array([2.])
     listfdfnbrek = array([1e-10, 3e-10, 1e-9])
@@ -457,12 +451,13 @@ def cnfg_ferm_mock_igal_brok():
              indxenerincl=indxenerincl, \
              indxevttincl=indxevttincl, \
              maxmnumbpnts=array([600]), \
-             minmflux=minmflux, \
-             maxmflux=maxmflux, \
+             minmflux=3e-11, \
+             maxmflux=1e-7, \
              regitype='ngal', \
              maxmnormback=array([2., 2.]), \
              minmnormback=array([0.5, 0.5]), \
              strgexpo='fermexpo_cmp0_ngal.fits', \
+             strgback=['isotflux.fits', 'fdfmflux.fits'], \
              datatype='mock', \
              mockfdfntype='brok', \
              mocknumbpnts=array([300]), \

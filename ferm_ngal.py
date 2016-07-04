@@ -181,7 +181,30 @@ def prep_dust():
     
     path = os.environ["PCAT_DATA_PATH"] + '/fermdustflux_ngal.fits'
     pf.writeto(path, dustngal, clobber=True)
-    
+   
+
+def plot_spec():
+
+    # Fermi-LAT best-fit components at the NGP
+    # temp
+    if False and gdat.trueinfo:
+        if gdat.datatype == 'mock':
+            pass
+        else:
+            if gdat.exprtype == 'ferm':
+                listname = ['data', 'pion', 'invc', 'brem', 'pnts', 'isot']
+                listmrkr = ['o', 's', 'p', '*', 'D', '^']
+                listcolr = ['g', 'g', 'g', 'g', 'g', 'g']
+                listlabl = ['Fermi-LAT Data', r'Fermi-LAT $\pi^0$', 'Fermi-LAT ICS', 'Fermi-LAT Brem', 'Fermi-LAT PS', 'Fermi-LAT Iso']
+                for k, name in enumerate(listname):
+                    path = os.environ["PCAT_DATA_PATH"] + '/fermspec' + name + '.csv'
+                    data = loadtxt(path)
+                    enertemp = data[:, 0] # [GeV]
+                    fluxtemp = data[:, 1] * 1e-3 # [GeV/cm^2/s/sr]
+                    fluxtemp = interp(gdat.meanener, enertemp, fluxtemp)
+                    #fluxtemp = interpolate.interp1d(enertemp, fluxtemp)(gdat.meanener)
+                    axis.plot(gdat.meanener, fluxtemp, marker=listmrkr[k], color=listcolr[k], label=listlabl[k])
+
     
 def cnfg_ferm_info():
     
@@ -202,9 +225,6 @@ def cnfg_ferm_info():
     indxenerincl = arange(2, 3)
     indxevttincl = arange(3, 4)
     numbener = indxenerincl.size
-    
-    path = os.environ["FERM_NGAL_DATA_PATH"]
-    strgback = [path + '/fermisotflux.fits', path + '/fermfdfmflux_ngal.fits']
 
     for k in range(numbiter):
         
@@ -223,6 +243,8 @@ def cnfg_ferm_info():
                                   minmflux=minmflux[k], \
                                   maxmflux=1e-7, \
                                   regitype='ngal', \
+                                  pathdata=os.environ["FERM_NGAL_DATA_PATH"], \
+                                  strgback=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
                                   maxmnormback=array([5., 5.]), \
                                   minmnormback=array([0.2, 0.2]), \
                                   strgexpo=strgexpo, \
@@ -239,12 +261,7 @@ def cnfg_ferm_info():
 def intr_ferm_expr_ngal( \
                         strgexpr='fermflux_cmp0_ngal.fits', \
                         strgexpo='fermexpo_cmp0_ngal.fits', \
-                        strgback=None, \
                        ): 
-
-    if strgback == None:
-        path = os.environ["FERM_NGAL_DATA_PATH"]
-        strgback = [path + '/fermisotflux.fits', path + '/fermfdfmflux_ngal.fits']
 
     karg = {}
     karg['psfntype'] = 'doubking'
@@ -261,9 +278,10 @@ def intr_ferm_expr_ngal( \
     karg['minmflux'] = 3e-11
     karg['maxmflux'] = 1e-7
     karg['regitype'] = 'ngal'
+    karg['pathdata'] = os.environ["FERM_NGAL_DATA_PATH"]
     karg['maxmnormback'] = array([2., 2.])
     karg['minmnormback'] = array([0.5, 0.5])
-    karg['strgback'] = strgback
+    karg['strgback'] = ['fermisotflux.fits', 'fermfdfmflux_ngal.fits']
     karg['strgexpo'] = strgexpo
     karg['datatype'] = 'inpt'
     karg['strgexpr'] = strgexpr
@@ -291,11 +309,6 @@ def cnfg_ferm_expr_ngal_cmp3():
     pcat.main.init(**karg)
 
 
-def cnfg_ferm_expr_ngal_full():
-    karg = intr_ferm_expr_ngal(strgexpr='fermflux_full_ngal.fits', strgexpo='fermexpo_full_ngal.fits')
-    pcat.main.init(**karg)
-
-
 def cnfg_ferm_mock_ngal():
      
     indxenerincl = arange(1, 4)
@@ -306,9 +319,6 @@ def cnfg_ferm_mock_ngal():
     maxmflux = 1e-7
     mockfdfnslop = array([1.9])
     
-    path = os.environ["FERM_NGAL_DATA_PATH"]
-    strgback = [path + '/fermisotflux.fits', path + '/fermfdfmflux_ngal.fits']
-      
     pcat.main.init(psfntype='doubking', \
                    numbswep=200000, \
                    randinit=False, \
@@ -323,6 +333,8 @@ def cnfg_ferm_mock_ngal():
                    regitype='ngal', \
                    maxmnormback=array([2., 2.]), \
                    minmnormback=array([0.5, 0.5]), \
+                   pathdata=os.environ["FERM_NGAL_DATA_PATH"], \
+                   strgback=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
                    strgexpo='fermexpo_cmp0_ngal.fits', \
                    datatype='mock', \
                    numbsideheal=256, \
