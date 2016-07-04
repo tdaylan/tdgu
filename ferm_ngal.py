@@ -6,21 +6,22 @@ def make_maps():
     gdat = tdpy.util.gdatstrt()
     
     numbtime = 4
-    gdat.rtag = ['rec7_pnts_cmp%d' % (numbtime - t - 1) for t in range(numbtime)]
-    gdat.reco = [7 for t in range(numbtime)]
+    gdat.timetype = ['tim%d' % t for t in range(numbtime)]
+    gdat.enertype = ['pnts' for t in range(numbtime)]
+    gdat.recotype = ['rec7' for t in range(numbtime)]
     gdat.evtc = [2 for t in range(numbtime)]
     gdat.strgtime = ['tmin=239155201 tmax=364953603' for t in range(numbtime)]
     gdat.weekinit = [9 for t in range(numbtime)]
     gdat.weekfinl = [218 for t in range(numbtime)]
-    gdat.listtimefrac = [0.25, 0.50, 0.75, 1.]
+    gdat.timefrac = [1., 0.75, 0.5, 0.25]
     gdat.photpath = ['p7v6c' for t in range(numbtime)]
     gdat.strgregi = [' ra=INDEF dec=INDEF rad=INDEF ' for n in range(numbtime)]
     gdat.strgener = ['gtbndefn_pnts.fits']
-
+    gdat.numbside = [256 for t in range(numbtime)]
     gdat.evtt = [4, 8, 16, 32]
     gdat.test = True
 
-    make_maps_main(gdat)
+    tdpy.util.make_maps_main(gdat, os.environ["FERM_NGAL_DATA_PATH"])
 
 
 def prep_maps():

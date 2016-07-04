@@ -8,46 +8,25 @@ def retr_modlflux(gdat, sampvarb):
     return modlflux
 
 
-def make_maps_pnts():
-    
-    gdat = tdpy.util.gdatstrt()
-    
-    gdat.rtag = ['']
-    gdat.reco = [8]
-    gdat.evtc = [128]
-    gdat.strgtime = ['tmin=INDEF tmax=INDEF']
-    gdat.weekinit = [11]
-    gdat.weekfinl = [422]
-    gdat.listtimefrac = [1.]
-    gdat.photpath = ['photon']
-    gdat.strgregi = [' ra=INDEF dec=INDEF rad=INDEF ']
-    gdat.strgener = ['gtbndefn_pnts.fits']
-    gdat.numside = [256]
-    gdat.evtt = [4, 8, 16, 32]
-    gdat.test = False
-    
-    tdpy.util.make_maps_main(gdat)
-
-
 def make_maps_back():
     
     gdat = tdpy.util.gdatstrt()
     
-    gdat.rtag = ['']
-    gdat.reco = [8]
-    gdat.evtc = [128]
-    gdat.strgtime = ['tmin=INDEF tmax=INDEF']
-    gdat.weekinit = [11]
-    gdat.weekfinl = [422]
-    gdat.listtimefrac = [1.]
-    gdat.photpath = ['photon']
+    gdat.timetype = ['tim0']
+    gdat.enertype = ['pnts']
+    gdat.recotype = ['rec7']
+    gdat.evtc = [2]
+    gdat.strgtime = ['tmin=239155201 tmax=364953603']
+    gdat.weekinit = [9]
+    gdat.weekfinl = [218]
+    gdat.timefrac = [1.]
+    gdat.photpath = ['p7v6c']
     gdat.strgregi = [' ra=INDEF dec=INDEF rad=INDEF ']
-    gdat.strgener = ['gtbndefn_back.fits']
+    gdat.strgener = ['gtbndefn_pnts.fits']
     gdat.numbside = [256]
-    gdat.evtt = [4, 8, 16, 32]
-    gdat.test = False
-
-    tdpy.util.make_maps_main(gdat)
+    gdat.test = True
+    
+    tdpy.util.make_maps_main(gdat, os.environ["FERM_IGAL_DATA_PATH"])
 
 
 def retr_llik(sampvarb, gdat):
