@@ -449,35 +449,36 @@ def pcat_mock_igal_brok():
     mockfdfnslopuppr = array([2.])
 
     for fdfnbrek in listfdfnbrek:
-        init(psfntype='doubking', \
-    		 numbswep=400000, \
-             numbburn=0, \
-             randinit=False, \
-             # temp
-             boolproppsfn=False, \
-             trueinfo=True, \
-             maxmgang=20., \
-             fdfntype='brok', \
-             indxenerincl=indxenerincl, \
-             indxevttincl=indxevttincl, \
-             maxmnumbpnts=array([600]), \
-             minmflux=3e-11, \
-             maxmflux=1e-7, \
-             regitype='ngal', \
-             maxmnormback=array([2., 2.]), \
-             minmnormback=array([0.5, 0.5]), \
-             strgexpo='fermexpo_cmp0_ngal.fits', \
-             strgback=['isotflux.fits', 'fdfmflux.fits'], \
-             datatype='mock', \
-             mockfdfntype='brok', \
-             mocknumbpnts=array([300]), \
-             numbsideheal=256, \
-             mockfdfnslop=mockfdfnslop, \
-             mockfdfnsloplowr=mockfdfnsloplowr, \
-             mockfdfnslopuppr=mockfdfnslopuppr, \
-             mockfdfnbrek=array([fdfnbrek]), \
-             mocknormback=ones((2, numbener)), \
-            )
+        pcat.main.init(psfntype='doubking', \
+                       numbswep=400000, \
+                       numbburn=0, \
+                       randinit=False, \
+                       # temp
+                       boolproppsfn=False, \
+                       trueinfo=True, \
+                       maxmgang=20., \
+                       fdfntype='brok', \
+                       indxenerincl=indxenerincl, \
+                       indxevttincl=indxevttincl, \
+                       maxmnumbpnts=array([600]), \
+                       minmflux=3e-11, \
+                       maxmflux=1e-7, \
+                       regitype='ngal', \
+                       maxmnormback=array([2., 2.]), \
+                       minmnormback=array([0.5, 0.5]), \
+                       strgexpo='fermexpo_cmp0_igal.fits', \
+                       strgback=['isotflux.fits', 'fdfmflux.fits'], \
+                       datatype='mock', \
+                       mockfdfntype='brok', \
+                       mocknumbpnts=array([300]), \
+                       numbsideheal=256, \
+                       mockfdfnslop=mockfdfnslop, \
+                       mockfdfnsloplowr=mockfdfnsloplowr, \
+                       mockfdfnslopuppr=mockfdfnslopuppr, \
+                       mockfdfnbrek=array([fdfnbrek]), \
+                       mocknormback=ones((2, numbener)), \
+                       pathdata=os.environ["FERM_IGAL_DATA_PATH"], \
+                      )
 
 
 def pcat_mock_igal():
