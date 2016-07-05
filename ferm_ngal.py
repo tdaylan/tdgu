@@ -72,9 +72,11 @@ def pcat_info():
     indxevttincl = arange(3, 4)
     numbener = indxenerincl.size
 
-    for k in range(numbiter):
-        
-        gridchan = pcat.main.init( \
+
+    # temp
+    if False:
+        for k in range(numbiter):
+            gridchan = pcat.main.init( \
                                   psfntype='doubking', \
                                   numbswep=numbswep[k], \
                                   numbburn=numbburn[k], \
@@ -101,7 +103,11 @@ def pcat_info():
         listlevi[k] = gridchan[-2]
         listinfo[k] = gridchan[-1]
 
-    plot_minmfluxinfo(minmflux, listinfo, listlevi)
+    else:
+        listlevi = array([-39222.9070569, -39226.1778779, -39300.7982166, -39521.8723332])[::-1]
+        listinfo = array([91.0328924911, 98.1275628394, 98.732104824, 88.3453610331])[::-1]
+
+    pcat.visu.plot_minmfluxinfo(minmflux, listinfo, listlevi)
 
 
 def intr_ferm_expr_ngal( \
@@ -163,7 +169,7 @@ def pcat_mock_ngal():
 
     minmflux = 3e-11
     maxmflux = 1e-7
-    mockfdfnslop = array([1.9])
+    mockfdfnslop = array([2.5])
     
     pcat.main.init(psfntype='doubking', \
                    numbswep=200000, \
@@ -172,7 +178,7 @@ def pcat_mock_ngal():
                    maxmgang=20., \
                    indxenerincl=indxenerincl, \
                    indxevttincl=indxevttincl, \
-                   mocknumbpnts=array([300]), \
+                   mocknumbpnts=array([400]), \
                    maxmnumbpnts=array([600]), \
                    minmflux=minmflux, \
                    maxmflux=maxmflux, \
