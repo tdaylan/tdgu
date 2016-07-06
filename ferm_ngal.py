@@ -172,6 +172,7 @@ def pcat_ferm_mock_ngal():
                    randinit=False, \
                    trueinfo=True, \
                    maxmgang=20., \
+                   boolproppsfn=False, \
                    indxenerincl=indxenerincl, \
                    indxevttincl=indxevttincl, \
                    mocknumbpnts=array([400]), \
