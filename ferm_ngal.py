@@ -163,8 +163,8 @@ def pcat_ferm_mock_ngal():
     indxevttincl = arange(2, 4)
     numbener = indxenerincl.size
 
-    minmflux = 3e-11
-    maxmflux = 1e-7
+    minmflux = 6e-11
+    maxmflux = 2e-8
     mockfdfnslop = array([1.9])
     
     pcat.main.init(psfntype='doubking', \
