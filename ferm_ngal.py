@@ -168,7 +168,7 @@ def pcat_ferm_mock_ngal():
     mockfdfnslop = array([1.9])
     
     pcat.main.init(psfntype='doubking', \
-                   numbswep=200000, \
+                   numbswep=2000000, \
                    randinit=False, \
                    trueinfo=True, \
                    maxmgang=20., \
