@@ -145,8 +145,8 @@ def retr_ener(gdat):
 
 def prep_maps():
     
-    tdpy.util.prep_maps('rec7', 'back', 'igal', os.environ["FERM_IGAL_DATA_PATH"])
-    tdpy.util.prep_maps('rec7', 'pnts', 'igal', os.environ["FERM_IGAL_DATA_PATH"])
+    tdpy.util.prep_maps('rec7', 'back', 'igal', os.environ["FERM_IGAL_DATA_PATH"], 'tim0')
+    tdpy.util.prep_maps('rec7', 'pnts', 'igal', os.environ["FERM_IGAL_DATA_PATH"], 'tim0')
 
 
 def plot_backspec(gdat, indxpixlmean):
