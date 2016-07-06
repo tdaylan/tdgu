@@ -414,7 +414,7 @@ def init( \
     #plot_backspec(gdat, indxpixlmean)
 
 
-def pcat_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
+def pcat_ferm_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
     pcat.main.init( \
               psfntype='doubking', \
@@ -437,7 +437,7 @@ def pcat_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_i
              )
     
     
-def pcat_mock_igal_brok():
+def pcat_ferm_mock_igal_brok():
      
     indxenerincl = arange(1, 4)
     indxevttincl = arange(2, 4)
@@ -481,7 +481,7 @@ def pcat_mock_igal_brok():
                       )
 
 
-def pcat_mock_igal():
+def pcat_ferm_mock_igal():
      
     indxevttincl = arange(2, 4)
     indxenerincl = arange(1, 4)
@@ -493,7 +493,7 @@ def pcat_mock_igal():
       
     pcat.main.init( \
                    psfntype='doubking', \
-                   numbswep=1000000, \
+                   numbswep=5000, \
                    randinit=False, \
                    trueinfo=True, \
                    maxmgang=20., \
@@ -509,6 +509,8 @@ def pcat_mock_igal():
                    mockfdfnslop=mockfdfnslop, \
                    minmnormback=array([0.5, 0.5]), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
+                   strgback=['isotflux.fits', 'fdfmflux.fits'], \
+                   pathdata=os.environ["FERM_IGAL_DATA_PATH"], \
                    regitype='igal', \
                    datatype='mock', \
                   )
