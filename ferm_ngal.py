@@ -137,22 +137,22 @@ def intr_ferm_expr_ngal( \
     return karg
 
 
-def pcat_expr_ngal():
+def pcat_ferm_expr_ngal():
     karg = intr_ferm_expr_ngal()
     pcat.main.init(**karg)
 
 
-def pcat_expr_ngal_cmp1():
+def pcat_ferm_expr_ngal_cmp1():
     karg = intr_ferm_expr_ngal(strgexpr='fermflux_cmp1_ngal.fits', strgexpo='fermexpo_cmp1_ngal.fits')
     pcat.main.init(**karg)
 
 
-def pcat_expr_ngal_cmp2():
+def pcat_ferm_expr_ngal_cmp2():
     karg = intr_ferm_expr_ngal(strgexpr='fermflux_cmp2_ngal.fits', strgexpo='fermexpo_cmp2_ngal.fits')
     pcat.main.init(**karg)
 
 
-def pcat_expr_ngal_cmp3():
+def pcat_ferm_expr_ngal_cmp3():
     karg = intr_ferm_expr_ngal(strgexpr='fermflux_cmp3_ngal.fits', strgexpo='fermexpo_cmp3_ngal.fits')
     pcat.main.init(**karg)
 
