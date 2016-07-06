@@ -177,7 +177,7 @@ def plot_backspec(gdat, indxpixlmean):
 
     # Fermi-LAT results
     # temp
-    if False and gdat.trueinfo:
+    if False:
         if gdat.datatype == 'mock':
             pass
         else:
@@ -420,7 +420,6 @@ def pcat_ferm_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_c
               psfntype='doubking', \
               numbswep=2000000, \
               randinit=False, \
-              trueinfo=True, \
               maxmgang=20., \
               indxenerincl=arange(1, 4), \
               indxevttincl=arange(2, 4), \
@@ -443,19 +442,17 @@ def pcat_ferm_mock_igal_brok():
     indxevttincl = arange(2, 4)
     numbener = indxenerincl.size
 
-    mockfdfnslop = array([2.])
-    listfdfnbrek = array([1e-10, 3e-10, 1e-9])
-    mockfdfnsloplowr = array([0.75])
-    mockfdfnslopuppr = array([2.])
+    mockfdfnslop = array([2.5])
+    listfdfnbrek = array([1e-10, 3e-10, 1e-9, 3e-9, 1e-8])
+    mockfdfnsloplowr = array([1.])
+    mockfdfnslopuppr = array([2.5])
 
     for fdfnbrek in listfdfnbrek:
         pcat.main.init(psfntype='doubking', \
                        numbswep=400000, \
                        numbburn=0, \
                        randinit=False, \
-                       # temp
                        boolproppsfn=False, \
-                       trueinfo=True, \
                        maxmgang=20., \
                        fdfntype='brok', \
                        indxenerincl=indxenerincl, \
@@ -495,7 +492,6 @@ def pcat_ferm_mock_igal():
                    psfntype='doubking', \
                    numbswep=5000, \
                    randinit=False, \
-                   trueinfo=True, \
                    maxmgang=20., \
                    indxevttincl=indxevttincl, \
                    indxenerincl=indxenerincl, \
