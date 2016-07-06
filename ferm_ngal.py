@@ -93,8 +93,6 @@ def pcat_info():
                                   regitype='ngal', \
                                   pathdata=os.environ["FERM_NGAL_DATA_PATH"], \
                                   strgback=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
-                                  maxmnormback=array([5., 5.]), \
-                                  minmnormback=array([0.2, 0.2]), \
                                   strgexpo=strgexpo, \
                                   datatype='inpt', \
                                   strgexpr=strgexpr, \
@@ -131,8 +129,6 @@ def intr_ferm_expr_ngal( \
     karg['maxmflux'] = 1e-7
     karg['regitype'] = 'ngal'
     karg['pathdata'] = os.environ["FERM_NGAL_DATA_PATH"]
-    karg['maxmnormback'] = array([2., 2.])
-    karg['minmnormback'] = array([0.5, 0.5])
     karg['strgback'] = ['fermisotflux.fits', 'fermfdfmflux_ngal.fits']
     karg['strgexpo'] = strgexpo
     karg['datatype'] = 'inpt'
@@ -161,7 +157,7 @@ def pcat_expr_ngal_cmp3():
     pcat.main.init(**karg)
 
 
-def pcat_mock_ngal():
+def pcat_ferm_mock_ngal():
      
     indxenerincl = arange(1, 4)
     indxevttincl = arange(2, 4)
@@ -183,8 +179,6 @@ def pcat_mock_ngal():
                    minmflux=minmflux, \
                    maxmflux=maxmflux, \
                    regitype='ngal', \
-                   maxmnormback=array([2., 2.]), \
-                   minmnormback=array([0.5, 0.5]), \
                    pathdata=os.environ["FERM_NGAL_DATA_PATH"], \
                    strgback=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
                    strgexpo='fermexpo_cmp0_ngal.fits', \

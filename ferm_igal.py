@@ -397,8 +397,6 @@ def pcat_ferm_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_c
               maxmflux=3e-6, \
               pathdata=os.environ["FERM_IGAL_DATA_PATH"], \
               regitype='igal', \
-              maxmnormback=array([5., 5.]), \
-              minmnormback=array([.2, .2]), \
               strgback=['isotflux.fits', 'fdfmflux.fits'], \
               strgexpo=strgexpo, \
               datatype='inpt', \
@@ -431,8 +429,6 @@ def pcat_ferm_mock_igal_brok():
                        minmflux=3e-11, \
                        maxmflux=1e-7, \
                        regitype='igal', \
-                       maxmnormback=array([2., 2.]), \
-                       minmnormback=array([0.5, 0.5]), \
                        strgexpo='fermexpo_cmp0_igal.fits', \
                        strgback=['isotflux.fits', 'fdfmflux.fits'], \
                        datatype='mock', \
@@ -454,9 +450,11 @@ def pcat_ferm_mock_igal():
     indxenerincl = arange(1, 4)
     numbener = indxenerincl.size
 
-    minmflux = 5e-11
+    minmflux = 3e-11
     maxmflux = 3e-7
-    mockfdfnslop = array([1.9])
+    mockfdfnbrek = array([1e-8])
+    mockfdfnsloplowr = array([1.6])
+    mockfdfnslopuppr = array([2.6])
       
     pcat.main.init( \
                    psfntype='doubking', \
@@ -465,20 +463,24 @@ def pcat_ferm_mock_igal():
                    maxmgang=20., \
                    indxevttincl=indxevttincl, \
                    indxenerincl=indxenerincl, \
-                   numbsideheal=256, \
-                   mocknumbpnts=array([800]), \
-                   maxmnumbpnts=array([1200]), \
-                   minmflux=minmflux, \
-                   maxmflux=maxmflux, \
-                   mocknormback=ones((2, numbener)), \
-                   maxmnormback=array([2., 2.]), \
-                   mockfdfnslop=mockfdfnslop, \
-                   minmnormback=array([0.5, 0.5]), \
+                   fdfntype='brok', \
                    strgexpo='fermexpo_cmp0_igal.fits', \
                    strgback=['isotflux.fits', 'fdfmflux.fits'], \
                    pathdata=os.environ["FERM_IGAL_DATA_PATH"], \
                    regitype='igal', \
+                   
+                   maxmnumbpnts=array([1200]), \
+                   minmflux=minmflux, \
+                   maxmflux=maxmflux, \
+                   
                    datatype='mock', \
+                   numbsideheal=256, \
+                   mocknumbpnts=array([800]), \
+                   mockfdfntype='brok', \
+                   mockfdfnbrek=mockfdfnbrek, \
+                   mockfdfnsloplowr=mockfdfnsloplowr, \
+                   mockfdfnslopuppr=mockfdfnslopuppr, \
+                   mocknormback=ones((2, numbener)), \
                   )
 
 
