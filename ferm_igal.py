@@ -11,43 +11,19 @@ def retr_modlflux(gdat, sampvarb):
 def make_maps_rec7_back():
     
     gdat = tdpy.util.gdatstrt()
-    
-    gdat.timetype = ['tim0']
-    gdat.enertype = ['back']
     gdat.recotype = ['rec7']
-    gdat.evtc = [2]
-    gdat.strgtime = ['tmin=239155201 tmax=364953603']
-    gdat.weekinit = [9]
-    gdat.weekfinl = [218]
-    gdat.timefrac = [1.]
-    gdat.photpath = ['p7v6c']
-    gdat.strgregi = [' ra=INDEF dec=INDEF rad=INDEF ']
-    gdat.strgener = ['gtbndefn_back.fits']
-    gdat.numbside = [256]
-    gdat.test = False
-    
+    gdat.enertype = ['back']
     tdpy.util.make_maps_main(gdat, os.environ["FERM_IGAL_DATA_PATH"])
+    tdpy.util.prep_maps('rec7', 'back', 'igal', os.environ["FERM_IGAL_DATA_PATH"], 'tim0')
 
 
 def make_maps_rec8_back():
     
     gdat = tdpy.util.gdatstrt()
-    
-    gdat.timetype = ['tim0']
-    gdat.enertype = ['back']
     gdat.recotype = ['rec8']
-    gdat.evtc = [128]
-    gdat.strgtime = ['tmin=INDEF tmax=INDEF']
-    gdat.weekinit = [11]
-    gdat.weekfinl = [422]
-    gdat.timefrac = [1.]
-    gdat.photpath = ['photon']
-    gdat.strgregi = [' ra=INDEF dec=INDEF rad=INDEF ']
-    gdat.strgener = ['gtbndefn_back.fits']
-    gdat.numbside = [256]
-    gdat.test = False
-    
+    gdat.enertype = ['back']
     tdpy.util.make_maps_main(gdat, os.environ["FERM_IGAL_DATA_PATH"])
+    tdpy.util.prep_maps('rec8', 'back', 'igal', os.environ["FERM_IGAL_DATA_PATH"], 'tim0')
 
 
 def retr_llik(sampvarb, gdat):
@@ -142,12 +118,6 @@ def retr_ener(gdat):
     gdat.numbener = gdat.meanener.size
     gdat.indxener = arange(gdat.numbener)
     
-
-def prep_maps():
-    
-    tdpy.util.prep_maps('rec7', 'back', 'igal', os.environ["FERM_IGAL_DATA_PATH"], 'tim0')
-    tdpy.util.prep_maps('rec7', 'pnts', 'igal', os.environ["FERM_IGAL_DATA_PATH"], 'tim0')
-
 
 def plot_backspec(gdat, indxpixlmean):
     
