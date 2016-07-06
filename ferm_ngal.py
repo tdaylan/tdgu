@@ -165,7 +165,7 @@ def pcat_ferm_mock_ngal():
 
     minmflux = 3e-11
     maxmflux = 1e-7
-    mockfdfnslop = array([2.5])
+    mockfdfnslop = array([1.9])
     
     pcat.main.init(psfntype='doubking', \
                    numbswep=200000, \
@@ -175,7 +175,7 @@ def pcat_ferm_mock_ngal():
                    boolproppsfn=False, \
                    indxenerincl=indxenerincl, \
                    indxevttincl=indxevttincl, \
-                   mocknumbpnts=array([400]), \
+                   mocknumbpnts=array([300]), \
                    maxmnumbpnts=array([600]), \
                    minmflux=minmflux, \
                    maxmflux=maxmflux, \
