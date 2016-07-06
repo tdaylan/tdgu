@@ -14,7 +14,7 @@ def make_maps_rec7_back():
     gdat.recotype = ['rec7']
     gdat.enertype = ['back']
     tdpy.util.make_maps_main(gdat, os.environ["FERM_IGAL_DATA_PATH"])
-    tdpy.util.prep_maps('rec7', 'back', 'igal', os.environ["FERM_IGAL_DATA_PATH"], 'tim0')
+    tdpy.util.prep_maps('rec7', 'back', 'igal', os.environ["FERM_IGAL_DATA_PATH"], 256, 'tim0')
 
 
 def make_maps_rec8_back():
@@ -23,7 +23,7 @@ def make_maps_rec8_back():
     gdat.recotype = ['rec8']
     gdat.enertype = ['back']
     tdpy.util.make_maps_main(gdat, os.environ["FERM_IGAL_DATA_PATH"])
-    tdpy.util.prep_maps('rec8', 'back', 'igal', os.environ["FERM_IGAL_DATA_PATH"], 'tim0')
+    tdpy.util.prep_maps('rec8', 'back', 'igal', os.environ["FERM_IGAL_DATA_PATH"], 256, 'tim0')
 
 
 def retr_llik(sampvarb, gdat):
