@@ -460,7 +460,7 @@ def pcat_ferm_mock_igal_brok():
                        maxmnumbpnts=array([600]), \
                        minmflux=3e-11, \
                        maxmflux=1e-7, \
-                       regitype='ngal', \
+                       regitype='igal', \
                        maxmnormback=array([2., 2.]), \
                        minmnormback=array([0.5, 0.5]), \
                        strgexpo='fermexpo_cmp0_igal.fits', \
