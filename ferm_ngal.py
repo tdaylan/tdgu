@@ -118,6 +118,7 @@ def intr_ferm_expr_ngal( \
     karg['numbswep'] = 2000000
     karg['randinit'] = False
     karg['maxmgang'] = 20.
+    karg['boolproppsfn'] = False
     karg['initfdfnslop'] = array([1.9])
     karg['initfdfnnorm'] = array([300])
     karg['maxmnumbpnts'] = array([500])
