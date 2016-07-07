@@ -266,18 +266,22 @@ def init( \
     gdat.fluxback = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
     for c in gdat.indxback:
 
+        if boolsmth:
+            strg = '_smth'
+        else:
+            strg = ''
         if c == 0:
             strg = 'isotflux'
         if c == 1:
-            strg = 'fdfmflux_smth'
+            strg = 'fdfmflux' + strg
         if c == 2:
-            strg = 'plnkdust_smth'
+            strg = 'plnkdust' + strg
         if c == 3:
-            strg = 'wisestar_smth'
+            strg = 'wisestar' + strg
         if c == 4:
-            strg = 'finkdust_smth'
+            strg = 'finkdust' + strg
         if c == 5:
-            strg = 'darktemp_smth'
+            strg = 'darktemp' + strg
 
         # temp -- ROI should be fixed at 40 X 40 degree^2
         path = os.environ["FERM_IGAL_DATA_PATH"] + '/' + strg + '.fits'
@@ -315,7 +319,8 @@ def init( \
                 else:
                     for i in gdat.indxenerfull:
                         fluxback[i, :, m] = fluxbackorig
-            fluxback = tdpy.util.smth_ferm(fluxback, gdat.meanenerfull, gdat.indxevttfull)
+            if boolsmth:
+                fluxback = tdpy.util.smth_ferm(fluxback, gdat.meanenerfull, gdat.indxevttfull)
             # temp
             fluxback[where(fluxback < 0.)] = 0.
 
