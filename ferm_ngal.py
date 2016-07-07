@@ -117,8 +117,6 @@ def intr_ferm_expr_ngal( \
     karg['psfntype'] = 'doubking'
     karg['numbswep'] = 2000000
     karg['randinit'] = False
-    # temp
-    karg['boolproppsfn'] = False
     karg['maxmgang'] = 20.
     karg['initfdfnslop'] = array([1.9])
     karg['initfdfnnorm'] = array([300])

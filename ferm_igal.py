@@ -269,15 +269,15 @@ def init( \
         if c == 0:
             strg = 'isotflux'
         if c == 1:
-            strg = 'fdfmflux'
+            strg = 'fdfmflux_smth'
         if c == 2:
-            strg = 'plnkdust'
+            strg = 'plnkdust_smth'
         if c == 3:
-            strg = 'wisestar'
+            strg = 'wisestar_smth'
         if c == 4:
-            strg = 'finkdust'
+            strg = 'finkdust_smth'
         if c == 5:
-            strg = 'darktemp'
+            strg = 'darktemp_smth'
 
         # temp -- ROI should be fixed at 40 X 40 degree^2
         path = os.environ["FERM_IGAL_DATA_PATH"] + '/' + strg + '.fits'
