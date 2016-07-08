@@ -143,6 +143,11 @@ def pcat_ferm_expr_ngal_cmp3():
     pcat.main.init(**karg)
 
 
+def pcat_ferm_expr_ngal_tim4():
+    karg = intr_ferm_expr_ngal(strgexpr='fermflux_rec7_pnts_ngal_0256_tim4.fits', strgexpo='fermexpo_rec7_pnts_ngal_0256_tim4.fits')
+    pcat.main.init(**karg)
+
+
 def pcat_ferm_mock_ngal():
      
     indxenerincl = arange(1, 4)
