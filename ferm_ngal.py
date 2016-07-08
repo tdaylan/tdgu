@@ -13,7 +13,7 @@ def make_maps():
 
 def prep_maps():
     
-    tdpy.util.prep_maps('rec7', 'pnts', 'ngal', os.environ["FERM_NGAL_DATA_PATH"])
+    tdpy.util.prep_maps('rec7', 'pnts', 'ngal', os.environ["FERM_NGAL_DATA_PATH"], 256, 'tim0')
 
 
 def plot_spec():
