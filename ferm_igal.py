@@ -107,16 +107,18 @@ def defn_gtbn():
 
 def retr_ener(gdat):
 
-    gdat.binsenerfull = array([0.1, 0.3, 1., 3., 10., 100.])
+    # temp
+    #gdat.binsenerfull = array([0.1, 0.3, 1., 3., 10., 100.])
+    gdat.binsenerfull = array([0.3, 1., 3., 10])
     gdat.meanenerfull = sqrt(gdat.binsenerfull[1:] * gdat.binsenerfull[:-1])
     gdat.numbenerfull = gdat.binsenerfull.size - 1
     gdat.indxenerfull = arange(gdat.numbenerfull)
-
     gdat.binsener = gdat.binsenerfull[gdat.indxenerincl[0]:gdat.indxenerincl[-1] + 2]
     gdat.meanener = sqrt(gdat.binsener[1:] * gdat.binsener[:-1])
     gdat.diffener = gdat.binsener[1:] - gdat.binsener[:-1]
     gdat.numbener = gdat.meanener.size
     gdat.indxener = arange(gdat.numbener)
+    gdat.strgbinsener = ['%.3g GeV - %.3g GeV' % (gdat.binsener[i], gdat.binsener[i+1]) for i in gdat.indxener]
     
 
 def plot_backspec(gdat, indxpixlmean):
@@ -178,6 +180,48 @@ def plot_backspec(gdat, indxpixlmean):
     plt.close(figr)
 
 
+def plot_psec(gdat, mapsplot):
+
+    listlabl = ['Data', 'Isotropic']
+    listlinestyl = ['-', '-']
+    listcolr = ['black', 'b']
+    for i in gdat.indxener:
+        listlabl.append('FDM, %s' % gdat.strgbinsener[i])
+        if i == 0:
+            listlinestyl.append('-.')
+        if i == 1:
+            listlinestyl.append(':')
+        if i == 2:
+            listlinestyl.append('--')
+            # temp increment line styl
+        listcolr.append('g')
+    listlabl.append(['Planck', r'WISE 12$\mu$m', 'NFW'])
+    listlinestly = ['-', '-', '-']
+    listcolr.append(['r', 'm', 'y'])
+
+    figr, axis = plt.subplots()
+    mpol = arange(3 * gdat.numbside, dtype=int)
+    for n in range(gdat.numbback):
+        print 'n: ', n
+        print 'mapsplot[n, :]'
+        print amin(mapsplot[n, :]), amax(mapsplot[n, :])
+        psec = hp.anafast(mapsplot[n, :])
+        print 'hey'
+        print psec
+
+        axis.loglog(mpol, mpol * (mpol + 1.) * psec, color=listcolr[n], label=listlabl[n])
+
+    axis.set_ylabel('$l(l+1)C_l$')
+    axis.set_xlabel('$l$')
+    
+    axis.legend(loc=4, ncol=2)
+
+    path = gdat.pathplot + 'psec.pdf'
+    plt.tight_layout()
+    plt.savefig(path)
+
+
+
 def init( \
          numbproc=1, \
          numbswep=None, \
@@ -187,7 +231,9 @@ def init( \
          strgexpr='fermflux_cmp0_igal.fits', \
          strgexpo='fermexpo_cmp0_igal.fits', \
          strgback=['isotflux', 'fdfmflux', 'HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'lambda_sfd_ebv.fits', 'darktemp'], \
-         indxenerincl=arange(1, 4), \
+         # temp
+         #indxenerincl=arange(1, 4), \
+         indxenerincl=arange(3), \
          indxevttincl=arange(3, 4), \
          maxmgang=20.
         ):
@@ -220,6 +266,8 @@ def init( \
     gdat.numbevtt = gdat.evtt.size
     gdat.indxevtt = arange(gdat.numbevtt)
 
+    boolsmth = False
+
     ## pixelization
     gdat.numbside = 256
     gdat.numbpixlfull = gdat.numbside**2 * 12
@@ -234,6 +282,8 @@ def init( \
     maxmlgal = gdat.maxmgang
     minmbgal = -gdat.maxmgang
     maxmbgal = gdat.maxmgang
+
+    boolplotpsec = True
 
     indxdatacubefilt = meshgrid(gdat.indxenerincl, gdat.indxpixlrofi, gdat.indxevttincl, indexing='ij')
     
@@ -262,6 +312,12 @@ def init( \
    
     gdat.datacnts = gdat.dataflux * gdat.expo * gdat.apix * gdat.diffener[:, None, None]
 
+    # power spectrum calculation
+    gdat.numbmapsplot = gdat.numbback - 1 + gdat.numbener
+    gdat.mapsplot = empty((gdat.numbmapsplot, gdat.numbpixlfull))
+    print 'gdat.numbmapsplot'
+    print gdat.numbmapsplot
+
     ## templates
     gdat.fluxback = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
     for c in gdat.indxback:
@@ -285,9 +341,10 @@ def init( \
 
         # temp -- ROI should be fixed at 40 X 40 degree^2
         path = os.environ["FERM_IGAL_DATA_PATH"] + '/' + strg + '.fits'
-        if os.path.isfile(path):
+        if os.path.isfile(path) or not boolplotpsec:
             fluxback = pf.getdata(path)
         else:
+            
             if c == 0:
                 fluxbackorig = tdpy.util.retr_isot(gdat.binsenerfull)
             if c == 1:
@@ -319,6 +376,7 @@ def init( \
                 else:
                     for i in gdat.indxenerfull:
                         fluxback[i, :, m] = fluxbackorig
+            
             if boolsmth:
                 fluxback = tdpy.util.smth_ferm(fluxback, gdat.meanenerfull, gdat.indxevttfull)
             # temp
@@ -326,11 +384,31 @@ def init( \
 
             pf.writeto(path, fluxback, clobber=True)
 
+            # load the map to the array whose power spectrum will be calculated
+            if c== 0:
+                gdat.mapsplot[c, :] = fluxbackorig
+            elif c == 1:
+                gdat.mapsplot[c:c+gdat.numbener, :] = fluxbackorig
+            else:
+                gdat.mapsplot[c+gdat.numbener-1, :] = fluxbackorig
+            print 'hey'
+            print 'gdat.mapsplot'
+            print amin(gdat.mapsplot, 1)
+            print amax(gdat.mapsplot, 1)
+            print
+
+
         # take only the energy bins, spatial pixels and event types of interest
         fluxback = fluxback[indxdatacubefilt]
         indxdatacubetemp = meshgrid(array([c]), gdat.indxener, gdat.indxpixl, gdat.indxevtt, indexing='ij')
         gdat.fluxback[indxdatacubetemp] = fluxback
-        
+        indxtemp = concatenate((array([0]), 1 + gdat.indxener, 1 + gdat.numbener + arange(4)))
+        print indxtemp
+        gdat.mapsplot = gdat.mapsplot[indxtemp, :]
+
+    # plot the power spectra
+    plot_psec(gdat, gdat.mapsplot)
+    
     gdat.pathbase = os.environ["FERM_IGAL_DATA_PATH"]
     gdat.pathplot = gdat.pathbase + '/imag/%s/' % gdat.rtag
     cmnd = 'mkdir -p ' + gdat.pathplot
@@ -449,6 +527,48 @@ def pcat_ferm_mock_igal_brok():
                       )
 
 
+def pcat_ferm_mock_igal_nfww():
+     
+    indxevttincl = arange(2, 4)
+    indxenerincl = arange(1, 4)
+    numbener = indxenerincl.size
+
+    minmflux = 3e-11
+    maxmflux = 3e-7
+    mockfdfnbrek = array([1e-8])
+    mockfdfnsloplowr = array([1.6])
+    mockfdfnslopuppr = array([2.6])
+      
+    pcat.main.init( \
+                   psfntype='doubking', \
+                   numbswep=5000, \
+                   randinit=False, \
+                   maxmgang=20., \
+                   indxevttincl=indxevttincl, \
+                   indxenerincl=indxenerincl, \
+                   fdfntype='brok', \
+                   strgexpo='fermexpo_cmp0_igal.fits', \
+                   strgback=['isotflux.fits', 'fdfmflux.fits'], \
+                   pathdata=os.environ["FERM_IGAL_DATA_PATH"], \
+                   regitype='igal', \
+                   
+                   maxmnumbpnts=array([1200]), \
+                   minmflux=minmflux, \
+                   maxmflux=maxmflux, \
+                   
+                   mockspatdist=['unif', 'gang'], \
+
+                   datatype='mock', \
+                   numbsideheal=256, \
+                   mocknumbpnts=array([800]), \
+                   mockfdfntype='brok', \
+                   mockfdfnbrek=mockfdfnbrek, \
+                   mockfdfnsloplowr=mockfdfnsloplowr, \
+                   mockfdfnslopuppr=mockfdfnslopuppr, \
+                   mocknormback=ones((2, numbener)), \
+                  )
+
+
 def pcat_ferm_mock_igal():
      
     indxevttincl = arange(2, 4)
@@ -494,7 +614,7 @@ def cnfg_nomi():
     init( \
          verbtype=1, \
          makeplot=True, \
-         strgback=['isotflux', 'fdfmflux'], \
+         #strgback=['isotflux', 'fdfmflux'], \
         )
 
 
