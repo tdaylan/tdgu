@@ -108,8 +108,7 @@ def defn_gtbn():
 def retr_ener(gdat):
 
     # temp
-    #gdat.binsenerfull = array([0.1, 0.3, 1., 3., 10., 100.])
-    gdat.binsenerfull = array([0.3, 1., 3., 10])
+    gdat.binsenerfull = array([0.1, 0.3, 1., 3., 10., 100.])
     gdat.meanenerfull = sqrt(gdat.binsenerfull[1:] * gdat.binsenerfull[:-1])
     gdat.numbenerfull = gdat.binsenerfull.size - 1
     gdat.indxenerfull = arange(gdat.numbenerfull)
@@ -183,31 +182,23 @@ def plot_backspec(gdat, indxpixlmean):
 def plot_psec(gdat, mapsplot):
 
     listlabl = ['Data', 'Isotropic']
-    listlinestyl = ['-', '-']
     listcolr = ['black', 'b']
-    for i in gdat.indxener:
-        listlabl.append('FDM, %s' % gdat.strgbinsener[i])
-        if i == 0:
-            listlinestyl.append('-.')
-        if i == 1:
-            listlinestyl.append(':')
-        if i == 2:
-            listlinestyl.append('--')
-            # temp increment line styl
-        listcolr.append('g')
-    listlabl.append(['Planck', r'WISE 12$\mu$m', 'NFW'])
-    listlinestly = ['-', '-', '-']
-    listcolr.append(['r', 'm', 'y'])
+    
+    listlabl.append('FDM, %s' % gdat.strgbinsener[1])
+    listcolr.append('g')
+    
+    listlabl.extend(['Planck', r'WISE 12$\mu$m', 'NFW'])
+    listcolr.extend(['r', 'm', 'y'])
 
     figr, axis = plt.subplots()
     mpol = arange(3 * gdat.numbside, dtype=int)
+    print 'hey'
     for n in range(gdat.numbback):
         print 'n: ', n
         print 'mapsplot[n, :]'
-        print amin(mapsplot[n, :]), amax(mapsplot[n, :])
+        print amin(mapsplot[n, :]), amax(mapsplot[n, :]), mean(mapsplot[n, :]), std(mapsplot[n, :])
         psec = hp.anafast(mapsplot[n, :])
-        print 'hey'
-        print psec
+        print 
 
         axis.loglog(mpol, mpol * (mpol + 1.) * psec, color=listcolr[n], label=listlabl[n])
 
@@ -221,7 +212,6 @@ def plot_psec(gdat, mapsplot):
     plt.savefig(path)
 
 
-
 def init( \
          numbproc=1, \
          numbswep=None, \
@@ -231,9 +221,7 @@ def init( \
          strgexpr='fermflux_cmp0_igal.fits', \
          strgexpo='fermexpo_cmp0_igal.fits', \
          strgback=['isotflux', 'fdfmflux', 'HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'lambda_sfd_ebv.fits', 'darktemp'], \
-         # temp
-         #indxenerincl=arange(1, 4), \
-         indxenerincl=arange(3), \
+         indxenerincl=arange(1, 4), \
          indxevttincl=arange(3, 4), \
          maxmgang=20.
         ):
@@ -313,10 +301,10 @@ def init( \
     gdat.datacnts = gdat.dataflux * gdat.expo * gdat.apix * gdat.diffener[:, None, None]
 
     # power spectrum calculation
-    gdat.numbmapsplot = gdat.numbback - 1 + gdat.numbener
+    gdat.numbmapsplot = gdat.numbback + 1
     gdat.mapsplot = empty((gdat.numbmapsplot, gdat.numbpixlfull))
-    print 'gdat.numbmapsplot'
-    print gdat.numbmapsplot
+    
+    gdat.mapsplot[0, gdat.indxpixlrofi] = sum(gdat.datacnts[1, :, :], 1)
 
     ## templates
     gdat.fluxback = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
@@ -385,35 +373,26 @@ def init( \
             pf.writeto(path, fluxback, clobber=True)
 
             # load the map to the array whose power spectrum will be calculated
-            if c== 0:
-                gdat.mapsplot[c, :] = fluxbackorig
+            if c == 0:
+                gdat.mapsplot[c+1, :] = fluxbackorig[1, :]
             elif c == 1:
-                gdat.mapsplot[c:c+gdat.numbener, :] = fluxbackorig
+                gdat.mapsplot[c+1, :] = fluxbackorig[1, :]
             else:
-                gdat.mapsplot[c+gdat.numbener-1, :] = fluxbackorig
-            print 'hey'
-            print 'gdat.mapsplot'
-            print amin(gdat.mapsplot, 1)
-            print amax(gdat.mapsplot, 1)
-            print
-
-
+                gdat.mapsplot[c+1, :] = fluxbackorig
+    
         # take only the energy bins, spatial pixels and event types of interest
         fluxback = fluxback[indxdatacubefilt]
         indxdatacubetemp = meshgrid(array([c]), gdat.indxener, gdat.indxpixl, gdat.indxevtt, indexing='ij')
         gdat.fluxback[indxdatacubetemp] = fluxback
-        indxtemp = concatenate((array([0]), 1 + gdat.indxener, 1 + gdat.numbener + arange(4)))
-        print indxtemp
-        gdat.mapsplot = gdat.mapsplot[indxtemp, :]
 
-    # plot the power spectra
-    plot_psec(gdat, gdat.mapsplot)
-    
     gdat.pathbase = os.environ["FERM_IGAL_DATA_PATH"]
     gdat.pathplot = gdat.pathbase + '/imag/%s/' % gdat.rtag
     cmnd = 'mkdir -p ' + gdat.pathplot
     os.system(cmnd)
 
+    # plot the power spectra
+    plot_psec(gdat, gdat.mapsplot)
+    
     # plot the input spatial templates
     for c in gdat.indxback:
         for i in gdat.indxener:
@@ -487,16 +466,45 @@ def pcat_ferm_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_c
              )
     
     
+def intr_ferm_mock_igal_brok( \
+                        strgexpr='fermflux_cmp0_ngal.fits', \
+                        strgexpo='fermexpo_cmp0_ngal.fits', \
+                       ): 
+
+    karg = {}
+    karg['psfntype'] = 'doubking'
+    karg['numbswep'] = 2000000
+    karg['randinit'] = False
+    karg['maxmgang'] = 20.
+    karg['boolproppsfn'] = False
+    karg['initfdfnslop'] = array([1.9])
+    karg['initfdfnnorm'] = array([300])
+    karg['maxmnumbpnts'] = array([500])
+    karg['indxenerincl'] = arange(1, 4)
+    karg['indxevttincl'] = arange(2, 4)
+    karg['minmflux'] = 3e-11
+    karg['maxmflux'] = 1e-7
+    karg['regitype'] = 'ngal'
+    karg['pathdata'] = os.environ["FERM_NGAL_DATA_PATH"]
+    karg['strgback'] = ['fermisotflux.fits', 'fermfdfmflux_ngal.fits']
+    karg['strgexpo'] = strgexpo
+    karg['datatype'] = 'inpt'
+    karg['strgexpr'] = strgexpr
+
+    return karg
+
+
 def pcat_ferm_mock_igal_brok():
      
     indxenerincl = arange(1, 4)
     indxevttincl = arange(2, 4)
     numbener = indxenerincl.size
 
-    mockfdfnslop = array([2.5])
     listfdfnbrek = array([1e-10, 3e-10, 1e-9, 3e-9, 1e-8])
+    listfdfnsloplowr = array([1.9, 2.2, 2.8, 3.1, 3.4])
     mockfdfnsloplowr = array([1.])
     mockfdfnslopuppr = array([2.5])
+
 
     for fdfnbrek in listfdfnbrek:
         pcat.main.init(psfntype='doubking', \
@@ -538,7 +546,7 @@ def pcat_ferm_mock_igal_nfww():
     mockfdfnbrek = array([1e-8])
     mockfdfnsloplowr = array([1.6])
     mockfdfnslopuppr = array([2.6])
-      
+    
     pcat.main.init( \
                    psfntype='doubking', \
                    numbswep=5000, \
@@ -556,16 +564,18 @@ def pcat_ferm_mock_igal_nfww():
                    minmflux=minmflux, \
                    maxmflux=maxmflux, \
                    
-                   mockspatdist=['unif', 'gang'], \
 
                    datatype='mock', \
                    numbsideheal=256, \
+                   mocknormback=ones((2, numbener)), \
                    mocknumbpnts=array([800]), \
+                   mockspatdisttype=['unif', 'gang'], \
                    mockfdfntype='brok', \
                    mockfdfnbrek=mockfdfnbrek, \
                    mockfdfnsloplowr=mockfdfnsloplowr, \
                    mockfdfnslopuppr=mockfdfnslopuppr, \
-                   mocknormback=ones((2, numbener)), \
+                   mocksdfnstdv=array([.5]), \
+                   mocksdfnmean=array([2.]), \
                   )
 
 
@@ -577,35 +587,37 @@ def pcat_ferm_mock_igal():
 
     minmflux = 3e-11
     maxmflux = 3e-7
-    mockfdfnbrek = array([1e-8])
-    mockfdfnsloplowr = array([1.6])
-    mockfdfnslopuppr = array([2.6])
+    mockfdfnslop = array([2.6, 2.6, 3.5])
       
     pcat.main.init( \
                    psfntype='doubking', \
-                   numbswep=5000, \
+                   numbswep=100, \
                    randinit=False, \
-                   maxmgang=20., \
                    indxevttincl=indxevttincl, \
                    indxenerincl=indxenerincl, \
-                   fdfntype='brok', \
                    strgexpo='fermexpo_cmp0_igal.fits', \
                    strgback=['isotflux.fits', 'fdfmflux.fits'], \
                    pathdata=os.environ["FERM_IGAL_DATA_PATH"], \
                    regitype='igal', \
                    
-                   maxmnumbpnts=array([1200]), \
+                   maxmnumbpnts=array([200, 200, 400]), \
+                   maxmgang=20., \
                    minmflux=minmflux, \
                    maxmflux=maxmflux, \
+                   fdfntype='powr', \
+                   sdfnstdv=array([.5, .5, .5]), \
+                   sdfnmean=array([2., 2., 2.]), \
                    
                    datatype='mock', \
                    numbsideheal=256, \
-                   mocknumbpnts=array([800]), \
-                   mockfdfntype='brok', \
-                   mockfdfnbrek=mockfdfnbrek, \
-                   mockfdfnsloplowr=mockfdfnsloplowr, \
-                   mockfdfnslopuppr=mockfdfnslopuppr, \
                    mocknormback=ones((2, numbener)), \
+                   mocknumbpnts=array([100, 100, 200]), \
+                   mockspatdisttype=['unif', 'disc', 'gang'], \
+                   mockfdfntype='powr', \
+                   mockfdfnslop=mockfdfnslop, \
+                   mocksdfntype='gaus', \
+                   mocksdfnstdv=array([.5, .5, .5]), \
+                   mocksdfnmean=array([2., 2., 2.]), \
                   )
 
 

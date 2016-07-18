@@ -59,7 +59,6 @@ def pcat_info():
     indxevttincl = arange(3, 4)
     numbener = indxenerincl.size
 
-
     # temp
     if False:
         for k in range(numbiter):
