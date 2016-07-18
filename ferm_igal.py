@@ -549,7 +549,7 @@ def pcat_ferm_mock_igal_nfww():
     
     pcat.main.init( \
                    psfntype='doubking', \
-                   numbswep=5000, \
+                   numbswep=5, \
                    randinit=False, \
                    maxmgang=20., \
                    indxevttincl=indxevttincl, \
