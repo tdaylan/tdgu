@@ -20,7 +20,7 @@ def plot_spec():
 
     # Fermi-LAT best-fit components at the NGP
     # temp
-    if False and gdat.trueinfo:
+    if False:
         if gdat.datatype == 'mock':
             pass
         else:
@@ -67,7 +67,6 @@ def pcat_info():
                                   numbswep=numbswep[k], \
                                   numbburn=numbburn[k], \
                                   probprop=array([0.01, 0.01, 0., 0., 1., 1., 0, 0, 1., 1., 1., 1.], dtype=float), \
-                                  trueinfo=True, \
                                   randinit=False, \
                                   makeplot=True, \
                                   maxmgang=10., \
@@ -159,7 +158,6 @@ def pcat_ferm_mock_ngal():
     pcat.main.init(psfntype='doubking', \
                    numbswep=300000, \
                    randinit=False, \
-                   trueinfo=True, \
                    maxmgang=20., \
                    boolproppsfn=False, \
                    indxenerincl=indxenerincl, \
@@ -173,7 +171,7 @@ def pcat_ferm_mock_ngal():
                    strgback=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
                    strgexpo='fermexpo_cmp0_ngal.fits', \
                    datatype='mock', \
-                   numbsideheal=256, \
+                   mocknumbsideheal=256, \
                    mockfluxdistslop=array([2.0]), \
                   )
 

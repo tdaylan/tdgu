@@ -497,7 +497,7 @@ def pcat_ferm_mock_igal_brok_arry():
                        datatype='mock', \
                        mockfdfntype='brok', \
                        mocknumbpnts=array([300]), \
-                       numbsideheal=256, \
+                       mocknumbsideheal=256, \
                        mockfdfnslop=mockfdfnslop, \
                        mockfdfnsloplowr=mockfdfnsloplowr, \
                        mockfdfnslopuppr=mockfdfnslopuppr, \

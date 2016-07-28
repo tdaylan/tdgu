@@ -152,6 +152,8 @@ def retr_llik(sampvarb, gdat):
     print gdat.fluxphothm12.shape
     print 'fluxphotdmatintp'
     print fluxphotdmatintp.shape
+    print 'gdat.fluxphotdmat'
+    print gdat.fluxphotdmat.shape
     print
 
     fluxphotmodl = gdat.fluxphothm12[gdat.indxenphexpr, 0] + fluxphotdmatintp[gdat.indxenphexpr, 0]
