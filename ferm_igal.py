@@ -466,35 +466,7 @@ def pcat_ferm_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_c
              )
     
     
-def intr_ferm_mock_igal_brok( \
-                        strgexpr='fermflux_cmp0_ngal.fits', \
-                        strgexpo='fermexpo_cmp0_ngal.fits', \
-                       ): 
-
-    karg = {}
-    karg['psfntype'] = 'doubking'
-    karg['numbswep'] = 2000000
-    karg['randinit'] = False
-    karg['maxmgang'] = 20.
-    karg['boolproppsfn'] = False
-    karg['initfdfnslop'] = array([1.9])
-    karg['initfdfnnorm'] = array([300])
-    karg['maxmnumbpnts'] = array([500])
-    karg['indxenerincl'] = arange(1, 4)
-    karg['indxevttincl'] = arange(2, 4)
-    karg['minmflux'] = 3e-11
-    karg['maxmflux'] = 1e-7
-    karg['regitype'] = 'ngal'
-    karg['pathdata'] = os.environ["FERM_NGAL_DATA_PATH"]
-    karg['strgback'] = ['fermisotflux.fits', 'fermfdfmflux_ngal.fits']
-    karg['strgexpo'] = strgexpo
-    karg['datatype'] = 'inpt'
-    karg['strgexpr'] = strgexpr
-
-    return karg
-
-
-def pcat_ferm_mock_igal_brok():
+def pcat_ferm_mock_igal_brok_arry():
      
     indxenerincl = arange(1, 4)
     indxevttincl = arange(2, 4)
@@ -535,7 +507,7 @@ def pcat_ferm_mock_igal_brok():
                       )
 
 
-def pcat_ferm_mock_igal_nfww():
+def pcat_ferm_mock_igal_brok():
      
     indxevttincl = arange(2, 4)
     indxenerincl = arange(1, 4)
@@ -549,7 +521,7 @@ def pcat_ferm_mock_igal_nfww():
     
     pcat.main.init( \
                    psfntype='doubking', \
-                   numbswep=5, \
+                   numbswep=10000, \
                    randinit=False, \
                    maxmgang=20., \
                    indxevttincl=indxevttincl, \
@@ -560,16 +532,15 @@ def pcat_ferm_mock_igal_nfww():
                    pathdata=os.environ["FERM_IGAL_DATA_PATH"], \
                    regitype='igal', \
                    
-                   maxmnumbpnts=array([1200]), \
+                   maxmnumbpnts=array([400]), \
                    minmflux=minmflux, \
                    maxmflux=maxmflux, \
-                   
 
                    datatype='mock', \
                    numbsideheal=256, \
                    mocknormback=ones((2, numbener)), \
-                   mocknumbpnts=array([800]), \
-                   mockspatdisttype=['unif', 'gang'], \
+                   mocknumbpnts=array([400]), \
+                   mockspatdisttype=['unif', 'disc', 'gang'], \
                    mockfdfntype='brok', \
                    mockfdfnbrek=mockfdfnbrek, \
                    mockfdfnsloplowr=mockfdfnsloplowr, \

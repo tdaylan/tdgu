@@ -105,8 +105,8 @@ def intr_ferm_expr_ngal( \
     karg['randinit'] = False
     karg['maxmgang'] = 20.
     karg['boolproppsfn'] = False
-    karg['initfdfnslop'] = array([1.9])
-    karg['initfdfnnorm'] = array([300])
+    karg['initfluxdistslop'] = array([1.9])
+    karg['initfluxdistnorm'] = array([300])
     karg['maxmnumbpnts'] = array([500])
     karg['indxenerincl'] = arange(1, 4)
     karg['indxevttincl'] = arange(2, 4)
@@ -155,7 +155,6 @@ def pcat_ferm_mock_ngal():
 
     minmflux = 3e-11
     maxmflux = 2e-8
-    mockfdfnslop = array([2.0])
     
     pcat.main.init(psfntype='doubking', \
                    numbswep=300000, \
@@ -175,8 +174,7 @@ def pcat_ferm_mock_ngal():
                    strgexpo='fermexpo_cmp0_ngal.fits', \
                    datatype='mock', \
                    numbsideheal=256, \
-                   mockfdfnslop=mockfdfnslop, \
-                   mocknormback=ones((2, numbener)), \
+                   mockfluxdistslop=array([2.0]), \
                   )
 
     
