@@ -37,6 +37,7 @@ import functools
 
 # tdpy
 import tdpy.util
+from tdpy.util import summ, show
 import tdpy.mcmc
 
 from tdpy.util import show

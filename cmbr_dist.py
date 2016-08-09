@@ -61,7 +61,7 @@ def plot_grnf():
     ax[1].plot(gdat.meanreds, gdat.vifm * gdat.vift + gdat.vify - gdat.vift, 'y')
     ax[1].set_xscale('log')
     ax[1].set_ylabel('$\mathcal{J}_B\mathcal{J}_\mu + \mathcal{J}_y - \mathcal{J}_B$')
-    plt.savefig(pathplot + 'visifunc.png')
+    plt.savefig(gdat.pathplot + 'visifunc.png')
     plt.close()
 
     with sns.color_palette("Blues", njreds):
@@ -82,7 +82,7 @@ def plot_grnf():
         strg = r'$\Delta I_\nu^G = \mathcal{J}_\mu \mathcal{J}_B I^M(\nu) + \mathcal{J}_y I^Y(\nu)$'
         fig.text(0.15, 0.42, strg, va='center', fontsize=18)
 
-        plt.savefig(pathplot + 'fulldist.png')
+        plt.savefig(gdat.pathplot + 'fulldist.png')
         plt.close()
 
 
@@ -127,7 +127,7 @@ def plot_timescal():
     ax_.set_xlabel('$t$ [yr]')
 
     fig.subplots_adjust(top=0.85)
-    plt.savefig(pathplot + 'timescal.png')
+    plt.savefig(gdat.pathplot + 'timescal.png')
     plt.close()
 
 
@@ -156,7 +156,7 @@ def plot_pure_dist():
     ax_.set_xlim([amin(sfrqconc), amax(sfrqconc)])
     ax_.set_xlabel('$x$')
     ax_.set_xscale('log')
-    plt.savefig(pathplot + 'puredist.png')
+    plt.savefig(gdat.pathplot + 'puredist.png')
     plt.close()
 
 
@@ -201,7 +201,7 @@ def plot_heat():
     ax_.set_xlim([amax(gdat.time[:-1]), amin(gdat.time[:-1])])
     ax_.set_xlabel('$t$ [yr]')
 
-    plt.savefig(pathplot + 'heatrate.png')
+    plt.savefig(gdat.pathplot + 'heatrate.png')
     plt.close()
     
     edendmatextd = omegdmat * edencrit * (1. + gdat.meanredsextd)**3
@@ -233,7 +233,7 @@ def plot_heat():
     ax_.set_xlabel('$t$ [s]')
     ax_.axvline(1., ls='--', color='grey')
     ax_.annotate('BBN', xy=[1., 1e-12], xytext=[1e2, 1e-12], arrowprops=dict(arrowstyle="->"), fontsize=20)
-    plt.savefig(pathplot + 'heatextd.png')
+    plt.savefig(gdat.pathplot + 'heatextd.png')
     plt.close()
 
 
@@ -268,7 +268,7 @@ def plot_deca():
         ax_.set_xlim([amax(gdat.time[:-1]), amin(gdat.time[:-1])])
         ax_.set_xlabel('$t$ [yr]')
 
-    plt.savefig(pathplot + 'heatdeca.png')
+    plt.savefig(gdat.pathplot + 'heatdeca.png')
     plt.close()
     
 
@@ -301,7 +301,7 @@ def plot_sampdist():
     ax.axhline(-5., ls='--', color='grey')
     ax.fill_between(gdat.freqmodl * 1e-9, ones_like(gdat.freqmodl) * 5., ones_like(gdat.freqmodl) * -5., color='grey')
     ax.text(2, 10, r'PIXIE 1-$\sigma$ sensitivity', color='grey', fontsize=20)
-    plt.savefig(pathplot + 'totldist.png')
+    plt.savefig(gdat.pathplot + 'totldist.png')
     plt.close()
     
     
@@ -320,7 +320,7 @@ def plot_sampdist():
             ax.set_title(heatstrg[k])
 
             plt.legend(loc=2, ncol=2)
-            plt.savefig(pathplot + 'diffdistdifflred_' + heatrtag[k] + '_%d.png' % jreds[c])
+            plt.savefig(gdat.pathplot + 'diffdistdifflred_' + heatrtag[k] + '_%d.png' % jreds[c])
             plt.close(fig)
         
 
@@ -477,7 +477,7 @@ def plot_temp():
     ax_.set_xlabel(r'$E_\gamma$ [eV]')
 
     ax.legend(loc=2)
-    plt.savefig(pathplot + 'tempevol.png')
+    plt.savefig(gdat.pathplot + 'tempevol.png')
     plt.close()
     
 
@@ -511,7 +511,7 @@ def plot_silkscal():
     ax_.set_ylabel(r'$\lambda$ [Mpc]')
     ax.set_title('Silk dissipation scale', fontsize=20)
 
-    plt.savefig(pathplot + 'wlensilk.png')
+    plt.savefig(gdat.pathplot + 'wlensilk.png')
     fig.subplots_adjust(top=0.9)
     plt.close()
 
@@ -525,7 +525,7 @@ def plot_resi_post(gdat, postflux):
     ax.append(plt.subplot(gs[1], sharex=ax[0]))
 
     ax[1].set_title('')
-    ax[1].errorbar(freqexpr * 1e-9, gdat.dataflux * 1e-6, ls='none', yerr=gdat.datafluxstdv*1e-6, xerr=gdat.datafluxstdv*1e-9, label=gdat.datalabl, marker='o', markersize=5, color='k')
+    ax[1].errorbar(gdat.freqexpr * 1e-9, gdat.dataflux * 1e-6, ls='none', yerr=gdat.datafluxstdv*1e-6, xerr=gdat.datafluxstdv*1e-9, label=gdat.datalabl, marker='o', markersize=5, color='k')
     
     tdpy.mcmc.plot_braz(ax[1], gdat.freqmodl * 1e-9, listfluxtotl * 1e-6, lcol='salmon', alpha=0.5, dcol='red', mcol='black')
     if gdat.inclcmbrmono:
@@ -544,7 +544,7 @@ def plot_resi_post(gdat, postflux):
     ax[1].set_ylim([1e-7, 1e4])
     ax[1].legend(loc=9, ncol=4)
 
-    tdpy.mcmc.plot_braz(ax[0], freqexpr * 1e-9, listresiflux, lcol='lightgrey',    alpha=0.5, dcol='darkgrey', mcol='black')
+    tdpy.mcmc.plot_braz(ax[0], gdat.freqexpr * 1e-9, listresiflux, lcol='lightgrey',    alpha=0.5, dcol='darkgrey', mcol='black')
     ax[0].set_ylabel(r'$I_\nu^{res}$ [Jy/sr]')
     ax[0].axhline(0., ls='--', color='black', alpha=0.1)
 
@@ -555,15 +555,13 @@ def plot_resi_post(gdat, postflux):
         plt.close(fig)
 
 
-def plot_dataflux(gdat):
+def plot_flux(gdat, modlfluxtotl=None):
         
-    figr = plt.figure(figsize=(16, 12))
+    figr = plt.figure(figsize=(2 * gdat.plotsize, gdat.plotsize))
     
-    xlim = [gdat.minmfreqmodl * 1e-9, gdat.maxmfreqmodl * 1e-9]
-
-    if gdat.datatype == 'expr':
+    if modlfluxtotl == None:
         axis = [plt.gca()]
-    if gdat.datatype == 'mock':
+    else:
         axisgridtemp = mpl.gridspec.GridSpec(2, 1, height_ratios=[1, 3]) 
         axis = [] 
         axis.append(plt.subplot(axisgridtemp[0]))
@@ -587,15 +585,15 @@ def plot_dataflux(gdat):
     axis[0].errorbar(gdat.freqexpr * 1e-9, gdat.dataflux * 1e-6, ls='none', xerr=xerr, yerr=yerr, label=gdat.datalabl, marker='o', markersize=5, color='k')
     
     if gdat.datatype == 'mock':
-        axis[0].plot(gdat.freqmodl * 1e-9, modlfluxtotl * 1e-6, label='Total model', color='r')
+        axis[0].plot(gdat.freqmodlscal * 1e-9, gdat.mockfluxtotl * 1e-6, label='Total model', color='r')
         if gdat.inclcmbrmono:
-            axis[0].plot(gdat.freqmodl * 1e-9, modlfluxcmbr * 1e-6, label='CMB', color='b')
-        axis[0].plot(gdat.freqmodl * 1e-9, modlfluxdustcold * 1e-6, label='Cold Dust', color='g', ls='--')
-        axis[0].plot(gdat.freqmodl * 1e-9, modlfluxdustwarm * 1e-6, label='Warm Dust', color='g', ls='-.')
-        axis[0].plot(gdat.freqmodl * 1e-9, modlfluxsync * 1e-6, label='Synchrotron', color='y')
-        axis[0].plot(gdat.freqmodl * 1e-9, modlfluxfree * 1e-6, label='Brem', color='coral')
-        axis[0].plot(gdat.freqmodl * 1e-9, abs(modlfluxydis) * 1e-6, label='Reionization', color='m')
-        axis[0].plot(gdat.freqmodl * 1e-9, abs(modlfluxdeca) * 1e-6, label='Particle decay', color='cyan')
+            axis[0].plot(gdat.freqmodlscal * 1e-9, gdat.mockfluxcmbr * 1e-6, label='CMB', color='b')
+        axis[0].plot(gdat.freqmodlscal * 1e-9, gdat.mockfluxdustcold * 1e-6, label='Cold Dust', color='g', ls='--')
+        axis[0].plot(gdat.freqmodlscal * 1e-9, gdat.mockfluxdustwarm * 1e-6, label='Warm Dust', color='g', ls='-.')
+        axis[0].plot(gdat.freqmodlscal * 1e-9, gdat.mockfluxsync * 1e-6, label='Synchrotron', color='y')
+        axis[0].plot(gdat.freqmodlscal * 1e-9, gdat.mockfluxfree * 1e-6, label='Brem', color='coral')
+        axis[0].plot(gdat.freqmodlscal * 1e-9, fabs(gdat.mockfluxydis) * 1e-6, label='Reionization', color='m')
+        axis[0].plot(gdat.freqmodlscal * 1e-9, fabs(gdat.mockfluxdeca) * 1e-6, label='Particle decay', color='cyan')
     
     axis[0].set_title('')
     axis[0].set_xscale('log')
@@ -604,22 +602,23 @@ def plot_dataflux(gdat):
     axis[0].set_ylabel(r'$I_\nu$ [MJy/sr]')
     axis[0].set_ylim([1e-7, 1e4])
     axis[0].legend(loc=9, ncol=4)
+    xlim = [gdat.minmfreqmodl * 1e-9, gdat.maxmfreqmodl * 1e-9]
     axis[0].set_xlim(xlim)
 
-    if gdat.datatype == 'mock':
-        axis[1].errorbar(freqexpr * 1e-9, resiflux, yerr=gdat.datafluxstdv, xerr=freqexprstdv*1e-9, marker='o', lw=1, ls='none', markersize=5, color='k')
-        axis[1].set_ylabel(r'$I_\nu^{res}$ [Jy/sr]')
-        axis[1].axhline(0., ls='--', color='black', alpha=0.1)
-        axis[1].set_xlim(xlim)
-
-
-    plt.savefig(path)
+    resiflux = gdat.dataflux - modlfluxtotl
+    axis[1].errorbar(gdat.freqexpr * 1e-9, resiflux, yerr=gdat.datafluxstdv, xerr=gdat.freqexprstdv*1e-9, marker='o', lw=1, ls='none', markersize=5, color='k')
+    axis[1].set_ylabel(r'$I_\nu^{res}$ [Jy/sr]')
+    axis[1].axhline(0., ls='--', color='black', alpha=0.1)
+    axis[1].set_xlim(xlim)
+    strg = ''
+    
+    plt.savefig(gdat.pathplot + 'postflux.')
     plt.close(fig)
 
 
 def retr_ydis_trac():
     
-    path = pathplot + 'electron_photonspectrum_results.fits'
+    path = gdat.pathplot + 'electron_photonspectrum_results.fits'
     data, hdr = pf.getdata(path, 1, header=True)
 
     redsoutp = data['OUTPUT_REDSHIFT'].squeeze()
@@ -812,7 +811,7 @@ def retr_llik(sampvarb, gdat):
     
     modlfluxtotl, modlfluxcmbr, modlfluxdustcold, modlfluxdustwarm, modlfluxsync, modlfluxfree, modlfluxydis, modlfluxdeca = retr_flux(gdat, gdat.freqmodl, sampvarb)
        
-    modlfluxintp = interp1d(gdat.freqmodl, modlfluxtotl)(freqexpr)
+    modlfluxintp = interp1d(gdat.freqmodl, modlfluxtotl)(gdat.freqexpr)
     resiflux = gdat.dataflux - modlfluxintp
 
     llik = sum(-log(sqrt(2. * pi) * gdat.datafluxstdv) - 0.5 * (modlfluxintp - gdat.dataflux) / gdat.datafluxstdv**2 * (modlfluxintp - gdat.dataflux))
@@ -1052,18 +1051,21 @@ def init( \
     rtag = retr_rtag(gdat)
 
     pathbase = os.environ["CMBR_DIST_DATA_PATH"]
-    pathplot = pathbase + '/png/' + rtag + '/'
-    cmnd = 'mkdir -p ' + pathplot
+    gdat.pathplot = pathbase + '/png/' + rtag + '/'
+    cmnd = 'mkdir -p ' + gdat.pathplot
     os.system(cmnd)
     
     if freqexpr == None:
-        gdat.freqexpr = logspace(log10(gdat.minmfreqexpr), log10(gdat.maxmfreqexpr), gdat.numbfreqexpr) # [Hz]
+        freqexpr = logspace(log10(gdat.minmfreqexpr), log10(gdat.maxmfreqexpr), gdat.numbfreqexpr) # [Hz]
     
+    gdat.freqexpr = freqexpr
+
     numbfreqmodl = 1000
     gdat.minmfreqmodl = 1e9
     gdat.maxmfreqmodl = 1e13
     gdat.freqmodl = logspace(log10(gdat.minmfreqmodl), log10(gdat.maxmfreqmodl), numbfreqmodl) # [Hz]
-    
+    gdat.freqmodlscal = gdat.freqmodl * 1e9
+
     # physical constants
     gdat.velolght = 3e8 # [m/s]
     mp2m = 3.1e22 # [Mpc/m]
@@ -1104,6 +1106,8 @@ def init( \
     # scaled frequency axis
     sfrqconc = gdat.plnkcons * gdat.freqmodl / gdat.boltcons / gdat.tempcmbrconc
     
+    gdat.plotsize = 6
+
     # cosmological constants
     edencrit = 4e9 # [eV/m^3]
     hubb = 0.68
@@ -1153,29 +1157,27 @@ def init( \
     # get expected instrumental uncertainty for PIXIE
     path = os.environ["CMBR_DIST_DATA_PATH"] + '/pixifluxstdv.csv'
     gdat.exprfluxstdvinstfreq = loadtxt(path)
-    gdat.exprfluxstdvinstfreq = interp1d(gdat.exprfluxstdvinstfreq[:, 0] * 1e9, gdat.exprfluxstdvinstfreq[:, 1] * 1e26)(freqexpr)
+    gdat.exprfluxstdvinstfreq = interp1d(gdat.exprfluxstdvinstfreq[:, 0] * 1e9, gdat.exprfluxstdvinstfreq[:, 1] * 1e26)(gdat.freqexpr)
     
     if gdat.datatype == 'mock':
          
-        mockfluxtotl, mockfluxcmbr, mockfluxdustcold, mockfluxdustwarm, mockfluxsync, mockfluxfree, mockfluxydis, mockfluxdeca = retr_flux(gdat, gdat.freqmodl, mocksampvarb)
-        mockfluxintp = interp1d(gdat.freqmodl, mockfluxtotl)(freqexpr)
+        gdat.mockfluxtotl, gdat.mockfluxcmbr, gdat.mockfluxdustcold, gdat.mockfluxdustwarm, gdat.mockfluxsync, \
+                gdat.mockfluxfree, gdat.mockfluxydis, gdat.mockfluxdeca = retr_flux(gdat, gdat.freqmodl, mocksampvarb)
+        mockfluxintp = interp1d(gdat.freqmodl, gdat.mockfluxtotl)(gdat.freqexpr)
                 
-        show(gdat.freqmodl, freqexpr)
-        
         if gdat.exprtype == 'pixi':
             gdat.datafluxstdv = mockfluxintp * gdat.exprfluxstdvfrac + gdat.exprfluxstdvinstfreq * gdat.exprfluxstdvinst
         if gdat.exprtype == 'plnk':
             gdat.datafluxstdv = mockfluxintp * gdat.exprfluxstdvfrac + gdat.exprfluxstdvinst
             
-        
         gdat.dataflux = mockfluxintp + gdat.datafluxstdv * randn(gdat.datafluxstdv.size)
         
         # temp
-        #fluxegbl = retr_egbl(freqexpr)
+        #fluxegbl = retr_egbl(gdat.freqexpr)
         #gdat.dataflux += fluxegbl
         
         gdat.resiflux = gdat.dataflux - mockfluxintp
-        gdat.path = pathplot + 'mockresi.png'
+        gdat.path = gdat.pathplot + 'mockresi.png'
         # temp
     
     else:
@@ -1183,11 +1185,11 @@ def init( \
         gdat.datafluxstdv = exprfluxstdv
         gdat.dataflux = exprflux
     
-    plot_dataflux(gdat)
+    plot_flux(gdat)
     
     #plot_llik()
     
-    gdat.numbfreqexpr = freqexpr.size
+    gdat.numbfreqexpr = gdat.freqexpr.size
 
     # sampler setup
     nproc = 1
@@ -1262,7 +1264,7 @@ def init( \
                 listfluxdeca[k, :] = listsampcalc[7][k]
                 listresiflux[k, :] = listsampcalc[8][k]
 
-            path = pathplot + 'postresi.png'
+            path = gdat.pathplot + 'postresi.png'
             plot_resiflux(gdat, postflux=postflux) 
             #postfluxtotl, postfluxcmbr, postfluxdustwarm, postfluxdustcold, postfluxsync, postfluxfree, postfluxydis, postfluxdeca)
 
@@ -1343,23 +1345,20 @@ def retr_plnkflux():
 
 def retr_plnkfreq():
     
-    freqexpr = array([3e10, 4.4e10, 7e10, 1e11, 1.43e11, 2.17e11, 3.53e11, 5.45e11, 8.57e11]) # [Hz]
+    gdat.freqexpr = array([3e10, 4.4e10, 7e10, 1e11, 1.43e11, 2.17e11, 3.53e11, 5.45e11, 8.57e11]) # [Hz]
     gdat.numbfreqexpr = freqexpr.size
-    freqexprstdv = empty(gdat.numbfreqexpr)
-    freqexprstdv[:3] = 0.2
-    freqexprstdv[3:] = 0.33
-    
+    gdat.freqexprstdv = empty(gdat.numbfreqexpr)
+    gdat.freqexprstdv[:3] = 0.2
+    gdat.freqexprstdv[3:] = 0.33
     gdat.exprfluxstdvinst = 5e3 # [Jy/sr]
     gdat.exprfluxstdvfrac = 1e-3
-    
-    return freqexpr, freqexprstdv, gdat.exprfluxstdvinst, gdat.exprfluxstdvfrac
     
 
 def writ_plnk():
 
     nfreqplnk = 9
     
-    freqexpr, freqexprstdv, gdat.exprfluxstdvinst, gdat.exprfluxstdvfrac = retr_plnkfreq()
+    retr_plnkfreq()
 
     nside = 256
     npixl = nside**2 * 12
@@ -1372,17 +1371,17 @@ def writ_plnk():
     
     for k in range(nfreqplnk):
         
-        print 'Processing Planck Map at %d GHz...' % (freqexpr[k] / 1e9)
+        print 'Processing Planck Map at %d GHz...' % (gdat.freqexpr[k] / 1e9)
         
         if k >= 3:
-            path = os.environ["CMBR_DIST_DATA_PATH"] + '/HFI_SkyMap_%03d_2048_R2.02_nominal.fits' % (freqexpr[k] / 1e9)
+            path = os.environ["CMBR_DIST_DATA_PATH"] + '/HFI_SkyMap_%03d_2048_R2.02_nominal.fits' % (gdat.freqexpr[k] / 1e9)
         else:
-            path = os.environ["CMBR_DIST_DATA_PATH"] + '/LFI_SkyMap_%03d_1024_R2.01_full.fits' % (freqexpr[k] / 1e9)
+            path = os.environ["CMBR_DIST_DATA_PATH"] + '/LFI_SkyMap_%03d_1024_R2.01_full.fits' % (gdat.freqexpr[k] / 1e9)
             
         fluxtemp = pf.getdata(path, 1)
 
         if k < 7:
-            frac = 1e6 * interp1d(gdat.freqmodl, thertempantntemp * antntempflux)(freqexpr[k]) * 1e6
+            frac = 1e6 * interp1d(gdat.freqmodl, thertempantntemp * antntempflux)(gdat.freqexpr[k]) * 1e6
         else:
             frac = 1e6
     
@@ -1454,26 +1453,26 @@ def chek_plnk():
     exprflux = loadtxt(os.environ["CMBR_DIST_DATA_PATH"] + '/plnkflux.dat')[indxpixltemp, :]
     exprfluxstdv = loadtxt(os.environ["CMBR_DIST_DATA_PATH"] + '/plnkfluxstdv.dat')[indxpixltemp, :]
 
-    freqexpr, freqexprstdv, gdat.exprfluxstdvinst, gdat.exprfluxstdvfrac = retr_plnkfreq()
+    retr_plnkfreq()
 
     freqtran, tran = retr_plnktran()
     gdat.numbfreqexpr = freqexpr.size
 
     #bolo = empty(gdat.numbfreqexpr)
     #for i in range(gdat.numbfreqexpr):
-    #    bolo[i] = trapz(tran[i][1:] * exprflux[0, i] * freqexpr[i] / freqtran[i][1:], freqtran[i][1:])
+    #    bolo[i] = trapz(tran[i][1:] * exprflux[0, i] * gdat.freqexpr[i] / freqtran[i][1:], freqtran[i][1:])
     #    plt.loglog(freqtran[i] * 1e-9, tran[i])  
     #plt.show()
-    #plt.loglog(freqexpr * 1e-9, exprfluxstdv)
+    #plt.loglog(gdat.freqexpr * 1e-9, exprfluxstdv)
     #plt.show()
 
     for k in range(10):
-        plt.loglog(freqexpr * 1e-9, exprflux[k, :])
+        plt.loglog(gdat.freqexpr * 1e-9, exprflux[k, :])
     plt.show()
 
-    plt.loglog(freqexpr * 1e-9, bolo)
+    plt.loglog(gdat.freqexpr * 1e-9, bolo)
     plt.show()
-    plt.loglog(freqexpr * 1e-9, 100. * (bolo - exprflux) / exprflux)
+    plt.loglog(gdat.freqexpr * 1e-9, 100. * (bolo - exprflux) / exprflux)
     plt.show()
 
 
@@ -1485,7 +1484,7 @@ def plot_cros_plnk():
     
     strgpara = []
     for k in range(nfreqplnk):
-        strgpara.append(r'$\mathcal{I}_{%d}$' % (freqexpr[k] / 1e9))
+        strgpara.append(r'$\mathcal{I}_{%d}$' % (gdat.freqexpr[k] / 1e9))
     scalpara = ['self'] * nfreqplnk
     path = os.environ["CMBR_DIST_DATA_PATH"] + '/png/plnkcros'
     tdpy.mcmc.plot_grid(plnkflux * 1e-6, strgpara, path=path, scalpara=scalpara)
@@ -1500,7 +1499,7 @@ def cnfg_arca():
 
 def cnfg_plnk_mock():
 
-    freqexpr, freqexprstdv, gdat.exprfluxstdvinst, gdat.exprfluxstdvfrac = retr_plnkfreq()
+    retr_plnkfreq()
     gdat.numbfreqexpr = freqexpr.size
     
     statpara = init( \
@@ -1520,7 +1519,7 @@ def cnfg_plnk_expr():
     exprflux = exprflux[0, :]
     exprfluxstdv = exprfluxstdv[0, :]
     
-    freqexpr, freqexprstdv, gdat.exprfluxstdvinst, gdat.exprfluxstdvfrac = retr_plnkfreq()
+    retr_plnkfreq()
     gdat.numbfreqexpr = freqexpr.size
 
     cnfg = init( \

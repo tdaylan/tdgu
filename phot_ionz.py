@@ -141,56 +141,37 @@ def retr_llik(sampvarb, gdat):
     gdat.csecvelo = sampvarb[0]
     gdat.csecfrac = sampvarb[1]
     gdat.masspart = sampvarb[2]
-    #dmatslop = sampvarb[3]
-    
-    fluxphotdmatintp = gdat.fluxphotdmat[:, :, 0] * gdat.csecvelo / gdat.csecvelopivt + gdat.fluxphotdmat[:, :, 1] * gdat.csecfrac / gdat.csecfracpivt
-    
-    print 'hey'
-    print 'gdat.indxenphexpr'
-    print gdat.indxenphexpr
-    print 'gdat.fluxphothm12'
-    print gdat.fluxphothm12.shape
-    print 'fluxphotdmatintp'
-    print fluxphotdmatintp.shape
-    print 'gdat.fluxphotdmat'
-    print gdat.fluxphotdmat.shape
-    print
-
-    fluxphotmodl = gdat.fluxphothm12[gdat.indxenphexpr, 0] + fluxphotdmatintp[gdat.indxenphexpr, 0]
+    #gdat.dmatslop = sampvarb[3]
+  
+    if gdat.boolstor:
+        fluxphotdmattotl = gdat.fluxphotdmat[:, :, 0] * gdat.csecvelo / gdat.csecvelopivt + gdat.fluxphotdmat[:, :, 1] * gdat.csecfrac / gdat.csecfracpivt
+    else:
+        retr_fluxphotdmat(gdat)
+        fluxphotdmattotl = sum(gdat.fluxphotdmat, 2)
+    fluxphotmodl = gdat.fluxphothm12[gdat.indxenphexpr, 0] + fluxphotdmattotl[gdat.indxenphexpr, 0]
     lpos = sum(-log(sqrt(2. * pi * gdat.fluxphotexprvari)) - 0.5 * (gdat.fluxphotexpr - fluxphotmodl)**2 / gdat.fluxphotexprvari)
     
     if False:
-        
-        print 'retr_llik'
+        print 'hey'
         print 'csecvelo'
-        print gdat.csecvelo
+        print csecvelo
         print 'csecfrac'
-        print gdat.csecfrac
-        print 'csecvelo / csecvelopivt'
-        print gdat.csecvelo / gdat.csecvelopivt
-        print 'csecfrac / csecfracpivt'
-        print gdat.csecfrac / gdat.csecfracpivt
-        print 'fluxphotdmat[gdat.indxenphexpr, 0, 0]'
-        print gdat.fluxphotdmat[gdat.indxenphexpr, 0, 0]
-        print 'fluxphotdmat[gdat.indxenphexpr, 0, 1]'
-        print gdat.fluxphotdmat[gdat.indxenphexpr, 0, 1]
-        print 'fluxphotdmatintp'
-        print fluxphotdmatintp
-        print 'gdat.fluxphothm12[gdat.indxenphexpr, 0]'
-        print gdat.fluxphothm12[gdat.indxenphexpr, 0]
+        print csecfrac
+        print 'masspart'
+        print masspart
+        print 'gdat.fluxphothm12'
+        print gdat.fluxphothm12
+        print 'gdat.fluxphotdmat[:, :, 0]'
+        print gdat.fluxphotdmat[:, :, 0]
         print 'fluxphotmodl'
         print fluxphotmodl
         print 'gdat.fluxphotexpr'
         print gdat.fluxphotexpr
-        print 'gdat.fluxphotexprvari'
-        print gdat.fluxphotexprvari
         print 'lpos'
         print lpos
         print
-     
-    # temp
-    sampcalc = [fluxphotdmatintp[:, 0]]
-    #sampcalc = []
+
+    sampcalc = [fluxphotdmattotl[:, 0]]
 
     return lpos, sampcalc
 
@@ -513,7 +494,7 @@ def retr_fluxphotdmat(gdat):
 
     # photon flux 
     difffluxphotdiffreds = zeros((gdat.numbenph, gdat.numbreds, gdat.numbreds, gdat.numbmpol))
-    gdat.fluxphot = zeros((gdat.numbenph, gdat.numbreds, gdat.numbmpol))
+    gdat.fluxphotdmat = zeros((gdat.numbenph, gdat.numbreds, gdat.numbmpol))
     for a in range(gdat.numbenph):
         for c in gdat.indxreds:
             gdat.meanenphshft = gdat.meanenph[a] * (1. + gdat.meanreds[c]) / (1. + gdat.meanreds)
@@ -524,13 +505,13 @@ def retr_fluxphotdmat(gdat):
                 gdat.emisphotintp = interp1d(gdat.meanenph, gdat.emisphot[:, c, m])(gdat.meanenphshft[gdat.indxredsshft]) # [1/cm^3/s/MeV]
                 difffluxphotdiffreds[a, c, gdat.indxredsshft, m] = gdat.velolght * gdat.timehubb[gdat.indxredsshft] / 4. / pi * \
                    gdat.emisphotintp * exp(-gdat.odep[a, c, gdat.indxredsshft]) * (1. + gdat.meanreds[c])**3 / (1. + gdat.meanreds[gdat.indxredsshft])**4 # [1/cm^2/s/sr/MeV]
-                gdat.fluxphot[a, c, m] = trapz(difffluxphotdiffreds[a, c, :, m], gdat.meanreds) # [1/cm^2/s/sr/MeV]  
-    gdat.fluxphotrydb = interp1d(gdat.meanenph, gdat.fluxphot, axis=0)(gdat.enerrydb) # [1/cm^2/s/sr/MeV]
-    gdat.fluxphotenph = trapz(gdat.fluxphot, gdat.meanenph, axis=0) # [1/cm^2/s/sr]
+                gdat.fluxphotdmat[a, c, m] = trapz(difffluxphotdiffreds[a, c, :, m], gdat.meanreds) # [1/cm^2/s/sr/MeV]  
+    gdat.fluxphotrydb = interp1d(gdat.meanenph, gdat.fluxphotdmat, axis=0)(gdat.enerrydb) # [1/cm^2/s/sr/MeV]
+    gdat.fluxphotenph = trapz(gdat.fluxphotdmat, gdat.meanenph, axis=0) # [1/cm^2/s/sr]
 
     # photo-ionization rate
-    gdat.diffionrdiffenph = 4. * pi * gdat.csecionz[:, None, None] * gdat.fluxphot # [1/s/MeV]
-    gdat.ionr = trapz(gdat.diffionrdiffenph, gdat.meanenph, axis=0) # [1/s]
+    gdat.diffionrdiffenph = 4. * pi * gdat.csecionz[:, None, None] * gdat.fluxphotdmat # [1/s/MeV]
+    gdat.ionrdmat = trapz(gdat.diffionrdiffenph, gdat.meanenph, axis=0) # [1/s]
     
 
 def plot_halo(gdat):
@@ -889,7 +870,7 @@ def plot_fluxphot(gdat):
     figr, axisrows = plt.subplots(1, gdat.numbmpol, sharey='all', figsize=(gdat.numbmpol * gdat.plotsize, gdat.plotsize))
     for m, axis in enumerate(axisrows):
         for c in range(gdat.numbredsplotlate):
-            plot = axis.loglog(gdat.meanenph * 1e6, gdat.meanenph * gdat.fluxphot[:, gdat.indxredsplotlate[c], m], label=gdat.strgredsplotlate[c])
+            plot = axis.loglog(gdat.meanenph * 1e6, gdat.meanenph * gdat.fluxphotdmat[:, gdat.indxredsplotlate[c], m], label=gdat.strgredsplotlate[c])
         axis.set_xlabel('$E_\gamma$ [eV]')
         axis.set_ylabel(r'$dN_\gamma/dtdAd\log E_\gamma$ [1/cm$^2$/s/sr]')
     axis.legend()
@@ -940,7 +921,7 @@ def plot_ionr(gdat):
     
     figr, axisrows = plt.subplots(1, gdat.numbmpol, sharey='all', figsize=(gdat.numbmpol * gdat.plotsize, gdat.plotsize))
     for i, axis in enumerate(axisrows):
-        plot = axis.loglog(gdat.meanreds, gdat.ionr[:,i])
+        plot = axis.loglog(gdat.meanreds, gdat.ionrdmat[:,i])
         axis.set_xlabel('$z$')
         axis.set_ylabel(r'$\Gamma$ [1/s/H]')
         
@@ -971,24 +952,12 @@ def retr_fluxphotexpr(gdat):
     gdat.meanenphexpr *= 1e-6 # [MeV]
     gdat.fluxphotexpr = tabl[:, 1]
     gdat.fluxphotexpr *= 1e-3 / gdat.meanenphexpr**2 # [1/cm^2/s/sr/MeV]
-
+    
     gdat.indxenphexpr = where((amin(gdat.meanenphexpr) < gdat.meanenph) & (gdat.meanenph < amax(gdat.meanenphexpr)))[0]
     
     gdat.fluxphotexpr = interp1d(gdat.meanenphexpr, gdat.fluxphotexpr)(gdat.meanenph[gdat.indxenphexpr])
     gdat.fluxphotexprvari = (gdat.fluxphotexpr * 1.)**2
     
-
-def retr_mocksampvarb(gdat):
-    
-    numbpara = 3
-    mocksampvarb = empty(numbpara)
-    mocksampvarb[0] = 1e-26
-    mocksampvarb[1] = 1e4
-    mocksampvarb[2] = 1e5
-    #mocksampvarb[3] = 1.
-    
-    return mocksampvarb
-
 
 def retr_datapara(gdat):
     
@@ -1003,6 +972,7 @@ def retr_datapara(gdat):
     datapara.scal = empty(gdat.numbpara, dtype=object)
     datapara.labl = empty(gdat.numbpara, dtype=object)
     datapara.unit = empty(gdat.numbpara, dtype=object)
+    datapara.true = empty(gdat.numbpara, dtype=object)
     datapara.vari = zeros(gdat.numbpara)
 
     datapara.indx['csecvelo'] = 0
@@ -1013,6 +983,7 @@ def retr_datapara(gdat):
     datapara.labl[0] = '$a$'
     datapara.unit[0] = '[cm$^3$/s]'
     datapara.vari[0] = 3e-1
+    datapara.true[0] = None
     
     datapara.indx['csecfrac'] = 1
     datapara.name[1] = 'csecfrac'
@@ -1022,6 +993,7 @@ def retr_datapara(gdat):
     datapara.labl[1] = '$b/a$'
     datapara.unit[1] = ''
     datapara.vari[1] = 3e-1
+    datapara.true[1] = None
     
     datapara.indx['masspart'] = 2
     datapara.name[2] = 'masspart'
@@ -1031,6 +1003,7 @@ def retr_datapara(gdat):
     datapara.labl[2] = '$M$'
     datapara.unit[2] = '[MeV]'
     datapara.vari[2] = 3e-1
+    datapara.true[2] = None
 
     if False:
         datapara.indx['dmatslop'] = 3
@@ -1042,7 +1015,7 @@ def retr_datapara(gdat):
         datapara.unit[3] = ''
         datapara.vari[3] = 3e-1
 
-    datapara.strg = datapara.name + ' ' + datapara.labl
+    datapara.strg = datapara.labl + ' ' + datapara.unit
     
     return datapara
 
@@ -1114,7 +1087,7 @@ def plot_hm12(gdat, fluxphotdmat=None, listfluxphotdmat=None):
         if fluxphotdmat != None:
             axis.loglog(gdat.meanenph * 1e6, gdat.meanenph * gdat.fluxphotdmat[:, gdat.indxredsplotlate[c]], label='DM, ' + gdat.strgredsplotlate[c])
         if listfluxphotdmat != None:
-            tdpy.mcmc.plot_braz(axis, gdat.meanenph * 1e6, gdat.meanenph[None, :] * listfluxphotdmat[:, :, gdat.indxredsplotlate[c]], \
+            tdpy.util.plot_braz(axis, gdat.meanenph * 1e6, gdat.meanenph[None, :] * listfluxphotdmat[:, :, gdat.indxredsplotlate[c]], \
                     lcol=listcolr[c], alpha=0.5, dcol=listcolr[c], mcol='black')
     axis.set_xlabel(r'$E_\gamma$ [eV]')
     axis.set_ylabel(r'$EdN/dE$ [1/cm$^2$/s/sr]')
@@ -1127,8 +1100,9 @@ def plot_hm12(gdat, fluxphotdmat=None, listfluxphotdmat=None):
 def init( \
          datatype='inpt', \
          datalabl='XMM-Newton', \
-         numbswep=100, \
+         numbswep=100000, \
          verbtype=1, \
+         boolstor=False, \
          makeplot=False, \
         ):
 
@@ -1139,7 +1113,6 @@ def init( \
 
     gdat.makeplot = makeplot
 
-    mocksampvarb = retr_mocksampvarb(gdat)
     datapara = retr_datapara(gdat)
     gdat.numbpara = len(datapara.name)
     gdat.indxpara = arange(gdat.numbpara)
@@ -1148,6 +1121,8 @@ def init( \
     
     gdat.anch = 'b'
     
+    gdat.boolstor = boolstor
+
     gdat.plotsize = 6
 
     gdat.demcsigm = 6.
@@ -1374,7 +1349,7 @@ def init( \
 
     gdat.propmodl = 'effi'
     gdat.concmodl = 'duff'
-    gdat.subsmodl = 'none'
+    gdat.subsmodl = 'smth'
     gdat.igmamodl = 'clum'
 
     # halo concentration model
@@ -1408,7 +1383,7 @@ def init( \
 
     # substructure model
     subs = ones((gdat.numbmass, gdat.numbreds, gdat.numbrsph))
-    if gdat.subsmodl == 'none':
+    if gdat.subsmodl == 'smth':
         subs[:] = 1.
     
     # cosmic ray escape model
@@ -1565,43 +1540,38 @@ def init( \
     gdat.masspart = 5e3 # [MeV]
 
     # run tag
-    gdat.rtag = gdat.propmodl + '_' + gdat.concmodl + '_' + gdat.subsmodl + '_' + gdat.igmamodl + '_massandm%.3g_' % gdat.masspart + gdat.anch
+    gdat.rtag = gdat.propmodl + '_' + gdat.concmodl + '_' + gdat.subsmodl + '_' + gdat.igmamodl + '_masspart%4g_' % gdat.masspart + gdat.anch
     
-    path = os.environ["PHOT_IONZ_DATA_PATH"] + '/data.fits'
+    path = os.environ["PHOT_IONZ_DATA_PATH"] + '/data_%s.fits' % gdat.rtag
     # temp
-    if os.path.isfile(path):
-        gdat.ionrdmat = pf.getdata(path, 0)
-        gdat.fluxphotdmat = pf.getdata(path, 1)
-    else:
-        gdat.csecvelo = gdat.csecvelopivt
-        gdat.csecfrac = gdat.csecfracpivt
-        gdat.masspart = gdat.masspartpivt
-        gdat.dmatslop = gdat.dmatsloppivt
-        retr_fluxphotdmat(gdat)
-        pf.append(path, gdat.ionrdmat)
-        pf.append(path, gdat.fluxphotdmat)
+    if gdat.boolstor:
+        if os.path.isfile(path):
+            gdat.ionrdmat = pf.getdata(path, 0)
+            gdat.fluxphotdmat = pf.getdata(path, 1)
+        else:
+            gdat.csecvelo = gdat.csecvelopivt
+            gdat.csecfrac = gdat.csecfracpivt
+            gdat.masspart = gdat.masspartpivt
+            gdat.dmatslop = gdat.dmatsloppivt
+            retr_fluxphotdmat(gdat)
+            pf.append(path, gdat.ionrdmat)
+            pf.append(path, gdat.fluxphotdmat)
 
-        if gdat.makeplot:
-            plot_halo(gdat)
-            plot_elec_flux(gdat)
-            plot_invrcomp(gdat)
-            plot_fluxphot(gdat)
-            plot_ionr(gdat)
-            plot_sfrd(gdat)
+            if gdat.makeplot:
+                plot_halo(gdat)
+                plot_elec_flux(gdat)
+                plot_invrcomp(gdat)
+                plot_fluxphot(gdat)
+                plot_ionr(gdat)
+                plot_sfrd(gdat)
 
-    optiprop = False
+    optiprop = True
 
     numbproc = 1
-    thissampvarb = zeros(gdat.numbpara)
-    thissampvarb[0] = gdat.csecvelopivt
-    thissampvarb[1] = gdat.csecfracpivt
-    #thissampvarb[2] = gdat.masspartpivt
-    #thissampvarb[3] = gdat.dmatsloppivt
-    thissamp = empty((numbproc, gdat.numbpara))
-    thissamp[0, :] = tdpy.mcmc.cdfn_samp(thissampvarb, datapara)
+    thissamp = rand(numbproc * gdat.numbpara).reshape((numbproc, gdat.numbpara))
 
     numbplotside = gdat.numbpara
-    sampbund = tdpy.mcmc.init(retr_llik, datapara, initsamp=thissamp, numbswep=numbswep, gdatextr=gdat, \
+    sampbund = tdpy.mcmc.init(retr_llik, datapara, initsamp=thissamp, numbswep=numbswep, gdatextr=gdat, optiprop=optiprop, \
                                     verbtype=verbtype, pathbase=gdat.pathbase, rtag=gdat.rtag, numbplotside=numbplotside)
     
     listsampvarb = sampbund[0]
@@ -1609,45 +1579,29 @@ def init( \
     listsampcalc = sampbund[2]
     listllik = sampbund[3]
     listaccp = sampbund[4]
-    listjsampvari = sampbund[5]
+    listindxsampvari = sampbund[5]
     
     listfluxphotdmat = listsampcalc[0]
     
     numbsamp = listsamp.shape[0]
             
     figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
-    
     uppr = gdat.meanenph[gdat.indxenphexpr] * (gdat.fluxphotexpr + sqrt(gdat.fluxphotexprvari))
     lowr = gdat.meanenph[gdat.indxenphexpr] * (gdat.fluxphotexpr - sqrt(gdat.fluxphotexprvari))
     axis.fill_between(gdat.meanenph[gdat.indxenphexpr] * 1e6, uppr, lowr, color='lightblue')
-    
-    axis.loglog(gdat.meanenph[gdat.indxenphexpr] * 1e6, gdat.fluxphothm12[gdat.indxenphexpr] * gdat.fluxphotexpr, label='ROSAT')
-    
+    axis.loglog(gdat.meanenph[gdat.indxenphexpr] * 1e6, gdat.fluxphothm12[gdat.indxenphexpr, 0] * gdat.fluxphotexpr, label='ROSAT')
     axis.loglog(gdat.meanenph * 1e6, gdat.meanenph * gdat.fluxphothm12[:, 0], label='Haardt & Madau (2012)')
-    tdpy.mcmc.plot_braz(axis, gdat.meanenph * 1e6, gdat.meanenph[None, :] * listfluxphotdmat[:, :, 0], alpha=0.5, mcol='black')
-
+    tdpy.util.plot_braz(axis, gdat.meanenph * 1e6, gdat.meanenph[None, :] * listfluxphotdmat, alpha=0.5, mcol='black')
     axis.set_xlabel(r'$E_\gamma$ [eV]')
     axis.set_ylabel(r'$EdN/dE$ [1/cm$^2$/s/sr]')
     axis.legend()
     figr.tight_layout()
     plt.savefig(gdat.pathplot + 'fluxphotpost.pdf')
     plt.close()
-    
-    path = os.environ["PHOT_IONZ_DATA_PATH"] + '/imag/mcmc'
-    tdpy.mcmc.plot_grid(listsampvarb, strgpara, scalpara=scalpara, path=path, quan=True)
-
-    for k in indxpara:
-        path = gdat.pathplot + namepara[k] + '.pdf'
-        tdpy.mcmc.plot_trac(listsampvarb[:, k], strgpara[k], scalpara=scalpara[k], path=path, quan=True)
-
 
 def cnfg_nomi():
     
-    init( \
-         numbswep=10, \
-         verbtype=1, \
-         makeplot=True, \
-        )
+    init()
 
 
 if __name__ == '__main__':

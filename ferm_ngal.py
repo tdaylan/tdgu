@@ -156,7 +156,8 @@ def pcat_ferm_mock_ngal():
     maxmflux = 2e-8
     
     pcat.main.init(psfntype='doubking', \
-                   numbswep=300000, \
+                   numbswep=2000, \
+                   numbswepplot=500, \
                    randinit=False, \
                    maxmgang=deg2rad(20.), \
                    boolproppsfn=False, \
@@ -171,7 +172,7 @@ def pcat_ferm_mock_ngal():
                    strgback=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
                    strgexpo='fermexpo_cmp0_ngal.fits', \
                    datatype='mock', \
-                   mocknumbsideheal=256, \
+                   numbsideheal=256, \
                    mockfluxdistslop=array([2.0]), \
                   )
 
