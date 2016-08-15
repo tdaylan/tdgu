@@ -3,54 +3,53 @@ from __init__ import *
 
 def prep_maps():
 
-    minmindx = 0
-    maxmindx = 1600
+    minmindx = 700
+    maxmindx = 900
+
+    numbside = maxmindx - minmindx
+    numbpixloutp = 200
 
     binsener = array([0.5, 2., 7.]) * 1e-3
     diffener = binsener[1:] - binsener[:-1]
     numbener = diffener.size
     indxener = arange(numbener)
 
-    pixlsize = deg2rad(0.984 / 3600.)
-    apix = pixlsize**2
+    numbener = 2
+    numbevtt = 1
     
+    cnts = empty((numbener, numbside, numbside, numbevtt))
+    expo = empty((numbener, numbside, numbside, numbevtt))
+
     # counts
     path = os.environ["TDGU_DATA_PATH"] + 'img_940k_softw.fits'
-    cntstemp = pf.getdata(path, 0)[minmindx:maxmindx, minmindx:maxmindx]
-    cnts = empty((2, cntstemp.shape[0], cntstemp.shape[1], 1))
-    expo = empty((2, cntstemp.shape[0], cntstemp.shape[1], 1))
-    cnts[0, :, :, 0] = cntstemp
-    
+    cnts[0, :, :, 0] = pf.getdata(path, 0)[minmindx:maxmindx, minmindx:maxmindx]
     path = os.environ["TDGU_DATA_PATH"] + 'img_940k_hardw.fits'
-    cntstemp = pf.getdata(path, 0)[minmindx:maxmindx, minmindx:maxmindx]
-    cnts[1, :, :, 0] = cntstemp
+    cnts[1, :, :, 0] = pf.getdata(path, 0)[minmindx:maxmindx, minmindx:maxmindx]
 
     # exposure
     path = os.environ["TDGU_DATA_PATH"] + 'expmap_940k_soft.fits'
     expo[0, :, :, 0] = pf.getdata(path, 0)[minmindx:maxmindx, minmindx:maxmindx]
     path = os.environ["TDGU_DATA_PATH"] + 'expmap_940k_hard.fits'
     expo[1, :, :, 0] = pf.getdata(path, 0)[minmindx:maxmindx, minmindx:maxmindx]
-   
-    numbpixloutp = 100
-    cntstemp = copy(cnts)
-    expotemp = copy(expo)
-    cnts = empty((2, numbpixloutp, numbpixloutp, 1))
-    expo = empty((2, numbpixloutp, numbpixloutp, 1))
-    for i in arange(numbener):
-        cnts[i, :, :, 0] = tdpy.util.rebn(cntstemp[i, :, :, 0], (numbpixloutp, numbpixloutp), totl=True)
-        expo[i, :, :, 0] = tdpy.util.rebn(expotemp[i, :, :, 0], (numbpixloutp, numbpixloutp), totl=True)
+  
+    
+    pixlsize = deg2rad(0.984 / 3600.) * numbside / numbsideoutp
+    apix = pixlsize**2
+    
+    if numbpixloutp != numbside:
+        cntstemp = copy(cnts)
+        expotemp = copy(expo)
+        cnts = empty((numbener, numbpixloutp, numbpixloutp, numbevtt))
+        expo = empty((numbener, numbpixloutp, numbpixloutp, numbevtt))
+        for i in arange(numbener):
+            cnts[i, :, :, 0] = tdpy.util.rebn(cntstemp[i, :, :, 0], (numbpixloutp, numbpixloutp), totl=True)
+            expo[i, :, :, 0] = tdpy.util.rebn(expotemp[i, :, :, 0], (numbpixloutp, numbpixloutp), totl=True)
 
     flux = zeros_like(cnts)
     for i in indxener:
         indxtemp = where(expo[i, :, :, 0] > 0.)
         flux[i, indxtemp[0], indxtemp[1], 0] = cnts[i, indxtemp[0], indxtemp[1], 0] / expo[i, indxtemp[0], indxtemp[1], 0] / diffener[i] / apix
    
-    print 'diffener'
-    print diffener
-    print 'apix'
-    print apix
-    print
-
     path = os.environ["TDGU_DATA_PATH"] + 'chanflux.fits'
     pf.writeto(path, flux, clobber=True)
 
@@ -60,13 +59,13 @@ def prep_maps():
 
 def pcat_chan():
     
-    maxmgang = deg2rad(0.984 / 3600.) * 50.
+    maxmgang = deg2rad(0.984 / 3600.) * 100.
     gridchan = pcat.main.init( \
-                              #verbtype=2, \
-                              numbswep=1000, \
-                              numbswepplot=400, \
-                              #numbburn=0, \
-                              #factthin=100, \
+                              verbtype=2, \
+                              numbswep=10000, \
+                              numbswepplot=2000, \
+                              numbburn=0, \
+                              factthin=100, \
                               randinit=True, \
                               indxenerincl=arange(2), \
                               indxevttincl=arange(1), \
@@ -76,13 +75,17 @@ def pcat_chan():
                               datatype='inpt', \
                               strgexpr='chanflux.fits', \
                               initnumbpnts=array([2]), \
-                              initfluxdistslop=array([2]), \
-                              maxmnumbpnts=array([2]), \
+                              #probprop=array([0., 0., 0., 0., 0., 1., 1., 1., 1., 0., 0., 1., 1., 1., 1.], dtype=float), \
+                              initfluxdistslop=array([30]), \
+                              maxmnumbpnts=array([30]), \
                               maxmgang=maxmgang, \
                               binsenerfull=array([0.5e-3, 2e-3, 7e-3]), \
+                              minmnormback=array([1e0]), \
+                              maxmnormback=array([1e12]), \
                               exprtype='chan', \
-                              minmflux=1e-7, \
-                              maxmflux=1e-3, \
+                              minmflux=1e-13, \
+                              maxmflux=1e-9, \
+                              #maxmflux=1e-3, \
                              )
 
 if len(sys.argv) > 1:

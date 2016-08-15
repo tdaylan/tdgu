@@ -156,8 +156,7 @@ def pcat_ferm_mock_ngal():
     maxmflux = 2e-8
     
     pcat.main.init(psfntype='doubking', \
-                   numbswep=2000, \
-                   numbswepplot=500, \
+                   numbswep=2000000, \
                    randinit=False, \
                    maxmgang=deg2rad(20.), \
                    boolproppsfn=False, \
