@@ -207,11 +207,11 @@ def retr_hmfn(gdat):
     peakhght = gdat.odencoll / gdat.grwf[None, :] / fluc[:-1, None]
     
     funcflucprsh = sqrt(2. / pi) * peakhght * exp(-gdat.shtrwgth * peakhght**2 / 2.)
-    funcflucshtr = gdat.shtrnorm * sqrt(2. * gdat.shtrwgth / pi) * (1. + (1. / peakhght**2 / gdat.shtrwgth)**gdat.shtrindx) * \
+    funcfluc = gdat.shtrnorm * sqrt(2. * gdat.shtrwgth / pi) * (1. + (1. / peakhght**2 / gdat.shtrwgth)**gdat.shtrindx) * \
                                                                                                                     peakhght * exp(-gdat.shtrwgth * peakhght**2 / 2.)
     
-    gdat.halodist = funcflucshtr * gdat.edendmat[None, :] * gdat.kprc2cmet**3 / gdat.solm2mgev / gdat.meanmass[:, None] * difflogtflucdiffmass[:, None] # [1/kpc^3/Msun]
     gdat.halodistprsh = funcflucprsh * gdat.edendmat[None, :] * gdat.kprc2cmet**3 / gdat.solm2mgev / gdat.meanmass[:, None] * difflogtflucdiffmass[:, None] # [1/kpc^3/Msun]
+    gdat.halodist = funcfluc * gdat.edendmat[None, :] * gdat.kprc2cmet**3 / gdat.solm2mgev / gdat.meanmass[:, None] * difflogtflucdiffmass[:, None] # [1/kpc^3/Msun]
     
     if gdat.makeplot:
         
@@ -474,9 +474,8 @@ def retr_fluxphotdmat(gdat):
     gdat.diffemiselecclmpdiffmassenel = trapz(diffemiselecclmpdiffmass, gdat.meanenel, axis=0) # [1/cm^3/s/Msun]
     
     print 'diffemiselecclmpdiffmassenel'
-    print diffemiselecclmpdiffmassenel[:, :, 0]
-    print diffemiselecclmpdiffmassenel[:, :, 1]
-    
+    print gdat.diffemiselecclmpdiffmassenel[:, :, 0]
+    print gdat.diffemiselecclmpdiffmassenel[:, :, 1]
     
     ## total
     gdat.emiselec = gdat.emiselecsmth + gdat.emiselecclmp

@@ -948,6 +948,7 @@ def retr_datapara():
     datapara.vari = zeros(numbpara)
     datapara.true = zeros(numbpara)
     
+
     datapara.indx['tempcmbr'] = 0
     datapara.name[0] = 'tempcmbr'
     datapara.minm[0] = 2.72
@@ -955,7 +956,7 @@ def retr_datapara():
     datapara.scal[0] = 'self'
     datapara.labl[0] = '$T_{cmb}$'
     datapara.unit[0] = '[K]'
-    datapara.vari[0] = 1e-6
+    datapara.vari[0] = 4.92e-7
     datapara.true[0] = 2.725
 
     datapara.indx['dustodep'] = 1
@@ -965,7 +966,7 @@ def retr_datapara():
     datapara.scal[1] = 'logt'
     datapara.labl[1] = r'$\tau_{dust}$'
     datapara.unit[1] = ''
-    datapara.vari[1] = 1e-8
+    datapara.vari[1] = 1.33e-8
     datapara.true[1] = 1e-3
 
     datapara.indx['dustemisrati'] = 2
@@ -975,7 +976,7 @@ def retr_datapara():
     datapara.scal[2] = 'logt'
     datapara.labl[2] = '$q_1/q_2$'
     datapara.unit[2] = ''
-    datapara.vari[2] = 1e-6
+    datapara.vari[2] = 4.34e-8
     datapara.true[2] = 1e1
     
     datapara.indx['dustpowrfrac'] = 3
@@ -985,7 +986,7 @@ def retr_datapara():
     datapara.scal[3] = 'self'
     datapara.labl[3] = '$f_1$'
     datapara.unit[3] = ''
-    datapara.vari[3] = 4e-6
+    datapara.vari[3] = 1.72e-7
     datapara.true[3] = 0.025
     
     datapara.indx['dustwarmindx'] = 4
@@ -995,7 +996,7 @@ def retr_datapara():
     datapara.scal[4] = 'self'
     datapara.labl[4] = r'$\beta_2$'
     datapara.unit[4] = ''
-    datapara.vari[4] = 1e-6
+    datapara.vari[4] = 7.50e-7
     datapara.true[4] = 2.75
     
     datapara.indx['dustwarmtemp'] = 5
@@ -1005,7 +1006,7 @@ def retr_datapara():
     datapara.scal[5] = 'self'
     datapara.labl[5] = '$T_2$'
     datapara.unit[5] = '[K]'
-    datapara.vari[5] = 5e-8
+    datapara.vari[5] = 2.58e-8
     datapara.true[5] = 15.
     
     datapara.indx['dustcoldindx'] = 6
@@ -1015,7 +1016,7 @@ def retr_datapara():
     datapara.scal[6] = 'self'
     datapara.labl[6] = r'$\beta_1$'
     datapara.unit[6] = ''
-    datapara.vari[6] = 8e-6
+    datapara.vari[6] = 2.49e-7
     datapara.true[6] = 1.75
     
     datapara.indx['syncnorm'] = 7
@@ -1025,7 +1026,7 @@ def retr_datapara():
     datapara.scal[7] = 'logt'
     datapara.labl[7] = '$A_{sync}$'
     datapara.unit[7] = ''
-    datapara.vari[7] = 2e-6
+    datapara.vari[7] = 3.96e-5
     datapara.true[7] = 1e5
     
     datapara.indx['syncindx'] = 8
@@ -1035,7 +1036,7 @@ def retr_datapara():
     datapara.scal[8] = 'self'
     datapara.labl[8] = r'$\alpha_{sync}$'
     datapara.unit[8] = ''
-    datapara.vari[8] = 8e-6
+    datapara.vari[8] = 5.78e-5
     datapara.true[8] = -0.75
     
     datapara.indx['emmefree'] = 9
@@ -1045,7 +1046,7 @@ def retr_datapara():
     datapara.scal[9] = 'logt'
     datapara.labl[9] = 'EM'
     datapara.unit[9] = '[pc/cm$^6$]'
-    datapara.vari[9] = 5e-5
+    datapara.vari[9] = 2.44e-6
     datapara.true[9] = 1e2
     
     datapara.indx['tempfree'] = 10
@@ -1055,7 +1056,7 @@ def retr_datapara():
     datapara.scal[10] = 'logt'
     datapara.labl[10] = r'$T_e$'
     datapara.unit[10] = '[K]'
-    datapara.vari[10] = 1e-3
+    datapara.vari[10] = 2.55e-5
     datapara.true[10] = 1e2
     
     datapara.indx['ydisampl'] = 11
@@ -1065,7 +1066,7 @@ def retr_datapara():
     datapara.scal[11] = 'logt'
     datapara.labl[11] = '$y_{ri}$'
     datapara.unit[11] = ''
-    datapara.vari[11] = 1e-3
+    datapara.vari[11] = 6.11e-3
     datapara.true[11] = 1e-7
     
     datapara.indx['ampldeca'] = 12
@@ -1075,7 +1076,7 @@ def retr_datapara():
     datapara.scal[12] = 'logt'
     datapara.labl[12] = '$f_X$'
     datapara.unit[12] = '[eV]'
-    datapara.vari[12] = 2e-1
+    datapara.vari[12] = 7.40e-1
     datapara.true[12] = 1e-5
     
     datapara.indx['timedeca'] = 13
@@ -1085,7 +1086,7 @@ def retr_datapara():
     datapara.scal[13] = 'logt'
     datapara.labl[13] = r'$\tau_X$'
     datapara.unit[13] = '[s]'
-    datapara.vari[13] = 2e-1
+    datapara.vari[13] = 7.64e-1
     datapara.true[13] = 1e10
     
     datapara.strg = datapara.labl + ' ' + datapara.unit
@@ -1116,7 +1117,7 @@ def init( \
          datatype='mock', \
          exprtype='pixi', \
          datalabl='PIXIE', \
-         numbswep=10000, \
+         numbswep=1000000, \
          exprflux=None, \
          exprfluxstdv=None, \
          freqexpr=None, \
@@ -1241,7 +1242,7 @@ def init( \
     gdat.alphsamp = 0.3
 
     # sampler setup
-    gdat.numbproc = 5
+    gdat.numbproc = 10
     gdat.indxproc = arange(gdat.numbproc)
     optiprop = True
     
