@@ -209,7 +209,9 @@ def retr_hmfn(gdat):
     funcflucprsh = sqrt(2. / pi) * peakhght * exp(-gdat.shtrwgth * peakhght**2 / 2.)
     funcflucshtr = gdat.shtrnorm * sqrt(2. * gdat.shtrwgth / pi) * (1. + (1. / peakhght**2 / gdat.shtrwgth)**gdat.shtrindx) * \
                                                                                                                     peakhght * exp(-gdat.shtrwgth * peakhght**2 / 2.)
-    gdat.halodist = funcfluc * gdat.edendmat[None, :] * gdat.kprc2cmet**3 / gdat.solm2mgev / gdat.meanmass[:, None] * difflogtflucdiffmass[:, None] # [1/kpc^3/Msun]
+    
+    gdat.halodist = funcflucshtr * gdat.edendmat[None, :] * gdat.kprc2cmet**3 / gdat.solm2mgev / gdat.meanmass[:, None] * difflogtflucdiffmass[:, None] # [1/kpc^3/Msun]
+    gdat.halodistprsh = funcflucprsh * gdat.edendmat[None, :] * gdat.kprc2cmet**3 / gdat.solm2mgev / gdat.meanmass[:, None] * difflogtflucdiffmass[:, None] # [1/kpc^3/Msun]
     
     if gdat.makeplot:
         
