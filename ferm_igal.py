@@ -56,16 +56,20 @@ def merg_maps():
     wght = empty_like(almcplnk)
 
     vari = 100.**2
-    wghtsing = 1. / sqrt(2. / pi / vari) * exp(-0.5 * mpol * (mpol + 1.) / vari**2)
+    wghtsing = exp(-0.5 * mpol * (mpol + 1.) / vari)
     mpolgrid, temp = hp.Alm.getlm(lmax=maxmmpol)
     if scalwght == 'self':
         for l in mpol:
             wght[where(mpolgrid == l)] = wghtsing[l]
     
+    print 'wght'
+    for k in range(wght.size):
+        print wght[k]
+
     # plot the weight
     figr, axis = plt.subplots()
-    axis.loglog(mpol, wght, label='FDM')
-    axis.loglog(mpol, 1. - wght, label='Planck')
+    axis.loglog(mpol, wghtsing, label='FDM')
+    axis.loglog(mpol, 1. - wghtsing, label='Planck')
     axis.set_ylabel('$w_l$')
     axis.set_xlabel('$l$')
     axis.legend()
@@ -74,8 +78,6 @@ def merg_maps():
     plt.tight_layout()
     plt.savefig(path)
     plt.close(figr)
-    
-    
     
     almcoutp = almcfdfm * wght + almcplnk * (1. - wght)
     mapsmerg = hp.alm2map(almcoutp, numbside, verbose=False)
