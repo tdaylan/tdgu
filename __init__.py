@@ -3,7 +3,7 @@ import matplotlib as mpl
 mpl.rcParams['figure.figsize'] = (6., 5.)
 mpl.use('Agg')
 import matplotlib.pyplot as plt
-mpl.rc('image', interpolation='none', origin='lower')
+mpl.rc('image', interpolation='nearest', origin='lower')
 
 import seaborn as sns
 sns.set(context='poster', style='ticks', color_codes=True)

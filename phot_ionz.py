@@ -430,7 +430,7 @@ def retr_fluxphotdmat(gdat):
                 for m in range(gdat.numbmpol):
                     gdat.emiselechalo[a, d, c, :, m] = gdat.csecvelohalo[d, c, :, m] / gdat.masspart**2 * multintp[a] * gdat.fesc[a, d, c, :] * \
                                                                                                                             gdat.edendmathalo[d, c, :]**2 # [1/s/cm^3/MeV]
-                    diffemiselechalodiffrsph[a, d, c, :, m] = 4. * pi * gdat.rsph[d, c, :]**2 * gdat.emiselechalo[a, d, c, :, m] * gdat.kprc2cmet**2 # [1/s/kpc/MeV]
+                    diffemiselechalodiffrsph[a, d, c, :, m] = 4. * pi * gdat.rsph[d, c, :]**2 * gdat.emiselechalo[a, d, c, :, m] * gdat.kprc2cmet**2 # [1/s/cm/MeV]
                     lumielechalo[a, d, c, m] = trapz(diffemiselechalodiffrsph[a, d, c, :, m] * gdat.kprc2cmet, gdat.rsph[d, c, :]) # [1/s/MeV]
     
     lumielechalo *= gdat.bostfact[None, :, None, None]
@@ -650,7 +650,7 @@ def plot_halo(gdat):
                 axis.set_title(gdat.strgmpol[p])
             axis.text(0.23, 0.12, gdat.strgmass[d], ha='center', va='center', transform = axis.transAxes)
             if d == gdat.numbmassplot / 2 and p == 0:
-                axis.set_ylabel(r'$dN_e/dt/dVd\log r$ [1/s]')
+                axis.set_ylabel(r'$dN_e/dt/dVd\log r$ [1/s/cm$^3$]')
     axis.legend()
     figr.subplots_adjust(hspace=0.1, wspace=0.1)
     plt.savefig(gdat.pathplot + 'diffemiselechalodiffrsphenel.pdf')
@@ -674,7 +674,16 @@ def plot_halo(gdat):
     figr, axisrows = plt.subplots(1, gdat.numbmpol, sharey='row', figsize=(gdat.numbmpol * gdat.plotsize, gdat.plotsize))
     for p, axis in enumerate(axisrows):
         for c in range(gdat.numbredsplotlate):
-            axis.loglog(gdat.meanmass, gdat.meanmass * gdat.diffemiselecclmpdiffmassenel[:, gdat.indxredsplotlate[c],p], label=gdat.strgredsplotlate[c])
+            print 'p'
+            print p
+            print 'c'
+            print c
+            print 'reds'
+            print gdat.meanreds[gdat.indxredsplotlate[c]]
+            print 'gdat.diffemiselecclmpdiffmassenel'
+            print gdat.diffemiselecclmpdiffmassenel[:, gdat.indxredsplotlate[c], p] * gdat.meanmass
+            print 
+            axis.loglog(gdat.meanmass, gdat.meanmass * gdat.diffemiselecclmpdiffmassenel[:, gdat.indxredsplotlate[c], p], label=gdat.strgredsplotlate[c])
         axis.set_xlabel(r'$M$ $[M_\odot]$')
         axis.set_title(gdat.strgmpol[p])
         if p == 0:

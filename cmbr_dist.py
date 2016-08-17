@@ -1285,8 +1285,6 @@ def init( \
         gdat.datafluxstdv = exprfluxstdv
         gdat.dataflux = exprflux
     
-    plot_flux(gdat, plottype='data')
-    
     gdat.numbfreqexpr = gdat.freqexpr.size
 
     sampbund = tdpy.mcmc.init(retr_llik, datapara, numbproc=gdat.numbproc, initsamp=thissamp, numbswep=numbswep, gdatextr=gdat, factpropeffi=3., \
@@ -1348,9 +1346,7 @@ def init( \
                 listfluxdeca[k, :] = listsampcalc[7][k]
                 listresiflux[k, :] = listsampcalc[8][k]
 
-            path = gdat.pathplot + 'postresi.pdf'
-            plot_resiflux(gdat, postflux=postflux) 
-            #postfluxtotl, postfluxcmbr, postfluxdustwarm, postfluxdustcold, postfluxsync, postfluxfree, postfluxydis, postfluxdeca)
+            plot_flux(gdat, plottype='post')
 
     return statpara
     

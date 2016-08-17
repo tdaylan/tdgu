@@ -105,7 +105,7 @@ def intr_ferm_expr_ngal( \
     karg['maxmgang'] = 20.
     karg['boolproppsfn'] = False
     karg['initfluxdistslop'] = array([1.9])
-    karg['initfluxdistnorm'] = array([300])
+    karg['initmeanpnts'] = array([300])
     karg['maxmnumbpnts'] = array([500])
     karg['indxenerincl'] = arange(1, 4)
     karg['indxevttincl'] = arange(2, 4)
@@ -157,6 +157,7 @@ def pcat_ferm_mock_ngal():
     
     pcat.main.init(psfntype='doubking', \
                    numbswep=2000000, \
+                   bindprio=True, \
                    randinit=False, \
                    maxmgang=deg2rad(20.), \
                    boolproppsfn=False, \

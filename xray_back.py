@@ -5,9 +5,9 @@ def prep_maps():
 
     minmindx = 700
     maxmindx = 900
+    numbsideoutp = 200
 
     numbside = maxmindx - minmindx
-    numbpixloutp = 200
 
     binsener = array([0.5, 2., 7.]) * 1e-3
     diffener = binsener[1:] - binsener[:-1]
@@ -36,14 +36,20 @@ def prep_maps():
     pixlsize = deg2rad(0.984 / 3600.) * numbside / numbsideoutp
     apix = pixlsize**2
     
-    if numbpixloutp != numbside:
+    print 'cnts'
+    print cnts[:10, :10]
+
+    if numbsideoutp != numbside:
         cntstemp = copy(cnts)
         expotemp = copy(expo)
-        cnts = empty((numbener, numbpixloutp, numbpixloutp, numbevtt))
-        expo = empty((numbener, numbpixloutp, numbpixloutp, numbevtt))
+        cnts = empty((numbener, numbsideoutp, numbsideoutp, numbevtt))
+        expo = empty((numbener, numbsideoutp, numbsideoutp, numbevtt))
         for i in arange(numbener):
-            cnts[i, :, :, 0] = tdpy.util.rebn(cntstemp[i, :, :, 0], (numbpixloutp, numbpixloutp), totl=True)
-            expo[i, :, :, 0] = tdpy.util.rebn(expotemp[i, :, :, 0], (numbpixloutp, numbpixloutp), totl=True)
+            cnts[i, :, :, 0] = tdpy.util.rebn(cntstemp[i, :, :, 0], (numbsideoutp, numbsideoutp), totl=True)
+            expo[i, :, :, 0] = tdpy.util.rebn(expotemp[i, :, :, 0], (numbsideoutp, numbsideoutp), totl=True)
+
+    print 'cnts'
+    print cnts[:10, :10]
 
     flux = zeros_like(cnts)
     for i in indxener:
@@ -76,8 +82,8 @@ def pcat_chan():
                               strgexpr='chanflux.fits', \
                               initnumbpnts=array([2]), \
                               #probprop=array([0., 0., 0., 0., 0., 1., 1., 1., 1., 0., 0., 1., 1., 1., 1.], dtype=float), \
-                              initfluxdistslop=array([30]), \
-                              maxmnumbpnts=array([30]), \
+                              initfluxdistslop=array([2]), \
+                              maxmnumbpnts=array([2]), \
                               maxmgang=maxmgang, \
                               binsenerfull=array([0.5e-3, 2e-3, 7e-3]), \
                               minmnormback=array([1e0]), \

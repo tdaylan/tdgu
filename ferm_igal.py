@@ -26,6 +26,93 @@ def make_maps_rec8_back():
     tdpy.util.prep_maps('rec8', 'back', 'igal', os.environ["FERM_IGAL_DATA_PATH"], 256, 'tim0')
 
 
+def merg_maps():
+
+    numbside = 256
+    scalwght = 'self'
+    binsener = array([0.1, 0.3, 1., 3., 10., 100.])[2:4]
+
+    pathplot = os.environ["FERM_IGAL_DATA_PATH"]
+    # get input maps
+    ## Planck map
+    path = pathplot + '/HFI_CompMap_ThermalDustModel_2048_R1.20.fits'
+    maps = pf.getdata(path, 1)['RADIANCE']
+    mapsplnk = hp.ud_grade(maps, numbside, order_in='NESTED', order_out='RING')
+    mapsplnk -= mean(mapsplnk)
+    mapsplnk /= std(mapsplnk)
+    almcplnk = hp.map2alm(mapsplnk)
+
+    ## Fermi Diffuse Model
+    # temp
+    mapsfdfm = tdpy.util.retr_fdfm(binsener).flatten()
+    mapsfdfm -= mean(mapsfdfm)
+    mapsfdfm /= std(mapsfdfm)
+    almcfdfm = hp.map2alm(mapsfdfm)
+
+    # get the merged map
+    mpol = arange(2. * numbside)
+    maxmmpol = amax(mpol)
+
+    wght = empty_like(almcplnk)
+
+    vari = 100.**2
+    wghtsing = 1. / sqrt(2. / pi / vari) * exp(-0.5 * mpol * (mpol + 1.) / vari**2)
+    mpolgrid, temp = hp.Alm.getlm(lmax=maxmmpol)
+    if scalwght == 'self':
+        for l in mpol:
+            wght[where(mpolgrid == l)] = wghtsing[l]
+    
+    # plot the weight
+    figr, axis = plt.subplots()
+    axis.loglog(mpol, wght, label='FDM')
+    axis.loglog(mpol, 1. - wght, label='Planck')
+    axis.set_ylabel('$w_l$')
+    axis.set_xlabel('$l$')
+    axis.legend()
+    
+    path = pathplot + '/wght.pdf'
+    plt.tight_layout()
+    plt.savefig(path)
+    plt.close(figr)
+    
+    
+    
+    almcoutp = almcfdfm * wght + almcplnk * (1. - wght)
+    mapsmerg = hp.alm2map(almcoutp, numbside, verbose=False)
+                
+    rtag = '%04d_%s' % (numbside, scalwght)
+
+    for plotigal in [True, False]:
+
+        if plotigal:
+            minmlgal = -20.
+            maxmlgal = 20.
+            minmbgal = -20.
+            maxmbgal = 20.
+            strg = rtag + 'igal'
+        else:
+            minmlgal = -180.
+            maxmlgal = 180.
+            minmbgal = -90.
+            maxmbgal = 90.
+            strg = rtag + 'full'
+           
+        path = os.environ["FERM_IGAL_DATA_PATH"] + '/mapsfdfm%s.pdf' % strg
+        tdpy.util.plot_maps(path, mapsfdfm, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
+        
+        path = os.environ["FERM_IGAL_DATA_PATH"] + '/mapsplnk%s.pdf' % strg
+        tdpy.util.plot_maps(path, mapsplnk, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
+        
+        path = os.environ["FERM_IGAL_DATA_PATH"] + '/mapsmerg%s.pdf' % strg
+        tdpy.util.plot_maps(path, mapsmerg, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
+        
+        path = os.environ["FERM_IGAL_DATA_PATH"] + '/mapsresifdfm%s.pdf' % strg
+        tdpy.util.plot_maps(path, mapsmerg - mapsfdfm, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, resi=True)
+        
+        path = os.environ["FERM_IGAL_DATA_PATH"] + '/mapsresiplnk%s.pdf' % strg
+        tdpy.util.plot_maps(path, mapsmerg - mapsplnk, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, resi=True)
+        
+
 def retr_llik(sampvarb, gdat):
 
     modlflux = retr_modlflux(gdat, sampvarb)
