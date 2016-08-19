@@ -38,7 +38,13 @@ def merg_maps():
     path = pathplot + '/HFI_CompMap_ThermalDustModel_2048_R1.20.fits'
     maps = pf.getdata(path, 1)['RADIANCE']
     mapsplnk = hp.ud_grade(maps, numbside, order_in='NESTED', order_out='RING')
+    print 'mapsplnk'
+    print amin(mapsplnk)
+    print amax(mapsplnk)
     mapsplnk -= mean(mapsplnk)
+    print 'mapsplnk'
+    print amin(mapsplnk)
+    print amax(mapsplnk)
     mapsplnk /= std(mapsplnk)
     almcplnk = hp.map2alm(mapsplnk)
 
@@ -62,10 +68,6 @@ def merg_maps():
         for l in mpol:
             wght[where(mpolgrid == l)] = wghtsing[l]
     
-    print 'wght'
-    for k in range(wght.size):
-        print wght[k]
-
     # plot the weight
     figr, axis = plt.subplots()
     axis.loglog(mpol, wghtsing, label='FDM')
@@ -74,7 +76,7 @@ def merg_maps():
     axis.set_xlabel('$l$')
     axis.legend()
     
-    path = pathplot + '/wght.pdf'
+    path = pathplot + '/imag/wght.pdf'
     plt.tight_layout()
     plt.savefig(path)
     plt.close(figr)
@@ -84,7 +86,8 @@ def merg_maps():
                 
     rtag = '%04d_%s' % (numbside, scalwght)
 
-    for plotigal in [True, False]:
+    # temp
+    for plotigal in [True]:
 
         if plotigal:
             minmlgal = -20.
@@ -99,19 +102,19 @@ def merg_maps():
             maxmbgal = 90.
             strg = rtag + 'full'
            
-        path = os.environ["FERM_IGAL_DATA_PATH"] + '/mapsfdfm%s.pdf' % strg
+        path = os.environ["FERM_IGAL_DATA_PATH"] + '/imag/mapsfdfm%s.pdf' % strg
         tdpy.util.plot_maps(path, mapsfdfm, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
         
-        path = os.environ["FERM_IGAL_DATA_PATH"] + '/mapsplnk%s.pdf' % strg
+        path = os.environ["FERM_IGAL_DATA_PATH"] + '/imag/mapsplnk%s.pdf' % strg
         tdpy.util.plot_maps(path, mapsplnk, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
         
-        path = os.environ["FERM_IGAL_DATA_PATH"] + '/mapsmerg%s.pdf' % strg
+        path = os.environ["FERM_IGAL_DATA_PATH"] + '/imag/mapsmerg%s.pdf' % strg
         tdpy.util.plot_maps(path, mapsmerg, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
         
-        path = os.environ["FERM_IGAL_DATA_PATH"] + '/mapsresifdfm%s.pdf' % strg
+        path = os.environ["FERM_IGAL_DATA_PATH"] + '/imag/mapsresifdfm%s.pdf' % strg
         tdpy.util.plot_maps(path, mapsmerg - mapsfdfm, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, resi=True)
         
-        path = os.environ["FERM_IGAL_DATA_PATH"] + '/mapsresiplnk%s.pdf' % strg
+        path = os.environ["FERM_IGAL_DATA_PATH"] + '/imag/mapsresiplnk%s.pdf' % strg
         tdpy.util.plot_maps(path, mapsmerg - mapsplnk, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, resi=True)
         
 
