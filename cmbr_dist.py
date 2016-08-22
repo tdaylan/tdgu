@@ -1287,15 +1287,14 @@ def init( \
     
     gdat.numbfreqexpr = gdat.freqexpr.size
 
-    sampbund = tdpy.mcmc.init(retr_llik, datapara, numbproc=gdat.numbproc, initsamp=thissamp, numbswep=numbswep, gdatextr=gdat, factpropeffi=3., \
+    chan = tdpy.mcmc.init(retr_llik, datapara, numbproc=gdat.numbproc, initsamp=thissamp, numbswep=numbswep, gdatextr=gdat, factpropeffi=3., \
                                                                 verbtype=gdat.verbtype, pathbase=pathbase, rtag=rtag, optiprop=optiprop)
-    listsampvarb = sampbund[0]
-    listsamp = sampbund[1]
-    listsampcalc = sampbund[2]
-    listllik = sampbund[3]
-    listaccp = sampbund[4]
-    listjsampvari = sampbund[5]
-
+    listsampvarb = chan[0]
+    listsamp = chan[1]
+    listsampcalc = chan[2]
+    listllik = chan[3]
+    listaccp = chan[4]
+    
     gdat.numbsamp = listsamp.shape[0]
     
     listflux = zeros((gdat.numbsamp, gdat.numbfreqexpr))

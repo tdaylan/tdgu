@@ -32,7 +32,7 @@ def merg_maps():
     scalwght = 'self'
     binsener = array([0.1, 0.3, 1., 3., 10., 100.])[2:4]
 
-    pathplot = os.environ["FERM_IGAL_DATA_PATH"]
+    pathplot = os.environ["FERM_IGAL_DATA_PATH"] + '/imag/'
     # get input maps
     ## Planck map
     path = pathplot + '/HFI_CompMap_ThermalDustModel_2048_R1.20.fits'
@@ -76,7 +76,7 @@ def merg_maps():
     axis.set_xlabel('$l$')
     axis.legend()
     
-    path = pathplot + '/imag/wght.pdf'
+    path = pathplot + 'wght.pdf'
     plt.tight_layout()
     plt.savefig(path)
     plt.close(figr)
@@ -85,6 +85,19 @@ def merg_maps():
     mapsmerg = hp.alm2map(almcoutp, numbside, verbose=False)
                 
     rtag = '%04d_%s' % (numbside, scalwght)
+
+    # plot the power spectra
+    figr, axis = plt.subplots()
+    axis.loglog(mpol, mpol * (mpol + 1.) * hp.anafast(mapsfdfm), label='Planck')
+    axis.loglog(mpol, mpol * (mpol + 1.) * hp.anafast(mapsfdfm), label='FDM')
+    axis.loglog(mpol, mpol * (mpol + 1.) * hp.anafast(mapsfdfm), label='Merged')
+    axis.set_ylabel('$l(l+1)C_l$')
+    axis.set_xlabel('$l$')
+    axis.legend()
+    path = pathplot + 'psec.pdf'
+    plt.tight_layout()
+    plt.savefig(path)
+    plt.close(figr)
 
     # temp
     for plotigal in [True]:
@@ -118,7 +131,7 @@ def merg_maps():
         tdpy.util.plot_maps(path, mapsmerg - mapsplnk, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, resi=True)
         
 
-def retr_llik(sampvarb, gdat):
+def retr_llik(sampvarb, gdat, gdatintr):
 
     modlflux = retr_modlflux(gdat, sampvarb)
     modlfluxtotl = sum(modlflux, axis=0)
@@ -315,7 +328,7 @@ def init( \
          strgback=['isotflux', 'fdfmflux', 'HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'lambda_sfd_ebv.fits', 'darktemp'], \
          indxenerincl=arange(1, 4), \
          indxevttincl=arange(3, 4), \
-         maxmgang=20.
+         maxmgang=deg2rad(20.)
         ):
 
     # construct the global object
@@ -499,7 +512,7 @@ def init( \
     chan = tdpy.mcmc.init(retr_llik, datapara, numbproc=gdat.numbproc, numbswep=gdat.numbswep, initsamp=initsamp, gdatextr=gdat, \
                 verbtype=gdat.verbtype, pathbase=gdat.pathbase, rtag=gdat.rtag, numbplotside=numbplotside)
     
-    listsampvarb, listsamp, listsampcalc, listllik, listaccp, listindxparamodi, propeffi, levi, info, gmrbstat = chan
+    listsampvarb, listsamp, listsampcalc, listllik, listaccp, listchro, listindxparamodi, propeffi, levi, info, gmrbstat = chan
     numbsamp = listsamp.shape[0]
 
     gdat.medisampvarb = percentile(listsampvarb, 50., axis=0)
@@ -544,7 +557,7 @@ def pcat_ferm_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_c
               psfntype='doubking', \
               numbswep=2000000, \
               randinit=False, \
-              maxmgang=20., \
+              maxmgang=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
               indxevttincl=arange(2, 4), \
               minmflux=3e-11, \
@@ -558,129 +571,102 @@ def pcat_ferm_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_c
              )
     
     
-def pcat_ferm_mock_igal_brok_arry():
+def pcat_ferm_mock_igal_brok():
      
-    indxenerincl = arange(1, 4)
-    indxevttincl = arange(2, 4)
-    numbener = indxenerincl.size
+    listmockfluxdistbrek = array([1e-10, 3e-10, 1e-9, 3e-9, 1e-8])
+    listmockfluxdistsloplowr = array([1.9, 2.2, 2.8, 3.1, 3.4])
 
-    listfdfnbrek = array([1e-10, 3e-10, 1e-9, 3e-9, 1e-8])
-    listfdfnsloplowr = array([1.9, 2.2, 2.8, 3.1, 3.4])
-    mockfdfnsloplowr = array([1.])
-    mockfdfnslopuppr = array([2.5])
-
-
-    for fdfnbrek in listfdfnbrek:
-        pcat.main.init(psfntype='doubking', \
-                       numbswep=400000, \
-                       numbburn=0, \
-                       randinit=False, \
-                       boolproppsfn=False, \
-                       maxmgang=20., \
-                       fdfntype='brok', \
-                       indxenerincl=indxenerincl, \
-                       indxevttincl=indxevttincl, \
-                       maxmnumbpnts=array([600]), \
-                       minmflux=3e-11, \
-                       maxmflux=1e-7, \
-                       regitype='igal', \
-                       strgexpo='fermexpo_cmp0_igal.fits', \
-                       strgback=['isotflux.fits', 'fdfmflux.fits'], \
-                       datatype='mock', \
-                       mockfdfntype='brok', \
-                       mocknumbpnts=array([300]), \
-                       mocknumbsideheal=256, \
-                       mockfdfnslop=mockfdfnslop, \
-                       mockfdfnsloplowr=mockfdfnsloplowr, \
-                       mockfdfnslopuppr=mockfdfnslopuppr, \
-                       mockfdfnbrek=array([fdfnbrek]), \
-                       mocknormback=ones((2, numbener)), \
+    for fluxdistbrek in listfluxdistbrek:
+    
+        pcat.main.init( \
                        pathdata=os.environ["FERM_IGAL_DATA_PATH"], \
+                       numbswep=10000, \
+                       randinit=False, \
+                       indxevttincl=arange(2, 4), \
+                       indxenerincl=arange(1, 4), \
+                       strgexpo='fermexpo_cmp0_igal.fits', \
+                       strgback=['isotflux.fits'], \
+                       regitype='igal', \
+                       
+                       maxmgang=deg2rad(20.), \
+                       fluxdisttype=['brok'], \
+                       psfntype='doubking', \
+                       
+                       maxmnumbpnts=array([400]), \
+                       minmflux=3e-11, \
+                       maxmflux=3e-7, \
+
+                       datatype='mock', \
+                       mocknumbpnts=array([400]), \
+                       
+                       mockfluxdistbrek=array([1e-9]), \
+                       mockfluxdistsloplowr=array([2.6]), \
+                       mockfluxdistslopuppr=array([1.6]), \
+                       
+                       mocksinddiststdv=array([.5]), \
+                       mocksinddistmean=array([2.]), \
                       )
 
 
-def pcat_ferm_mock_igal_brok():
+def pcat_ferm_mock_igal_popl():
      
-    indxevttincl = arange(2, 4)
-    indxenerincl = arange(1, 4)
-    numbener = indxenerincl.size
-
-    minmflux = 3e-11
-    maxmflux = 3e-7
-    mockfdfnbrek = array([1e-8])
-    mockfdfnsloplowr = array([1.6])
-    mockfdfnslopuppr = array([2.6])
-    
     pcat.main.init( \
-                   psfntype='doubking', \
+                   pathdata=os.environ["FERM_IGAL_DATA_PATH"], \
                    numbswep=10000, \
                    randinit=False, \
-                   maxmgang=20., \
-                   indxevttincl=indxevttincl, \
-                   indxenerincl=indxenerincl, \
-                   fdfntype='brok', \
+                   indxevttincl=arange(2, 4), \
+                   indxenerincl=arange(1, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
-                   strgback=['isotflux.fits', 'fdfmflux.fits'], \
-                   pathdata=os.environ["FERM_IGAL_DATA_PATH"], \
+                   strgback=['isotflux.fits'], \
                    regitype='igal', \
                    
+                   maxmgang=deg2rad(20.), \
+                   fluxdisttype=['brok'], \
+                   psfntype='doubking', \
+                   
                    maxmnumbpnts=array([400]), \
-                   minmflux=minmflux, \
-                   maxmflux=maxmflux, \
+                   minmflux=3e-11, \
+                   maxmflux=3e-7, \
 
                    datatype='mock', \
-                   numbsideheal=256, \
-                   mocknormback=ones((2, numbener)), \
                    mocknumbpnts=array([400]), \
+                   
                    mockspatdisttype=['unif', 'disc', 'gang'], \
-                   mockfdfntype='brok', \
-                   mockfdfnbrek=mockfdfnbrek, \
-                   mockfdfnsloplowr=mockfdfnsloplowr, \
-                   mockfdfnslopuppr=mockfdfnslopuppr, \
-                   mocksdfnstdv=array([.5]), \
-                   mocksdfnmean=array([2.]), \
+                   
+                   mocksinddiststdv=array([.5]), \
+                   mocksinddistmean=array([2.]), \
                   )
 
 
 def pcat_ferm_mock_igal():
      
-    indxevttincl = arange(2, 4)
-    indxenerincl = arange(1, 4)
-    numbener = indxenerincl.size
-
-    minmflux = 3e-11
-    maxmflux = 3e-7
-    mockfdfnslop = array([2.6, 2.6, 3.5])
-      
     pcat.main.init( \
                    psfntype='doubking', \
-                   numbswep=100, \
+                   numbswep=1000000, \
                    randinit=False, \
-                   indxevttincl=indxevttincl, \
-                   indxenerincl=indxenerincl, \
+                   indxevttincl=arange(2, 4), \
+                   indxenerincl=arange(1, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
                    strgback=['isotflux.fits', 'fdfmflux.fits'], \
                    pathdata=os.environ["FERM_IGAL_DATA_PATH"], \
                    regitype='igal', \
                    
-                   maxmnumbpnts=array([200, 200, 400]), \
-                   maxmgang=20., \
-                   minmflux=minmflux, \
-                   maxmflux=maxmflux, \
-                   fdfntype='powr', \
-                   sdfnstdv=array([.5, .5, .5]), \
-                   sdfnmean=array([2., 2., 2.]), \
+                   maxmnumbpnts=array([2, 2, 4]), \
+                   #maxmnumbpnts=array([200, 200, 400]), \
+                   maxmgang=deg2rad(20.), \
+                   minmflux=3e-11, \
+                   maxmflux=3e-7, \
+                   
+                   sinddiststdv=array([.5, .5, .5]), \
+                   sinddistmean=array([2., 2., 2.]), \
                    
                    datatype='mock', \
-                   numbsideheal=256, \
-                   mocknormback=ones((2, numbener)), \
-                   mocknumbpnts=array([100, 100, 200]), \
+                   #mocknumbpnts=array([100, 100, 200]), \
                    mockspatdisttype=['unif', 'disc', 'gang'], \
-                   mockfdfntype='powr', \
-                   mockfdfnslop=mockfdfnslop, \
-                   mocksdfntype='gaus', \
-                   mocksdfnstdv=array([.5, .5, .5]), \
-                   mocksdfnmean=array([2., 2., 2.]), \
+                   mocknumbpnts=array([1, 1, 2]), \
+                   mockfluxdistslop=array([2.6, 2.6, 3.5]), \
+                   mocksinddiststdv=array([.5, .5, .5]), \
+                   mocksinddistmean=array([2., 2., 2.]), \
                   )
 
 
