@@ -26,109 +26,164 @@ def make_maps_rec8_back():
     tdpy.util.prep_maps('rec8', 'back', 'igal', os.environ["FERM_IGAL_DATA_PATH"], 256, 'tim0')
 
 
-def merg_maps():
+def merg_maps_arry():
+    
+    merg_maps(numbside=512)
+    merg_maps(mpolmerg=360.)
+    merg_maps(mpolmerg=90.)
 
-    numbside = 256
-    scalwght = 'self'
-    binsener = array([0.1, 0.3, 1., 3., 10., 100.])[2:4]
 
-    pathplot = os.environ["FERM_IGAL_DATA_PATH"] + '/imag/'
+def merg_maps(numbside=256, mpolmerg=180.):
+
+    alph = 0.5
+
+    rtag = '%04d%04d' % (numbside, mpolmerg)
+    
+    maxmmpol = 3. * numbside - 1.
+    numbpixl = 12 * numbside**2
+
+    binsener = array([0.1, 0.3, 1., 3., 10., 100.])
+    meanener = sqrt(binsener[1:] * binsener[:-1])
+    numbener = meanener.size
+    
+    lgalheal, bgalheal, numbpixl, apix = tdpy.util.retr_healgrid(numbside)
+    
+    pathbase = os.environ["FERM_IGAL_DATA_PATH"]
+    pathplot = pathbase + '/imag/mergmaps/'
     # get input maps
     ## Planck map
-    path = pathplot + '/HFI_CompMap_ThermalDustModel_2048_R1.20.fits'
+    path = pathbase + '/HFI_CompMap_ThermalDustModel_2048_R1.20.fits'
     maps = pf.getdata(path, 1)['RADIANCE']
     mapsplnk = hp.ud_grade(maps, numbside, order_in='NESTED', order_out='RING')
-    print 'mapsplnk'
-    print amin(mapsplnk)
-    print amax(mapsplnk)
     mapsplnk -= mean(mapsplnk)
-    print 'mapsplnk'
-    print amin(mapsplnk)
-    print amax(mapsplnk)
     mapsplnk /= std(mapsplnk)
-    almcplnk = hp.map2alm(mapsplnk)
+    almcplnktemp = hp.map2alm(mapsplnk)
+
+    # temp
+    if False:
+        mapspnts = zeros((2, numbpixl))
+        numbpnts = array([100, 100000])
+        for k in arange(numbpnts.size):
+            for n in arange(numbpnts[k]):
+                dir1 = array([lgalheal, bgalheal])
+                dir2 = array([modllgal[k], modlbgal[k]])
+                dist = angdist(dir1, dir2, lonlat=True)
+                thisindxtruepnts = where(dist < gdat.anglassc)[0]
+                mapspnts[k, :] += exp(-0.5 * angldist**2) 
+
+    # Gaussian noise map
+    mapsgaus = 0.1 * randn(numbpixl)
 
     ## Fermi Diffuse Model
     # temp
-    mapsfdfm = tdpy.util.retr_fdfm(binsener).flatten()
-    mapsfdfm -= mean(mapsfdfm)
-    mapsfdfm /= std(mapsfdfm)
-    almcfdfm = hp.map2alm(mapsfdfm)
+    mapsfdfm = tdpy.util.retr_fdfm(binsener, numbside=numbside)
+    mapsfdfm -= mean(mapsfdfm, 1)[:, None]
+    mapsfdfm /= std(mapsfdfm, 1)[:, None]
 
-    # get the merged map
-    mpol = arange(2. * numbside)
-    maxmmpol = amax(mpol)
+    numbalmc = int(maxmmpol * (maxmmpol + 1.) / 2. + maxmmpol + 1)
+    almcfdfm = empty((numbener, numbalmc), dtype=complex) 
+    for i in arange(numbener):
+        almcfdfm[i, :] = hp.map2alm(mapsfdfm[i, :])
 
-    wght = empty_like(almcplnk)
-
-    vari = 100.**2
-    wghtsing = exp(-0.5 * mpol * (mpol + 1.) / vari)
+    # multipole axis
+    mpol = arange(maxmmpol + 1)
     mpolgrid, temp = hp.Alm.getlm(lmax=maxmmpol)
-    if scalwght == 'self':
-        for l in mpol:
-            wght[where(mpolgrid == l)] = wghtsing[l]
+
+    # compute the weight
+    wghtsing = exp(-0.5 * mpol * (mpol + 1.) / mpolmerg**2)
+    wght = empty(numbalmc) 
+    for l in mpol.astype(int):
+        wght[where(mpolgrid == l)] = wghtsing[l]
     
     # plot the weight
     figr, axis = plt.subplots()
     axis.loglog(mpol, wghtsing, label='FDM')
     axis.loglog(mpol, 1. - wghtsing, label='Planck')
+    axis.axvline(numbside, ls='--', color='black', alpha=alph, label='$N_{side}$')
+    axis.axvline(mpolmerg, ls='-.', color='black', alpha=alph, label='$l_{merg}$')
     axis.set_ylabel('$w_l$')
     axis.set_xlabel('$l$')
-    axis.legend()
-    
-    path = pathplot + 'wght.pdf'
+    axis.set_ylim([1e-4, 1.])
+    axis.set_xlim([amin(mpol), amax(mpol)])
+    axis.legend(loc=2)
     plt.tight_layout()
+    path = pathplot + 'wght_%s.pdf' % rtag
     plt.savefig(path)
     plt.close(figr)
+   
+    # compute the power spectra
+    fact = mpol * (2. * mpol + 1.) / 4. / pi
+    psecplnktemp = fact * hp.anafast(mapsplnk)
+    print 'sum(psecplnktemp)'
+    print psecplnktemp
+    psecgaus = fact * hp.anafast(mapsgaus)
+    print 'sum(psecgaus)'
+    print psecgaus
+    psecfdfm = empty((numbener, maxmmpol))
+    psecplnk = empty((numbener, maxmmpol))
+    indxmpoltemp = where(mpol < 10.)[0]
+    for i in arange(numbener):
+        psecfdfm[i, :] = fact * hp.anafast(mapsfdfm[i, :])
+        ## correct the Planck variance
+        factcorr = sum(psecfdfm[i, indxmpoltemp]) / um(psecplnk[indxmpoltemp])
+        psecplnk[i, :] = factcorr * psecplnktemp
+        almcplnk[i, :] = sqrt(factcorr) * almcplnktemp
+    # merge the maps
+    mapsmerg = empty((numbener, numbpixl))
+    for i in arange(numbener):
+        almcmerg = almcfdfm[i, :] * wght + almcplnk * (1. - wght)
+        mapsmerg[i, :] = hp.alm2map(almcmerg, numbside, verbose=False)
     
-    almcoutp = almcfdfm * wght + almcplnk * (1. - wght)
-    mapsmerg = hp.alm2map(almcoutp, numbside, verbose=False)
-                
-    rtag = '%04d_%s' % (numbside, scalwght)
-
     # plot the power spectra
-    figr, axis = plt.subplots()
-    axis.loglog(mpol, mpol * (mpol + 1.) * hp.anafast(mapsfdfm), label='Planck')
-    axis.loglog(mpol, mpol * (mpol + 1.) * hp.anafast(mapsfdfm), label='FDM')
-    axis.loglog(mpol, mpol * (mpol + 1.) * hp.anafast(mapsfdfm), label='Merged')
-    axis.set_ylabel('$l(l+1)C_l$')
-    axis.set_xlabel('$l$')
-    axis.legend()
-    path = pathplot + 'psec.pdf'
-    plt.tight_layout()
-    plt.savefig(path)
-    plt.close(figr)
+    for i in arange(numbener):
+        figr, axis = plt.subplots()
+        axis.loglog(mpol, psecfdfm[i, :], label='FDM')
+        axis.loglog(mpol, psecplnk, label='Planck')
+        axis.loglog(mpol, psecmerg[i, :], label='Merged')
+        axis.loglog(mpol, psecgaus, label='Uncorrelated Noise', alpha=alph, ls='--')
+        
+        axis.axvline(numbside, ls='--', color='black', alpha=alph, label='$N_{side}$')
+        axis.axvline(mpolmerg, ls='-.', color='black', alpha=alph, label='$l_{merg}$')
+        axis.set_ylabel('$l(2l+1)C_l/4\pi$')
+        axis.set_xlabel('$l$')
+        axis.set_ylim([1e-3, 1.])
+        axis.set_xlim([amin(mpol), amax(mpol)])
+        axis.legend(loc=3)
+        plt.tight_layout()
+        path = pathplot + 'psec%04d_%s.pdf' % (i, rtag)
+        plt.savefig(path)
+        plt.close(figr)
 
-    # temp
-    for plotigal in [True]:
+        for plotigal in [False, True]:
 
-        if plotigal:
-            minmlgal = -20.
-            maxmlgal = 20.
-            minmbgal = -20.
-            maxmbgal = 20.
-            strg = rtag + 'igal'
-        else:
-            minmlgal = -180.
-            maxmlgal = 180.
-            minmbgal = -90.
-            maxmbgal = 90.
-            strg = rtag + 'full'
-           
-        path = os.environ["FERM_IGAL_DATA_PATH"] + '/imag/mapsfdfm%s.pdf' % strg
-        tdpy.util.plot_maps(path, mapsfdfm, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
-        
-        path = os.environ["FERM_IGAL_DATA_PATH"] + '/imag/mapsplnk%s.pdf' % strg
-        tdpy.util.plot_maps(path, mapsplnk, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
-        
-        path = os.environ["FERM_IGAL_DATA_PATH"] + '/imag/mapsmerg%s.pdf' % strg
-        tdpy.util.plot_maps(path, mapsmerg, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
-        
-        path = os.environ["FERM_IGAL_DATA_PATH"] + '/imag/mapsresifdfm%s.pdf' % strg
-        tdpy.util.plot_maps(path, mapsmerg - mapsfdfm, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, resi=True)
-        
-        path = os.environ["FERM_IGAL_DATA_PATH"] + '/imag/mapsresiplnk%s.pdf' % strg
-        tdpy.util.plot_maps(path, mapsmerg - mapsplnk, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, resi=True)
+            if plotigal:
+                minmlgal = -20.
+                maxmlgal = 20.
+                minmbgal = -20.
+                maxmbgal = 20.
+                strg = 'igal'
+            else:
+                minmlgal = -180.
+                maxmlgal = 180.
+                minmbgal = -90.
+                maxmbgal = 90.
+                strg = 'ngal'
+               
+            path = pathplot + '%s/mapsfdfm%04d_%s.pdf' % (strg, i, rtag)
+            tdpy.util.plot_maps(path, mapsfdfm[i, :], minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
+            
+            if i == 0:
+                path = pathplot + '%s/mapsplnk_%s.pdf' % (strg, rtag)
+                tdpy.util.plot_maps(path, mapsplnk, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
+            
+            path = pathplot + '%s/mapsmerg%04d_%s.pdf' % (strg, i, rtag)
+            tdpy.util.plot_maps(path, mapsmerg[i, :], minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
+            
+            path = pathplot + '%s/mapsresifdfm%04d_%s.pdf' % (strg, i, rtag)
+            tdpy.util.plot_maps(path, mapsmerg[i, :] - mapsfdfm[i, :], minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, resi=True, satu=True)
+            
+            path = pathplot + '%s/mapsresiplnk%04d_%s.pdf' % (strg, i, rtag)
+            tdpy.util.plot_maps(path, mapsmerg[i, :] - mapsplnk, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, resi=True, satu=True)
         
 
 def retr_llik(sampvarb, gdat, gdatintr):
@@ -297,14 +352,8 @@ def plot_psec(gdat, mapsplot):
 
     figr, axis = plt.subplots()
     mpol = arange(3 * gdat.numbside, dtype=int)
-    print 'hey'
     for n in range(gdat.numbback):
-        print 'n: ', n
-        print 'mapsplot[n, :]'
-        print amin(mapsplot[n, :]), amax(mapsplot[n, :]), mean(mapsplot[n, :]), std(mapsplot[n, :])
         psec = hp.anafast(mapsplot[n, :])
-        print 
-
         axis.loglog(mpol, mpol * (mpol + 1.) * psec, color=listcolr[n], label=listlabl[n])
 
     axis.set_ylabel('$l(l+1)C_l$')
@@ -317,19 +366,19 @@ def plot_psec(gdat, mapsplot):
     plt.savefig(path)
 
 
-def init( \
-         numbproc=1, \
-         numbswep=None, \
-         datatype='inpt', \
-         verbtype=1, \
-         makeplot=False, \
-         strgexpr='fermflux_cmp0_igal.fits', \
-         strgexpo='fermexpo_cmp0_igal.fits', \
-         strgback=['isotflux', 'fdfmflux', 'HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'lambda_sfd_ebv.fits', 'darktemp'], \
-         indxenerincl=arange(1, 4), \
-         indxevttincl=arange(3, 4), \
-         maxmgang=deg2rad(20.)
-        ):
+def regr_back( \
+              numbproc=1, \
+              numbswep=None, \
+              datatype='inpt', \
+              verbtype=1, \
+              makeplot=False, \
+              strgexpr='fermflux_cmp0_igal.fits', \
+              strgexpo='fermexpo_cmp0_igal.fits', \
+              strgback=['isotflux', 'fdfmflux', 'HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'lambda_sfd_ebv.fits', 'darktemp'], \
+              indxenerincl=arange(1, 4), \
+              indxevttincl=arange(3, 4), \
+              maxmgang=deg2rad(20.)
+             ):
 
     # construct the global object
     gdat = tdpy.util.gdatstrt()
@@ -443,15 +492,15 @@ def init( \
             if c == 1:
                 fluxbackorig = tdpy.util.retr_fdfm(gdat.binsenerfull) 
             if c == 2:
-                pathtemp = os.environ["FERM_IGAL_DATA_PATH"] + '/' + gdat.strgback[c]
+                pathtemp = os.environ["FERM_IGAL_DATA_PATH"] + gdat.strgback[c]
                 fluxbackorig = pf.getdata(pathtemp, 1)['RADIANCE']
                 fluxbackorig = hp.ud_grade(fluxbackorig, gdat.numbside, order_in='NESTED', order_out='RING')
             if c == 3:
-                pathtemp = os.environ["FERM_IGAL_DATA_PATH"] + '/' + gdat.strgback[c]
+                pathtemp = os.environ["FERM_IGAL_DATA_PATH"] + gdat.strgback[c]
                 fluxbackorig = pf.getdata(pathtemp, 0)
                 fluxbackorig = hp.ud_grade(fluxbackorig, gdat.numbside, order_in='RING', order_out='RING')
             if c == 4:
-                pathtemp = os.environ["FERM_IGAL_DATA_PATH"] + '/' + gdat.strgback[c]
+                pathtemp = os.environ["FERM_IGAL_DATA_PATH"] + gdat.strgback[c]
                 fluxbackorig = pf.getdata(pathtemp)['TEMPERATURE']
                 fluxbackorig = hp.ud_grade(fluxbackorig, gdat.numbside, order_in='NESTED', order_out='RING')
             if c == 5:
@@ -651,8 +700,8 @@ def pcat_ferm_mock_igal():
                    pathdata=os.environ["FERM_IGAL_DATA_PATH"], \
                    regitype='igal', \
                    
-                   maxmnumbpnts=array([2, 2, 4]), \
-                   #maxmnumbpnts=array([200, 200, 400]), \
+                   #maxmnumbpnts=array([2, 2, 4]), \
+                   maxmnumbpnts=array([200, 200, 400]), \
                    maxmgang=deg2rad(20.), \
                    minmflux=3e-11, \
                    maxmflux=3e-7, \
@@ -661,22 +710,22 @@ def pcat_ferm_mock_igal():
                    sinddistmean=array([2., 2., 2.]), \
                    
                    datatype='mock', \
-                   #mocknumbpnts=array([100, 100, 200]), \
+                   #mocknumbpnts=array([1, 1, 2]), \
+                   mocknumbpnts=array([100, 100, 200]), \
                    mockspatdisttype=['unif', 'disc', 'gang'], \
-                   mocknumbpnts=array([1, 1, 2]), \
                    mockfluxdistslop=array([2.6, 2.6, 3.5]), \
                    mocksinddiststdv=array([.5, .5, .5]), \
                    mocksinddistmean=array([2., 2., 2.]), \
                   )
 
 
-def cnfg_nomi():
+def regr_back_arry():
     
-    init( \
-         verbtype=1, \
-         makeplot=True, \
-         #strgback=['isotflux', 'fdfmflux'], \
-        )
+    regr_back( \
+              verbtype=1, \
+              makeplot=True, \
+              #strgback=['isotflux', 'fdfmflux'], \
+             )
 
 
 if len(sys.argv) > 1:
@@ -684,5 +733,4 @@ if len(sys.argv) > 1:
     name.get(sys.argv[1])()
 else:
     pass
-    cnfg_nomi()
 

@@ -157,7 +157,7 @@ def pcat_ferm_mock_ngal():
     
     pcat.main.init(psfntype='doubking', \
                    numbswep=2000000, \
-                   bindprio=True, \
+                   #bindprio=True, \
                    randinit=False, \
                    maxmgang=deg2rad(20.), \
                    boolproppsfn=False, \

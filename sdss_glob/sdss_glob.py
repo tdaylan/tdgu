@@ -155,10 +155,63 @@ def writ_sdss():
     pf.writeto(path, sdssexpo, clobber=True)
 
     
-#writ_sdss()
+def cnfg_sdss_mock():
 
+    indxenerincl = arange(3)
+    indxevttincl = arange(1)
 
-# In[ ]:
+    init( \
+         pathdata=os.environ["PCAT_DATA_PATH"], \
+         numbswep=100000, \
+         minmflux=array([1e3]), \
+         maxmflux=array([1e5]), \
+         initnumbpnts=array([100]), \
+         exprtype='sdss', \
+         pixltype='cart', \
+         regitype='mes5', \
+         stdvlbhl=2./3600., \
+         lgalcntr=202., \
+         bgalcntr=2., \
+         radispmrlbhl=5./3600., \
+         maxmgang=30./3600., \
+         margsize=2./3600., \
+         strgback=['unit'], \
+         psfntype='doubgaus', \
+         strgexpo='unit', \
+         indxevttincl=indxevttincl, \
+         indxenerincl=indxenerincl, \
+         datatype='mock', \
+         numbsidecart=100, \
+         mockfluxdistslop=array([1.9]), \
+        )
+    
+    
+def cnfg_sdss_expr():
 
-
+    init( \
+         pathdata=os.environ["PCAT_DATA_PATH"], \
+         trueinfo=False, \
+         numbswep=1000000, \
+         minmflux=ones(3) * 1e3, \
+         maxmflux=ones(3) * 1e5, \
+         initnumbpnts=array([10]), \
+         exprtype='sdss', \
+         datatype='inpt', \
+         pixltype='cart', \
+         regitype='mes5', \
+         stdvlbhl=2./3600., \
+         lgalcntr=202., \
+         bgalcntr=2., \
+         radispmrlbhl=0.5/3600., \
+         stdvflux=0.05, \
+         margsize=2./3600., \
+         maxmgang=30./3600., \
+         strgexpr='sdssflux.fits', \
+         strgexpo='sdssexpo.fits', \
+         psfntype='doubgaus', \
+         stdvback=1e-4, \
+         indxevttincl=arange(1), \
+         indxenerincl=arange(1), \
+        )
+    
 
