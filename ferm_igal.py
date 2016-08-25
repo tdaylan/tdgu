@@ -1,13 +1,5 @@
 from __init__ import *
 
-def retr_modlflux(gdat, sampvarb):
-
-    norm = sampvarb.reshape((gdat.numbback, gdat.numbener))
-    modlflux = norm[:, :, None, None] * gdat.fluxback
-   
-    return modlflux
-
-
 def make_maps_rec7_back():
     
     gdat = tdpy.util.gdatstrt()
@@ -41,6 +33,7 @@ def merg_maps(numbside=256, mpolmerg=180.):
     
     maxmmpol = 3. * numbside - 1.
     numbpixl = 12 * numbside**2
+    numbmpol = int(maxmmpol) + 1
 
     binsener = array([0.1, 0.3, 1., 3., 10., 100.])
     meanener = sqrt(binsener[1:] * binsener[:-1])
@@ -74,6 +67,11 @@ def merg_maps(numbside=256, mpolmerg=180.):
     # Gaussian noise map
     mapsgaus = 0.1 * randn(numbpixl)
 
+    # Test map
+    mapstest = exp(-0.5 * (bgalheal)**2) * exp(-0.5 * (bgalheal**2 + lgalheal**2) / 90.)
+    mapstest -= mean(mapstest)
+    mapstest /= std(mapstest)
+    
     ## Fermi Diffuse Model
     # temp
     mapsfdfm = tdpy.util.retr_fdfm(binsener, numbside=numbside)
@@ -86,7 +84,7 @@ def merg_maps(numbside=256, mpolmerg=180.):
         almcfdfm[i, :] = hp.map2alm(mapsfdfm[i, :])
 
     # multipole axis
-    mpol = arange(maxmmpol + 1)
+    mpol = arange(numbmpol)
     mpolgrid, temp = hp.Alm.getlm(lmax=maxmmpol)
 
     # compute the weight
@@ -112,34 +110,41 @@ def merg_maps(numbside=256, mpolmerg=180.):
     plt.close(figr)
    
     # compute the power spectra
-    fact = mpol * (2. * mpol + 1.) / 4. / pi
-    psecplnktemp = fact * hp.anafast(mapsplnk)
-    print 'sum(psecplnktemp)'
-    print psecplnktemp
-    psecgaus = fact * hp.anafast(mapsgaus)
-    print 'sum(psecgaus)'
-    print psecgaus
-    psecfdfm = empty((numbener, maxmmpol))
-    psecplnk = empty((numbener, maxmmpol))
+    factmpol = mpol * (2. * mpol + 1.) / 4. / pi
+    psecplnktemp = factmpol * hp.anafast(mapsplnk)
+    psecgaus = factmpol * hp.anafast(mapsgaus)
+    psectest = factmpol * hp.anafast(mapstest)
+    psecfdfm = empty((numbener, numbmpol))
+    psecplnk = empty((numbener, numbmpol))
     indxmpoltemp = where(mpol < 10.)[0]
+    almcplnk = empty((numbener, numbalmc), dtype=complex)
     for i in arange(numbener):
-        psecfdfm[i, :] = fact * hp.anafast(mapsfdfm[i, :])
+        psecfdfm[i, :] = factmpol * hp.anafast(mapsfdfm[i, :])
         ## correct the Planck variance
-        factcorr = sum(psecfdfm[i, indxmpoltemp]) / um(psecplnk[indxmpoltemp])
+        # temp
+        #factcorr = sum(psecfdfm[i, indxmpoltemp]) / sum(psecplnktemp[indxmpoltemp])
+        factcorr = 1.
         psecplnk[i, :] = factcorr * psecplnktemp
         almcplnk[i, :] = sqrt(factcorr) * almcplnktemp
+    
     # merge the maps
     mapsmerg = empty((numbener, numbpixl))
     for i in arange(numbener):
-        almcmerg = almcfdfm[i, :] * wght + almcplnk * (1. - wght)
+        almcmerg = almcfdfm[i, :] * wght + almcplnk[i, :] * (1. - wght)
         mapsmerg[i, :] = hp.alm2map(almcmerg, numbside, verbose=False)
+    
+    # calculate the power spectrum of the merged map
+    psecmerg = empty((numbener, numbmpol))
+    for i in arange(numbener):
+        psecmerg[i, :] = factmpol * hp.anafast(mapsmerg[i, :])
     
     # plot the power spectra
     for i in arange(numbener):
         figr, axis = plt.subplots()
         axis.loglog(mpol, psecfdfm[i, :], label='FDM')
-        axis.loglog(mpol, psecplnk, label='Planck')
+        axis.loglog(mpol, psecplnk[i, :], label='Planck')
         axis.loglog(mpol, psecmerg[i, :], label='Merged')
+        axis.loglog(mpol, psectest, label='Test')
         axis.loglog(mpol, psecgaus, label='Uncorrelated Noise', alpha=alph, ls='--')
         
         axis.axvline(numbside, ls='--', color='black', alpha=alph, label='$N_{side}$')
@@ -185,6 +190,14 @@ def merg_maps(numbside=256, mpolmerg=180.):
             path = pathplot + '%s/mapsresiplnk%04d_%s.pdf' % (strg, i, rtag)
             tdpy.util.plot_maps(path, mapsmerg[i, :] - mapsplnk, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, resi=True, satu=True)
         
+
+def retr_modlflux(gdat, sampvarb):
+
+    norm = sampvarb.reshape((gdat.numbback, gdat.numbener))
+    modlflux = norm[:, :, None, None] * gdat.fluxback
+   
+    return modlflux
+
 
 def retr_llik(sampvarb, gdat, gdatintr):
 
@@ -280,93 +293,7 @@ def retr_ener(gdat):
     gdat.strgbinsener = ['%.3g GeV - %.3g GeV' % (gdat.binsener[i], gdat.binsener[i+1]) for i in gdat.indxener]
     
 
-def plot_backspec(gdat, indxpixlmean):
-    
-    listcolr = ['black', 'b', 'g', 'r', 'm', 'y'][:gdat.numbback+1]
-    listlabl = ['Data', 'Isotropic', 'FDM', 'Planck', r'WISE 12$\mu$m', 'NFW'][:gdat.numbback+1]
-
-    figr, axis = plt.subplots()
-    
-    numbvarb = gdat.numbback + 1
-    listydat = empty((numbvarb, gdat.numbener))
-    listyerr = zeros((2, numbvarb, gdat.numbener))
-    
-    listydat[0, :] = mean(sum(gdat.datacnts, 2) / sum(gdat.expo, 2), 1) / gdat.apix / gdat.diffener
-    listyerr[:, 0, :] = mean(sqrt(sum(gdat.datacnts, 2)) / sum(gdat.expo, 2), 1) / gdat.apix / gdat.diffener
-    for n in gdat.indxback:
-        if n == 0 or n == 1:
-            listydat[n+1, :] = gdat.postnormback[0, n, :] * mean(mean(gdat.fluxback[n, :, :, :], 1), 1)
-        else:
-            listydat[n+1, :] = gdat.postnormback[0, n, :]
-        listyerr[:, n+1, :] = tdpy.util.retr_errrvarb(gdat.postnormback[:, n, :])
-    
-    xdat = gdat.meanener
-    for k in range(numbvarb):
-        ydat = gdat.meanener**2 * listydat[k, :]
-        yerr = gdat.meanener**2 * listyerr[:, k, :]
-        axis.errorbar(xdat, ydat, yerr=yerr, marker='o', markersize=5, color=listcolr[k], label=listlabl[k])
-
-    # Fermi-LAT results
-    # temp
-    if False:
-        if gdat.datatype == 'mock':
-            pass
-        else:
-            if gdat.exprtype == 'ferm':
-                listname = ['data', 'pion', 'invc', 'brem', 'pnts', 'isot']
-                listmrkr = ['o', 's', 'p', '*', 'D', '^']
-                listcolr = ['g', 'g', 'g', 'g', 'g', 'g']
-                listlabl = ['Fermi-LAT Data', r'Fermi-LAT $\pi^0$', 'Fermi-LAT ICS', 'Fermi-LAT Brem', 'Fermi-LAT PS', 'Fermi-LAT Iso']
-                for k, name in enumerate(listname):
-                    path = os.environ["PCAT_DATA_PATH"] + '/fermspec' + name + '.csv'
-                    data = loadtxt(path)
-                    enertemp = data[:, 0] # [GeV]
-                    fluxtemp = data[:, 1] * 1e-3 # [GeV/cm^2/s/sr]
-                    fluxtemp = interp(gdat.meanener, enertemp, fluxtemp)
-                    #fluxtemp = interpolate.interp1d(enertemp, fluxtemp)(gdat.meanener)
-                    axis.plot(gdat.meanener, fluxtemp, marker=listmrkr[k], color=listcolr[k], label=listlabl[k])
-
-    axis.set_xlim([amin(gdat.binsener), amax(gdat.binsener)])
-    axis.set_yscale('log')
-    axis.set_xlabel('E [GeV]')
-    axis.set_xscale('log')
-    axis.set_ylabel('$E^2dN/dAdtd\Omega dE$ [GeV/cm$^2$/s/sr]')
-    axis.legend(loc=4, ncol=2)
-
-    path = gdat.pathplot + 'backspec.pdf'
-    plt.tight_layout()
-    plt.savefig(path)
-    plt.close(figr)
-
-
-def plot_psec(gdat, mapsplot):
-
-    listlabl = ['Data', 'Isotropic']
-    listcolr = ['black', 'b']
-    
-    listlabl.append('FDM, %s' % gdat.strgbinsener[1])
-    listcolr.append('g')
-    
-    listlabl.extend(['Planck', r'WISE 12$\mu$m', 'NFW'])
-    listcolr.extend(['r', 'm', 'y'])
-
-    figr, axis = plt.subplots()
-    mpol = arange(3 * gdat.numbside, dtype=int)
-    for n in range(gdat.numbback):
-        psec = hp.anafast(mapsplot[n, :])
-        axis.loglog(mpol, mpol * (mpol + 1.) * psec, color=listcolr[n], label=listlabl[n])
-
-    axis.set_ylabel('$l(l+1)C_l$')
-    axis.set_xlabel('$l$')
-    
-    axis.legend(loc=4, ncol=2)
-
-    path = gdat.pathplot + 'psec.pdf'
-    plt.tight_layout()
-    plt.savefig(path)
-
-
-def regr_back( \
+def regrback( \
               numbproc=1, \
               numbswep=None, \
               datatype='inpt', \
@@ -540,13 +467,36 @@ def regr_back( \
         gdat.fluxback[indxdatacubetemp] = fluxback
 
     gdat.pathbase = os.environ["FERM_IGAL_DATA_PATH"]
-    gdat.pathplot = gdat.pathbase + '/imag/%s/' % gdat.rtag
+    gdat.pathplot = gdat.pathbase + '/imag/regrback/%s/' % gdat.rtag
     cmnd = 'mkdir -p ' + gdat.pathplot
     os.system(cmnd)
 
     # plot the power spectra
-    plot_psec(gdat, gdat.mapsplot)
+
+    listlabl = ['Data', 'Isotropic']
+    listcolr = ['black', 'b']
     
+    listlabl.append('FDM, %s' % gdat.strgbinsener[1])
+    listcolr.append('g')
+    
+    listlabl.extend(['Planck', r'WISE 12$\mu$m', 'NFW'])
+    listcolr.extend(['r', 'm', 'y'])
+
+    figr, axis = plt.subplots()
+    mpol = arange(3 * gdat.numbside, dtype=int)
+    for n in range(gdat.numbback):
+        psec = hp.anafast(gdat.mapsplot[n, :])
+        axis.loglog(mpol, mpol * (mpol + 1.) * psec, color=listcolr[n], label=listlabl[n])
+
+    axis.set_ylabel('$l(l+1)C_l$')
+    axis.set_xlabel('$l$')
+    
+    axis.legend(loc=4, ncol=2)
+
+    path = gdat.pathplot + 'psec.pdf'
+    plt.tight_layout()
+    plt.savefig(path)
+
     # plot the input spatial templates
     for c in gdat.indxback:
         for i in gdat.indxener:
@@ -590,9 +540,63 @@ def regr_back( \
             tdpy.util.plot_maps(path, mediresiflux[i, :, m] * 1e6, indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
                             minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, satu=True, resi=True)
     
-    # make plots of the spectra of spatially averaged background components
-    plot_backspec(gdat, gdat.indxpixlrofi)
+    # plot the spectra of spatially averaged background components
     
+    listlabl = ['Data', 'Isotropic', 'FDM', 'PlanckDust', r'WISE 12$\mu$m', 'SFD', 'NFW']
+
+    figr, axis = plt.subplots()
+    
+    numbvarb = gdat.numbback + 1
+    listydat = empty((numbvarb, gdat.numbener))
+    listyerr = zeros((2, numbvarb, gdat.numbener))
+    
+    listydat[0, :] = mean(sum(gdat.datacnts, 2) / sum(gdat.expo, 2), 1) / gdat.apix / gdat.diffener
+    listyerr[:, 0, :] = mean(sqrt(sum(gdat.datacnts, 2)) / sum(gdat.expo, 2), 1) / gdat.apix / gdat.diffener
+    for n in gdat.indxback:
+        if n == 0 or n == 1:
+            listydat[n+1, :] = gdat.postnormback[0, n, :] * mean(mean(gdat.fluxback[n, :, :, :], 1), 1)
+        else:
+            listydat[n+1, :] = gdat.postnormback[0, n, :]
+        listyerr[:, n+1, :] = tdpy.util.retr_errrvarb(gdat.postnormback[:, n, :])
+    
+    xdat = gdat.meanener
+    for k in range(numbvarb):
+        ydat = gdat.meanener**2 * listydat[k, :]
+        yerr = gdat.meanener**2 * listyerr[:, k, :]
+        axis.errorbar(xdat, ydat, yerr=yerr, marker='o', markersize=5, label=listlabl[k])
+
+    # Fermi-LAT results
+    # temp
+    if False:
+        if gdat.datatype == 'mock':
+            pass
+        else:
+            if gdat.exprtype == 'ferm':
+                listname = ['data', 'pion', 'invc', 'brem', 'pnts', 'isot']
+                listmrkr = ['o', 's', 'p', '*', 'D', '^']
+                listcolr = ['g', 'g', 'g', 'g', 'g', 'g']
+                listlabl = ['Fermi-LAT Data', r'Fermi-LAT $\pi^0$', 'Fermi-LAT ICS', 'Fermi-LAT Brem', 'Fermi-LAT PS', 'Fermi-LAT Iso']
+                for k, name in enumerate(listname):
+                    path = os.environ["PCAT_DATA_PATH"] + '/fermspec' + name + '.csv'
+                    data = loadtxt(path)
+                    enertemp = data[:, 0] # [GeV]
+                    fluxtemp = data[:, 1] * 1e-3 # [GeV/cm^2/s/sr]
+                    fluxtemp = interp(gdat.meanener, enertemp, fluxtemp)
+                    #fluxtemp = interpolate.interp1d(enertemp, fluxtemp)(gdat.meanener)
+                    axis.plot(gdat.meanener, fluxtemp, marker=listmrkr[k], color=listcolr[k], label=listlabl[k])
+
+    axis.set_xlim([amin(gdat.binsener), amax(gdat.binsener)])
+    axis.set_yscale('log')
+    axis.set_xlabel('E [GeV]')
+    axis.set_xscale('log')
+    axis.set_ylabel('$E^2dN/dAdtd\Omega dE$ [GeV/cm$^2$/s/sr]')
+    axis.legend(loc=4, ncol=2)
+
+    path = gdat.pathplot + 'backspec.pdf'
+    plt.tight_layout()
+    plt.savefig(path)
+    plt.close(figr)
+
     # temp
     #indxpixlmean = where(abs(gdat.bgalheal) < 2.)[0]
     #plot_backspec(gdat, indxpixlmean)
@@ -719,13 +723,13 @@ def pcat_ferm_mock_igal():
                   )
 
 
-def regr_back_arry():
+def regrback_arry():
     
-    regr_back( \
-              verbtype=1, \
-              makeplot=True, \
-              #strgback=['isotflux', 'fdfmflux'], \
-             )
+    regrback( \
+             verbtype=1, \
+             makeplot=True, \
+             #strgback=['isotflux', 'fdfmflux'], \
+            )
 
 
 if len(sys.argv) > 1:
