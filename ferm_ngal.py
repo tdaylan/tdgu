@@ -39,60 +39,6 @@ def plot_spec():
                     axis.plot(gdat.meanener, fluxtemp, marker=listmrkr[k], color=listcolr[k], label=listlabl[k])
 
     
-def pcat_info():
-    
-    minmflux = array([3e-10, 1e-10, 3e-11, 1e-11])
-    numbruns = minmflux.size
-    maxmnumbpnts = zeros(numbruns, dtype=int) + 1000
-    numbswep = zeros(numbruns, dtype=int) + 2000000
-    numbburn = numbswep / 2
-    
-    numbiter = minmflux.size
-
-    listlevi = zeros(numbiter)
-    listinfo = zeros(numbiter)
-    
-    strgexpo='fermexpo_cmp0_ngal.fits'
-    strgexpr='fermflux_cmp0_ngal.fits'
-
-    indxenerincl = arange(2, 3)
-    indxevttincl = arange(3, 4)
-    numbener = indxenerincl.size
-
-    # temp
-    if False:
-        for k in range(numbiter):
-            gridchan = pcat.main.init( \
-                                  psfntype='doubking', \
-                                  numbswep=numbswep[k], \
-                                  numbburn=numbburn[k], \
-                                  probprop=array([0.01, 0.01, 0., 0., 1., 1., 0, 0, 1., 1., 1., 1.], dtype=float), \
-                                  randinit=False, \
-                                  makeplot=True, \
-                                  maxmgang=10., \
-                                  maxmnumbpnts=array([maxmnumbpnts[k]]), \
-                                  indxenerincl=indxenerincl, \
-                                  indxevttincl=indxevttincl, \
-                                  minmflux=minmflux[k], \
-                                  maxmflux=1e-7, \
-                                  regitype='ngal', \
-                                  pathdata=os.environ["FERM_NGAL_DATA_PATH"], \
-                                  strgback=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
-                                  strgexpo=strgexpo, \
-                                  datatype='inpt', \
-                                  strgexpr=strgexpr, \
-                                 )
-        
-        listlevi[k] = gridchan[-2]
-        listinfo[k] = gridchan[-1]
-
-    else:
-        listlevi = array([-39222.9070569, -39226.1778779, -39300.7982166, -39521.8723332])[::-1]
-        listinfo = array([91.0328924911, 98.1275628394, 98.732104824, 88.3453610331])[::-1]
-
-    pcat.visu.plot_minmfluxinfo(minmflux, listinfo, listlevi)
-
-
 def intr_ferm_expr_ngal( \
                         strgexpr='fermflux_cmp0_ngal.fits', \
                         strgexpo='fermexpo_cmp0_ngal.fits', \
@@ -121,32 +67,32 @@ def intr_ferm_expr_ngal( \
     return karg
 
 
-def pcat_ferm_expr_ngal():
+def ferm_expr_ngal():
     karg = intr_ferm_expr_ngal()
     pcat.main.init(**karg)
 
 
-def pcat_ferm_expr_ngal_cmp1():
+def ferm_expr_ngal_cmp1():
     karg = intr_ferm_expr_ngal(strgexpr='fermflux_cmp1_ngal.fits', strgexpo='fermexpo_cmp1_ngal.fits')
     pcat.main.init(**karg)
 
 
-def pcat_ferm_expr_ngal_cmp2():
+def ferm_expr_ngal_cmp2():
     karg = intr_ferm_expr_ngal(strgexpr='fermflux_cmp2_ngal.fits', strgexpo='fermexpo_cmp2_ngal.fits')
     pcat.main.init(**karg)
 
 
-def pcat_ferm_expr_ngal_cmp3():
+def ferm_expr_ngal_cmp3():
     karg = intr_ferm_expr_ngal(strgexpr='fermflux_cmp3_ngal.fits', strgexpo='fermexpo_cmp3_ngal.fits')
     pcat.main.init(**karg)
 
 
-def pcat_ferm_expr_ngal_tim4():
+def ferm_expr_ngal_tim4():
     karg = intr_ferm_expr_ngal(strgexpr='fermflux_rec7_pnts_ngal_0256_tim4.fits', strgexpo='fermexpo_rec7_pnts_ngal_0256_tim4.fits')
     pcat.main.init(**karg)
 
 
-def pcat_ferm_mock_ngal():
+def ferm_mock_ngal():
      
     indxenerincl = arange(1, 4)
     indxevttincl = arange(2, 4)

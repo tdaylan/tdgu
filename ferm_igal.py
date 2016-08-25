@@ -347,10 +347,10 @@ def regrback( \
     gdat.lgalgrid = gdat.lgalheal[gdat.indxpixlrofi]
     gdat.bgalgrid = gdat.bgalheal[gdat.indxpixlrofi]
        
-    minmlgal = -gdat.maxmgang
-    maxmlgal = gdat.maxmgang
-    minmbgal = -gdat.maxmgang
-    maxmbgal = gdat.maxmgang
+    minmlgal = -gdat.maxmgang * 180. / pi
+    maxmlgal = gdat.maxmgang * 180. / pi
+    minmbgal = -gdat.maxmgang * 180. / pi
+    maxmbgal = gdat.maxmgang * 180. / pi
 
     boolplotpsec = True
 
@@ -604,7 +604,7 @@ def regrback( \
     #plot_backspec(gdat, indxpixlmean)
 
 
-def pcat_ferm_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
+def ferm_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
     pcat.main.init( \
               psfntype='doubking', \
@@ -624,7 +624,7 @@ def pcat_ferm_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_c
              )
     
     
-def pcat_ferm_mock_igal_brok():
+def ferm_mock_igal_brok():
      
     listmockfluxdistbrek = array([1e-10, 3e-10, 1e-9, 3e-9, 1e-8])
     listmockfluxdistsloplowr = array([1.9, 2.2, 2.8, 3.1, 3.4])
@@ -661,7 +661,7 @@ def pcat_ferm_mock_igal_brok():
                       )
 
 
-def pcat_ferm_mock_igal_popl():
+def ferm_mock_igal_popl():
      
     pcat.main.init( \
                    pathdata=os.environ["FERM_IGAL_DATA_PATH"], \
@@ -691,7 +691,7 @@ def pcat_ferm_mock_igal_popl():
                   )
 
 
-def pcat_ferm_mock_igal():
+def ferm_mock_igal():
      
     pcat.main.init( \
                    psfntype='doubking', \
