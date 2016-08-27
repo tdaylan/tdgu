@@ -61,7 +61,9 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     # base path
     pathbase = os.environ["FERM_IGAL_DATA_PATH"]
     pathdata = pathbase + '/mergmaps/'
-    os.system('mkdir -p ' + pathdata)
+    pathngal = pathbase + '/imag/mergmaps/ngal'
+    pathigal = pathbase + '/imag/mergmaps/igal'
+    os.system('mkdir -p ' + pathngal + ' ' + pathigal)
 
     # plotting settings
     alph = 0.5
