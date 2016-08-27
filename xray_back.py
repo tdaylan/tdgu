@@ -63,19 +63,20 @@ def prep_maps():
     pf.writeto(path, expo, clobber=True)
 
 
-def pcat_chan():
+def chan_expr():
     
     maxmgang = deg2rad(0.984 / 3600.) * 100.
     gridchan = pcat.main.init( \
+                              pathdata=os.environ["TDGU_DATA_PATH"], \
                               verbtype=2, \
                               numbswep=10000, \
                               numbswepplot=2000, \
                               numbburn=0, \
                               factthin=100, \
+                              exprinfo=False, \
                               randinit=True, \
                               indxenerincl=arange(2), \
                               indxevttincl=arange(1), \
-                              pathdata=os.environ["TDGU_DATA_PATH"], \
                               strgback=['unit'], \
                               strgexpo='chanexpo.fits', \
                               datatype='inpt', \

@@ -33,9 +33,9 @@ bins = linspace(minm, 2. * maxm, 2 * numbvarb + 1)
 
 arry = empty((2, numbsamp))
 
-minmslop = -3.
+minmslop = 1.5
 maxmslop = 3.
-numbslop = 10
+numbslop = 4
 sloparry = linspace(minmslop, maxmslop, numbslop)
 for n in range(numbslop):
     slop = sloparry[n]
@@ -58,7 +58,8 @@ for n in range(numbslop):
     axis.plot(meandoub, convprob * numbsamp * deltdoub[0], label='$f_0$ (Numerically convolved)', color='g')
     
     axis.plot(meandoub[indxdoub], convprobpoly * numbsamp * deltdoub[indxdoub], label='$f_0$ (Fit)', color='r')
-    
+
+    axis.set_ylim([0.5, numbsamp])
     axis.set_xlabel('$f$')
     axis.set_xlim([amin(bins), amax(bins)])
     axis.set_xscale('log')
@@ -66,6 +67,8 @@ for n in range(numbslop):
     axis.set_ylabel('$N_{samp}$')
     axis.legend()
     plt.tight_layout()
-    figr.savefig(os.environ["TDGU_DATA_PATH"] + '/imag/powrpdfn%02d.pdf' % n)
+    pathfold = os.environ["TDGU_DATA_PATH"] + '/imag/powrpdfn/'
+    os.system('mkdir -p ' + pathfold)
+    figr.savefig(pathfold + 'powrpdfn%04d.pdf' % n)
     plt.close(figr)
     
