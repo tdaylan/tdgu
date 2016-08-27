@@ -54,7 +54,7 @@ def smth(maps, scalsmth, mpol=False, retralmc=False, retrfull=False):
         return maps 
 
 
-def merg_maps(numbside=256, mpolmerg=180., mpolsmth=9., strgmaps='radi'):
+def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
 
     timeinit = time.time()
 
@@ -85,18 +85,12 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=9., strgmaps='radi'):
     ## spatial
     lgalheal, bgalheal, numbpixl, apix = tdpy.util.retr_healgrid(numbside)
     
-    print 'init'
-    print time.time() - timeinit
-    
     # get input maps
     ## Planck map
     if strgmaps == 'radi':
         mapsplnkorig = pf.getdata(pathbase + '/HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 1)['RADIANCE']
     mapsplnkorig = hp.reorder(mapsplnkorig, n2r=True)
     tdpy.util.plot_maps(pathplot + 'mapsplnkorig_%s.pdf' % rtag, mapsplnkorig, numbsidelgal=1000, numbsidebgal=1000, satu=True)
-    
-    print 'process plnk'
-    print time.time() - timeinit
     
     path = pathdata + 'mapsplnk_%s.fits' % rtag
     if os.path.isfile(path):
@@ -107,16 +101,10 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=9., strgmaps='radi'):
         mapsplnk = hp.ud_grade(mapsplnksmth, numbside)
         pf.writeto(path, mapsplnk, clobber=True)
 
-    print 'hey'
-    print time.time() - timeinit
-    
     mapsplnk -= mean(mapsplnk)
     mapsplnk /= std(mapsplnk)
     almcplnktemp = hp.map2alm(mapsplnk)
 
-    print 'hey'
-    print time.time() - timeinit
-    
     # temp
     if False:
         mapspnts = zeros((2, numbpixl))
@@ -132,12 +120,6 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=9., strgmaps='radi'):
     # Gaussian noise map
     mapsgaus = 0.1 * randn(numbpixl)
 
-    # Test map
-    mapstest = exp(-0.5 * bgalheal**2 / 180.**2) * exp(-0.5 * (bgalheal**2 + lgalheal**2) / 5.**2)
-    mapstest -= mean(mapstest)
-    mapstest /= std(mapstest)
-    tdpy.util.plot_maps(pathplot + 'mapstest_%s.pdf' % rtag, mapstest, numbsidelgal=1000, numbsidebgal=1000)
-    
     ## Fermi Diffuse Model
     # temp
     mapsfdfmorig = tdpy.util.retr_fdfm(binsener, numbside=numbside)
@@ -153,9 +135,6 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=9., strgmaps='radi'):
     for i in arange(numbener):
         almcfdfm[i, :] = hp.map2alm(mapsfdfm[i, :])
 
-    print 'hey'
-    print time.time() - timeinit
-    
     # compute the weight
     wghtsing = exp(-0.5 * mpol * (mpol + 1.) / mpolmerg**2)
     wght = empty(numbalmc) 
@@ -181,14 +160,10 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=9., strgmaps='radi'):
     plt.savefig(path)
     plt.close(figr)
    
-    print 'hey'
-    print time.time() - timeinit
-    
     # compute the power spectra
     factmpol = mpol * (2. * mpol + 1.) / 4. / pi
     psecplnktemp = factmpol * hp.anafast(mapsplnk)
     psecgaus = factmpol * hp.anafast(mapsgaus)
-    psectest = factmpol * hp.anafast(mapstest)
     psecfdfm = empty((numbener, numbmpol))
     psecplnk = empty((numbener, numbmpol))
     indxmpoltemp = where(mpol < 10.)[0]
@@ -202,9 +177,6 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=9., strgmaps='radi'):
         psecplnk[i, :] = factcorr * psecplnktemp
         almcplnk[i, :] = sqrt(factcorr) * almcplnktemp
 
-    print 'hey'
-    print time.time() - timeinit
-    
     # merge the maps
     mapsmerg = empty((numbener, numbpixl))
     for i in arange(numbener):
@@ -216,38 +188,15 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=9., strgmaps='radi'):
     for i in arange(numbener):
         psecmerg[i, :] = factmpol * hp.anafast(mapsmerg[i, :])
     
-    print 'hey'
-    print time.time() - timeinit
-    
     # plot the power spectra
     for i in arange(numbener):
         figr, axis = plt.subplots()
         
-        print 'psecfdfm[i, :]'
-        print psecfdfm[i, :]
-        print 'psecplnk[i, :]'
-        print psecplnk[i, :]
-        print 'psecmerg[i, :]'
-        print psecmerg[i, :]
-        print 'psectest'
-        print psectest
-        print 'psecgaus'
-        print psecgaus
-        print 'mpolsmth'
-        print mpolsmth
-        print 
-
-        #axis.loglog(mpol, psecfdfm[i, :], label='FDM')
+        axis.loglog(mpol, psecfdfm[i, :], label='FDM')
         axis.loglog(mpol, psecplnk[i, :], label='Planck')
         axis.loglog(mpol, psecmerg[i, :], label='Merged')
-        axis.loglog(mpol, psectest, label='Test')
         axis.loglog(mpol, psecgaus, label='Uncorrelated Noise', alpha=alph, ls='--')
         
-        #axistwin = axis.twiny()
-        #axistwin.set_xticks(180. / mpol)
-        #axistwin.set_xticklabels(['%.3g' % angl for angl in 180. / mpol])
-        #axistwin.set_xlabel(r'$\theta$')
-
         axis.axvline(numbside, ls='--', color='black', alpha=alph, label='$N_{side}$')
         axis.axvline(mpolmerg, ls='-.', color='black', alpha=alph, label='$l_{merg}$')
         axis.axvline(mpolsmth, color='black', alpha=alph, label='$l_{smth}$')
@@ -256,7 +205,7 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=9., strgmaps='radi'):
         axis.set_ylim([1e-3, 1.])
         axis.set_xlim([amin(mpol), amax(mpol)])
         axis.legend(loc=3, ncol=2)
-        #plt.tight_layout()
+        plt.tight_layout()
         path = pathplot + 'psec%04d_%s.pdf' % (i, rtag)
         plt.savefig(path)
         plt.close(figr)
