@@ -64,7 +64,12 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     pathngal = pathbase + '/imag/mergmaps/ngal'
     pathigal = pathbase + '/imag/mergmaps/igal'
     os.system('mkdir -p ' + pathngal + ' ' + pathigal)
-
+    
+    # get Planck PS mask
+    path = pathdata + 'HFI_Mask_PointSrc_2048_R2.00.fits'
+    mapsmask = pf.open(path)[1].data['F353']
+    indxpixlmask = where(mapsmask == 1)
+    
     # plotting settings
     alph = 0.5
     pathplot = pathbase + '/imag/mergmaps/'
@@ -105,6 +110,13 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
 
     mapsplnk -= mean(mapsplnk)
     mapsplnk /= std(mapsplnk)
+    
+    print hp.anafast(mapsplnk)
+    mapsplnkmask = copy(mapsplnk)
+    mapsplnkmask[indxpixlmask] = -1.
+    mapsplnkmask = hp.ma(mapsplnkmask, badval=-1.)
+    print hp.anafast(mapsplnkmask)
+    
     almcplnktemp = hp.map2alm(mapsplnk)
 
     # temp
