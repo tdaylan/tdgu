@@ -25,7 +25,7 @@ def merg_maps_arry():
     merg_maps(mpolmerg=90.)
 
 
-def smth(maps, scalsmth, mpol=False, retralmc=False, retrfull=False):
+def smth(maps, scalsmth, mpol=False, retrfull=False, numbsideoutp=None, indxpixlmask=None):
 
     if mpol:
         mpolsmth = scalsmth
@@ -39,17 +39,35 @@ def smth(maps, scalsmth, mpol=False, retralmc=False, retrfull=False):
     mpolgrid, temp = hp.Alm.getlm(lmax=maxmmpol)
     mpol = arange(maxmmpol + 1.)
     
-    timeinit = time.time()
-    almc = hp.map2alm(maps)
+    if numbsideoutp == None:
+        numbsideoutp = numbside
+    
+    if indxpixlmask != None:
+        mapsoutp = copy(maps)
+        mapsoutp[indxpixlmask] = hp.UNSEEN
+        mapsoutp = hp.ma(mapsoutp)
+        
+        almctemp = hp.map2alm(maps)
+        print 'almcmasknone'
+        for k in range(10):
+            print almctemp[k]
+        print
+    else:
+        mapsoutp = maps
+    
+    almc = hp.map2alm(mapsoutp)
+    print 'almcmask'
+    for k in range(10):
+        print almc[k]
+    print
+
     wght = exp(-0.5 * (mpolgrid / mpolsmth)**2)
     almc *= wght
 
-    maps = hp.alm2map(almc, numbside, verbose=False)
+    mapsoutp = hp.alm2map(almc[where(mpolgrid < 3 * numbsideoutp)], numbsideoutp, verbose=False)
 
-    if retralmc:
-        return maps, almc
-    elif retrfull:
-        return maps, mpol, exp(-0.5 * (mpol / mpolsmth)**2)
+    if retrfull:
+        return maps, almc, mpol, exp(-0.5 * (mpol / mpolsmth)**2)
     else:
         return maps 
 
@@ -68,7 +86,9 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     # get Planck PS mask
     path = pathdata + 'HFI_Mask_PointSrc_2048_R2.00.fits'
     mapsmask = pf.open(path)[1].data['F353']
+    mapsmask = hp.reorder(mapsmask, n2r=True)
     indxpixlmask = where(mapsmask == 1)
+    tdpy.util.plot_maps(pathplot + 'mapsmask_%s.pdf' % rtag, mapsmask, numbsidelgal=1000, numbsidebgal=1000, satu=True)
     
     # plotting settings
     alph = 0.5
@@ -85,6 +105,7 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     
     ## multipole
     maxmmpol = 3. * numbside - 1.
+    numbalmc = int(maxmmpol * (maxmmpol + 1.) / 2. + maxmmpol + 1)
     numbmpol = int(maxmmpol) + 1
     mpol = arange(numbmpol)
     mpolgrid, temp = hp.Alm.getlm(lmax=maxmmpol)
@@ -103,20 +124,13 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     if os.path.isfile(path):
         mapsplnk = pf.getdata(path)
     else:
-        mapsplnksmth, mpolsmthplnk, wghtsmthplnk = smth(mapsplnkorig, mpolsmth, mpol=True, retrfull=True)
-        tdpy.util.plot_maps(pathplot + 'mapsplnksmth_%s.pdf' % rtag, mapsplnksmth, numbsidelgal=1000, numbsidebgal=1000)
-        mapsplnk = hp.ud_grade(mapsplnksmth, numbside)
+        mapsplnkorig -= mean(mapsplnkorig)
+        mapsplnkorig /= std(mapsplnkorig)
+        mapsplnk, mapsalmc, mpolsmthplnk, wghtsmthplnk = smth(mapsplnkorig, mpolsmth, mpol=True, retrfull=True, indxpixlmask=indxpixlmask, numbsideoutp=numbside)
+        tdpy.util.plot_maps(pathplot + 'mapsplnk_%s.pdf' % rtag, mapsplnk, numbsidelgal=1000, numbsidebgal=1000)
+        #mapsplnk = hp.ud_grade(mapsplnksmth, numbside)
         pf.writeto(path, mapsplnk, clobber=True)
 
-    mapsplnk -= mean(mapsplnk)
-    mapsplnk /= std(mapsplnk)
-    
-    print hp.anafast(mapsplnk)
-    mapsplnkmask = copy(mapsplnk)
-    mapsplnkmask[indxpixlmask] = -1.
-    mapsplnkmask = hp.ma(mapsplnkmask, badval=-1.)
-    print hp.anafast(mapsplnkmask)
-    
     almcplnktemp = hp.map2alm(mapsplnk)
 
     # temp
@@ -140,14 +154,12 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     mapsfdfmorig -= mean(mapsfdfmorig, 1)[:, None]
     mapsfdfmorig /= std(mapsfdfmorig, 1)[:, None]
     mapsfdfm = empty_like(mapsfdfmorig)
-    for i in arange(numbener):
-        tdpy.util.plot_maps(pathplot + 'mapsfdfmorig%04d_%s.pdf' % (i, rtag), mapsfdfmorig[i, :], numbsidelgal=1000, numbsidebgal=1000)
-        mapsfdfm[i, :], mpolsmthfdfm, wghtsmthfdfm = smth(mapsfdfmorig[i,:], mpolsmth, mpol=True, retrfull=True)
-
-    numbalmc = int(maxmmpol * (maxmmpol + 1.) / 2. + maxmmpol + 1)
+    almcfdfmorig = empty((numbener, numbalmc), dtype=complex) 
     almcfdfm = empty((numbener, numbalmc), dtype=complex) 
     for i in arange(numbener):
-        almcfdfm[i, :] = hp.map2alm(mapsfdfm[i, :])
+        almcfdfmorig[i, :] = hp.map2alm(mapsfdfmorig[i, :])
+        tdpy.util.plot_maps(pathplot + 'mapsfdfmorig%04d_%s.pdf' % (i, rtag), mapsfdfmorig[i, :], numbsidelgal=1000, numbsidebgal=1000)
+        mapsfdfm[i, :], almcfdfm[i, :], mpolsmthfdfm, wghtsmthfdfm = smth(mapsfdfmorig[i,:], mpolsmth, mpol=True, retrfull=True)
 
     # compute the weight
     wghtsing = exp(-0.5 * mpol * (mpol + 1.) / mpolmerg**2)
