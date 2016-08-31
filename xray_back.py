@@ -69,8 +69,8 @@ def chan_expr():
     gridchan = pcat.main.init( \
                               pathdata=os.environ["TDGU_DATA_PATH"], \
                               verbtype=2, \
-                              numbswep=10000, \
-                              numbswepplot=2000, \
+                              numbswep=200, \
+                              numbswepplot=20, \
                               numbburn=0, \
                               factthin=100, \
                               exprinfo=False, \
