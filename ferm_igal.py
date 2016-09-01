@@ -72,31 +72,137 @@ def smth(maps, scalsmth, mpol=False, retrfull=False, numbsideoutp=None, indxpixl
         return maps 
 
 
+def read_fits(path, pathimag=None):
+    
+    print 'Reading the header of %s...' % path
+        
+    if pathimag != None:
+        os.system('mkdir -p ' + pathimag)
+    
+    hdun = pf.open(path)
+    numbhead = len(hdun)
+    for k in range(numbhead):
+        print 'Extension %d' % k
+        head = hdun[k].header
+        data = hdun[k].data
+        arry = array(stack((head.keys(), head.values()), 1))
+        listtype = []
+        listform = []
+        listunit = []
+        for n in range(arry.shape[0]):
+            if arry[n, 0].startswith('TTYPE') or arry[n, 0].startswith('TFORM') or arry[n, 0].startswith('TUNIT'):
+                print arry[n, 0], ': ', arry[n, 1]
+            if arry[n, 0].startswith('TTYPE'):
+                listtype.append(arry[n, 1])
+            if arry[n, 0].startswith('TFORM'):
+                listform.append(arry[n, 1])
+            if arry[n, 0].startswith('TUNIT'):
+                listunit.append(arry[n, 1])
+                print
+
+        if pathimag != None:
+            for n in range(len(listtype)):
+                if not listform[n].endswith('A') and isfinite(data[listtype[n]]).all():
+                    figr, axis = plt.subplots()
+                    axis.hist(data[listtype[n]])
+                    axis.set_xlabel('%s [%s]' % (listtype[n], listunit[n]))
+                    plt.tight_layout()
+                    path = pathimag + 'readfits_%s.pdf' % listtype[n]
+                    plt.savefig(path)
+                    plt.close(figr)
+
+
 def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
 
     timeinit = time.time()
 
+    # runtag
+    rtag = '%04d%04d%04d' % (numbside, mpolmerg, mpolsmth)
+    
+    ## spatial
+    lgalheal, bgalheal, numbpixl, apix = tdpy.util.retr_healgrid(numbside)
+    
     # base path
     pathbase = os.environ["FERM_IGAL_DATA_PATH"]
     pathdata = pathbase + '/mergmaps/'
-    pathngal = pathbase + '/imag/mergmaps/ngal'
-    pathigal = pathbase + '/imag/mergmaps/igal'
-    os.system('mkdir -p ' + pathngal + ' ' + pathigal)
+    pathimag = pathbase + '/imag/mergmaps/'
+    pathimagngal = pathbase + '/imag/mergmaps/ngal'
+    pathimagigal = pathbase + '/imag/mergmaps/igal'
+    os.system('mkdir -p ' + pathimagngal + ' ' + pathimagigal)
     
+    strgfreq = ['030', '044', '070', '100', '143', '217', '353', '545', '857']
+    numbfreq = len(strgfreq)
+    for k in range(numbfreq):
+        print 'k'
+        print k
+        print 'strgfreq[k]'
+        print strgfreq[k]
+        
+        if k < 3:
+            strg = 'R2.04'
+        else:
+            strg = 'R2.01'
+        dataplnk = pf.getdata(pathbase + '/COM_PCCS_%s_%s.fits' % (strgfreq[k], strg), 1)[:10]
+        fluxpntsplnk = dataplnk['GAUFLUX'] * 1e3 # [Jy]
+        lgalpntsplnk = pi / 180. * dataplnk['GLON'] # [rad]
+        lgalpntsplnk = (lgalpntsplnk - pi) % (2. * pi) - pi
+        bgalpntsplnk = pi / 180. * dataplnk['GLAT'] # [rad]
+        fwhmpntsplnk = pi / 180. * dataplnk['GAU_FWHM_EFF'] / 60. # [rad]
+        numbpntsplnk = fluxpntsplnk.size
+        print 'numbpntsplnk'
+        print numbpntsplnk
+
+        if k < 3: 
+            strgfrst = '/LFI_SkyMap_' 
+            strgseco = '-BPassCorrected-field-IQU_0256_R2.01_full.fits'
+        elif k < 5:
+            strgfrst = '/HFI_SkyMap_'
+            strgseco = '-field-IQU_2048_R2.02_full.fits'
+        else:
+            strgfrst = '/HFI_SkyMap_'
+            strgseco = '-field-Int_2048_R2.02_full.fits'
+
+        strg = strgfrst + '%s' % strgfreq[k] + strgseco
+        read_fits(pathbase + strg)
+        if k < 3:
+            strgcols = 'TEMPERATURE'
+        else:
+            strgcols = 'I_STOKES'
+        mapsplnk = pf.getdata(pathbase + strg, 1)[strgcols]
+        mapsplnk = hp.reorder(mapsplnk, n2r=True)
+        tdpy.util.plot_maps(pathimag + 'mapsplnk0%s.pdf' % strgfreq[k], mapsplnk, satu=True)
+        gridheal = array([deg2rad(lgalheal), deg2rad(bgalheal)])
+        print 'gridheal'
+        print amin(gridheal)
+        print amax(gridheal)
+        mapspntsplnk = zeros_like(mapsplnk)
+        for n in range(numbpntsplnk):
+            gridpnts = array([lgalpntsplnk[n], bgalpntsplnk[n]])
+            anglpnts = angdist(gridheal, gridpnts, lonlat=True)
+            print 'gridpnts'
+            print gridpnts
+            print 'fwhmpntsplnk[n]'
+            print fwhmpntsplnk[n]
+            print 'anglpnts'
+            print amin(anglpnts)
+            print amax(anglpnts)
+            print 
+            mapspntsplnk += fluxpntsplnk[n] * exp(-0.5 * anglpnts**2 / fwhmpntsplnk[n]**2)
+        tdpy.util.plot_maps(pathimag + 'mapspntsplnk0%s.pdf' % strgfreq[k], mapspntsplnk, satu=True)
+
+    #path = pathimag + 'pcsc/'
+    #read_fits(pathbase + '/COM_PCCS_%s_R2.01.fits' % strgfreq[3], pathimag=path)
+
     # get Planck PS mask
     path = pathdata + 'HFI_Mask_PointSrc_2048_R2.00.fits'
     mapsmask = pf.open(path)[1].data['F353']
     mapsmask = hp.reorder(mapsmask, n2r=True)
     indxpixlmask = where(mapsmask == 1)
-    tdpy.util.plot_maps(pathplot + 'mapsmask_%s.pdf' % rtag, mapsmask, numbsidelgal=1000, numbsidebgal=1000, satu=True)
+    tdpy.util.plot_maps(pathimag + 'mapsmask_%s.pdf' % rtag, mapsmask, satu=True)
     
     # plotting settings
     alph = 0.5
-    pathplot = pathbase + '/imag/mergmaps/'
 
-    # runtag
-    rtag = '%04d%04d%04d' % (numbside, mpolmerg, mpolsmth)
-    
     # axes
     ## energy
     binsener = array([0.1, 0.3, 1., 3., 10., 100.])
@@ -110,15 +216,12 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     mpol = arange(numbmpol)
     mpolgrid, temp = hp.Alm.getlm(lmax=maxmmpol)
 
-    ## spatial
-    lgalheal, bgalheal, numbpixl, apix = tdpy.util.retr_healgrid(numbside)
-    
     # get input maps
     ## Planck map
     if strgmaps == 'radi':
         mapsplnkorig = pf.getdata(pathbase + '/HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 1)['RADIANCE']
     mapsplnkorig = hp.reorder(mapsplnkorig, n2r=True)
-    tdpy.util.plot_maps(pathplot + 'mapsplnkorig_%s.pdf' % rtag, mapsplnkorig, numbsidelgal=1000, numbsidebgal=1000, satu=True)
+    tdpy.util.plot_maps(pathimag + 'mapsplnkorig_%s.pdf' % rtag, mapsplnkorig, satu=True)
     
     path = pathdata + 'mapsplnk_%s.fits' % rtag
     if os.path.isfile(path):
@@ -127,11 +230,16 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
         mapsplnkorig -= mean(mapsplnkorig)
         mapsplnkorig /= std(mapsplnkorig)
         mapsplnk, mapsalmc, mpolsmthplnk, wghtsmthplnk = smth(mapsplnkorig, mpolsmth, mpol=True, retrfull=True, indxpixlmask=indxpixlmask, numbsideoutp=numbside)
-        tdpy.util.plot_maps(pathplot + 'mapsplnk_%s.pdf' % rtag, mapsplnk, numbsidelgal=1000, numbsidebgal=1000)
+        tdpy.util.plot_maps(pathimag + 'mapsplnk_%s.pdf' % rtag, mapsplnk)
         #mapsplnk = hp.ud_grade(mapsplnksmth, numbside)
         pf.writeto(path, mapsplnk, clobber=True)
 
     almcplnktemp = hp.map2alm(mapsplnk)
+
+    ## Planck Compact Source Catalog
+    print pf.info(pathbase + '/HFI_Mask_PointSrc_2048_R2.00.fits')
+    pf.open(pathbase + '/HFI_Mask_PointSrc_2048_R2.00.fits')[0]
+    
 
     # temp
     if False:
@@ -158,7 +266,7 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     almcfdfm = empty((numbener, numbalmc), dtype=complex) 
     for i in arange(numbener):
         almcfdfmorig[i, :] = hp.map2alm(mapsfdfmorig[i, :])
-        tdpy.util.plot_maps(pathplot + 'mapsfdfmorig%04d_%s.pdf' % (i, rtag), mapsfdfmorig[i, :], numbsidelgal=1000, numbsidebgal=1000)
+        tdpy.util.plot_maps(pathimag + 'mapsfdfmorig%04d_%s.pdf' % (i, rtag), mapsfdfmorig[i, :])
         mapsfdfm[i, :], almcfdfm[i, :], mpolsmthfdfm, wghtsmthfdfm = smth(mapsfdfmorig[i,:], mpolsmth, mpol=True, retrfull=True)
 
     # compute the weight
@@ -182,7 +290,7 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     axis.set_xlim([amin(mpol), amax(mpol)])
     axis.legend(loc=2)
     plt.tight_layout()
-    path = pathplot + 'wght_%s.pdf' % rtag
+    path = pathimag + 'wght_%s.pdf' % rtag
     plt.savefig(path)
     plt.close(figr)
    
@@ -232,7 +340,7 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
         axis.set_xlim([amin(mpol), amax(mpol)])
         axis.legend(loc=3, ncol=2)
         plt.tight_layout()
-        path = pathplot + 'psec%04d_%s.pdf' % (i, rtag)
+        path = pathimag + 'psec%04d_%s.pdf' % (i, rtag)
         plt.savefig(path)
         plt.close(figr)
 
@@ -251,20 +359,20 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
                 maxmbgal = 90.
                 strg = 'ngal'
                
-            path = pathplot + '%s/mapsfdfm%04d_%s.pdf' % (strg, i, rtag)
+            path = pathimag + '%s/mapsfdfm%04d_%s.pdf' % (strg, i, rtag)
             tdpy.util.plot_maps(path, mapsfdfm[i, :], minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
             
             if i == 0:
-                path = pathplot + '%s/mapsplnk_%s.pdf' % (strg, rtag)
+                path = pathimag + '%s/mapsplnk_%s.pdf' % (strg, rtag)
                 tdpy.util.plot_maps(path, mapsplnk, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
             
-            path = pathplot + '%s/mapsmerg%04d_%s.pdf' % (strg, i, rtag)
+            path = pathimag + '%s/mapsmerg%04d_%s.pdf' % (strg, i, rtag)
             tdpy.util.plot_maps(path, mapsmerg[i, :], minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
             
-            path = pathplot + '%s/mapsresifdfm%04d_%s.pdf' % (strg, i, rtag)
+            path = pathimag + '%s/mapsresifdfm%04d_%s.pdf' % (strg, i, rtag)
             tdpy.util.plot_maps(path, mapsmerg[i, :] - mapsfdfm[i, :], minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, resi=True, satu=True)
             
-            path = pathplot + '%s/mapsresiplnk%04d_%s.pdf' % (strg, i, rtag)
+            path = pathimag + '%s/mapsresiplnk%04d_%s.pdf' % (strg, i, rtag)
             tdpy.util.plot_maps(path, mapsmerg[i, :] - mapsplnk, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, resi=True, satu=True)
         
 
@@ -544,8 +652,8 @@ def regrback( \
         gdat.fluxback[indxdatacubetemp] = fluxback
 
     gdat.pathbase = os.environ["FERM_IGAL_DATA_PATH"]
-    gdat.pathplot = gdat.pathbase + '/imag/regrback/%s/' % gdat.rtag
-    cmnd = 'mkdir -p ' + gdat.pathplot
+    gdat.pathimag = gdat.pathbase + '/imag/regrback/%s/' % gdat.rtag
+    cmnd = 'mkdir -p ' + gdat.pathimag
     os.system(cmnd)
 
     # plot the power spectra
@@ -570,7 +678,7 @@ def regrback( \
     
     axis.legend(loc=4, ncol=2)
 
-    path = gdat.pathplot + 'psec.pdf'
+    path = gdat.pathimag + 'psec.pdf'
     plt.tight_layout()
     plt.savefig(path)
 
@@ -578,7 +686,7 @@ def regrback( \
     for c in gdat.indxback:
         for i in gdat.indxener:
             for m in gdat.indxevtt:
-                path = gdat.pathplot + 'fluxback_%d%d%d.pdf' % (c, i, m)
+                path = gdat.pathimag + 'fluxback_%d%d%d.pdf' % (c, i, m)
                 tdpy.util.plot_maps(path, gdat.fluxback[c, i, :, m], indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
                                                                                 minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
             
@@ -603,17 +711,17 @@ def regrback( \
     for i in gdat.indxener:
         for m in gdat.indxevtt:
             
-            path = gdat.pathplot + 'dataflux_%d%d.pdf' % (i, m)
+            path = gdat.pathimag + 'dataflux_%d%d.pdf' % (i, m)
             tdpy.util.plot_maps(path, gdat.dataflux[i, :, m] * 1e6, indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
                             minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, satu=True)
             for c in gdat.indxback:
-                path = gdat.pathplot + 'medimodlflux_%d%d%d.pdf' % (c, i, m)
+                path = gdat.pathimag + 'medimodlflux_%d%d%d.pdf' % (c, i, m)
                 tdpy.util.plot_maps(path, medimodlflux[c, i, :, m] * 1e6, indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
                                 minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, satu=True)
-            path = gdat.pathplot + 'medimodlfluxtotl_%d%d.pdf' % (i, m)
+            path = gdat.pathimag + 'medimodlfluxtotl_%d%d.pdf' % (i, m)
             tdpy.util.plot_maps(path, medimodlfluxtotl[i, :, m] * 1e6, indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
                             minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, satu=True)
-            path = gdat.pathplot + 'mediresiflux_%d%d.pdf' % (i, m)
+            path = gdat.pathimag + 'mediresiflux_%d%d.pdf' % (i, m)
             tdpy.util.plot_maps(path, mediresiflux[i, :, m] * 1e6, indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
                             minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, satu=True, resi=True)
     
@@ -669,7 +777,7 @@ def regrback( \
     axis.set_ylabel('$E^2dN/dAdtd\Omega dE$ [GeV/cm$^2$/s/sr]')
     axis.legend(loc=4, ncol=2)
 
-    path = gdat.pathplot + 'backspec.pdf'
+    path = gdat.pathimag + 'backspec.pdf'
     plt.tight_layout()
     plt.savefig(path)
     plt.close(figr)
