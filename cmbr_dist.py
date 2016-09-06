@@ -24,7 +24,7 @@ def plot_temp():
     axis.set_xlabel(r'$z$')
     axis.set_ylabel(r'T(z) [K]')
 
-    enerradilate = gdat.tempcmbrconc * (1. + gdat.meanreds) * gdat.boltconsnatu
+    enerradilate = gdat.tempcmbrconc * (1. + gdat.meanreds) * gdat.consboltnatu
 
     axistwin = axis.twiny()
     axistwin.set_xscale('log')
@@ -666,24 +666,24 @@ def retr_occp(sfrq, dist=False):
 
 def retr_fluxcmbr(gdat, thisfreq, tempcmbr):
     
-    sfrq = gdat.plnkcons * thisfreq / gdat.boltcons / tempcmbr
+    sfrq = gdat.consplnk * thisfreq / gdat.consbolt / tempcmbr
     
     occpplnk = retr_occp(sfrq)
 
-    fluxcmbr = 2. * gdat.plnkcons * thisfreq**3 / gdat.velolght**2 * occpplnk * 1e26
+    fluxcmbr = 2. * gdat.consplnk * thisfreq**3 / gdat.velolght**2 * occpplnk * 1e26
     
     return fluxcmbr
 
 
 def retr_fluxgren(gdat, thisfreq, tempcmbr, disttype):
     
-    sfrq = gdat.plnkcons * thisfreq / gdat.boltcons / tempcmbr
+    sfrq = gdat.consplnk * thisfreq / gdat.consbolt / tempcmbr
 
     occpplnk, occptdis, occpydis, occpmdis = retr_occp(sfrq, dist=True)
     
-    fluxtdisgren = 0.25 * 2. * gdat.plnkcons * thisfreq**3 / gdat.velolght**2 * occptdis * 1e26
-    fluxydisgren = 0.25 * 2. * gdat.plnkcons * thisfreq**3 / gdat.velolght**2 * occpydis * 1e26
-    fluxmdisgren = 1.41 * 2. * gdat.plnkcons * thisfreq**3 / gdat.velolght**2 * occpmdis * 1e26
+    fluxtdisgren = 0.25 * 2. * gdat.consplnk * thisfreq**3 / gdat.velolght**2 * occptdis * 1e26
+    fluxydisgren = 0.25 * 2. * gdat.consplnk * thisfreq**3 / gdat.velolght**2 * occpydis * 1e26
+    fluxmdisgren = 1.41 * 2. * gdat.consplnk * thisfreq**3 / gdat.velolght**2 * occpmdis * 1e26
     
     fluxfdisgren = gdat.vifm[None, :] * gdat.vift[None, :] * fluxmdisgren[:, None] + gdat.vify[None, :] * fluxydisgren[:, None] + (1. - gdat.vift[None, :]) * fluxtdisgren[:, None]
     fluxodisgren = gdat.vifm[None, :] * gdat.vift[None, :] * fluxmdisgren[:, None] + gdat.vify[None, :] * fluxydisgren[:, None]
@@ -713,9 +713,9 @@ def retr_fluxfree(gdat, thisfreq, emmefree, tempfree):
 
 def retr_plnkfunc(gdat, thisfreq, temp):
     
-    thissfrq = gdat.plnkcons * thisfreq / gdat.boltcons / temp
+    thissfrq = gdat.consplnk * thisfreq / gdat.consbolt / temp
     
-    plnk = 2. * gdat.plnkcons * thisfreq**3 / gdat.velolght**2 / (exp(thissfrq) - 1.)
+    plnk = 2. * gdat.consplnk * thisfreq**3 / gdat.velolght**2 / (exp(thissfrq) - 1.)
     
     return plnk
 
@@ -729,7 +729,7 @@ def retr_ydis_trac():
     enerpart = 10**data['LOG10ENERGY'].squeeze()
     redsinpt = data['INPUT_REDSHIFT'].squeeze()
     enerphot = data['PHOTON_ENERGY'].squeeze()
-    freqphot = enerphot / gdat.plnkcons
+    freqphot = enerphot / gdat.consplnk
 
     nredsoutp = redsoutp.size
     nenerpart = enerpart.size
@@ -743,8 +743,8 @@ def retr_ydis_trac():
     jenerpart = [k * nenerpart / njenerpart for k in range(njenerpart)]
     jredsinpt = [k * nredsinpt / njredsinpt for k in range(njredsinpt)]
 
-    specchek = 8. * pi * enerphot[:,:,None]**2 / (gdat.velolght * gdat.plnkcons)**3 / (exp(enerphot[:,:,None] / \
-                                                    tempcmbrnunc / gdat.boltcons / (1. + redsinpt[None,None,:])) - 1.) # [1/cm^3/eV]
+    specchek = 8. * pi * enerphot[:,:,None]**2 / (gdat.velolght * gdat.consplnk)**3 / (exp(enerphot[:,:,None] / \
+                                                    tempcmbrnunc / gdat.consbolt / (1. + redsinpt[None,None,:])) - 1.) # [1/cm^3/eV]
 
     diffydisdiffreds = data['YDISTORTION'].squeeze()
     ydis = data['CUMULATIVE_YDISTORTION'].squeeze()
@@ -866,7 +866,7 @@ def retr_fluxdust(gdat, thisfreq, dustodep, dustemisrati, dustpowrfrac, dustwarm
 
     factwarm = (sp.special.zetac(4. + dustwarmindx) + 1) * sp.special.gamma(4. + dustwarmindx)
     factcold = (sp.special.zetac(4. + dustcoldindx) + 1) * sp.special.gamma(4. + dustcoldindx)
-    dustcoldtemp = (factwarm / factcold / dustemisrati * (gdat.plnkcons * gdat.freqpivt / gdat.boltcons)**(dustcoldindx - dustwarmindx) * \
+    dustcoldtemp = (factwarm / factcold / dustemisrati * (gdat.consplnk * gdat.freqpivt / gdat.consbolt)**(dustcoldindx - dustwarmindx) * \
             dustwarmtemp**(4. + dustwarmindx))**(1. / (4. + dustcoldindx))
     
     fluxdustcoldfact = dustpowrfrac * dustemisrati * (thisfreq / 3e12)**dustcoldindx
@@ -1172,11 +1172,11 @@ def init( \
     gdat.velolght = 3e8 # [m/s]
     mp2m = 3.1e22 # [Mpc/m]
     yr2s = 364. * 3600. * 24. # [year/s]
-    gdat.plnkcons = 6.63e-34 # [J s]
-    gdat.boltcons = 1.38e-23 # [J/K]
+    gdat.consplnk = 6.63e-34 # [J s]
+    gdat.consbolt = 1.38e-23 # [J/K]
     gdat.freqpivt = 1e12 # [Hz]
     gdat.tempcmbrconc = 2.725 # Planck concordance model temperature of the CMB today [K]
-    gdat.boltconsnatu = 8.6173e-5 # Boltzmann constant [eV/K]
+    gdat.consboltnatu = 8.6173e-5 # Boltzmann constant [eV/K]
     massprot = 9.38e8 # [eV]
     ## distortion
     alph = 1.401
@@ -1214,7 +1214,7 @@ def init( \
     thertempantntemp = (1.76e-11 * gdat.freqmodl)**2 * exp(1.76e-11 * gdat.freqmodl) / (exp(1.76e-11 * gdat.freqmodl) - 1.)**2
     antntempflux = 0.0307 * (gdat.freqmodl / 1e9)**2
     # scaled frequency
-    gdat.sfrqconc = gdat.plnkcons * gdat.freqmodl / gdat.boltcons / gdat.tempcmbrconc
+    gdat.sfrqconc = gdat.consplnk * gdat.freqmodl / gdat.consbolt / gdat.tempcmbrconc
    
     # cosmological setup
     edenbmat = omegbmat * edencrit * (1. + gdat.meanreds)**3
