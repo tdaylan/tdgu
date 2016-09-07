@@ -113,7 +113,8 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     # read unit conversion data provided by Planck
     factconvplnk = loadtxt(pathdata + 'plnkunitconv.dat')
     
-    strgmapsplnk = ['0030', '0044', '0070', '0100', '0143', '0217', '0353', '0545', '0857', 'radi']
+    #strgmapsplnk = ['0030', '0044', '0070', '0100', '0143', '0217', '0353', '0545', '0857', 'radi']
+    strgmapsplnk = ['0857']
     numbmapsplnk = len(strgmapsplnk)
     for k in range(numbmapsplnk):
 
@@ -128,11 +129,11 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
         else:
             
             # read sky maps
-            if k < 3: 
+            if strgmapsplnk[k][1] == '0':
                 strgfrst = '/LFI_SkyMap_' 
                 strgseco = '-BPassCorrected-field-IQU_0256_R2.01_full.fits'
                 strgcols = 'TEMPERATURE'
-            elif k < 7:
+            elif strgmapsplnk[k][1] == '1' or strgmapsplnk[k][1] == '2' or strgmapsplnk[k][1] == '3':
                 strgfrst = '/HFI_SkyMap_'
                 strgseco = '-field-IQU_2048_R2.02_full.fits'
                 strgcols = 'I_STOKES'
@@ -145,11 +146,11 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
             mapsplnk = hp.reorder(mapsplnk, n2r=True)
 
             # change units of the sky maps to Jy/sr
-            if k < 8:
+            if strgmapsplnk[k] != '0545' and strgmapsplnk[k] != '0857':
                 ## from Kcmb
                 if calcfactconv:
                     # read Planck band transmission data
-                    if k < 3:
+                    if strgmapsplnk[k][1] == '0':
                         strg = 'LFI_RIMO_R2.50'
                         strgextn = 'BANDPASS_%s' % strgmapsplnk[k][1:]
                         freqband = pf.open(pathbase + '/%s.fits' % strg)[strgextn].data['WAVENUMBER'][1:] * 1e9
@@ -181,7 +182,7 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
             if subspnts:
                 # subtract PSs from the Planck maps
                 ## read PCCS
-                if k < 3:
+                if strgmapsplnk[k][1] == '0':
                     strg = 'R2.04'
                 else:
                     strg = 'R2.01'
