@@ -85,7 +85,7 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     # analysis setup
     ## plots
     alph = 0.5
-    plotfull = True
+    plotfull = False
 
     ## Healpix grid
     lgalheal, bgalheal, numbpixl, apix = tdpy.util.retr_healgrid(numbside)
@@ -113,21 +113,22 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     # read unit conversion data provided by Planck
     factconvplnk = loadtxt(pathdata + 'plnkunitconv.dat')
     
-    #strgmapsplnk = ['0030', '0044', '0070', '0100', '0143', '0217', '0353', '0545', '0857', 'radi']
-    strgmapsplnk = ['0857']
+    if plotfull:
+        strgmapsplnk = ['0030', '0044', '0070', '0100', '0143', '0217', '0353', '0545', '0857', 'radi']
+    strgmapsplnk = ['radi']
+    #strgmapsplnk = ['0857']
     numbmapsplnk = len(strgmapsplnk)
     for k in range(numbmapsplnk):
 
-        print 'k'
-        print k
-        print 'strgmapsplnk[k]'
-        print strgmapsplnk[k]
+        print 'Map number ', k
+        print 'Maps string: ', strgmapsplnk[k]
         
         if strgmapsplnk[k] == 'radi':
             mapsplnkorig = pf.getdata(pathbase + '/HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 1)['RADIANCE']
             mapsplnkorig = hp.reorder(mapsplnkorig, n2r=True)
         else:
             
+            print 'Reading the raw map at %d...' % int(strgmapsplnk[k][1:])
             # read sky maps
             if strgmapsplnk[k][1] == '0':
                 strgfrst = '/LFI_SkyMap_' 
@@ -145,6 +146,7 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
             mapsplnk = pf.getdata(pathbase + strg, 1)[strgcols]
             mapsplnk = hp.reorder(mapsplnk, n2r=True)
 
+            print 'Changing units...'
             # change units of the sky maps to Jy/sr
             if strgmapsplnk[k] != '0545' and strgmapsplnk[k] != '0857':
                 ## from Kcmb
@@ -180,6 +182,8 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
             tdpy.util.plot_maps(pathimag + 'mapsplnk%s.pdf' % strgmapsplnk[k], mapsplnk, satu=True)
 
             if subspnts:
+                print 'Subtracting point sources...'
+
                 # subtract PSs from the Planck maps
                 ## read PCCS
                 if strgmapsplnk[k][1] == '0':
