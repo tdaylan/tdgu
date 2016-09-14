@@ -1,6 +1,6 @@
 from __init__ import *
  
-def cnfg_null():
+def cnfg_mocknull():
 
     sigm = init( \
                 mockfracperd=0., \
@@ -9,7 +9,7 @@ def cnfg_null():
                )
     
 
-def mock_grid():
+def cnfg_mockgrid():
 
     print 'Initializing grid search...'
     pathimag, pathdata = retr_path()
@@ -336,4 +336,5 @@ def init( \
 
     return sigm
 
-mock_grid()
+#cnfg_mockgrid()
+cnfg_mocknull()
