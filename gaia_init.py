@@ -4,4 +4,4 @@ datapath = '/n/fink2/gaia/cdn.gea.esac.esa.int/Gaia/gaia_source/fits/'
 
 strg = 'GaiaSource_000-000-042.fits'
 
-read_fits(path + strg)
+tdpy.util.read_fits(path + strg)
