@@ -32,7 +32,7 @@ def cnfg_mockgrid():
                 sigm = init( \
                             mocknumbpuls=listnumbpuls[l], \
                             mockfracperd=listfracperd[k], \
-                            numbiter=10, \
+                            numbiter=100, \
                             verbtype=2, \
                            )
                 numbiter = sigm.size
@@ -42,12 +42,12 @@ def cnfg_mockgrid():
 
     # plot the grid
     figr, axis = plt.subplots()
-    axis.pcolor(listnumbpuls, listfracperd, fracdete, cmap='Greens')
+    imag = axis.pcolor(listnumbpuls, listfracperd, fracdete, cmap='Greens')
     axis.set_yscale('log')
     #axis.set_xscale('log')
     axis.set_ylabel(r'$\gamma$')
     axis.set_xlabel(r'$N$')
-    plt.colorbar()
+    cbar = plt.colorbar(imag) 
     plt.tight_layout()
     path = pathimag + 'mockgrid_%4f.pdf' % sigmthrs
     plt.savefig(path)
@@ -61,7 +61,7 @@ def retr_path():
     pathimag = pathbase + '/imag/ferm_time/'
     os.system('mkdir -p %s' % pathimag)
 
-    pathdata = pathbase + '/data/ferm_time'
+    pathdata = pathbase + '/data/ferm_time/'
     os.system('mkdir -p %s' % pathdata)
 
     return pathimag, pathdata
