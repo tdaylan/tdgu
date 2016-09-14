@@ -46,30 +46,21 @@ def smth(maps, scalsmth, mpol=False, retrfull=False, numbsideoutp=None, indxpixl
         mapsoutp = copy(maps)
         mapsoutp[indxpixlmask] = hp.UNSEEN
         mapsoutp = hp.ma(mapsoutp)
-        
         almctemp = hp.map2alm(maps)
-        print 'almcmasknone'
-        for k in range(10):
-            print almctemp[k]
-        print
     else:
         mapsoutp = maps
     
     almc = hp.map2alm(mapsoutp)
-    print 'almcmask'
-    for k in range(10):
-        print almc[k]
-    print
 
     wght = exp(-0.5 * (mpolgrid / mpolsmth)**2)
     almc *= wght
-
+    
     mapsoutp = hp.alm2map(almc[where(mpolgrid < 3 * numbsideoutp)], numbsideoutp, verbose=False)
 
     if retrfull:
-        return maps, almc, mpol, exp(-0.5 * (mpol / mpolsmth)**2)
+        return mapsoutp, almc, mpol, exp(-0.5 * (mpol / mpolsmth)**2)
     else:
-        return maps 
+        return mapsoutp
 
 
 def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
@@ -239,11 +230,11 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
         plt.close(figr)
     
     # get Planck PS mask
+    print 'Reading the Planck mask...'
     path = pathdata + 'HFI_Mask_PointSrc_2048_R2.00.fits'
     mapsmask = pf.open(path)[1].data['F353']
     mapsmask = hp.reorder(mapsmask, n2r=True)
-    indxpixlmask = where(mapsmask == 1)
-    tdpy.util.plot_maps(pathimag + 'mapsmask_%s.pdf' % rtag, mapsmask, satu=True)
+    tdpy.util.plot_maps(pathimag + 'mapsmask_%s.pdf' % rtag, mapsmask)
     
     ## multipole
     maxmmpol = 3. * numbside - 1.
@@ -256,19 +247,21 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     ## Planck map
     tdpy.util.plot_maps(pathimag + 'mapsplnkorig_%s.pdf' % rtag, mapsplnkorig, satu=True)
     
+    print 'Smoothing the Planck map...'
     path = pathdata + 'mapsplnk_%s.fits' % rtag
     if os.path.isfile(path):
         mapsplnk = pf.getdata(path)
     else:
         mapsplnkorig -= mean(mapsplnkorig)
         mapsplnkorig /= std(mapsplnkorig)
+        # temp
+        indxpixlmask = []
         mapsplnk, mapsalmc, mpolsmthplnk, wghtsmthplnk = smth(mapsplnkorig, mpolsmth, mpol=True, retrfull=True, indxpixlmask=indxpixlmask, numbsideoutp=numbside)
         tdpy.util.plot_maps(pathimag + 'mapsplnk_%s.pdf' % rtag, mapsplnk)
-        #mapsplnk = hp.ud_grade(mapsplnksmth, numbside)
         pf.writeto(path, mapsplnk, clobber=True)
-
     almcplnktemp = hp.map2alm(mapsplnk)
 
+    ## PS
     # temp
     if False:
         mapspnts = zeros((2, numbpixl))
@@ -280,11 +273,23 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
             bgal = (rand(numbpnts[k]) - 0.5) * 360.
             mapspnts[k, :] = tdpy.util.retr_mapspnts(lgal, bgal, stdv, flux, numbside=numbside)
 
-    # Gaussian noise map
-    mapsgaus = 0.1 * randn(numbpixl)
+    ## Fermi data
+    path = pathbase + '/fermflux_cmp0_igal.fits'
+    mapsfermorig = sum(pf.getdata(path), 2)
+    mapsfermorig -= mean(mapsfermorig, 1)[:, None]
+    mapsfermorig /= std(mapsfermorig, 1)[:, None]
+    mapsferm = empty_like(mapsfermorig)
+    for i in arange(numbener):
+        tdpy.util.plot_maps(pathimag + 'mapsfermorig%04d_%s.pdf' % (i, rtag), mapsfermorig[i, :], satu=True)
+        tdpy.util.plot_maps(pathimag + 'mapsferm%04d_%s.pdf' % (i, rtag), mapsferm[i, :], satu=True)
+        mapsferm[i, :] = smth(mapsfermorig[i, :], mpolsmth, mpol=True)
+
+    ## Gaussian noise map
+    mapsgaus = sqrt(0.25 / 30.) * randn(numbpixl)
 
     ## Fermi Diffuse Model
     # temp
+    print 'Reading the Fermi diffuse model...'
     mapsfdfmorig = tdpy.util.retr_fdfm(binsener, numbside=numbside)
     mapsfdfmorig -= mean(mapsfdfmorig, 1)[:, None]
     mapsfdfmorig /= std(mapsfdfmorig, 1)[:, None]
@@ -293,7 +298,7 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     almcfdfm = empty((numbener, numbalmc), dtype=complex) 
     for i in arange(numbener):
         almcfdfmorig[i, :] = hp.map2alm(mapsfdfmorig[i, :])
-        tdpy.util.plot_maps(pathimag + 'mapsfdfmorig%04d_%s.pdf' % (i, rtag), mapsfdfmorig[i, :])
+        tdpy.util.plot_maps(pathimag + 'mapsfdfmorig%04d_%s.pdf' % (i, rtag), mapsfdfmorig[i, :], satu=True)
         mapsfdfm[i, :], almcfdfm[i, :], mpolsmthfdfm, wghtsmthfdfm = smth(mapsfdfmorig[i,:], mpolsmth, mpol=True, retrfull=True)
 
     # compute the weight
@@ -309,7 +314,8 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     axis.loglog(mpolsmthfdfm, wghtsmthfdfm, label='Smoothing Kernel')
     #axis.loglog(mpolsmthplnk + 0.1, wghtsmthplnk, label='Smoothing Kernel')
 
-    axis.axvline(numbside, ls='--', color='black', alpha=alph, label='$N_{side}$')
+    axis.axvline(numbside, ls='-', color='black', alpha=alph, label='$N_{side}$')
+    axis.axvline(mpolsmth, ls='--', color='black', alpha=alph, label='$l_{smth}$')
     axis.axvline(mpolmerg, ls='-.', color='black', alpha=alph, label='$l_{merg}$')
     axis.set_ylabel('$w_l$')
     axis.set_xlabel('$l$')
@@ -321,21 +327,31 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     plt.savefig(path)
     plt.close(figr)
    
-    # compute the power spectra
+
+    # compute power spectra
+    print 'Computing power spectra...'
+    ## power spectrum prefactor
     factmpol = mpol * (2. * mpol + 1.) / 4. / pi
-    psecplnktemp = factmpol * hp.anafast(mapsplnk)
+    
+    ## indices of multipoles over which the variance of Fermi diffuse model and Planck map is matched
+    indxmpoltemp = where(mpol < 10.)[0]
+    
+    psecplnkuncr = factmpol * hp.anafast(mapsplnk)
     psecgaus = factmpol * hp.anafast(mapsgaus)
+    
+    psecferm = empty((numbener, numbmpol))
+    psecfermorig = empty((numbener, numbmpol))
     psecfdfm = empty((numbener, numbmpol))
     psecplnk = empty((numbener, numbmpol))
-    indxmpoltemp = where(mpol < 10.)[0]
     almcplnk = empty((numbener, numbalmc), dtype=complex)
+    
     for i in arange(numbener):
+        psecfermorig[i, :] = factmpol * hp.anafast(mapsfermorig[i, :])
+        psecferm[i, :] = factmpol * hp.anafast(mapsferm[i, :])
         psecfdfm[i, :] = factmpol * hp.anafast(mapsfdfm[i, :])
         ## correct the Planck variance
-        # temp
-        #factcorr = sum(psecfdfm[i, indxmpoltemp]) / sum(psecplnktemp[indxmpoltemp])
-        factcorr = 1.
-        psecplnk[i, :] = factcorr * psecplnktemp
+        factcorr = sum(psecfdfm[i, indxmpoltemp]) / sum(psecplnkuncr[indxmpoltemp])
+        psecplnk[i, :] = factcorr * psecplnkuncr
         almcplnk[i, :] = sqrt(factcorr) * almcplnktemp
 
     # merge the maps
@@ -353,14 +369,21 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     for i in arange(numbener):
         figr, axis = plt.subplots()
         
-        axis.loglog(mpol, psecfdfm[i, :], label='FDM')
-        axis.loglog(mpol, psecplnk[i, :], label='Planck')
-        axis.loglog(mpol, psecmerg[i, :], label='Merged')
-        axis.loglog(mpol, psecgaus, label='Uncorrelated Noise', alpha=alph, ls='--')
+        axis.loglog(mpol, psecfermorig[i, :], label='Fermi-LAT Native', color='b')
+        axis.loglog(mpol, psecferm[i, :], label='Fermi-LAT Smooth', color='b', alpha=0.5)
+        axis.loglog(mpol, psecfdfmorig[i, :], label='FDM Native', color='c')
+        axis.loglog(mpol, psecfdfm[i, :], label='FDM Smooth', color='c', alpha=0.5)
+        axis.loglog(mpol, psecplnkuncr, label='Planck Smooth', color='r', alpha=0.5)
+        axis.loglog(mpol, psecplnk[i, :], label='Planck Smooth Norm.', color='r')
+        axis.loglog(mpol, psecmerg[i, :], label='Merged', color='m')
         
-        axis.axvline(numbside, ls='--', color='black', alpha=alph, label='$N_{side}$')
-        axis.axvline(mpolmerg, ls='-.', color='black', alpha=alph, label='$l_{merg}$')
-        axis.axvline(mpolsmth, color='black', alpha=alph, label='$l_{smth}$')
+        axis.loglog(mpol, psecgaus, label='Uncorrelated Noise', alpha=0.1, ls='--', color='black')
+#        axis.loglog(mpol, 3e-3 * exp(mpol / 1800.), label='Planck beam deconvolved', alpha=0.1, ls='-.', color='black')
+    
+        axis.axvline(numbside, ls='-', color='black', alpha=0.6, label='$N_{side}$')
+        axis.axvline(mpolsmth, ls='--', color='black', alpha=0.6, label='$l_{smth}$')
+        axis.axvline(mpolmerg, ls='-.', color='black', alpha=0.6, label='$l_{merg}$')
+        
         axis.set_ylabel('$l(2l+1)C_l/4\pi$')
         axis.set_xlabel('$l$')
         axis.set_ylim([1e-3, 1.])
@@ -387,14 +410,14 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
                 strg = 'ngal'
                
             path = pathimag + '%s/mapsfdfm%04d_%s.pdf' % (strg, i, rtag)
-            tdpy.util.plot_maps(path, mapsfdfm[i, :], minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
+            tdpy.util.plot_maps(path, mapsfdfm[i, :], minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, satu=True)
             
             if i == 0:
                 path = pathimag + '%s/mapsplnk_%s.pdf' % (strg, rtag)
-                tdpy.util.plot_maps(path, mapsplnk, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
+                tdpy.util.plot_maps(path, mapsplnk, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, satu=True)
             
             path = pathimag + '%s/mapsmerg%04d_%s.pdf' % (strg, i, rtag)
-            tdpy.util.plot_maps(path, mapsmerg[i, :], minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
+            tdpy.util.plot_maps(path, mapsmerg[i, :], minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, satu=True)
             
             path = pathimag + '%s/mapsresifdfm%04d_%s.pdf' % (strg, i, rtag)
             tdpy.util.plot_maps(path, mapsmerg[i, :] - mapsfdfm[i, :], minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, resi=True, satu=True)

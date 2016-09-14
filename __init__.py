@@ -1,9 +1,10 @@
 # plotting
 import matplotlib as mpl
-mpl.rcParams['figure.figsize'] = (6., 5.)
 mpl.use('Agg')
 import matplotlib.pyplot as plt
 mpl.rc('image', interpolation='nearest', origin='lower')
+#mpl.rcParams['figure.figsize'] = (6., 5.)
+mpl.rc('figure', figsize=(6, 5))
 
 import seaborn as sns
 sns.set(context='poster', style='ticks', color_codes=True)
@@ -42,7 +43,7 @@ import tdpy.mcmc
 
 from tdpy.util import show
 
-import pcat.main
+#import pcat.main
 
 import warnings
 warnings.simplefilter(action = "ignore", category = FutureWarning)
