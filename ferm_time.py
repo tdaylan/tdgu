@@ -116,8 +116,11 @@ def init( \
         # generate mock exposure
         expo = 1e11
     
+    # get the time stamp
+    strgdate = tdpy.util.retr_strgdate()
+
     # construct the run tag
-    rtag = '%s' % (datatype)
+    rtag = '%s' % (strgdate, datatype)
     if datatype == 'mock':
         mockperd = 1. / mockfreq
         mocktimepuls = arange(0., maxmtime - 1., mockperd)
