@@ -15,37 +15,39 @@ def cnfg_mockgrid():
     pathimag, pathdata = retr_path()
 
     sigmthrs = 3.
-    listfracperd = logspace(-3., -1., 10)
-    #listnumbpuls = logspace(0, 1, 2).astype(int)
-    listnumbpuls = arange(1, 10)
+    listfracperd = logspace(-2., log10(0.5), 4)
+    #listnumbpuls = logspace(0, 1, 4).astype(int)
+    listnumbpuls = arange(1, 4)
     numbfracperd = listfracperd.size
     numbfluxperd = listnumbpuls.size
-    fracdete = empty((numbfracperd, numbfluxperd))
     
-    # null
-    sigm = init( \
-                mockfracperd=0., \
-                verbtype=2, \
-               )
-    
-    for k in range(listfracperd.size):
-        for l in range(listnumbpuls.size):
-            sigm = init( \
-                        mocknumbpuls=listnumbpuls[l], \
-                        mockfracperd=listfracperd[k], \
-                        verbtype=2, \
-                       )
-            numbiter = sigm.size
-            numbdete = where(sigm > sigmthrs)[0].size
-            fracdete[k, l] = float(numbdete) / numbiter
+    path = pathdata + 'fracdete.fits'
+    if os.path.isfile(path):
+        print 'Reading from the file...'
+        fracdete = pf.getdata(path)
+    else:
+        fracdete = empty((numbfracperd, numbfluxperd))
+        for k in range(listfracperd.size):
+            for l in range(listnumbpuls.size):
+                sigm = init( \
+                            mocknumbpuls=listnumbpuls[l], \
+                            mockfracperd=listfracperd[k], \
+                            numbiter=10, \
+                            verbtype=2, \
+                           )
+                numbiter = sigm.size
+                numbdete = where(sigm > sigmthrs)[0].size
+                fracdete[k, l] = float(numbdete) / numbiter
+        pf.writeto(path, mapsplnk, clobber=True)
 
     # plot the grid
     figr, axis = plt.subplots()
     axis.pcolor(listnumbpuls, listfracperd, fracdete, cmap='Greens')
     axis.set_yscale('log')
-    axis.set_xscale('log')
+    #axis.set_xscale('log')
     axis.set_ylabel(r'$\gamma$')
-    axis.set_xlabel(r'$\phi$')
+    axis.set_xlabel(r'$N$')
+    plt.colorbar()
     plt.tight_layout()
     path = pathimag + 'mockgrid_%4f.pdf' % sigmthrs
     plt.savefig(path)
@@ -120,7 +122,7 @@ def init( \
             if verbtype > 1:
                 print 'Null model'
         else:
-            rtag += '_%s_%04.f_%04.f' % (mockmodltype, -log10(mockfracperd), -log10(mocknumbpuls))
+            rtag += '_%s_%04.f_%04.f' % (mockmodltype, -log10(mockfracperd), log10(mocknumbpuls))
             if verbtype > 1:
                 print 'Model %s' % mockmodltype
                 print 'mockfracperd'
@@ -336,5 +338,10 @@ def init( \
 
     return sigm
 
-#cnfg_mockgrid()
-cnfg_mocknull()
+
+if len(sys.argv) > 1:
+    name = globals().copy()
+    name.get(sys.argv[1])()
+else:
+    pass
+
