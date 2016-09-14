@@ -17,12 +17,12 @@ def cnfg_mockgrid():
     sigmthrs = 3.
     minmfracperd = 0.01
     maxmfracperd = 0.3
-    numbfracperd = 4
+    numbfracperd = 6
     listfracperd = logspace(log10(minmfracperd), log10(maxmfracperd), numbfracperd)
     
     minmnumbpuls = 1
-    maxmnumbpuls = 4
-    numbnumbpuls = 4
+    maxmnumbpuls = 10
+    numbnumbpuls = 3
     listnumbpuls = logspace(minmnumbpuls, maxmnumbpuls, numbnumbpuls).astype(int)
     #listnumbpuls = logspace(0, 1, 4).astype(int)
     
@@ -40,17 +40,12 @@ def cnfg_mockgrid():
                 sigm = init( \
                             mocknumbpuls=listnumbpuls[l], \
                             mockfracperd=listfracperd[k], \
-                            numbiter=100, \
+                            #numbiter=100, \
                             verbtype=2, \
                            )
                 numbiter = sigm.size
                 numbdete = where(sigm > sigmthrs)[0].size
                 fracdete[k, l] = float(numbdete) / numbiter
-                print 'sigm'
-                print sigm
-                print 'numbdete'
-                print numbdete
-                print 
         pf.writeto(path, fracdete, clobber=True)
 
     # plot the grid
