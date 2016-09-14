@@ -1,7 +1,7 @@
 from __init__ import *
 
-path = '/n/fink2/gaia/cdn.gea.esac.esa.int/Gaia/gaia_source/fits'
+datapath = '/n/fink2/gaia/cdn.gea.esac.esa.int/Gaia/gaia_source/fits/'
 
+strg = 'GaiaSource_000-000-042.fits'
 
-
-show_fits(path)
+show_fits(path + strg)

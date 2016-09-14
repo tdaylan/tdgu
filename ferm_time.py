@@ -15,7 +15,7 @@ def cnfg_mockgrid():
     pathimag, pathdata = retr_path()
 
     sigmthrs = 3.
-    listfracperd = logspace(-2., log10(0.5), 4)
+    listfracperd = logspace(-2., -1, 4)
     #listnumbpuls = logspace(0, 1, 4).astype(int)
     listnumbpuls = arange(1, 4)
     numbfracperd = listfracperd.size
@@ -38,7 +38,7 @@ def cnfg_mockgrid():
                 numbiter = sigm.size
                 numbdete = where(sigm > sigmthrs)[0].size
                 fracdete[k, l] = float(numbdete) / numbiter
-        pf.writeto(path, mapsplnk, clobber=True)
+        pf.writeto(path, fracdete, clobber=True)
 
     # plot the grid
     figr, axis = plt.subplots()
