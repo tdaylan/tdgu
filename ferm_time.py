@@ -1,4 +1,13 @@
 from __init__ import *
+ 
+def cnfg_null():
+
+    sigm = init( \
+                mockfracperd=0., \
+                numbiter=100000, \
+                verbtype=2, \
+               )
+    
 
 def mock_grid():
 
