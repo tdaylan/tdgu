@@ -15,13 +15,21 @@ def cnfg_mockgrid():
     pathimag, pathdata = retr_path()
 
     sigmthrs = 3.
-    listfracperd = logspace(-2., -1, 4)
+    minmfracperd = 0.01
+    maxmfracperd = 0.3
+    numbfracperd = 4
+    listfracperd = logspace(log10(minmfracperd), log10(maxmfracperd), numbfracperd)
+    
+    minmnumbpuls = 1
+    maxmnumbpuls = 4
+    numbnumbpuls = 4
+    listnumbpuls = logspace(minmnumbpuls, maxmnumbpuls, numbnumbpuls).astype(int)
     #listnumbpuls = logspace(0, 1, 4).astype(int)
-    listnumbpuls = arange(1, 4)
+    
     numbfracperd = listfracperd.size
     numbfluxperd = listnumbpuls.size
     
-    path = pathdata + 'fracdete.fits'
+    path = pathdata + 'fracdete%04f%04f%04f%04f%04f%04f%04f_.fits' % (sigmthrs, -log10(minmfracperd), -log10(maxmfracperd), numbfracperd, minmnumbpuls, maxmnumbpuls, numbnumbpuls)
     if os.path.isfile(path):
         print 'Reading from the file...'
         fracdete = pf.getdata(path)
@@ -38,6 +46,11 @@ def cnfg_mockgrid():
                 numbiter = sigm.size
                 numbdete = where(sigm > sigmthrs)[0].size
                 fracdete[k, l] = float(numbdete) / numbiter
+                print 'sigm'
+                print sigm
+                print 'numbdete'
+                print numbdete
+                print 
         pf.writeto(path, fracdete, clobber=True)
 
     # plot the grid
