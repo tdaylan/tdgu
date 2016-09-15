@@ -54,16 +54,16 @@ def corr_catl(lgalseco, bgalseco, fluxseco, lgalfrst, bgalfrst, fluxfrst, anglas
 
 strgproc = os.uname()[1]
 if strgproc == 'fink1':
-    os.system('')
-else:
     pathimag = '/n/pan/www/tansu/imag/gaia_init/'
-pathbase = os.environ["TDGU_DATA_PATH"]
-os.system('mkdir -p %s' % pathimag)
-
-pathdata = pathbase + '/data/gaia_init/'
-os.system('mkdir -p %s' % pathdata)
-
-strg = 'GaiaSource_000-000-000.fits'
+    pathdata = '/n/fink2/gaia/cdn.gea.esac.esa.int/Gaia/gaia_source/fits/'
+    strg = 'GaiaSource_000-000-000.fits'
+    #pathdata = '/n/fink2/gaia/gaia-sweep.fits'
+    #strg = 'gaia-sweep.fits'
+else:
+    pathbase = os.environ["TDGU_DATA_PATH"]
+    pathimag = pathimag + '/data/gaia_init/'
+    os.system('mkdir -p %s' % pathimag)
+    os.system('mkdir -p %s' % pathdata)
 
 #tdpy.util.read_fits(pathdata + strg, pathimag=pathimag)
 
