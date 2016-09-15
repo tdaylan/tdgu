@@ -1,6 +1,24 @@
 from tdgu.__init__ import *
 import tdpy.util
 
+def read_pstr(lgal, bgal):
+
+    numbpnts = lgal.size
+    indxpixl = empty(numbpnts, dtype=int)
+    for k in range(numbpnts):
+        indxpixl[k] = ang2pix(32., pi / 2. - deg2rad(bgal), deg2rad(lgal)) 
+    indxpixl = unique(indxpixl)
+
+    for k in range(indxpixl):
+        path = '/n/fink2/dfink/decam-ucal-qz-time/chunks-qz-star-v3/ps1-%05d.fits' % indxpixl[k]
+        print 'Reading %s' % path
+        catl = pf.getdata(path)
+        print catl
+        print 
+
+    return pstrcatl
+
+
 def corr_catl(lgalseco, bgalseco, fluxseco, lgalfrst, bgalfrst, fluxfrst, anglassc=deg2rad(1.)):
 
     numbfrst = lgalfrst.size
@@ -33,13 +51,13 @@ def corr_catl(lgalseco, bgalseco, fluxseco, lgalfrst, bgalfrst, fluxfrst, anglas
 
 
 #pathdata = '/n/fink2/gaia/cdn.gea.esac.esa.int/Gaia/gaia_source/fits/'
-#pathimag = '/n/pan/www/tansu/imag/gaia_init/'
 
 strgproc = os.uname()[1]
 if strgproc == 'fink1':
     os.system('')
+else:
+    pathimag = '/n/pan/www/tansu/imag/gaia_init/'
 pathbase = os.environ["TDGU_DATA_PATH"]
-pathimag = pathbase + '/imag/gaia_init/'
 os.system('mkdir -p %s' % pathimag)
 
 pathdata = pathbase + '/data/gaia_init/'
@@ -49,10 +67,6 @@ strg = 'GaiaSource_000-000-000.fits'
 
 #tdpy.util.read_fits(pathdata + strg, pathimag=pathimag)
 
-os.system('setenexport TESTAT_DIR=/Users/tansu/Documents/work/git/local/tdgu')
-os.system('echo $TEST')
-os.system('export PS1CAT_DIR=/n/fink2/dfink/decam-ucal-qz-time/chunks-qz-star-v3')
-os.system('echo $PS1CAT_DIR')
 numbpstr = 10
 lgalpstr = 2. * (rand(numbpstr) - 0.5) * 180.
 bgalpstr = 2. * (rand(numbpstr) - 0.5) * 90.

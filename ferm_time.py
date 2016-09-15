@@ -9,7 +9,6 @@ def cnfg_mocknull():
                )
 
 
-@profile
 def cnfg_mockgrid():
 
     print 'Initializing grid search...'
@@ -24,12 +23,12 @@ def cnfg_mockgrid():
     minmnumbpuls = 1
     maxmnumbpuls = 10
     numbnumbpuls = 3
-    listnumbpuls = logspace(minmnumbpuls, maxmnumbpuls, numbnumbpuls).astype(int)
+    listnumbpuls = linspace(minmnumbpuls, maxmnumbpuls, numbnumbpuls).astype(int)
     #listnumbpuls = logspace(0, 1, 4).astype(int)
     
     numbfracperd = listfracperd.size
     numbfluxperd = listnumbpuls.size
-    
+
     path = pathdata + 'fracdete%04f%04f%04f%04f%04f%04f%04f_.fits' % (sigmthrs, -log10(minmfracperd), -log10(maxmfracperd), numbfracperd, minmnumbpuls, maxmnumbpuls, numbnumbpuls)
     if os.path.isfile(path):
         print 'Reading from the file...'
@@ -38,10 +37,11 @@ def cnfg_mockgrid():
         fracdete = empty((numbfracperd, numbfluxperd))
         for k in range(listfracperd.size):
             for l in range(listnumbpuls.size):
+                tdpy.util.show_memo_simp()
                 sigm = init( \
                             mocknumbpuls=listnumbpuls[l], \
                             mockfracperd=listfracperd[k], \
-                            #numbiter=100, \
+                            numbiter=10, \
                             verbtype=2, \
                            )
                 numbiter = sigm.size
@@ -49,6 +49,7 @@ def cnfg_mockgrid():
                 fracdete[k, l] = float(numbdete) / numbiter
         pf.writeto(path, fracdete, clobber=True)
 
+    
     # plot the grid
     figr, axis = plt.subplots()
     imag = axis.pcolor(listnumbpuls, listfracperd, fracdete, cmap='Greens')
