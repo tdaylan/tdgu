@@ -351,17 +351,6 @@ def init( \
     return sigm
 
 
-@profile
-def fooo():
-    
-    print 'hey'
-
-
-
-#fooo()
-cnfg_mockgrid()
-
-
 if len(sys.argv) > 1:
     name = globals().copy()
     name.get(sys.argv[1])()
