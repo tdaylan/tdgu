@@ -7,8 +7,9 @@ def cnfg_mocknull():
                 numbiter=100000, \
                 verbtype=2, \
                )
-    
 
+
+@profile
 def cnfg_mockgrid():
 
     print 'Initializing grid search...'
@@ -117,10 +118,10 @@ def init( \
         expo = 1e11
     
     # get the time stamp
-    strgdate = tdpy.util.retr_strgdate()
+    strgtimestmp = tdpy.util.retr_strgtimestmp()
 
     # construct the run tag
-    rtag = '%s' % (strgdate, datatype)
+    rtag = '%s_%s' % (strgtimestmp, datatype)
     if datatype == 'mock':
         mockperd = 1. / mockfreq
         mocktimepuls = arange(0., maxmtime - 1., mockperd)
@@ -348,6 +349,17 @@ def init( \
         print '%d iterations perfomed.' % numbiter
 
     return sigm
+
+
+@profile
+def fooo():
+    
+    print 'hey'
+
+
+
+#fooo()
+cnfg_mockgrid()
 
 
 if len(sys.argv) > 1:
