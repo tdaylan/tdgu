@@ -80,9 +80,9 @@ def retr_path():
 def init( \
          datatype='mock', \
          verbtype=1, \
-         numbiter=1000, \
-         numbphot=1000, \
-         numbfreq=1000, \
+         numbiter=10, \
+         numbphot=100, \
+         numbfreq=100, \
          minmfreq=5., \
          maxmfreq=15., \
          maxmtime=1000., \
