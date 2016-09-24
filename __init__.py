@@ -43,7 +43,7 @@ import tdpy.mcmc
 
 from tdpy.util import show
 
-#import pcat.main
+import pcat.main
 
 import warnings
 warnings.simplefilter(action = "ignore", category = FutureWarning)

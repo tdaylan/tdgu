@@ -1,5 +1,6 @@
 from __init__ import *
 from astroML.datasets import fetch_wmap_temperatures
+import astroML
 
 pathfold = os.environ["TDGU_DATA_PATH"] + '/imag/psec/'
 os.system('mkdir -p ' + pathfold)

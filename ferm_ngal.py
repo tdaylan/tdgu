@@ -1,6 +1,5 @@
 from __init__ import *
 
-
 def make_maps():
 
     gdat = tdpy.util.gdatstrt()
@@ -46,9 +45,10 @@ def intr_ferm_expr_ngal( \
 
     karg = {}
     karg['psfntype'] = 'doubking'
-    karg['numbswep'] = 2000000
+    karg['numbswep'] = 20000
+    karg['verbtype'] = 2
     karg['randinit'] = False
-    karg['maxmgang'] = 20.
+    karg['maxmgang'] = deg2rad(20.)
     karg['boolproppsfn'] = False
     karg['initfluxdistslop'] = array([1.9])
     karg['initmeanpnts'] = array([300])
@@ -103,7 +103,6 @@ def ferm_mock_ngal():
     
     pcat.main.init(psfntype='doubking', \
                    numbswep=2000000, \
-                   #bindprio=True, \
                    randinit=False, \
                    maxmgang=deg2rad(20.), \
                    boolproppsfn=False, \

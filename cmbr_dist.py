@@ -1,5 +1,36 @@
 from __init__ import *
 
+def plot_cmbrtemppsec():
+    
+    numbside = 256
+    lghp, bghp, numbpixl, apix = tdpy.util.retr_healgrid(numbside) 
+
+    path = gdat.pathdata + 'COM_PowerSpect_CMB-TT-loL-full_R2.01.txt'
+    plnkdata = loadtxt(path)
+    lmodloww = plnkdata[:, 0]
+    clhploww = plnkdata[:, 1]
+    path = gdat.pathdata + 'COM_PowerSpect_CMB-TT-hiL-full_R2.01.txt'
+    plnkdata = loadtxt(path)
+    lmodhigh = plnkdata[:, 0]
+    clhphigh = plnkdata[:, 1]
+
+    flux = hp.synfast(clhphigh, numbside)
+    fluxcart = tdpy.util.retr_cart(flux)
+    figr, axis = plt.subplots()
+    imag = axis.imshow(fluxcart, origin='lower', cmap='Reds')
+    plt.colorbar(imag, ax=axis, fraction=0.05)
+
+    flux = hp.synfast(clhploww, numbside)
+    fluxcart = tdpy.util.retr_cart(flux)
+    figr, axis = plt.subplots()
+    imag = axis.imshow(fluxcart, origin='lower', cmap='Reds')
+    plt.colorbar(imag, ax=axis, fraction=0.05)
+
+    figr, axis = plt.subplots()
+    axis.plot(lmodhigh, clhphigh)
+    axis.plot(lmodloww, clhploww)               
+
+
 def plot_temp():
     
     #def difftempdmatdiffreds(tempdmat, thisreds):
@@ -32,7 +63,7 @@ def plot_temp():
     axistwin.set_xlabel(r'$E_\gamma$ [eV]')
 
     axis.legend(loc=2)
-    plt.savefig(gdat.pathplot + 'tempevol.pdf')
+    plt.savefig(gdat.pathimag + 'tempevol.pdf')
     plt.close()
     
 
@@ -66,7 +97,7 @@ def plot_silkscal():
     axistwin.set_ylabel(r'$\lambda$ [Mpc]')
     axis.set_title('Silk dissipation scale', fontsize=20)
 
-    plt.savefig(gdat.pathplot + 'wlensilk.pdf')
+    plt.savefig(gdat.pathimag + 'wlensilk.pdf')
     figr.subplots_adjust(top=0.9)
     plt.close()
 
@@ -181,39 +212,8 @@ def plot_flux(gdat, fluxtotl=None, fluxtotlintp=None, fluxcmbr=None, fluxdustcol
         strg = '_%d' % gdat.cntrswep
     else:
         strg = ''
-    plt.savefig(gdat.pathplot + 'postflux_%s%s.pdf' % (plottype, strg))
+    plt.savefig(gdat.pathimag + 'postflux_%s%s.pdf' % (plottype, strg))
     plt.close(figr)
-
-
-def plot_cmbrtemppsec():
-    
-    nside = 256
-    lghp, bghp, nside, npixl, apix = tdpy.util.retr_heal(nside) 
-
-    fname = os.environ["CMBR_DIST_DATA_PATH"] + '/dat/COM_PowerSpect_CMB-TT-loL-full_R2.01.txt'
-    plnkdata = loadtxt(fname)
-    lmodloww = plnkdata[:, 0]
-    clhploww = plnkdata[:, 1]
-    fname = os.environ["CMBR_DIST_DATA_PATH"] + '/dat/COM_PowerSpect_CMB-TT-hiL-full_R2.01.txt'
-    plnkdata = loadtxt(fname)
-    lmodhigh = plnkdata[:, 0]
-    clhphigh = plnkdata[:, 1]
-
-    flux = hp.synfast(clhphigh, nside)
-    fluxcart = tdpy.util.retr_cart(flux)
-    figr, axis = plt.subplots()
-    imag = axis.imshow(fluxcart, origin='lower', cmap='Reds')
-    plt.colorbar(imag, ax=axis, fraction=0.05)
-
-    flux = hp.synfast(clhploww, nside)
-    fluxcart = tdpy.util.retr_cart(flux)
-    figr, axis = plt.subplots()
-    imag = axis.imshow(fluxcart, origin='lower', cmap='Reds')
-    plt.colorbar(imag, ax=axis, fraction=0.05)
-
-    figr, axis = plt.subplots()
-    axis.plot(lmodhigh, clhphigh)
-    axis.plot(lmodloww, clhploww)               
 
 
 def plot_plnktran():
@@ -227,7 +227,8 @@ def plot_plnktran():
     axis.set_xlim([1e1, 1e3])
     axis.set_ylabel(r'$T(\nu)$')
     axis.set_xlabel(r'$\nu$ [GHz]')
-    plt.savefig(os.environ["CMBR_DIST_DATA_PATH"] + '/imag/plnktran.pdf')
+    path = gdat.pathdata + 'plnktran.pdf'
+    plt.savefig(path)
     plt.close()
     
     plt.show()
@@ -236,8 +237,10 @@ def plot_plnktran():
 def plot_plnk():
     
     indxpixltemp = random_integers(0, 12*256**2, size=100)
-    exprflux = loadtxt(os.environ["CMBR_DIST_DATA_PATH"] + '/plnkflux.dat')[indxpixltemp, :]
-    exprfluxstdv = loadtxt(os.environ["CMBR_DIST_DATA_PATH"] + '/plnkfluxstdv.dat')[indxpixltemp, :]
+    path = gdat.pathdata + 'plnkflux.dat'
+    exprflux = loadtxt(path)[indxpixltemp, :]
+    path = gdat.pathdata + 'plnkfluxstdv.dat'
+    exprfluxstdv = loadtxt(path)[indxpixltemp, :]
 
     retr_plnkfreq()
 
@@ -264,23 +267,23 @@ def plot_plnk():
 
 def plot_cros_plnk(gdat):
 
-    plnkflux, plnkfluxstdv = retr_plnkflux()
+    plnkflux, plnkfluxstdv = retr_plnkflux(gdat)
     
-    nfreqplnk = plnkflux.shape[1]
+    numbfreqplnk = plnkflux.shape[1]
     
     strgpara = []
-    for k in range(nfreqplnk):
+    for k in range(numbfreqplnk):
         strgpara.append(r'$\mathcal{I}_{%d}$' % (gdat.freqexpr[k] / 1e9))
-    scalpara = ['self'] * nfreqplnk
-    path = os.environ["CMBR_DIST_DATA_PATH"] + '/imag/plnkcros'
+    scalpara = ['self'] * numbfreqplnk
+    path = gdat.pathimag + 'plnkcros'
     tdpy.mcmc.plot_grid(path, plnkflux * 1e-6, strgpara, scalpara=scalpara)
     
 
 def plot_plnkmaps():
     
-    exprflux, exprfluxstdv = retr_plnkflux()
-    nside = exprflux.shape[0]
-    npixl = 12 * nside**2
+    exprflux, exprfluxstdv = retr_plnkflux(gdat)
+    numbside = exprflux.shape[0]
+    numbpixl = 12 * numbside**2
     for k in range(9):
         hp.visufunc.mollview(exprflux[:, k])
         plt.show()
@@ -330,7 +333,8 @@ def plot_intr(eventype='norm'):
         axis.set_xlabel('Cosmic Time')
         axis.set_ylabel("Relevance to Today's Talk")
 
-        plt.savefig(os.environ["CMBR_DIST_DATA_PATH"] + '/imag/talkintr_%s.pdf' % eventype)
+        path = gdat.pathdata + 'talkintr_%s.pdf' % eventype
+        plt.savefig(path)
         plt.close()
 
 
@@ -368,7 +372,7 @@ def plot_grnf(gdat):
     axis.set_ylabel(r'$\mathcal{J}(z)$')
     axis.legend()
     figr.tight_layout()
-    plt.savefig(gdat.pathplot + 'visifunc.pdf')
+    plt.savefig(gdat.pathimag + 'visifunc.pdf')
     plt.close()
     
     figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
@@ -377,7 +381,7 @@ def plot_grnf(gdat):
     axis.set_xlabel('$z$')
     axis.set_ylabel(r'$\Delta\mathcal{J}(z)$')
     figr.tight_layout()
-    plt.savefig(gdat.pathplot + 'errrgren.pdf')
+    plt.savefig(gdat.pathimag + 'errrgren.pdf')
     plt.close()
 
     with sns.color_palette("Blues", gdat.numbredsplot):
@@ -388,7 +392,7 @@ def plot_grnf(gdat):
         axis.set_xscale('log')
         axis.set_xlabel(r'$\nu$ [GHz]')
         axis.set_ylabel('$\Delta I_\nu^G$')
-        plt.savefig(gdat.pathplot + 'distfull.pdf')
+        plt.savefig(gdat.pathimag + 'distfull.pdf')
         plt.close()
         
         figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
@@ -397,7 +401,7 @@ def plot_grnf(gdat):
         axis.set_xscale('log')
         axis.set_xlabel(r'$\nu$ [GHz]')
         axis.set_ylabel('$\Delta I_\nu^{O}$')
-        plt.savefig(gdat.pathplot + 'distobsv.pdf')
+        plt.savefig(gdat.pathimag + 'distobsv.pdf')
         plt.close()
 
 
@@ -442,7 +446,7 @@ def plot_timescal():
     axistwin.set_xlabel('$t$ [yr]')
 
     figr.subplots_adjust(top=0.85)
-    plt.savefig(gdat.pathplot + 'timescal.pdf')
+    plt.savefig(gdat.pathimag + 'timescal.pdf')
     plt.close()
 
 
@@ -470,7 +474,7 @@ def plot_pure_dist(gdat):
     axistwin.set_xlabel('$x$')
     axistwin.set_xscale('log')
     plt.legend(loc=2)
-    plt.savefig(gdat.pathplot + 'puredist.pdf')
+    plt.savefig(gdat.pathimag + 'puredist.pdf')
     plt.close()
 
 
@@ -515,7 +519,7 @@ def plot_heat():
     axistwin.set_xlim([amax(gdat.time[:-1]), amin(gdat.time[:-1])])
     axistwin.set_xlabel('$t$ [yr]')
 
-    plt.savefig(gdat.pathplot + 'heatrate.pdf')
+    plt.savefig(gdat.pathimag + 'heatrate.pdf')
     plt.close()
     
     edendmatextd = omegdmat * edencrit * (1. + gdat.meanredsextd)**3
@@ -547,7 +551,7 @@ def plot_heat():
     axistwin.set_xlabel('$t$ [s]')
     axistwin.axvline(1., ls='--', color='grey')
     axistwin.annotate('BBN', xy=[1., 1e-12], xytext=[1e2, 1e-12], arrowprops=dict(arrowstyle="->"), fontsize=20)
-    plt.savefig(gdat.pathplot + 'heatextd.pdf')
+    plt.savefig(gdat.pathimag + 'heatextd.pdf')
     plt.close()
 
 
@@ -582,7 +586,7 @@ def plot_deca():
         axistwin.set_xlim([amax(gdat.time[:-1]), amin(gdat.time[:-1])])
         axistwin.set_xlabel('$t$ [yr]')
 
-    plt.savefig(gdat.pathplot + 'heatdeca.pdf')
+    plt.savefig(gdat.pathimag + 'heatdeca.pdf')
     plt.close()
     
 
@@ -615,7 +619,7 @@ def plot_sampdist():
     axis.axhline(-5., ls='--', color='grey')
     axis.fill_between(gdat.freqmodl * 1e-9, ones_like(gdat.freqmodl) * 5., ones_like(gdat.freqmodl) * -5., color='grey')
     axis.text(2, 10, r'PIXIE 1-$\sigma$ sensitivity', color='grey', fontsize=20)
-    plt.savefig(gdat.pathplot + 'totldist.pdf')
+    plt.savefig(gdat.pathimag + 'totldist.pdf')
     plt.close()
     
     
@@ -633,8 +637,7 @@ def plot_sampdist():
             axis.set_ylim(ylim)
             axis.set_title(heatstrg[k])
 
-            plt.legend(loc=2, ncol=2)
-            plt.savefig(gdat.pathplot + 'diffdistdifflred_' + heatrtag[k] + '_%d.pdf' % gdat.indxredsplot[c])
+            plt.savefig(gdat.pathimag + 'diffdistdifflred_' + heatrtag[k] + '_%d.pdf' % gdat.indxredsplot[c])
             plt.close(figr)
         
 
@@ -722,7 +725,7 @@ def retr_plnkfunc(gdat, thisfreq, temp):
 
 def retr_ydis_trac():
     
-    path = gdat.pathplot + 'electron_photonspectrum_results.fits'
+    path = gdat.pathimag + 'electron_photonspectrum_results.fits'
     data, hdr = pf.getdata(path, 1, header=True)
 
     redsoutp = data['OUTPUT_REDSHIFT'].squeeze()
@@ -773,7 +776,7 @@ def retr_ydis_trac():
     for a in range(njenerpart):
         for c in range(njredsoutp):
             for f in range(njredsinpt):
-                labl = '$z_{out} = %.3g, E_{inj} = %.3g, z_{inp} = %.3g$' %     (redsoutp[jredsoutp[c]], enerpart[jenerpart[a]], redsinpt[jredsinpt[f]])
+                labl = '$z_{out} = %.3g, E_{inj} = %.3g, z_{inp} = %.3g$' % (redsoutp[jredsoutp[c]], enerpart[jenerpart[a]], redsinpt[jredsinpt[f]])
                 plt.plot(freqphot[:,jenerpart[a]] * 1e-9, diffydisdiffreds[:,jredsinpt[f],jenerpart[a],jredsoutp[c]], label=labl)
             plt.xlabel(r'$\nu_\gamma$ [GHz]')
             plt.xscale('log')
@@ -1096,7 +1099,7 @@ def retr_datapara():
 
 def retr_egbl(thisfreq):
     
-    path = os.environ['CMBR_DIST_DATA_PATH'] + '/egbl.csv'
+    path = gdat.pathdata + 'egbl.csv'
     egbldata = loadtxt(path)
     wlenegbl = egbldata[:, 0] * 1e-6 # [m]
     freqegbl = flipud(gdat.velolght / wlenegbl) # [Hz]
@@ -1134,10 +1137,15 @@ def init( \
          numbswepplot=1000, \
         ):
     
+    # global object
+    gdat = tdpy.util.gdatstrt()
+   
+    # paths
+    gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('cmbr_dist')
+    
+    # defaults
     if freqexpr == None:
         freqexpr = logspace(log10(minmfreqexpr), log10(maxmfreqexpr), numbfreqexpr) # [Hz]
-    
-    gdat = tdpy.util.gdatstrt()
    
     gdat.datatype = datatype
     gdat.exprtype = exprtype
@@ -1156,11 +1164,6 @@ def init( \
     
     rtag = retr_rtag(gdat)
 
-    pathbase = os.environ["CMBR_DIST_DATA_PATH"]
-    gdat.pathplot = pathbase + '/imag/' + rtag + '/'
-    cmnd = 'mkdir -p ' + gdat.pathplot
-    os.system(cmnd)
-    
     # Boolean flag to indicate whether the posterior of intermediate variables will be stored
     gdat.savepost = False
     
@@ -1242,7 +1245,7 @@ def init( \
     gdat.alphsamp = 0.3
 
     # sampler setup
-    gdat.numbproc = 10
+    gdat.numbproc = 1
     gdat.indxproc = arange(gdat.numbproc)
     optiprop = True
     
@@ -1260,7 +1263,7 @@ def init( \
         thissamp[k, :] = thissamptemp
 
     # get expected instrumental uncertainty for PIXIE
-    path = os.environ["CMBR_DIST_DATA_PATH"] + '/pixifluxstdv.csv'
+    path = gdat.pathdata + 'pixifluxstdv.csv'
     gdat.exprfluxstdvinstfreq = loadtxt(path)
     gdat.exprfluxstdvinstfreq = interp1d(gdat.exprfluxstdvinstfreq[:, 0] * 1e9, gdat.exprfluxstdvinstfreq[:, 1] * 1e26)(gdat.freqexpr)
     
@@ -1288,7 +1291,7 @@ def init( \
     gdat.numbfreqexpr = gdat.freqexpr.size
 
     chan = tdpy.mcmc.init(retr_llik, datapara, numbproc=gdat.numbproc, initsamp=thissamp, numbswep=numbswep, gdatextr=gdat, factpropeffi=3., \
-                                                                verbtype=gdat.verbtype, pathbase=pathbase, rtag=rtag, optiprop=optiprop)
+                                                                verbtype=gdat.verbtype, pathbase=gdat.pathdata, rtag=rtag, optiprop=optiprop)
     listsampvarb = chan[0]
     listsamp = chan[1]
     listsampcalc = chan[2]
@@ -1350,10 +1353,12 @@ def init( \
     return statpara
     
 
-def retr_plnkflux():
+def retr_plnkflux(gdat):
     
-    plnkflux = loadtxt(os.environ["CMBR_DIST_DATA_PATH"] + '/plnkflux.dat')
-    plnkfluxstdv = loadtxt(os.environ["CMBR_DIST_DATA_PATH"] + '/plnkfluxstdv.dat')
+    path = gdat.pathdata + 'plnkflux.dat'
+    plnkflux = loadtxt(path)
+    path = gdat.pathdata + 'plnkfluxstdv.dat'
+    plnkfluxstdv = loadtxt(path)
 
     return plnkflux, plnkfluxstdv
 
@@ -1371,27 +1376,25 @@ def retr_plnkfreq():
 
 def writ_plnk():
 
-    nfreqplnk = 9
+    numbfreqplnk = 9
     
     retr_plnkfreq()
 
-    nside = 256
-    npixl = nside**2 * 12
-    flux = zeros((npixl, nfreqplnk))
-    fluxstdv = zeros((npixl, nfreqplnk))
+    numbside = 256
+    numbpixl = numbside**2 * 12
+    flux = zeros((numbpixl, numbfreqplnk))
+    fluxstdv = zeros((numbpixl, numbfreqplnk))
     mpixl = []
-
     
-    #ipixlring = hp.pixelfunc.nest2ring(nside, arange(npixl))
-    
-    for k in range(nfreqplnk):
+    for k in range(numbfreqplnk):
         
         print 'Processing Planck Map at %d GHz...' % (gdat.freqexpr[k] / 1e9)
         
+        path = gdat.pathdata
         if k >= 3:
-            path = os.environ["CMBR_DIST_DATA_PATH"] + '/HFI_SkyMap_%03d_2048_R2.02_nominal.fits' % (gdat.freqexpr[k] / 1e9)
+            path += 'HFI_SkyMap_%03d_2048_R2.02_nominal.fits' % (gdat.freqexpr[k] / 1e9)
         else:
-            path = os.environ["CMBR_DIST_DATA_PATH"] + '/LFI_SkyMap_%03d_1024_R2.01_full.fits' % (gdat.freqexpr[k] / 1e9)
+            path += 'LFI_SkyMap_%03d_1024_R2.01_full.fits' % (gdat.freqexpr[k] / 1e9)
             
         fluxtemp = pf.getdata(path, 1)
 
@@ -1400,13 +1403,13 @@ def writ_plnk():
         else:
             frac = 1e6
     
-        flux[:, k] = hp.pixelfunc.ud_grade(fluxtemp['I_Stokes'], nside, order_in='NESTED', order_out='RING') * frac
-        fluxstdv[:, k] = sqrt(hp.pixelfunc.ud_grade(fluxtemp['II_cov'], nside, order_in='NESTED', order_out='RING')) * frac
+        flux[:, k] = hp.pixelfunc.ud_grade(fluxtemp['I_Stokes'], numbside, order_in='NESTED', order_out='RING') * frac
+        fluxstdv[:, k] = sqrt(hp.pixelfunc.ud_grade(fluxtemp['II_cov'], numbside, order_in='NESTED', order_out='RING')) * frac
         
-    path = os.environ["CMBR_DIST_DATA_PATH"] + '/plnkflux.dat'
+    path = gdat.pathdata + 'plnkflux.dat'
     savetxt(path, flux)
     
-    path = os.environ["CMBR_DIST_DATA_PATH"] + '/plnkfluxstdv.dat'
+    path = gdat.pathdata + 'plnkfluxstdv.dat'
     savetxt(path, fluxstdv)
 
 
@@ -1415,7 +1418,7 @@ def retr_plnktran():
     freq = []
     tran = []
 
-    path = os.environ["CMBR_DIST_DATA_PATH"] + '/LFI_RIMO_R1.12.fits'
+    path = gdat.pathdata + 'LFI_RIMO_R1.12.fits'
     for i in range(3):
         data, hdr = pf.getdata(path, i+2, header=True)
         freqtemp = 1e9 * data['WAVENUMBER']
@@ -1424,7 +1427,7 @@ def retr_plnktran():
         freq.append(freqtemp)
         tran.append(trantemp)
 
-    path = os.environ["CMBR_DIST_DATA_PATH"] + '/HFI_RIMO_R1.10.fits'
+    path = gdat.pathdata + 'HFI_RIMO_R1.10.fits'
     for i in range(6):
         data, hdr = pf.getdata(path, i+2, header=True)
         freqtemp = 1e2 * gdat.velolght * data['WAVENUMBER']
@@ -1461,7 +1464,7 @@ def cnfg_plnk_mock():
 
 def cnfg_plnk_expr():
     
-    exprflux, exprfluxstdv = retr_plnkflux()
+    exprflux, exprfluxstdv = retr_plnkflux(gdat)
     
     # temp
     exprflux = exprflux[0, :]
@@ -1558,7 +1561,7 @@ def cnfg_pixi_mock_stdv():
 
     for k in range(numbpertpara):
         
-        path = os.environ["CMBR_DIST_DATA_PATH"] + '/imag/stdv%d.pdf' % k
+        path = gdat.pathimag + 'stdv%d.pdf' % k
         figr, axgr = plt.subplots(numbpara / 2, 2, figsize=(14, numbpara * 3))
 
         if k == 0:
@@ -1604,6 +1607,6 @@ if __name__ == '__main__':
     #writ_plnk()
     
     if os.uname()[1] == 'fink1.rc.fas.harvard.edu':
-        cmnd = 'cp -r ' + os.environ["CMBR_DIST_DATA_PATH"] + '/imag/* /n/pan/www/tansu/imag/cmbr_dist/'
+        cmnd = 'cp -r ' + gdat.pathimag + '* /n/pan/www/tansu/imag/cmbr_dist/'
         os.system(cmnd)
 

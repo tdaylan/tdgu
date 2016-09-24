@@ -9,29 +9,37 @@ def cnfg_mocknull():
                )
 
 
+def cnfg_inpt():
+
+    sigm = init( \
+                datatype='inpt', \
+                numbiter=100000, \
+                verbtype=2, \
+               )
+
+
 def cnfg_mockgrid():
 
     print 'Initializing grid search...'
-    pathimag, pathdata = retr_path()
+    pathimag, pathdata = tdpy.util.retr_path('ferm_time')
 
     sigmthrs = 3.
     minmfracperd = 0.01
     maxmfracperd = 0.3
-    numbfracperd = 6
+    numbfracperd = 20
     listfracperd = logspace(log10(minmfracperd), log10(maxmfracperd), numbfracperd)
     
     minmnumbpuls = 1
-    maxmnumbpuls = 10
-    numbnumbpuls = 3
+    maxmnumbpuls = 6
+    numbnumbpuls = 6
     listnumbpuls = linspace(minmnumbpuls, maxmnumbpuls, numbnumbpuls).astype(int)
-    #listnumbpuls = logspace(0, 1, 4).astype(int)
     
     numbfracperd = listfracperd.size
     numbfluxperd = listnumbpuls.size
 
-    path = pathdata + 'fracdete%04f%04f%04f%04f%04f%04f%04f_.fits' % (sigmthrs, -log10(minmfracperd), -log10(maxmfracperd), numbfracperd, minmnumbpuls, maxmnumbpuls, numbnumbpuls)
+    path = pathdata + 'fracdete%04f%04f%04f%04f%04f%04f%04f.fits' % (sigmthrs, -log10(minmfracperd), -log10(maxmfracperd), numbfracperd, minmnumbpuls, maxmnumbpuls, numbnumbpuls)
     if os.path.isfile(path):
-        print 'Reading from the file...'
+        print 'Reading from %s...' % path
         fracdete = pf.getdata(path)
     else:
         fracdete = empty((numbfracperd, numbfluxperd))
@@ -49,12 +57,12 @@ def cnfg_mockgrid():
                 fracdete[k, l] = float(numbdete) / numbiter
         pf.writeto(path, fracdete, clobber=True)
 
-    
     # plot the grid
     figr, axis = plt.subplots()
     imag = axis.pcolor(listnumbpuls, listfracperd, fracdete, cmap='Greens')
     axis.set_yscale('log')
-    #axis.set_xscale('log')
+    axis.set_xlim([minmnumbpuls, maxmnumbpuls])
+    axis.set_ylim([minmfracperd, maxmfracperd])
     axis.set_ylabel(r'$\gamma$')
     axis.set_xlabel(r'$N$')
     cbar = plt.colorbar(imag) 
@@ -64,71 +72,95 @@ def cnfg_mockgrid():
     plt.close(figr)
 
  
-def retr_path():
-    
-    pathbase = os.environ["TDGU_DATA_PATH"]
-
-    pathimag = pathbase + '/imag/ferm_time/'
-    os.system('mkdir -p %s' % pathimag)
-
-    pathdata = pathbase + '/data/ferm_time/'
-    os.system('mkdir -p %s' % pathdata)
-
-    return pathimag, pathdata
-
-
 def init( \
          datatype='mock', \
          verbtype=1, \
-         numbiter=10, \
-         numbphot=100, \
-         numbfreq=100, \
+         numbiter=100, \
+         numbfreq=1000, \
          minmfreq=5., \
          maxmfreq=15., \
          maxmtime=1000., \
+         stattype='ctft', \
          mockmodltype='sine', \
+         mocknumbphot=1000, \
          mocknumbpuls=1, \
          mockfracperd=0.1, \
          makeplot=True, \
          ):
     
-    pathimag, pathdata = retr_path()
+    pathimag, pathdata = tdpy.util.retr_path('ferm_time')
 
-    # frequency
-    binsfreq = linspace(minmfreq, maxmfreq, numbfreq + 1)
-    meanfreq = (binsfreq[1:] + binsfreq[:-1]) / 2.
-    indxfreq = arange(numbfreq)
-    
+    # axes
+    ## frequency
+    binsfreq, meanfreq, numbfreq, indxfreq = tdpy.util.retr_axis(minmfreq, maxmfreq, numbfreq)
+    ## period
+    binsperd = 1. / binsfreq
+    meanperd = 1. / meanfreq
+    numbperd = numbfreq
+    indxperd = indxfreq
+
+    # get the time stamp
+    strgtimestmp = tdpy.util.retr_strgtimestmp()
+
     # get data
     if datatype == 'inpt':
         # read Fermi-LAT data
-        pass
+        path = pathdata + '/fermdata.fits'
+        if os.path.isfile(path):
+            print 'Reading from %s...' % path
+            listphot = pf.getdata(path)
+        else:
+
+            rasc = 17. / 24. * 360. + 45. / 60. + 40.04 / 3600.
+            decl = -29. + 28.1 / 3600.
+
+            #cmnd = 'ls -d -1 $FERMI_DATA/weekly/spacecraft/* >> spactemp.txt' + spac
+            #os.system(cmnd)
+            pathinpt = pathdata + 'phottemp.txt'
+            strgproc = os.uname()[1]
+            if strgproc == 'fink1':
+                strg = '$FERMI_DATA/weekly/photon/'
+            else:
+                strg = pathdata
+            cmnd = 'ls -d -1 %s*_w100_* >> %s' % (strg, pathinpt)
+            os.system(cmnd)
+
+            cmnd = 'gtselect infile=' + pathinpt + ' outfile=' + path + ' ra=%.3g dec=%.3g rad=0.1 emin=1000 emax=3000 zmax=90 evclass=128 evtype=32' % (rasc, decl)
+            os.system(cmnd)
+
+            listphot = pf.getdata(path)
+            print 'listphot'
+            print listphot
+            
+        numbphot = listphot.size
+
     else:
         # generate mock data
         if mockmodltype == 'sine':
             # temp
             mockfreq = choice(meanfreq)
+
+        numbphot = mocknumbphot
     
     # get exposure
     if datatype == 'inpt':
         # read Fermi-LAT exposure
         pass
         numbiter = 1
+        indxfreqplot = choice(indxfreq, size=1, replace=False)
     else:
         # generate mock exposure
         expo = 1e11
+        indxfreqplot = concatenate((choice(indxfreq, size=1, replace=False), where(meanfreq == mockfreq)[0]))
     
-    # get the time stamp
-    strgtimestmp = tdpy.util.retr_strgtimestmp()
-
     # construct the run tag
     rtag = '%s_%s' % (strgtimestmp, datatype)
     if datatype == 'mock':
         mockperd = 1. / mockfreq
         mocktimepuls = arange(0., maxmtime - 1., mockperd)
-        numbphotperd = int(mockfracperd * numbphot)
-        indxphotperd = arange(numbphotperd)
-        numbphotrand = numbphot - numbphotperd
+        mocknumbphotperd = int(mockfracperd * mocknumbphot)
+        indxphotperd = arange(mocknumbphotperd)
+        mocknumbphotrand = mocknumbphot - mocknumbphotperd
 
         if mockfracperd == 0:
             rtag += '_null'
@@ -160,17 +192,12 @@ def init( \
     fraccomp = 0.
     
     listchrofreq = empty(numbfreq)
-    # plotting
-    numbfreqplotrand = 1
-    indxfreqplot = concatenate((choice(indxfreq, size=numbfreqplotrand, replace=False), where(meanfreq == mockfreq)[0]))
-    
-    indxnumbphotperd = arange(numbphotperd)
     
     for k in range(numbiter):
         
         # generate data
         if datatype == 'mock':
-            listphotrand = maxmtime * rand(numbphotrand)
+            listphotrand = maxmtime * rand(mocknumbphotrand)
             listindxphotperd = array_split(indxphotperd, mocknumbpuls)
             listphotperd = []
             for m in range(mocknumbpuls):
@@ -178,21 +205,28 @@ def init( \
             listphotperd = concatenate(listphotperd)
             listphot = concatenate((listphotrand, listphotperd))
     
-        # take the CTFT
+        # search over the frequency grid
         for n in range(numbfreq):
    
             if k == 0:
                 chroinit = time.time()
 
-            phas = meanfreq[n] * listphot
-            ctftreal = sin(2. * pi * phas)
-            ctftimag = cos(2. * pi * phas)
-            ctftrealtotl = sum(ctftreal)
-            ctftimagtotl = sum(ctftimag)
-            thispsec = (ctftrealtotl**2 + ctftimagtotl**2) / numbphot
-            if thispsec > maxmpsec[k]:
-                maxmpsec[k] = thispsec
-    
+            if stattype == 'ctft':
+                
+                # use the power spectrum as the test statistics
+                ## take the CTFT
+                phas = 2. * pi * meanfreq[n] * listphot
+                ctftreal = sin(phas)
+                ctftimag = cos(phas)
+                ctftrealtotl = sum(ctftreal)
+                ctftimagtotl = sum(ctftimag)
+                thispsec = (ctftrealtotl**2 + ctftimagtotl**2) / numbphot
+                if thispsec > maxmpsec[k]:
+                    maxmpsec[k] = thispsec
+            else:
+                # use the wrapped light curve as the test statistics
+                bindphot = histogram(listphot % meanperd[n])
+
             if makeplot:
                 listctftrealtotl[n] = ctftrealtotl
                 listctftimagtotl[n] = ctftimagtotl
@@ -244,8 +278,8 @@ def init( \
 
         nextfraccomp = int(100. * k / numbiter)
         if nextfraccomp % 10 == 0 and fraccomp < nextfraccomp and verbtype > 0:
-            print '%2d%% completed.' % fraccomp
             fraccomp = nextfraccomp
+            print '%2d%% completed.' % fraccomp
     
         if makeplot and k == 0:
     
@@ -323,28 +357,37 @@ def init( \
         plt.close(figr)
         
         pval = sp.stats.gumbel_r.sf(maxmpsec, loc=log(numbfreq), scale=1.)
-        minm = amin(pval[where(pval > 0.)])
-        maxm = amax(pval)
-        bins = logspace(log10(minm), log10(maxm), 50)
-        figr, axis = plt.subplots()
-        axis.hist(pval, bins=bins)
-        axis.set_xlabel('$p$ value')
-        axis.set_xscale('log')
-        axis.set_ylabel('$N$')
-        plt.tight_layout()
-        path = pathimag + 'maxmpsecpval_%s.pdf' % rtag
-        plt.savefig(path)
-        plt.close(figr)
-        
-        figr, axis = plt.subplots()
-        sigm = sp.stats.norm.ppf(1. - pval)
-        axis.hist(sigm)
-        axis.set_xlabel(r'Significance [$\sigma$]')
-        axis.set_ylabel('$N$')
-        plt.tight_layout()
-        path = pathimag + 'maxmpsecsigm_%s.pdf' % rtag
-        plt.savefig(path)
-        plt.close(figr)
+        indxpvalzero = where(pval == 0.)[0]
+        if indxpvalzero.size > 0:
+            print 'All p values are zero!'
+            plotpval = False
+            sigm = zeros_like(pval) + 1000.
+        else:
+            minm = amin(pval[where(pval > 0.)])
+            maxm = amax(pval)
+            bins = logspace(log10(minm), log10(maxm), 50)
+            plotpval = True
+
+        if plotpval:
+            figr, axis = plt.subplots()
+            axis.hist(pval, bins=bins)
+            axis.set_xlabel('$p$ value')
+            axis.set_xscale('log')
+            axis.set_ylabel('$N$')
+            plt.tight_layout()
+            path = pathimag + 'maxmpsecpval_%s.pdf' % rtag
+            plt.savefig(path)
+            plt.close(figr)
+            
+            figr, axis = plt.subplots()
+            sigm = sp.stats.norm.ppf(1. - pval)
+            axis.hist(sigm)
+            axis.set_xlabel(r'Significance [$\sigma$]')
+            axis.set_ylabel('$N$')
+            plt.tight_layout()
+            path = pathimag + 'maxmpsecsigm_%s.pdf' % rtag
+            plt.savefig(path)
+            plt.close(figr)
 
     if verbtype > 1:
         print '%d iterations perfomed.' % numbiter
