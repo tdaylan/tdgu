@@ -14,6 +14,8 @@ import numpy as np
 from numpy import *
 from numpy.random import *
 from numpy.random import choice
+#seterr(divide='raise', over='raise', invalid='raise')
+#seterr(divide='raise', invalid='raise')
 
 # scipy
 import scipy as sp

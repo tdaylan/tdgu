@@ -545,6 +545,15 @@ def init( \
     # initialize the global object 
     gdat = globdatastrt()
     
+    # get the time stamp
+    gdat.strgtimestmp = tdpy.util.retr_strgtimestmp()
+    
+    # run tag
+    rtag = retr_rtag(gdat)
+
+    # paths
+    gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('tdgu', 'cmbr_dist/', 'cmbr_dist/', rtag)
+    
     # event class
     #gdat.reco = 8
     #gdat.evtc = 128
@@ -572,19 +581,9 @@ def init( \
     gdat.indxpixl = arange(gdat.numbpixl)
     gdat.apix = 4. * pi / gdat.numbpixl
     
-    # base project path
-    gdat.pathbase = os.environ["FERM_LINE_DATA_PATH"]
-    
     # plot setup
     ## ROI settings
     gdat.exttrofi = [-180., 180., -90., 90.]
-    ## prepare plot folder
-    gdat.pathplot = gdat.pathbase + '/imag/'
-    cmnd = 'mkdir -p ' + gdat.pathplot
-    os.system(cmnd)
-    if os.uname()[1] == 'fink1.rc.fas.harvard.edu' and getpass.getuser() == 'tansu':
-        cmnd = 'mv ' + gdat.pathplot + '/* /n/pan/www/tansu/imag/ferm_line/'
-        os.system(cmnd)
     
     # maximum multipole moment
     gdat.maxmsphl = 1
@@ -767,7 +766,7 @@ def almc(gdattemp):
         pathmedisamp = os.environ["FERM_LINE_DATA_PATH"] + '/medisamp%s.fits' % gdat.rtag
         thissamp = empty((gdat.numbproc, gdat.numbpara))
         if os.path.isfile(pathmedisamp):
-            print 'Loading initial sample from the previous run.'
+            print 'Reading %s...' % pathmedisamp
             thissampvarb = pf.getdata(pathmedisamp)
             thissamp[:] = tdpy.mcmc.cdfn_samp(thissampvarb, datapara)[None, :]
         else:

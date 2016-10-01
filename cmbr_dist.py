@@ -1120,7 +1120,7 @@ def init( \
          datatype='mock', \
          exprtype='pixi', \
          datalabl='PIXIE', \
-         numbswep=1000000, \
+         numbswep=10000, \
          exprflux=None, \
          exprfluxstdv=None, \
          freqexpr=None, \
@@ -1140,9 +1140,6 @@ def init( \
     # global object
     gdat = tdpy.util.gdatstrt()
    
-    # paths
-    gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('cmbr_dist')
-    
     # defaults
     if freqexpr == None:
         freqexpr = logspace(log10(minmfreqexpr), log10(maxmfreqexpr), numbfreqexpr) # [Hz]
@@ -1162,8 +1159,15 @@ def init( \
     gdat.plotsamp = plotsamp
     gdat.numbswepplot = numbswepplot
     
+    # get the time stamp
+    gdat.strgtimestmp = tdpy.util.retr_strgtimestmp()
+    
+    # run tag
     rtag = retr_rtag(gdat)
 
+    # paths
+    gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('tdgu', 'cmbr_dist/', 'cmbr_dist/', rtag)
+    
     # Boolean flag to indicate whether the posterior of intermediate variables will be stored
     gdat.savepost = False
     
@@ -1291,7 +1295,7 @@ def init( \
     gdat.numbfreqexpr = gdat.freqexpr.size
 
     chan = tdpy.mcmc.init(retr_llik, datapara, numbproc=gdat.numbproc, initsamp=thissamp, numbswep=numbswep, gdatextr=gdat, factpropeffi=3., \
-                                                                verbtype=gdat.verbtype, pathbase=gdat.pathdata, rtag=rtag, optiprop=optiprop)
+                                                                verbtype=gdat.verbtype, pathdata=gdat.pathdata, pathimag=gdat.pathimag, rtag=rtag, optiprop=optiprop)
     listsampvarb = chan[0]
     listsamp = chan[1]
     listsampcalc = chan[2]
@@ -1441,7 +1445,7 @@ def retr_plnktran():
 
 def retr_rtag(gdat):
     
-    rtag = '%d_%03.1f_%03.1f_%03.1f_%03.1f' % (gdat.numbfreqexpr, log10(gdat.minmfreqexpr), log10(gdat.maxmfreqexpr), \
+    rtag = '%s_%d_%03.1f_%03.1f_%03.1f_%03.1f' % (gdat.strgtimestmp, gdat.numbfreqexpr, log10(gdat.minmfreqexpr), log10(gdat.maxmfreqexpr), \
                 log10(gdat.exprfluxstdvinst * 1e3), -log10(gdat.exprfluxstdvfrac))
  
     return rtag

@@ -18,28 +18,160 @@ def make_maps_rec8_back():
     tdpy.util.prep_maps('rec8', 'back', 'igal', os.environ["FERM_IGAL_DATA_PATH"], 256, 'tim0')
 
 
-def merg_maps_arry():
+def mergmaps_arry():
     
-    merg_maps(numbside=512)
-    merg_maps(mpolmerg=360.)
-    merg_maps(mpolmerg=90.)
+    mergmaps(numbside=512)
+    mergmaps(mpolmerg=360.)
+    mergmaps(mpolmerg=90.)
 
 
-def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
+def retr_plnkmapsorig(gdat, strgmapsplnk):
 
+    if strgmapsplnk == 'radi':
+        mapsplnkorig = pf.getdata(gdat.pathdata + 'HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 1)['RADIANCE']
+        mapsplnkorig = hp.reorder(mapsplnkorig, n2r=True)
+    else:
+        
+        # read sky maps
+        if strgmapsplnk[1] == '0':
+            strgfrst = 'LFI_SkyMap_' 
+            strgseco = '-BPassCorrected-field-IQU_0256_R2.01_full.fits'
+            strgcols = 'TEMPERATURE'
+        elif strgmapsplnk[1] == '1' or strgmapsplnk[1] == '2' or strgmapsplnk[1] == '3':
+            strgfrst = 'HFI_SkyMap_'
+            strgseco = '-field-IQU_2048_R2.02_full.fits'
+            strgcols = 'I_STOKES'
+        else:
+            strgfrst = 'HFI_SkyMap_'
+            strgseco = '-field-Int_2048_R2.02_full.fits'
+            strgcols = 'I_STOKES'
+        strg = strgfrst + '%s' % strgmapsplnk[1:] + strgseco
+        mapsplnk = pf.getdata(gdat.pathdata + strg, 1)[strgcols]
+        mapsplnk = hp.reorder(mapsplnk, n2r=True)
+
+        print 'Changing units...'
+        # change units of the sky maps to Jy/sr
+        if strgmapsplnk != '0545' and strgmapsplnk != '0857':
+            ## from Kcmb
+            if calcfactconv:
+                # read Planck band transmission data
+                if strgmapsplnk[1] == '0':
+                    strg = 'LFI_RIMO_R2.50'
+                    strgextn = 'BANDPASS_%s' % strgmapsplnk[1:]
+                    freqband = pf.open(gdat.pathdata + '/%s.fits' % strg)[strgextn].data['WAVENUMBER'][1:] * 1e9
+                else:
+                    strg = 'HFI_RIMO_R2.00'
+                    strgextn = 'BANDPASS_F%s' % strgmapsplnk[1:]
+                    freqband = 1e2 * velolght * pf.open(gdat.pathdata + '/%s.fits' % strg)[strgextn].data['WAVENUMBER'][1:]
+                tranband = pf.open(gdat.pathdata + '/%s.fits' % strg)[strgextn].data['TRANSMISSION'][1:]
+                indxfreqbandgood = where(tranband > 1e-6)[0]
+                indxfreqbandgood = arange(amin(indxfreqbandgood), amax(indxfreqbandgood) + 1)
+
+                # calculate the unit conversion factor
+                freqscal = consplnk * freqband[indxfreqbandgood] / consbolt / tempcmbr
+                freqcntr = float(strgmapsplnk) * 1e9
+                specdipo = 1e26 * 2. * (consplnk * freqband[indxfreqbandgood]**2 / velolght / tempcmbr)**2 / consbolt / (exp(freqscal) - 1.)**2 * exp(freqscal) # [Jy/sr]
+                factconv = trapz(specdipo * tranband[indxfreqbandgood], freqband[indxfreqbandgood]) / \
+                                                trapz(freqcntr * tranband[indxfreqbandgood] / freqband[indxfreqbandgood], freqband[indxfreqbandgood]) # [Jy/sr/Kcmb]
+            else:
+                # read the unit conversion factors provided by Planck
+                factconv = factconvplnk[k, 1] * 1e6
+        else:
+            ## from MJy/sr
+            factconv = 1e6
+        mapsplnk *= factconv
+
+        # plot the Planck map
+        tdpy.util.plot_maps(gdat.pathimag + 'mapsplnk%s.pdf' % strgmapsplnk, mapsplnk, satu=True)
+
+        if gdat.subspnts:
+            print 'Subtracting point sources...'
+
+            # subtract PSs from the Planck maps
+            ## read PCCS
+            if strgmapsplnk[1] == '0':
+                strg = 'R2.04'
+            else:
+                strg = 'R2.01'
+            # temp
+            dataplnk = pf.getdata(gdat.pathdata + '/COM_PCCS_%s_%s.fits' % (strgmapsplnk[1:], strg), 1)
+            fluxpntsplnk = dataplnk['GAUFLUX'] * 1e-3 # [Jy]
+            lgalpntsplnk = dataplnk['GLON'] # [deg]
+            lgalpntsplnk = (lgalpntsplnk - 180.) % 360. - 180.
+            bgalpntsplnk = dataplnk['GLAT'] # [deg]
+            fwhmpntsplnk = dataplnk['GAU_FWHM_EFF'] / 60. # [deg]
+            stdvpntsplnk = fwhmpntsplnk / 2. / sqrt(2. * log(2.)) # [deg]
+            
+            # sort PS with respect to flux
+            indxpntsplnk = argsort(fluxpntsplnk)
+            lgalpntsplnk = lgalpntsplnk[indxpntsplnk]
+            bgalpntsplnk = bgalpntsplnk[indxpntsplnk]
+            fluxpntsplnk = fluxpntsplnk[indxpntsplnk]
+            stdvpntsplnk = stdvpntsplnk[indxpntsplnk]
+            
+            # temp
+            numbpntskeep = 3
+            lgalpntsplnk = lgalpntsplnk[0:numbpntskeep]
+            bgalpntsplnk = bgalpntsplnk[0:numbpntskeep]
+            fluxpntsplnk = fluxpntsplnk[0:numbpntskeep]
+            stdvpntsplnk = stdvpntsplnk[0:numbpntskeep]
+            
+            print 'lgalpntsplnk'
+            print lgalpntsplnk
+            print 'bgalpntsplnk'
+            print bgalpntsplnk
+            print 'fluxpntsplnk'
+            print fluxpntsplnk
+            print 'stdvpntsplnk'
+            print stdvpntsplnk
+            numbpntsplnk = fluxpntsplnk.size
+            
+            print 'Using %d PS from the PCCS...' % numbpntsplnk
+
+            ## calculate PS map using PCCS
+            numbsidepnts = int(sqrt(mapsplnk.size / 12))
+            pathmapspntsplnk = gdat.pathdata + 'mapspntsplnk%s%04d.fits' % (strgmapsplnk, numbsidepnts)
+            if os.path.isfile(pathmapspntsplnk):
+                print 'Reading %s...' % pathmapspntsplnk
+                mapspntsplnk = pf.getdata(pathmapspntsplnk)
+            else:
+                mapspntsplnk = tdpy.util.retr_mapspnts(lgalpntsplnk, bgalpntsplnk, stdvpntsplnk, fluxpntsplnk, verbtype=2, numbside=numbsidepnts)
+                print 'mapspntsplnk'
+                print amin(mapspntsplnk)
+                print amax(mapspntsplnk)
+                ## plot the PCSC map
+                tdpy.util.plot_maps(gdat.pathimag + 'mapspntsplnk%s.pdf' % strgmapsplnk, mapspntsplnk, satu=True)
+                pf.writeto(pathmapspntsplnk, mapspntsplnk, clobber=True)
+    
+            mapsorigplnk = mapsplnk - mapspntsplnk
+            
+        else:
+            mapsorigplnk = mapsplnk
+
+    return mapsorigplnk
+
+
+def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
+
+    # construct the global object
+    gdat = tdpy.util.gdatstrt()
+    
+    # get the time stamp
+    strgtimestmp = tdpy.util.retr_strgtimestmp()
+    
+    # run tag
+    rtag = '%s_%04d_%04d_%04d' % (strgtimestmp, numbside, mpolmerg, mpolsmth)
+    
     # paths
-    pathimag, pathdata = tdpy.util.retr_path('ferm_igal')
-    
+    gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('tdgu', 'ferm_igal/', 'ferm_igal/mergmaps/', rtag)
+
     # time stamp
     strgtimestmp = tdpy.util.retr_strgtimestmp()
 
     timeinit = time.time()
 
     calcfactconv = False
-    subspnts = False
-    
-    # runtag
-    rtag = '%04d%04d%04d' % (numbside, mpolmerg, mpolsmth)
+    gdat.subspnts = True
     
     # analysis setup
     ## plots
@@ -61,124 +193,16 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     tempcmbr = 2.725 # [K]
     velolght = 3e8 # [m/s]
 
-    ## base path
-    pathimag += 'mergmaps/'
-    pathimagngal = pathimag + 'ngal/'
-    pathimagigal = pathimag + 'igal/'
-    # os.system('mkdir -p ' + pathimagngal + ' ' + pathimagigal)
-    
+    ## multipole
+    maxmmpol = 3. * numbside - 1.
+    numbalmc = int(maxmmpol * (maxmmpol + 1.) / 2. + maxmmpol + 1)
+    numbmpol = int(maxmmpol) + 1
+    mpol = arange(numbmpol)
+    mpolgrid, temp = hp.Alm.getlm(lmax=maxmmpol)
+
     # read unit conversion data provided by Planck
-    factconvplnk = loadtxt(pathdata + 'plnkunitconv.dat')
+    factconvplnk = loadtxt(gdat.pathdata + 'plnkunitconv.dat')
     
-    if plotfull:
-        strgmapsplnk = ['0030', '0044', '0070', '0100', '0143', '0217', '0353', '0545', '0857', 'radi']
-    strgmapsplnk = ['radi']
-    #strgmapsplnk = ['0857']
-    numbmapsplnk = len(strgmapsplnk)
-    for k in range(numbmapsplnk):
-
-        print 'Map number ', k
-        print 'Maps string: ', strgmapsplnk[k]
-        
-        if strgmapsplnk[k] == 'radi':
-            mapsplnkorig = pf.getdata(pathdata + 'HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 1)['RADIANCE']
-            mapsplnkorig = hp.reorder(mapsplnkorig, n2r=True)
-        else:
-            
-            print 'Reading the raw map at %d...' % int(strgmapsplnk[k][1:])
-            # read sky maps
-            if strgmapsplnk[k][1] == '0':
-                strgfrst = 'LFI_SkyMap_' 
-                strgseco = '-BPassCorrected-field-IQU_0256_R2.01_full.fits'
-                strgcols = 'TEMPERATURE'
-            elif strgmapsplnk[k][1] == '1' or strgmapsplnk[k][1] == '2' or strgmapsplnk[k][1] == '3':
-                strgfrst = 'HFI_SkyMap_'
-                strgseco = '-field-IQU_2048_R2.02_full.fits'
-                strgcols = 'I_STOKES'
-            else:
-                strgfrst = 'HFI_SkyMap_'
-                strgseco = '-field-Int_2048_R2.02_full.fits'
-                strgcols = 'I_STOKES'
-            strg = strgfrst + '%s' % strgmapsplnk[k][1:] + strgseco
-            mapsplnk = pf.getdata(pathdata + strg, 1)[strgcols]
-            mapsplnk = hp.reorder(mapsplnk, n2r=True)
-
-            print 'Changing units...'
-            # change units of the sky maps to Jy/sr
-            if strgmapsplnk[k] != '0545' and strgmapsplnk[k] != '0857':
-                ## from Kcmb
-                if calcfactconv:
-                    # read Planck band transmission data
-                    if strgmapsplnk[k][1] == '0':
-                        strg = 'LFI_RIMO_R2.50'
-                        strgextn = 'BANDPASS_%s' % strgmapsplnk[k][1:]
-                        freqband = pf.open(pathdata + '/%s.fits' % strg)[strgextn].data['WAVENUMBER'][1:] * 1e9
-                    else:
-                        strg = 'HFI_RIMO_R2.00'
-                        strgextn = 'BANDPASS_F%s' % strgmapsplnk[k][1:]
-                        freqband = 1e2 * velolght * pf.open(pathdata + '/%s.fits' % strg)[strgextn].data['WAVENUMBER'][1:]
-                    tranband = pf.open(pathdata + '/%s.fits' % strg)[strgextn].data['TRANSMISSION'][1:]
-                    indxfreqbandgood = where(tranband > 1e-6)[0]
-                    indxfreqbandgood = arange(amin(indxfreqbandgood), amax(indxfreqbandgood) + 1)
-
-                    # calculate the unit conversion factor
-                    freqscal = consplnk * freqband[indxfreqbandgood] / consbolt / tempcmbr
-                    freqcntr = float(strgmapsplnk[k]) * 1e9
-                    specdipo = 1e26 * 2. * (consplnk * freqband[indxfreqbandgood]**2 / velolght / tempcmbr)**2 / consbolt / (exp(freqscal) - 1.)**2 * exp(freqscal) # [Jy/sr]
-                    factconv = trapz(specdipo * tranband[indxfreqbandgood], freqband[indxfreqbandgood]) / \
-                                                    trapz(freqcntr * tranband[indxfreqbandgood] / freqband[indxfreqbandgood], freqband[indxfreqbandgood]) # [Jy/sr/Kcmb]
-                else:
-                    # read the unit conversion factors provided by Planck
-                    factconv = factconvplnk[k, 1] * 1e6
-            else:
-                ## from MJy/sr
-                factconv = 1e6
-            mapsplnk *= factconv
-
-            # plot the Planck map
-            tdpy.util.plot_maps(pathimag + 'mapsplnk%s.pdf' % strgmapsplnk[k], mapsplnk, satu=True)
-
-            if subspnts:
-                print 'Subtracting point sources...'
-
-                # subtract PSs from the Planck maps
-                ## read PCCS
-                if strgmapsplnk[k][1] == '0':
-                    strg = 'R2.04'
-                else:
-                    strg = 'R2.01'
-                dataplnk = pf.getdata(pathdata + '/COM_PCCS_%s_%s.fits' % (strgmapsplnk[k][1:], strg), 1)
-                fluxpntsplnk = dataplnk['GAUFLUX'] * 1e-3 # [Jy]
-                lgalpntsplnk = dataplnk['GLON'] # [deg]
-                lgalpntsplnk = (lgalpntsplnk - 180.) % 360. - 180.
-                bgalpntsplnk = dataplnk['GLAT'] # [deg]
-                fwhmpntsplnk = dataplnk['GAU_FWHM_EFF'] / 60. # [deg]
-                stdvpntsplnk = fwhmpntsplnk / 2. / sqrt(2. * log(2.)) # [deg]
-                numbpntsplnk = fluxpntsplnk.size
-                print 'numbpntsplnk'
-                print numbpntsplnk
-
-                ## calculate PS map using PCCS
-                pathmapspntsplnk = pathdata + 'mapspntsplnk%s.fits' % strgmapsplnk[k]
-                if os.path.isfile(pathmapspntsplnk):
-                    print 'Reading Planck PS map for %d GHz from %s' % (float(strgmapsplnk[k]), pathmapspntsplnk)
-                    mapspntsplnk = pf.getdata(pathmapspntsplnk)
-                else:
-                    
-                    print 'numbside'
-                    print numbside
-                    print
-                    mapspntsplnk = tdpy.util.retr_mapspnts(lgalpntsplnk, bgalpntsplnk, stdvpntsplnk, fluxpntsplnk, verbtype=1, numbside=numbside)
-                    tdpy.util.plot_maps(pathimag + 'mapspntsplnk%s.pdf' % strgmapsplnk[k], mapspntsplnk, satu=True)
-                    pf.writeto(pathmapspntsplnk, mapspntsplnk, clobber=True)
-        
-                ## plot the PCSC map
-                tdpy.util.plot_maps(pathimag + 'mapspntsplnk%s.pdf' % strgmapsplnk[k], mapspntsplnk, satu=True)
-
-                mapsorigplnk = mapsplnk - mapspntsplnk
-            else:
-                mapsorigplnk = mapsplnk
-
     if plotfull:
         # plot tranmission spectra
         figr, axis = plt.subplots()
@@ -191,41 +215,46 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
             axis.loglog(1e-9 * freqband, tranband, label=labl)
         axis.legend(loc=3, ncol=2)
         plt.tight_layout()
-        path = pathimag + 'tran_%s.pdf' % rtag
+        path = gdat.pathimag + 'tran_%s.pdf' % rtag
         plt.savefig(path)
         plt.close(figr)
+        strgmapsplnk = ['0030', '0044', '0070', '0100', '0143', '0217', '0353', '0545', '0857', 'radi']
+        for k in range(numbmapsplnk):
+            print 'Map number ', k
+            print 'Maps string: ', strgmapsplnk[k]
+            writ_plnk(strgmapsplnk[k])
     
     # get Planck PS mask
-    print 'Reading the Planck mask...'
-    path = pathdata + 'HFI_Mask_PointSrc_2048_R2.00.fits'
-    mapsmask = pf.open(path)[1].data['F353']
-    mapsmask = hp.reorder(mapsmask, n2r=True)
-    tdpy.util.plot_maps(pathimag + 'mapsmask_%s.pdf' % rtag, mapsmask)
+    if False:
+        print 'Reading the Planck mask...'
+        path = gdat.pathdata + 'HFI_Mask_PointSrc_2048_R2.00.fits'
+        mapsmask = pf.open(path)[1].data['F353']
+        mapsmask = hp.reorder(mapsmask, n2r=True)
+        tdpy.util.plot_maps(gdat.pathimag + 'mapsmask_%s.pdf' % rtag, mapsmask)
     
-    ## multipole
-    maxmmpol = 3. * numbside - 1.
-    numbalmc = int(maxmmpol * (maxmmpol + 1.) / 2. + maxmmpol + 1)
-    numbmpol = int(maxmmpol) + 1
-    mpol = arange(numbmpol)
-    mpolgrid, temp = hp.Alm.getlm(lmax=maxmmpol)
-
+    #strgmapsplnk = 'radi'
+    strgmapsplnk = '0857'
+    
     # get input maps
     ## Planck map
-    tdpy.util.plot_maps(pathimag + 'mapsplnkorig_%s.pdf' % rtag, mapsplnkorig, satu=True)
-    
     print 'Smoothing the Planck map...'
-    path = pathdata + 'mapsplnk_%s.fits' % rtag
+    path = gdat.pathdata + 'mapsplnk_%s.fits' % rtag
     if os.path.isfile(path):
+        print 'Reading %s...' % path
         mapsplnk = pf.getdata(path)
     else:
+        mapsplnkorig = retr_plnkmapsorig(gdat, strgmapsplnk)
         mapsplnkorig -= mean(mapsplnkorig)
         mapsplnkorig /= std(mapsplnkorig)
+        tdpy.util.plot_maps(gdat.pathimag + 'mapsplnkorig_%s.pdf' % rtag, mapsplnkorig, satu=True)
         # temp
         indxpixlmask = []
         mapsplnk, mapsalmc, mpolsmthplnk, wghtsmthplnk = tdpy.util.smth(mapsplnkorig, mpolsmth, mpol=True, retrfull=True, indxpixlmask=indxpixlmask, numbsideoutp=numbside)
-        tdpy.util.plot_maps(pathimag + 'mapsplnk_%s.pdf' % rtag, mapsplnk)
+        tdpy.util.plot_maps(gdat.pathimag + 'mapsplnk.pdf', mapsplnk)
         pf.writeto(path, mapsplnk, clobber=True)
     almcplnktemp = hp.map2alm(mapsplnk)
+
+    numbmapsplnk = len(strgmapsplnk)
 
     ## PS
     # temp
@@ -240,14 +269,14 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
             mapspnts[k, :] = tdpy.util.retr_mapspnts(lgal, bgal, stdv, flux, numbside=numbside)
 
     ## Fermi data
-    path = pathdata + '/fermflux_cmp0_igal.fits'
+    path = gdat.pathdata + '/fermflux_cmp0_igal.fits'
     mapsfermorig = sum(pf.getdata(path), 2)
     mapsfermorig -= mean(mapsfermorig, 1)[:, None]
     mapsfermorig /= std(mapsfermorig, 1)[:, None]
     mapsferm = empty_like(mapsfermorig)
     for i in arange(numbener):
-        tdpy.util.plot_maps(pathimag + 'mapsfermorig%04d_%s.pdf' % (i, rtag), mapsfermorig[i, :], satu=True)
-        tdpy.util.plot_maps(pathimag + 'mapsferm%04d_%s.pdf' % (i, rtag), mapsferm[i, :], satu=True)
+        tdpy.util.plot_maps(gdat.pathimag + 'mapsfermorig%04d.pdf' % i, mapsfermorig[i, :], satu=True)
+        tdpy.util.plot_maps(gdat.pathimag + 'mapsferm%04d.pdf' % i, mapsferm[i, :], satu=True)
         mapsferm[i, :] = tdpy.util.smth(mapsfermorig[i, :], mpolsmth, mpol=True)
 
     ## Gaussian noise map
@@ -264,7 +293,7 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     almcfdfm = empty((numbener, numbalmc), dtype=complex) 
     for i in arange(numbener):
         almcfdfmorig[i, :] = hp.map2alm(mapsfdfmorig[i, :])
-        tdpy.util.plot_maps(pathimag + 'mapsfdfmorig%04d_%s.pdf' % (i, rtag), mapsfdfmorig[i, :], satu=True)
+        tdpy.util.plot_maps(gdat.pathimag + 'mapsfdfmorig%04d.pdf' % i, mapsfdfmorig[i, :], satu=True)
         mapsfdfm[i, :], almcfdfm[i, :], mpolsmthfdfm, wghtsmthfdfm = tdpy.util.smth(mapsfdfmorig[i,:], mpolsmth, mpol=True, retrfull=True)
 
     # compute the weight
@@ -289,7 +318,7 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     axis.set_xlim([amin(mpol), amax(mpol)])
     axis.legend(loc=2)
     plt.tight_layout()
-    path = pathimag + 'wght_%s.pdf' % rtag
+    path = gdat.pathimag + 'wght.pdf'
     plt.savefig(path)
     plt.close(figr)
    
@@ -358,7 +387,7 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
         axis.set_xlim([amin(mpol), amax(mpol)])
         axis.legend(loc=3, ncol=2)
         plt.tight_layout()
-        path = pathimag + 'psec%04d_%s.pdf' % (i, rtag)
+        path = gdat.pathimag + 'psec%04d.pdf' % i
         plt.savefig(path)
         plt.close(figr)
 
@@ -369,28 +398,26 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
                 maxmlgal = 20.
                 minmbgal = -20.
                 maxmbgal = 20.
-                strg = 'igal'
             else:
                 minmlgal = -180.
                 maxmlgal = 180.
                 minmbgal = -90.
                 maxmbgal = 90.
-                strg = 'ngal'
                
-            path = pathimag + '%s/mapsfdfm%04d_%s.pdf' % (strg, i, rtag)
+            path = gdat.pathimag + 'mapsfdfm%04d.pdf' % i
             tdpy.util.plot_maps(path, mapsfdfm[i, :], minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, satu=True)
             
             if i == 0:
-                path = pathimag + '%s/mapsplnk_%s.pdf' % (strg, rtag)
+                path = gdat.pathimag + 'mapsplnk.pdf'
                 tdpy.util.plot_maps(path, mapsplnk, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, satu=True)
             
-            path = pathimag + '%s/mapsmerg%04d_%s.pdf' % (strg, i, rtag)
+            path = gdat.pathimag + 'mapsmerg%04d.pdf' % i
             tdpy.util.plot_maps(path, mapsmerg[i, :], minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, satu=True)
             
-            path = pathimag + '%s/mapsresifdfm%04d_%s.pdf' % (strg, i, rtag)
+            path = gdat.pathimag + 'mapsresifdfm%04d.pdf' % i
             tdpy.util.plot_maps(path, mapsmerg[i, :] - mapsfdfm[i, :], minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, resi=True, satu=True)
             
-            path = pathimag + '%s/mapsresiplnk%04d_%s.pdf' % (strg, i, rtag)
+            path = gdat.pathimag + 'mapsresiplnk%04d.pdf' % i
             tdpy.util.plot_maps(path, mapsmerg[i, :] - mapsplnk, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, resi=True, satu=True)
         
 
@@ -479,11 +506,10 @@ def retr_ener(gdat):
 
     # temp
     gdat.binsenerfull = array([0.1, 0.3, 1., 3., 10., 100.])
-    gdat.meanenerfull, gdat.numbenerfull, gdat.indxenerfull = tdpy.util.retr_axis(bins=gdat.binsenerfull, scal='logt')
-
+    gdat.binsenerfull, gdat.meanenerfull, gdat.diffenerfull, gdat.numbenerfull, gdat.indxenerfull = tdpy.util.retr_axis(bins=gdat.binsenerfull, scal='logt')
     gdat.binsener = gdat.binsenerfull[gdat.indxenerincl[0]:gdat.indxenerincl[-1] + 2]
-    gdat.meanener, gdat.numbener, gdat.indxener = tdpy.util.retr_axis(bins=gdat.binsener, scal='logt')
-    
+
+    gdat.binsener, gdat.meanener, gdat.diffener, gdat.numbener, gdat.indxener = tdpy.util.retr_axis(bins=gdat.binsener, scal='logt')
     gdat.strgbinsener = ['%.3g GeV - %.3g GeV' % (gdat.binsener[i], gdat.binsener[i+1]) for i in gdat.indxener]
     
 
@@ -498,9 +524,12 @@ def regrback( \
               strgback=['isotflux', 'fdfmflux', 'HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'lambda_sfd_ebv.fits', 'darktemp'], \
               indxenerincl=arange(1, 4), \
               indxevttincl=arange(3, 4), \
-              maxmgang=deg2rad(20.)
+              maxmgang=20.
              ):
 
+    smthmaps = False
+    boolplotpsec = True
+    
     # construct the global object
     gdat = tdpy.util.gdatstrt()
     gdat.numbproc = numbproc
@@ -515,9 +544,6 @@ def regrback( \
     gdat.indxevttincl = indxevttincl
     gdat.maxmgang = maxmgang
     
-    # paths
-    pathimag, pathdata = tdpy.util.retr_path('ferm_igal')
-    
     # axes
     ## energy
     retr_ener(gdat)
@@ -531,8 +557,6 @@ def regrback( \
     gdat.numbevtt = gdat.evtt.size
     gdat.indxevtt = arange(gdat.numbevtt)
 
-    boolsmth = False
-    
     gdat.numbback = len(strgback)
     gdat.indxback = arange(gdat.numbback)
 
@@ -543,15 +567,11 @@ def regrback( \
     gdat.indxpixlrofi = where((abs(gdat.lgalheal) < gdat.maxmgang) & (abs(gdat.bgalheal) < gdat.maxmgang))[0]
     gdat.numbpixl = gdat.indxpixlrofi.size
     gdat.indxpixl = arange(gdat.numbpixl)
-    gdat.lgalgrid = gdat.lgalheal[gdat.indxpixlrofi]
-    gdat.bgalgrid = gdat.bgalheal[gdat.indxpixlrofi]
        
-    minmlgal = -gdat.maxmgang * 180. / pi
-    maxmlgal = gdat.maxmgang * 180. / pi
-    minmbgal = -gdat.maxmgang * 180. / pi
-    maxmbgal = gdat.maxmgang * 180. / pi
-
-    boolplotpsec = True
+    minmlgal = -gdat.maxmgang
+    maxmlgal = gdat.maxmgang 
+    minmbgal = -gdat.maxmgang
+    maxmbgal = gdat.maxmgang 
 
     indxdatacubefilt = meshgrid(gdat.indxenerincl, gdat.indxpixlrofi, gdat.indxevttincl, indexing='ij')
     
@@ -559,15 +579,21 @@ def regrback( \
     datapara = retr_datapara(gdat)
     
     if gdat.numbswep == None:
-        gdat.numbswep = 4 * gdat.numbpara * 10000
+        gdat.numbswep = 4 * gdat.numbpara * 1000
 
-    # setup
-    gdat.rtag = '%s' % (gdat.datatype)
+    # get the time stamp
+    strgtimestmp = tdpy.util.retr_strgtimestmp()
     
+    # setup
+    gdat.rtag = '%s_%s' % (strgtimestmp, gdat.datatype)
+    
+    # paths
+    gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('tdgu', 'ferm_igal/', 'ferm_igal/regrback/', gdat.rtag)
+
     ## data
     if gdat.datatype == 'inpt':
         
-        path = pathdata + gdat.strgexpr
+        path = gdat.pathdata + gdat.strgexpr
         gdat.exprflux = pf.getdata(path)
         
         ### filter
@@ -590,108 +616,105 @@ def regrback( \
     gdat.fluxback = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
     for c in gdat.indxback:
 
-        if boolsmth:
-            strg = '_smth'
-        else:
-            strg = ''
         if c == 0:
             strg = 'isotflux'
         if c == 1:
-            strg = 'fdfmflux' + strg
+            strg = 'fdfmflux'
         if c == 2:
-            strg = 'plnkdust' + strg
+            strg = 'plnkdust'
         if c == 3:
-            strg = 'wisestar' + strg
+            strg = 'wisestar'
         if c == 4:
-            strg = 'finkdust' + strg
+            strg = 'finkdust'
         if c == 5:
-            strg = 'darktemp' + strg
+            strg = 'darktemp'
+        if smthmaps:
+            strg += 'smth'
 
         # temp -- ROI should be fixed at 40 X 40 degree^2
-        path = os.environ["FERM_IGAL_DATA_PATH"] + '/' + strg + '.fits'
+        path = gdat.pathdata + strg + '.fits'
+        path += '.fits'
         if os.path.isfile(path) or not boolplotpsec:
-            fluxback = pf.getdata(path)
+            print 'Reading %s...' % path
+            gdat.fluxback[c, :, :, :] = pf.getdata(path)
         else:
             
             if c == 0:
-                fluxbackorig = tdpy.util.retr_isot(gdat.binsenerfull)
+                gdat.fluxbackorig = tdpy.util.retr_isot(gdat.binsenerfull)
             if c == 1:
-                fluxbackorig = tdpy.util.retr_fdfm(gdat.binsenerfull) 
+                gdat.fluxbackorig = tdpy.util.retr_fdfm(gdat.binsenerfull) 
             if c == 2:
-                pathtemp = os.environ["FERM_IGAL_DATA_PATH"] + gdat.strgback[c]
-                fluxbackorig = pf.getdata(pathtemp, 1)['RADIANCE']
-                fluxbackorig = hp.ud_grade(fluxbackorig, gdat.numbside, order_in='NESTED', order_out='RING')
+                pathtemp = gdat.pathdata + gdat.strgback[c]
+                gdat.fluxbackorig = pf.getdata(pathtemp, 1)['RADIANCE']
+                gdat.fluxbackorig = hp.ud_grade(gdat.fluxbackorig, gdat.numbside, order_in='NESTED', order_out='RING')
             if c == 3:
-                pathtemp = os.environ["FERM_IGAL_DATA_PATH"] + gdat.strgback[c]
-                fluxbackorig = pf.getdata(pathtemp, 0)
-                fluxbackorig = hp.ud_grade(fluxbackorig, gdat.numbside, order_in='RING', order_out='RING')
+                pathtemp = gdat.pathdata + gdat.strgback[c]
+                gdat.fluxbackorig = pf.getdata(pathtemp, 0)
+                gdat.fluxbackorig = hp.ud_grade(gdat.fluxbackorig, gdat.numbside, order_in='RING', order_out='RING')
             if c == 4:
-                pathtemp = os.environ["FERM_IGAL_DATA_PATH"] + gdat.strgback[c]
-                fluxbackorig = pf.getdata(pathtemp)['TEMPERATURE']
-                fluxbackorig = hp.ud_grade(fluxbackorig, gdat.numbside, order_in='NESTED', order_out='RING')
+                pathtemp = gdat.pathdata + gdat.strgback[c]
+                gdat.fluxbackorig = pf.getdata(pathtemp)['TEMPERATURE']
+                gdat.fluxbackorig = hp.ud_grade(gdat.fluxbackorig, gdat.numbside, order_in='NESTED', order_out='RING')
             if c == 5:
-                fluxbackorig = tdpy.util.retr_nfwp(1., gdat.numbside)
+                gdat.fluxbackorig = tdpy.util.retr_nfwp(1., gdat.numbside)
 
             # normalize the templates
             if c != 0 and c != 1:
-                fluxbackorig /= mean(fluxbackorig[gdat.indxpixlrofi])
+                gdat.fluxbackorig /= mean(gdat.fluxbackorig[gdat.indxpixlrofi])
             
             # smooth the templates
-            fluxback = empty((gdat.numbenerfull, gdat.numbpixlfull, gdat.numbevttfull))
+            gdat.fluxback = empty((gdat.numbenerfull, gdat.numbpixlfull, gdat.numbevttfull))
             for m in gdat.indxevttfull:
                 if c == 0 or c == 1:
-                    fluxback[:, :, m] = fluxbackorig
+                    gdat.fluxback[:, :, m] = gdat.fluxbackorig
                 else:
                     for i in gdat.indxenerfull:
-                        fluxback[i, :, m] = fluxbackorig
+                        gdat.fluxback[i, :, m] = gdat.fluxbackorig
             
-            if boolsmth:
-                fluxback = tdpy.util.smth_ferm(fluxback, gdat.meanenerfull, gdat.indxevttfull)
+            if smthmaps:
+                gdat.fluxback = tdpy.util.smth_ferm(gdat.fluxback, gdat.meanenerfull, gdat.indxevttfull)
             # temp
-            fluxback[where(fluxback < 0.)] = 0.
+            gdat.fluxback[where(gdat.fluxback < 0.)] = 0.
 
-            pf.writeto(path, fluxback, clobber=True)
+            pf.writeto(path, gdat.fluxback, clobber=True)
 
-            # load the map to the array whose power spectrum will be calculated
-            if c == 0:
-                gdat.mapsplot[c+1, :] = fluxbackorig[1, :]
-            elif c == 1:
-                gdat.mapsplot[c+1, :] = fluxbackorig[1, :]
-            else:
-                gdat.mapsplot[c+1, :] = fluxbackorig
-    
         # take only the energy bins, spatial pixels and event types of interest
-        fluxback = fluxback[indxdatacubefilt]
+        gdat.fluxback = gdat.fluxback[indxdatacubefilt]
         indxdatacubetemp = meshgrid(array([c]), gdat.indxener, gdat.indxpixl, gdat.indxevtt, indexing='ij')
-        gdat.fluxback[indxdatacubetemp] = fluxback
+        gdat.fluxback[indxdatacubetemp] = gdat.fluxback
 
-    gdat.pathdata = os.environ["FERM_IGAL_DATA_PATH"]
-    gdat.pathimag = gdat.pathbase + '/imag/regrback/%s/' % gdat.rtag
-    cmnd = 'mkdir -p ' + gdat.pathimag
-    os.system(cmnd)
+    # load the map to the array whose power spectrum will be calculated
+    print 'hey'
+    print 'fluxback'
+    print gdat.fluxback.shape
+    print 'gdat.mapsplot'
+    print gdat.mapsplot.shape
+    print 
 
+    gdat.mapsplot[1:, gdat.indxpixlrofi] = gdat.fluxback
+    
     # plot the power spectra
-
     listlabl = ['Data', 'Isotropic']
     listcolr = ['black', 'b']
-    
     listlabl.append('FDM, %s' % gdat.strgbinsener[1])
     listcolr.append('g')
-    
     listlabl.extend(['Planck', r'WISE 12$\mu$m', 'NFW'])
     listcolr.extend(['r', 'm', 'y'])
 
     figr, axis = plt.subplots()
     mpol = arange(3 * gdat.numbside, dtype=int)
     for n in range(gdat.numbback):
+        print 'hey'
+        print 'gdat.mapsplot[n, :]'
+        print gdat.mapsplot[n, :]
         psec = hp.anafast(gdat.mapsplot[n, :])
+        print 'psec'
+        print psec
+        print
         axis.loglog(mpol, mpol * (mpol + 1.) * psec, color=listcolr[n], label=listlabl[n])
-
     axis.set_ylabel('$l(l+1)C_l$')
     axis.set_xlabel('$l$')
-    
     axis.legend(loc=4, ncol=2)
-
     path = gdat.pathimag + 'psec.pdf'
     plt.tight_layout()
     plt.savefig(path)
@@ -703,12 +726,12 @@ def regrback( \
                 path = gdat.pathimag + 'fluxback_%d%d%d.pdf' % (c, i, m)
                 tdpy.util.plot_maps(path, gdat.fluxback[c, i, :, m], indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
                                                                                 minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
-            
+           
     initsamp = rand(gdat.numbproc * gdat.numbpara).reshape((gdat.numbproc, gdat.numbpara))
 
     numbplotside = gdat.numbpara
     chan = tdpy.mcmc.init(retr_llik, datapara, numbproc=gdat.numbproc, numbswep=gdat.numbswep, initsamp=initsamp, gdatextr=gdat, \
-                verbtype=gdat.verbtype, pathbase=gdat.pathimag, rtag=gdat.rtag, numbplotside=numbplotside)
+                verbtype=gdat.verbtype, pathdata=gdat.pathdata, pathimag=gdat.pathimag, rtag=gdat.rtag, numbplotside=numbplotside)
     
     listsampvarb, listsamp, listsampcalc, listllik, listaccp, listchro, listindxparamodi, propeffi, levi, info, gmrbstat = chan
     numbsamp = listsamp.shape[0]
@@ -803,7 +826,7 @@ def regrback( \
     #plot_backspec(gdat, indxpixlmean)
 
 
-def ferm_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
+def pcat_ferm_inpt_ptch(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
     pcat.main.init( \
               psfntype='doubking', \
@@ -812,10 +835,11 @@ def ferm_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_i
               maxmgang=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
               indxevttincl=arange(2, 4), \
+              lgalcntr=deg2rad(5.), \
+              bgalcntr=deg2rad(5.), \
               minmflux=3e-11, \
               maxmflux=3e-6, \
               pathdata=os.environ["FERM_IGAL_DATA_PATH"], \
-              regitype='igal', \
               strgback=['isotflux.fits', 'fdfmflux.fits'], \
               strgexpo=strgexpo, \
               datatype='inpt', \
@@ -823,11 +847,32 @@ def ferm_expr_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_i
              )
     
     
-def ferm_mock_igal_brok():
+def pcat_ferm_inpt_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
+    
+    pathdata = os.environ["FERM_IGAL_DATA_PATH"] + '/data/'
+    pcat.main.init( \
+              pathdata=pathdata, \
+              psfntype='doubking', \
+              verbtype=2, \
+              numbswep=20000, \
+              randinit=False, \
+              maxmgang=deg2rad(20.), \
+              indxenerincl=arange(1, 4), \
+              indxevttincl=arange(2, 4), \
+              minmflux=3e-11, \
+              maxmflux=3e-6, \
+              strgback=['isotflux.fits', 'fdfmflux.fits'], \
+              strgexpo=strgexpo, \
+              datatype='inpt', \
+              strgexpr=strgexpr, \
+             )
+    
+    
+def pcat_ferm_mock_igal_brok():
      
     listmockfluxdistbrek = array([1e-10, 3e-10, 1e-9, 3e-9, 1e-8])
     listmockfluxdistsloplowr = array([1.9, 2.2, 2.8, 3.1, 3.4])
-
+    
     for fluxdistbrek in listfluxdistbrek:
     
         pcat.main.init( \
@@ -838,7 +883,6 @@ def ferm_mock_igal_brok():
                        indxenerincl=arange(1, 4), \
                        strgexpo='fermexpo_cmp0_igal.fits', \
                        strgback=['isotflux.fits'], \
-                       regitype='igal', \
                        
                        maxmgang=deg2rad(20.), \
                        fluxdisttype=['brok'], \
@@ -860,7 +904,7 @@ def ferm_mock_igal_brok():
                       )
 
 
-def ferm_mock_igal_popl():
+def pcat_ferm_mock_igal_popl():
      
     pcat.main.init( \
                    pathdata=os.environ["FERM_IGAL_DATA_PATH"], \
@@ -870,7 +914,6 @@ def ferm_mock_igal_popl():
                    indxenerincl=arange(1, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
                    strgback=['isotflux.fits'], \
-                   regitype='igal', \
                    
                    maxmgang=deg2rad(20.), \
                    fluxdisttype=['brok'], \
@@ -890,7 +933,7 @@ def ferm_mock_igal_popl():
                   )
 
 
-def ferm_mock_igal():
+def pcat_ferm_mock_igal():
      
     pcat.main.init( \
                    psfntype='doubking', \
@@ -901,7 +944,6 @@ def ferm_mock_igal():
                    strgexpo='fermexpo_cmp0_igal.fits', \
                    strgback=['isotflux.fits', 'fdfmflux.fits'], \
                    pathdata=os.environ["FERM_IGAL_DATA_PATH"], \
-                   regitype='igal', \
                    
                    #maxmnumbpnts=array([2, 2, 4]), \
                    maxmnumbpnts=array([200, 200, 400]), \

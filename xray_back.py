@@ -60,7 +60,7 @@ def prep_maps():
     pf.writeto(path, expo, clobber=True)
 
 
-def chan_expr():
+def chan_inpt():
     
     maxmgang = deg2rad(0.984 / 3600.) * 100.
     gridchan = pcat.main.init( \

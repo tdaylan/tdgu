@@ -45,8 +45,8 @@ def intr_ferm_expr_ngal( \
 
     karg = {}
     karg['psfntype'] = 'doubking'
-    karg['numbswep'] = 20000
-    karg['verbtype'] = 2
+    karg['numbswep'] = 1000000
+    karg['verbtype'] = 1
     karg['randinit'] = False
     karg['maxmgang'] = deg2rad(20.)
     karg['boolproppsfn'] = False
@@ -58,7 +58,7 @@ def intr_ferm_expr_ngal( \
     karg['minmflux'] = 3e-11
     karg['maxmflux'] = 1e-7
     karg['regitype'] = 'ngal'
-    karg['pathdata'] = os.environ["FERM_NGAL_DATA_PATH"]
+    karg['pathdata'] = os.environ["PCAT_DATA_PATH"]
     karg['strgback'] = ['fermisotflux.fits', 'fermfdfmflux_ngal.fits']
     karg['strgexpo'] = strgexpo
     karg['datatype'] = 'inpt'

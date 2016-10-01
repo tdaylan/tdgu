@@ -178,6 +178,8 @@ def retr_hmfn(gdat):
     for c in gdat.indxreds:
         diffgrwfdiffreds = gdat.funchubb[c] * (1. + gdat.meanreds) / gdat.funchubb**3
         gdat.grwf[c] = trapz(diffgrwfdiffreds[c:], gdat.meanreds[c:])
+    # temp -- avoid later division by zero
+    gdat.grwf[-1] = gdat.grwf[-2]
     gdat.grwf /= gdat.grwf[0]
     
     # radius, wavelength and wavenumber corresponding to the halo mass
@@ -216,8 +218,8 @@ def retr_hmfn(gdat):
         # growth factor from Loeb2006
         path = gdat.pathdata + '/odencollloeb.csv'
         odencollloeb = loadtxt(path)
-        redsloeb = odencollloeb[:, 1]
-        odencollloeb = odencollloeb[:, 0]
+        redsloeb = odencollloeb[:, 0]
+        odencollloeb = odencollloeb[:, 1]
         grwfloeb = gdat.odencoll / odencollloeb
         figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
         axis.loglog(gdat.meanreds, gdat.grwf)
@@ -1142,14 +1144,15 @@ def init( \
          verbtype=1, \
          saveflux=True, \
          makeplot=True, \
+         propmodl='effi', \
+         concmodl='duff', \
+         subsmodl='smth', \
+         igmamodl='clum'
         ):
 
     # global object
     gdat = tdpy.util.gdatstrt()
 
-    # paths
-    gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('phot_ionz')
-    
     gdat.makeplot = makeplot
 
     datapara = retr_datapara(gdat)
@@ -1214,7 +1217,12 @@ def init( \
     gdat.gravconsredu = 1.19e-34 # [cm^3/MeV/s^2]
     gdat.cmet2angs = 1e8
     
-    # axis.s
+    gdat.propmodl = propmodl
+    gdat.concmodl = concmodl
+    gdat.subsmodl = subsmodl
+    gdat.igmamodl = igmamodl
+    
+    # axis
     # temp
     gdat.numbradi = 50
     gdat.numbrsph = 50
@@ -1320,6 +1328,15 @@ def init( \
     gdat.listchro = zeros((11, numbswep + 2))
     gdat.indxswepcntr = 0
 
+    # get the time stamp
+    strgtimestmp = tdpy.util.retr_strgtimestmp()
+    
+    # run tag
+    gdat.rtag = '%s_%s_%s_%s_%s_%s' % (strgtimestmp, gdat.propmodl, gdat.concmodl, gdat.subsmodl, gdat.igmamodl, gdat.anch)
+    
+    # paths
+    gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('tdgu', 'phot_ionz/', 'phot_ionz/', gdat.rtag)
+    
     # plot annihilation spectrum
     if gdat.makeplot:
         anchlabl = ['$e^-e^+$', r'$\mu\bar{\mu}$', r'$\tau^-\tau^+$', r'$b\bar{b}$']
@@ -1388,11 +1405,6 @@ def init( \
     retr_hmfn(gdat)
     
     gdat.numbmpol = 2
-
-    gdat.propmodl = 'effi'
-    gdat.concmodl = 'duff'
-    gdat.subsmodl = 'smth'
-    gdat.igmamodl = 'clum'
 
     # halo concentration model
     gdat.numbconcmodl = 3
@@ -1583,13 +1595,11 @@ def init( \
     
     gdat.masspart = 5e3 # [MeV]
 
-    # run tag
-    gdat.rtag = gdat.strgtimestmp + '_' + gdat.propmodl + '_' + gdat.concmodl + '_' + gdat.subsmodl + '_' + gdat.igmamodl + '_masspart%4g_' % gdat.masspart + gdat.anch
-    
     path = gdat.pathdata + 'data_%s.fits' % gdat.rtag
     # temp
     if gdat.saveflux:
         if os.path.isfile(path):
+            print 'Reading %s...' % path
             gdat.ionrdmat = pf.getdata(path, 0)
             gdat.fluxphotdmat = pf.getdata(path, 1)
         else:
@@ -1616,7 +1626,7 @@ def init( \
 
     numbplotside = gdat.numbpara
     sampbund = tdpy.mcmc.init(retr_llik, datapara, initsamp=thissamp, numbswep=numbswep, gdatextr=gdat, optiprop=optiprop, \
-                                    verbtype=verbtype, pathbase=gdat.pathdata, rtag=gdat.rtag, numbplotside=numbplotside)
+                                    verbtype=verbtype, pathdata=gdat.pathdata, pathimag=gdat.pathimag, rtag=gdat.rtag, numbplotside=numbplotside)
     
     listsampvarb = sampbund[0]
     listsamp = sampbund[1]
