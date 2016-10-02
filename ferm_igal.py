@@ -842,7 +842,7 @@ def pcat_ferm_inpt_ptch(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_c
     
     pcat.main.init( \
               psfntype='doubking', \
-              numbswep=2000000, \
+              numbswep=2000, \
               randinit=False, \
               maxmgang=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
