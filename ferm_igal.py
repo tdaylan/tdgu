@@ -838,32 +838,54 @@ def regrback( \
     #plot_backspec(gdat, indxpixlmean)
 
 
-def pcat_ferm_inpt_ptch(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
+def pcat_ferm_inpt_ptch():
+
+    pathbase = os.environ["TDGU_DATA_PATH"] + '/ferm_igal/'
+    pathdata = pathbase + 'data/'
+    lgalcntr = deg2rad(5.)
+    bgalcntr = deg2rad(5.)
+    liststrg = ['fermflux_cmp0_igal', 'fermexpo_cmp0_igal', 'fdfmflux']
+    numbmaps = len(liststrg)
+    strgcntr = '_cntr%04d%04d' % (rad2deg(lgalcntr), rad2deg(bgalcntr))
+    for k in range(numbmaps):
+        path = pathdata + liststrg[k] + strgcntr + '.fits'
+        if os.path.isfile(path):
+            maps = pf.getdata(path)
+        else:
+            pathorig = pathdata + liststrg[k] + '.fits'
+            maps = pf.getdata(pathorig)
+            numbener = maps.shape[0]
+            numbevtt = maps.shape[2]
+            numbside = int(sqrt(maps.shape[1] / 12))
+            for i in range(numbener):
+                for m in range(numbevtt):
+                    almc = hp.map2alm(maps[i, :, m])
+                    hp.rotate_alm(almc, lgalcntr, bgalcntr, 0.)
+                    maps[i, :, m] = hp.alm2map(almc, numbside)
+            pf.writeto(path, maps, clobber=True)
     
     pcat.main.init( \
+              pathbase=pathbase, \
               psfntype='doubking', \
               numbswep=2000, \
               randinit=False, \
               maxmgang=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
               indxevttincl=arange(2, 4), \
-              lgalcntr=deg2rad(5.), \
-              bgalcntr=deg2rad(5.), \
+              lgalcntr=lgalcntr, \
+              bgalcntr=bgalcntr, \
               minmflux=3e-11, \
               maxmflux=3e-6, \
-              pathdata=os.environ["FERM_IGAL_DATA_PATH"], \
-              strgback=['isotflux.fits', 'fdfmflux.fits'], \
-              strgexpo=strgexpo, \
+              strgback=['isotflux.fits', 'fdfmflux%s.fits' % strgcntr], \
+              strgexpo='fermexpo_cmp0_igal%s.fits' % strgcntr, \
               datatype='inpt', \
-              strgexpr=strgexpr, \
+              strgexpr='fermflux_cmp0_igal%s.fits' % strgcntr, \
              )
     
     
 def pcat_ferm_inpt_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
-    pathdata = os.environ["FERM_IGAL_DATA_PATH"] + '/data/'
     pcat.main.init( \
-              pathdata=pathdata, \
               psfntype='doubking', \
               verbtype=2, \
               numbswep=20000, \
@@ -888,7 +910,6 @@ def pcat_ferm_mock_igal_brok():
     for fluxdistbrek in listfluxdistbrek:
     
         pcat.main.init( \
-                       pathdata=os.environ["FERM_IGAL_DATA_PATH"], \
                        numbswep=10000, \
                        randinit=False, \
                        indxevttincl=arange(2, 4), \
@@ -919,7 +940,6 @@ def pcat_ferm_mock_igal_brok():
 def pcat_ferm_mock_igal_popl():
      
     pcat.main.init( \
-                   pathdata=os.environ["FERM_IGAL_DATA_PATH"], \
                    numbswep=10000, \
                    randinit=False, \
                    indxevttincl=arange(2, 4), \
@@ -955,17 +975,13 @@ def pcat_ferm_mock_igal():
                    indxenerincl=arange(1, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
                    strgback=['isotflux.fits', 'fdfmflux.fits'], \
-                   pathdata=os.environ["FERM_IGAL_DATA_PATH"], \
-                   
                    #maxmnumbpnts=array([2, 2, 4]), \
                    maxmnumbpnts=array([200, 200, 400]), \
                    maxmgang=deg2rad(20.), \
                    minmflux=3e-11, \
                    maxmflux=3e-7, \
-                   
                    sinddiststdv=array([.5, .5, .5]), \
                    sinddistmean=array([2., 2., 2.]), \
-                   
                    datatype='mock', \
                    #mocknumbpnts=array([1, 1, 2]), \
                    mocknumbpnts=array([100, 100, 200]), \

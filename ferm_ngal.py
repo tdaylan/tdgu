@@ -113,7 +113,6 @@ def ferm_mock_ngal():
                    minmflux=minmflux, \
                    maxmflux=maxmflux, \
                    regitype='ngal', \
-                   pathdata=os.environ["FERM_NGAL_DATA_PATH"], \
                    strgback=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
                    strgexpo='fermexpo_cmp0_ngal.fits', \
                    datatype='mock', \
