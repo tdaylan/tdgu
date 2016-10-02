@@ -633,7 +633,6 @@ def regrback( \
 
         # temp -- ROI should be fixed at 40 X 40 degree^2
         path = gdat.pathdata + strg + '.fits'
-        path += '.fits'
         if os.path.isfile(path) or not boolplotpsec:
             print 'Reading %s...' % path
             gdat.fluxback[c, :, :, :] = pf.getdata(path)
