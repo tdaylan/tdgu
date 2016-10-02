@@ -613,7 +613,7 @@ def regrback( \
     gdat.mapsplot[0, gdat.indxpixlrofi] = sum(gdat.datacnts[1, :, :], 1)
 
     ## templates
-    gdat.fluxback = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
+    gdat.fluxback = empty((gdat.numbback, gdat.numbenerfull, gdat.numbpixlfull, gdat.numbevttfull))
     for c in gdat.indxback:
 
         if c == 0:
@@ -662,7 +662,7 @@ def regrback( \
             if c != 0 and c != 1:
                 gdat.fluxbackorig /= mean(gdat.fluxbackorig[gdat.indxpixlrofi])
             
-            # smooth the templates
+            # make copies of the maps
             gdat.fluxback = empty((gdat.numbenerfull, gdat.numbpixlfull, gdat.numbevttfull))
             for m in gdat.indxevttfull:
                 if c == 0 or c == 1:
@@ -671,6 +671,7 @@ def regrback( \
                     for i in gdat.indxenerfull:
                         gdat.fluxback[i, :, m] = gdat.fluxbackorig
             
+            # smooth the templates
             if smthmaps:
                 gdat.fluxback = tdpy.util.smth_ferm(gdat.fluxback, gdat.meanenerfull, gdat.indxevttfull)
             # temp
@@ -678,10 +679,22 @@ def regrback( \
 
             pf.writeto(path, gdat.fluxback, clobber=True)
 
-        # take only the energy bins, spatial pixels and event types of interest
-        gdat.fluxback = gdat.fluxback[indxdatacubefilt]
-        indxdatacubetemp = meshgrid(array([c]), gdat.indxener, gdat.indxpixl, gdat.indxevtt, indexing='ij')
-        gdat.fluxback[indxdatacubetemp] = gdat.fluxback
+    # temp
+    path = gdat.pathimag + 'test1.pdf'
+    tdpy.util.plot_maps(path, gdat.fluxback[1, 0, :, 0], indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
+                                                                    minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
+    path = gdat.pathimag + 'test2.pdf'
+    tdpy.util.plot_maps(path, gdat.fluxback[2, 0, :, 0], indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
+                                                                    minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
+    path = gdat.pathimag + 'test3.pdf'
+    tdpy.util.plot_maps(path, gdat.fluxback[3, 0, :, 0], indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
+                                                                    minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
+    
+    return
+
+    # take only the energy bins, spatial pixels and event types of interest
+    indxdatacubetemp = meshgrid(gdat.indxback, gdat.indxener, gdat.indxpixl, gdat.indxevtt, indexing='ij')
+    gdat.fluxback = gdat.fluxback[indxdatacubetemp]
 
     # load the map to the array whose power spectrum will be calculated
     print 'hey'
@@ -691,7 +704,7 @@ def regrback( \
     print gdat.mapsplot.shape
     print 
 
-    gdat.mapsplot[1:, gdat.indxpixlrofi] = gdat.fluxback
+    gdat.mapsplot[1:, gdat.indxpixlrofi] = gdat.fluxback[:, 0, :, 0]
     
     # plot the power spectra
     listlabl = ['Data', 'Isotropic']
