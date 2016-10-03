@@ -879,7 +879,8 @@ def pcat_ferm_inpt_ptch():
             for i in range(numbener):
                 for m in range(numbevtt):
                     almc = hp.map2alm(maps[i, :, m])
-                    hp.rotate_alm(almc, lgalcntr, bgalcntr, 0.)
+                    hp.rotate_alm(almc, 0., bgalcntr, 0.)
+                    #hp.rotate_alm(almc, lgalcntr, bgalcntr, 0.)
                     maps[i, :, m] = hp.alm2map(almc, numbside)
             pf.writeto(path, maps, clobber=True)
     
