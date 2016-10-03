@@ -28,21 +28,21 @@ def mergmaps_arry():
 def retr_plnkmapsorig(gdat, strgmapsplnk):
 
     if strgmapsplnk == 'radi':
-        mapsplnkorig = pf.getdata(gdat.pathdata + 'HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 1)['RADIANCE']
+        mapsplnkorig = pf.getdata(gdat.pathdata + 'plnk/HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 1)['RADIANCE']
         mapsplnkorig = hp.reorder(mapsplnkorig, n2r=True)
     else:
         
         # read sky maps
         if strgmapsplnk[1] == '0':
-            strgfrst = 'LFI_SkyMap_' 
+            strgfrst = 'plnk/LFI_SkyMap_' 
             strgseco = '-BPassCorrected-field-IQU_0256_R2.01_full.fits'
             strgcols = 'TEMPERATURE'
         elif strgmapsplnk[1] == '1' or strgmapsplnk[1] == '2' or strgmapsplnk[1] == '3':
-            strgfrst = 'HFI_SkyMap_'
+            strgfrst = 'plnk/HFI_SkyMap_'
             strgseco = '-field-IQU_2048_R2.02_full.fits'
             strgcols = 'I_STOKES'
         else:
-            strgfrst = 'HFI_SkyMap_'
+            strgfrst = 'plnk/HFI_SkyMap_'
             strgseco = '-field-Int_2048_R2.02_full.fits'
             strgcols = 'I_STOKES'
         strg = strgfrst + '%s' % strgmapsplnk[1:] + strgseco
@@ -60,7 +60,7 @@ def retr_plnkmapsorig(gdat, strgmapsplnk):
                     strgextn = 'BANDPASS_%s' % strgmapsplnk[1:]
                     freqband = pf.open(gdat.pathdata + '/%s.fits' % strg)[strgextn].data['WAVENUMBER'][1:] * 1e9
                 else:
-                    strg = 'HFI_RIMO_R2.00'
+                    strg = 'plnk/HFI_RIMO_R2.00'
                     strgextn = 'BANDPASS_F%s' % strgmapsplnk[1:]
                     freqband = 1e2 * velolght * pf.open(gdat.pathdata + '/%s.fits' % strg)[strgextn].data['WAVENUMBER'][1:]
                 tranband = pf.open(gdat.pathdata + '/%s.fits' % strg)[strgextn].data['TRANSMISSION'][1:]
@@ -94,7 +94,7 @@ def retr_plnkmapsorig(gdat, strgmapsplnk):
             else:
                 strg = 'R2.01'
             # temp
-            dataplnk = pf.getdata(gdat.pathdata + '/COM_PCCS_%s_%s.fits' % (strgmapsplnk[1:], strg), 1)
+            dataplnk = pf.getdata(gdat.pathdata + 'plnk/COM_PCCS_%s_%s.fits' % (strgmapsplnk[1:], strg), 1)
             fluxpntsplnk = dataplnk['GAUFLUX'] * 1e-3 # [Jy]
             lgalpntsplnk = dataplnk['GLON'] # [deg]
             lgalpntsplnk = (lgalpntsplnk - 180.) % 360. - 180.
@@ -227,7 +227,7 @@ def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     # get Planck PS mask
     if False:
         print 'Reading the Planck mask...'
-        path = gdat.pathdata + 'HFI_Mask_PointSrc_2048_R2.00.fits'
+        path = gdat.pathdata + 'plnk/HFI_Mask_PointSrc_2048_R2.00.fits'
         mapsmask = pf.open(path)[1].data['F353']
         mapsmask = hp.reorder(mapsmask, n2r=True)
         tdpy.util.plot_maps(gdat.pathimag + 'mapsmask_%s.pdf' % rtag, mapsmask)
@@ -521,7 +521,7 @@ def regrback( \
               makeplot=False, \
               strgexpr='fermflux_cmp0_igal.fits', \
               strgexpo='fermexpo_cmp0_igal.fits', \
-              strgback=['isotflux', 'fdfmflux', 'HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'lambda_sfd_ebv.fits', 'darktemp'], \
+              strgback=['isotflux', 'fdfmflux', 'plnk/HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'lambda_sfd_ebv.fits', 'darktemp'], \
               indxenerincl=arange(1, 4), \
               indxevttincl=arange(3, 4), \
               maxmgang=20.
@@ -840,8 +840,7 @@ def regrback( \
 
 def pcat_ferm_inpt_ptch():
 
-    pathbase = os.environ["TDGU_DATA_PATH"] + '/ferm_igal/'
-    pathdata = pathbase + 'data/'
+    pathdata = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
     lgalcntr = deg2rad(5.)
     bgalcntr = deg2rad(5.)
     liststrg = ['fermflux_cmp0_igal', 'fermexpo_cmp0_igal', 'fdfmflux']
@@ -849,7 +848,10 @@ def pcat_ferm_inpt_ptch():
     strgcntr = '_cntr%04d%04d' % (rad2deg(lgalcntr), rad2deg(bgalcntr))
     for k in range(numbmaps):
         path = pathdata + liststrg[k] + strgcntr + '.fits'
+        print 'path'
+        print path
         if os.path.isfile(path):
+            print 'Reading %s...' % path
             maps = pf.getdata(path)
         else:
             pathorig = pathdata + liststrg[k] + '.fits'
@@ -865,7 +867,6 @@ def pcat_ferm_inpt_ptch():
             pf.writeto(path, maps, clobber=True)
     
     pcat.main.init( \
-              pathbase=pathbase, \
               psfntype='doubking', \
               numbswep=2000, \
               randinit=False, \
@@ -887,7 +888,6 @@ def pcat_ferm_inpt_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_c
     
     pcat.main.init( \
               psfntype='doubking', \
-              verbtype=2, \
               numbswep=20000, \
               randinit=False, \
               maxmgang=deg2rad(20.), \
