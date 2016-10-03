@@ -860,8 +860,8 @@ def regrback( \
 def pcat_ferm_inpt_ptch():
 
     pathdata = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
-    lgalcntr = deg2rad(45.)
-    bgalcntr = deg2rad(45.)
+    lgalcntr = deg2rad(20.)
+    bgalcntr = deg2rad(10.)
     liststrg = ['fermflux_cmp0_igal', 'fermexpo_cmp0_igal', 'fdfmflux']
     numbmaps = len(liststrg)
     strgcntr = '_cntr%04d%04d' % (rad2deg(lgalcntr), rad2deg(bgalcntr))
