@@ -102,6 +102,27 @@ def retr_plnkmapsorig(gdat, strgmapsplnk):
             fwhmpntsplnk = dataplnk['GAU_FWHM_EFF'] / 60. # [deg]
             stdvpntsplnk = fwhmpntsplnk / 2. / sqrt(2. * log(2.)) # [deg]
             
+            # filter out bad 
+            indxpntsgood = where((stdvpntsplnk >= 0.) & (fluxpntsplnk > 0.))[0]
+            print 'total'
+            print fwhmpntsplnk.size
+            print 'good'
+            print indxpntsgood.size
+            print 'amin(stdvpntsplnk)'
+            print amin(stdvpntsplnk)
+            print 'stdvpntsplnk'
+            print stdvpntsplnk
+            print 'indxpntsgood'
+            print indxpntsgood
+            lgalpntsplnk = lgalpntsplnk[indxpntsgood]
+            bgalpntsplnk = bgalpntsplnk[indxpntsgood]
+            fluxpntsplnk = fluxpntsplnk[indxpntsgood]
+            stdvpntsplnk = stdvpntsplnk[indxpntsgood]
+            print 'amin(stdvpntsplnk)'
+            print amin(stdvpntsplnk)
+            print 'stdvpntsplnk'
+            print stdvpntsplnk
+            
             # sort PS with respect to flux
             indxpntsplnk = argsort(fluxpntsplnk)
             lgalpntsplnk = lgalpntsplnk[indxpntsplnk]
@@ -136,13 +157,11 @@ def retr_plnkmapsorig(gdat, strgmapsplnk):
                 mapspntsplnk = pf.getdata(pathmapspntsplnk)
             else:
                 mapspntsplnk = tdpy.util.retr_mapspnts(lgalpntsplnk, bgalpntsplnk, stdvpntsplnk, fluxpntsplnk, verbtype=2, numbside=numbsidepnts)
-                print 'mapspntsplnk'
-                print amin(mapspntsplnk)
-                print amax(mapspntsplnk)
                 ## plot the PCSC map
                 tdpy.util.plot_maps(gdat.pathimag + 'mapspntsplnk%s.pdf' % strgmapsplnk, mapspntsplnk, satu=True)
                 pf.writeto(pathmapspntsplnk, mapspntsplnk, clobber=True)
-    
+   
+            print 'hey'
             mapsorigplnk = mapsplnk - mapspntsplnk
             
         else:
@@ -841,15 +860,13 @@ def regrback( \
 def pcat_ferm_inpt_ptch():
 
     pathdata = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
-    lgalcntr = deg2rad(5.)
-    bgalcntr = deg2rad(5.)
+    lgalcntr = deg2rad(45.)
+    bgalcntr = deg2rad(45.)
     liststrg = ['fermflux_cmp0_igal', 'fermexpo_cmp0_igal', 'fdfmflux']
     numbmaps = len(liststrg)
     strgcntr = '_cntr%04d%04d' % (rad2deg(lgalcntr), rad2deg(bgalcntr))
     for k in range(numbmaps):
         path = pathdata + liststrg[k] + strgcntr + '.fits'
-        print 'path'
-        print path
         if os.path.isfile(path):
             print 'Reading %s...' % path
             maps = pf.getdata(path)
@@ -868,7 +885,7 @@ def pcat_ferm_inpt_ptch():
     
     pcat.main.init( \
               psfntype='doubking', \
-              numbswep=2000, \
+              numbswep=400000, \
               randinit=False, \
               maxmgang=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
