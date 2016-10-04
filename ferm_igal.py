@@ -888,7 +888,7 @@ def pcat_ferm_inpt_ptch():
     pcat.main.init( \
               psfntype='doubking', \
               numbswep=100000, \
-              randinit=False, \
+              randinit=True, \
               maxmgang=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
               indxevttincl=arange(2, 4), \
