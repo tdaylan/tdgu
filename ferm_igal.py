@@ -860,8 +860,8 @@ def regrback( \
 def pcat_ferm_inpt_ptch():
 
     pathdata = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
-    lgalcntr = deg2rad(20.)
-    bgalcntr = deg2rad(10.)
+    lgalcntr = deg2rad(45.)
+    bgalcntr = deg2rad(0.)
     liststrg = ['fermflux_cmp0_igal', 'fermexpo_cmp0_igal', 'fdfmflux']
     numbmaps = len(liststrg)
     strgcntr = '_cntr%04d%04d' % (rad2deg(lgalcntr), rad2deg(bgalcntr))
@@ -879,14 +879,15 @@ def pcat_ferm_inpt_ptch():
             for i in range(numbener):
                 for m in range(numbevtt):
                     almc = hp.map2alm(maps[i, :, m])
-                    hp.rotate_alm(almc, 0., bgalcntr, 0.)
-                    #hp.rotate_alm(almc, lgalcntr, bgalcntr, 0.)
+                    # temp
+                    #hp.rotate_alm(almc, 0., bgalcntr, 0.)
+                    hp.rotate_alm(almc, lgalcntr, bgalcntr, 0.)
                     maps[i, :, m] = hp.alm2map(almc, numbside)
             pf.writeto(path, maps, clobber=True)
     
     pcat.main.init( \
               psfntype='doubking', \
-              numbswep=400000, \
+              numbswep=100000, \
               randinit=False, \
               maxmgang=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
