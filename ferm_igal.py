@@ -699,21 +699,30 @@ def regrback( \
 
     # temp
     path = gdat.pathimag + 'test1.pdf'
-    tdpy.util.plot_maps(path, gdat.fluxback[1, 0, :, 0], indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
+    tdpy.util.plot_maps(path, gdat.fluxback[1, 0, :, 0], \
                                                                     minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
     path = gdat.pathimag + 'test2.pdf'
-    tdpy.util.plot_maps(path, gdat.fluxback[2, 0, :, 0], indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
+    tdpy.util.plot_maps(path, gdat.fluxback[2, 0, :, 0], \
                                                                     minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
     path = gdat.pathimag + 'test3.pdf'
-    tdpy.util.plot_maps(path, gdat.fluxback[3, 0, :, 0], indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
+    tdpy.util.plot_maps(path, gdat.fluxback[3, 0, :, 0], \
                                                                     minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
     
-    return
-
     # take only the energy bins, spatial pixels and event types of interest
     indxdatacubetemp = meshgrid(gdat.indxback, gdat.indxener, gdat.indxpixl, gdat.indxevtt, indexing='ij')
     gdat.fluxback = gdat.fluxback[indxdatacubetemp]
 
+    # temp
+    path = gdat.pathimag + 'testtest1.pdf'
+    tdpy.util.plot_maps(path, gdat.fluxback[1, 0, :, 0], indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
+                                                                    minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
+    path = gdat.pathimag + 'testtest2.pdf'
+    tdpy.util.plot_maps(path, gdat.fluxback[2, 0, :, 0], indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
+                                                                    minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
+    path = gdat.pathimag + 'testtest3.pdf'
+    tdpy.util.plot_maps(path, gdat.fluxback[3, 0, :, 0], indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
+                                                                    minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
+    
     # load the map to the array whose power spectrum will be calculated
     print 'hey'
     print 'fluxback'
@@ -887,7 +896,7 @@ def pcat_ferm_inpt_ptch():
     
     pcat.main.init( \
               psfntype='doubking', \
-              numbswep=100000, \
+              numbswep=1000000, \
               randinit=True, \
               maxmgang=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
@@ -907,7 +916,7 @@ def pcat_ferm_inpt_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_c
     
     pcat.main.init( \
               psfntype='doubking', \
-              numbswep=20000, \
+              numbswep=1000000, \
               randinit=False, \
               maxmgang=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
@@ -929,7 +938,7 @@ def pcat_ferm_mock_igal_brok():
     for fluxdistbrek in listfluxdistbrek:
     
         pcat.main.init( \
-                       numbswep=10000, \
+                       numbswep=1000000, \
                        randinit=False, \
                        indxevttincl=arange(2, 4), \
                        indxenerincl=arange(1, 4), \
@@ -959,7 +968,7 @@ def pcat_ferm_mock_igal_brok():
 def pcat_ferm_mock_igal_popl():
      
     pcat.main.init( \
-                   numbswep=10000, \
+                   numbswep=1000000, \
                    randinit=False, \
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
