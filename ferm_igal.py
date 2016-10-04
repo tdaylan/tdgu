@@ -160,10 +160,7 @@ def retr_plnkmapsorig(gdat, strgmapsplnk):
                 ## plot the PCSC map
                 tdpy.util.plot_maps(gdat.pathimag + 'mapspntsplnk%s.pdf' % strgmapsplnk, mapspntsplnk, satu=True)
                 pf.writeto(pathmapspntsplnk, mapspntsplnk, clobber=True)
-   
-            print 'hey'
             mapsorigplnk = mapsplnk - mapspntsplnk
-            
         else:
             mapsorigplnk = mapsplnk
 
@@ -529,14 +526,16 @@ def regrback( \
               makeplot=False, \
               strgexpr='fermflux_cmp0_igal.fits', \
               strgexpo='fermexpo_cmp0_igal.fits', \
-              strgback=['isotflux', 'fdfmflux', 'plnk/HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'lambda_sfd_ebv.fits', 'darktemp'], \
+              #strgback=['isotflux', 'fdfmflux', 'plnk/HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'lambda_sfd_ebv.fits', 'darktemp'], \
+              strgback=['isotflux', 'fdfmflux'], \
               indxenerincl=arange(1, 4), \
               indxevttincl=arange(3, 4), \
               maxmgang=20.
              ):
 
     smthmaps = False
-    
+    optiprop = True
+
     # construct the global object
     gdat = tdpy.util.gdatstrt()
     gdat.numbproc = numbproc
@@ -688,17 +687,6 @@ def regrback( \
 
             pf.writeto(path, gdat.fluxbackfull[c, :, :, :], clobber=True)
 
-    # temp
-    path = gdat.pathimag + 'test1.pdf'
-    tdpy.util.plot_maps(path, gdat.fluxbackfull[1, 0, :, 0], \
-                                                                    minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
-    path = gdat.pathimag + 'test2.pdf'
-    tdpy.util.plot_maps(path, gdat.fluxbackfull[2, 0, :, 0], \
-                                                                    minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
-    path = gdat.pathimag + 'test3.pdf'
-    tdpy.util.plot_maps(path, gdat.fluxbackfull[3, 0, :, 0], \
-                                                                    minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
-    
     # take only the energy bins, spatial pixels and event types of interest
     gdat.fluxback = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
     print 'gdat.fluxback'
@@ -729,13 +717,6 @@ def regrback( \
                                                                     minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
     
     # load the map to the array whose power spectrum will be calculated
-    print 'hey'
-    print 'fluxback'
-    print gdat.fluxback.shape
-    print 'gdat.mapsplot'
-    print gdat.mapsplot.shape
-    print 
-
     gdat.mapsplot[1:, gdat.indxpixlrofi] = gdat.fluxback[:, 0, :, 0]
     
     # plot the power spectra
@@ -749,13 +730,7 @@ def regrback( \
     figr, axis = plt.subplots()
     mpol = arange(3 * gdat.numbside, dtype=int)
     for n in range(gdat.numbback):
-        print 'hey'
-        print 'gdat.mapsplot[n, :]'
-        print gdat.mapsplot[n, :]
         psec = hp.anafast(gdat.mapsplot[n, :])
-        print 'psec'
-        print psec
-        print
         axis.loglog(mpol, mpol * (mpol + 1.) * psec, color=listcolr[n], label=listlabl[n])
     axis.set_ylabel('$l(l+1)C_l$')
     axis.set_xlabel('$l$')
@@ -775,7 +750,7 @@ def regrback( \
     initsamp = rand(gdat.numbproc * gdat.numbpara).reshape((gdat.numbproc, gdat.numbpara))
 
     numbplotside = gdat.numbpara
-    chan = tdpy.mcmc.init(retr_llik, datapara, numbproc=gdat.numbproc, numbswep=gdat.numbswep, initsamp=initsamp, gdatextr=gdat, \
+    chan = tdpy.mcmc.init(retr_llik, datapara, numbproc=gdat.numbproc, numbswep=gdat.numbswep, initsamp=initsamp, gdatextr=gdat, optiprop=optiprop, \
                 verbtype=gdat.verbtype, pathdata=gdat.pathdata, pathimag=gdat.pathimag, rtag=gdat.rtag, numbplotside=numbplotside)
     
     listsampvarb, listsamp, listsampcalc, listllik, listaccp, listchro, listindxparamodi, propeffi, levi, info, gmrbstat = chan
@@ -901,7 +876,7 @@ def pcat_ferm_inpt_ptch():
     
     pcat.main.init( \
               psfntype='doubking', \
-              numbswep=1000000, \
+              numbswep=100000, \
               randinit=True, \
               maxmgang=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
@@ -921,7 +896,7 @@ def pcat_ferm_inpt_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_c
     
     pcat.main.init( \
               psfntype='doubking', \
-              numbswep=1000000, \
+              numbswep=100000, \
               randinit=False, \
               maxmgang=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
@@ -944,7 +919,7 @@ def pcat_ferm_mock_igal_brok():
     for k in range(numbiter):
     
         pcat.main.init( \
-                       numbswep=10000, \
+                       numbswep=100000, \
                        randinit=False, \
                        exprinfo=False, \
                        indxevttincl=arange(2, 4), \
@@ -977,7 +952,7 @@ def pcat_ferm_mock_igal_brok():
 def pcat_ferm_mock_igal_popl():
      
     pcat.main.init( \
-                   numbswep=1000000, \
+                   numbswep=100000, \
                    randinit=False, \
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
@@ -1006,7 +981,7 @@ def pcat_ferm_mock_igal():
      
     pcat.main.init( \
                    psfntype='doubking', \
-                   numbswep=1000000, \
+                   numbswep=100000, \
                    randinit=False, \
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
