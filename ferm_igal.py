@@ -709,8 +709,14 @@ def regrback( \
                                                                     minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
     
     # take only the energy bins, spatial pixels and event types of interest
-    indxdatacubetemp = meshgrid(gdat.indxback, gdat.indxener, gdat.indxpixl, gdat.indxevtt, indexing='ij')
-    gdat.fluxback = gdat.fluxback[indxdatacubetemp]
+    gdat.fluxback = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
+    for c in gdat.indxback:
+        for i in gdat.indxener:
+            for m in gdat.indxevtt:
+                print 'cim'
+                print c, i, m
+                print 
+                gdat.fluxback[c, i, :, m] = gdat.fluxback[c, i, gdat.indxpixlrofi, m]
 
     # temp
     path = gdat.pathimag + 'testtest1.pdf'
@@ -932,14 +938,16 @@ def pcat_ferm_inpt_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_c
     
 def pcat_ferm_mock_igal_brok():
      
-    listmockfluxdistbrek = array([1e-10, 3e-10, 1e-9, 3e-9, 1e-8])
+    #mockfluxdistbrek = array([1e-10, 3e-10, 1e-9, 3e-9, 1e-8])
+    mockfluxdistbrek = array([1e-9])
     listmockfluxdistsloplowr = array([1.9, 2.2, 2.8, 3.1, 3.4])
-    
-    for fluxdistbrek in listfluxdistbrek:
+    numbiter = listmockfluxdistsloplowr.size
+    for k in range(numbiter):
     
         pcat.main.init( \
-                       numbswep=1000000, \
+                       numbswep=10000, \
                        randinit=False, \
+                       exprinfo=False, \
                        indxevttincl=arange(2, 4), \
                        indxenerincl=arange(1, 4), \
                        strgexpo='fermexpo_cmp0_igal.fits', \
@@ -949,6 +957,8 @@ def pcat_ferm_mock_igal_brok():
                        fluxdisttype=['brok'], \
                        psfntype='doubking', \
                        
+                       boolpropfluxdistbrek=False, \
+
                        maxmnumbpnts=array([400]), \
                        minmflux=3e-11, \
                        maxmflux=3e-7, \
@@ -956,8 +966,8 @@ def pcat_ferm_mock_igal_brok():
                        datatype='mock', \
                        mocknumbpnts=array([400]), \
                        
-                       mockfluxdistbrek=array([1e-9]), \
-                       mockfluxdistsloplowr=array([2.6]), \
+                       mockfluxdistbrek=mockfluxdistbrek, \
+                       mockfluxdistsloplowr=listmockfluxdistsloplowr[k], \
                        mockfluxdistslopuppr=array([1.6]), \
                        
                        mocksinddiststdv=array([.5]), \
