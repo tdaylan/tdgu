@@ -551,9 +551,6 @@ def regrback( \
     gdat.indxevttincl = indxevttincl
     gdat.maxmgang = maxmgang
     
-    if gdat.numbswep == None:
-        gdat.numbswep = 4 * gdat.numbpara * 1000
-    
     # axes
     gdat.binsenerfull = array([0.1, 0.3, 1., 3., 10., 100.])
     gdat.binsenerfull, gdat.meanenerfull, gdat.diffenerfull, gdat.numbenerfull, gdat.indxenerfull = tdpy.util.retr_axis(bins=gdat.binsenerfull, scal='logt')
@@ -589,6 +586,9 @@ def regrback( \
     
     # get data structure
     datapara = retr_datapara(gdat)
+    
+    if gdat.numbswep == None:
+        gdat.numbswep = 4 * gdat.numbpara * 1000
     
     # get the time stamp
     strgtimestmp = tdpy.util.retr_strgtimestmp()
