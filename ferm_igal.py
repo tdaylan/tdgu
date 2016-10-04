@@ -521,17 +521,6 @@ def defn_gtbn():
     savetxt(path, limtener, fmt='%10.5g')
 
 
-def retr_ener(gdat):
-
-    # temp
-    gdat.binsenerfull = array([0.1, 0.3, 1., 3., 10., 100.])
-    gdat.binsenerfull, gdat.meanenerfull, gdat.diffenerfull, gdat.numbenerfull, gdat.indxenerfull = tdpy.util.retr_axis(bins=gdat.binsenerfull, scal='logt')
-    gdat.binsener = gdat.binsenerfull[gdat.indxenerincl[0]:gdat.indxenerincl[-1] + 2]
-
-    gdat.binsener, gdat.meanener, gdat.diffener, gdat.numbener, gdat.indxener = tdpy.util.retr_axis(bins=gdat.binsener, scal='logt')
-    gdat.strgbinsener = ['%.3g GeV - %.3g GeV' % (gdat.binsener[i], gdat.binsener[i+1]) for i in gdat.indxener]
-    
-
 def regrback( \
               numbproc=1, \
               numbswep=None, \
@@ -547,7 +536,6 @@ def regrback( \
              ):
 
     smthmaps = False
-    boolplotpsec = True
     
     # construct the global object
     gdat = tdpy.util.gdatstrt()
@@ -563,17 +551,22 @@ def regrback( \
     gdat.indxevttincl = indxevttincl
     gdat.maxmgang = maxmgang
     
+    if gdat.numbswep == None:
+        gdat.numbswep = 4 * gdat.numbpara * 1000
+    
     # axes
-    ## energy
-    retr_ener(gdat)
+    gdat.binsenerfull = array([0.1, 0.3, 1., 3., 10., 100.])
+    gdat.binsenerfull, gdat.meanenerfull, gdat.diffenerfull, gdat.numbenerfull, gdat.indxenerfull = tdpy.util.retr_axis(bins=gdat.binsenerfull, scal='logt')
+    gdat.binsener = gdat.binsenerfull[gdat.indxenerincl[0]:gdat.indxenerincl[-1] + 2]
+
+    gdat.binsener, gdat.meanener, gdat.diffener, gdat.numbener, gdat.indxener = tdpy.util.retr_axis(bins=gdat.binsener, scal='logt')
+    gdat.strgbinsener = ['%.3g GeV - %.3g GeV' % (gdat.binsener[i], gdat.binsener[i+1]) for i in gdat.indxener]
 
     ## event type
-    gdat.evttfull = array([4, 8, 16, 32])
-    gdat.numbevttfull = gdat.evttfull.size
-    gdat.indxevttfull = arange(gdat.numbevttfull)
-    
-    gdat.evtt = gdat.evttfull[gdat.indxevttincl]
-    gdat.numbevtt = gdat.evtt.size
+    gdat.indxevttfull = arange(4)
+    gdat.numbevttfull = gdat.indxevttfull.size
+    gdat.indxevttrofi = gdat.indxevttfull[gdat.indxevttincl]
+    gdat.numbevtt = gdat.indxevttrofi.size
     gdat.indxevtt = arange(gdat.numbevtt)
 
     gdat.numbback = len(strgback)
@@ -597,9 +590,6 @@ def regrback( \
     # get data structure
     datapara = retr_datapara(gdat)
     
-    if gdat.numbswep == None:
-        gdat.numbswep = 4 * gdat.numbpara * 1000
-
     # get the time stamp
     strgtimestmp = tdpy.util.retr_strgtimestmp()
     
@@ -632,7 +622,7 @@ def regrback( \
     gdat.mapsplot[0, gdat.indxpixlrofi] = sum(gdat.datacnts[1, :, :], 1)
 
     ## templates
-    gdat.fluxback = empty((gdat.numbback, gdat.numbenerfull, gdat.numbpixlfull, gdat.numbevttfull))
+    gdat.fluxbackfull = empty((gdat.numbback, gdat.numbenerfull, gdat.numbpixlfull, gdat.numbevttfull))
     for c in gdat.indxback:
 
         if c == 0:
@@ -652,9 +642,9 @@ def regrback( \
 
         # temp -- ROI should be fixed at 40 X 40 degree^2
         path = gdat.pathdata + strg + '.fits'
-        if os.path.isfile(path) or not boolplotpsec:
+        if os.path.isfile(path):
             print 'Reading %s...' % path
-            gdat.fluxback[c, :, :, :] = pf.getdata(path)
+            gdat.fluxbackfull[c, :, :, :] = pf.getdata(path)
         else:
             
             if c == 0:
@@ -677,46 +667,55 @@ def regrback( \
                 gdat.fluxbackorig = tdpy.util.retr_nfwp(1., gdat.numbside)
 
             # normalize the templates
-            if c != 0 and c != 1:
-                gdat.fluxbackorig /= mean(gdat.fluxbackorig[gdat.indxpixlrofi])
+            #if c != 0 and c != 1:
+            #    gdat.fluxbackorig /= mean(gdat.fluxbackorig[gdat.indxpixlrofi])
             
             # make copies of the maps
-            gdat.fluxback = empty((gdat.numbenerfull, gdat.numbpixlfull, gdat.numbevttfull))
             for m in gdat.indxevttfull:
                 if c == 0 or c == 1:
-                    gdat.fluxback[:, :, m] = gdat.fluxbackorig
+                    gdat.fluxbackfull[c, :, :, m] = gdat.fluxbackorig
                 else:
                     for i in gdat.indxenerfull:
-                        gdat.fluxback[i, :, m] = gdat.fluxbackorig
+                        gdat.fluxbackfull[c, i, :, m] = gdat.fluxbackorig
             
             # smooth the templates
             if smthmaps:
-                gdat.fluxback = tdpy.util.smth_ferm(gdat.fluxback, gdat.meanenerfull, gdat.indxevttfull)
+                for c in gdat.indxback:
+                    gdat.fluxbackfull[c, :, :, :] = tdpy.util.smth_ferm(gdat.fluxbackfull[c, :, :, :], gdat.meanenerfull, gdat.indxevttfull)
+            
             # temp
-            gdat.fluxback[where(gdat.fluxback < 0.)] = 0.
+            #gdat.fluxback[where(gdat.fluxback < 0.)] = 0.
 
-            pf.writeto(path, gdat.fluxback, clobber=True)
+            pf.writeto(path, gdat.fluxbackfull[c, :, :, :], clobber=True)
 
     # temp
     path = gdat.pathimag + 'test1.pdf'
-    tdpy.util.plot_maps(path, gdat.fluxback[1, 0, :, 0], \
+    tdpy.util.plot_maps(path, gdat.fluxbackfull[1, 0, :, 0], \
                                                                     minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
     path = gdat.pathimag + 'test2.pdf'
-    tdpy.util.plot_maps(path, gdat.fluxback[2, 0, :, 0], \
+    tdpy.util.plot_maps(path, gdat.fluxbackfull[2, 0, :, 0], \
                                                                     minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
     path = gdat.pathimag + 'test3.pdf'
-    tdpy.util.plot_maps(path, gdat.fluxback[3, 0, :, 0], \
+    tdpy.util.plot_maps(path, gdat.fluxbackfull[3, 0, :, 0], \
                                                                     minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
     
     # take only the energy bins, spatial pixels and event types of interest
     gdat.fluxback = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
+    print 'gdat.fluxback'
+    print gdat.fluxback.shape
+    print 'gdat.fluxbackfull'
+    print gdat.fluxbackfull.shape
     for c in gdat.indxback:
         for i in gdat.indxener:
             for m in gdat.indxevtt:
                 print 'cim'
                 print c, i, m
+                print 'gdat.indxenerincl[i]'
+                print gdat.indxenerincl[i]
+                print 'gdat.indxevttincl[m]'
+                print gdat.indxevttincl[m]
                 print 
-                gdat.fluxback[c, i, :, m] = gdat.fluxback[c, i, gdat.indxpixlrofi, m]
+                gdat.fluxback[c, i, :, m] = gdat.fluxbackfull[c, gdat.indxenerincl[i], gdat.indxpixlrofi, gdat.indxevttincl[m]]
 
     # temp
     path = gdat.pathimag + 'testtest1.pdf'
