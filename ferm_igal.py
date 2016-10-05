@@ -874,12 +874,12 @@ def pcat_ferm_inpt_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_c
     
     pcat.main.init( \
               psfntype='doubking', \
-              numbswep=100000, \
+              numbswep=2000000, \
               randinit=False, \
               maxmgang=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
               indxevttincl=arange(2, 4), \
-              minmflux=1e-10, \
+              minmflux=1e-9, \
               maxmflux=3e-6, \
               strgback=['isotflux.fits', 'fdfmflux.fits'], \
               strgexpo=strgexpo, \
