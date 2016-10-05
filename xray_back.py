@@ -60,11 +60,35 @@ def prep_maps():
     pf.writeto(path, expo, clobber=True)
 
 
+def chan_mock():
+    
+    maxmgang = deg2rad(0.984 / 3600.) * 100.
+    gridchan = pcat.main.init( \
+                              verbtype=2, \
+                              numbswep=100, \
+                              exprinfo=False, \
+                              indxenerincl=arange(2), \
+                              indxevttincl=arange(1), \
+                              strgback=['unit'], \
+                              strgexpo='chanexpo.fits', \
+                              #probprop=array([0., 0., 0., 0., 0., 1., 1., 1., 1., 0., 0., 1., 1., 1., 1.], dtype=float), \
+                              initnumbpnts=array([3]), \
+                              maxmnumbpnts=array([3]), \
+                              maxmgang=maxmgang, \
+                              binsenerfull=array([0.5e-3, 2e-3, 7e-3]), \
+                              minmnormback=array([1e0]), \
+                              maxmnormback=array([1e12]), \
+                              exprtype='chan', \
+                              minmflux=1e-15, \
+                              maxmflux=1e-13, \
+                              datatype='mock', \
+                              mocknumbpnts=array([100]), \
+                             )
+
 def chan_inpt():
     
     maxmgang = deg2rad(0.984 / 3600.) * 100.
     gridchan = pcat.main.init( \
-                              pathdata=os.environ["TDGU_DATA_PATH"], \
                               verbtype=2, \
                               numbswep=100, \
                               numbswepplot=30000, \

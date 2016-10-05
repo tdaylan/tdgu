@@ -689,33 +689,11 @@ def regrback( \
 
     # take only the energy bins, spatial pixels and event types of interest
     gdat.fluxback = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
-    print 'gdat.fluxback'
-    print gdat.fluxback.shape
-    print 'gdat.fluxbackfull'
-    print gdat.fluxbackfull.shape
     for c in gdat.indxback:
         for i in gdat.indxener:
             for m in gdat.indxevtt:
-                print 'cim'
-                print c, i, m
-                print 'gdat.indxenerincl[i]'
-                print gdat.indxenerincl[i]
-                print 'gdat.indxevttincl[m]'
-                print gdat.indxevttincl[m]
-                print 
                 gdat.fluxback[c, i, :, m] = gdat.fluxbackfull[c, gdat.indxenerincl[i], gdat.indxpixlrofi, gdat.indxevttincl[m]]
 
-    # temp
-    path = gdat.pathimag + 'testtest1.pdf'
-    tdpy.util.plot_maps(path, gdat.fluxback[1, 0, :, 0], indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
-                                                                    minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
-    path = gdat.pathimag + 'testtest2.pdf'
-    tdpy.util.plot_maps(path, gdat.fluxback[2, 0, :, 0], indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
-                                                                    minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
-    path = gdat.pathimag + 'testtest3.pdf'
-    tdpy.util.plot_maps(path, gdat.fluxback[3, 0, :, 0], indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
-                                                                    minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
-    
     # load the map to the array whose power spectrum will be calculated
     gdat.mapsplot[1:, gdat.indxpixlrofi] = gdat.fluxback[:, 0, :, 0]
     
