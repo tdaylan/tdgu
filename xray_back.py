@@ -62,10 +62,11 @@ def prep_maps():
 
 def chan_mock():
     
-    maxmgang = deg2rad(0.984 / 3600.) * 100.
+    maxmgang = deg2rad(0.5 / 3600.) * 100.
     gridchan = pcat.main.init( \
                               #verbtype=2, \
-                              numbswep=100, \
+                              numbswep=1000000, \
+                              numbswepplot=4000, \
                               exprinfo=False, \
                               randinit=False, \
                               indxenerincl=arange(2), \
@@ -77,13 +78,15 @@ def chan_mock():
                               #maxmnumbpnts=array([3]), \
                               maxmgang=maxmgang, \
                               binsenerfull=array([0.5e-3, 2e-3, 7e-3]), \
+                              mocknormback=1e15*ones((1, 3)), \
                               minmnormback=array([1e0]), \
                               maxmnormback=array([1e12]), \
                               exprtype='chan', \
-                              minmflux=1e-5, \
+                              minmflux=1e-7, \
                               maxmflux=1e-3, \
                               datatype='mock', \
-                              mocknumbpnts=array([100]), \
+                              maxmnumbpnts=array([400]), \
+                              mocknumbpnts=array([200]), \
                              )
 
 def chan_inpt():

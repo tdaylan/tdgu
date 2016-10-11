@@ -189,6 +189,8 @@ def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     calcfactconv = False
     gdat.subspnts = True
     
+    retr_axisener(gdat)
+    
     # analysis setup
     ## plots
     alph = 0.5
@@ -219,6 +221,29 @@ def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     # read unit conversion data provided by Planck
     factconvplnk = loadtxt(gdat.pathdata + 'plnkunitconv.dat')
     
+    ## Fermi-LAT flux map
+    path = gdat.pathdata + '/fermflux_cmp0_igal.fits'
+    mapsfermorig = sum(pf.getdata(path), 2)
+    mapsfermorig -= mean(mapsfermorig, 1)[:, None]
+    mapsfermorig /= std(mapsfermorig, 1)[:, None]
+    mapsferm = empty_like(mapsfermorig)
+    for i in arange(numbener):
+        tdpy.util.plot_maps(gdat.pathimag + 'mapsfermorig%04d.pdf' % i, mapsfermorig[i, :], satu=True)
+        tdpy.util.plot_maps(gdat.pathimag + 'mapsferm%04d.pdf' % i, mapsferm[i, :], satu=True)
+        mapsferm[i, :] = tdpy.util.smth(mapsfermorig[i, :], mpolsmth, mpol=True)
+    numbsideferm = int(sqrt(mapsfermorig.shape[1] / 12))
+
+    # 3FGL flux map
+    path = gdat.pathdata + 'gll_psc_v16.fit'
+    datafgl3 = pf.getdata(path)
+    lgalfgl3 = datafgl3['glon']
+    lgalfgl3 = ((lgalfgl3 - 180.) % 360.) - 180.
+    bgalfgl3 = datafgl3['glat']
+    stdvfgl3 = tdpy.util.retr_fwhmferm() / 2.
+    specfgl3 = stack((datafgl3['Flux100_300'], datafgl3['Flux300_1000'], datafgl3['Flux1000_3000'], \
+                                                            datafgl3['Flux3000_10000'], datafgl3['Flux10000_100000'])) / gdat.diffenerfull[:, None]
+    mapspntsferm = tdpy.util.retr_mapspnts(lgalfgl3, bgalfgl3, stdvfgl3, specfgl3, verbtype=2, numbside=numbsideferm)
+
     if plotfull:
         # plot tranmission spectra
         figr, axis = plt.subplots()
@@ -283,17 +308,6 @@ def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
             lgal = (rand(numbpnts[k]) - 0.5) * 360.
             bgal = (rand(numbpnts[k]) - 0.5) * 360.
             mapspnts[k, :] = tdpy.util.retr_mapspnts(lgal, bgal, stdv, flux, numbside=numbside)
-
-    ## Fermi data
-    path = gdat.pathdata + '/fermflux_cmp0_igal.fits'
-    mapsfermorig = sum(pf.getdata(path), 2)
-    mapsfermorig -= mean(mapsfermorig, 1)[:, None]
-    mapsfermorig /= std(mapsfermorig, 1)[:, None]
-    mapsferm = empty_like(mapsfermorig)
-    for i in arange(numbener):
-        tdpy.util.plot_maps(gdat.pathimag + 'mapsfermorig%04d.pdf' % i, mapsfermorig[i, :], satu=True)
-        tdpy.util.plot_maps(gdat.pathimag + 'mapsferm%04d.pdf' % i, mapsferm[i, :], satu=True)
-        mapsferm[i, :] = tdpy.util.smth(mapsfermorig[i, :], mpolsmth, mpol=True)
 
     ## Gaussian noise map
     mapsgaus = sqrt(0.25 / 30.) * randn(numbpixl)
@@ -518,6 +532,12 @@ def defn_gtbn():
     savetxt(path, limtener, fmt='%10.5g')
 
 
+def retr_axisener(gdat):
+    
+    gdat.binsenerfull = array([0.1, 0.3, 1., 3., 10., 100.])
+    gdat.binsenerfull, gdat.meanenerfull, gdat.diffenerfull, gdat.numbenerfull, gdat.indxenerfull = tdpy.util.retr_axis(bins=gdat.binsenerfull, scal='logt')
+
+
 def regrback( \
               numbproc=1, \
               numbswep=None, \
@@ -550,9 +570,15 @@ def regrback( \
     gdat.indxevttincl = indxevttincl
     gdat.maxmgang = maxmgang
     
+    #theory of everything in a shell
+    #ecedmmkj = tanshuuydiomw if hkshdud => hsgdsiiiis 
+    #return hsudghin <= TRUE
+    #for d(f) if ede = FALSE
+    #return tansu => dghsishjklnbjks,  a =  nonsense(tansu=cooncon)
+
+
     # axes
-    gdat.binsenerfull = array([0.1, 0.3, 1., 3., 10., 100.])
-    gdat.binsenerfull, gdat.meanenerfull, gdat.diffenerfull, gdat.numbenerfull, gdat.indxenerfull = tdpy.util.retr_axis(bins=gdat.binsenerfull, scal='logt')
+    retr_axisener(gdat)
     gdat.binsener = gdat.binsenerfull[gdat.indxenerincl[0]:gdat.indxenerincl[-1] + 2]
 
     gdat.binsener, gdat.meanener, gdat.diffener, gdat.numbener, gdat.indxener = tdpy.util.retr_axis(bins=gdat.binsener, scal='logt')
