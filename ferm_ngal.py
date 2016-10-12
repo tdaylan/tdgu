@@ -38,14 +38,14 @@ def plot_spec():
                     axis.plot(gdat.meanener, fluxtemp, marker=listmrkr[k], color=listcolr[k], label=listlabl[k])
 
     
-def intr_ferm_expr_ngal( \
+def intr_ferm_inpt_ngal( \
                         strgexpr='fermflux_cmp0_ngal.fits', \
                         strgexpo='fermexpo_cmp0_ngal.fits', \
                        ): 
 
     karg = {}
-    karg['psfntype'] = 'doubking'
-    karg['numbswep'] = 1000000
+    karg['modlpsfntype'] = 'doubking'
+    karg['numbswep'] = 10000
     karg['verbtype'] = 1
     karg['randinit'] = False
     karg['maxmgang'] = deg2rad(20.)
@@ -57,8 +57,8 @@ def intr_ferm_expr_ngal( \
     karg['indxevttincl'] = arange(2, 4)
     karg['minmflux'] = 3e-11
     karg['maxmflux'] = 1e-7
-    karg['regitype'] = 'ngal'
-    karg['pathdata'] = os.environ["PCAT_DATA_PATH"]
+    karg['lgalcntr'] = deg2rad(0.)
+    karg['bgalcntr'] = deg2rad(pi / 2.)
     karg['strgback'] = ['fermisotflux.fits', 'fermfdfmflux_ngal.fits']
     karg['strgexpo'] = strgexpo
     karg['datatype'] = 'inpt'
@@ -67,28 +67,28 @@ def intr_ferm_expr_ngal( \
     return karg
 
 
-def ferm_expr_ngal():
-    karg = intr_ferm_expr_ngal()
+def ferm_inpt_ngal():
+    karg = intr_ferm_inpt_ngal()
     pcat.main.init(**karg)
 
 
-def ferm_expr_ngal_cmp1():
-    karg = intr_ferm_expr_ngal(strgexpr='fermflux_cmp1_ngal.fits', strgexpo='fermexpo_cmp1_ngal.fits')
+def ferm_inpt_ngal_cmp1():
+    karg = intr_ferm_inpt_ngal(strgexpr='fermflux_cmp1_ngal.fits', strgexpo='fermexpo_cmp1_ngal.fits')
     pcat.main.init(**karg)
 
 
-def ferm_expr_ngal_cmp2():
-    karg = intr_ferm_expr_ngal(strgexpr='fermflux_cmp2_ngal.fits', strgexpo='fermexpo_cmp2_ngal.fits')
+def ferm_inpt_ngal_cmp2():
+    karg = intr_ferm_inpt_ngal(strgexpr='fermflux_cmp2_ngal.fits', strgexpo='fermexpo_cmp2_ngal.fits')
     pcat.main.init(**karg)
 
 
-def ferm_expr_ngal_cmp3():
-    karg = intr_ferm_expr_ngal(strgexpr='fermflux_cmp3_ngal.fits', strgexpo='fermexpo_cmp3_ngal.fits')
+def ferm_inpt_ngal_cmp3():
+    karg = intr_ferm_inpt_ngal(strgexpr='fermflux_cmp3_ngal.fits', strgexpo='fermexpo_cmp3_ngal.fits')
     pcat.main.init(**karg)
 
 
-def ferm_expr_ngal_tim4():
-    karg = intr_ferm_expr_ngal(strgexpr='fermflux_rec7_pnts_ngal_0256_tim4.fits', strgexpo='fermexpo_rec7_pnts_ngal_0256_tim4.fits')
+def ferm_inpt_ngal_tim4():
+    karg = intr_ferm_inpt_ngal(strgexpr='fermflux_rec7_pnts_ngal_0256_tim4.fits', strgexpo='fermexpo_rec7_pnts_ngal_0256_tim4.fits')
     pcat.main.init(**karg)
 
 
@@ -101,7 +101,7 @@ def ferm_mock_ngal():
     minmflux = 3e-11
     maxmflux = 2e-8
     
-    pcat.main.init(psfntype='doubking', \
+    pcat.main.init(modlpsfntype='doubking', \
                    numbswep=2000000, \
                    randinit=False, \
                    maxmgang=deg2rad(20.), \
@@ -112,7 +112,8 @@ def ferm_mock_ngal():
                    maxmnumbpnts=array([600]), \
                    minmflux=minmflux, \
                    maxmflux=maxmflux, \
-                   regitype='ngal', \
+                   lgalcntr=0., \
+                   bgalcntr=deg2rad(pi / 2.), \
                    strgback=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
                    strgexpo='fermexpo_cmp0_ngal.fits', \
                    datatype='mock', \

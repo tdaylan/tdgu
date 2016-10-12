@@ -879,7 +879,6 @@ def pcat_ferm_inpt_ptch():
             pf.writeto(path, maps, clobber=True)
     
     pcat.main.init( \
-              psfntype='doubking', \
               numbswep=100000, \
               randinit=True, \
               maxmgang=deg2rad(20.), \
@@ -899,8 +898,7 @@ def pcat_ferm_inpt_ptch():
 def pcat_ferm_inpt_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
     pcat.main.init( \
-              psfntype='doubking', \
-              numbswep=2000000, \
+              numbswep=100000, \
               randinit=False, \
               maxmgang=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
@@ -933,7 +931,6 @@ def pcat_ferm_mock_igal_brok():
                        
                        maxmgang=deg2rad(20.), \
                        fluxdisttype=['brok'], \
-                       psfntype='doubking', \
                        
                        boolpropfluxdistbrek=False, \
 
@@ -965,7 +962,6 @@ def pcat_ferm_mock_igal_popl():
                    
                    maxmgang=deg2rad(20.), \
                    fluxdisttype=['brok'], \
-                   psfntype='doubking', \
                    
                    maxmnumbpnts=array([400]), \
                    minmflux=3e-11, \
@@ -984,7 +980,6 @@ def pcat_ferm_mock_igal_popl():
 def pcat_ferm_mock_igal():
      
     pcat.main.init( \
-                   psfntype='doubking', \
                    numbswep=100000, \
                    randinit=False, \
                    indxevttincl=arange(2, 4), \
