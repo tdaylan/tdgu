@@ -1120,7 +1120,8 @@ def init( \
          datatype='mock', \
          exprtype='pixi', \
          datalabl='PIXIE', \
-         numbswep=10000, \
+         numbswep=100000, \
+         numbproc=10, \
          exprflux=None, \
          exprfluxstdv=None, \
          freqexpr=None, \
@@ -1249,7 +1250,7 @@ def init( \
     gdat.alphsamp = 0.3
 
     # sampler setup
-    gdat.numbproc = 1
+    gdat.numbproc = numbproc
     gdat.indxproc = arange(gdat.numbproc)
     optiprop = True
     
