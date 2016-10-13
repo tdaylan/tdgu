@@ -898,7 +898,7 @@ def pcat_ferm_inpt_ptch():
 def pcat_ferm_inpt_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
     pcat.main.init( \
-              numbswep=10000, \
+              numbswep=1000000, \
               randinit=False, \
               maxmgang=deg2rad(20.), \
               indxenerincl=arange(1, 4), \

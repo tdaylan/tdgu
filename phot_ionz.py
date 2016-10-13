@@ -1626,7 +1626,7 @@ def init( \
 
     numbplotside = gdat.numbpara
     sampbund = tdpy.mcmc.init(retr_llik, datapara, initsamp=thissamp, numbswep=numbswep, gdatextr=gdat, optiprop=optiprop, \
-                                    verbtype=verbtype, pathdata=gdat.pathdata, pathimag=gdat.pathimag, rtag=gdat.rtag, numbplotside=numbplotside)
+                                    verbtype=verbtype, pathdata=gdat.pathdata, pathimag=gdat.pathimag, numbplotside=numbplotside)
     
     listsampvarb = sampbund[0]
     listsamp = sampbund[1]

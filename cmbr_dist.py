@@ -1611,7 +1611,3 @@ if __name__ == '__main__':
     #intr_fluxdust()
     #writ_plnk()
     
-    if os.uname()[1] == 'fink1.rc.fas.harvard.edu':
-        cmnd = 'cp -r ' + gdat.pathimag + '* /n/pan/www/tansu/imag/cmbr_dist/'
-        os.system(cmnd)
-
