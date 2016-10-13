@@ -1120,10 +1120,10 @@ def init( \
          datatype='mock', \
          exprtype='pixi', \
          datalabl='PIXIE', \
-         numbswep=1000000, \
-         numbburn=100000, \
-         factthin=900, \
-         numbproc=10, \
+         numbswep=10000000, \
+         numbburn=1000000, \
+         factthin=9000, \
+         numbproc=20, \
          exprflux=None, \
          exprfluxstdv=None, \
          freqexpr=None, \
