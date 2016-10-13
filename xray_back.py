@@ -65,7 +65,7 @@ def chan_mock():
     maxmgang = deg2rad(0.5 / 3600.) * 100.
     gridchan = pcat.main.init( \
                               #verbtype=2, \
-                              numbswep=1000000, \
+                              numbswep=1000, \
                               numbswepplot=4000, \
                               exprinfo=False, \
                               randinit=False, \

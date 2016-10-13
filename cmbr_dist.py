@@ -1295,7 +1295,7 @@ def init( \
     gdat.numbfreqexpr = gdat.freqexpr.size
 
     chan = tdpy.mcmc.init(retr_llik, datapara, numbproc=gdat.numbproc, initsamp=thissamp, numbswep=numbswep, gdatextr=gdat, factpropeffi=3., \
-                                                                verbtype=gdat.verbtype, pathdata=gdat.pathdata, pathimag=gdat.pathimag, rtag=rtag, optiprop=optiprop)
+                                                                verbtype=gdat.verbtype, pathdata=gdat.pathdata, pathimag=gdat.pathimag, optiprop=optiprop)
     listsampvarb = chan[0]
     listsamp = chan[1]
     listsampcalc = chan[2]
