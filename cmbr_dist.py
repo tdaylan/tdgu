@@ -1120,9 +1120,9 @@ def init( \
          datatype='mock', \
          exprtype='pixi', \
          datalabl='PIXIE', \
-         numbswep=10000000, \
-         numbburn=1000000, \
-         factthin=9000, \
+         numbswep=1000000, \
+         numbburn=100000, \
+         factthin=90000, \
          numbproc=20, \
          exprflux=None, \
          exprfluxstdv=None, \
@@ -1297,8 +1297,8 @@ def init( \
     
     gdat.numbfreqexpr = gdat.freqexpr.size
 
-    chan = tdpy.mcmc.init(retr_llik, datapara, numbproc=gdat.numbproc, initsamp=thissamp, numbswep=numbswep, gdatextr=gdat, factpropeffi=3., \
-                                                                verbtype=gdat.verbtype, pathdata=gdat.pathdata, pathimag=gdat.pathimag, optiprop=optiprop)
+    chan = tdpy.mcmc.init(retr_llik, datapara, numbproc=gdat.numbproc, initsamp=thissamp, numbswep=numbswep, numbburn=numbburn, factthin=factthin, \
+                                                  gdatextr=gdat, factpropeffi=3., verbtype=gdat.verbtype, pathdata=gdat.pathdata, pathimag=gdat.pathimag, optiprop=optiprop)
     listsampvarb = chan[0]
     listsamp = chan[1]
     listsampcalc = chan[2]
