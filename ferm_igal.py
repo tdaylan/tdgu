@@ -755,7 +755,7 @@ def regrback( \
 
     numbplotside = gdat.numbpara
     chan = tdpy.mcmc.init(retr_llik, datapara, numbproc=gdat.numbproc, numbswep=gdat.numbswep, initsamp=initsamp, gdatextr=gdat, optiprop=optiprop, \
-                verbtype=gdat.verbtype, pathdata=gdat.pathdata, pathimag=gdat.pathimag, rtag=gdat.rtag, numbplotside=numbplotside)
+                verbtype=gdat.verbtype, pathdata=gdat.pathdata, pathimag=gdat.pathimag, numbplotside=numbplotside)
     
     listsampvarb, listsamp, listsampcalc, listllik, listaccp, listchro, listindxparamodi, propeffi, levi, info, gmrbstat = chan
     numbsamp = listsamp.shape[0]
@@ -1013,9 +1013,5 @@ def regrback_arry():
             )
 
 
-if len(sys.argv) > 1:
-    name = globals().copy()
-    name.get(sys.argv[1])()
-else:
-    pass
+globals().get(sys.argv[1])()
 

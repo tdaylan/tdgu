@@ -91,9 +91,7 @@ def chan_inpt():
     
     maxmgang = deg2rad(0.984 / 3600.) * 100.
     gridchan = pcat.main.init( \
-                              verbtype=2, \
-                              numbswep=100, \
-                              numbswepplot=30000, \
+                              numbswep=100000, \
                               numbburn=0, \
                               #factthin=100, \
                               exprinfo=False, \
@@ -106,8 +104,7 @@ def chan_inpt():
                               strgexpr='chanflux.fits', \
                               #probprop=array([0., 0., 0., 0., 0., 1., 1., 1., 1., 0., 0., 1., 1., 1., 1.], dtype=float), \
                               #initfluxdistslop=array([1.]), \
-                              initnumbpnts=array([3]), \
-                              maxmnumbpnts=array([3]), \
+                              maxmnumbpnts=array([400]), \
                               maxmgang=maxmgang, \
                               binsenerfull=array([0.5e-3, 2e-3, 7e-3]), \
                               minmnormback=array([1e0]), \
