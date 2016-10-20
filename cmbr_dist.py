@@ -111,8 +111,7 @@ def plot_resi_post(gdat, postflux):
     axis.append(plt.subplot(gs[1], sharex=axis[0]))
 
     axis[1].set_title('')
-    axis[1].errorbar(gdat.freqexpr * 1e-9, gdat.dataflux * 1e-6, ls='none', yerr=gdat.datafluxstdv*1e-6, \
-                                                    xerr=gdat.datafluxstdv*1e-9, label=gdat.datalabl, marker='o', markersize=5, color='k')
+    axis[1].errorbar(gdat.freqexpr * 1e-9, gdat.dataflux * 1e-6, ls='none', yerr=gdat.datafluxstdv*1e-6, label=gdat.datalabl, marker='o', markersize=5, color='k')
     
     tdpy.mcmc.plot_braz(axis[1], gdat.freqmodl * 1e-9, listfluxtotl * 1e-6, lcol='salmon', alpha=0.5, dcol='red', mcol='black')
     if gdat.inclcmbrmono:
@@ -135,11 +134,8 @@ def plot_resi_post(gdat, postflux):
     axis[0].set_ylabel(r'$I_\nu^{res}$ [Jy/sr]')
     axis[0].axhline(0., ls='--', color='black', alpha=0.1)
 
-    if path == None:
-        plt.show()
-    else:
-        plt.savefig(path)
-        plt.close(figr)
+    plt.savefig(path)
+    plt.close(figr)
 
 
 def plot_flux(gdat, fluxtotl=None, fluxtotlintp=None, fluxcmbr=None, fluxdustcold=None, fluxdustwarm=None, \
@@ -162,8 +158,8 @@ def plot_flux(gdat, fluxtotl=None, fluxtotlintp=None, fluxcmbr=None, fluxdustcol
 
     # plot data
     yerr = gdat.datafluxstdv * 1e-6
-    xerr = gdat.datafluxstdv * 1e-9
-    axis[0].errorbar(gdat.freqexpr * 1e-9, gdat.dataflux * 1e-6, ls='none', xerr=xerr, yerr=yerr, label=gdat.datalabl, marker='o', markersize=.5, color='k')
+
+    axis[0].errorbar(gdat.freqexpr * 1e-9, gdat.dataflux * 1e-6, ls='', yerr=yerr, label=gdat.datalabl, marker='o', color='black')
     
     if plottype != 'data':
         axis[0].plot(gdat.freqmodlscal, gdat.mockfluxtotl * 1e-6, label='Total model', color='b')
@@ -202,10 +198,12 @@ def plot_flux(gdat, fluxtotl=None, fluxtotlintp=None, fluxcmbr=None, fluxdustcol
         else:
             resiflux = gdat.dataflux - fluxtotlintp
 
-        axis[1].errorbar(gdat.freqexpr * 1e-9, resiflux, yerr=gdat.datafluxstdv, xerr=gdat.freqexprstdv*1e-9, marker='o', lw=1, ls='none', markersize=5, color='k')
+        axis[1].errorbar(gdat.freqexpr * 1e-9, resiflux, yerr=gdat.datafluxstdv, marker='o', lw=1, ls='none', markersize=5, color='k')
         axis[1].set_ylabel(r'$I_\nu^{res}$ [Jy/sr]')
         axis[1].axhline(0., ls='--', color='black', alpha=0.1)
         axis[1].set_xlim(xlim)
+        maxmresi = max(amax(resiflux + gdat.datafluxstdv), amax(fabs(resiflux - gdat.datafluxstdv)))
+        axis[1].set_yticks(linspace(-maxmresi, maxmresi, 5))
         plt.setp(axis[1].get_xticklabels(), visible=False)
     
     if plottype == 'samp':
@@ -216,13 +214,11 @@ def plot_flux(gdat, fluxtotl=None, fluxtotlintp=None, fluxcmbr=None, fluxdustcol
     plt.close(figr)
 
 
-def plot_plnktran():
+def plot_plnk(gdat):
     
-    freq, tran = retr_plnktran()
-
     figr, axis = plt.subplots(figsize=(10, 8))
-    for k in range(9):
-        axis.loglog(freq[k] * 1e-9, tran[k])
+    for k in arange(gdat.numbfreqplnk):
+        axis.loglog(gdat.freqplnk[k] * 1e-9, gdat.tran[k])
     axis.set_ylim([1e-13, 1e-9])
     axis.set_xlim([1e1, 1e3])
     axis.set_ylabel(r'$T(\nu)$')
@@ -231,42 +227,22 @@ def plot_plnktran():
     plt.savefig(path)
     plt.close()
     
-    plt.show()
-
-
-def plot_plnk():
-    
     indxpixltemp = random_integers(0, 12*256**2, size=100)
     path = gdat.pathdata + 'plnkflux.dat'
     flux = loadtxt(path)[indxpixltemp, :]
     path = gdat.pathdata + 'plnkfluxstdv.dat'
     fluxstdv = loadtxt(path)[indxpixltemp, :]
 
-    retr_plnkfreq(gdat)
-
-    freqtran, tran = retr_plnktran()
-
     bolo = empty(gdat.numbfreqexpr)
     for i in range(gdat.numbfreqexpr):
         bolo[i] = trapz(tran[i][1:] * flux[0, i] * gdat.freqexpr[i] / freqtran[i][1:], freqtran[i][1:])
         plt.loglog(freqtran[i] * 1e-9, tran[i])  
-    plt.show()
     plt.loglog(gdat.freqexpr * 1e-9, fluxstdv)
-    plt.show()
 
     for k in range(10):
         plt.loglog(gdat.freqexpr * 1e-9, flux[k, :])
-    plt.show()
-
     plt.loglog(gdat.freqexpr * 1e-9, bolo)
-    plt.show()
     plt.loglog(gdat.freqexpr * 1e-9, 100. * (bolo - flux) / flux)
-    plt.show()
-
-
-def plot_plnk(gdat):
-
-    retr_plnkflux(gdat)
     
     strgpara = []
     for k in range(gdat.numbfreqplnk):
@@ -1121,7 +1097,6 @@ def init( \
          exprfluxstdv=None, \
          freqexpr=None, \
          numbfreqexpr=None, \
-         freqexprstdv=None, \
          minmfreqexpr=None, \
          maxmfreqexpr=None, \
          fluxstdvinst=None, \
@@ -1140,7 +1115,7 @@ def init( \
     gdat.exprtype = exprtype
     gdat.datalabl = datalabl
     gdat.verbtype = verbtype
-    gdat.freqexprstdv = freqexprstdv
+    gdat.numbfreqexpr = numbfreqexpr
     gdat.minmfreqexpr = minmfreqexpr
     gdat.maxmfreqexpr = maxmfreqexpr
     gdat.fluxstdvinst = fluxstdvinst
@@ -1152,37 +1127,58 @@ def init( \
     
     # data path
     gdat.pathdata = tdpy.util.retr_path('tdgu', 'cmbr_dist/', onlydata=True)
-    
-    retr_plnkfreq(gdat)
-    retr_plnkflux(gdat)
+   
+    # Planck variables
+    gdat.freqplnk = array([3e10, 4.4e10, 7e10, 1e11, 1.43e11, 2.17e11, 3.53e11, 5.45e11, 8.57e11]) # [Hz]
+    gdat.numbfreqplnk = gdat.freqplnk.size 
+    gdat.fluxstdvinst = 5e3 # [Jy/sr]
+    gdat.fluxstdvfrac = 1e-3
+    gdat.numbpixlplnk = 2048 
+
+    # PIXIE variables
+    gdat.numbfreqpixi = 400
+    gdat.minmfreqpixi = 3e10 # [Hz]
+    gdat.maxmfreqpixi = 6e12 # [Hz]
+    gdat.freqpixi = logspace(log10(gdat.minmfreqpixi), log10(gdat.maxmfreqpixi), gdat.numbfreqpixi)
+    gdat.fluxstdvinstpixi = 5e0 # [Jy/sr]
+    gdat.fluxstdvfracpixi = 1e-20
     
     # defaults
     if gdat.exprtype == 'plnk':
-        retr_plnkfreq(gdat)
-        # temp
-        retr_plnkflux(gdat, 0)
-
         gdat.freqexpr = gdat.freqplnk
-
+        gdat.numbfreqexpr = gdat.freqexpr.size
+        
     if gdat.exprtype == 'pixi':
-        retr_pixifreq(gdat)
+        if gdat.minmfreqexpr == None or gdat.maxmfreqexpr == None or gdat.numbfreqexpr == None:
+            if gdat.minmfreqexpr == None:
+                gdat.minmfreqexpr = gdat.minmfreqpixi
+            if gdat.maxmfreqexpr == None:
+                gdat.maxmfreqexpr = gdat.maxmfreqpixi
+            if gdat.numbfreqexpr == None:
+                gdat.numbfreqexpr = gdat.numbfreqpixi
+            gdat.freqexpr = logspace(log10(gdat.minmfreqexpr), log10(gdat.maxmfreqexpr), gdat.numbfreqexpr)
+        else:
+            gdat.freqexpr = gdat.freqpixi
         if fluxstdvinst == None:
-            gdat.fluxstdvinst = 5e0 # [Jy/sr]
+            gdat.fluxstdvinst = gdat.fluxstdvinstpixi
         if fluxstdvfrac == None:
-            gdat.fluxstdvfrac = 1e-20
-        if freqexpr == None:
-            gdat.freqexpr = logspace(log10(gdat.minmfreqexpr), log10(gdat.maxmfreqexpr), gdat.numbfreqexpr) # [Hz]
+            gdat.fluxstdvfrac = gdat.fluxstdvfracpixi
         
-        # get expected instrumental uncertainty for PIXIE
-        if fluxstdvinst == None:
-            path = gdat.pathdata + 'pixifluxstdv.csv'
-            gdat.fluxstdvinstfreq = loadtxt(path)
-            gdat.fluxstdvinstfreq = interp1d(gdat.fluxstdvinstfreq[:, 0] * 1e9, gdat.fluxstdvinstfreq[:, 1] * 1e26)(gdat.freqexpr)
-    
-    gdat.numbfreqexpr = gdat.freqexpr.size
-        
+    # get expected instrumental uncertainty for PIXIE
+    # temp
+    if fluxstdvinst == None:
+        path = gdat.pathdata + 'pixifluxstdv.csv'
+        gdat.fluxstdvinstfreq = loadtxt(path)
+        gdat.fluxstdvinstfreq = interp1d(gdat.fluxstdvinstfreq[:, 0] * 1e9, gdat.fluxstdvinstfreq[:, 1] * 1e26)(gdat.freqexpr)
+
     # get the time stamp
     gdat.strgtimestmp = tdpy.util.retr_strgtimestmp()
+    
+    # get the Healpix grid for Planck maps
+    numbsideplnk = 2048
+    lgalheal, bgalheal, numbpixlplnk, apixplnk = tdpy.util.retr_healgrid(numbsideplnk) 
+
+    indxpixlrofi = where((lgalheal - lgalcntr < maxmgang) & (bgalheal - bgalcntr < maxmgang))[0]
     
     # run tag
     rtag = retr_rtag(gdat)
@@ -1265,7 +1261,6 @@ def init( \
     if makeplot:
         plot_pure_dist(gdat)
         plot_grnf(gdat)
-        plot_plnk(gdat)
     
     # plot settings
     gdat.alphsamp = 0.3
@@ -1273,7 +1268,10 @@ def init( \
     # sampler setup
     gdat.numbproc = numbproc
     gdat.indxproc = arange(gdat.numbproc)
-    optiprop = True
+    
+    # temp
+    optiprop = False
+    #optiprop = True
     
     # parameters
     datapara = retr_datapara()
@@ -1302,17 +1300,24 @@ def init( \
             
         gdat.dataflux = gdat.mockfluxtotlintp + gdat.datafluxstdv * randn(gdat.datafluxstdv.size)
         
+        print 'gdat.dataflux'
+        print gdat.dataflux
+
         # temp
         #fluxegbl = retr_egbl(gdat.freqexpr)
         #gdat.dataflux += fluxegbl
         plot_flux(gdat, plottype='mock')
     else:
-        gdat.datafluxstdv = exprfluxstdv
-        gdat.dataflux = exprflux
+        if gdat.exprtype == 'pixi':
+            raise Exception('PIXIE has not been launched!')
+        if gdat.exprtype == 'plnk':
+            gdat.datafluxplnk, gdat.datafluxstdvplnk = tdpy.util.retr_mapsplnkfreq(indxpixlrofi, numbsideoutp=4)
+            plot_plnk(gdat)
+
     
     gdat.numbfreqexpr = gdat.freqexpr.size
 
-    chan = tdpy.mcmc.init(retr_llik, datapara, numbproc=gdat.numbproc, initsamp=thissamp, numbswep=numbswep, numbburn=numbburn, factthin=factthin, \
+    chan = tdpy.mcmc.init(retr_llik, datapara, numbproc=gdat.numbproc, initsamp=thissamp, numbswep=numbswep, numbburn=numbburn, factthin=factthin, rtag=rtag, \
                                                   gdatextr=gdat, factpropeffi=3., verbtype=gdat.verbtype, pathdata=gdat.pathdata, pathimag=gdat.pathimag, optiprop=optiprop)
     listsampvarb = chan[0]
     listsamp = chan[1]
@@ -1374,105 +1379,9 @@ def init( \
 
     return statpara
     
-
-def retr_plnkfreq(gdat):
     
-    gdat.freqplnk = array([3e10, 4.4e10, 7e10, 1e11, 1.43e11, 2.17e11, 3.53e11, 5.45e11, 8.57e11]) # [Hz]
-    gdat.numbfreqplnk = gdat.freqplnk.size 
-    gdat.freqplnkstdv = empty(gdat.numbfreqplnk)
-    gdat.freqplnkstdv[:3] = 0.2
-    gdat.freqplnkstdv[3:] = 0.33
-    gdat.fluxstdvinst = 5e3 # [Jy/sr]
-    gdat.fluxstdvfrac = 1e-3
-    gdat.numbpixlplnk = 2048 
-
-
-def retr_plnkflux(gdat, indxpixlrofi=0):
-
-    retr_plnkfreq(gdat)
-
-    pathflux = gdat.pathdata + 'plnkflux.dat'
-    pathfluxstdv = gdat.pathdata + 'plnkfluxstdv.dat'
-    if os.path.isfile(pathflux) and os.path.isfile(pathfluxstdv):
-        print 'Reading %s...' % pathflux
-        gdat.fluxplnk = pf.getdata(pathflux)
-        print 'Reading %s...' % pathfluxstdv
-        gdat.fluxplnkstdv = pf.getdata(pathfluxstdv)
-    else:
-        mapspntsplnk = tdpy.util.retr_mapspnts(lgalpntsplnk, bgalpntsplnk, stdvpntsplnk, fluxpntsplnk, verbtype=2, numbside=numbsidepnts)
-        ## plot the PCSC map
-        tdpy.util.plot_maps(gdat.pathimag + 'mapspntsplnk%s.pdf' % strgmapsplnk, mapspntsplnk, satu=True)
-        pf.writeto(pathmapspntsplnk, mapspntsplnk, clobber=True)
-    
-    gdat.flux = loadtxt(path)
-    gdat.fluxstdvinst = loadtxt(path)
-    gdat.fluxstdvfrac = 0.
-
-    numbside = 256
-    numbpixl = numbside**2 * 12
-    flux = zeros((gdat.numbpixlplnk, gdat.numbfreqplnk))
-    fluxstdv = zeros((gdat.numbpixlplnk, gdat.numbfreqplnk))
-    mpixl = []
-    for k in range(gdat.numbfreqplnk):
-        
-        print 'Processing Planck Map at %d GHz...' % (gdat.freqexpr[k] / 1e9)
-        
-        path = gdat.pathdata
-        if k >= 3:
-            path += 'HFI_SkyMap_%03d_2048_R2.02_nominal.fits' % (gdat.freqexpr[k] / 1e9)
-        else:
-            path += 'LFI_SkyMap_%03d_1024_R2.01_full.fits' % (gdat.freqexpr[k] / 1e9)
-            
-        fluxtemp = pf.getdata(path, 1)
-
-        if k < 7:
-            frac = 1e6 * interp1d(gdat.freqmodl, thertempantntemp * antntempflux)(gdat.freqexpr[k]) * 1e6
-        else:
-            frac = 1e6
-    
-        flux[:, k] = hp.pixelfunc.ud_grade(fluxtemp['I_Stokes'], numbside, order_in='NESTED', order_out='RING') * frac
-        fluxstdv[:, k] = sqrt(hp.pixelfunc.ud_grade(fluxtemp['II_cov'], numbside, order_in='NESTED', order_out='RING')) * frac
-        
-    path = gdat.pathdata + 'plnkflux.np'
-    save(path, flux)
-    
-    path = gdat.pathdata + 'plnkfluxstdv.np'
-    save(path, fluxstdv)
-
-
-def retr_plnktran():
-    
-    freq = []
-    tran = []
-
-    path = gdat.pathdata + 'LFI_RIMO_R1.12.fits'
-    for i in range(3):
-        data, hdr = pf.getdata(path, i+2, header=True)
-        freqtemp = 1e9 * data['WAVENUMBER']
-        trantemp = data['TRANSMISSION']
-        trantemp /= trapz(trantemp, freqtemp) 
-        freq.append(freqtemp)
-        tran.append(trantemp)
-
-    path = gdat.pathdata + 'HFI_RIMO_R1.10.fits'
-    for i in range(6):
-        data, hdr = pf.getdata(path, i+2, header=True)
-        freqtemp = 1e2 * gdat.velolght * data['WAVENUMBER']
-        trantemp = data['TRANSMISSION']
-        trantemp /= trapz(trantemp, freqtemp) 
-        freq.append(freqtemp)
-        tran.append(trantemp)
-        
-    return freq, tran
-    
-
 def retr_rtag(gdat):
     
-    print gdat.numbfreqexpr
-    print gdat.minmfreqexpr
-    print gdat.maxmfreqexpr
-    print gdat.fluxstdvinst
-    print gdat.fluxstdvfrac
     if gdat.exprtype == 'plnk':
         rtag = 'plnk'
     else:
@@ -1502,26 +1411,15 @@ def cnfg_plnk_expr():
                     maxmgang=10., \
                     lgalcntr=0., \
                     bgalcntr=0., \
+                    exprtype='plnk', \
                     inclcmbrmono=False, \
                    )
     
 
 def cnfg_pixi():
     
-    minmfreqexpr = 3e10 # [Hz]
-    maxmfreqexpr = 6e12 # [Hz]
-    numbfreqexpr = 400
-    
-    freqexprstdv = ones(numbfreqexpr) * 0.01
     
     statpara = init( \
-                    inclcmbrmono=True, \
-                    numbfreqexpr=numbfreqexpr, \
-                    minmfreqexpr=minmfreqexpr, \
-                    maxmfreqexpr=maxmfreqexpr, \
-                    freqexprstdv=freqexprstdv, \
-                    fluxstdvinst=fluxstdvinst, \
-                    fluxstdvfrac=fluxstdvfrac \
                    )
     
 
@@ -1563,15 +1461,12 @@ def cnfg_pixi_mock_stdv():
             if k == 4:
                 gdat.fluxstdvfrac = arrygdat.fluxstdvfrac[l]
 
-            freqexprstdv = ones(gdat.numbfreqexpr) * 0.01
-            
             statparagrid[k, l, :, :] = init( \
                                             numbswep=numbswep, \
                                             inclcmbrmono=True, \
                                             numbfreqexpr=numbfreqexpr, \
                                             minmfreqexpr=minmfreqexpr, \
                                             maxmfreqexpr=maxmfreqexpr, \
-                                            freqexprstdv=freqexprstdv, \
                                             fluxstdvinst=fluxstdvinst, \
                                             fluxstdvfrac=fluxstdvfrac \
                                            )

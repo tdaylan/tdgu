@@ -62,7 +62,7 @@ def prep_maps():
 
 def chan_mock():
     
-    maxmgang = deg2rad(0.5 / 3600.) * 100.
+    maxmgang = deg2rad(0.492 / 3600.) * 100.
     gridchan = pcat.main.init( \
                               numbswep=1000000, \
                               exprinfo=False, \
@@ -71,29 +71,26 @@ def chan_mock():
                               indxevttincl=arange(1), \
                               strgback=['unit'], \
                               strgexpo='chanexpo.fits', \
-                              #probprop=array([0., 0., 0., 0., 0., 1., 1., 1., 1., 0., 0., 1., 1., 1., 1.], dtype=float), \
-                              #initnumbpnts=array([3]), \
-                              #maxmnumbpnts=array([3]), \
-                              maxmgang=maxmgang, \
-                              binsenerfull=array([0.5e-3, 2e-3, 7e-3]), \
-                              mocknormback=1e15*ones((1, 3)), \
-                              minmnormback=array([1e0]), \
-                              maxmnormback=array([1e12]), \
                               exprtype='chan', \
+                              #probprop=array([0., 0., 0., 0., 0., 1., 1., 1., 1., 0., 0., 1., 1., 1., 1.], dtype=float), \
+                              maxmnumbpnts=array([400]), \
+                              maxmgang=maxmgang, \
+                              minmnormback=array([5e2]), \
+                              maxmnormback=array([1e4]), \
                               minmflux=1e-7, \
                               maxmflux=1e-3, \
                               datatype='mock', \
-                              maxmnumbpnts=array([400]), \
+                              mocknormback=ones((1, 2)), \
                               mocknumbpnts=array([200]), \
                              )
 
 def chan_inpt():
     
-    maxmgang = deg2rad(0.984 / 3600.) * 100.
+    maxmgang = deg2rad(0.492 / 3600.) * 100.
     gridchan = pcat.main.init( \
-                              numbswep=100000, \
-                              numbburn=0, \
-                              #factthin=100, \
+                              numbswep=200000, \
+                              #numbburn=0, \
+                              #factthin=20, \
                               exprinfo=False, \
                               randinit=True, \
                               indxenerincl=arange(2), \
@@ -102,16 +99,16 @@ def chan_inpt():
                               strgexpo='chanexpo.fits', \
                               datatype='inpt', \
                               strgexpr='chanflux.fits', \
-                              #probprop=array([0., 0., 0., 0., 0., 1., 1., 1., 1., 0., 0., 1., 1., 1., 1.], dtype=float), \
+                              exprtype='chan', \
+                              boolproppsfn=True, \
+                              #probprop=array([0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0.], dtype=float), \
                               #initfluxdistslop=array([1.]), \
                               maxmnumbpnts=array([400]), \
                               maxmgang=maxmgang, \
-                              binsenerfull=array([0.5e-3, 2e-3, 7e-3]), \
-                              minmnormback=array([1e0]), \
-                              maxmnormback=array([1e12]), \
-                              exprtype='chan', \
-                              minmflux=1e-15, \
-                              maxmflux=1e-13, \
+                              minmnormback=array([5e2]), \
+                              maxmnormback=array([1e4]), \
+                              minmflux=1e-7, \
+                              maxmflux=1e-3, \
                              )
 
 if len(sys.argv) > 1:

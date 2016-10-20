@@ -32,54 +32,7 @@ def retr_plnkmapsorig(gdat, strgmapsplnk):
         mapsplnkorig = hp.reorder(mapsplnkorig, n2r=True)
     else:
         
-        # read sky maps
-        if strgmapsplnk[1] == '0':
-            strgfrst = 'plnk/LFI_SkyMap_' 
-            strgseco = '-BPassCorrected-field-IQU_0256_R2.01_full.fits'
-            strgcols = 'TEMPERATURE'
-        elif strgmapsplnk[1] == '1' or strgmapsplnk[1] == '2' or strgmapsplnk[1] == '3':
-            strgfrst = 'plnk/HFI_SkyMap_'
-            strgseco = '-field-IQU_2048_R2.02_full.fits'
-            strgcols = 'I_STOKES'
-        else:
-            strgfrst = 'plnk/HFI_SkyMap_'
-            strgseco = '-field-Int_2048_R2.02_full.fits'
-            strgcols = 'I_STOKES'
-        strg = strgfrst + '%s' % strgmapsplnk[1:] + strgseco
-        mapsplnk = pf.getdata(gdat.pathdata + strg, 1)[strgcols]
-        mapsplnk = hp.reorder(mapsplnk, n2r=True)
-
-        print 'Changing units...'
-        # change units of the sky maps to Jy/sr
-        if strgmapsplnk != '0545' and strgmapsplnk != '0857':
-            ## from Kcmb
-            if calcfactconv:
-                # read Planck band transmission data
-                if strgmapsplnk[1] == '0':
-                    strg = 'LFI_RIMO_R2.50'
-                    strgextn = 'BANDPASS_%s' % strgmapsplnk[1:]
-                    freqband = pf.open(gdat.pathdata + '/%s.fits' % strg)[strgextn].data['WAVENUMBER'][1:] * 1e9
-                else:
-                    strg = 'plnk/HFI_RIMO_R2.00'
-                    strgextn = 'BANDPASS_F%s' % strgmapsplnk[1:]
-                    freqband = 1e2 * velolght * pf.open(gdat.pathdata + '/%s.fits' % strg)[strgextn].data['WAVENUMBER'][1:]
-                tranband = pf.open(gdat.pathdata + '/%s.fits' % strg)[strgextn].data['TRANSMISSION'][1:]
-                indxfreqbandgood = where(tranband > 1e-6)[0]
-                indxfreqbandgood = arange(amin(indxfreqbandgood), amax(indxfreqbandgood) + 1)
-
-                # calculate the unit conversion factor
-                freqscal = consplnk * freqband[indxfreqbandgood] / consbolt / tempcmbr
-                freqcntr = float(strgmapsplnk) * 1e9
-                specdipo = 1e26 * 2. * (consplnk * freqband[indxfreqbandgood]**2 / velolght / tempcmbr)**2 / consbolt / (exp(freqscal) - 1.)**2 * exp(freqscal) # [Jy/sr]
-                factconv = trapz(specdipo * tranband[indxfreqbandgood], freqband[indxfreqbandgood]) / \
-                                                trapz(freqcntr * tranband[indxfreqbandgood] / freqband[indxfreqbandgood], freqband[indxfreqbandgood]) # [Jy/sr/Kcmb]
-            else:
-                # read the unit conversion factors provided by Planck
-                factconv = factconvplnk[k, 1] * 1e6
-        else:
-            ## from MJy/sr
-            factconv = 1e6
-        mapsplnk *= factconv
+        mapsplnk = tdpy.util.retr_plnkfreqmaps(strgmapsplnk)
 
         # plot the Planck map
         tdpy.util.plot_maps(gdat.pathimag + 'mapsplnk%s.pdf' % strgmapsplnk, mapsplnk, satu=True)
@@ -176,10 +129,11 @@ def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     strgtimestmp = tdpy.util.retr_strgtimestmp()
     
     # run tag
-    rtag = '%s_%04d_%04d_%04d' % (strgtimestmp, numbside, mpolmerg, mpolsmth)
+    rtag = '%04d_%04d_%04d' % (numbside, mpolmerg, mpolsmth)
+    extn = strgtimestmp + '_' + rtag
     
     # paths
-    gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('tdgu', 'ferm_igal/', 'ferm_igal/mergmaps/', rtag)
+    gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('tdgu', 'ferm_igal/', 'ferm_igal/mergmaps/', extn)
 
     # time stamp
     strgtimestmp = tdpy.util.retr_strgtimestmp()
@@ -190,7 +144,9 @@ def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     gdat.subspnts = True
     
     retr_axisener(gdat)
-    
+   
+    indxevttrofi = arange(4)
+
     # analysis setup
     ## plots
     alph = 0.5
@@ -204,7 +160,11 @@ def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     binsener = array([0.1, 0.3, 1., 3., 10., 100.])
     meanener = sqrt(binsener[1:] * binsener[:-1])
     numbener = meanener.size
-    
+    indxener = arange(numbener)
+    indxevttrofi = arange(3, 4)
+    numbevtt = indxevttrofi.size
+    indxevtt = arange(numbevtt)
+
     ## constants
     consplnk = 6.63e-34 # [J s]
     consbolt = 1.38e-23 # [J/K]
@@ -224,14 +184,15 @@ def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     ## Fermi-LAT flux map
     path = gdat.pathdata + '/fermflux_cmp0_igal.fits'
     mapsfermorig = sum(pf.getdata(path), 2)
+    numbpixlferm = mapsfermorig.shape[1]
+    numbsideferm = int(sqrt(numbpixlferm / 12))
     mapsfermorig -= mean(mapsfermorig, 1)[:, None]
     mapsfermorig /= std(mapsfermorig, 1)[:, None]
     mapsferm = empty_like(mapsfermorig)
-    for i in arange(numbener):
+    for i in indxener:
         tdpy.util.plot_maps(gdat.pathimag + 'mapsfermorig%04d.pdf' % i, mapsfermorig[i, :], satu=True)
-        tdpy.util.plot_maps(gdat.pathimag + 'mapsferm%04d.pdf' % i, mapsferm[i, :], satu=True)
         mapsferm[i, :] = tdpy.util.smth(mapsfermorig[i, :], mpolsmth, mpol=True)
-    numbsideferm = int(sqrt(mapsfermorig.shape[1] / 12))
+        tdpy.util.plot_maps(gdat.pathimag + 'mapsferm%04d.pdf' % i, mapsferm[i, :], satu=True)
 
     # 3FGL flux map
     path = gdat.pathdata + 'gll_psc_v16.fit'
@@ -239,10 +200,22 @@ def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     lgalfgl3 = datafgl3['glon']
     lgalfgl3 = ((lgalfgl3 - 180.) % 360.) - 180.
     bgalfgl3 = datafgl3['glat']
-    stdvfgl3 = tdpy.util.retr_fwhmferm() / 2.
+    stdvfgl3 = tdpy.util.retr_fwhmferm(meanener, indxevttrofi) / 2.
     specfgl3 = stack((datafgl3['Flux100_300'], datafgl3['Flux300_1000'], datafgl3['Flux1000_3000'], \
                                                             datafgl3['Flux3000_10000'], datafgl3['Flux10000_100000'])) / gdat.diffenerfull[:, None]
-    mapspntsferm = tdpy.util.retr_mapspnts(lgalfgl3, bgalfgl3, stdvfgl3, specfgl3, verbtype=2, numbside=numbsideferm)
+    
+    # temp
+    numbpntsfgl3 = 10
+    indxfgl3brgt = argsort(specfgl3[2, :])
+    lgalfgl3 = lgalfgl3[indxfgl3brgt][:numbpntsfgl3]
+    bgalfgl3 = bgalfgl3[indxfgl3brgt][:numbpntsfgl3]
+    specfgl3 = specfgl3[:, indxfgl3brgt][:, :numbpntsfgl3]
+    mapspntsferm = empty((numbener, numbpixlferm, numbevtt))
+    for i in indxener:
+        for m in indxevtt:
+            mapspntsferm[i, :, m] = tdpy.util.retr_mapspnts(lgalfgl3, bgalfgl3, stdvfgl3[i, m], specfgl3[i, :], verbtype=2, numbside=numbsideferm)
+
+
 
     if plotfull:
         # plot tranmission spectra
@@ -256,7 +229,7 @@ def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
             axis.loglog(1e-9 * freqband, tranband, label=labl)
         axis.legend(loc=3, ncol=2)
         plt.tight_layout()
-        path = gdat.pathimag + 'tran_%s.pdf' % rtag
+        path = gdat.pathimag + 'tran.pdf'
         plt.savefig(path)
         plt.close(figr)
         strgmapsplnk = ['0030', '0044', '0070', '0100', '0143', '0217', '0353', '0545', '0857', 'radi']
@@ -271,7 +244,7 @@ def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
         path = gdat.pathdata + 'plnk/HFI_Mask_PointSrc_2048_R2.00.fits'
         mapsmask = pf.open(path)[1].data['F353']
         mapsmask = hp.reorder(mapsmask, n2r=True)
-        tdpy.util.plot_maps(gdat.pathimag + 'mapsmask_%s.pdf' % rtag, mapsmask)
+        tdpy.util.plot_maps(gdat.pathimag + 'mapsmask.pdf', mapsmask)
     
     #strgmapsplnk = 'radi'
     strgmapsplnk = '0857'
@@ -279,7 +252,7 @@ def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     # get input maps
     ## Planck map
     print 'Smoothing the Planck map...'
-    path = gdat.pathdata + 'mapsplnk_%s.fits' % rtag
+    path = gdat.pathdata + 'mapsplnk.fits'
     if os.path.isfile(path):
         print 'Reading %s...' % path
         mapsplnk = pf.getdata(path)
@@ -287,7 +260,7 @@ def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
         mapsplnkorig = retr_plnkmapsorig(gdat, strgmapsplnk)
         mapsplnkorig -= mean(mapsplnkorig)
         mapsplnkorig /= std(mapsplnkorig)
-        tdpy.util.plot_maps(gdat.pathimag + 'mapsplnkorig_%s.pdf' % rtag, mapsplnkorig, satu=True)
+        tdpy.util.plot_maps(gdat.pathimag + 'mapsplnkorig.pdf', mapsplnkorig, satu=True)
         # temp
         indxpixlmask = []
         mapsplnk, mapsalmc, mpolsmthplnk, wghtsmthplnk = tdpy.util.smth(mapsplnkorig, mpolsmth, mpol=True, retrfull=True, indxpixlmask=indxpixlmask, numbsideoutp=numbside)
@@ -540,7 +513,9 @@ def retr_axisener(gdat):
 
 def regrback( \
               numbproc=1, \
-              numbswep=None, \
+              numbswep=100000, \
+              factthin=1, \
+              numbburn=50000, \
               datatype='inpt', \
               verbtype=1, \
               makeplot=False, \
@@ -548,8 +523,8 @@ def regrback( \
               strgexpo='fermexpo_cmp0_igal.fits', \
               #strgback=['isotflux', 'fdfmflux', 'plnk/HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'lambda_sfd_ebv.fits', 'darktemp'], \
               strgback=['isotflux', 'fdfmflux'], \
-              indxenerincl=arange(1, 4), \
-              indxevttincl=arange(3, 4), \
+              indxenerrofi=arange(1, 4), \
+              indxevttrofi=arange(3, 4), \
               maxmgang=20.
              ):
 
@@ -566,20 +541,13 @@ def regrback( \
     gdat.strgexpr = strgexpr
     gdat.strgexpo = strgexpo
     gdat.strgback = strgback
-    gdat.indxenerincl = indxenerincl
-    gdat.indxevttincl = indxevttincl
+    gdat.indxenerrofi = indxenerrofi
+    gdat.indxevttrofi = indxevttrofi
     gdat.maxmgang = maxmgang
     
-    #theory of everything in a shell
-    #ecedmmkj = tanshuuydiomw if hkshdud => hsgdsiiiis 
-    #return hsudghin <= TRUE
-    #for d(f) if ede = FALSE
-    #return tansu => dghsishjklnbjks,  a =  nonsense(tansu=cooncon)
-
-
     # axes
     retr_axisener(gdat)
-    gdat.binsener = gdat.binsenerfull[gdat.indxenerincl[0]:gdat.indxenerincl[-1] + 2]
+    gdat.binsener = gdat.binsenerfull[gdat.indxenerrofi[0]:gdat.indxenerrofi[-1] + 2]
 
     gdat.binsener, gdat.meanener, gdat.diffener, gdat.numbener, gdat.indxener = tdpy.util.retr_axis(bins=gdat.binsener, scal='logt')
     gdat.strgbinsener = ['%.3g GeV - %.3g GeV' % (gdat.binsener[i], gdat.binsener[i+1]) for i in gdat.indxener]
@@ -587,7 +555,7 @@ def regrback( \
     ## event type
     gdat.indxevttfull = arange(4)
     gdat.numbevttfull = gdat.indxevttfull.size
-    gdat.indxevttrofi = gdat.indxevttfull[gdat.indxevttincl]
+    gdat.indxevttrofi = gdat.indxevttfull[gdat.indxevttrofi]
     gdat.numbevtt = gdat.indxevttrofi.size
     gdat.indxevtt = arange(gdat.numbevtt)
 
@@ -607,7 +575,7 @@ def regrback( \
     minmbgal = -gdat.maxmgang
     maxmbgal = gdat.maxmgang 
 
-    indxdatacubefilt = meshgrid(gdat.indxenerincl, gdat.indxpixlrofi, gdat.indxevttincl, indexing='ij')
+    indxdatacubefilt = meshgrid(gdat.indxenerrofi, gdat.indxpixlrofi, gdat.indxevttrofi, indexing='ij')
     
     # get data structure
     datapara = retr_datapara(gdat)
@@ -619,10 +587,11 @@ def regrback( \
     strgtimestmp = tdpy.util.retr_strgtimestmp()
     
     # setup
-    gdat.rtag = '%s_%s' % (strgtimestmp, gdat.datatype)
-    
+    gdat.rtag = '%s' % (gdat.datatype)
+    gdat.extn = strgtimestmp + '_' + gdat.rtag
+
     # paths
-    gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('tdgu', 'ferm_igal/', 'ferm_igal/regrback/', gdat.rtag)
+    gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('tdgu', 'ferm_igal/', 'ferm_igal/regrback/', gdat.extn)
 
     ## data
     if gdat.datatype == 'inpt':
@@ -718,7 +687,7 @@ def regrback( \
     for c in gdat.indxback:
         for i in gdat.indxener:
             for m in gdat.indxevtt:
-                gdat.fluxback[c, i, :, m] = gdat.fluxbackfull[c, gdat.indxenerincl[i], gdat.indxpixlrofi, gdat.indxevttincl[m]]
+                gdat.fluxback[c, i, :, m] = gdat.fluxbackfull[c, gdat.indxenerrofi[i], gdat.indxpixlrofi, gdat.indxevttrofi[m]]
 
     # load the map to the array whose power spectrum will be calculated
     gdat.mapsplot[1:, gdat.indxpixlrofi] = gdat.fluxback[:, 0, :, 0]
@@ -754,8 +723,9 @@ def regrback( \
     initsamp = rand(gdat.numbproc * gdat.numbpara).reshape((gdat.numbproc, gdat.numbpara))
 
     numbplotside = gdat.numbpara
-    chan = tdpy.mcmc.init(retr_llik, datapara, numbproc=gdat.numbproc, numbswep=gdat.numbswep, initsamp=initsamp, gdatextr=gdat, optiprop=optiprop, \
-                verbtype=gdat.verbtype, pathdata=gdat.pathdata, pathimag=gdat.pathimag, numbplotside=numbplotside)
+    
+    chan = tdpy.mcmc.init(retr_llik, datapara, numbproc=gdat.numbproc, numbswep=gdat.numbswep, initsamp=initsamp, gdatextr=gdat, optiprop=optiprop, loadchan=False, \
+                           numbburn=numbburn, factthin=factthin, rtag=gdat.rtag, verbtype=gdat.verbtype, pathdata=gdat.pathdata, pathimag=gdat.pathimag, numbplotside=numbplotside)
     
     listsampvarb, listsamp, listsampcalc, listllik, listaccp, listchro, listindxparamodi, propeffi, levi, info, gmrbstat = chan
     numbsamp = listsamp.shape[0]
@@ -898,12 +868,12 @@ def pcat_ferm_inpt_ptch():
 def pcat_ferm_inpt_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
     pcat.main.init( \
-              numbswep=1000000, \
+              numbswep=100000, \
               randinit=False, \
               maxmgang=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
               indxevttincl=arange(2, 4), \
-              minmflux=1e-9, \
+              minmflux=1e-8, \
               maxmflux=3e-6, \
               strgback=['isotflux.fits', 'fdfmflux.fits'], \
               strgexpo=strgexpo, \
@@ -922,7 +892,7 @@ def pcat_ferm_mock_igal_brok():
     
         pcat.main.init( \
                        numbswep=100, \
-                       verbtype=2, \
+                       verbtype=1, \
                        randinit=False, \
                        exprinfo=False, \
                        indxevttincl=arange(2, 4), \
@@ -982,7 +952,7 @@ def pcat_ferm_mock_igal():
      
     pcat.main.init( \
                    numbswep=10, \
-                   verbtype=2, \
+                   verbtype=1, \
                    randinit=False, \
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
