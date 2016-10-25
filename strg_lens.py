@@ -12,9 +12,11 @@ def pcat_lens_mock():
                               indxenerincl=arange(1), \
                               indxevttincl=arange(1), \
                               strgback=['zero'], \
-                              strgexpo=1e25, \
+                              strgexpo=1e28, \
                               datatype='mock', \
                               exprtype='hubb', \
+                              scalmaps='asnh', \
+                              optiprop=True, \
                               boolpropnormback=False, \
                               maxmnumbpnts=array([100]), \
                               #minmflux=1e-4, \
