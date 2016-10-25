@@ -772,7 +772,11 @@ def retr_ydis_trac():
 
 def retr_flux(gdat, thisfreq, thispara):
 
-    tempcmbr = thispara[0]
+    # CMB
+    if modlcmbrtype == 'full':
+        gdatmodi.flux.cmbr = retr_fluxcmbr(gdat, thisfreq, thispara.tempcmbr)
+    
+
     dustodep = thispara[1]
     dustemisrati = thispara[2]
     dustpowrfrac = thispara[3]
@@ -803,11 +807,11 @@ def retr_flux(gdat, thisfreq, thispara):
         print 'ampldeca: ', ampldeca
         print 'timedeca: ', timedeca
         
-    # CMB
-    fluxcmbr = retr_fluxcmbr(gdat, thisfreq, tempcmbr)
-
     # dust
-    fluxdust, fluxdustcold, fluxdustwarm = retr_fluxdust(gdat, thisfreq, dustodep, dustemisrati, dustpowrfrac, dustwarmindx, dustwarmtemp, dustcoldindx)
+    if gdat.modldusttype == 'singtemp':
+        fluxdust, fluxdustcold, fluxdustwarm = retr_fluxdust_singtemp(gdat, thisfreq, dustodep, dustwarm, dusttemp)
+    if gdat.modldusttype == 'doubtemp':
+        fluxdust, fluxdustcold, fluxdustwarm = retr_fluxdust(gdat, thisfreq, dustodep, dustemisrati, dustpowrfrac, dustwarmindx, dustwarmtemp, dustcoldindx)
    
     # synchrotron
     fluxsync = retr_fluxsync(thisfreq, syncnorm, syncindx)
@@ -827,10 +831,11 @@ def retr_flux(gdat, thisfreq, thispara):
     if gdat.inclcmbrmono:
         fluxtotl += fluxcmbr
 
-    return fluxtotl, fluxcmbr, fluxdustcold, fluxdustwarm, fluxsync, fluxfree, fluxydis, fluxdeca
+    fluxtotl, fluxcmbr, fluxdustcold, fluxdustwarm, fluxsync, fluxfree, fluxydis, fluxdeca
+    return flux
 
 
-def retr_fluxdust(gdat, thisfreq, dustodep, dustemisrati, dustpowrfrac, dustwarmindx, dustwarmtemp, dustcoldindx):
+def retr_fluxdoubdust(gdat, thisfreq, dustodep, dustemisrati, dustpowrfrac, dustwarmindx, dustwarmtemp, dustcoldindx):
 
     factwarm = (sp.special.zetac(4. + dustwarmindx) + 1) * sp.special.gamma(4. + dustwarmindx)
     factcold = (sp.special.zetac(4. + dustcoldindx) + 1) * sp.special.gamma(4. + dustcoldindx)
@@ -1084,6 +1089,8 @@ def retr_egbl(thisfreq):
 def init( \
          datatype='mock', \
          exprtype='pixi', \
+         modldusttype='doubtemp', \
+         mockdusttype='doubtemp', \
          datalabl='PIXIE', \
          numbswep=10000, \
          numbburn=100, \

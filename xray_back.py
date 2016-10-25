@@ -1,6 +1,5 @@
 from __init__ import *
 
-
 def prep_maps():
 
     minmindx = 600
@@ -60,13 +59,17 @@ def prep_maps():
     pf.writeto(path, expo, clobber=True)
 
 
-def chan_mock():
+def pcat_chan_mock():
     
     maxmgang = deg2rad(0.492 / 3600.) * 100.
     gridchan = pcat.main.init( \
-                              numbswep=1000000, \
+                              numbswep=100000, \
+                              #numbswep=100, \
+                              #numbswepplot=10, \
+                              #verbtype=2, \
                               exprinfo=False, \
                               randinit=False, \
+                              modlpsfntype='singgaus', \
                               indxenerincl=arange(2), \
                               indxevttincl=arange(1), \
                               strgback=['unit'], \
@@ -74,21 +77,28 @@ def chan_mock():
                               exprtype='chan', \
                               #probprop=array([0., 0., 0., 0., 0., 1., 1., 1., 1., 0., 0., 1., 1., 1., 1.], dtype=float), \
                               maxmnumbpnts=array([400]), \
+                              #maxmnumbpnts=array([4]), \
                               maxmgang=maxmgang, \
                               minmnormback=array([5e2]), \
                               maxmnormback=array([1e4]), \
-                              minmflux=1e-7, \
-                              maxmflux=1e-3, \
+                              minmflux=1e-8, \
+                              maxmflux=1e-5, \
                               datatype='mock', \
+                              #mockpsfntype='doubgaus', \
                               mocknormback=ones((1, 2)), \
+                              numbsidecart=200, \
                               mocknumbpnts=array([200]), \
+                              #mocknumbpnts=array([2]), \
                              )
 
-def chan_inpt():
+def pcat_chan_inpt():
     
     maxmgang = deg2rad(0.492 / 3600.) * 100.
     gridchan = pcat.main.init( \
                               numbswep=200000, \
+                              #numbswep=100, \
+                              #numbswepplot=10, \
+                              #verbtype=2, \
                               #numbburn=0, \
                               #factthin=20, \
                               exprinfo=False, \
@@ -104,11 +114,12 @@ def chan_inpt():
                               #probprop=array([0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0.], dtype=float), \
                               #initfluxdistslop=array([1.]), \
                               maxmnumbpnts=array([400]), \
+                              #maxmnumbpnts=array([4]), \
                               maxmgang=maxmgang, \
                               minmnormback=array([5e2]), \
                               maxmnormback=array([1e4]), \
-                              minmflux=1e-7, \
-                              maxmflux=1e-3, \
+                              minmflux=1e-8, \
+                              maxmflux=1e-5, \
                              )
 
 if len(sys.argv) > 1:
