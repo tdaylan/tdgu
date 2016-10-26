@@ -6,6 +6,7 @@ def pcat_lens_mock():
     maxmflux = deg2rad(1e2 / 3600.)
     gridchan = pcat.main.init( \
                               numbswep=500000, \
+                              numbproc=20, \
                               numbburn=0, \
                               factthin=5000, \
                               numbswepplot=30000, \
