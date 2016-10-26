@@ -32,7 +32,7 @@ def retr_plnkmapsorig(gdat, strgmapsplnk):
         mapsplnkorig = hp.reorder(mapsplnkorig, n2r=True)
     else:
         
-        mapsplnk = tdpy.util.retr_plnkfreqmaps(strgmapsplnk)
+        mapsplnk = tdpy.util.retr_mapsplnkfreq(strgmapsplnk)
 
         # plot the Planck map
         tdpy.util.plot_maps(gdat.pathimag + 'mapsplnk%s.pdf' % strgmapsplnk, mapsplnk, satu=True)
