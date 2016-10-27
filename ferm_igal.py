@@ -120,6 +120,93 @@ def retr_plnkmapsorig(gdat, strgmapsplnk):
     return mapsorigplnk
 
 
+def retr_modlflux(gdat, sampvarb):
+
+    norm = sampvarb.reshape((gdat.numbback, gdat.numbener))
+    modlflux = norm[:, :, None, None] * gdat.fluxback
+   
+    return modlflux
+
+
+def retr_llik(sampvarb, gdat, gdatintr):
+
+    modlflux = retr_modlflux(gdat, sampvarb)
+    modlfluxtotl = sum(modlflux, axis=0)
+    modlcnts = modlfluxtotl * gdat.expo * gdat.apix * gdat.diffener[:, None, None]
+    llik = sum(gdat.datacnts * log(modlcnts) - modlcnts)
+    sampcalc = []
+
+    return llik, sampcalc
+
+
+def retr_datapara(gdat):
+    
+    gdat.numbpara = gdat.numbener * gdat.numbback
+    gdat.indxpara = arange(gdat.numbpara)
+
+    datapara = tdpy.util.gdatstrt()
+
+    datapara.indx = dict()
+    datapara.minm = zeros(gdat.numbpara)
+    datapara.maxm = zeros(gdat.numbpara)
+    datapara.name = empty(gdat.numbpara, dtype=object)
+    datapara.scal = empty(gdat.numbpara, dtype=object)
+    datapara.labl = empty(gdat.numbpara, dtype=object)
+    datapara.unit = empty(gdat.numbpara, dtype=object)
+    datapara.vari = zeros(gdat.numbpara)
+    datapara.true = zeros(gdat.numbpara)
+
+    for n in gdat.indxpara:
+        datapara.indx['norm%04d' % n] = n
+        datapara.name[n] = 'norm%04d' % n
+        datapara.scal[n] = 'logt'
+        if n // gdat.numbener == 0 or n // gdat.numbener == 1:
+            datapara.minm[n] = 1e-4
+            datapara.maxm[n] = 1e1
+        else:
+            datapara.minm[n] = 1e-9
+            datapara.maxm[n] = 1e-3
+        if n // gdat.numbener == 0:
+            strg = 'isot'
+        if n // gdat.numbener == 1:
+            strg = 'fdfm'
+        if n // gdat.numbener == 2:
+            strg = 'plnk'
+        if n // gdat.numbener == 3:
+            strg = 'wise'
+        if n // gdat.numbener == 5:
+            strg = 'fink'
+        if n // gdat.numbener == 4:
+            strg = 'dark'
+        datapara.labl[n] = '$A_{%d}^{%s}$' % (n % gdat.numbener, strg)
+        datapara.unit[n] = ''
+        datapara.vari[n] = 1e-1
+        datapara.true[n] = None
+    
+    datapara.strg = datapara.labl + ' ' + datapara.unit
+    
+    return datapara
+
+
+def defn_gtbn():
+    
+    numbener = 30
+    minmener = 0.1
+    maxmener = 100.
+    binsener = logspace(log10(minmener), log10(maxmener), numbener + 1)
+    lowrener = binsener[:-1]
+    upprener = binsener[1:]
+    limtener = stack((lowrener, upprener), axis=1)
+    path = os.environ["TDPY_DATA_PATH"] + '/gtbndefn_back.dat'
+    savetxt(path, limtener, fmt='%10.5g')
+
+
+def retr_axisener(gdat):
+    
+    gdat.binsenerfull = array([0.1, 0.3, 1., 3., 10., 100.])
+    gdat.binsenerfull, gdat.meanenerfull, gdat.diffenerfull, gdat.numbenerfull, gdat.indxenerfull = tdpy.util.retr_axis(bins=gdat.binsenerfull, scal='logt')
+
+
 def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
 
     # construct the global object
@@ -205,7 +292,7 @@ def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
                                                             datafgl3['Flux3000_10000'], datafgl3['Flux10000_100000'])) / gdat.diffenerfull[:, None]
     
     # temp
-    numbpntsfgl3 = 10
+    numbpntsfgl3 = 2
     indxfgl3brgt = argsort(specfgl3[2, :])
     lgalfgl3 = lgalfgl3[indxfgl3brgt][:numbpntsfgl3]
     bgalfgl3 = bgalfgl3[indxfgl3brgt][:numbpntsfgl3]
@@ -214,8 +301,6 @@ def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     for i in indxener:
         for m in indxevtt:
             mapspntsferm[i, :, m] = tdpy.util.retr_mapspnts(lgalfgl3, bgalfgl3, stdvfgl3[i, m], specfgl3[i, :], verbtype=2, numbside=numbsideferm)
-
-
 
     if plotfull:
         # plot tranmission spectra
@@ -246,8 +331,8 @@ def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
         mapsmask = hp.reorder(mapsmask, n2r=True)
         tdpy.util.plot_maps(gdat.pathimag + 'mapsmask.pdf', mapsmask)
     
-    #strgmapsplnk = 'radi'
-    strgmapsplnk = '0857'
+    strgmapsplnk = 'radi'
+    #strgmapsplnk = '0857'
     
     # get input maps
     ## Planck map
@@ -423,93 +508,6 @@ def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
             path = gdat.pathimag + 'mapsresiplnk%04d.pdf' % i
             tdpy.util.plot_maps(path, mapsmerg[i, :] - mapsplnk, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, resi=True, satu=True)
         
-
-def retr_modlflux(gdat, sampvarb):
-
-    norm = sampvarb.reshape((gdat.numbback, gdat.numbener))
-    modlflux = norm[:, :, None, None] * gdat.fluxback
-   
-    return modlflux
-
-
-def retr_llik(sampvarb, gdat, gdatintr):
-
-    modlflux = retr_modlflux(gdat, sampvarb)
-    modlfluxtotl = sum(modlflux, axis=0)
-    modlcnts = modlfluxtotl * gdat.expo * gdat.apix * gdat.diffener[:, None, None]
-    llik = sum(gdat.datacnts * log(modlcnts) - modlcnts)
-    sampcalc = []
-
-    return llik, sampcalc
-
-
-def retr_datapara(gdat):
-    
-    gdat.numbpara = gdat.numbener * gdat.numbback
-    gdat.indxpara = arange(gdat.numbpara)
-
-    datapara = tdpy.util.gdatstrt()
-
-    datapara.indx = dict()
-    datapara.minm = zeros(gdat.numbpara)
-    datapara.maxm = zeros(gdat.numbpara)
-    datapara.name = empty(gdat.numbpara, dtype=object)
-    datapara.scal = empty(gdat.numbpara, dtype=object)
-    datapara.labl = empty(gdat.numbpara, dtype=object)
-    datapara.unit = empty(gdat.numbpara, dtype=object)
-    datapara.vari = zeros(gdat.numbpara)
-    datapara.true = zeros(gdat.numbpara)
-
-    for n in gdat.indxpara:
-        datapara.indx['norm%04d' % n] = n
-        datapara.name[n] = 'norm%04d' % n
-        datapara.scal[n] = 'logt'
-        if n // gdat.numbener == 0 or n // gdat.numbener == 1:
-            datapara.minm[n] = 1e-4
-            datapara.maxm[n] = 1e1
-        else:
-            datapara.minm[n] = 1e-9
-            datapara.maxm[n] = 1e-3
-        if n // gdat.numbener == 0:
-            strg = 'isot'
-        if n // gdat.numbener == 1:
-            strg = 'fdfm'
-        if n // gdat.numbener == 2:
-            strg = 'plnk'
-        if n // gdat.numbener == 3:
-            strg = 'wise'
-        if n // gdat.numbener == 5:
-            strg = 'fink'
-        if n // gdat.numbener == 4:
-            strg = 'dark'
-        datapara.labl[n] = '$A_{%d}^{%s}$' % (n % gdat.numbener, strg)
-        datapara.unit[n] = ''
-        datapara.vari[n] = 1e-1
-        datapara.true[n] = None
-    
-    datapara.strg = datapara.labl + ' ' + datapara.unit
-    
-    return datapara
-
-
-def defn_gtbn():
-    
-    numbener = 30
-    minmener = 0.1
-    maxmener = 100.
-    binsener = logspace(log10(minmener), log10(maxmener), numbener + 1)
-    lowrener = binsener[:-1]
-    upprener = binsener[1:]
-    limtener = stack((lowrener, upprener), axis=1)
-    path = os.environ["TDPY_DATA_PATH"] + '/gtbndefn_back.dat'
-    savetxt(path, limtener, fmt='%10.5g')
-
-
-def retr_axisener(gdat):
-    
-    gdat.binsenerfull = array([0.1, 0.3, 1., 3., 10., 100.])
-    gdat.binsenerfull, gdat.meanenerfull, gdat.diffenerfull, gdat.numbenerfull, gdat.indxenerfull = tdpy.util.retr_axis(bins=gdat.binsenerfull, scal='logt')
-
 
 def regrback( \
               numbproc=1, \
@@ -725,7 +723,7 @@ def regrback( \
     numbplotside = gdat.numbpara
     
     chan = tdpy.mcmc.init(retr_llik, datapara, numbproc=gdat.numbproc, numbswep=gdat.numbswep, initsamp=initsamp, gdatextr=gdat, optiprop=optiprop, loadchan=False, \
-                           numbburn=numbburn, factthin=factthin, rtag=gdat.rtag, verbtype=gdat.verbtype, pathdata=gdat.pathdata, pathimag=gdat.pathimag, numbplotside=numbplotside)
+                  numbburn=numbburn, factthin=factthin, rtag=gdat.rtag, verbtype=gdat.verbtype, pathdata=gdat.pathdata, pathimag=gdat.pathimag, numbplotside=numbplotside)
     
     listsampvarb, listsamp, listsampcalc, listllik, listaccp, listchro, listindxparamodi, propeffi, levi, info, gmrbstat = chan
     numbsamp = listsamp.shape[0]
@@ -869,7 +867,6 @@ def pcat_ferm_inpt_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_c
     
     pcat.main.init( \
               numbswep=100000, \
-              randinit=False, \
               maxmgang=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
               indxevttincl=arange(2, 4), \
@@ -893,7 +890,6 @@ def pcat_ferm_mock_igal_brok():
         pcat.main.init( \
                        numbswep=100, \
                        verbtype=1, \
-                       randinit=False, \
                        exprinfo=False, \
                        indxevttincl=arange(2, 4), \
                        indxenerincl=arange(1, 4), \
@@ -925,49 +921,38 @@ def pcat_ferm_mock_igal_popl():
      
     pcat.main.init( \
                    numbswep=10000, \
-                   randinit=False, \
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
                    strgback=['isotflux.fits'], \
-                   
                    maxmgang=deg2rad(20.), \
                    fluxdisttype=['brok'], \
-                   
                    maxmnumbpnts=array([400]), \
                    minmflux=3e-11, \
                    maxmflux=3e-7, \
-
                    datatype='mock', \
-                   mocknumbpnts=array([400]), \
-                   
+                   mocknumbpnts=array([3, 3, 3]), \
                    mockspatdisttype=['unif', 'disc', 'gang'], \
-                   
-                   mocksinddiststdv=array([.5]), \
-                   mocksinddistmean=array([2.]), \
+                   mockfluxdistslop=array([2.6, 2.6, 3.5]), \
+                   mocksinddiststdv=array([.5, .5, .5]), \
+                   mocksinddistmean=array([2., 2., 2.]), \
                   )
 
 
 def pcat_ferm_mock_igal():
      
     pcat.main.init( \
-                   numbswep=10, \
-                   verbtype=1, \
-                   randinit=False, \
+                   numbswep=100000, \
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
                    strgback=['isotflux.fits', 'fdfmflux.fits'], \
-                   #maxmnumbpnts=array([2, 2, 4]), \
-                   #maxmnumbpnts=array([200, 200, 400]), \
-                   maxmnumbpnts=array([2]), \
                    maxmgang=deg2rad(20.), \
                    minmflux=3e-11, \
                    maxmflux=3e-7, \
                    datatype='mock', \
-                   #mocknumbpnts=array([1, 1, 2]), \
-                   mocknumbpnts=array([3, 3, 3]), \
-                   mockspatdisttype=['unif', 'disc', 'gang'], \
+                   mocknumbpnts=array([100]), \
+                   mockspatdisttype=['gang'], \
                    mockfluxdistslop=array([2.6, 2.6, 3.5]), \
                    mocksinddiststdv=array([.5, .5, .5]), \
                    mocksinddistmean=array([2., 2., 2.]), \
@@ -984,4 +969,3 @@ def regrback_arry():
 
 
 globals().get(sys.argv[1])()
-
