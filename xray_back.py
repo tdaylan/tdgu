@@ -92,20 +92,23 @@ def pcat_chan_mock():
     
     maxmgang = deg2rad(0.492 / 3600.) * 100.
     gridchan = pcat.main.init( \
-                              numbswep=70000, \
-                              numbswepplot=30000, \
+                              numbswep=100, \
+                              #numbswep=200000, \
+                              #numbswepplot=30000, \
+                              #numbswepplot=1, \
+                              #factthin=1000, \
                               exprinfo=False, \
                               randinit=False, \
                               modlpsfntype='singgaus', \
                               indxenerincl=arange(2), \
                               indxevttincl=arange(1), \
                               #verbtype=2, \
-                              strgback=['unit', 'chanfluxback_0200_4msc.fits'], \
-                              #strgback=['chanfluxback_0200_4msc.fits'], \
+                              strgback=['unit'], \
+                              #strgback=['unit', 'chanfluxback_0200_4msc.fits'], \
                               strgexpo='chanexpo_0200_4msc.fits', \
                               exprtype='chan', \
-                              mockvarioaxi=False, \
-                              modlvarioaxi=False, \
+                              #mockvarioaxi=False, \
+                              #modlvarioaxi=False, \
                               maxmgang=maxmgang, \
                               scalmaps='asnh', \
                               #minmnormback=array([5e2]), \
@@ -115,29 +118,28 @@ def pcat_chan_mock():
                               datatype='mock', \
                               mocknormback=ones((1, 2)), \
                               numbsidecart=200, \
-                              mocknumbpnts=array([200]), \
-                              #maxmnumbpnts=array([2]), \
-                              #mocknumbpnts=array([2]), \
+                              #mocknumbpnts=array([200]), \
+                              maxmnumbpnts=array([2]), \
+                              mocknumbpnts=array([2]), \
                              )
 
 def pcat_chan_inpt():
     
     maxmgang = deg2rad(0.492 / 3600.) * 100.
     gridchan = pcat.main.init( \
-                              numbswep=10000, \
-                              numbswepplot=3000, \
+                              numbswep=100, \
+                              numbswepplot=1, \
                               exprinfo=False, \
                               randinit=True, \
                               indxenerincl=arange(2), \
                               mockvarioaxi=False, \
                               modlvarioaxi=False, \
                               scalmaps='asnh', \
-                              verbtype=2, \
-                              boolproppsfn=True, \
+                              #verbtype=2, \
                               indxevttincl=arange(1), \
-                              #strgback=['unit'], \
                               #strgback=['chanfluxback_0300_4msc.fits'], \
-                              strgback=['chanfluxback_0200_4msc.fits'], \
+                              strgback=['unit'], \
+                              #strgback=['unit', 'chanfluxback_0200_4msc.fits'], \
                               #strgexpo='chanexpo_0300_4msc.fits', \
                               strgexpo='chanexpo_0200_4msc.fits', \
                               datatype='inpt', \
@@ -145,10 +147,10 @@ def pcat_chan_inpt():
                               #strgexpr='chanflux_0300_4msc.fits', \
                               strgexpr='chanflux_0200_4msc.fits', \
                               exprtype='chan', \
-                              maxmnumbpnts=array([2]), \
+                              maxmnumbpnts=array([1]), \
                               maxmgang=maxmgang, \
-                              minmnormback=array([5e2]), \
-                              maxmnormback=array([1e4]), \
+                              minmnormback=array([1e4]), \
+                              maxmnormback=array([1e5]), \
                               minmflux=1e-7, \
                               maxmflux=1e-4, \
                              )
