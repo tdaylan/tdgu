@@ -92,7 +92,8 @@ def pcat_chan_mock():
     
     maxmgang = deg2rad(0.492 / 3600.) * 100.
     gridchan = pcat.main.init( \
-                              numbswep=110000, \
+                              numbswep=70000, \
+                              numbswepplot=30000, \
                               exprinfo=False, \
                               randinit=False, \
                               modlpsfntype='singgaus', \
@@ -109,7 +110,7 @@ def pcat_chan_mock():
                               scalmaps='asnh', \
                               #minmnormback=array([5e2]), \
                               #maxmnormback=array([1e4]), \
-                              minmflux=1e-7, \
+                              minmflux=3e-7, \
                               maxmflux=1e-4, \
                               datatype='mock', \
                               mocknormback=ones((1, 2)), \
