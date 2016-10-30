@@ -847,7 +847,7 @@ def pcat_ferm_inpt_ptch():
             pf.writeto(path, maps, clobber=True)
     
     pcat.main.init( \
-              numbswep=100000, \
+              numbswep=200000, \
               randinit=True, \
               maxmgang=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
@@ -866,7 +866,7 @@ def pcat_ferm_inpt_ptch():
 def pcat_ferm_inpt_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
     pcat.main.init( \
-              numbswep=100000, \
+              numbswep=200000, \
               maxmgang=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
               indxevttincl=arange(2, 4), \
@@ -881,15 +881,13 @@ def pcat_ferm_inpt_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_c
     
 def pcat_ferm_mock_igal_brok():
      
-    #mockfluxdistbrek = array([1e-10, 3e-10, 1e-9, 3e-9, 1e-8])
+    listmockfluxdistbrek = array([1e-10, 3e-10, 1e-9, 3e-9, 1e-8])
     mockfluxdistbrek = array([1e-9])
     listmockfluxdistsloplowr = array([1.9, 2.2, 2.8, 3.1, 3.4])
     numbiter = listmockfluxdistsloplowr.size
     for k in range(numbiter):
-    
         pcat.main.init( \
-                       numbswep=100, \
-                       verbtype=1, \
+                       numbswep=200000, \
                        exprinfo=False, \
                        indxevttincl=arange(2, 4), \
                        indxenerincl=arange(1, 4), \
@@ -901,15 +899,15 @@ def pcat_ferm_mock_igal_brok():
                        
                        boolpropfluxdistbrek=False, \
 
-                       maxmnumbpnts=array([4]), \
                        minmflux=3e-11, \
                        maxmflux=3e-7, \
 
                        datatype='mock', \
-                       mocknumbpnts=array([4]), \
-                       
+                       mocknumbpnts=array([100]), \
+                        
+                       mockfluxdisttype=['brok'], \
                        mockfluxdistbrek=mockfluxdistbrek, \
-                       mockfluxdistsloplowr=listmockfluxdistsloplowr[k], \
+                       mockfluxdistsloplowr=array([listmockfluxdistsloplowr[k]]), \
                        mockfluxdistslopuppr=array([1.6]), \
                        
                        mocksinddiststdv=array([.5]), \
@@ -917,32 +915,42 @@ def pcat_ferm_mock_igal_brok():
                       )
 
 
-def pcat_ferm_mock_igal_popl():
+def pcat_ferm_mock_igal_syst():
      
-    pcat.main.init( \
-                   numbswep=10000, \
-                   indxevttincl=arange(2, 4), \
-                   indxenerincl=arange(1, 4), \
-                   strgexpo='fermexpo_cmp0_igal.fits', \
-                   strgback=['isotflux.fits'], \
-                   maxmgang=deg2rad(20.), \
-                   fluxdisttype=['brok'], \
-                   maxmnumbpnts=array([400]), \
-                   minmflux=3e-11, \
-                   maxmflux=3e-7, \
-                   datatype='mock', \
-                   mocknumbpnts=array([3, 3, 3]), \
-                   mockspatdisttype=['unif', 'disc', 'gang'], \
-                   mockfluxdistslop=array([2.6, 2.6, 3.5]), \
-                   mocksinddiststdv=array([.5, .5, .5]), \
-                   mocksinddistmean=array([2., 2., 2.]), \
-                  )
+    tupl = [ \
+            # numbener
+            [50, 100, ], \
+           ]
+    numbtupl = len(tupl)
+    indxtupl = np.arange(numbtupl)
+    strgtupl = []
+    for k in range(numbtupl):
+        mocknumbpnts = tupl[k]
+
+        pcat.main.init( \
+                       numbswep=200000, \
+                       indxevttincl=arange(2, 4), \
+                       indxenerincl=arange(1, 4), \
+                       strgexpo='fermexpo_cmp0_igal.fits', \
+                       strgback=['isotflux.fits'], \
+                       maxmnumbpnts=array([20]), \
+                       maxmgang=deg2rad(20.), \
+                       minmflux=3e-11, \
+                       maxmflux=3e-7, \
+                       datatype='mock', \
+                       mocknumbpnts=array([10, 10, 10]), \
+                       mockspatdisttype=['unif', 'disc', 'gang'], \
+                       mockfluxdisttype=['powr', 'powr', 'brok'], \
+                       mockfluxdistslop=array([2.6, 2.6, 3.5]), \
+                       mocksinddiststdv=array([.5, .5, .5]), \
+                       mocksinddistmean=array([2., 2., 2.]), \
+                      )
 
 
 def pcat_ferm_mock_igal():
      
     pcat.main.init( \
-                   numbswep=100000, \
+                   numbswep=200000, \
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
@@ -951,8 +959,10 @@ def pcat_ferm_mock_igal():
                    minmflux=3e-11, \
                    maxmflux=3e-7, \
                    datatype='mock', \
-                   mocknumbpnts=array([100]), \
-                   mockspatdisttype=['gang'], \
+                   maxmnumbpnts=array([20, 20, 20]), \
+                   mocknumbpnts=array([10, 10, 10]), \
+                   mockspatdisttype=['unif', 'disc', 'gang'], \
+                   mockfluxdisttype=['powr', 'powr', 'powr'], \
                    mockfluxdistslop=array([2.6, 2.6, 3.5]), \
                    mocksinddiststdv=array([.5, .5, .5]), \
                    mocksinddistmean=array([2., 2., 2.]), \
