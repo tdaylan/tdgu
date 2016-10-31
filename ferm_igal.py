@@ -847,7 +847,6 @@ def pcat_ferm_inpt_ptch():
             pf.writeto(path, maps, clobber=True)
     
     pcat.main.init( \
-              numbswep=200000, \
               randinit=True, \
               maxmgang=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
@@ -866,7 +865,6 @@ def pcat_ferm_inpt_ptch():
 def pcat_ferm_inpt_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
     pcat.main.init( \
-              numbswep=200000, \
               maxmgang=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
               indxevttincl=arange(2, 4), \
@@ -887,7 +885,6 @@ def pcat_ferm_mock_igal_brok():
     numbiter = listmockfluxdistsloplowr.size
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=200000, \
                        exprinfo=False, \
                        indxevttincl=arange(2, 4), \
                        indxenerincl=arange(1, 4), \
@@ -928,7 +925,6 @@ def pcat_ferm_mock_igal_syst():
         mocknumbpnts = tupl[k]
 
         pcat.main.init( \
-                       numbswep=200000, \
                        indxevttincl=arange(2, 4), \
                        indxenerincl=arange(1, 4), \
                        strgexpo='fermexpo_cmp0_igal.fits', \
@@ -950,7 +946,6 @@ def pcat_ferm_mock_igal_syst():
 def pcat_ferm_mock_igal():
      
     pcat.main.init( \
-                   numbswep=50, \
                    verbtype=2, \
                    #indxevttincl=arange(2, 4), \
                    indxevttincl=arange(3, 4), \
