@@ -92,8 +92,9 @@ def pcat_chan_mock():
     
     maxmgang = deg2rad(0.492 / 3600.) * 100.
     gridchan = pcat.main.init( \
-                              numbswep=21000, \
-                              factthin=21, \
+                              numbswep=210000, \
+                              numbburn=100000, \
+                              factthin=110, \
                               numbswepplot=20000, \
                               exprinfo=False, \
                               indxenerincl=arange(2), \
@@ -113,9 +114,9 @@ def pcat_chan_inpt():
     
     maxmgang = deg2rad(0.492 / 3600.) * 100.
     gridchan = pcat.main.init( \
-                              numbswep=21000, \
-                              numbburn=10000, \
-                              factthin=11, \
+                              numbswep=210000, \
+                              numbburn=100000, \
+                              factthin=110, \
                               numbswepplot=20000, \
                               exprinfo=False, \
                               indxenerincl=arange(2), \
