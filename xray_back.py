@@ -92,24 +92,19 @@ def pcat_chan_mock():
     
     maxmgang = deg2rad(0.492 / 3600.) * 100.
     gridchan = pcat.main.init( \
+                              numbswep=21000, \
+                              factthin=21, \
+                              numbswepplot=20000, \
                               exprinfo=False, \
-                              randinit=False, \
-                              modlpsfntype='singgaus', \
                               indxenerincl=arange(2), \
                               indxevttincl=arange(1), \
                               strgback=['unit'], \
                               strgexpo='chanexpo_0200_4msc.fits', \
                               exprtype='chan', \
-                              #mockvarioaxi=False, \
-                              #modlvarioaxi=False, \
                               maxmgang=maxmgang, \
-                              scalmaps='asnh', \
-                              #minmnormback=array([5e2]), \
-                              #maxmnormback=array([1e4]), \
-                              minmflux=3e-7, \
-                              maxmflux=1e-4, \
+                              minmnormback=array([1e4]), \
+                              maxmnormback=array([1e5]), \
                               datatype='mock', \
-                              mocknormback=ones((1, 2)), \
                               numbsidecart=200, \
                               mocknumbpnts=array([200]), \
                              )
@@ -118,30 +113,22 @@ def pcat_chan_inpt():
     
     maxmgang = deg2rad(0.492 / 3600.) * 100.
     gridchan = pcat.main.init( \
+                              numbswep=210000, \
+                              numbburn=100000, \
+                              factthin=110, \
+                              numbswepplot=20000, \
                               exprinfo=False, \
-                              randinit=True, \
                               indxenerincl=arange(2), \
-                              mockvarioaxi=False, \
-                              modlvarioaxi=False, \
-                              scalmaps='asnh', \
-                              #verbtype=2, \
                               indxevttincl=arange(1), \
-                              #strgback=['chanfluxback_0300_4msc.fits'], \
                               strgback=['unit'], \
-                              #strgback=['unit', 'chanfluxback_0200_4msc.fits'], \
-                              #strgexpo='chanexpo_0300_4msc.fits', \
                               strgexpo='chanexpo_0200_4msc.fits', \
-                              datatype='inpt', \
-                              initfluxdistslop=array([2.]), \
-                              #strgexpr='chanflux_0300_4msc.fits', \
-                              strgexpr='chanflux_0200_4msc.fits', \
                               exprtype='chan', \
-                              maxmnumbpnts=array([3]), \
+                              datatype='inpt', \
+                              strgexpr='chanflux_0200_4msc.fits', \
+                              maxmnumbpnts=array([100]), \
                               maxmgang=maxmgang, \
                               minmnormback=array([1e4]), \
                               maxmnormback=array([1e5]), \
-                              minmflux=1e-7, \
-                              maxmflux=1e-4, \
                              )
 
 if len(sys.argv) > 1:
