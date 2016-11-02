@@ -93,8 +93,8 @@ def pcat_chan_mock():
     maxmgang = deg2rad(0.492 / 3600.) * 100.
     gridchan = pcat.main.init( \
                               numbswep=210000, \
-                              numbburn=100000, \
-                              factthin=110, \
+                              numbburn=10000, \
+                              factthin=200, \
                               numbswepplot=20000, \
                               exprinfo=False, \
                               indxenerincl=arange(2), \
@@ -126,7 +126,6 @@ def pcat_chan_inpt():
                               exprtype='chan', \
                               datatype='inpt', \
                               strgexpr='chanflux_0200_4msc.fits', \
-                              maxmnumbpnts=array([100]), \
                               maxmgang=maxmgang, \
                               minmnormback=array([1e4]), \
                               maxmnormback=array([1e5]), \
