@@ -114,9 +114,9 @@ def pcat_chan_inpt():
     
     maxmgang = deg2rad(0.492 / 3600.) * 100.
     gridchan = pcat.main.init( \
-                              numbswep=210000, \
-                              numbburn=100000, \
-                              factthin=110, \
+                              numbswep=21000, \
+                              numbburn=10000, \
+                              factthin=11, \
                               numbswepplot=20000, \
                               exprinfo=False, \
                               indxenerincl=arange(2), \
