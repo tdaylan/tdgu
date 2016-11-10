@@ -964,6 +964,7 @@ def pcat_ferm_mock_igal():
                    mockfluxdistslop=array([2.6, 2.6, 3.5]), \
                    mocksinddiststdv=array([.5, .5, .5]), \
                    mocksinddistmean=array([2., 2., 2.]), \
+                   mockspectype=['powr', 'expo', 'expo']
                   )
 
 

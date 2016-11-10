@@ -105,7 +105,6 @@ def pcat_chan_mock():
                               numbswep=100000, \
                               factthin=100, \
                               numbswepplot=19000, \
-                              exprinfo=False, \
                               strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
@@ -125,7 +124,6 @@ def pcat_chan_mock_popl():
                               numbburn=10000, \
                               factthin=200, \
                               numbswepplot=20000, \
-                              exprinfo=False, \
                               strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
@@ -142,7 +140,6 @@ def pcat_chan_inpt():
                               numbswep=1300000, \
                               numbburn=300000, \
                               factthin=1000, \
-                              exprinfo=False, \
                               strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
