@@ -3,7 +3,6 @@ import os
 listcmnd = [ \
             'python $TDGU_PATH/xray_back.py pcat_chan_inpt', \
             'python $TDGU_PATH/xray_back.py pcat_chan_mock', \
-            'python $PCAT_PATH/cnfg.py test_psfn', \
             'python $PCAT_PATH/cnfg.py test_lowr', \
             'python $PCAT_PATH/cnfg.py test_errr', \
             'python $PCAT_PATH/cnfg.py test_time', \
@@ -20,6 +19,7 @@ listcmnd = [ \
             'python $TDGU_PATH/ferm_igal.py pcat_ferm_mock_igal_brok', \
             'python $TDGU_PATH/ferm_igal.py pcat_ferm_inpt_igal', \
             'python $TDGU_PATH/ferm_igal.py pcat_ferm_inpt_ptch', \
+            'python $PCAT_PATH/cnfg.py test_psfn', \
              ]
 for k in range(len(listcmnd)):
     try:

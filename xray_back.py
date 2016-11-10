@@ -93,11 +93,31 @@ def prep_maps():
             path = pathdatapcat + 'chanfluxisot_%s.fits' % strgmaps
             print 'Writing to %s...' % path
             fluxisot = zeros_like(flux)
-            fluxisot[:, :, 0] = mean(flux[:, :, 0], 1)[:, None]
+            fluxisot[0, :, :, 0] = mean(flux[0, :, :, 0])
+            fluxisot[1, :, :, 0] = mean(flux[1, :, :, 0])
             pf.writeto(path, fluxisot, clobber=True)
-        
+
 
 def pcat_chan_mock():
+    
+    numbsidecart = 300
+    gridchan = pcat.main.init( \
+                              numbswep=100000, \
+                              factthin=100, \
+                              numbswepplot=19000, \
+                              exprinfo=False, \
+                              strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
+                              strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
+                              exprtype='chan', \
+                              datatype='mock', \
+                              numbsidecart=numbsidecart, \
+                              maxmnumbpnts=array([10]), \
+                              #verbtype=2, \
+                              mocknumbpnts=array([10]), \
+                              mocknormback=zeros((1, 2)), \
+                             )
+
+def pcat_chan_mock_popl():
     
     numbsidecart = 300
     gridchan = pcat.main.init( \
@@ -109,22 +129,22 @@ def pcat_chan_mock():
                               strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
-                              maxmgang=maxmgang, \
                               datatype='mock', \
                               numbsidecart=numbsidecart, \
-                              mocknumbpnts=array([200]), \
+                              maxmnumbpnts=array([5, 4]), \
+                              mocknumbpnts=array([5, 4]), \
                              )
 
 def pcat_chan_inpt():
    
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              verbtype=2, \
                               numbswep=31000, \
                               numbburn=16000, \
                               factthin=150, \
                               numbswepplot=20000, \
                               exprinfo=False, \
+                              probprop=array([0., 0., 0., 0., 0., 0., 0., 1., 1., 0., 0., 0., 0., 0., 0., 0., 0.]), \
                               strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \

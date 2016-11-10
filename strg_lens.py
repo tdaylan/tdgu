@@ -14,7 +14,7 @@ def pcat_lens_mock():
                               exprinfo=False, \
                               indxenerincl=arange(1), \
                               indxevttincl=arange(1), \
-                              strgback=['zero'], \
+                              strgback=[1.], \
                               strgexpo=1e28, \
                               datatype='mock', \
                               exprtype='hubb', \
@@ -28,6 +28,7 @@ def pcat_lens_mock():
                               #maxmflux=1e-1, \
                               minmflux=minmflux, \
                               maxmflux=maxmflux, \
+                              mocknormback=zeros((1, 1)), \
                               mocknumbpnts=array([100]), \
                              )
 

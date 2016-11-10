@@ -946,7 +946,7 @@ def pcat_ferm_mock_igal_syst():
 def pcat_ferm_mock_igal():
      
     pcat.main.init( \
-                   verbtype=2, \
+                   #verbtype=2, \
                    #indxevttincl=arange(2, 4), \
                    indxevttincl=arange(3, 4), \
                    #indxenerincl=arange(1, 4), \
