@@ -111,7 +111,7 @@ def pcat_chan_mock():
                               exprtype='chan', \
                               datatype='mock', \
                               numbsidecart=numbsidecart, \
-                              maxmnumbpnts=array([10]), \
+                              #maxmnumbpnts=array([10]), \
                               #verbtype=2, \
                               mocknumbpnts=array([10]), \
                               mocknormback=zeros((1, 2)), \
@@ -139,17 +139,16 @@ def pcat_chan_inpt():
    
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=31000, \
-                              numbburn=16000, \
-                              factthin=150, \
-                              numbswepplot=20000, \
+                              numbswep=1300000, \
+                              numbburn=300000, \
+                              factthin=1000, \
                               exprinfo=False, \
-                              probprop=array([0., 0., 0., 0., 0., 0., 0., 1., 1., 0., 0., 0., 0., 0., 0., 0., 0.]), \
                               strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
                               datatype='inpt', \
                               strgexpr='chanflux_%04d_4msc.fits' % numbsidecart, \
+                              #maxmnumbpnts=array([10]), \
                              )
 
 if len(sys.argv) > 1:

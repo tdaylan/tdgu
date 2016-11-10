@@ -5,10 +5,11 @@ def pcat_lens_mock():
     minmflux = deg2rad(1. / 3600.)
     maxmflux = deg2rad(1e2 / 3600.)
     gridchan = pcat.main.init( \
-                              numbswep=500000, \
-                              numbproc=20, \
+                              verbtype=2, \
+                              numbswep=10000, \
+                              #numbproc=20, \
                               numbburn=0, \
-                              factthin=5000, \
+                              factthin=10, \
                               numbswepplot=30000, \
                               pntstype='lens', \
                               exprinfo=False, \
