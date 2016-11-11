@@ -109,6 +109,8 @@ def pcat_chan_mock():
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
                               datatype='mock', \
+                              lgalcntr=deg2rad(223.562517912), \
+                              bgalcntr=deg2rad(-54.4384411082), \
                               numbsidecart=numbsidecart, \
                               #maxmnumbpnts=array([10]), \
                               #verbtype=2, \
