@@ -97,6 +97,14 @@ def prep_maps():
             fluxisot[1, :, :, 0] = mean(flux[1, :, :, 0])
             pf.writeto(path, fluxisot, clobber=True)
 
+            print 'expo'
+            print mean(expo)
+            print 'diffener'
+            print diffener
+            print 'apix'
+            print apix
+            print 
+
 
 def pcat_chan_mock():
     
@@ -114,7 +122,7 @@ def pcat_chan_mock():
                               numbsidecart=numbsidecart, \
                               #maxmnumbpnts=array([10]), \
                               #verbtype=2, \
-                              mocknumbpnts=array([10]), \
+                              mocknumbpnts=array([100]), \
                               mocknormback=zeros((1, 2)), \
                              )
 
@@ -139,9 +147,12 @@ def pcat_chan_inpt():
    
     numbsidecart = 300
     gridchan = pcat.main.init( \
+                              #verbtype=2, \
                               numbswep=1300000, \
                               numbburn=300000, \
                               factthin=1000, \
+                              lgalcntr=deg2rad(223.562517912), \
+                              bgalcntr=deg2rad(-54.4384411082), \
                               strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \

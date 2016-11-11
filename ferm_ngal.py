@@ -44,6 +44,7 @@ def pcat_ferm_inpt_ngal_intr( \
                        ): 
 
     karg = {}
+    karg['verbtype'] = 2
     karg['randinit'] = False
     karg['boolproppsfn'] = False
     karg['indxenerincl'] = arange(1, 4)
@@ -88,7 +89,6 @@ def pcat_ferm_inpt_ngal_tim4():
 def pcat_ferm_mock_ngal():
      
     pcat.main.init( \
-                   randinit=False, \
                    boolproppsfn=False, \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
