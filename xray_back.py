@@ -12,7 +12,7 @@ def prep_maps():
     
     cntrindx = array([3260, 3280]) / 2
     numbmaps = len(expomaps)
-    listnumbside = [200, 300]
+    listnumbside = [200, 300, 1500]
     for numbside in listnumbside:
         cntrindx[1] += 30
         minmindx = cntrindx - numbside / 2
@@ -145,7 +145,7 @@ def pcat_chan_mock_popl():
 
 def pcat_chan_inpt():
    
-    numbsidecart = 300
+    numbsidecart = 1500
     gridchan = pcat.main.init( \
                               #verbtype=2, \
                               numbswep=1300000, \
@@ -157,6 +157,7 @@ def pcat_chan_inpt():
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
                               datatype='inpt', \
+                              numbsidecart=numbsidecart, \
                               strgexpr='chanflux_%04d_4msc.fits' % numbsidecart, \
                               #maxmnumbpnts=array([10]), \
                              )
