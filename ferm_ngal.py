@@ -44,7 +44,7 @@ def pcat_ferm_inpt_ngal_intr( \
                        ): 
 
     karg = {}
-    #karg['verbtype'] = 2
+    karg['numbswep'] = 100000
     karg['randinit'] = False
     karg['boolproppsfn'] = False
     karg['indxenerincl'] = arange(1, 4)
@@ -57,7 +57,7 @@ def pcat_ferm_inpt_ngal_intr( \
     karg['maxmflux'] = 1e-7
     karg['datatype'] = 'inpt'
     karg['strgexpr'] = strgexpr
-    karg['maxmnumbpnts'] = array([100])
+#    karg['maxmnumbpnts'] = array([100])
     
     return karg
 

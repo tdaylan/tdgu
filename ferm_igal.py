@@ -865,16 +865,17 @@ def pcat_ferm_inpt_ptch():
 def pcat_ferm_inpt_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
     pcat.main.init( \
-              maxmgang=deg2rad(20.), \
-              indxenerincl=arange(1, 4), \
-              indxevttincl=arange(2, 4), \
-              minmflux=1e-8, \
-              maxmflux=3e-6, \
-              strgback=['isotflux.fits', 'fdfmflux.fits'], \
-              strgexpo=strgexpo, \
-              datatype='inpt', \
-              strgexpr=strgexpr, \
-             )
+                   numbswep=100000, \
+                   maxmgang=deg2rad(20.), \
+                   indxenerincl=arange(1, 4), \
+                   indxevttincl=arange(2, 4), \
+                   minmflux=1e-8, \
+                   maxmflux=3e-6, \
+                   strgback=['isotflux.fits', 'fdfmflux.fits'], \
+                   strgexpo=strgexpo, \
+                   datatype='inpt', \
+                   strgexpr=strgexpr, \
+                  )
     
     
 def pcat_ferm_mock_igal_brok():
