@@ -947,11 +947,8 @@ def pcat_ferm_mock_igal_syst():
 def pcat_ferm_mock_igal():
      
     pcat.main.init( \
-                   verbtype=2, \
-                   #indxevttincl=arange(2, 4), \
-                   indxevttincl=arange(3, 4), \
-                   #indxenerincl=arange(1, 4), \
-                   indxenerincl=arange(2, 3), \
+                   indxevttincl=arange(2, 4), \
+                   indxenerincl=arange(1, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
                    strgback=['isotflux.fits', 'fdfmflux.fits'], \
                    maxmgang=deg2rad(20.), \
