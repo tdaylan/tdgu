@@ -128,7 +128,7 @@ def retr_modlflux(gdat, sampvarb):
     return modlflux
 
 
-def retr_llik(sampvarb, gdat, gdatintr):
+def retr_llik(sampvarb, gdat):
 
     modlflux = retr_modlflux(gdat, sampvarb)
     modlfluxtotl = sum(modlflux, axis=0)
@@ -947,6 +947,7 @@ def pcat_ferm_mock_igal_syst():
 def pcat_ferm_mock_igal():
      
     pcat.main.init( \
+                   verbtype=2, \
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
@@ -955,8 +956,9 @@ def pcat_ferm_mock_igal():
                    minmflux=3e-11, \
                    maxmflux=3e-7, \
                    datatype='mock', \
-                   maxmnumbpnts=array([10, 10, 10]), \
-                   mocknumbpnts=array([5, 5, 5]), \
+                   probprop=array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 1., 1., 0.]), \
+                   maxmnumbpnts=array([3, 3, 3]), \
+                   mocknumbpnts=array([3, 3, 3]), \
                    mockspatdisttype=['unif', 'disc', 'gang'], \
                    mockfluxdisttype=['powr', 'powr', 'powr'], \
                    mockfluxdistslop=array([2.6, 2.6, 3.5]), \
