@@ -28,7 +28,7 @@ def mergmaps_arry():
 def retr_plnkmapsorig(gdat, strgmapsplnk):
 
     if strgmapsplnk == 'radi':
-        mapsplnkorig = pf.getdata(gdat.pathdata + 'plnk/HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 1)['RADIANCE']
+        mapsplnkorig = pf.getdata(gdat.pathdatatdpy + 'plnk/HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 1)['RADIANCE']
         mapsplnkorig = hp.reorder(mapsplnkorig, n2r=True)
     else:
         
@@ -220,6 +220,7 @@ def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     extn = strgtimestmp + '_' + rtag
     
     # paths
+    gdat.pathdatatdpy = tdpy.util.retr_path('tdpy', dataonly=True)
     gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('tdgu', 'ferm_igal/', 'ferm_igal/mergmaps/', extn)
 
     # time stamp
@@ -326,7 +327,7 @@ def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     # get Planck PS mask
     if False:
         print 'Reading the Planck mask...'
-        path = gdat.pathdata + 'plnk/HFI_Mask_PointSrc_2048_R2.00.fits'
+        path = gdat.pathdatatdpy + 'plnk/HFI_Mask_PointSrc_2048_R2.00.fits'
         mapsmask = pf.open(path)[1].data['F353']
         mapsmask = hp.reorder(mapsmask, n2r=True)
         tdpy.util.plot_maps(gdat.pathimag + 'mapsmask.pdf', mapsmask)
@@ -589,6 +590,7 @@ def regrback( \
     gdat.extn = strgtimestmp + '_' + gdat.rtag
 
     # paths
+    gdat.pathdatatdpy = tdpy.util.retr_path('tdpy', dataonly=True)
     gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('tdgu', 'ferm_igal/', 'ferm_igal/regrback/', gdat.extn)
 
     ## data
@@ -947,7 +949,7 @@ def pcat_ferm_mock_igal_syst():
 def pcat_ferm_mock_igal():
      
     pcat.main.init( \
-                   verbtype=2, \
+                   #verbtype=2, \
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
@@ -956,7 +958,7 @@ def pcat_ferm_mock_igal():
                    minmflux=3e-11, \
                    maxmflux=3e-7, \
                    datatype='mock', \
-                   probprop=array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 1., 1., 0.]), \
+                   #probprop=array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 1., 1., 0.]), \
                    maxmnumbpnts=array([3, 3, 3]), \
                    mocknumbpnts=array([3, 3, 3]), \
                    mockspatdisttype=['unif', 'disc', 'gang'], \
