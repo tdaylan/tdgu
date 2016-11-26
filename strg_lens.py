@@ -7,9 +7,9 @@ def pcat_lens_mock():
     gridchan = pcat.main.init( \
                               verbtype=2, \
                               #makeplot=False, \
-                              numbswep=100, \
+                              numbswep=50, \
                               numbswepplot=500, \
-                              factthin=10, \
+                              factthin=1, \
                               pntstype='lens', \
                               exprinfo=False, \
                               indxenerincl=arange(1), \
@@ -19,13 +19,13 @@ def pcat_lens_mock():
                               exprtype='hubb', \
                               stdvflux=0.01, \
                               stdvlbhl=0.01, \
-                              maxmnumbpnts=array([4]), \
+                              maxmnumbpnts=array([5]), \
                               #minmflux=1e-4, \
                               #maxmflux=1e-1, \
                               minmflux=minmflux, \
                               maxmflux=maxmflux, \
                               mockbacp=zeros((1, 1)), \
-                              #mocknumbpnts=array([100]), \
+                              mocknumbpnts=array([5]), \
                              )
 
 if len(sys.argv) > 1:

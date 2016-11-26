@@ -46,7 +46,7 @@ def pcat_ferm_inpt_ngal_intr( \
     karg = {}
     karg['numbswep'] = 100000
     karg['randinit'] = False
-    karg['boolproppsfn'] = False
+    karg['proppsfp'] = False
     karg['indxenerincl'] = arange(1, 4)
     karg['indxevttincl'] = arange(2, 4)
     karg['lgalcntr'] = deg2rad(0.)
@@ -90,7 +90,7 @@ def pcat_ferm_inpt_ngal_tim4():
 def pcat_ferm_mock_ngal():
      
     pcat.main.init( \
-                   boolproppsfn=False, \
+                   proppsfp=False, \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
                    lgalcntr=0., \

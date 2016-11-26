@@ -154,8 +154,8 @@ def pcat_chan_mock():
     
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=10, \
-                              factthin=1, \
+                              numbswep=10000, \
+                              factthin=100, \
                               strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
@@ -164,7 +164,7 @@ def pcat_chan_mock():
                               bgalcntr=deg2rad(-54.4384411082), \
                               numbsidecart=numbsidecart, \
                               maxmnumbpnts=array([10]), \
-                              verbtype=2, \
+                              verbtype=1, \
                               mocknumbpnts=array([10]), \
                               mockbacp=zeros((1, 2)), \
                              )
