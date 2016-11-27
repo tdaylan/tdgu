@@ -163,9 +163,9 @@ def pcat_chan_mock():
                               lgalcntr=deg2rad(223.562517912), \
                               bgalcntr=deg2rad(-54.4384411082), \
                               numbsidecart=numbsidecart, \
-                              maxmnumbpnts=array([10]), \
-                              verbtype=1, \
-                              mocknumbpnts=array([10]), \
+                              maxmnumbpnts=array([5]), \
+                              verbtype=2, \
+                              mocknumbpnts=array([5]), \
                               mockbacp=zeros((1, 2)), \
                              )
 
