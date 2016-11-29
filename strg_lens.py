@@ -11,7 +11,7 @@ def pcat_lens_mock():
                                   verbtype=1, \
                                   #makeplot=False, \
                                   numbswep=50000, \
-                                  #diagmode=False, \
+                                  diagmode=False, \
                                   numbswepplot=5000, \
                                   factthin=50, \
                                   pntstype='lens', \
