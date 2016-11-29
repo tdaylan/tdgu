@@ -8,12 +8,15 @@ def pcat_lens_mock():
     numbiter = 1
     for k in range(numbiter):
         gridchan = pcat.main.init( \
-                                  verbtype=1, \
+                                  verbtype=2, \
                                   #makeplot=False, \
-                                  numbswep=50000, \
+                                  numbswep=100, \
                                   diagmode=False, \
                                   numbswepplot=5000, \
                                   factthin=50, \
+                                  proppsfp=False, \
+                                  propbacp=False, \
+                                  proplenp=False, \
                                   pntstype='lens', \
                                   exprinfo=False, \
                                   indxenerincl=arange(1), \
@@ -23,11 +26,11 @@ def pcat_lens_mock():
                                   exprtype='hubb', \
                                   stdvflux=0.01, \
                                   stdvlbhl=0.01, \
-                                  maxmnumbpnts=array([20]), \
+                                  maxmnumbpnts=array([1]), \
                                   minmflux=minmflux, \
                                   maxmflux=maxmflux, \
                                   mockbacp=zeros((1, 1)), \
-                                  mocknumbpnts=array([10]), \
+                                  #mocknumbpnts=array([10]), \
                                  )
 
 if len(sys.argv) > 1:
