@@ -164,7 +164,7 @@ def pcat_chan_mock():
                               bgalcntr=deg2rad(-54.4384411082), \
                               numbsidecart=numbsidecart, \
                               maxmnumbpnts=array([100]), \
-                              verbtype=2, \
+                              #verbtype=2, \
                               #proppsfp=False, \
                               #mocknumbpnts=array([5]), \
                               mockbacp=zeros((1, 2)), \
