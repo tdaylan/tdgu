@@ -155,15 +155,15 @@ def pcat_chan_mock():
     numbsidecart = 300
     gridchan = pcat.main.init( \
                               numbswep=100000, \
+                              verbtype=2, \
                               factthin=100, \
                               strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
-                              datatype='mock', \
                               lgalcntr=deg2rad(223.562517912), \
                               bgalcntr=deg2rad(-54.4384411082), \
                               numbsidecart=numbsidecart, \
-                              maxmnumbpnts=array([100]), \
+                              maxmnumbpnts=array([10]), \
                               #verbtype=2, \
                               #proppsfp=False, \
                               #mocknumbpnts=array([5]), \
@@ -181,7 +181,6 @@ def pcat_chan_mock_popl():
                               strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
-                              datatype='mock', \
                               numbsidecart=numbsidecart, \
                               maxmnumbpnts=array([5, 4]), \
                               mocknumbpnts=array([5, 4]), \
@@ -248,9 +247,8 @@ def pcattemp(args, gdat):
 #                  strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
 #                  strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
 #                  exprtype='chan', \
-#                  datatype='inpt', \
 #                  numbsidecart=numbsidecart, \
-#                  strgexpr='chanflux_%04d_4msc.fits' % numbsidecart, \
+#                  strgexprflux='chanflux_%04d_4msc.fits' % numbsidecart, \
 #                  #maxmnumbpnts=array([10]), \
 #                 )
 #
@@ -299,9 +297,8 @@ def pcat_chan_inpt():
                               strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
-                              datatype='inpt', \
                               numbsidecart=numbsidecart, \
-                              strgexpr='chanflux_%04d_4msc.fits' % numbsidecart, \
+                              strgexprflux='chanflux_%04d_4msc.fits' % numbsidecart, \
                              )
 
 
