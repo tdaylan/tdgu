@@ -859,12 +859,11 @@ def pcat_ferm_inpt_ptch():
               maxmflux=3e-6, \
               strgback=['isotflux.fits', 'fdfmflux%s.fits' % strgcntr], \
               strgexpo='fermexpo_cmp0_igal%s.fits' % strgcntr, \
-              datatype='inpt', \
-              strgexpr='fermflux_cmp0_igal%s.fits' % strgcntr, \
+              strgexprflux='fermflux_cmp0_igal%s.fits' % strgcntr, \
              )
     
     
-def pcat_ferm_inpt_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
+def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
     pcat.main.init( \
                    numbswep=100000, \
@@ -875,8 +874,7 @@ def pcat_ferm_inpt_igal(strgexpr='fermflux_cmp0_igal.fits', strgexpo='fermexpo_c
                    maxmflux=3e-6, \
                    strgback=['isotflux.fits', 'fdfmflux.fits'], \
                    strgexpo=strgexpo, \
-                   datatype='inpt', \
-                   strgexpr=strgexpr, \
+                   strgexprflux=strgexprflux, \
                   )
     
     
@@ -902,7 +900,6 @@ def pcat_ferm_mock_igal_brok():
                        minmflux=3e-11, \
                        maxmflux=3e-7, \
 
-                       datatype='mock', \
                        mocknumbpnts=array([100]), \
                         
                        mockfluxdisttype=['brok'], \
@@ -936,7 +933,6 @@ def pcat_ferm_mock_igal_syst():
                        maxmgang=deg2rad(20.), \
                        minmflux=3e-11, \
                        maxmflux=3e-7, \
-                       datatype='mock', \
                        mocknumbpnts=array([10, 10, 10]), \
                        mockspatdisttype=['unif', 'disc', 'gang'], \
                        mockfluxdisttype=['powr', 'powr', 'brok'], \
@@ -949,7 +945,7 @@ def pcat_ferm_mock_igal_syst():
 def pcat_ferm_mock_igal():
      
     pcat.main.init( \
-                   #verbtype=2, \
+                   verbtype=2, \
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
@@ -957,8 +953,6 @@ def pcat_ferm_mock_igal():
                    maxmgang=deg2rad(20.), \
                    minmflux=3e-11, \
                    maxmflux=3e-7, \
-                   datatype='mock', \
-                   #probprop=array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 1., 1., 0.]), \
                    maxmnumbpnts=array([3, 3, 3]), \
                    mocknumbpnts=array([3, 3, 3]), \
                    mockspatdisttype=['unif', 'disc', 'gang'], \
