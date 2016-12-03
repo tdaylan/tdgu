@@ -10,8 +10,7 @@ def pcat_lens_mock():
         gridchan = pcat.main.init( \
                                   #verbtype=2, \
                                   #makeplot=False, \
-                                  numbproc=2, \
-                                  numbswep=200000, \
+                                  numbswep=100000, \
                                   numbswepplot=10000, \
                                   factthin=100, \
                                   diagmode=False, \
@@ -36,10 +35,10 @@ def pcat_lens_mock():
                                   stdvflux=1e-5, \
                                   stdvlbhl=0.01, \
                                   strgback=[0.01], \
-                                  maxmnumbpnts=array([0]), \
+                                  maxmnumbpnts=array([10]), \
                                   minmflux=minmflux, \
                                   maxmflux=maxmflux, \
-                                  #mocknumbpnts=array([20]), \
+                                  mocknumbpnts=array([5]), \
                                  )
 
 if len(sys.argv) > 1:
