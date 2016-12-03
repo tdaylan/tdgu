@@ -39,7 +39,7 @@ def plot_spec():
 
     
 def pcat_ferm_inpt_ngal_intr( \
-                        strgexpr='fermflux_cmp0_ngal.fits', \
+                        strgexprflux='fermflux_cmp0_ngal.fits', \
                         strgexpo='fermexpo_cmp0_ngal.fits', \
                        ): 
 
@@ -55,8 +55,7 @@ def pcat_ferm_inpt_ngal_intr( \
     karg['strgexpo'] = strgexpo
     karg['minmflux'] = 3e-11
     karg['maxmflux'] = 1e-7
-    karg['datatype'] = 'inpt'
-    karg['strgexpr'] = strgexpr
+    karg['strgexprflux'] = strgexprflux
 #    karg['maxmnumbpnts'] = array([100])
     
     return karg
@@ -68,22 +67,22 @@ def pcat_ferm_inpt_ngal():
 
 
 def pcat_ferm_inpt_ngal_cmp1():
-    karg = pcat_ferm_inpt_ngal_intr(strgexpr='fermflux_cmp1_ngal.fits', strgexpo='fermexpo_cmp1_ngal.fits')
+    karg = pcat_ferm_inpt_ngal_intr(strgexprflux='fermflux_cmp1_ngal.fits', strgexpo='fermexpo_cmp1_ngal.fits')
     pcat.main.init(**karg)
 
 
 def pcat_ferm_inpt_ngal_cmp2():
-    karg = pcat_ferm_inpt_ngal_intr(strgexpr='fermflux_cmp2_ngal.fits', strgexpo='fermexpo_cmp2_ngal.fits')
+    karg = pcat_ferm_inpt_ngal_intr(strgexprflux='fermflux_cmp2_ngal.fits', strgexpo='fermexpo_cmp2_ngal.fits')
     pcat.main.init(**karg)
 
 
 def pcat_ferm_inpt_ngal_cmp3():
-    karg = pcat_ferm_inpt_ngal_intr(strgexpr='fermflux_cmp3_ngal.fits', strgexpo='fermexpo_cmp3_ngal.fits')
+    karg = pcat_ferm_inpt_ngal_intr(strgexprflux='fermflux_cmp3_ngal.fits', strgexpo='fermexpo_cmp3_ngal.fits')
     pcat.main.init(**karg)
 
 
 def pcat_ferm_inpt_ngal_tim4():
-    karg = pcat_ferm_inpt_ngal_intr(strgexpr='fermflux_rec7_pnts_ngal_0256_tim4.fits', strgexpo='fermexpo_rec7_pnts_ngal_0256_tim4.fits')
+    karg = pcat_ferm_inpt_ngal_intr(strgexprflux='fermflux_rec7_pnts_ngal_0256_tim4.fits', strgexpo='fermexpo_rec7_pnts_ngal_0256_tim4.fits')
     pcat.main.init(**karg)
 
 
@@ -99,7 +98,6 @@ def pcat_ferm_mock_ngal():
                    strgexpo='fermexpo_cmp0_ngal.fits', \
                    minmflux=3e-11, \
                    maxmflux=1e-7, \
-                   datatype='mock', \
                    numbsideheal=256, \
                    mocknumbpnts=array([300]), \
                    mockfluxdistslop=array([2.0]), \

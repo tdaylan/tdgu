@@ -169,7 +169,6 @@ def pcat_chan_mock():
                               diagmode=False, \
                               maxmnumbpnts=array([200]), \
                               mocknumbpnts=array([100]), \
-                              mockbacp=zeros((1, 2)), \
                              )
 
 def pcat_chan_mock_popl():
