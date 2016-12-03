@@ -953,14 +953,22 @@ def pcat_ferm_mock_igal():
                    maxmgang=deg2rad(20.), \
                    minmflux=3e-11, \
                    maxmflux=3e-7, \
-                   maxmnumbpnts=array([3, 3, 3]), \
-                   mocknumbpnts=array([3, 3, 3]), \
-                   mockspatdisttype=['unif', 'disc', 'gang'], \
-                   mockfluxdisttype=['powr', 'powr', 'powr'], \
-                   mockfluxdistslop=array([2.6, 2.6, 3.5]), \
-                   mocksinddiststdv=array([.5, .5, .5]), \
-                   mocksinddistmean=array([2., 2., 2.]), \
-                   mockspectype=['powr', 'expo', 'expo']
+                   maxmnumbpnts=array([2, 2]), \
+                   mocknumbpnts=array([2, 2]), \
+                   mockspatdisttype=['unif', 'disc'], \
+                   mockfluxdisttype=['powr', 'powr'], \
+                   mockfluxdistslop=array([2.6, 2.6]), \
+                   mocksinddiststdv=array([.5, .5]), \
+                   mocksinddistmean=array([2., 2.]), \
+                   mockspectype=['powr', 'expo']
+                   #maxmnumbpnts=array([3, 3, 3]), \
+                   #mocknumbpnts=array([3, 3, 3]), \
+                   #mockspatdisttype=['unif', 'disc', 'gang'], \
+                   #mockfluxdisttype=['powr', 'powr', 'powr'], \
+                   #mockfluxdistslop=array([2.6, 2.6, 3.5]), \
+                   #mocksinddiststdv=array([.5, .5, .5]), \
+                   #mocksinddistmean=array([2., 2., 2.]), \
+                   #mockspectype=['powr', 'expo', 'expo']
                   )
 
 
