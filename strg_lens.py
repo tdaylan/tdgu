@@ -1,5 +1,37 @@
 from __init__ import *
 
+
+def pcat_lens_mock_arry():
+
+    #liststrgback = linspace(0.1, 3., 3.)
+    liststrgback = logspace(-1., 1., 3.)
+
+    minmflux = deg2rad(5e-2 / 3600.)
+    maxmflux = deg2rad(5e-1 / 3600.)
+
+    for k in range(len(liststrgback)):
+       
+        strgback = [liststrgback[k]]
+        gridchan = pcat.main.init( \
+                                  numbswep=100000, \
+                                  numbswepplot=10000, \
+                                  factthin=100, \
+                                  diagmode=False, \
+                                  optiprop=True, \
+                                  exprinfo=False, \
+                                  pntstype='lens', \
+                                  indxenerincl=arange(1), \
+                                  indxevttincl=arange(1), \
+                                  strgexpo=1e16, \
+                                  exprtype='hubb', \
+                                  strgback=strgback, \
+                                  maxmnumbpnts=array([10]), \
+                                  minmflux=minmflux, \
+                                  maxmflux=maxmflux, \
+                                  mocknumbpnts=array([5]), \
+                                 )
+
+    
 def pcat_lens_mock():
     
     minmflux = deg2rad(5e-2 / 3600.)
@@ -18,14 +50,12 @@ def pcat_lens_mock():
                                   #proppsfp=False, \
                                   #propbacp=False, \
                                   #proplenp=False, \
-                                  #optiprop=True, \
-                                  #pntstype='lens', \
-                                  
+                                  #propcomp=False, \
                                   stdvprophypr=0.1, \
                                   stdvpropbacp=5e-3, \
                                   stdvproplenp=5e-4, \
                                   #probtran=0., \
-                                  #optiprop=True, \
+                                  optiprop=True, \
                                   exprinfo=False, \
                                   pntstype='lens', \
                                   indxenerincl=arange(1), \

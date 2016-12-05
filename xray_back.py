@@ -154,7 +154,7 @@ def pcat_chan_mock():
     
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=2000, \
+                              numbswep=200000, \
                               verbtype=1, \
                               propcomp=False, \
                               probtran=0., \
