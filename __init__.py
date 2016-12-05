@@ -41,7 +41,7 @@ import functools
 
 # tdpy
 import tdpy.util
-from tdpy.util import summ, show
+from tdpy.util import summ, summgene, show
 import tdpy.mcmc
 
 from tdpy.util import show
