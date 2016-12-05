@@ -10,6 +10,7 @@ import seaborn as sns
 sns.set(context='poster', style='ticks', color_codes=True)
 
 # numpy
+import random as randommod
 import numpy as np
 from numpy import *
 from numpy.random import *

@@ -34,27 +34,36 @@ def pcat_lens_mock_arry():
     
 def pcat_lens_mock():
     
-    minmflux = deg2rad(5e-2 / 3600.)
+    listminmflux = array([deg2rad(1e-3 / 3600.)])
+#    listminmflux = deg2rad(logspace(-3., -2., 2) / 3600.)
+    liststrgback = logspace(-2., 0., 3.)
     maxmflux = deg2rad(5e-1 / 3600.)
 
     numbiter = 1
     for k in range(numbiter):
-        gridchan = pcat.main.init( \
-                                  #verbtype=2, \
+        seedstat = get_state()
+
+        for k in range(len(listminmflux)):
+            for n in range(len(liststrgback)):
+                minmflux = listminmflux[k]
+                strgback = [liststrgback[n]]
+                gridchan = pcat.main.init( \
+                                  #verbtype=2, \ 
+                                  seedstat=seedstat, \
                                   #makeplot=False, \
-                                  numbswep=100, \
-                                  numbswepplot=10000, \
-                                  factthin=100, \
+                                  numbswep=10000, \
+                                  numbswepplot=3000, \
+                                  factthin=10, \
                                   diagmode=False, \
-                                  prophypr=False, \
+                                  #prophypr=False, \
                                   proppsfp=False, \
-                                  propbacp=False, \
-                                  proplenp=False, \
+                                  #propbacp=False, \
+                                  #proplenp=False, \
                                   #propcomp=False, \
                                   #stdvprophypr=0.1, \
                                   #stdvpropbacp=5e-3, \
                                   #stdvproplenp=5e-4, \
-                                  probtran=0., \
+                                  #probtran=0., \
                                   #optiprop=True, \
                                   exprinfo=False, \
                                   pntstype='lens', \
@@ -62,13 +71,11 @@ def pcat_lens_mock():
                                   indxevttincl=arange(1), \
                                   strgexpo=1e16, \
                                   exprtype='hubb', \
-                                  stdvflux=1e-5, \
-                                  stdvlbhl=0.01, \
-                                  strgback=[0.01], \
-                                  maxmnumbpnts=array([10]), \
+                                  strgback=strgback, \
+                                  maxmnumbpnts=array([20]), \
                                   minmflux=minmflux, \
                                   maxmflux=maxmflux, \
-                                  mocknumbpnts=array([5]), \
+                                  mocknumbpnts=array([10]), \
                                  )
 
 if len(sys.argv) > 1:
