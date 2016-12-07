@@ -238,6 +238,10 @@ def writ_tgasdata():
     numbside = sqrt(datacntstemp.size)
     datacnts = zeros((1, numbside, numbside, 1))
     datacnts[0, :, :, 0] = datacntstemp
+    
+    print 'datacnts'
+    print amin(datacnts)
+    print amax(datacnts)
 
     path = os.environ["PCAT_DATA_PATH"] + '/data/inpt/tgas.fits'
     pf.writeto(path, datacnts, clobber=True)
@@ -249,10 +253,11 @@ def pcat_tgas():
          exprtype='sdyn', \
          verbtype=2, \
          numbswep=100, \
+         strgback=[1e-3], \
          numbswepplot=50, \
          factthin=1, \
          strgexprflux='tgas.fits', \
-         maxmnumbpnts=array([20]), \
+         maxmnumbpnts=array([3]), \
         )
 
 globals().get(sys.argv[1])()
