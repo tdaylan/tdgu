@@ -19,29 +19,11 @@ def prep_maps():
     cntrindx[0] += numbpixlshft
     numbmaps = len(expomaps)
 
-    rasc = (3. + 32. / 60. + 28.06 / 3600.) * 15.
-    decl = -27. - 48. / 60. - 26.4 / 3600. + 14.76 / 3600.
-    coor = SkyCoord(ra=rasc, dec=decl, unit='deg', equinox='J2000')
-    lgal = coor.galactic.l.degree
-    bgal = coor.galactic.b.degree
-    print 'lgal'
-    print lgal
-    print 'bgal'
-    print bgal
-
     listnumbside = [200, 300, 1500]
     for numbside in listnumbside:
         minmindx = cntrindx - numbside / 2
         maxmindx = cntrindx + numbside / 2
 
-        declshft = 0.492 * (minmindx[0] + numbside / 2. - 3260. / 2) / 3600.
-        rascshft = 0.492 * (minmindx[1] + numbside / 2. - 3280. / 2) / 3600.
-        declcntr = decl + declshft 
-        rasccntr = rasc + rascshft 
-        coor = SkyCoord(ra=rasccntr, dec=declcntr, unit='deg', equinox='J2000')
-        lgalcntr = coor.galactic.l.degree
-        bgalcntr = coor.galactic.b.degree
-        
         print 'numbside'
         print numbside
         print 'minmindx[0]'
@@ -52,10 +34,7 @@ def prep_maps():
         print minmindx[1]
         print 'maxmindx[1]'
         print maxmindx[1]
-        print 'bgalcntr'
-        print bgalcntr
-        print 'lgalcntr'
-        print lgalcntr
+        print 
         for k in range(numbmaps):
             strgmaps = '%04d_%dmsc' % (numbside, expomaps[k])
 
