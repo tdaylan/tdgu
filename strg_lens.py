@@ -71,7 +71,7 @@ def pcat_lens_mock_arry():
                 
                 gridchan, gdat = pcat.main.init( \
                                                 seedstat=seedstat, \
-                                                numbswep=10000, \
+                                                numbswep=1000, \
                                                 numbswepplot=3000, \
                                                 factthin=10, \
                                                 diagmode=False, \
