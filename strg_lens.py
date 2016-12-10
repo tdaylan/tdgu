@@ -35,7 +35,7 @@ def pcat_lens_mock_arry_depr():
 def pcat_lens_mock_arry():
    
     anglfact = pi / 180. / 3600.
-    maxmflux = 1e0 * anglfact
+    maxmflux = 3e-1 * anglfact
     
     numbcnfg = 3
     
@@ -94,6 +94,9 @@ def pcat_lens_mock_arry():
                 for n in range(numboutpvarb):
                     arry[:3, n, m, l] = getattr(gdat, 'postfixp')[:, getattr(gdat, 'indxfixp' + listnameoutpvarb[n])].flatten()
                     arry[3, n, m, l] = getattr(gdat, 'truefixp')[getattr(gdat, 'indxfixp' + listnameoutpvarb[n])]
+                    print 'arry[3, n, m, l]'
+                    print arry[3, n, m, l]
+                    print 
                     if k == 0 and m == 0 and l == 0:
                         liststrgoutpvarb.append(getattr(gdat, 'strgfixp')[getattr(gdat, 'indxfixp' + listnameoutpvarb[n])])
         
@@ -105,7 +108,7 @@ def pcat_lens_mock_arry():
                 axis.plot(varbinpt.para[m], arry[3, n, m, :], ls='', marker='x', color='g')
                 axis.set_xlabel(liststrgvarbinpt[m])
                 axis.set_ylabel(liststrgoutpvarb[n][0])
-
+                
                 maxm = amax(varbinpt.para[m])
                 minm = amin(varbinpt.para[m])
                 if varbinpt.scal[m] == 'logt':

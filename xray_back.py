@@ -278,6 +278,7 @@ def pcat_chan_inpt():
                               numbswep=1300000, \
                               numbburn=300000, \
                               factthin=1000, \
+                              diagmode=False, \
                               randinit=True, \
                               strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
