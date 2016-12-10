@@ -866,6 +866,7 @@ def pcat_ferm_inpt_ptch():
 def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
     pcat.main.init( \
+                   verbtype=2, \
                    numbswep=100000, \
                    maxmgang=deg2rad(20.), \
                    indxenerincl=arange(1, 4), \

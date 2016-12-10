@@ -133,23 +133,25 @@ def pcat_chan_mock():
     
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=10000, \
+                              numbswep=2000, \
                               #verbtype=2, \
                               #factthin=9, \
-                              numbswepplot=3000, \
+                              numbswepplot=20000, \
                               strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               #probtran=1., \
                               exprtype='chan', \
                               #optiprop=True, \
+                              propcomp=False, \
+                              probtran=0., \
                               minmflux=1e-7, \
                               lgalcntr=deg2rad(223.562517912), \
                               bgalcntr=deg2rad(-54.4384411082), \
                               numbsidecart=numbsidecart, \
-                              makeplot=False, \
-                              #diagmode=False, \
-                              maxmnumbpnts=array([5]), \
-                              mocknumbpnts=array([3]), \
+                              #makeplot=False, \
+                              diagmode=False, \
+                              maxmnumbpnts=array([4]), \
+                              mocknumbpnts=array([2]), \
                              )
 
 def pcat_chan_mock_popl():
@@ -271,11 +273,12 @@ def pcat_chan_catl():
 
 def pcat_chan_inpt():
    
-    numbsidecart = 1500
+    numbsidecart = 300
     gridchan = pcat.main.init( \
                               numbswep=1300000, \
                               numbburn=300000, \
                               factthin=1000, \
+                              randinit=True, \
                               strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
@@ -284,9 +287,5 @@ def pcat_chan_inpt():
                              )
 
 
-if len(sys.argv) > 1:
-    name = globals().copy()
-    name.get(sys.argv[1])()
-else:
-    pass
+globals().get(sys.argv[1])()
 
