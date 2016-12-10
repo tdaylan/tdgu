@@ -71,22 +71,23 @@ def pcat_lens_mock_arry():
                 
                 gridchan, gdat = pcat.main.init( \
                                                 seedstat=seedstat, \
-                                                numbswep=100, \
-                                                numbswepplot=3000, \
-                                                factthin=10, \
-                                                makeplot=False, \
+                                                numbswep=100000, \
+                                                numbswepplot=10000, \
+                                                factthin=50, \
+                                                numbproc=20, \
+                                                #makeplot=False, \
                                                 diagmode=False, \
                                                 proppsfp=False, \
                                                 exprinfo=False, \
-                                                probtran=0., \
-                                                proplenp=False, \
+                                                #probtran=0., \
+                                                #proplenp=False, \
                                                 pntstype='lens', \
                                                 indxenerincl=arange(1), \
                                                 indxevttincl=arange(1), \
                                                 strgexpo=strgexpo, \
                                                 exprtype='hubb', \
                                                 strgback=[strgback], \
-                                                maxmnumbpnts=array([20]), \
+                                                #maxmnumbpnts=array([20]), \
                                                 minmflux=minmflux, \
                                                 maxmflux=maxmflux, \
                                                 mocknumbpnts=array([10]), \
@@ -95,9 +96,6 @@ def pcat_lens_mock_arry():
                 for n in range(numboutpvarb):
                     arry[:3, n, m, l] = getattr(gdat, 'postfixp')[:, getattr(gdat, 'indxfixp' + listnameoutpvarb[n])].flatten()
                     arry[3, n, m, l] = getattr(gdat, 'truefixp')[getattr(gdat, 'indxfixp' + listnameoutpvarb[n])]
-                    print 'arry[3, n, m, l]'
-                    print arry[3, n, m, l]
-                    print 
                     if k == 0 and m == 0 and l == 0:
                         liststrgoutpvarb.append(getattr(gdat, 'strgfixp')[getattr(gdat, 'indxfixp' + listnameoutpvarb[n])])
         
