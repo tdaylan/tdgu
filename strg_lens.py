@@ -71,9 +71,10 @@ def pcat_lens_mock_arry():
                 
                 gridchan, gdat = pcat.main.init( \
                                                 seedstat=seedstat, \
-                                                numbswep=1000, \
+                                                numbswep=100, \
                                                 numbswepplot=3000, \
                                                 factthin=10, \
+                                                makeplot=False, \
                                                 diagmode=False, \
                                                 proppsfp=False, \
                                                 exprinfo=False, \
@@ -105,7 +106,7 @@ def pcat_lens_mock_arry():
                 figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
                 yerr = tdpy.util.retr_errrvarb(arry[:3, n, m, :])
                 axis.errorbar(varbinpt.para[m], arry[0, n, m, :], yerr=yerr, ls='', marker='o')
-                axis.plot(varbinpt.para[m], arry[3, n, m, :], ls='', marker='x', color='g')
+                axis.plot(varbinpt.para[m], arry[3, n, m, :], marker='x', color='g')
                 axis.set_xlabel(liststrgvarbinpt[m])
                 axis.set_ylabel(liststrgoutpvarb[n][0])
                 
