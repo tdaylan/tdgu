@@ -275,9 +275,10 @@ def pcat_chan_inpt():
    
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=1300000, \
+                              numbswep=2300000, \
+                              numbproc=20, \
                               numbburn=300000, \
-                              factthin=1000, \
+                              factthin=2000, \
                               diagmode=False, \
                               randinit=True, \
                               strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
