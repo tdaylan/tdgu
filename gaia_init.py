@@ -259,7 +259,7 @@ def pcat_tgas():
     pcat.main.init( \
          exprtype='sdyn', \
          verbtype=1, \
-         numbproc=20
+         numbproc=20, \
          numbswep=300000, \
          numbburn=200000, \
          psfninfoprio=False, \
