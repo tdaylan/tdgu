@@ -227,21 +227,28 @@ def writ_tgasdata():
     amom = pf.getdata(path)['L'][:, 2]
     
     numbbins = 200
-    minmekin = amin(ekin)
-    maxmekin = amax(ekin)
-    minmamom = amin(amom)
-    maxmamom = amax(amom)
-    binsekin = linspace(minmekin, maxmekin, numbbins)
+    minmamom = percentile(amom, 0.5)
+    maxmamom = percentile(amom, 99.5)
+    maxmamom = max(abs(minmamom), maxmamom)
+    minmamom = -maxmamom
+    
+    minmekin = percentile(ekin, 1.)
+    maxmekin = percentile(ekin, 99.)
+    
     binsamom = linspace(minmamom, maxmamom, numbbins)
+    binsekin = linspace(minmekin, maxmekin, numbbins)
+    
     datacntstemp = histogram2d(ekin, amom, bins=(binsekin, binsamom))[0]
-
+    
     numbside = sqrt(datacntstemp.size)
     datacnts = zeros((1, numbside, numbside, 1))
     datacnts[0, :, :, 0] = datacntstemp
     
+    set_printoptions(precision=1)
     print 'datacnts'
-    print amin(datacnts)
-    print amax(datacnts)
+    summgene(datacnts)
+
+    datacnts *= numbbins**2 / 4.
 
     path = os.environ["PCAT_DATA_PATH"] + '/data/inpt/tgas.fits'
     pf.writeto(path, datacnts, clobber=True)
@@ -251,13 +258,16 @@ def pcat_tgas():
     
     pcat.main.init( \
          exprtype='sdyn', \
-         verbtype=2, \
-         numbswep=100, \
+         verbtype=1, \
+         numbproc=20
+         numbswep=100000, \
+         psfninfoprio=False, \
+         strgexpo=1., \
          strgback=[1e-3], \
-         numbswepplot=50, \
-         factthin=1, \
+         numbswepplot=20000, \
+         factthin=10, \
          strgexprflux='tgas.fits', \
-         maxmnumbpnts=array([3]), \
+         #maxmnumbpnts=array([30]), \
         )
 
 globals().get(sys.argv[1])()
