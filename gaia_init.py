@@ -224,16 +224,15 @@ def writ_tgasdata():
     path = os.environ["TDGU_DATA_PATH"] + '/gaia_init/data/tgas.fits'
     
     ekin = pf.getdata(path)['Ek']
-    amom = pf.getdata(path)['L'][:, 2]
-    
+    amom = pf.getdata(path)['L'][:, 0]
     numbbins = 200
-    minmamom = percentile(amom, 0.5)
-    maxmamom = percentile(amom, 99.5)
+    minmamom = percentile(amom, 0.0)
+    maxmamom = percentile(amom, 100.)
     maxmamom = max(abs(minmamom), maxmamom)
     minmamom = -maxmamom
     
-    minmekin = percentile(ekin, 1.)
-    maxmekin = percentile(ekin, 99.)
+    minmekin = percentile(ekin, 0.)
+    maxmekin = percentile(ekin, 99.6)
     
     binsamom = linspace(minmamom, maxmamom, numbbins)
     binsekin = linspace(minmekin, maxmekin, numbbins)
@@ -242,12 +241,12 @@ def writ_tgasdata():
     
     numbside = sqrt(datacntstemp.size)
     datacnts = zeros((1, numbside, numbside, 1))
-    datacnts[0, :, :, 0] = datacntstemp
+    datacnts[0, :, :, 0] = datacntstemp.T
     
     set_printoptions(precision=1)
     print 'datacnts'
     summgene(datacnts)
-
+    print flipud(datacnts[0, :, :, 0].astype(int))
     datacnts *= numbbins**2 / 4.
 
     path = os.environ["PCAT_DATA_PATH"] + '/data/inpt/tgas.fits'
@@ -259,9 +258,8 @@ def pcat_tgas():
     pcat.main.init( \
          exprtype='sdyn', \
          verbtype=1, \
-         numbproc=20, \
-         numbswep=300000, \
-         numbburn=200000, \
+         numbswep=30000, \
+         numbburn=20000, \
          psfninfoprio=False, \
          strgexpo=1., \
          strgback=[1e-3], \

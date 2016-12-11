@@ -8,7 +8,7 @@ def pcat_lens_mock_grid():
     numbcnfg = 3
     
     varbinpt = tdpy.util.varb(numbcnfg)
-    varbinpt.defn_para('minmflux', 1e-3, 1e-1, scal='logt')
+    varbinpt.defn_para('minmflux', 3e-4, 3e-2, scal='logt')
     varbinpt.defn_para('strgback', 1e-2, 1e0, scal='logt')
     varbinpt.defn_para('strgexpo', 1e15, 1e17, scal='logt')
 
@@ -41,8 +41,8 @@ def pcat_lens_mock_grid():
                                                 seedstat=seedstat, \
                                                 numbswep=100000, \
                                                 numbswepplot=10000, \
-                                                factthin=50, \
-                                                numbproc=20, \
+                                                factthin=100, \
+                                                proplenp=False, \
                                                 #makeplot=False, \
                                                 diagmode=False, \
                                                 proppsfp=False, \
