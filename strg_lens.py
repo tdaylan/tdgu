@@ -1,38 +1,6 @@
 from __init__ import *
 
-
-def pcat_lens_mock_arry_depr():
-
-    #liststrgback = linspace(0.1, 3., 3.)
-    liststrgback = logspace(-1., 1., 3.)
-
-    minmflux = deg2rad(5e-2 / 3600.)
-    maxmflux = deg2rad(5e-1 / 3600.)
-
-    for k in range(len(liststrgback)):
-       
-        strgback = [liststrgback[k]]
-        gridchan = pcat.main.init( \
-                                  numbswep=100000, \
-                                  numbswepplot=10000, \
-                                  factthin=100, \
-                                  diagmode=False, \
-                                  optiprop=True, \
-                                  exprinfo=False, \
-                                  pntstype='lens', \
-                                  indxenerincl=arange(1), \
-                                  indxevttincl=arange(1), \
-                                  strgexpo=1e16, \
-                                  exprtype='hubb', \
-                                  strgback=strgback, \
-                                  maxmnumbpnts=array([10]), \
-                                  minmflux=minmflux, \
-                                  maxmflux=maxmflux, \
-                                  mocknumbpnts=array([5]), \
-                                 )
-
-    
-def pcat_lens_mock_arry():
+def pcat_lens_mock_grid():
    
     anglfact = pi / 180. / 3600.
     maxmflux = 3e-1 * anglfact
@@ -49,7 +17,7 @@ def pcat_lens_mock_arry():
     liststrgoutpvarb = []
 
     liststrgvarbinpt = ['$R_{min}$ [arcsec]', '$A$ [1/cm^2/s]', r'$\epsilon$ [cm^2 s]']
-    arry = empty((4, numboutpvarb, varbinpt.size, numbcnfg))
+    grid = empty((4, numboutpvarb, varbinpt.size, numbcnfg))
     
     numbiter = 1
     for k in range(numbiter):
@@ -94,17 +62,19 @@ def pcat_lens_mock_arry():
                                                )
                 
                 for n in range(numboutpvarb):
-                    arry[:3, n, m, l] = getattr(gdat, 'postfixp')[:, getattr(gdat, 'indxfixp' + listnameoutpvarb[n])].flatten()
-                    arry[3, n, m, l] = getattr(gdat, 'truefixp')[getattr(gdat, 'indxfixp' + listnameoutpvarb[n])]
+                    grid[:3, n, m, l] = getattr(gdat, 'postfixp')[:, getattr(gdat, 'indxfixp' + listnameoutpvarb[n])].flatten()
+                    grid[3, n, m, l] = getattr(gdat, 'truefixp')[getattr(gdat, 'indxfixp' + listnameoutpvarb[n])]
                     if k == 0 and m == 0 and l == 0:
                         liststrgoutpvarb.append(getattr(gdat, 'strgfixp')[getattr(gdat, 'indxfixp' + listnameoutpvarb[n])])
         
+        path = os.environ["PCAT_DATA_PATH"] + '/imag/%s_lensgrid/' % gdat.strgtimestmp
+        os.system('mkdir -p %s' % path)
         for n in range(numboutpvarb):
             for m in range(varbinpt.size):
                 figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
-                yerr = tdpy.util.retr_errrvarb(arry[:3, n, m, :])
-                axis.errorbar(varbinpt.para[m], arry[0, n, m, :], yerr=yerr, ls='', marker='o')
-                axis.plot(varbinpt.para[m], arry[3, n, m, :], marker='x', color='g')
+                yerr = tdpy.util.retr_errrvarb(grid[:3, n, m, :])
+                axis.errorbar(varbinpt.para[m], grid[0, n, m, :], yerr=yerr, ls='', marker='o')
+                axis.plot(varbinpt.para[m], grid[3, n, m, :], marker='x', color='g')
                 axis.set_xlabel(liststrgvarbinpt[m])
                 axis.set_ylabel(liststrgoutpvarb[n][0])
                 
@@ -116,7 +86,7 @@ def pcat_lens_mock_arry():
                 else:
                     axis.set_xlim([minm - 1., maxm + 1.])
                 plt.tight_layout()
-                plt.savefig(os.environ["PCAT_DATA_PATH"] + '/imag/lensarry%d%d%d.pdf' % (n, m, k))
+                plt.savefig('%s/%d%d%d.pdf' % (path, n, m, k))
                 plt.close(figr)
     
 
@@ -169,16 +139,5 @@ def pcat_lens_mock():
                                   mocknumbpnts=array([10]), \
                                  )
 
-        figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
-        imag = axis.imshow(evid, extent=[minmgain, maxmgain, minmdevi, maxmdevi], cmap='winter', origin='lower')
-        cset1 = plt.contourf(gain, devi, evid, cmap='winter')
-        axis.set_xlabel('Exposure')
-        axis.set_ylabel('Background')
-        axis.set_zlabel('SubHalo Mass')
-        plt.colorbar(imag, ax=axis, fraction=0.03)
-        plt.tight_layout()
-        plt.savefig(gdat.pathplot + 'lensgrid%d.pdf' % k)
-        plt.close(figr)
-    
     
 globals().get(sys.argv[1])()

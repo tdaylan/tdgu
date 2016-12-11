@@ -265,7 +265,7 @@ def pcat_tgas():
          strgexpo=1., \
          strgback=[1e-3], \
          numbswepplot=20000, \
-         factthin=10, \
+         factthin=100, \
          strgexprflux='tgas.fits', \
          #maxmnumbpnts=array([30]), \
         )
