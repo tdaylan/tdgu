@@ -39,9 +39,9 @@ def pcat_lens_mock_grid():
                 
                 gridchan, gdat = pcat.main.init( \
                                                 seedstat=seedstat, \
-                                                numbswep=100000, \
-                                                numbswepplot=10000, \
-                                                factthin=100, \
+                                                numbswep=10000, \
+                                                numbswepplot=2000, \
+                                                factthin=10, \
                                                 proplenp=False, \
                                                 #makeplot=False, \
                                                 diagmode=False, \
