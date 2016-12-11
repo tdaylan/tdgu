@@ -260,11 +260,12 @@ def pcat_tgas():
          exprtype='sdyn', \
          verbtype=1, \
          numbproc=20
-         numbswep=100000, \
+         numbswep=300000, \
+         numbburn=200000, \
          psfninfoprio=False, \
          strgexpo=1., \
          strgback=[1e-3], \
-         numbswepplot=20000, \
+         numbswepplot=30000, \
          factthin=100, \
          strgexprflux='tgas.fits', \
          #maxmnumbpnts=array([30]), \
