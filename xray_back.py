@@ -43,7 +43,7 @@ def prep_maps():
             cntsback = empty((numbener, numbside, numbside, numbevtt))
 
             # paths
-            pathdata = tdpy.util.retr_path('tdgu', 'xray_back/', onlydata=True)
+            pathdata = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
             path = pathdata + 'CDFS-4Ms-0p5to2-asca-im-bin1.fits'
             if expomaps[k] == 2:
                 path = pathdata + 'CDFS-2Ms-0p5to2-asca-im-bin1-astwk.fits'
@@ -276,7 +276,6 @@ def pcat_chan_inpt():
     numbsidecart = 300
     gridchan = pcat.main.init( \
                               numbswep=2300000, \
-                              numbproc=20, \
                               numbburn=300000, \
                               factthin=2000, \
                               diagmode=False, \
