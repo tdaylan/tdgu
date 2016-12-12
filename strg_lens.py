@@ -48,7 +48,7 @@ def pcat_lens_mock_grid():
                                                 numbswepplot=2000, \
                                                 factthin=200, \
                                                 proplenp=False, \
-                                                makeplot=False, \
+                                                #makeplot=False, \
                                                 diagmode=False, \
                                                 proppsfp=False, \
                                                 exprinfo=False, \
