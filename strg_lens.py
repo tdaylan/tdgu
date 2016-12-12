@@ -12,7 +12,7 @@ def pcat_lens_mock_grid():
     varbinpt.defn_para('strgback', 1e-2, 1e0, scal='logt')
     varbinpt.defn_para('strgexpo', 1e15, 1e17, scal='logt')
 
-    listnameoutpvarb = ['fluxdistslop', 'meanpnts']
+    listnameoutpvarb = ['fluxdistslop', 'meanpnts', 'specassc']
     numboutpvarb = len(listnameoutpvarb)
     liststrgoutpvarb = []
 
@@ -24,6 +24,11 @@ def pcat_lens_mock_grid():
         seedstat = get_state()
         for m in range(varbinpt.size):
             for l in range(varbinpt.numb):
+                
+                if m > 0 and l == varbinpt.numb / 2:
+                    grid[:, :, m, l] = grid[:, :, 0, varbinpt.numb / 2]
+                    continue
+
                 for p in range(varbinpt.size):
                     if p == m:
                         varb = varbinpt.para[p][l]
@@ -41,9 +46,9 @@ def pcat_lens_mock_grid():
                                                 seedstat=seedstat, \
                                                 numbswep=10000, \
                                                 numbswepplot=2000, \
-                                                factthin=10, \
+                                                factthin=200, \
                                                 proplenp=False, \
-                                                #makeplot=False, \
+                                                makeplot=False, \
                                                 diagmode=False, \
                                                 proppsfp=False, \
                                                 exprinfo=False, \
@@ -62,10 +67,16 @@ def pcat_lens_mock_grid():
                                                )
                 
                 for n in range(numboutpvarb):
-                    grid[:3, n, m, l] = getattr(gdat, 'postfixp')[:, getattr(gdat, 'indxfixp' + listnameoutpvarb[n])].flatten()
-                    grid[3, n, m, l] = getattr(gdat, 'truefixp')[getattr(gdat, 'indxfixp' + listnameoutpvarb[n])]
-                    if k == 0 and m == 0 and l == 0:
-                        liststrgoutpvarb.append(getattr(gdat, 'strgfixp')[getattr(gdat, 'indxfixp' + listnameoutpvarb[n])])
+                    if listnameoutpvarb[n] == 'specassc':
+                        grid[:3, n, m, l] = gdat.fluxfactplot * gdat.postspecassc[:, gdat.indxenerfluxdist[0], 0]
+                        grid[3, n, m, l] = gdat.fluxfactplot * gdat.truespec[0][0, gdat.indxenerfluxdist[0], 0]
+                        if k == 0 and m == 0 and l == 0:
+                            liststrgoutpvarb.append('$R_0$')
+                    else:
+                        grid[:3, n, m, l] = getattr(gdat, 'postfixp')[:, getattr(gdat, 'indxfixp' + listnameoutpvarb[n])].flatten()
+                        grid[3, n, m, l] = getattr(gdat, 'truefixp')[getattr(gdat, 'indxfixp' + listnameoutpvarb[n])]
+                        if k == 0 and m == 0 and l == 0:
+                            liststrgoutpvarb.append(getattr(gdat, 'strgfixp')[getattr(gdat, 'indxfixp' + listnameoutpvarb[n])])
         
         path = os.environ["PCAT_DATA_PATH"] + '/imag/%s_lensgrid/' % gdat.strgtimestmp
         os.system('mkdir -p %s' % path)
@@ -95,11 +106,14 @@ def pcat_lens_mock():
     maxmflux = deg2rad(5e-1 / 3600.)
     minmflux = deg2rad(5e-3 / 3600.)
     gridchan = pcat.main.init( \
-                              numbswep=300000, \
+                              numbswep=1000, \
                               numbswepplot=30000, \
-                              factthin=200, \
-                              diagmode=False, \
+                              factthin=10, \
+                              verbtype=1, \
+                              #diagmode=False, \
                               proppsfp=False, \
+                              proplenp=False, \
+                              diagmode=False, \
                               exprinfo=False, \
                               pntstype='lens', \
                               indxenerincl=arange(1), \
@@ -109,6 +123,7 @@ def pcat_lens_mock():
                               strgback=[1e-1], \
                               minmflux=minmflux, \
                               maxmflux=maxmflux, \
+                              maxmnumbpnts=array([30]), \
                               mocknumbpnts=array([10]), \
                              )
     
