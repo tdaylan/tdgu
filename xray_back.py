@@ -2,7 +2,6 @@ from __init__ import *
 from astropy.coordinates import SkyCoord
 from pcat.util import retr_chandata
 
-
 def prep_maps():
 
     binsener = array([0.5, 2., 8.]) * 1e-3
@@ -133,25 +132,14 @@ def pcat_chan_mock():
     
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=2000, \
-                              #verbtype=2, \
-                              #factthin=9, \
+                              numbswep=10000, \
                               numbswepplot=20000, \
                               strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
-                              #probtran=1., \
                               exprtype='chan', \
-                              #optiprop=True, \
-                              propcomp=False, \
-                              probtran=0., \
-                              minmflux=1e-7, \
-                              lgalcntr=deg2rad(223.562517912), \
-                              bgalcntr=deg2rad(-54.4384411082), \
                               numbsidecart=numbsidecart, \
-                              #makeplot=False, \
                               diagmode=False, \
-                              maxmnumbpnts=array([4]), \
-                              mocknumbpnts=array([2]), \
+                              mocknumbpnts=array([100]), \
                              )
 
 def pcat_chan_mock_popl():
@@ -166,109 +154,8 @@ def pcat_chan_mock_popl():
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
                               numbsidecart=numbsidecart, \
-                              maxmnumbpnts=array([5, 4]), \
-                              mocknumbpnts=array([5, 4]), \
+                              mocknumbpnts=array([50, 40]), \
                              )
-
-
-def pcattemp(args, gdat):
-    
-    anglcatlrttr = args[0]
-    lgalcntr = args[1]
-    bgalcntr = args[2]
-    
-    print 'pcattemp'
-    print 'anglcatlrttr'
-    print anglcatlrttr
-    print 'lgalcntr'
-    print lgalcntr
-    print 'bgalcntr'
-    print bgalcntr
-
-    rttr = hp.rotator.Rotator(rot=[rad2deg(lgalcntr), rad2deg(bgalcntr), anglcatlrttr], deg=True, eulertype='ZYX')
-    exprbgalrttr, exprlgalrttr = rttr(pi / 2. - gdat.exprbgal, gdat.exprlgal)
-    exprbgalrttr = pi / 2. - exprbgalrttr
-     
-    indx = tdpy.util.corr_catl(gdat.lgalmaxm, gdat.bgalmaxm, exprlgalrttr, exprbgalrttr, anglassc=pi)
-    dist = mean(sqrt((gdat.lgalmaxm[indx] - exprlgalrttr)**2 + (gdat.bgalmaxm[indx] - exprbgalrttr)**2)) * gdat.anglfact
-    
-    print 'gdat.lgalmaxm'
-    print gdat.lgalmaxm
-    print 'gdat.bgalmaxm'
-    print gdat.bgalmaxm
-    print 'exprlgalrttr'
-    print exprlgalrttr
-    print 'exprbgalrttr'
-    print exprbgalrttr
-    print 
-
-#    dist = pcat.main.init( \
-#                  verbtype=0, \
-#                  makeplot=False, \
-#                  numbswep=1300000, \
-#                  numbburn=300000, \
-#                  factthin=1000, \
-#                  
-#                  lgalcntr=deg2rad(lgalcntr), \
-#                  bgalcntr=deg2rad(bgalcntr), \
-#                  anglcatlrttr=anglcatlrttr, \
-#                  
-#                  # 4 ms includes shift
-#                  #lgalcntr=deg2rad(223.557580277), \
-#                  #bgalcntr=deg2rad(-54.4358432488), \
-#                  # 4 ms v2
-#                  #lgalcntr=deg2rad(223.564551147), \
-#                  #bgalcntr=deg2rad(-54.4364535238), \
-#                  # 4 ms
-#                  #lgalcntr=deg2rad(223.57152222), \
-#                  #bgalcntr=deg2rad(-54.4370634), \
-#                  # 1 ms
-#                  #lgalcntr=deg2rad(223.57318365), \
-#                  #bgalcntr=deg2rad(-54.43741081), \
-#                  # mean
-#                  #lgalcntr=deg2rad(223.562517912), \
-#                  #bgalcntr=deg2rad(-54.4384411082), \
-#                  strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
-#                  strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
-#                  exprtype='chan', \
-#                  numbsidecart=numbsidecart, \
-#                  strgexprflux='chanflux_%04d_4msc.fits' % numbsidecart, \
-#                  #maxmnumbpnts=array([10]), \
-#                 )
-#
-    return dist
-
-
-def pcat_chan_catl():
-    
-    gdat = tdpy.util.gdatstrt()
-    
-    numbsidecart = 1500
-    gdat.anglfact = 3600. * pi / 180.
-    maxmgang = 0.492 * numbsidecart / 2. / gdat.anglfact
-    minmlgal = -maxmgang
-    maxmlgal = maxmgang
-    minmbgal = -maxmgang
-    maxmbgal = maxmgang
-    binslgalcart = linspace(minmlgal, maxmlgal, numbsidecart + 1)
-    binsbgalcart = linspace(minmbgal, maxmbgal, numbsidecart + 1)
-    gdat.lgalcart = (binslgalcart[0:-1] + binslgalcart[1:]) / 2.
-    gdat.bgalcart = (binsbgalcart[0:-1] + binsbgalcart[1:]) / 2.
-    gdat.numbener = 2    
-    gdat.numbevtt = 1
-    gdat.pathdata = os.environ["PCAT_DATA_PATH"] + '/data/'
-    retr_chandata(gdat) 
-    
-    path = gdat.pathdata + 'inpt/chanflux_%04d_4msc.fits' % numbsidecart
-    data = pf.getdata(path)
-    gdat.indxxaximaxm, gdat.indxyaximaxm = tdpy.util.retr_indximagmaxm(data)
-   
-    gdat.lgalmaxm = gdat.lgalcart[gdat.indxxaximaxm]
-    gdat.bgalmaxm = gdat.bgalcart[gdat.indxyaximaxm]
-
-    thissampvarb = array([170., deg2rad(223.5703), deg2rad(-54.4265)])
-    stdvpara = 1e-3 * ones(thissampvarb.size)
-    tdpy.util.minm(thissampvarb, pcattemp, stdvpara=stdvpara, gdat=gdat, verbtype=2)
 
 
 def pcat_chan_inpt():
@@ -279,7 +166,6 @@ def pcat_chan_inpt():
                               numbburn=300000, \
                               factthin=2000, \
                               diagmode=False, \
-                              randinit=True, \
                               strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
@@ -289,4 +175,3 @@ def pcat_chan_inpt():
 
 
 globals().get(sys.argv[1])()
-

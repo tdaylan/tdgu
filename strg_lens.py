@@ -5,7 +5,7 @@ def pcat_lens_mock_grid():
     anglfact = pi / 180. / 3600.
     maxmflux = 3e-1 * anglfact
     
-    numbcnfg = 3
+    numbcnfg = 5
     
     varbinpt = tdpy.util.varb(numbcnfg)
     varbinpt.defn_para('minmflux', 3e-4, 3e-2, scal='logt')
@@ -19,7 +19,7 @@ def pcat_lens_mock_grid():
     liststrgvarbinpt = ['$R_{min}$ [arcsec]', '$A$ [1/cm^2/s]', r'$\epsilon$ [cm^2 s]']
     grid = empty((4, numboutpvarb, varbinpt.size, numbcnfg))
     
-    numbiter = 1
+    numbiter = 2
     for k in range(numbiter):
         seedstat = get_state()
         for m in range(varbinpt.size):
@@ -44,10 +44,10 @@ def pcat_lens_mock_grid():
                 
                 gridchan, gdat = pcat.main.init( \
                                                 seedstat=seedstat, \
-                                                numbswep=100000, \
-                                                numbswepplot=5000, \
-                                                factthin=2000, \
-                                                #proplenp=False, \
+                                                numbswep=10000, \
+                                                numbswepplot=1000, \
+                                                factthin=180, \
+                                                proplenp=False, \
                                                 makeplot=False, \
                                                 diagmode=False, \
                                                 proppsfp=False, \
