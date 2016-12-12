@@ -102,29 +102,33 @@ def pcat_lens_mock_grid():
     
 
 def pcat_lens_mock():
-    
+   
     maxmflux = deg2rad(5e-1 / 3600.)
-    minmflux = deg2rad(5e-3 / 3600.)
-    gridchan = pcat.main.init( \
-                              numbswep=1000, \
-                              numbswepplot=30000, \
-                              factthin=10, \
-                              verbtype=1, \
-                              #diagmode=False, \
-                              proppsfp=False, \
-                              proplenp=False, \
-                              diagmode=False, \
-                              exprinfo=False, \
-                              pntstype='lens', \
-                              indxenerincl=arange(1), \
-                              indxevttincl=arange(1), \
-                              strgexpo=1e16, \
-                              exprtype='hubb', \
-                              strgback=[1e-1], \
-                              minmflux=minmflux, \
-                              maxmflux=maxmflux, \
-                              maxmnumbpnts=array([30]), \
-                              mocknumbpnts=array([10]), \
-                             )
+    minmflux = deg2rad(1e-3 / 3600.)
+    
+    numbiter = 10
+    for k in range(numbiter):
+        gridchan = pcat.main.init( \
+                                  numbswep=100, \
+                                  numbswepplot=30000, \
+                                  factthin=1, \
+                                  numbburn=0, \
+                                  verbtype=1, \
+                                  #diagmode=False, \
+                                  proppsfp=False, \
+                                  #proplenp=False, \
+                                  #diagmode=False, \
+                                  exprinfo=False, \
+                                  pntstype='lens', \
+                                  indxenerincl=arange(1), \
+                                  indxevttincl=arange(1), \
+                                  strgexpo=1e16, \
+                                  exprtype='hubb', \
+                                  strgback=[1e-1], \
+                                  minmflux=minmflux, \
+                                  maxmflux=maxmflux, \
+                                  maxmnumbpnts=array([30]), \
+                                  mocknumbpnts=array([10]), \
+                                 )
     
 globals().get(sys.argv[1])()
