@@ -71,7 +71,7 @@ def pcat_lens_mock_grid():
                         grid[:3, n, m, l] = gdat.fluxfactplot * gdat.postspecassc[:, gdat.indxenerfluxdist[0], 0]
                         grid[3, n, m, l] = gdat.fluxfactplot * gdat.truespec[0][0, gdat.indxenerfluxdist[0], 0]
                         if k == 0 and m == 0 and l == 0:
-                            liststrgoutpvarb.append('$R_0$')
+                            liststrgoutpvarb.append(['$R_0$'])
                     else:
                         grid[:3, n, m, l] = getattr(gdat, 'postfixp')[:, getattr(gdat, 'indxfixp' + listnameoutpvarb[n])].flatten()
                         grid[3, n, m, l] = getattr(gdat, 'truefixp')[getattr(gdat, 'indxfixp' + listnameoutpvarb[n])]
