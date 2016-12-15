@@ -131,7 +131,7 @@ def retr_psec(gdat, thiswnum):
     return psec, tranfunc
 
 
-def retr_llik(sampvarb, gdat, gdatintr):
+def retr_llik(sampvarb, gdat):
 
     gdat.csecvelo = sampvarb[0]
     gdat.csecfrac = sampvarb[1]

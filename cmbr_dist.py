@@ -773,9 +773,8 @@ def retr_ydis_trac():
 def retr_flux(gdat, thisfreq, thispara):
 
     # CMB
-    if modlcmbrtype == 'full':
+    if gdat.cmbrtype == 'full':
         gdatmodi.flux.cmbr = retr_fluxcmbr(gdat, thisfreq, thispara.tempcmbr)
-    
 
     dustodep = thispara[1]
     dustemisrati = thispara[2]
@@ -854,7 +853,7 @@ def retr_fluxdoubdust(gdat, thisfreq, dustodep, dustemisrati, dustpowrfrac, dust
     return fluxdust, fluxdustcold, fluxdustwarm
 
 
-def retr_llik(sampvarb, gdat, gdatintr):
+def retr_llik(sampvarb, gdat):
     
     modlfluxtotl, modlfluxcmbr, modlfluxdustcold, modlfluxdustwarm, modlfluxsync, modlfluxfree, modlfluxydis, modlfluxdeca = retr_flux(gdat, gdat.freqmodl, sampvarb)
     
@@ -1132,6 +1131,8 @@ def init( \
     gdat.plotsamp = plotsamp
     gdat.numbswepplot = numbswepplot
     
+    gdat.cmbrtype = 'full'
+
     # data path
     gdat.pathdata = tdpy.util.retr_path('tdgu', 'cmbr_dist/', onlydata=True)
    
@@ -1424,7 +1425,6 @@ def cnfg_plnk_expr():
     
 
 def cnfg_pixi():
-    
     
     statpara = init( \
                    )

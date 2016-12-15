@@ -44,9 +44,12 @@ def pcat_ferm_inpt_ngal_intr( \
                        ): 
 
     karg = {}
-    karg['numbswep'] = 1000
+    karg['numbswep'] = 10000
+    karg['numbswepplot'] = 5000
     karg['randinit'] = False
     karg['proppsfp'] = False
+    karg['verbtype'] = 1
+    karg['maxmnumbpnts'] = array([10])
     karg['indxenerincl'] = arange(1, 4)
     karg['indxevttincl'] = arange(2, 4)
     karg['lgalcntr'] = 0.
@@ -90,8 +93,10 @@ def pcat_ferm_mock_ngal():
     pcat.main.init( \
                    proppsfp=False, \
                    indxenerincl=arange(1, 4), \
-                   indxevttincl=arange(2, 4), \
+                   # temp
+                   indxevttincl=arange(3, 4), \
                    lgalcntr=0., \
+                   numbswep=1000, \
                    bgalcntr=deg2rad(pi / 2.), \
                    strgback=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
                    strgexpo='fermexpo_cmp0_ngal.fits', \
