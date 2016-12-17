@@ -54,7 +54,7 @@ def pcat_ferm_inpt_ngal_intr( \
     karg['indxevttincl'] = arange(2, 4)
     karg['lgalcntr'] = 0.
     karg['bgalcntr'] = pi / 2.
-    karg['strgback'] = ['fermisotflux.fits', 'fermfdfmflux_ngal.fits']
+    karg['back'] = ['fermisotflux.fits', 'fermfdfmflux_ngal.fits']
     karg['strgexpo'] = strgexpo
     karg['minmflux'] = 3e-11
     karg['maxmflux'] = 1e-7
@@ -91,14 +91,15 @@ def pcat_ferm_inpt_ngal_tim4():
 def pcat_ferm_mock_ngal():
      
     pcat.main.init( \
+                   numbswep=100, \
                    proppsfp=False, \
                    indxenerincl=arange(1, 4), \
                    # temp
                    indxevttincl=arange(3, 4), \
                    lgalcntr=0., \
-                   numbswep=1000, \
+                   diagmode=False, \
                    bgalcntr=deg2rad(pi / 2.), \
-                   strgback=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
+                   back=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
                    strgexpo='fermexpo_cmp0_ngal.fits', \
                    minmflux=3e-11, \
                    maxmflux=1e-7, \
