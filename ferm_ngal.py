@@ -97,6 +97,7 @@ def pcat_ferm_mock_ngal():
                    # temp
                    indxevttincl=arange(3, 4), \
                    lgalcntr=0., \
+                   makeplot=False, \
                    diagmode=False, \
                    bgalcntr=deg2rad(pi / 2.), \
                    back=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
