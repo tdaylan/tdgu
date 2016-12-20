@@ -92,12 +92,13 @@ def pcat_ferm_mock_ngal():
      
     pcat.main.init( \
                    numbswep=100, \
+                   factthin=10, \
                    proppsfp=False, \
                    indxenerincl=arange(1, 4), \
                    # temp
                    indxevttincl=arange(3, 4), \
                    lgalcntr=0., \
-                   makeplot=False, \
+                   #makeplot=False, \
                    diagmode=False, \
                    bgalcntr=deg2rad(pi / 2.), \
                    back=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
