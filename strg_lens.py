@@ -110,8 +110,7 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         gridchan = pcat.main.init( \
-                                  numbswep=3000, \
-                                  numbproc=2, \
+                                  numbswep=30000, \
                                   numbswepplot=10000, \
                                   factthin=30, \
                                   verbtype=1, \
