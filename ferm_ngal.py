@@ -91,7 +91,7 @@ def pcat_ferm_inpt_ngal_tim4():
 def pcat_ferm_mock_ngal():
      
     pcat.main.init( \
-                   numbswep=100, \
+                   numbswep=10000, \
                    factthin=10, \
                    proppsfp=False, \
                    indxenerincl=arange(1, 4), \
@@ -106,7 +106,7 @@ def pcat_ferm_mock_ngal():
                    minmflux=3e-11, \
                    maxmflux=1e-7, \
                    numbsideheal=256, \
-                   mocknumbpnts=array([300]), \
+                   mocknumbpnts=array([30]), \
                    mockfluxdistslop=array([2.0]), \
                   )
 
