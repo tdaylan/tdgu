@@ -104,7 +104,7 @@ def pcat_lens_mock_grid():
 def pcat_lens_mock():
    
     maxmflux = deg2rad(5e-1 / 3600.)
-    minmflux = deg2rad(5e-3 / 3600.)
+    minmflux = deg2rad(3e-3 / 3600.)
     
     numbiter = 10
     for k in range(numbiter):
@@ -128,7 +128,7 @@ def pcat_lens_mock():
                                   minmflux=minmflux, \
                                   maxmflux=maxmflux, \
                                   #maxmnumbpnts=array([50]), \
-                                  mocknumbpnts=array([20]), \
+                                  mocknumbpnts=array([50]), \
                                  )
     
 globals().get(sys.argv[1])()
