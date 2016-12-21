@@ -104,21 +104,20 @@ def pcat_lens_mock_grid():
 def pcat_lens_mock():
    
     maxmflux = deg2rad(5e-1 / 3600.)
-    minmflux = deg2rad(5e-13 / 3600.)
-    #minmflux = deg2rad(5e-3 / 3600.)
+    minmflux = deg2rad(5e-3 / 3600.)
     
     numbiter = 10
     for k in range(numbiter):
         gridchan = pcat.main.init( \
-                                  numbswep=30000, \
-                                  numbswepplot=10000, \
-                                  factthin=30, \
+                                  numbswep=10000, \
+                                  numbswepplot=1000, \
+                                  factthin=10, \
                                   verbtype=1, \
                                   #diagmode=False, \
                                   proppsfp=False, \
+                                  #propcomp=False, \
+                                  #probtran=0., \
                                   #proplenp=False, \
-                                  #proplenp=False, \
-                                  #diagmode=False, \
                                   exprinfo=False, \
                                   pntstype='lens', \
                                   indxenerincl=arange(1), \
@@ -128,8 +127,8 @@ def pcat_lens_mock():
                                   strgback=[1e-1], \
                                   minmflux=minmflux, \
                                   maxmflux=maxmflux, \
-                                  maxmnumbpnts=array([30]), \
-                                  mocknumbpnts=array([10]), \
+                                  #maxmnumbpnts=array([50]), \
+                                  mocknumbpnts=array([20]), \
                                  )
     
 globals().get(sys.argv[1])()
