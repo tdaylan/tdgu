@@ -857,7 +857,7 @@ def pcat_ferm_inpt_ptch():
               bgalcntr=bgalcntr, \
               minmflux=3e-11, \
               maxmflux=3e-6, \
-              strgback=['isotflux.fits', 'fdfmflux%s.fits' % strgcntr], \
+              back=['isotflux.fits', 'fdfmflux%s.fits' % strgcntr], \
               strgexpo='fermexpo_cmp0_igal%s.fits' % strgcntr, \
               strgexprflux='fermflux_cmp0_igal%s.fits' % strgcntr, \
              )
@@ -873,7 +873,7 @@ def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermex
                    indxevttincl=arange(2, 4), \
                    minmflux=1e-8, \
                    maxmflux=3e-6, \
-                   strgback=['isotflux.fits', 'fdfmflux.fits'], \
+                   back=['isotflux.fits', 'fdfmflux.fits'], \
                    strgexpo=strgexpo, \
                    strgexprflux=strgexprflux, \
                   )
@@ -891,7 +891,7 @@ def pcat_ferm_mock_igal_brok():
                        indxevttincl=arange(2, 4), \
                        indxenerincl=arange(1, 4), \
                        strgexpo='fermexpo_cmp0_igal.fits', \
-                       strgback=['isotflux.fits'], \
+                       back=['isotflux.fits'], \
                        
                        maxmgang=deg2rad(20.), \
                        fluxdisttype=['brok'], \
@@ -929,7 +929,7 @@ def pcat_ferm_mock_igal_syst():
                        indxevttincl=arange(2, 4), \
                        indxenerincl=arange(1, 4), \
                        strgexpo='fermexpo_cmp0_igal.fits', \
-                       strgback=['isotflux.fits'], \
+                       back=['isotflux.fits'], \
                        maxmnumbpnts=array([20]), \
                        maxmgang=deg2rad(20.), \
                        minmflux=3e-11, \
@@ -946,16 +946,18 @@ def pcat_ferm_mock_igal_syst():
 def pcat_ferm_mock_igal():
      
     pcat.main.init( \
-                   verbtype=2, \
+                   #verbtype=2, \
+                   numbswep=10000, \
+                   numbswepplot=2000, \
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
-                   strgback=['isotflux.fits', 'fdfmflux.fits'], \
+                   back=['isotflux.fits', 'fdfmflux.fits'], \
                    maxmgang=deg2rad(20.), \
                    minmflux=3e-11, \
                    maxmflux=3e-7, \
-                   maxmnumbpnts=array([2, 2]), \
-                   mocknumbpnts=array([2, 2]), \
+                   maxmnumbpnts=array([400, 200]), \
+                   mocknumbpnts=array([200, 100]), \
                    mockspatdisttype=['unif', 'disc'], \
                    mockfluxdisttype=['powr', 'powr'], \
                    mockfluxdistslop=array([2.6, 2.6]), \

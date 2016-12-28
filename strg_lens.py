@@ -9,7 +9,7 @@ def pcat_lens_mock_grid():
     
     varbinpt = tdpy.util.varb(numbcnfg)
     varbinpt.defn_para('minmflux', 3e-4, 3e-2, scal='logt')
-    varbinpt.defn_para('strgback', 1e-2, 1e0, scal='logt')
+    varbinpt.defn_para('back', 1e-2, 1e0, scal='logt')
     varbinpt.defn_para('strgexpo', 1e15, 1e17, scal='logt')
 
     listnameoutpvarb = ['fluxdistslop', 'meanpnts', 'specassc']
@@ -37,8 +37,8 @@ def pcat_lens_mock_grid():
                      
                     if varbinpt.name[p] == 'minmflux':
                         minmflux = varb * anglfact
-                    if varbinpt.name[p] == 'strgback':
-                        strgback = varb
+                    if varbinpt.name[p] == 'back':
+                        back = varb
                     if varbinpt.name[p] == 'strgexpo':
                         strgexpo = varb
                 
@@ -59,7 +59,7 @@ def pcat_lens_mock_grid():
                                                 indxevttincl=arange(1), \
                                                 strgexpo=strgexpo, \
                                                 exprtype='hubb', \
-                                                strgback=[strgback], \
+                                                back=[back], \
                                                 #maxmnumbpnts=array([20]), \
                                                 minmflux=minmflux, \
                                                 maxmflux=maxmflux, \
@@ -106,14 +106,32 @@ def pcat_lens_mock():
     maxmflux = deg2rad(5e-1 / 3600.)
     minmflux = deg2rad(1e-3 / 3600.)
     
+    #fact = 1.24510e-19
+    fact = 1.63050e-19
+    
+    anglfact = 3600. * 180. / pi
+    maxmgang = 2. / anglfact
+    mocksizesour = 0.05 / anglfact
+
+    stbr = 10.
+    htsr = 10.
+    sourfact = 1.
+    strgexpo = 1e4
+    
+    mockfluxsour = sourfact * fact
+    mockfluxhost = htsr * mockfluxsour
+    back = [mockfluxsour / stbr / (pi * mocksizesour**2)]
+    
+    strgexpo /= fact
+    
     numbiter = 10
     for k in range(numbiter):
         gridchan = pcat.main.init( \
-                                  numbswep=600, \
-                                  numbswepplot=20000, \
-                                  factthin=120, \
+                                  numbswep=50000, \
+                                  numbswepplot=10000, \
+                                  factthin=50, \
                                   verbtype=1, \
-                                  numbproc=2, \
+                                  maxmgang=maxmgang, \
                                   #diagmode=False, \
                                   proppsfp=False, \
                                   #propcomp=False, \
@@ -123,13 +141,16 @@ def pcat_lens_mock():
                                   pntstype='lens', \
                                   indxenerincl=arange(1), \
                                   indxevttincl=arange(1), \
-                                  strgexpo=1e16, \
+                                  strgexpo=strgexpo, \
                                   exprtype='hubb', \
-                                  strgback=[1e-1], \
+                                  back=back, \
                                   minmflux=minmflux, \
                                   maxmflux=maxmflux, \
                                   #maxmnumbpnts=array([50]), \
                                   mocknumbpnts=array([50]), \
+                                  mockfluxsour=mockfluxsour, \
+                                  mockfluxhost=mockfluxhost, \
+                                
                                  )
     
 globals().get(sys.argv[1])()

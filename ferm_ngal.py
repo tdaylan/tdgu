@@ -44,11 +44,12 @@ def pcat_ferm_inpt_ngal_intr( \
                        ): 
 
     karg = {}
-    karg['numbswep'] = 10000
-    karg['numbswepplot'] = 5000
+    karg['numbswep'] = 100000
+    karg['numbswepplot'] = 10000
+
+    karg['factthin'] = 90
     karg['randinit'] = False
-    karg['proppsfp'] = False
-    karg['verbtype'] = 1
+    karg['verbtype'] = 2
     karg['maxmnumbpnts'] = array([10])
     karg['indxenerincl'] = arange(1, 4)
     karg['indxevttincl'] = arange(2, 4)
@@ -91,22 +92,25 @@ def pcat_ferm_inpt_ngal_tim4():
 def pcat_ferm_mock_ngal():
      
     pcat.main.init( \
-                   numbswep=10000, \
-                   factthin=10, \
+                   numbswep=2000, \
+                   numbswepplot=10000, \
+                   factthin=180, \
                    proppsfp=False, \
                    indxenerincl=arange(1, 4), \
-                   # temp
-                   indxevttincl=arange(3, 4), \
-                   lgalcntr=0., \
+                   indxevttincl=arange(2, 4), \
+                   #verbtype=2, \
                    #makeplot=False, \
-                   diagmode=False, \
-                   bgalcntr=deg2rad(pi / 2.), \
+                   lgalcntr=0., \
+                   #propcova=True, \
+                   #diagmode=True, \
+                   bgalcntr=pi / 2., \
                    back=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
                    strgexpo='fermexpo_cmp0_ngal.fits', \
                    minmflux=3e-11, \
                    maxmflux=1e-7, \
                    numbsideheal=256, \
-                   mocknumbpnts=array([30]), \
+                   #maxmnumbpnts=array([100]), \
+                   mocknumbpnts=array([200]), \
                    mockfluxdistslop=array([2.0]), \
                   )
 

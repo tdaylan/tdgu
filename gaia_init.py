@@ -262,7 +262,7 @@ def pcat_tgas():
          numbburn=20000, \
          psfninfoprio=False, \
          strgexpo=1., \
-         strgback=[1e-3], \
+         back=[1e-3], \
          numbswepplot=30000, \
          factthin=100, \
          strgexprflux='tgas.fits', \

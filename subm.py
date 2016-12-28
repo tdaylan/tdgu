@@ -25,4 +25,5 @@ for k in range(len(listcmnd)):
     try:
         os.system(listcmnd[k])
     except:
+        raise
         pass

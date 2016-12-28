@@ -175,7 +175,7 @@ def cnfg_sdss_mock():
          radispmrlbhl=5./3600., \
          maxmgang=30./3600., \
          margsize=2./3600., \
-         strgback=['unit'], \
+         back=['unit'], \
          psfntype='doubgaus', \
          strgexpo='unit', \
          indxevttincl=indxevttincl, \

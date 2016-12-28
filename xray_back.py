@@ -134,7 +134,7 @@ def pcat_chan_mock_zero():
     gridchan = pcat.main.init( \
                               numbswep=30000, \
                               numbswepplot=20000, \
-                              strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
+                              back=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
                               numbsidecart=numbsidecart, \
@@ -148,11 +148,11 @@ def pcat_chan_mock():
     gridchan = pcat.main.init( \
                               numbswep=300000, \
                               numbswepplot=20000, \
-                              strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
+                              back=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
                               psfntype='singking', \
-                              psfninfoprio=False, \
+                              #psfninfoprio=False, \
                               numbsidecart=numbsidecart, \
                               diagmode=False, \
                               mocknumbpnts=array([100]), \
@@ -166,7 +166,7 @@ def pcat_chan_mock_popl():
                               numbburn=10000, \
                               factthin=200, \
                               numbswepplot=20000, \
-                              strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
+                              back=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
                               numbsidecart=numbsidecart, \
@@ -182,7 +182,7 @@ def pcat_chan_inpt():
                               numbburn=300000, \
                               factthin=2000, \
                               diagmode=False, \
-                              strgback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
+                              back=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
                               numbsidecart=numbsidecart, \
