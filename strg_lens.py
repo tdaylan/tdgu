@@ -58,24 +58,11 @@ def pcat_lens_mock_grid():
                     if varbinpt.name[p] == 'mockfluxhost':
                         mockfluxhost = varb
                 
-                print 'minmflux'
-                print minmflux
-                print 'back'
-                print back
-                print 'strgexpo'
-                print strgexpo
-                print 'mockfluxsour'
-                print mockfluxsour
-                print 'mockfluxhost'
-                print mockfluxhost
-                print
-
                 gdat = pcat.main.init( \
                                       seedstat=seedstat, \
-                                      numbswep=50000, \
-                                      makeplot=False, \
-                                      numbswepplot=100000, \
-                                      factthin=50, \
+                                      numbswep=10000, \
+                                      numbswepplot=4000, \
+                                      factthin=200, \
                                       proppsfp=False, \
                                       exprinfo=False, \
                                       pntstype='lens', \
@@ -96,10 +83,6 @@ def pcat_lens_mock_grid():
                         grid[0, n, m, l] = gdat.fluxfactplot * gdat.medispecassc[0][gdat.indxenerfluxdist[0], 0]
                         grid[1:3, n, m, l] = gdat.fluxfactplot * gdat.errrspecassc[0][:, gdat.indxenerfluxdist[0], 0]
                         grid[3, n, m, l] = gdat.fluxfactplot * gdat.truespec[0][0, gdat.indxenerfluxdist[0], 0]
-                        print 'gdat.fluxfactplot'
-                        print gdat.fluxfactplot
-                        print grid[:, n, m, l]
-                        print
 
                         if k == 0 and m == 0 and l == 0:
                             liststrgoutpvarb.append(r'$\theta_{E,0}$')
@@ -114,24 +97,6 @@ def pcat_lens_mock_grid():
                             liststrgoutpvarb.append(getattr(gdat, 'strgfixp')[indx][0])
                             listscaloutpvarb.append(getattr(gdat, 'scalfixp')[indx])
                             
-                    print 'listnameoutpvarb[n]'
-                    print listnameoutpvarb[n]
-                    print 'true'
-                    print grid[0, n, m, l]
-                    print
-                print
-                print
-                print
-                print
-                print
-                print
-                print
-                print
-                print
-                print
-                print
-                print
-
         path = os.environ["PCAT_DATA_PATH"] + '/imag/%s_lensgrid/' % gdat.strgtimestmp
         os.system('mkdir -p %s' % path)
         for n in range(numboutpvarb):
@@ -179,9 +144,9 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=5000, \
-                       numbswepplot=10000, \
-                       factthin=5, \
+                       numbswep=500, \
+                       numbswepplot=1000, \
+                       factthin=50, \
                        verbtype=1, \
                        maxmgang=maxmgang, \
                        proppsfp=False, \
