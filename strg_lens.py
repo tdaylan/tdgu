@@ -60,7 +60,7 @@ def pcat_lens_mock_grid():
                 
                 gdat = pcat.main.init( \
                                       seedstat=seedstat, \
-                                      numbswep=10000, \
+                                      numbswep=100000, \
                                       numbswepplot=4000, \
                                       factthin=200, \
                                       proppsfp=False, \
@@ -144,9 +144,9 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=500, \
-                       numbswepplot=1000, \
-                       factthin=50, \
+                       numbswep=100000, \
+                       numbswepplot=10000, \
+                       factthin=10, \
                        verbtype=1, \
                        maxmgang=maxmgang, \
                        proppsfp=False, \
@@ -159,8 +159,8 @@ def pcat_lens_mock():
                        back=back, \
                        minmflux=minmflux, \
                        maxmflux=maxmflux, \
-                       #maxmnumbpnts=array([50]), \
-                       mocknumbpnts=array([50]), \
+                       #maxmnumbpnts=array([3]), \
+                       mocknumbpnts=array([20]), \
                        mockfluxsour=mockfluxsour, \
                        mockfluxhost=mockfluxhost, \
                       )
