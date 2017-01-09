@@ -882,10 +882,10 @@ def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermex
     
 def pcat_ferm_mock_igal_brok():
      
-    listmockfluxdistbrek = array([1e-10, 3e-10, 1e-9, 3e-9, 1e-8])
-    mockfluxdistbrek = array([1e-9])
-    listmockfluxdistsloplowr = array([1.9, 2.2, 2.8, 3.1, 3.4])
-    numbiter = listmockfluxdistsloplowr.size
+    listtruefluxdistbrek = array([1e-10, 3e-10, 1e-9, 3e-9, 1e-8])
+    truefluxdistbrek = array([1e-9])
+    listtruefluxdistsloplowr = array([1.9, 2.2, 2.8, 3.1, 3.4])
+    numbiter = listtruefluxdistsloplowr.size
     for k in range(numbiter):
         pcat.main.init( \
                        exprinfo=False, \
@@ -902,15 +902,15 @@ def pcat_ferm_mock_igal_brok():
                        minmflux=3e-11, \
                        maxmflux=3e-7, \
 
-                       mocknumbpnts=array([100]), \
+                       truenumbpnts=array([100]), \
                         
-                       mockfluxdisttype=['brok'], \
-                       mockfluxdistbrek=mockfluxdistbrek, \
-                       mockfluxdistsloplowr=array([listmockfluxdistsloplowr[k]]), \
-                       mockfluxdistslopuppr=array([1.6]), \
+                       truefluxdisttype=['brok'], \
+                       truefluxdistbrek=truefluxdistbrek, \
+                       truefluxdistsloplowr=array([listtruefluxdistsloplowr[k]]), \
+                       truefluxdistslopuppr=array([1.6]), \
                        
-                       mocksinddiststdv=array([.5]), \
-                       mocksinddistmean=array([2.]), \
+                       truesinddiststdv=array([.5]), \
+                       truesinddistmean=array([2.]), \
                       )
 
 
@@ -924,7 +924,7 @@ def pcat_ferm_mock_igal_syst():
     indxtupl = np.arange(numbtupl)
     strgtupl = []
     for k in range(numbtupl):
-        mocknumbpnts = tupl[k]
+        truenumbpnts = tupl[k]
 
         pcat.main.init( \
                        indxevttincl=arange(2, 4), \
@@ -935,12 +935,12 @@ def pcat_ferm_mock_igal_syst():
                        maxmgang=deg2rad(20.), \
                        minmflux=3e-11, \
                        maxmflux=3e-7, \
-                       mocknumbpnts=array([10, 10, 10]), \
-                       mockspatdisttype=['unif', 'disc', 'gang'], \
-                       mockfluxdisttype=['powr', 'powr', 'brok'], \
-                       mockfluxdistslop=array([2.6, 2.6, 3.5]), \
-                       mocksinddiststdv=array([.5, .5, .5]), \
-                       mocksinddistmean=array([2., 2., 2.]), \
+                       truenumbpnts=array([10, 10, 10]), \
+                       truespatdisttype=['unif', 'disc', 'gang'], \
+                       truefluxdisttype=['powr', 'powr', 'brok'], \
+                       truefluxdistslop=array([2.6, 2.6, 3.5]), \
+                       truesinddiststdv=array([.5, .5, .5]), \
+                       truesinddistmean=array([2., 2., 2.]), \
                       )
 
 
@@ -958,21 +958,21 @@ def pcat_ferm_mock_igal():
                    minmflux=3e-11, \
                    maxmflux=3e-7, \
                    maxmnumbpnts=array([400, 200]), \
-                   mocknumbpnts=array([200, 100]), \
-                   mockspatdisttype=['unif', 'disc'], \
-                   mockfluxdisttype=['powr', 'powr'], \
-                   mockfluxdistslop=array([2.6, 2.6]), \
-                   mocksinddiststdv=array([.5, .5]), \
-                   mocksinddistmean=array([2., 2.]), \
-                   mockspectype=['powr', 'expo']
+                   truenumbpnts=array([200, 100]), \
+                   truespatdisttype=['unif', 'disc'], \
+                   truefluxdisttype=['powr', 'powr'], \
+                   truefluxdistslop=array([2.6, 2.6]), \
+                   truesinddiststdv=array([.5, .5]), \
+                   truesinddistmean=array([2., 2.]), \
+                   truespectype=['powr', 'expo']
                    #maxmnumbpnts=array([3, 3, 3]), \
-                   #mocknumbpnts=array([3, 3, 3]), \
-                   #mockspatdisttype=['unif', 'disc', 'gang'], \
-                   #mockfluxdisttype=['powr', 'powr', 'powr'], \
-                   #mockfluxdistslop=array([2.6, 2.6, 3.5]), \
-                   #mocksinddiststdv=array([.5, .5, .5]), \
-                   #mocksinddistmean=array([2., 2., 2.]), \
-                   #mockspectype=['powr', 'expo', 'expo']
+                   #truenumbpnts=array([3, 3, 3]), \
+                   #truespatdisttype=['unif', 'disc', 'gang'], \
+                   #truefluxdisttype=['powr', 'powr', 'powr'], \
+                   #truefluxdistslop=array([2.6, 2.6, 3.5]), \
+                   #truesinddiststdv=array([.5, .5, .5]), \
+                   #truesinddistmean=array([2., 2., 2.]), \
+                   #truespectype=['powr', 'expo', 'expo']
                   )
 
 

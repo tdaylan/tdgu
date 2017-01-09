@@ -97,7 +97,6 @@ def pcat_ferm_mock_ngal():
                    proppsfp=False, \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
-                   numbproc=2, \
                    #verbtype=2, \
                    #makeplot=False, \
                    lgalcntr=0., \
@@ -110,8 +109,8 @@ def pcat_ferm_mock_ngal():
                    maxmflux=1e-7, \
                    numbsideheal=256, \
                    #maxmnumbpnts=array([100]), \
-                   mocknumbpnts=array([200]), \
-                   mockfluxdistslop=array([2.0]), \
+                   truenumbpnts=array([200]), \
+                   truefluxdistslop=array([2.0]), \
                   )
 
 globals().get(sys.argv[1])()

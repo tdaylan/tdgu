@@ -5,7 +5,7 @@ def pcat_lens_mock_grid():
     anglfact = 3600. * 180. / pi
     maxmflux = 3e-1 * anglfact
     maxmgang = 2. / anglfact
-    mocksizesour = 0.05 / anglfact
+    truesizesour = 0.05 / anglfact
     
     numbcnfg = 5
     numbiter = 2
@@ -19,12 +19,12 @@ def pcat_lens_mock_grid():
 
     varbinpt = tdpy.util.varb(numbcnfg)
     varbinpt.defn_para('minmflux', 3e-4, 3e-2, scal='logt')
-    varbinpt.defn_para('back', 1e-1 * fact / (pi * mocksizesour**2), 1e1 * fact / (pi * mocksizesour**2), scal='logt')
+    varbinpt.defn_para('back', 1e-1 * fact / (pi * truesizesour**2), 1e1 * fact / (pi * truesizesour**2), scal='logt')
     varbinpt.defn_para('strgexpo', 1e5 / fact, 1e7 / fact, scal='logt')
-    varbinpt.defn_para('mockfluxsour', 1e-1 * fact, 1e1 * fact, scal='logt')
-    varbinpt.defn_para('mockfluxhost', 1e-1 * fact, 1e1 * fact, scal='logt')
+    varbinpt.defn_para('truespecsour', 1e-1 * fact, 1e1 * fact, scal='logt')
+    varbinpt.defn_para('truespechost', 1e-1 * fact, 1e1 * fact, scal='logt')
 
-    listnameoutpvarb = ['fluxdistsloppop0', 'meanpntspop0', 'specassc', 'fluxhost', 'beinhost']
+    listnameoutpvarb = ['fluxdistsloppop0', 'meanpntspop0', 'specassc', 'spechost', 'beinhost']
     numboutpvarb = len(listnameoutpvarb)
     liststrgoutpvarb = []
     listscaloutpvarb = []
@@ -53,10 +53,10 @@ def pcat_lens_mock_grid():
                         back = varb
                     if varbinpt.name[p] == 'strgexpo':
                         strgexpo = varb
-                    if varbinpt.name[p] == 'mockfluxsour':
-                        mockfluxsour = varb
-                    if varbinpt.name[p] == 'mockfluxhost':
-                        mockfluxhost = varb
+                    if varbinpt.name[p] == 'truespecsour':
+                        truespecsour = varb
+                    if varbinpt.name[p] == 'truespechost':
+                        truespechost = varb
                 
                 gdat = pcat.main.init( \
                                       seedstat=seedstat, \
@@ -73,9 +73,9 @@ def pcat_lens_mock_grid():
                                       back=[back], \
                                       minmflux=minmflux, \
                                       maxmflux=maxmflux, \
-                                      mockfluxsour=mockfluxsour, \
-                                      mockfluxhost=mockfluxhost, \
-                                      mocknumbpnts=array([10]), \
+                                      truespecsour=truespecsour, \
+                                      truespechost=truespechost, \
+                                      truenumbpnts=array([10]), \
                                      )
                 
                 for n in range(numboutpvarb):
@@ -128,26 +128,28 @@ def pcat_lens_mock():
     
     anglfact = 3600. * 180. / pi
     maxmgang = 2. / anglfact
-    mocksizesour = 0.05 / anglfact
+    truesizesour = 0.05 / anglfact
 
-    stbr = 10.
-    htsr = 10.
-    cntssour = 1.
-    strgexpo = 1e4
+    btsr = 1.
+    htsr = 1.
+    strgexpo = 1e3
     
-    mockfluxsour = cntssour * fact
-    mockfluxhost = htsr * mockfluxsour
-    back = [mockfluxsour / stbr / (pi * mocksizesour**2)]
+    truespecsour = fact
+    truespechost = htsr * truespecsour
+    back = [2. * truespecsour * btsr / (pi * truesizesour**2)]
     
     strgexpo /= fact
     
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=100000, \
-                       numbswepplot=10000, \
-                       factthin=10, \
-                       verbtype=1, \
+                       numbswep=10, \
+                       numbswepplot=400, \
+                       factthin=1, \
+                       verbtype=2, \
+                       #makeplot=False, \
+                       probtran=0., \
+                       diagmode=True, \
                        maxmgang=maxmgang, \
                        proppsfp=False, \
                        exprinfo=False, \
@@ -159,10 +161,14 @@ def pcat_lens_mock():
                        back=back, \
                        minmflux=minmflux, \
                        maxmflux=maxmflux, \
-                       #maxmnumbpnts=array([3]), \
-                       mocknumbpnts=array([20]), \
-                       mockfluxsour=mockfluxsour, \
-                       mockfluxhost=mockfluxhost, \
+                       maxmnumbpnts=array([3]), \
+                       truenumbpnts=array([2]), \
+                       truespecsour=truespecsour, \
+                       minmspecsour=0.1*truespecsour, \
+                       maxmspecsour=10*truespecsour, \
+                       truespechost=truespechost, \
+                       minmspechost=0.1*truespechost, \
+                       maxmspechost=10*truespechost, \
                       )
     
 globals().get(sys.argv[1])()
