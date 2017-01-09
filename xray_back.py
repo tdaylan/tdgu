@@ -149,7 +149,7 @@ def pcat_chan_mock():
                               numbswep=1000, \
                               verbtype=1, \
                               #makeplot=False, \
-                              numbswepplot=20000, \
+                              numbswepplot=200, \
                               back=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
@@ -157,8 +157,8 @@ def pcat_chan_mock():
                               #psfntype='singking', \
                               #psfninfoprio=False, \
                               numbsidecart=numbsidecart, \
-                              maxmnumbpnts=array([3]), \
-                              truenumbpnts=array([2]), \
+                              maxmnumbpnts=array([30]), \
+                              truenumbpnts=array([20]), \
                              )
 
 def pcat_chan_mock_popl():

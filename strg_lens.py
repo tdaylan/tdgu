@@ -130,7 +130,7 @@ def pcat_lens_mock():
     maxmgang = 2. / anglfact
     truesizesour = 0.05 / anglfact
 
-    btsr = 1.
+    btsr = 1e10
     htsr = 1.
     strgexpo = 1e3
     
@@ -143,10 +143,12 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=10, \
+                       numbswep=1000, \
                        numbswepplot=400, \
-                       factthin=1, \
-                       verbtype=2, \
+                       optiprop=True, \
+                       factthin=10, \
+                       #randinit=True, \
+                       #verbtype=2, \
                        #makeplot=False, \
                        probtran=0., \
                        diagmode=True, \
