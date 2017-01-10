@@ -1,5 +1,13 @@
 from __init__ import *
 
+def plot():
+
+    angl = linspace(0., 3., 100)
+    listanglscal = [0.]
+    defl = retr_deflcutf(angl, anglscal, anglcutf)
+
+    plot_gene(path, xdat, ydat, scalxdat=None, scalydat=None, lablxdat='', lablydat='')
+
 def pcat_lens_mock_grid():
    
     anglfact = 3600. * 180. / pi
@@ -144,14 +152,13 @@ def pcat_lens_mock():
     for k in range(numbiter):
         pcat.main.init( \
                        numbswep=1000, \
-                       numbswepplot=400, \
-                       optiprop=True, \
-                       factthin=10, \
+                       numbswepplot=3000, \
+                       factthin=100, \
                        #randinit=True, \
                        #verbtype=2, \
                        #makeplot=False, \
-                       probtran=0., \
-                       diagmode=True, \
+                       #probtran=0., \
+                       #diagmode=True, \
                        maxmgang=maxmgang, \
                        proppsfp=False, \
                        exprinfo=False, \
@@ -163,8 +170,8 @@ def pcat_lens_mock():
                        back=back, \
                        minmflux=minmflux, \
                        maxmflux=maxmflux, \
-                       maxmnumbpnts=array([3]), \
-                       truenumbpnts=array([2]), \
+                       #maxmnumbpnts=array([3]), \
+                       truenumbpnts=array([50]), \
                        truespecsour=truespecsour, \
                        minmspecsour=0.1*truespecsour, \
                        maxmspecsour=10*truespecsour, \

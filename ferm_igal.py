@@ -947,24 +947,23 @@ def pcat_ferm_mock_igal_syst():
 def pcat_ferm_mock_igal():
      
     pcat.main.init( \
-                   verbtype=2, \
                    numbswep=10000, \
                    numbswepplot=2000, \
-                   indxevttincl=arange(2, 4), \
-                   indxenerincl=arange(1, 4), \
+                   indxevttincl=arange(3, 4), \
+                   indxenerincl=arange(2, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
                    back=['isotflux.fits', 'fdfmflux.fits'], \
                    maxmgang=deg2rad(20.), \
                    minmflux=3e-11, \
                    maxmflux=3e-7, \
-                   maxmnumbpnts=array([400, 200]), \
-                   truenumbpnts=array([200, 100]), \
-                   truespatdisttype=['unif', 'disc'], \
-                   truefluxdisttype=['powr', 'powr'], \
-                   truefluxdistslop=array([2.6, 2.6]), \
-                   truesinddiststdv=array([.5, .5]), \
-                   truesinddistmean=array([2., 2.]), \
-                   truespectype=['powr', 'expo']
+                   maxmnumbpnts=array([100, 100, 100]), \
+                   truenumbpnts=array([50, 50, 50]), \
+                   truespatdisttype=['unif', 'disc', 'gang'], \
+                   truefluxdisttype=['powr', 'powr', 'powr'], \
+                   truefluxdistslop=array([2.6, 2.6, 2.6]), \
+                   truesinddiststdv=array([.5, .5, 0.5]), \
+                   truesinddistmean=array([2., 2., 2.]), \
+                   truespectype=['powr', 'expo', 'expo']
                    #maxmnumbpnts=array([3, 3, 3]), \
                    #truenumbpnts=array([3, 3, 3]), \
                    #truespatdisttype=['unif', 'disc', 'gang'], \
