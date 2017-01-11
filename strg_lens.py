@@ -138,7 +138,7 @@ def pcat_lens_mock():
     maxmgang = 2. / anglfact
     truesizesour = 0.05 / anglfact
 
-    btsr = 1e10
+    btsr = 1.
     htsr = 1.
     strgexpo = 1e3
     
@@ -148,17 +148,15 @@ def pcat_lens_mock():
     
     strgexpo /= fact
     
+    #strgexpo *= 1e-20
+
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=1000, \
-                       numbswepplot=3000, \
-                       factthin=100, \
-                       #randinit=True, \
+                       numbswep=30000, \
+                       numbswepplot=1000, \
+                       factthin=30, \
                        #verbtype=2, \
-                       #makeplot=False, \
-                       #probtran=0., \
-                       #diagmode=True, \
                        maxmgang=maxmgang, \
                        proppsfp=False, \
                        exprinfo=False, \
@@ -170,14 +168,10 @@ def pcat_lens_mock():
                        back=back, \
                        minmflux=minmflux, \
                        maxmflux=maxmflux, \
-                       #maxmnumbpnts=array([3]), \
-                       truenumbpnts=array([50]), \
+                       maxmnumbpnts=array([2]), \
+                       truenumbpnts=array([2]), \
                        truespecsour=truespecsour, \
-                       minmspecsour=0.1*truespecsour, \
-                       maxmspecsour=10*truespecsour, \
                        truespechost=truespechost, \
-                       minmspechost=0.1*truespechost, \
-                       maxmspechost=10*truespechost, \
                       )
     
 globals().get(sys.argv[1])()
