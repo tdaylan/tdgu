@@ -126,25 +126,37 @@ def pcat_lens_mock_grid():
                 plt.close(figr)
     
 
+def pcat_lens_mock_zero():
+   
+    strgexpo = 0.
+    pcat.main.init( \
+                   numbswep=10000, \
+                   numbswepplot=1000, \
+                   proppsfp=False, \
+                   exprinfo=False, \
+                   pntstype='lens', \
+                   strgexpo=0., \
+                  )
+    
 def pcat_lens_mock():
    
     maxmflux = deg2rad(5e-1 / 3600.)
-    minmflux = deg2rad(1e-3 / 3600.)
-    
+    minmflux = deg2rad(2e-4 / 3600.)
+   
     #fact = 1.24510e-19
     fact = 1.63050e-19
     
     anglfact = 3600. * 180. / pi
     maxmgang = 2. / anglfact
-    truesizesour = 0.05 / anglfact
+    truesizesour = 0.15 / anglfact
 
-    btsr = 1.
+    btsr = 0.1
     htsr = 1.
-    strgexpo = 1e3
+    strgexpo = 1e4
     
     truespecsour = fact
     truespechost = htsr * truespecsour
-    back = [2. * truespecsour * btsr / (pi * truesizesour**2)]
+    back = [truespecsour * btsr / (pi * truesizesour**2) / 2.]
     
     strgexpo /= fact
     
@@ -168,10 +180,15 @@ def pcat_lens_mock():
                        back=back, \
                        minmflux=minmflux, \
                        maxmflux=maxmflux, \
-                       maxmnumbpnts=array([2]), \
-                       truenumbpnts=array([2]), \
+                       #maxmnumbpnts=array([6]), \
+                       truenumbpnts=array([50]), \
+                       truesizesour=truesizesour, \
                        truespecsour=truespecsour, \
+                       minmspecsour=1e-2*truespecsour, \
+                       maxmspecsour=1e2*truespecsour, \
                        truespechost=truespechost, \
+                       minmspechost=1e-2*truespechost, \
+                       maxmspechost=1e2*truespechost, \
                       )
     
 globals().get(sys.argv[1])()

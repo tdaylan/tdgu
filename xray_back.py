@@ -152,11 +152,14 @@ def pcat_chan_mock():
                               back=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
+                              #verbtype=2, \
                               # temp
                               #psfntype='singking', \
                               #psfninfoprio=False, \
                               numbsidecart=numbsidecart, \
-                              truenumbpnts=array([200]), \
+                              #maxmnumbpnts=array([30]), \
+                              truenumbpnts=array([50]), \
+                              #truenumbpnts=array([50]), \
                              )
 
 def pcat_chan_mock_popl():
