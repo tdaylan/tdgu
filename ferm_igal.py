@@ -904,7 +904,7 @@ def pcat_ferm_mock_igal_brok():
 
                        truenumbpnts=array([100]), \
                         
-                       truefluxdisttype=['brok'], \
+                       truefluxdisttype='brok', \
                        truefluxdistbrek=truefluxdistbrek, \
                        truefluxdistsloplowr=array([listtruefluxdistsloplowr[k]]), \
                        truefluxdistslopuppr=array([1.6]), \
@@ -937,7 +937,7 @@ def pcat_ferm_mock_igal_syst():
                        maxmflux=3e-7, \
                        truenumbpnts=array([10, 10, 10]), \
                        truespatdisttype=['unif', 'disc', 'gang'], \
-                       truefluxdisttype=['powr', 'powr', 'brok'], \
+                       truefluxdisttype='powr', \
                        truefluxdistslop=array([2.6, 2.6, 3.5]), \
                        truesinddiststdv=array([.5, .5, .5]), \
                        truesinddistmean=array([2., 2., 2.]), \
@@ -959,7 +959,7 @@ def pcat_ferm_mock_igal():
                    maxmnumbpnts=array([100, 100, 100]), \
                    truenumbpnts=array([50, 50, 50]), \
                    truespatdisttype=['unif', 'disc', 'gang'], \
-                   truefluxdisttype=['powr', 'powr', 'powr'], \
+                   truefluxdisttype='powr', \
                    truefluxdistslop=array([2.6, 2.6, 2.6]), \
                    truesinddiststdv=array([.5, .5, 0.5]), \
                    truesinddistmean=array([2., 2., 2.]), \
@@ -967,7 +967,6 @@ def pcat_ferm_mock_igal():
                    #maxmnumbpnts=array([3, 3, 3]), \
                    #truenumbpnts=array([3, 3, 3]), \
                    #truespatdisttype=['unif', 'disc', 'gang'], \
-                   #truefluxdisttype=['powr', 'powr', 'powr'], \
                    #truefluxdistslop=array([2.6, 2.6, 3.5]), \
                    #truesinddiststdv=array([.5, .5, .5]), \
                    #truesinddistmean=array([2., 2., 2.]), \
