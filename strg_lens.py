@@ -170,6 +170,7 @@ def pcat_lens_mock():
                        numbswep=30000, \
                        numbswepplot=1000, \
                        factthin=30, \
+                       numbproc=2, \
                        #verbtype=2, \
                        maxmgang=maxmgang, \
                        proppsfp=False, \
