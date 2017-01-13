@@ -167,9 +167,9 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=30000, \
+                       numbswep=1000, \
                        numbswepplot=1000, \
-                       factthin=30, \
+                       factthin=100, \
                        numbproc=2, \
                        #verbtype=2, \
                        maxmgang=maxmgang, \
