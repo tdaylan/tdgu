@@ -135,7 +135,9 @@ def pcat_lens_mock_zero():
                    proppsfp=False, \
                    exprinfo=False, \
                    pntstype='lens', \
-                   strgexpo=0., \
+                   exprtype='hubb', \
+                   strgexpo=1e-20, \
+                   truenumbpnts=array([20]), \
                   )
     
 def pcat_lens_mock():
