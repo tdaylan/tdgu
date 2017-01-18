@@ -8,6 +8,7 @@ def plot():
 
     plot_gene(path, xdat, ydat, scalxdat=None, scalydat=None, lablxdat='', lablydat='')
 
+
 def pcat_lens_mock_grid():
    
     anglfact = 3600. * 180. / pi
@@ -142,56 +143,29 @@ def pcat_lens_mock_zero():
     
 def pcat_lens_mock():
    
-    maxmflux = deg2rad(5e-1 / 3600.)
-    minmflux = deg2rad(2e-4 / 3600.)
-   
-    #fact = 1.24510e-19
-    fact = 1.63050e-19
-    
-    anglfact = 3600. * 180. / pi
-    maxmgang = 2. / anglfact
-    truesizesour = 0.15 / anglfact
+    gdat = pcat.main.init(verbtype=0, pntstype='lens', exprtype='hubb', defa=True)
 
     btsr = 0.1
     htsr = 1.
-    strgexpo = 1e4
-    
-    truespecsour = fact
-    truespechost = htsr * truespecsour
-    back = [truespecsour * btsr / (pi * truesizesour**2) / 2.]
-    
-    strgexpo /= fact
-    
-    #strgexpo *= 1e-20
 
+    truespecsour = gdat.hubbexpofact
+    truespechost = htsr * truespecsour
+    back = [truespecsour * btsr / (pi * gdat.truefixp[gdat.trueindxfixpsizesour]**2) / 2.]
+    
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=1000, \
+                       numbswep=10000, \
                        numbswepplot=1000, \
-                       factthin=100, \
-                       numbproc=2, \
-                       #verbtype=2, \
-                       maxmgang=maxmgang, \
+                       factthin=10, \
                        proppsfp=False, \
                        exprinfo=False, \
                        pntstype='lens', \
-                       indxenerincl=arange(1), \
-                       indxevttincl=arange(1), \
-                       strgexpo=strgexpo, \
                        exprtype='hubb', \
                        back=back, \
-                       minmflux=minmflux, \
-                       maxmflux=maxmflux, \
-                       #maxmnumbpnts=array([6]), \
-                       truenumbpnts=array([50]), \
-                       truesizesour=truesizesour, \
+                       truenumbpnts=array([40]), \
                        truespecsour=truespecsour, \
-                       minmspecsour=1e-2*truespecsour, \
-                       maxmspecsour=1e2*truespecsour, \
                        truespechost=truespechost, \
-                       minmspechost=1e-2*truespechost, \
-                       maxmspechost=1e2*truespechost, \
                       )
     
 globals().get(sys.argv[1])()

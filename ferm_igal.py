@@ -866,14 +866,17 @@ def pcat_ferm_inpt_ptch():
 def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
     pcat.main.init( \
-                   numbswep=200000, \
+                   numbswep=1000, \
                    numbswepplot=20000, \
                    maxmgang=deg2rad(20.), \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
                    proppsfp=False, \
+                   diagmode=True, \
+                   verbtype=2, \
                    minmflux=1e-8, \
                    maxmflux=3e-6, \
+                   maxmnumbpnts=array([10]), \
                    back=['isotflux.fits', 'fdfmflux.fits'], \
                    strgexpo=strgexpo, \
                    strgexprflux=strgexprflux, \
