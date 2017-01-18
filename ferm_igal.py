@@ -959,8 +959,8 @@ def pcat_ferm_mock_igal():
                    maxmgang=deg2rad(20.), \
                    minmflux=3e-11, \
                    maxmflux=3e-7, \
-                   maxmnumbpnts=array([100, 100, 100]), \
-                   truenumbpnts=array([50, 50, 50]), \
+                   maxmnumbpnts=array([4, 4, 4]), \
+                   truenumbpnts=array([2, 2, 2]), \
                    truespatdisttype=['unif', 'disc', 'gang'], \
                    truefluxdisttype='powr', \
                    truefluxdistslop=array([2.6, 2.6, 2.6]), \
