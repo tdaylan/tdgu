@@ -132,7 +132,7 @@ def pcat_lens_mock_zero():
     
 def pcat_lens_mock():
    
-    gdat = pcat.main.init(verbtype=0, pntstype='lens', exprtype='hubb', defa=True)
+    gdat = pcat.main.init(verbtype=0, pntstype='lens', exprtype='hubb', defa=True, makeplot=False)
 
     btsr = 0.1
     htsr = 1.
@@ -151,6 +151,7 @@ def pcat_lens_mock():
                        exprinfo=False, \
                        pntstype='lens', \
                        exprtype='hubb', \
+                       diagmode=False, \
                        back=back, \
                        truenumbpnts=array([40]), \
                        truespecsour=truespecsour, \
