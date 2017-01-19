@@ -1,14 +1,5 @@
 from __init__ import *
 
-def plot():
-
-    angl = linspace(0., 3., 100)
-    listanglscal = [0.]
-    defl = retr_deflcutf(angl, anglscal, anglcutf)
-
-    plot_gene(path, xdat, ydat, scalxdat=None, scalydat=None, lablxdat='', lablydat='')
-
-
 def pcat_lens_mock_grid():
   
     gdat = pcat.main.init(verbtype=0, pntstype='lens', exprtype='hubb', defa=True)
@@ -144,9 +135,9 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=10000, \
-                       numbswepplot=1000, \
-                       factthin=200, \
+                       numbswep=200000, \
+                       numbswepplot=20000, \
+                       factthin=2000, \
                        proppsfp=False, \
                        exprinfo=False, \
                        pntstype='lens', \
