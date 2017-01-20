@@ -49,7 +49,7 @@ def pcat_ferm_inpt_ngal_intr( \
     karg['diagmode'] = True
     #karg['verbtype'] = 2
     karg['factthin'] = 90
-    karg['randinit'] = False
+    karg['inittype'] = 'blob'
     karg['indxenerincl'] = arange(2, 4)
     karg['indxevttincl'] = arange(3, 4)
     karg['lgalcntr'] = 0.

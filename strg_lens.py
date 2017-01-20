@@ -110,9 +110,9 @@ def pcat_lens_mock_zero():
    
     strgexpo = 0.
     pcat.main.init( \
-                   numbswep=10000, \
+                   numbswep=1000, \
                    numbswepplot=1000, \
-                   factthin=200, \
+                   factthin=20, \
                    proppsfp=False, \
                    exprinfo=False, \
                    pntstype='lens', \
