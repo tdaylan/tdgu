@@ -952,7 +952,7 @@ def pcat_ferm_mock_igal():
     pcat.main.init( \
                    numbswep=10000, \
                    #verbtype=2, \
-                   numbswepplot=2000, \
+                   numbswepplot=3000, \
                    indxevttincl=arange(3, 4), \
                    indxenerincl=arange(1, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
@@ -961,7 +961,7 @@ def pcat_ferm_mock_igal():
                    minmflux=3e-11, \
                    maxmflux=3e-7, \
                    maxmnumbpnts=array([100, 100, 100]), \
-                   truenumbpnts=array([100, 100, 100]), \
+                   truenumbpnts=array([50, 50, 50]), \
                    spatdisttype=['unif', 'disc', 'gang'], \
                    truespatdisttype=['unif', 'disc', 'gang'], \
                    truefluxdisttype='powr', \
