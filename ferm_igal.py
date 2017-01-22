@@ -524,7 +524,7 @@ def regrback( \
               strgback=['isotflux', 'fdfmflux'], \
               indxenerrofi=arange(1, 4), \
               indxevttrofi=arange(3, 4), \
-              maxmgang=20.
+              maxmgangdata=20.
              ):
 
     smthmaps = False
@@ -542,7 +542,7 @@ def regrback( \
     gdat.strgback = strgback
     gdat.indxenerrofi = indxenerrofi
     gdat.indxevttrofi = indxevttrofi
-    gdat.maxmgang = maxmgang
+    gdat.maxmgangdata = maxmgangdata
     
     # axes
     retr_axisener(gdat)
@@ -565,14 +565,14 @@ def regrback( \
     gdat.numbside = 256
     gdat.numbpixlfull = gdat.numbside**2 * 12
     gdat.lgalheal, gdat.bgalheal, gdat.numbpixl, gdat.apix = tdpy.util.retr_healgrid(gdat.numbside)
-    gdat.indxpixlrofi = where((abs(gdat.lgalheal) < gdat.maxmgang) & (abs(gdat.bgalheal) < gdat.maxmgang))[0]
+    gdat.indxpixlrofi = where((abs(gdat.lgalheal) < gdat.maxmgangdata) & (abs(gdat.bgalheal) < gdat.maxmgangdata))[0]
     gdat.numbpixl = gdat.indxpixlrofi.size
     gdat.indxpixl = arange(gdat.numbpixl)
        
-    minmlgal = -gdat.maxmgang
-    maxmlgal = gdat.maxmgang 
-    minmbgal = -gdat.maxmgang
-    maxmbgal = gdat.maxmgang 
+    minmlgal = -gdat.maxmgangdata
+    maxmlgal = gdat.maxmgangdata 
+    minmbgal = -gdat.maxmgangdata
+    maxmbgal = gdat.maxmgangdata 
 
     indxdatacubefilt = meshgrid(gdat.indxenerrofi, gdat.indxpixlrofi, gdat.indxevttrofi, indexing='ij')
     
@@ -850,7 +850,7 @@ def pcat_ferm_inpt_ptch():
     
     pcat.main.init( \
               inittype='blob', \
-              maxmgang=deg2rad(20.), \
+              maxmgangdata=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
               indxevttincl=arange(2, 4), \
               lgalcntr=lgalcntr, \
@@ -868,7 +868,7 @@ def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermex
     pcat.main.init( \
                    numbswep=1000, \
                    numbswepplot=20000, \
-                   maxmgang=deg2rad(20.), \
+                   maxmgangdata=deg2rad(20.), \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
                    proppsfp=False, \
@@ -897,7 +897,7 @@ def pcat_ferm_mock_igal_brok():
                        strgexpo='fermexpo_cmp0_igal.fits', \
                        back=['isotflux.fits'], \
                        
-                       maxmgang=deg2rad(20.), \
+                       maxmgangdata=deg2rad(20.), \
                        fluxdisttype=['brok'], \
                        
                        boolpropfluxdistbrek=False, \
@@ -935,7 +935,7 @@ def pcat_ferm_mock_igal_syst():
                        strgexpo='fermexpo_cmp0_igal.fits', \
                        back=['isotflux.fits'], \
                        maxmnumbpnts=array([20]), \
-                       maxmgang=deg2rad(20.), \
+                       maxmgangdata=deg2rad(20.), \
                        minmflux=3e-11, \
                        maxmflux=3e-7, \
                        truenumbpnts=array([10, 10, 10]), \
@@ -951,20 +951,21 @@ def pcat_ferm_mock_igal():
      
     pcat.main.init( \
                    numbswep=10000, \
-                   verbtype=2, \
+                   #verbtype=2, \
                    numbswepplot=2000, \
                    indxevttincl=arange(3, 4), \
-                   indxenerincl=arange(2, 4), \
+                   indxenerincl=arange(1, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
                    back=['isotflux.fits', 'fdfmflux.fits'], \
-                   maxmgang=deg2rad(10.), \
+                   maxmgangdata=deg2rad(10.), \
                    minmflux=3e-11, \
                    maxmflux=3e-7, \
-                   maxmnumbpnts=array([10, 10, 10]), \
-                   truenumbpnts=array([5, 5, 5]), \
+                   maxmnumbpnts=array([100, 100, 100]), \
+                   truenumbpnts=array([100, 100, 100]), \
+                   spatdisttype=['unif', 'disc', 'gang'], \
                    truespatdisttype=['unif', 'disc', 'gang'], \
                    truefluxdisttype='powr', \
-                   truefluxdistslop=array([2.6, 2.6, 2.6]), \
+                   truefluxdistslop=array([2., 1.5, 3.5]), \
                    truesinddiststdv=array([.5, .5, 0.5]), \
                    truesinddistmean=array([2., 2., 2.]), \
                    truespectype=['powr', 'expo', 'expo']

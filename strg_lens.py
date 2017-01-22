@@ -110,9 +110,7 @@ def pcat_lens_mock_zero():
    
     strgexpo = 0.
     pcat.main.init( \
-                   numbswep=1000, \
-                   numbswepplot=1000, \
-                   factthin=20, \
+                   numbswep=10000, \
                    proppsfp=False, \
                    exprinfo=False, \
                    pntstype='lens', \
@@ -135,9 +133,8 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=200000, \
-                       numbswepplot=20000, \
-                       factthin=2000, \
+                       numbswep=10000, \
+                       numbswepplot=2000, \
                        proppsfp=False, \
                        exprinfo=False, \
                        pntstype='lens', \
