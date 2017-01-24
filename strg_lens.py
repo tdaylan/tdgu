@@ -123,7 +123,7 @@ def pcat_lens_mock():
    
     gdat = pcat.main.init(verbtype=0, pntstype='lens', exprtype='hubb', defa=True, makeplot=False)
 
-    btsr = 0.1
+    btsr = 0.33
     htsr = 1.
 
     truespecsour = gdat.hubbexpofact
