@@ -950,8 +950,8 @@ def pcat_ferm_mock_igal_syst():
 def pcat_ferm_mock_igal():
      
     pcat.main.init( \
-                   numbswep=10000, \
-                   #verbtype=2, \
+                   numbswep=30000, \
+                   verbtype=2, \
                    numbswepplot=3000, \
                    indxevttincl=arange(3, 4), \
                    indxenerincl=arange(1, 4), \
@@ -965,10 +965,8 @@ def pcat_ferm_mock_igal():
                    #truenumbpnts=array([40, 40, 40]), \
                    maxmnumbpnts=array([100, 100, 100]), \
                    truenumbpnts=array([50, 50, 50]), \
-                   #spatdisttype=['unif', 'disc', 'gang'], \
-                   #spatdisttype=['unif', 'unif', 'unif'], \
-                   #truespatdisttype=['unif', 'disc', 'gang'], \
-                   #truespatdisttype=['unif', 'disc', 'gang'], \
+                   truespatdisttype=['unif', 'disc', 'gang'], \
+                   spatdisttype=['unif', 'disc', 'gang'], \
                    truefluxdisttype='powr', \
                    truespectype=['powr', 'expo', 'expo']
                    #truespatdisttype=['unif', 'disc', 'gang'], \
