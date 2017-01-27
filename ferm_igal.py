@@ -871,6 +871,7 @@ def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermex
                    maxmgangdata=deg2rad(20.), \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
+                   randinit=True, \
                    proppsfp=False, \
                    diagmode=True, \
                    verbtype=2, \
@@ -950,27 +951,31 @@ def pcat_ferm_mock_igal_syst():
 def pcat_ferm_mock_igal():
      
     pcat.main.init( \
-                   numbswep=30000, \
-                   verbtype=2, \
-                   numbswepplot=3000, \
+                   numbswep=10000, \
+                   #verbtype=2, \
+                   #numbproc=2, \
+                   numbswepplot=4000, \
                    indxevttincl=arange(3, 4), \
                    indxenerincl=arange(1, 4), \
-                   #strgexpo='fermexpo_cmp0_igal.fits', \
-                   strgexpo=1e-10, \
+                   strgexpo='fermexpo_cmp0_igal.fits', \
+                   #strgexpo=1e-10, \
                    back=['isotflux.fits', 'fdfmflux.fits'], \
                    maxmgangdata=deg2rad(10.), \
-                   minmflux=3e-11, \
-                   maxmflux=3e-7, \
-                   #maxmnumbpnts=array([100, 100, 100]), \
-                   #truenumbpnts=array([40, 40, 40]), \
-                   maxmnumbpnts=array([100, 100, 100]), \
+                   minmflux=7e-11, \
+                   maxmflux=1e-7, \
+                   minmnumbpnts=array([40, 40, 40]), \
+                   maxmnumbpnts=array([60, 60, 60]), \
                    truenumbpnts=array([50, 50, 50]), \
+                   #maxmnumbpnts=array([10]), \
+                   #truenumbpnts=array([10]), \
+                   #truespatdisttype=['gang'], \
+                   #truespatdisttype=['gang'], \
                    truespatdisttype=['unif', 'disc', 'gang'], \
-                   spatdisttype=['unif', 'disc', 'gang'], \
-                   truefluxdisttype='powr', \
-                   truespectype=['powr', 'expo', 'expo']
-                   #truespatdisttype=['unif', 'disc', 'gang'], \
+                   #truefluxdisttype='powr', \
+                   #truespectype=['powr']
                    #truespectype=['powr', 'expo', 'expo']
+                   #truespatdisttype=['unif', 'disc', 'gang'], \
+                   truespectype=['powr', 'expo', 'expo']
                   )
 
 
