@@ -954,7 +954,7 @@ def pcat_ferm_mock_igal():
                    numbswep=400, \
                    numbburn=0, \
                    factthin=4, \
-                   verbtype=2, \
+                   #verbtype=2, \
                    #numbproc=2, \
                    numbswepplot=20000, \
                    indxevttincl=arange(3, 4), \
