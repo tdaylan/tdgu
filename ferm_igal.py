@@ -965,11 +965,10 @@ def pcat_ferm_mock_igal():
                    maxmgangdata=deg2rad(10.), \
                    minmflux=5e-11, \
                    maxmflux=1e-7, \
-                   #minmnumbpnts=array([30, 30, 30]), \
-                   #maxmnumbpnts=array([50, 50, 50]), \
-                   #truenumbpnts=array([40, 40, 40]), \
-                   maxmnumbpnts=array([5, 5, 5]), \
-                   truenumbpnts=array([4, 4, 4]), \
+                   maxmnumbpnts=array([100, 100, 100]), \
+                   truenumbpnts=array([50, 50, 50]), \
+                   #maxmnumbpnts=array([5, 5, 5]), \
+                   #truenumbpnts=array([4, 4, 4]), \
                    #maxmnumbpnts=array([10]), \
                    #truenumbpnts=array([10]), \
                    #truespatdisttype=['gang'], \
