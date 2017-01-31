@@ -951,12 +951,12 @@ def pcat_ferm_mock_igal_syst():
 def pcat_ferm_mock_igal():
      
     pcat.main.init( \
-                   numbswep=400, \
+                   numbswep=90000, \
                    numbburn=0, \
-                   factthin=4, \
+                   factthin=90, \
                    #verbtype=2, \
                    #numbproc=2, \
-                   numbswepplot=20000, \
+                   numbswepplot=4000, \
                    indxevttincl=arange(3, 4), \
                    indxenerincl=arange(1, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \

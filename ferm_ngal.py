@@ -46,8 +46,8 @@ def pcat_ferm_inpt_ngal_intr( \
     karg = {}
     karg['numbswep'] = 10000
     karg['numbswepplot'] = 3000
-    karg['diagmode'] = True
-    #karg['verbtype'] = 2
+
+    karg['verbtype'] = 2
     karg['factthin'] = 90
     karg['inittype'] = 'blob'
     karg['indxenerincl'] = arange(1, 4)
@@ -59,7 +59,6 @@ def pcat_ferm_inpt_ngal_intr( \
     karg['minmflux'] = 3e-11
     karg['maxmflux'] = 1e-7
     karg['strgexprflux'] = strgexprflux
-    karg['maxmnumbpnts'] = array([100])
     
     return karg
 

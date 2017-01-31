@@ -135,8 +135,8 @@ def pcat_lens_mock():
         pcat.main.init( \
                        numbswep=1000, \
                        factthin=100, \
-                       minmflux=pi/180./3600.*1e-3, \
-                       maxmflux=pi/180./3600.*1e-1, \
+                       minmflux=pi/180./3600.*1e-2, \
+                       maxmflux=pi/180./3600.*1e0, \
                        numbswepplot=2000, \
                        proppsfp=False, \
                        exprinfo=False, \
