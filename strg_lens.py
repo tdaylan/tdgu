@@ -37,11 +37,9 @@ def pcat_lens_mock_grid():
                         varb = varbinpt.para[p][numbcnfg / 2]
                      
                     if varbinpt.name[p] == 'minmflux':
-                        minmflux = varb / anglfact
+                        minmflux = varb / gdat.anglfact
                     if varbinpt.name[p] == 'back':
                         back = varb
-                    if varbinpt.name[p] == 'strgexpo':
-                        strgexpo = varb
                     if varbinpt.name[p] == 'truespecsour':
                         truespecsour = varb
                     if varbinpt.name[p] == 'truespechost':
@@ -53,7 +51,6 @@ def pcat_lens_mock_grid():
                                       numbswepplot=4000, \
                                       factthin=200, \
                                       pntstype='lens', \
-                                      strgexpo=strgexpo, \
                                       exprtype='hubb', \
                                       makeplot=False, \
                                       back=[back], \
@@ -130,10 +127,10 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=10000, \
-                       numbswepplot=5000, \
+                       numbswep=100000, \
+                       numbswepplot=10000, \
                        numbburn=0, \
-                       factthin=2000, \
+                       factthin=10000, \
                        proppsfp=False, \
                        exprinfo=False, \
                        pntstype='lens', \
