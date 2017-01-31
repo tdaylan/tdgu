@@ -4,18 +4,14 @@ def pcat_lens_mock_grid():
   
     gdat = pcat.main.init(verbtype=0, pntstype='lens', exprtype='hubb', defa=True)
 
-    truespecsour = gdat.hubbexpofact
-    truespechost = htsr * truespecsour
-    back = [truespecsour * btsr / (pi * gdat.truefixp[gdat.trueindxfixpsizesour]**2) / 2.]
-    
     numbcnfg = 5
     numbiter = 2
    
     varbinpt = tdpy.util.varb(numbcnfg)
     varbinpt.defn_para('minmflux', 3e-4, 3e-2, scal='logt')
-    varbinpt.defn_para('back', 1e-1 * fact / (pi * truesizesour**2), 1e1 * fact / (pi * truesizesour**2), scal='logt')
-    varbinpt.defn_para('truespecsour', 1e-1 * fact, 1e1 * fact, scal='logt')
-    varbinpt.defn_para('truespechost', 1e-1 * fact, 1e1 * fact, scal='logt')
+    varbinpt.defn_para('back', 1e-1 * gdat.hubbexpofact / (pi * gdat.truesizesour**2), 1e1 * gdat.hubbexpofact / (pi * gdat.truesizesour**2), scal='logt')
+    varbinpt.defn_para('truespecsour', 1e-1 * gdat.hubbexpofact, 1e1 * gdat.hubbexpofact, scal='logt')
+    varbinpt.defn_para('truespechost', 1e-1 * gdat.hubbexpofact, 1e1 * gdat.hubbexpofact, scal='logt')
 
     listnameoutpvarb = ['fluxdistsloppop0', 'meanpntspop0', 'specassc', 'spechost', 'beinhost']
     numboutpvarb = len(listnameoutpvarb)
@@ -53,12 +49,13 @@ def pcat_lens_mock_grid():
                 
                 gdat = pcat.main.init( \
                                       seedstat=seedstat, \
-                                      numbswep=100000, \
+                                      numbswep=1000, \
                                       numbswepplot=4000, \
                                       factthin=200, \
                                       pntstype='lens', \
                                       strgexpo=strgexpo, \
                                       exprtype='hubb', \
+                                      makeplot=False, \
                                       back=[back], \
                                       minmflux=minmflux, \
                                       truespecsour=truespecsour, \
@@ -137,14 +134,10 @@ def pcat_lens_mock():
                        numbswepplot=5000, \
                        numbburn=0, \
                        factthin=2000, \
-                       #minmflux=pi/180./3600.*1e-1, \
-                       #maxmflux=pi/180./3600.*1e0, \
                        proppsfp=False, \
                        exprinfo=False, \
                        pntstype='lens', \
                        exprtype='hubb', \
-                       #verbtype=2, \
-                       diagmode=False, \
                        back=back, \
                        truenumbpnts=array([40]), \
                        truespecsour=truespecsour, \
