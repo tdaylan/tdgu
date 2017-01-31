@@ -104,8 +104,8 @@ def pcat_ferm_mock_ngal():
                    minmflux=3e-11, \
                    maxmflux=1e-7, \
                    numbsideheal=256, \
-                   maxmnumbpnts=array([40]), \
-                   truenumbpnts=array([20]), \
+                   maxmnumbpnts=array([200]), \
+                   truenumbpnts=array([100]), \
                    truefluxdistslop=array([2.0]), \
                   )
 
