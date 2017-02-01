@@ -132,14 +132,14 @@ def pcat_lens_mock():
                        factthin=1000, \
                        #verbtype=2, \
                        #numbburn=0, \
-                       trueminmflux=1./3600./180.*pi*0.1, \
+                       #trueminmflux=1./3600./180.*pi*0.1, \
                        proppsfp=False, \
                        exprinfo=False, \
                        pntstype='lens', \
                        exprtype='hubb', \
                        back=back, \
-                       maxmnumbpnts=array([2]), \
-                       truenumbpnts=array([1]), \
+                       maxmnumbpnts=array([100]), \
+                       truenumbpnts=array([50]), \
                        truespecsour=truespecsour, \
                        truespechost=truespechost, \
                       )
