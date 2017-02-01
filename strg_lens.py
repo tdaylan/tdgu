@@ -136,7 +136,7 @@ def pcat_lens_mock():
                        pntstype='lens', \
                        exprtype='hubb', \
                        back=back, \
-                       truenumbpnts=array([40]), \
+                       truenumbpnts=array([50]), \
                        truespecsour=truespecsour, \
                        truespechost=truespechost, \
                       )
