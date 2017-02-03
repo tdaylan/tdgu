@@ -128,18 +128,23 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=5000, \
+                       numbswep=10000, \
                        numbswepplot=4000, \
-                       factthin=100, \
+                       factthin=10, \
+                       #evalcirc='full', \
                        #verbtype=2, \
                        #numbburn=0, \
                        #trueminmflux=1./3600./180.*pi*0.1, \
                        #makeplotintr=True, \
+                       truebeinhost=1e-3 * gdat.anglfact, \
+                       minmbeinhost=1e-4 * gdat.anglfact, \
+                       maxmbeinhost=1e-2 * gdat.anglfact, \
                        truespechost=1e-30, \
                        minmspechost=1e-31, \
                        maxmspechost=1e-29, \
                        #minmflux=1e-10/gdat.anglfact,
                        bacp=1e-20, \
+                       #makeplot=False, \
                        strgexpo=1./gdat.hubbexpofact*1e5, \
                        minmbacp=1e-21, \
                        maxmbacp=1e-19, \
@@ -148,8 +153,8 @@ def pcat_lens_mock():
                        pntstype='lens', \
                        exprtype='hubb', \
                        back=back, \
-                       maxmnumbpnts=array([100]), \
-                       truenumbpnts=array([50]), \
+                       maxmnumbpnts=array([10]), \
+                       truenumbpnts=array([5]), \
                        truespecsour=truespecsour, \
                        #truespechost=truespechost, \
                       )
