@@ -91,11 +91,9 @@ def pcat_ferm_inpt_ngal_tim4():
 def pcat_ferm_mock_ngal():
      
     pcat.main.init( \
-                   numbswep=3000, \
-                   numbswepplot=20000, \
-                   #makeplotfram=False, \
-                   factthin=200, \
-                   numbburn=0, \
+                   numbswep=200000, \
+                   numbswepplot=10000, \
+                   factthin=4000, \
                    diagmode=False, \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(3, 4), \
