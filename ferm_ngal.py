@@ -92,7 +92,8 @@ def pcat_ferm_mock_ngal():
      
     pcat.main.init( \
                    numbswep=200000, \
-                   numbswepplot=10000, \
+                   numbswepplot=4000, \
+                   numbburn=10000, \
                    factthin=4000, \
                    diagmode=False, \
                    indxenerincl=arange(1, 4), \
@@ -104,7 +105,6 @@ def pcat_ferm_mock_ngal():
                    minmflux=5e-10, \
                    maxmflux=1e-7, \
                    numbsideheal=256, \
-                   #verbtype=2, \
                    maxmnumbpnts=array([200]), \
                    truenumbpnts=array([100]), \
                    truefluxdistslop=array([2.0]), \
