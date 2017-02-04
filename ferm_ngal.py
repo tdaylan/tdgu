@@ -91,18 +91,19 @@ def pcat_ferm_inpt_ngal_tim4():
 def pcat_ferm_mock_ngal():
      
     pcat.main.init( \
-                   numbswep=400000, \
-                   numbswepplot=10000, \
-                   factthin=10000, \
+                   numbswep=3000, \
+                   numbswepplot=20000, \
+                   #makeplotfram=False, \
+                   factthin=200, \
                    numbburn=0, \
-                   #verbtype=2, \
+                   diagmode=False, \
                    indxenerincl=arange(1, 4), \
-                   indxevttincl=arange(2, 4), \
+                   indxevttincl=arange(3, 4), \
                    lgalcntr=0., \
                    bgalcntr=pi / 2., \
                    back=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
                    strgexpo='fermexpo_cmp0_ngal.fits', \
-                   minmflux=5e-11, \
+                   minmflux=5e-10, \
                    maxmflux=1e-7, \
                    numbsideheal=256, \
                    #verbtype=2, \

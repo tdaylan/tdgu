@@ -115,48 +115,20 @@ def pcat_lens_mock_zero():
     
 def pcat_lens_mock():
    
-    gdat = pcat.main.init(verbtype=0, pntstype='lens', exprtype='hubb', defa=True, makeplot=False)
-
-    btsr = 0.05
-    htsr = 1.
-
-    truespecsour = 10. * gdat.hubbexpofact
-    truespechost = htsr * truespecsour
-
-    back = [truespecsour * btsr / (pi * gdat.truesizesour**2) / 2.]
-    
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=10000, \
-                       numbswepplot=4000, \
-                       factthin=10, \
-                       #evalcirc='full', \
-                       #verbtype=2, \
+                       numbswep=1000, \
+                       numbswepplot=20000, \
+                       factthin=100, \
+                       makeplotintr=True, \
                        #numbburn=0, \
-                       #trueminmflux=1./3600./180.*pi*0.1, \
-                       #makeplotintr=True, \
-                       truebeinhost=1e-3 * gdat.anglfact, \
-                       minmbeinhost=1e-4 * gdat.anglfact, \
-                       maxmbeinhost=1e-2 * gdat.anglfact, \
-                       truespechost=1e-30, \
-                       minmspechost=1e-31, \
-                       maxmspechost=1e-29, \
-                       #minmflux=1e-10/gdat.anglfact,
-                       bacp=1e-20, \
-                       #makeplot=False, \
-                       strgexpo=1./gdat.hubbexpofact*1e5, \
-                       minmbacp=1e-21, \
-                       maxmbacp=1e-19, \
                        proppsfp=False, \
                        exprinfo=False, \
                        pntstype='lens', \
                        exprtype='hubb', \
-                       back=back, \
-                       maxmnumbpnts=array([10]), \
-                       truenumbpnts=array([5]), \
-                       truespecsour=truespecsour, \
-                       #truespechost=truespechost, \
+                       maxmnumbpnts=array([200]), \
+                       truenumbpnts=array([100]), \
                       )
     
 globals().get(sys.argv[1])()
