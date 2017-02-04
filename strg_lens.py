@@ -128,8 +128,8 @@ def pcat_lens_mock():
                        exprinfo=False, \
                        pntstype='lens', \
                        exprtype='hubb', \
-                       maxmnumbpnts=array([200]), \
-                       truenumbpnts=array([100]), \
+                       maxmnumbpnts=array([20]), \
+                       truenumbpnts=array([10]), \
                       )
     
 globals().get(sys.argv[1])()
