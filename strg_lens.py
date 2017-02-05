@@ -51,6 +51,7 @@ def pcat_lens_mock_grid():
                                       numbswepplot=10000, \
                                       factthin=100, \
                                       pntstype='lens', \
+                                      numbproc=1, \
                                       exprtype='hubb', \
                                       back=[back], \
                                       minmflux=minmflux, \
