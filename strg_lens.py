@@ -122,7 +122,6 @@ def pcat_lens_mock():
                        numbproc=1, \
                        numbswepplot=10000, \
                        factthin=500, \
-                       makeplotfram=False, \
                        minmflux=1e-4/3600./180.*pi, \
                        proppsfp=False, \
                        exprinfo=False, \
