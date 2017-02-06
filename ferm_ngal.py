@@ -95,6 +95,8 @@ def pcat_ferm_mock_ngal():
                    numbswep=2000, \
                    numbswepplot=5000, \
                    #diagmode=False, \
+                   numbproc=2, \
+                   verbtype=1, \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(3, 4), \
                    lgalcntr=0., \
