@@ -119,18 +119,15 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=2000, \
-                       numbproc=1, \
+                       numbswep=30000, \
                        numbswepplot=10000, \
-                       factthin=500, \
                        makeplotintr=True, \
-                       minmflux=1e-4/3600./180.*pi, \
                        proppsfp=False, \
                        exprinfo=False, \
                        pntstype='lens', \
                        exprtype='hubb', \
-                       maxmnumbpnts=array([4]), \
-                       truenumbpnts=array([2]), \
+                       maxmnumbpnts=array([100]), \
+                       truenumbpnts=array([50]), \
                       )
     
 globals().get(sys.argv[1])()

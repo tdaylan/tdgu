@@ -9,27 +9,31 @@ pars.set_cosmology(H0=67.5, ombh2=0.022, omch2=0.122, mnu=0.06, omk=0, tau=0.06)
 pars.InitPower.set_params(ns=0.965, r=0)
 pars.set_for_lmax(2500, lens_potential_accuracy=0);
 
-cambdata = camb.get_results(pars)
-powers =cambdata.get_cmb_power_spectra(pars)
-totCL=powers['total']
-unlensedCL=powers['unlensed_scalar']
+path = '/Users/tansu/Desktop/infl/'
+os.system('mkdir -p %s' % path)
 
-ls = np.arange(totCL.shape[0])
+#os.environ["FERM_IGAL_DATA_PATH"]
+cambdata = camb.get_results(pars)
+psec = cambdata.get_cmb_power_spectra(pars)
+psectotl = psec['total']
+pseculen = psec['unlensed_scalar']
+
+ls = np.arange(psectotl.shape[0])
 fig, ax = plt.subplots(2,2, figsize = (12,12))
-ax[0,0].plot(ls,totCL[:,0], color='k')
-ax[0,0].plot(ls,unlensedCL[:,0], color='r')
+ax[0,0].plot(ls,psectotl[:,0], color='k')
+ax[0,0].plot(ls,pseculen[:,0], color='r')
 ax[0,0].set_title('TT')
-ax[0,1].plot(ls[2:], 1-unlensedCL[2:,0]/totCL[2:,0]);
+ax[0,1].plot(ls[2:], 1-pseculen[2:,0]/psectotl[2:,0]);
 ax[0,1].set_title(r'$\Delta TT$')
-ax[1,0].plot(ls,totCL[:,1], color='k')
-ax[1,0].plot(ls,unlensedCL[:,1], color='r')
+ax[1,0].plot(ls,psectotl[:,1], color='k')
+ax[1,0].plot(ls,pseculen[:,1], color='r')
 ax[1,0].set_title(r'$EE$')
-ax[1,1].plot(ls,totCL[:,3], color='k')
-ax[1,1].plot(ls,unlensedCL[:,3], color='r')
+ax[1,1].plot(ls,psectotl[:,3], color='k')
+ax[1,1].plot(ls,pseculen[:,3], color='r')
 ax[1,1].set_title(r'$TE$');
 for ax in ax.reshape(-1):
     ax.set_xlim([2,2500])
-plt.savefig('/Users/tansu/Desktop/1.pdf')
+plt.savefig(path + 'psec.pdf')
 plt.close()
 
 
@@ -45,7 +49,7 @@ for r in rs:
     plt.loglog(np.arange(lmax+1),cl[:,2])
 plt.xlim([2,lmax])
 plt.legend(rs, loc='lower right');
-plt.savefig('/Users/tansu/Desktop/21.pdf')
+plt.savefig(path + 'tens.pdf')
 plt.close()
 
 pars = camb.CAMBparams()
@@ -67,7 +71,7 @@ for i, (redshift, line) in enumerate(zip(z,['-','--'])):
 plt.xlabel('k/h Mpc');
 plt.legend(['linear','non-linear'], loc='lower left');
 plt.title('Matter power at z=%s and z= %s'%tuple(z));
-plt.savefig('/Users/tansu/Desktop/22.pdf')
+plt.savefig(path + 'psecnonl.pdf')
 plt.close()
 
 pars = camb.CAMBparams()
@@ -80,7 +84,7 @@ for w in ws:
     cambdata = camb.get_results(pars)
     cl = cambdata.get_lens_potential_cls(lmax=2000)
     plt.loglog(np.arange(2001), cl[:,0])
-plt.savefig('/Users/tansu/Desktop/2.pdf')
+plt.savefig(path + 'psecdene.pdf')
 plt.close()
 
 pars.set_dark_energy() 
@@ -88,7 +92,7 @@ plt.legend(ws)
 plt.ylabel('$[L(L+1)]^2C_L^{\phi\phi}/2\pi$')
 plt.xlabel('$L$')
 plt.xlim([2,2000]);
-plt.savefig('/Users/tansu/Desktop/3.pdf')
+plt.savefig(path + 'dene.pdf')
 plt.close()
 
 pars = camb.CAMBparams()
@@ -96,12 +100,34 @@ pars.set_cosmology(H0=67.5, ombh2=0.022, omch2=0.122)
 cambdata = camb.get_background(pars)
 z = np.linspace(0,4,100)
 DA = cambdata.angular_diameter_distance(z)
+
+for redshost in [0.1, 0.3, 0.5]:
+    for redssour in [0.6, 1., 2.]:
+        disthost = cambdata.angular_diameter_distance(redshost)
+        distsour = cambdata.angular_diameter_distance(redssour)
+        disthostsour = cambdata.angular_diameter_distance2(redshost, redssour)
+        fact = disthostsour / distsour / disthost
+        print redshost, redssour, fact
+
+minmredshost = 0.
+maxmredshost = 1.
+minmredssour = 0.
+maxmredssour = 5.
+
+plt.imshow(redshost, redssour, extent=[minmredshost, maxmredshost, minmredssour, maxmredssour])
+plt.xlabel('$z$')
+plt.ylabel(r'$D_A /\rm{Mpc}$')
+plt.title('Angular diameter distance')
+plt.ylim([0,2000]);
+plt.savefig(path + 'distangl.pdf')
+plt.close()
+
 plt.plot(z, DA)
 plt.xlabel('$z$')
 plt.ylabel(r'$D_A /\rm{Mpc}$')
 plt.title('Angular diameter distance')
 plt.ylim([0,2000]);
-plt.savefig('/Users/tansu/Desktop/4.pdf')
+plt.savefig(path + 'distangl.pdf')
 plt.close()
 
 pars = camb.CAMBparams()
@@ -113,7 +139,7 @@ for ix, ax in zip([3, 20, 40, 60],axs.reshape(-1)):
     ax.plot(transfer.q,transfer.delta_p_l_k[0,ix,:])
     ax.set_title(r'$\ell = %s$'%transfer.l[ix])
     if ix>1: ax.set_xlabel(r'$k \rm{Mpc}$')
-plt.savefig('/Users/tansu/Desktop/5.pdf')
+plt.savefig(path + 'tran.pdf')
 plt.close()
 
 trans = transfer
@@ -124,7 +150,7 @@ for source_ix, (name, ax) in enumerate(zip(['T', 'E'], axs)):
     ax.set_xlim([1e-5, 0.05])
     ax.set_xlabel(r'$k \rm{Mpc}$')
     ax.set_title(r'%s transfer function for $\ell = %s$'%(name, trans.l[ix]))
-plt.savefig('/Users/tansu/Desktop/6.pdf')
+plt.savefig(path + 'trantran.pdf')
 plt.close()
 
 pars = camb.CAMBparams()
@@ -149,7 +175,7 @@ plt.title(r'Contribution to B from primordial tensor power spectrum for various 
 derived = data.get_derived_params()
 for l,col in zip(ls,cols):
     plt.axvline(l/(1000*derived['DAstar']), color=col, ls=':', lw=2)
-plt.savefig('/Users/tansu/Desktop/7.pdf')
+plt.savefig(path + 'bmod.pdf')
 plt.close()
 
 k=10**np.linspace(-5, 1, 50)
@@ -161,7 +187,7 @@ plt.semilogx(k,tensor_pk);
 plt.xlabel(r'$k \rm{Mpc}$')
 plt.ylabel(r'${\cal P}(k)$')
 plt.legend(['scalar', 'tensor']);
-plt.savefig('/Users/tansu/Desktop/8.pdf')
+plt.savefig(path + 'scaltens.pdf')
 plt.close()
 
 pars = camb.set_params(H0=67.5, ombh2=0.022, omch2=0.122, As=2e-9, ns=0.95)
@@ -176,7 +202,7 @@ axs[0].set_ylabel('$x_e$')
 axs[1].set_xlabel(r'$\eta/\rm{Mpc}$')
 axs[1].set_ylabel('Visibility');
 fig.suptitle('Ionization history, including both hydrogen and helium recombination and reionization');
-plt.savefig('/Users/tansu/Desktop/9.pdf')
+plt.savefig(path + 'ionz.pdf')
 plt.close()
 
 z = 10**np.linspace(2, 4, 300)
@@ -187,7 +213,7 @@ for i, (ax, label), in enumerate(zip(axs, ['$x_e$','Visibility'])):
     ax.set_xlabel('$z$')
     ax.set_ylabel(label)
     ax.set_xlim([500,1e4])
-plt.savefig('/Users/tansu/Desktop/10.pdf')
+plt.savefig(path + 'visi.pdf')
 plt.close()
 
 eta = np.linspace(1, 400, 300)
@@ -200,7 +226,7 @@ for i, ax in enumerate(axs):
     ax.set_title('$k= %s$'%ks[i])
     ax.set_xlabel(r'$\eta/\rm{Mpc}$');
 plt.legend([r'$\Delta_b$', r'$\Delta_\gamma$'], loc = 'upper left');
-plt.savefig('/Users/tansu/Desktop/11.pdf')
+plt.savefig(path + 'bary.pdf')
 plt.close()
 
 z = np.linspace(500,5000,300)
@@ -214,7 +240,7 @@ for i, ax in enumerate(axs):
     ax.set_title(r'$k= %s/\rm{Mpc}$'%ks[i])
     ax.set_xlabel('$z$');
 plt.legend([r'$\Delta_b$', r'$\Delta_c$', r'$\Delta_\gamma$'], loc = 'upper right');
-plt.savefig('/Users/tansu/Desktop/12.pdf')
+plt.savefig(path + 'barybary.pdf')
 plt.close()
 
 eta = 10**(np.linspace(0, 3, 500))
@@ -226,7 +252,7 @@ def plot_ev(ev, k):
     plt.title(r'$k= %s/\rm{Mpc}$'%k)
     plt.xlabel(r'$\eta/\rm{Mpc}$');
     plt.legend([r'$\Delta_c$', r'$|\Delta_\gamma|$', r'$-(\Phi+\Psi)/2$'], loc = 'upper left');
-    plt.savefig('/Users/tansu/Desktop/13_%d.pdf' % k)
+    plt.savefig(path + 'etaa%d.pdf' % k)
     plt.close()
 
 k=0.3
@@ -262,7 +288,7 @@ plt.xlabel('k Mpc')
 plt.ylabel('$P_\Psi\, Mpc^{-3}$')
 plt.legend(['z=%s'%z for z in zplot]);
 plt.xlabel('$L$');
-plt.savefig('/Users/tansu/Desktop/14.pdf')
+plt.savefig(path + 'psii.pdf')
 
  
 win = ((chistar-chis)/(chis**2*chistar))**2
@@ -287,7 +313,7 @@ plt.xlim([1,2000])
 plt.legend(['Limber','CAMB hybrid'])
 plt.ylabel('$[L(L+1)]^2C_L^{\phi}/2\pi$')
 plt.xlabel('$L$');
-plt.savefig('/Users/tansu/Desktop/15.pdf')
+plt.savefig(path + 'kapp.pdf')
 plt.close()
 
 camb.set_halofit_version('takahashi')
@@ -300,7 +326,7 @@ axs[0].loglog(kh_nonlin, pk_mead[0])
 axs[1].semilogx(kh_nonlin, pk_mead[0]/pk_takahashi[0]-1)
 axs[1].set_xlabel(r'$k/h\, \rm{Mpc}$')    
 axs[1].legend(['Mead/Takahashi-1'], loc='upper left')
-plt.savefig('/Users/tansu/Desktop/16.pdf')
+plt.savefig(path + 'halo.pdf')
 plt.close()
 
 
