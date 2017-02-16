@@ -874,7 +874,7 @@ def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermex
                    randinit=True, \
                    proppsfp=False, \
                    diagmode=True, \
-                   verbtype=2, \
+                   #verbtype=2, \
                    minmflux=1e-8, \
                    maxmflux=3e-6, \
                    #maxmnumbpnts=array([10]), \
