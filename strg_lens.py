@@ -121,6 +121,7 @@ def pcat_lens_mock():
         pcat.main.init( \
                        numbswep=1000, \
                        factthin=100, \
+                       numbproc=2, \
                        numbswepplot=1000, \
                        makeplotintr=True, \
                        proppsfp=False, \

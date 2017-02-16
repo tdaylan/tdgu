@@ -4,7 +4,7 @@ from pcat.util import retr_chandata
 
 def prep_maps():
 
-    binsener = array([0.5, 2., 8.]) * 1e-3
+    binsener = array([0.5, 2., 8.])
     diffener = binsener[1:] - binsener[:-1]
     numbener = diffener.size
     indxener = arange(numbener)
@@ -166,10 +166,7 @@ def pcat_chan_mock_popl():
     
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=210000, \
-                              numbburn=10000, \
-                              factthin=200, \
-                              numbswepplot=20000, \
+                              numbswep=100000, \
                               back=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
@@ -182,13 +179,13 @@ def pcat_chan_inpt():
    
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=2300000, \
-                              numbburn=300000, \
-                              factthin=2000, \
-                              diagmode=False, \
+                              numbswep=10000, \
+                              factthin=1000, \
+                              numbswepplot=4000, \
                               back=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
+                              maxmnumbpnts=array([30]), \
                               numbsidecart=numbsidecart, \
                               strgexprflux='chanflux_%04d_4msc.fits' % numbsidecart, \
                              )
