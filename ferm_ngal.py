@@ -91,12 +91,12 @@ def pcat_ferm_inpt_ngal_tim4():
 def pcat_ferm_mock_ngal():
      
     pcat.main.init( \
-                   numbswep=1000, \
+                   numbswep=200000, \
                    inittype='rand', \
-                   numbburn=0, \
+                   numbburn=180000, \
                    factthin=200, \
                    numbswepplot=5000, \
-                   verbtype=2, \
+                   #verbtype=2, \
                    #makeplot=False, \
                    indxenerincl=arange(2, 3), \
                    indxevttincl=arange(3, 4), \
@@ -106,9 +106,9 @@ def pcat_ferm_mock_ngal():
                    back=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
                    strgexpo='fermexpo_cmp0_ngal.fits', \
                    numbsideheal=256, \
-                   trueminmflux=3e-9, \
-                   maxmnumbpnts=array([5]), \
-                   truenumbpnts=array([3]), \
+                   trueminmflux=3e-10, \
+                   maxmnumbpnts=array([200]), \
+                   truenumbpnts=array([100]), \
                   )
 
 globals().get(sys.argv[1])()
