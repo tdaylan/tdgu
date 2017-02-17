@@ -119,8 +119,8 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=100000, \
-                       factthin=1000, \
+                       numbswep=200000, \
+                       factthin=2000, \
                        numbswepplot=10000, \
                        makeplotintr=True, \
                        proppsfp=False, \
