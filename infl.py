@@ -98,31 +98,22 @@ plt.close()
 pars = camb.CAMBparams()
 pars.set_cosmology(H0=67.5, ombh2=0.022, omch2=0.122)
 cambdata = camb.get_background(pars)
-z = np.linspace(0,4,100)
+z = np.linspace(0,5,100)
 DA = cambdata.angular_diameter_distance(z)
 
-for redshost in [0.1, 0.3, 0.5]:
-    for redssour in [0.6, 1., 2.]:
-        disthost = cambdata.angular_diameter_distance(redshost)
-        distsour = cambdata.angular_diameter_distance(redssour)
-        disthostsour = cambdata.angular_diameter_distance2(redshost, redssour)
-        fact = disthostsour / distsour / disthost
-        print redshost, redssour, fact
-
-minmredshost = 0.
-maxmredshost = 1.
-minmredssour = 0.
-maxmredssour = 5.
-
-plt.imshow(redshost, redssour, extent=[minmredshost, maxmredshost, minmredssour, maxmredssour])
-plt.xlabel('$z$')
-plt.ylabel(r'$D_A /\rm{Mpc}$')
-plt.title('Angular diameter distance')
-plt.ylim([0,2000]);
-plt.savefig(path + 'distangl.pdf')
-plt.close()
-
 plt.plot(z, DA)
+coef = np.polyfit(z, DA, 10)
+print 'coef'
+print coef
+plt.plot(z, np.poly1d(coef)(z))
+import h5py, os
+h5f = h5py.File(os.environ['PCAT_DATA_PATH'] + '/data/inpt/adiscoef.h5', 'w')
+h5f.create_dataset('adiscoef', data=coef)
+h5f.close()
+print 'np.poly1d(coef)(z)'
+print np.poly1d(coef)(z)
+print 'DA'
+print DA
 plt.xlabel('$z$')
 plt.ylabel(r'$D_A /\rm{Mpc}$')
 plt.title('Angular diameter distance')
