@@ -44,14 +44,12 @@ def pcat_ferm_inpt_ngal_intr( \
                        ): 
 
     karg = {}
-    karg['numbswep'] = 1000
-    karg['factthin'] = 100
-    karg['numbswepplot'] = 10000
-    #karg['verbtype'] = 2
+    karg['numbswep'] = 500000
+    karg['factthin'] = 5000
+    karg['numbswepplot'] = 5000
     karg['inittype'] = 'refr'
     karg['indxenerincl'] = arange(1, 4)
     karg['indxevttincl'] = arange(2, 4)
-    karg['optiprop'] = False
     karg['lgalcntr'] = 0.
     karg['bgalcntr'] = pi / 2.
     karg['back'] = ['fermisotflux.fits', 'fermfdfmflux_ngal.fits']
@@ -59,7 +57,7 @@ def pcat_ferm_inpt_ngal_intr( \
     karg['maxmgangdata'] = 20. / 180. * pi
     karg['minmflux'] = 3e-11
     karg['maxmflux'] = 1e-7
-    karg['maxmnumbpnts'] = array([120])
+    karg['maxmnumbpnts'] = array([200])
     karg['strgexprflux'] = strgexprflux
     
     return karg
