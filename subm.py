@@ -1,6 +1,8 @@
 import os
 
 listcmnd = [ \
+            'python $TDGU_PATH/ferm_igal.py pcat_lens_mock', \
+            'python $TDGU_PATH/ferm_igal.py pcat_lens_mock_grid', \
             'python $PCAT_PATH/cnfg.py test_info', \
             'python $PCAT_PATH/cnfg.py test_prio', \
             'python $PCAT_PATH/cnfg.py test_atcr', \
@@ -25,5 +27,4 @@ for k in range(len(listcmnd)):
     try:
         os.system(listcmnd[k])
     except:
-        raise
         pass
