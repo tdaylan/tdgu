@@ -120,9 +120,10 @@ def pcat_lens_mock():
     for k in range(numbiter):
         pcat.main.init( \
                        numbswep=200000, \
-                       factthin=2000, \
-                       numbswepplot=10000, \
+                       factthin=1000, \
+                       numbswepplot=5000, \
                        makeplotintr=True, \
+                       evalcirc='full', \
                        proppsfp=False, \
                        exprinfo=False, \
                        pntstype='lens', \

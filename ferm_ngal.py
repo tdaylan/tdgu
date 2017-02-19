@@ -92,10 +92,11 @@ def pcat_ferm_mock_ngal():
      
     pcat.main.init( \
                    numbswep=200000, \
-                   inittype='rand', \
+                   #inittype='rand', \
                    numbburn=180000, \
                    factthin=200, \
                    numbswepplot=5000, \
+                   fluxdisttype=['bind'], \
                    #verbtype=2, \
                    #makeplot=False, \
                    indxenerincl=arange(2, 3), \
