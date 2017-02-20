@@ -120,15 +120,14 @@ def pcat_lens_mock_syst():
     numbiter = 3
     for k in range(numbiter):
         if k < numbiter - 1:
-            numbswep = 3000
             minmnumbpnts = array([k+1])
             maxmnumbpnts = array([k+1])
         else:
-            numbswep = 100000
             minmnumbpnts = None
             maxmnumbpnts = None
 
         pcat.main.init( \
+                       numbswep=100000, \
                        seedstat=seedstat, \
                        numbswep=numbswep, \
                        exprinfo=False, \
