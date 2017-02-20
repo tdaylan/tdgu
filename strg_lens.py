@@ -4,8 +4,8 @@ def pcat_lens_mock_grid():
   
     gdat = pcat.main.init(verbtype=0, pntstype='lens', exprtype='hubb', defa=True)
 
-    numbcnfg = 5
-    numbiter = 2
+    numbcnfg = 3
+    numbiter = 1
    
     varbinpt = tdpy.util.varb(numbcnfg)
     varbinpt.defn_para('minmflux', 3e-4, 3e-2, scal='logt')
@@ -48,17 +48,16 @@ def pcat_lens_mock_grid():
                 gdat = pcat.main.init( \
                                       seedstat=seedstat, \
                                       numbswep=100000, \
-                                      numbswepplot=10000, \
-                                      factthin=100, \
+                                      numbswepplot=5000, \
+                                      factthin=800, \
                                       pntstype='lens', \
-                                      numbproc=1, \
                                       exprtype='hubb', \
                                       back=[back], \
                                       minmflux=minmflux, \
                                       truespecsour=truespecsour, \
                                       truespechost=truespechost, \
-                                      maxmnumbpnts=array([40]), \
-                                      truenumbpnts=array([20]), \
+                                      maxmnumbpnts=array([100]), \
+                                      truenumbpnts=array([50]), \
                                      )
                 
                 for n in range(numboutpvarb):
@@ -114,21 +113,40 @@ def pcat_lens_mock_zero():
                    truenumbpnts=array([40]), \
                   )
     
+def pcat_lens_mock_syst():
+   
+    seedstat = get_state()
+
+    numbiter = 2
+    for k in range(numbiter):
+        if k == 0:
+            minmnumbpnts = array([0])
+            maxmnumbpnts = array([1000])
+            probtran = 0.
+        else:
+            probtran = None
+
+        pcat.main.init( \
+                       seedstat=seedstat, \
+                       numbswep=1000, \
+                       exprinfo=False, \
+                       pntstype='lens', \
+                       exprtype='hubb', \
+                       minmnumbpnts=minmnumbpnts, \
+                       maxmnumbpnts=maxmnumbpnts, \
+                       probtran=probtran, \
+                       truenumbpnts=array([50]), \
+                      )
+    
 def pcat_lens_mock():
    
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=200000, \
-                       factthin=1000, \
-                       numbswepplot=5000, \
                        makeplotintr=True, \
-                       evalcirc='full', \
-                       proppsfp=False, \
                        exprinfo=False, \
                        pntstype='lens', \
                        exprtype='hubb', \
-                       maxmnumbpnts=array([100]), \
                        truenumbpnts=array([50]), \
                       )
     

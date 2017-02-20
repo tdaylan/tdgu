@@ -44,9 +44,7 @@ def pcat_ferm_inpt_ngal_intr( \
                        ): 
 
     karg = {}
-    karg['numbswep'] = 500000
-    karg['factthin'] = 5000
-    karg['numbswepplot'] = 5000
+    karg['numbswep'] = 100000
     karg['inittype'] = 'refr'
     karg['indxenerincl'] = arange(1, 4)
     karg['indxevttincl'] = arange(2, 4)
@@ -57,7 +55,6 @@ def pcat_ferm_inpt_ngal_intr( \
     karg['maxmgangdata'] = 20. / 180. * pi
     karg['minmflux'] = 3e-11
     karg['maxmflux'] = 1e-7
-    karg['maxmnumbpnts'] = array([200])
     karg['strgexprflux'] = strgexprflux
     
     return karg
@@ -92,15 +89,11 @@ def pcat_ferm_mock_ngal():
      
     pcat.main.init( \
                    numbswep=200000, \
-                   #inittype='rand', \
                    numbburn=180000, \
                    factthin=200, \
                    numbswepplot=5000, \
-                   fluxdisttype=['bind'], \
-                   #verbtype=2, \
-                   #makeplot=False, \
-                   indxenerincl=arange(2, 3), \
-                   indxevttincl=arange(3, 4), \
+                   indxenerincl=arange(1, 4), \
+                   indxevttincl=arange(2, 4), \
                    optiprop=False, \
                    lgalcntr=0., \
                    bgalcntr=pi / 2., \
