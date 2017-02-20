@@ -129,7 +129,6 @@ def pcat_lens_mock_syst():
         pcat.main.init( \
                        numbswep=100000, \
                        seedstat=seedstat, \
-                       numbswep=numbswep, \
                        exprinfo=False, \
                        pntstype='lens', \
                        exprtype='hubb', \
