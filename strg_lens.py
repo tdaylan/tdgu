@@ -117,24 +117,25 @@ def pcat_lens_mock_syst():
    
     seedstat = get_state()
 
-    numbiter = 2
+    numbiter = 3
     for k in range(numbiter):
-        if k == 0:
-            minmnumbpnts = array([0])
-            maxmnumbpnts = array([1000])
-            probtran = 0.
+        if k < numbiter - 1:
+            numbswep = 30000
+            minmnumbpnts = array([k+1])
+            maxmnumbpnts = array([k+1])
         else:
-            probtran = None
+            numbswep = 100000
+            minmnumbpnts = None
+            maxmnumbpnts = None
 
         pcat.main.init( \
                        seedstat=seedstat, \
-                       numbswep=1000, \
+                       numbswep=numbswep, \
                        exprinfo=False, \
                        pntstype='lens', \
                        exprtype='hubb', \
                        minmnumbpnts=minmnumbpnts, \
                        maxmnumbpnts=maxmnumbpnts, \
-                       probtran=probtran, \
                        truenumbpnts=array([50]), \
                       )
     
