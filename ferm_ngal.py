@@ -44,7 +44,8 @@ def pcat_ferm_inpt_ngal_intr( \
                        ): 
 
     karg = {}
-    karg['numbswep'] = 100000
+    karg['numbswep'] = 200000
+    karg['numbswepplot'] = 5000
     karg['inittype'] = 'refr'
     karg['indxenerincl'] = arange(1, 4)
     karg['indxevttincl'] = arange(2, 4)
