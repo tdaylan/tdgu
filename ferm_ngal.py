@@ -55,6 +55,7 @@ def pcat_ferm_inpt_ngal_intr( \
     karg['maxmgangdata'] = 20. / 180. * pi
     karg['minmflux'] = 3e-11
     karg['maxmflux'] = 1e-7
+    karg['maxmnumbpnts'] = array([200])
     karg['strgexprflux'] = strgexprflux
     
     return karg
