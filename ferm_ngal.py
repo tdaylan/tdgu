@@ -44,20 +44,24 @@ def pcat_ferm_inpt_ngal_intr( \
                        ): 
 
     karg = {}
-    karg['numbswep'] = 100000
-    karg['numbproc'] = 10
-    karg['numbswepplot'] = 5000
+    karg['numbswep'] = 30000
+    karg['factthin'] = 300
+    karg['numbswepplot'] = 6000
     karg['inittype'] = 'refr'
+    karg['optiproptype'] = 'iact'
+    karg['checprio'] = False
     karg['indxenerincl'] = arange(1, 4)
     karg['indxevttincl'] = arange(2, 4)
+    karg['proppsfn'] = False
     karg['lgalcntr'] = 0.
     karg['bgalcntr'] = pi / 2.
     karg['back'] = ['fermisotflux.fits', 'fermfdfmflux_ngal.fits']
     karg['strgexpo'] = strgexpo
     karg['maxmgangdata'] = 20. / 180. * pi
-    karg['minmflux'] = 5e-11
+    karg['minmflux'] = 1e-11
     karg['maxmflux'] = 1e-7
-    karg['maxmnumbpnts'] = array([150])
+    karg['maxmnumbpnts'] = array([200])
+    karg['sinddisttype'] = ['atan']
     karg['strgexprflux'] = strgexprflux
     
     return karg
@@ -91,22 +95,24 @@ def pcat_ferm_inpt_ngal_tim4():
 def pcat_ferm_mock_ngal():
      
     pcat.main.init( \
-                   numbswep=100000, \
-                   numbburn=180000, \
-                   numbproc=10, \
-                   factthin=200, \
-                   numbswepplot=5000, \
+                   numbswep=1000, \
+                   factthin=250, \
+                   numbburn=0, \
+                   #makeplot=False, \
+                   verbtype=2, \
+                   checprio=False, \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
                    optiprop=False, \
+                   maxmgangdata=4./180.*pi, \
                    lgalcntr=0., \
                    bgalcntr=pi / 2., \
                    back=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
                    strgexpo='fermexpo_cmp0_ngal.fits', \
                    numbsideheal=256, \
-                   trueminmflux=3e-10, \
-                   maxmnumbpnts=array([200]), \
-                   truenumbpnts=array([100]), \
+                   trueminmflux=7e-11, \
+                   maxmnumbpnts=array([10]), \
+                   truenumbpnts=array([5]), \
                   )
 
 globals().get(sys.argv[1])()

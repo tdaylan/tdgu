@@ -16,12 +16,11 @@ def pcat_ferm_quas_mock():
             bgalprio = (rand(20) - 0.5) * 20. * pi / 180.
         else:
             spatdisttype = None
-            truespatdisttype = None
-            truespatdisttype = None
    
         pcat.main.init( \
                        seedstat=seedstat, \
-                       numbswep=10000, \
+                       #verbtype=2, \
+                       numbswep=1000, \
                        spatdisttype=spatdisttype, \
                        lgalprio=lgalprio, \
                        bgalprio=bgalprio, \
