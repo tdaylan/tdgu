@@ -21,6 +21,7 @@ def pcat_ferm_quas_mock():
                        seedstat=seedstat, \
                        #verbtype=2, \
                        numbswep=1000, \
+                       factthin=500, \
                        spatdisttype=spatdisttype, \
                        lgalprio=lgalprio, \
                        bgalprio=bgalprio, \
