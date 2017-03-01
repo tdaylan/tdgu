@@ -117,23 +117,12 @@ def prep_maps():
             fluxisot[1, :, :, 0] = mean(flux[1, :, :, 0])
             pf.writeto(path, fluxisot, clobber=True)
 
-        print
-        print
-            #print 'expo'
-            #print mean(expo)
-            #print 'diffener'
-            #print diffener
-            #print 'apix'
-            #print apix
-            #print 
-
 
 def pcat_chan_mock_zero():
     
     numbsidecart = 300
     gridchan = pcat.main.init( \
                               numbswep=30000, \
-                              numbswepplot=20000, \
                               back=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
@@ -147,46 +136,34 @@ def pcat_chan_mock():
     numbsidecart = 300
     gridchan = pcat.main.init( \
                               numbswep=10000, \
-                              factthin=100, \
-                              numbswepplot=3000, \
                               back=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
-                              #verbtype=2, \
-                              # temp
-                              #psfntype='singking', \
-                              #psfninfoprio=False, \
                               numbsidecart=numbsidecart, \
-                              #maxmnumbpnts=array([30]), \
                               truenumbpnts=array([50]), \
-                              #truenumbpnts=array([50]), \
                              )
 
 def pcat_chan_mock_popl():
     
-    numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=100000, \
+                              numbswep=10000, \
                               back=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
-                              numbsidecart=numbsidecart, \
+                              numbsidecart=300, \
                               truenumbpnts=array([50, 40]), \
                              )
 
 
 def pcat_chan_inpt():
    
-    numbsidecart = 300
     gridchan = pcat.main.init( \
                               numbswep=100000, \
-                              factthin=1000, \
-                              numbswepplot=4000, \
+                              inittype='refr', \
                               back=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
-                              maxmnumbpnts=array([30]), \
-                              numbsidecart=numbsidecart, \
+                              numbsidecart=300, \
                               strgexprflux='chanflux_%04d_4msc.fits' % numbsidecart, \
                              )
 
