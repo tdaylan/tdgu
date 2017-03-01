@@ -120,26 +120,24 @@ def prep_maps():
 
 def pcat_chan_mock_zero():
     
-    numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=30000, \
+                              numbswep=10000, \
                               back=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
-                              numbsidecart=numbsidecart, \
+                              numbsidecart=300, \
                               diagmode=False, \
                               truenumbpnts=array([0]), \
                              )
 
 def pcat_chan_mock():
     
-    numbsidecart = 300
     gridchan = pcat.main.init( \
                               numbswep=10000, \
                               back=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
-                              numbsidecart=numbsidecart, \
+                              numbsidecart=300, \
                               truenumbpnts=array([50]), \
                              )
 
@@ -158,7 +156,7 @@ def pcat_chan_mock_popl():
 def pcat_chan_inpt():
    
     gridchan = pcat.main.init( \
-                              numbswep=100000, \
+                              numbswep=10000, \
                               inittype='refr', \
                               back=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
