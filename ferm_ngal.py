@@ -44,9 +44,10 @@ def pcat_ferm_inpt_ngal_intr( \
                        ): 
 
     karg = {}
-    karg['numbswep'] = 10000
-    karg['factthin'] = 1000
-    karg['numbproc'] = 1
+    karg['numbswep'] = 3000
+    karg['numbburn'] = 2500
+    karg['factthin'] = 500
+    karg['numbproc'] = 6
     karg['numbswepplot'] = 100000
     #karg['propwithsing'] = True
     karg['inittype'] = 'refr'
