@@ -105,9 +105,9 @@ def pcat_ferm_mock_ngal():
                    #makeplot=False, \
                    #verbtype=2, \
                    #optiprop=True, \
-                   indxenerincl=arange(1, 4), \
-                   indxevttincl=arange(2, 4), \
-                   maxmgangdata=4./180.*pi, \
+                   #indxenerincl=arange(1, 4), \
+                   #indxevttincl=arange(2, 4), \
+                   #maxmgangdata=4./180.*pi, \
                    lgalcntr=0., \
                    bgalcntr=pi / 2., \
                    back=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \

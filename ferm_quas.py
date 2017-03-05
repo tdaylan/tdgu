@@ -23,7 +23,9 @@ def pcat_ferm_quas_mock():
                        numbburn=100, \
                        numbproc=1, \
                        factthin=9, \
-                       truenumbpnts=array([50]), \
+                       verbtype=2, \
+                       truenumbpnts=array([10]), \
+                       maxmnumbpnts=array([20]), \
                        spatdisttype=spatdisttype, \
                        lgalprio=lgalprio, \
                        bgalprio=bgalprio, \
@@ -31,5 +33,27 @@ def pcat_ferm_quas_mock():
                        bgalcntr=pi / 2., \
                        strgexpo='fermexpo_cmp0_ngal.fits', \
                       )
+
+                  # numbswep=2000, \
+                  # indxenerincl=arange(1, 4), \
+                  # indxevttincl=arange(2, 4), \
+                  # maxmgangdata=4./180.*pi, \
+                  # lgalcntr=0., \
+                  # bgalcntr=pi / 2., \
+                  # back=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
+                  # strgexpo='fermexpo_cmp0_ngal.fits', \
+                  # numbsideheal=256, \
+                  # #trueminmflux=7e-11, \
+                  # maxmnumbpnts=array([100]), \
+                  # truenumbpnts=array([50]), \
+                  #)
+
+
+
+
+
+
+
+
 
 globals().get(sys.argv[1])()
