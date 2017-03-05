@@ -100,7 +100,7 @@ def pcat_ferm_mock_ngal():
                    numbswep=2000, \
                    factthin=500, \
                    numbburn=0, \
-                   optiprop=True, \
+                   #optiprop=True, \
                    #optipropllik=True, \
                    #makeplot=False, \
                    #verbtype=2, \
