@@ -256,15 +256,11 @@ def writ_tgasdata():
 def pcat_tgas():
     
     pcat.main.init( \
-         exprtype='sdyn', \
-         verbtype=1, \
          numbswep=30000, \
-         numbburn=20000, \
+         exprtype='sdyn', \
          psfninfoprio=False, \
          strgexpo=1., \
          back=[1e-3], \
-         numbswepplot=30000, \
-         factthin=100, \
          strgexprflux='tgas.fits', \
          #maxmnumbpnts=array([30]), \
         )

@@ -849,7 +849,7 @@ def pcat_ferm_inpt_ptch():
             pf.writeto(path, maps, clobber=True)
     
     pcat.main.init( \
-              inittype='blob', \
+              inittype='pert', \
               maxmgangdata=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
               indxevttincl=arange(2, 4), \
@@ -867,7 +867,6 @@ def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermex
     
     pcat.main.init( \
                    numbswep=1000, \
-                   numbswepplot=20000, \
                    maxmgangdata=deg2rad(20.), \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
@@ -957,7 +956,6 @@ def pcat_ferm_mock_igal():
                    #verbtype=2, \
                    #numbproc=2, \
                    strgexpo=1e-20, \
-                   numbswepplot=4000, \
                    indxevttincl=arange(3, 4), \
                    indxenerincl=arange(1, 4), \
                    #strgexpo='fermexpo_cmp0_igal.fits', \

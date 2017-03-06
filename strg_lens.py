@@ -48,7 +48,6 @@ def pcat_lens_mock_grid():
                 gdat = pcat.main.init( \
                                       seedstat=seedstat, \
                                       numbswep=100000, \
-                                      numbswepplot=5000, \
                                       factthin=800, \
                                       pntstype='lens', \
                                       exprtype='hubb', \
@@ -142,18 +141,8 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=20000, \
-                       numbswepplot=2000, \
-                       numbburn=15000, \
-                       #optiprop=True, \
-                       #numbproc=2, \
-                       inittype='rand', \
-                       factthin=50, \
-                       checprio=True, \
-                       #makeplot=True, \
-                       makeplotintr=True, \
+                       numbswep=100000, \
                        exprinfo=False, \
-                       #verbtype=2, \
                        pntstype='lens', \
                        exprtype='hubb', \
                        truenumbpnts=array([30]), \

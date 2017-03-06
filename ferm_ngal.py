@@ -48,10 +48,9 @@ def pcat_ferm_inpt_ngal_intr( \
     karg['numbproc'] = 1
     karg['numbburn'] = 1000
     karg['factthin'] = 90
-    karg['numbswepplot'] = 1000
     #karg['verbtype'] = 2
     #karg['propwithsing'] = True
-    karg['inittype'] = 'refr'
+    karg['inittype'] = 'pert'
     karg['indxenerincl'] = arange(1, 4)
     karg['indxevttincl'] = arange(2, 4)
     karg['proppsfn'] = False
@@ -97,10 +96,10 @@ def pcat_ferm_inpt_ngal_tim4():
 def pcat_ferm_mock_ngal():
      
     pcat.main.init( \
-                   numbswep=2000, \
-                   factthin=500, \
-                   numbburn=0, \
-                   optiprop=True, \
+                   numbswep=30000, \
+                   #factthin=500, \
+                   #numbburn=0, \
+                   #optiprop=True, \
                    #optipropllik=True, \
                    #makeplot=False, \
                    #verbtype=2, \
