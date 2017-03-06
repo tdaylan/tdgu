@@ -24,6 +24,7 @@ def pcat_ferm_quas_mock():
                        numbproc=1, \
                        factthin=9, \
                        verbtype=2, \
+                       checprio=True, \
                        truenumbpnts=array([10]), \
                        maxmnumbpnts=array([20]), \
                        spatdisttype=spatdisttype, \
