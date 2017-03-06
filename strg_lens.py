@@ -146,6 +146,7 @@ def pcat_lens_mock():
                        numbburn=10, \
                        #numbproc=2, \
                        factthin=1, \
+                       makeplot=False, \
                        checprio=True, \
                        makeplotintr=True, \
                        exprinfo=False, \
