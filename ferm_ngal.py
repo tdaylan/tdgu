@@ -50,7 +50,7 @@ def pcat_ferm_inpt_ngal_intr( \
     karg['factthin'] = 90
     karg['numbswepplot'] = 1000
     #karg['verbtype'] = 2
-    karg['propwithsing'] = True
+    #karg['propwithsing'] = True
     karg['inittype'] = 'refr'
     karg['indxenerincl'] = arange(1, 4)
     karg['indxevttincl'] = arange(2, 4)
@@ -108,6 +108,7 @@ def pcat_ferm_mock_ngal():
                    #indxenerincl=arange(1, 4), \
                    #indxevttincl=arange(2, 4), \
                    #maxmgangdata=4./180.*pi, \
+                   propwithsing=True, \
                    lgalcntr=0., \
                    bgalcntr=pi / 2., \
                    back=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
