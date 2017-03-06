@@ -144,6 +144,7 @@ def pcat_lens_mock():
                        numbswep=20000, \
                        exprinfo=False, \
                        pntstype='lens', \
+                       checprio=False, \
                        exprtype='hubb', \
                        truenumbpnts=array([20]), \
                        maxmnumbpnts=array([40]), \
