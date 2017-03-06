@@ -19,9 +19,9 @@ def pcat_ferm_quas_mock():
    
         pcat.main.init( \
                        seedstat=seedstat, \
-                       numbswep=50000, \
-                       truenumbpnts=array([10]), \
-                       maxmnumbpnts=array([20]), \
+                       numbswep=200000, \
+                       truenumbpnts=array([100]), \
+                       maxmnumbpnts=array([200]), \
                        spatdisttype=spatdisttype, \
                        lgalprio=lgalprio, \
                        bgalprio=bgalprio, \
