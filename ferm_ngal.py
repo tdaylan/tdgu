@@ -100,7 +100,7 @@ def pcat_ferm_mock_ngal():
                    numbswep=2000, \
                    factthin=500, \
                    numbburn=0, \
-                   #optiprop=True, \
+                   optiprop=True, \
                    #optipropllik=True, \
                    #makeplot=False, \
                    #verbtype=2, \
@@ -108,7 +108,8 @@ def pcat_ferm_mock_ngal():
                    #indxenerincl=arange(1, 4), \
                    #indxevttincl=arange(2, 4), \
                    #maxmgangdata=4./180.*pi, \
-                   propwithsing=True, \
+                   #propwithsing=True, \
+                   #makeplot=False, \
                    lgalcntr=0., \
                    bgalcntr=pi / 2., \
                    back=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \

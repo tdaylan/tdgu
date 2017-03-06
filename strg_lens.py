@@ -144,16 +144,19 @@ def pcat_lens_mock():
         pcat.main.init( \
                        numbswep=200, \
                        numbburn=10, \
+                       #optiprop=True, \
                        #numbproc=2, \
+                       inittype='rand', \
                        factthin=1, \
-                       makeplot=False, \
-                       checprio=True, \
+                       checprio=False, \
+                       #makeplot=True, \
                        makeplotintr=True, \
                        exprinfo=False, \
                        #verbtype=2, \
                        pntstype='lens', \
                        exprtype='hubb', \
-                       truenumbpnts=array([50]), \
+                       truenumbpnts=array([40]), \
+                       maxmnumbpnts=array([80]), \
                       )
     
 globals().get(sys.argv[1])()
