@@ -142,13 +142,14 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=200, \
-                       numbburn=10, \
+                       numbswep=20000, \
+                       numbswepplot=2000, \
+                       numbburn=15000, \
                        #optiprop=True, \
                        #numbproc=2, \
                        inittype='rand', \
-                       factthin=1, \
-                       checprio=False, \
+                       factthin=50, \
+                       checprio=True, \
                        #makeplot=True, \
                        makeplotintr=True, \
                        exprinfo=False, \
