@@ -160,8 +160,9 @@ def pcat_chan_inpt():
     
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=20000, \
+                              numbswep=50000, \
                               maxmnumbpnts=array([150]), \
+                              #optiprop=True, \
                               #propcomp=False, \
                               #probtran=0., \
                               #makeplot=False, \

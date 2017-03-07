@@ -115,8 +115,8 @@ def pcat_ferm_mock_ngal():
                    strgexpo='fermexpo_cmp0_ngal.fits', \
                    numbsideheal=256, \
                    #trueminmflux=7e-11, \
-                   maxmnumbpnts=array([100]), \
-                   truenumbpnts=array([50]), \
+                   maxmnumbpnts=array([300]), \
+                   truenumbpnts=array([200]), \
                   )
 
 globals().get(sys.argv[1])()
