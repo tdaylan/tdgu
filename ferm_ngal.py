@@ -96,25 +96,12 @@ def pcat_ferm_inpt_ngal_tim4():
 def pcat_ferm_mock_ngal():
      
     pcat.main.init( \
-                   numbswep=30000, \
-                   #factthin=500, \
-                   #numbburn=0, \
-                   #optiprop=True, \
-                   #optipropllik=True, \
-                   #makeplot=False, \
-                   #verbtype=2, \
-                   #optiprop=True, \
-                   #indxenerincl=arange(1, 4), \
-                   #indxevttincl=arange(2, 4), \
-                   #maxmgangdata=4./180.*pi, \
-                   #propwithsing=True, \
-                   #makeplot=False, \
+                   numbswep=100000, \
                    lgalcntr=0., \
                    bgalcntr=pi / 2., \
                    back=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
                    strgexpo='fermexpo_cmp0_ngal.fits', \
                    numbsideheal=256, \
-                   #trueminmflux=7e-11, \
                    maxmnumbpnts=array([300]), \
                    truenumbpnts=array([200]), \
                   )
