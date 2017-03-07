@@ -20,7 +20,7 @@ def pcat_ferm_quas_mock():
         pcat.main.init( \
                        seedstat=seedstat, \
                        checprio=False, \
-                       numbswep=10000, \
+                       numbswep=50000, \
                        truenumbpnts=array([50]), \
                        maxmnumbpnts=array([100]), \
                        spatdisttype=spatdisttype, \
