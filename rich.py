@@ -20,6 +20,15 @@ listenerstow = []
 
 numbbins = 200
 
+# energy axis
+minmener = 0.5 # [keV]
+maxmener = 7 # [keV]
+binsener = array([0.5, 2., 7.])
+deltener = diff(binsener)
+meanener = sqrt(binsener[1:] * binsener[:-1])
+numbener = meanener.size
+indxener = arange(numbener)
+
 # counts
 for i in range(len(lgal)):
     a = lgal[i]
@@ -37,6 +46,9 @@ for j in range(0, len(cropx_y)):
             listenerstow.append(cropx_e[j])
 cnts = histogram(array(listenerstow) * 1e-3, binsener)[0]
 
+# exposure time
+expotime = 6.03e5
+
 # effective area
 with open(pathdata + '/effective_area_cycle3.txt', 'r') as p:
     enereffa = []
@@ -49,18 +61,18 @@ enereffa = asarray(enereffa, dtype='float') #in keV
 effatemp = asarray(effatemp, dtype='float') #cm^2
 effa = empty(numbener)
 for i in indxener:
-    indx = where((enereaff > binsener[i]) & (enereaff < binsener[i]))[0]
-    effa[i] = trapz(eafftemp[indx], enereaff[indx])
+    indx = where((enereffa > binsener[i]) & (enereffa < binsener[i+1]))[0]
+    effa[i] = trapz(effatemp[indx], enereffa[indx]) / deltener[i]
 
-# exposure time
-expotime = 6.03e5
+print 'effa'
+print effa
+print 'expo'
+print effa * expotime
 
-# energy axis
-minmener = 0.5 # [keV]
-maxmener = 7 # [keV]
-binsener = array([0.5, 2., 7.])
-deltener = diff(binsener)
-meanener = sqrt(binsener[1:] * binsener[:-1])
+print 'cnts'
+print cnts
+
+# [2.09, 7.79] keV/cm^2/s/sr
 
 # pixel area
 apix = (0.492 / 3600. * pi / 180.)**2
@@ -74,13 +86,18 @@ plt.plot(enereffa, effatemp)
 plt.xscale('log')
 plt.xlabel('Energy [keV]')
 plt.ylabel('Effective Area [cm$^2$])')
+plt.tight_layout()
+plt.savefig('effa.pdf')
+plt.close()
 
 ## stowed spectra
 plt.figure(figsize=(6, 6))
 plt.loglog(meanener, flux)
 plt.xlabel('Energy [keV]')
 plt.ylabel('$E^2dI/dE$ [keV/s/cm$^2$/sr]')
+plt.tight_layout()
 plt.savefig('specstow.pdf')
+plt.close()
 
 ## stowed image
 img_zero, yedges, xedges = histogram2d(cropy_x, cropy_y, numbbins)
@@ -91,5 +108,4 @@ plt.xlabel('Chip Y Coordinates (pixel)')
 plt.ylabel('Chip X Coordinates (pixel)')
 plt.savefig('stowimag.pdf')
 plt.close()
-
 

@@ -12,7 +12,6 @@ def prep_maps():
     
     expomaps = [2, 4]
     
-    lgalcntr = 0.492
     cntrindx = array([3260, 3280]) / 2
     numbpixlshft = 30
     cntrindx[0] += numbpixlshft
@@ -49,8 +48,6 @@ def prep_maps():
             elif expomaps[k] == 4:
                 path = pathdata + 'CDFS-4Ms-0p5to2-asca-im-bin1.fits'
             temp = pf.getdata(path, 0)
-            #print 'Shape of the map'
-            #print temp.shape
 
             cnts[0, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
             if expomaps[k] == 2:
@@ -70,6 +67,9 @@ def prep_maps():
             elif expomaps[k] == 4:
                 path = pathdata + 'CDFS-4Ms-2to8-bin1.emap'
             expo[1, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+            
+            print 'expo'
+            summgene(expo)
 
             # background
             if expomaps[k] == 2:
@@ -160,10 +160,12 @@ def pcat_chan_inpt():
     
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=100000, \
+                              numbswep=20000, \
                               maxmnumbpnts=array([150]), \
                               #propcomp=False, \
                               #probtran=0., \
+                              #makeplot=False, \
+                              #verbtype=2, \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               inittype='refr', \
                               exprtype='chan', \
