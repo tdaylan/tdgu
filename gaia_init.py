@@ -258,6 +258,7 @@ def pcat_tgas():
     pcat.main.init( \
          numbswep=30000, \
          exprtype='sdyn', \
+         elemtype='clus', \
          psfninfoprio=False, \
          strgexpo=1., \
          back=[1e-3], \

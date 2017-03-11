@@ -139,7 +139,7 @@ def pcat_chan_mock():
                               numbburn=0, \
                               factthin=200,
                               verbtype=2, \
-                              makeplotfram=False, \
+                              #makeplotfram=False, \
                               back=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \

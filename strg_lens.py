@@ -2,7 +2,7 @@ from __init__ import *
 
 def pcat_lens_mock_grid():
   
-    gdat = pcat.main.init(verbtype=0, pntstype='lens', exprtype='hubb', defa=True)
+    gdat = pcat.main.init(verbtype=0, elemtype='lens', exprtype='hubb', defa=True)
 
     numbcnfg = 3
     numbiter = 1
@@ -49,7 +49,7 @@ def pcat_lens_mock_grid():
                                       seedstat=seedstat, \
                                       numbswep=100000, \
                                       factthin=800, \
-                                      pntstype='lens', \
+                                      elemtype='lens', \
                                       exprtype='hubb', \
                                       back=[back], \
                                       minmflux=minmflux, \
@@ -106,7 +106,7 @@ def pcat_lens_mock_zero():
                    numbswep=10000, \
                    proppsfp=False, \
                    exprinfo=False, \
-                   pntstype='lens', \
+                   elemtype='lens', \
                    exprtype='hubb', \
                    strgexpo=1e-20, \
                    truenumbpnts=array([40]), \
@@ -129,7 +129,7 @@ def pcat_lens_mock_syst():
                        numbswep=100000, \
                        seedstat=seedstat, \
                        exprinfo=False, \
-                       pntstype='lens', \
+                       elemtype='lens', \
                        exprtype='hubb', \
                        minmnumbpnts=minmnumbpnts, \
                        maxmnumbpnts=maxmnumbpnts, \
@@ -142,8 +142,9 @@ def pcat_lens_mock():
     for k in range(numbiter):
         pcat.main.init( \
                        numbswep=2000, \
+                       makeplotintr=True, \
                        exprinfo=False, \
-                       pntstype='lens', \
+                       elemtype='lens', \
                        checprio=False, \
                        exprtype='hubb', \
                        truenumbpnts=array([20]), \
