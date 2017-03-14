@@ -950,10 +950,12 @@ def pcat_ferm_mock_igal_syst():
 def pcat_ferm_mock_igal():
      
     pcat.main.init( \
-                   numbswep=10000, \
+                   numbswep=1000, \
                    numbburn=0, \
-                   factthin=1000, \
-                   #verbtype=2, \
+                   factthin=200, \
+                   numbswepplot=200, \
+                   makeplot=False, \
+                   verbtype=2, \
                    #numbproc=2, \
                    strgexpo=1e-20, \
                    indxevttincl=arange(3, 4), \
@@ -964,8 +966,8 @@ def pcat_ferm_mock_igal():
                    maxmgangdata=deg2rad(10.), \
                    minmflux=5e-11, \
                    maxmflux=1e-7, \
-                   maxmnumbpnts=array([100, 100, 100]), \
-                   truenumbpnts=array([50, 50, 50]), \
+                   maxmnumbpnts=array([4, 4, 4]), \
+                   truenumbpnts=array([2, 2, 2]), \
                    #maxmnumbpnts=array([5, 5, 5]), \
                    #truenumbpnts=array([4, 4, 4]), \
                    #maxmnumbpnts=array([10]), \

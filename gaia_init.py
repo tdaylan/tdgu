@@ -239,29 +239,33 @@ def writ_tgasdata():
     
     datacntstemp = histogram2d(ekin, amom, bins=(binsekin, binsamom))[0]
     
-    numbside = sqrt(datacntstemp.size)
+    numbside = int(sqrt(datacntstemp.size))
     datacnts = zeros((1, numbside, numbside, 1))
     datacnts[0, :, :, 0] = datacntstemp.T
-    
-    set_printoptions(precision=1)
-    print 'datacnts'
-    summgene(datacnts)
-    print flipud(datacnts[0, :, :, 0].astype(int))
     datacnts *= numbbins**2 / 4.
-
+    
     path = os.environ["PCAT_DATA_PATH"] + '/data/inpt/tgas.fits'
     pf.writeto(path, datacnts, clobber=True)
+    
+    backcnts = copy(datacnts)
+    backcnts[0, :, :, 0] = sp.ndimage.filters.gaussian_filter(backcnts[0, :, :, 0], sigma=5)
+    backcnts[where(backcnts <= 0.)] = 1e-20
+
+    path = os.environ["PCAT_DATA_PATH"] + '/data/inpt/tgasback.fits'
+    pf.writeto(path, backcnts, clobber=True)
 
 
 def pcat_tgas():
     
     pcat.main.init( \
-         numbswep=30000, \
+         numbswep=100, \
+         factthin=10, \
+         maxmnumbpnts=array([10]), \
          exprtype='sdyn', \
-         elemtype='clus', \
+         #elemtype='clus', \
          psfninfoprio=False, \
          strgexpo=1., \
-         back=[1e-3], \
+         back=['tgasback.fits'], \
          strgexprflux='tgas.fits', \
          #maxmnumbpnts=array([30]), \
         )
