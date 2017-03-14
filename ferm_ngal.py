@@ -44,16 +44,17 @@ def pcat_ferm_inpt_ngal_intr( \
                        ): 
 
     karg = {}
-    karg['numbswep'] = 1000
-    karg['factthin'] = 100
-    karg['priofactdoff'] = 1.
+    karg['numbswep'] = 15000
+    karg['numbburn'] = 5000
+    karg['factthin'] = 1000
+    karg['priofactdoff'] = 1.6
     karg['inittype'] = 'refr'
-    karg['proppsfn'] = False
+    karg['proppsfp'] = False
     karg['lgalcntr'] = 0.
     karg['bgalcntr'] = pi / 2.
     karg['back'] = ['fermisotflux.fits', 'fermfdfmflux_ngal.fits']
     karg['strgexpo'] = strgexpo
-    karg['maxmnumbpnts'] = array([500])
+    karg['maxmnumbpnts'] = array([350])
     karg['strgexprflux'] = strgexprflux
     
     return karg
@@ -89,17 +90,18 @@ def pcat_ferm_mock_ngal():
     pcat.main.init( \
                    numbswep=1000, \
                    numbburn=0, \
-                   numbswepplot=200, \
-                   factthin=200, \
+                   #numbswepplot=200, \
+                   factthin=100, \
                    lgalcntr=0., \
+                   makeplot=False, \
+                   checkprio=True, \
                    #makeplotfram=False, \
                    bgalcntr=pi / 2., \
-                   indxevttincl=array([3]), \
                    back=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
                    strgexpo='fermexpo_cmp0_ngal.fits', \
                    numbsideheal=256, \
-                   maxmnumbpnts=array([10]), \
-                   truenumbpnts=array([5]), \
+                   maxmnumbpnts=array([100]), \
+                   truenumbpnts=array([50]), \
                   )
 
 globals().get(sys.argv[1])()
