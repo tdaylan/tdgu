@@ -50,7 +50,7 @@ def pcat_ferm_inpt_ngal_intr( \
     karg['factthin'] = 1000
     #karg['makeplot'] = False
     karg['indxevttincl'] = array([2])
-    karg['priofactdoff'] = 4.
+    karg['priofactdoff'] = 3.
     karg['inittype'] = 'refr'
     #karg['propbacp'] = False
     #karg['proppsfp'] = False
