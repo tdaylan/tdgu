@@ -45,12 +45,15 @@ def pcat_ferm_inpt_ngal_intr( \
 
     karg = {}
     karg['numbswep'] = 20000
+    karg['numbswepplot'] = 1000
     karg['numbburn'] = 10000
     karg['factthin'] = 1000
     #karg['makeplot'] = False
-    karg['priofactdoff'] = 1.6
+    karg['indxevttincl'] = array([2])
+    karg['priofactdoff'] = 4.
     karg['inittype'] = 'refr'
-    karg['proppsfp'] = False
+    #karg['propbacp'] = False
+    #karg['proppsfp'] = False
     karg['lgalcntr'] = 0.
     karg['bgalcntr'] = pi / 2.
     karg['back'] = ['fermisotflux.fits', 'fermfdfmflux_ngal.fits']
