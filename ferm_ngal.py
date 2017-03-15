@@ -47,8 +47,10 @@ def pcat_ferm_inpt_ngal_intr( \
     karg['numbswep'] = 2000
     karg['numbburn'] = 1000
     karg['factthin'] = 100
+    #karg['verbtype'] = 2
     karg['numbswepplot'] = 1000
-    karg['optiprop'] = False
+    #karg['optiprop'] = False
+    #karg['makeplot'] = False
     karg['indxevttincl'] = array([2])
     karg['priofactdoff'] = 2.1
     karg['inittype'] = 'refr'

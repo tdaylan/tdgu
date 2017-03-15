@@ -126,10 +126,12 @@ def pcat_lens_mock_syst():
             maxmnumbpnts = None
 
         pcat.main.init( \
-                       numbswep=10000, \
+                       numbswep=100, \
                        seedstat=seedstat, \
                        exprinfo=False, \
+                       verbtype=2, \
                        elemtype='lens', \
+                       #makeplot=False, \
                        exprtype='hubb', \
                        minmnumbpnts=minmnumbpnts, \
                        maxmnumbpnts=maxmnumbpnts, \
@@ -150,7 +152,7 @@ def pcat_lens_mock():
                        exprinfo=False, \
                        elemtype='lens', \
                        inittype='refr', \
-                       checprio=True, \
+                       #checprio=True, \
                        exprtype='hubb', \
                        truenumbpnts=array([5]), \
                        maxmnumbpnts=array([10]), \
