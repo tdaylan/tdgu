@@ -44,17 +44,14 @@ def pcat_ferm_inpt_ngal_intr( \
                        ): 
 
     karg = {}
-    karg['numbswep'] = 30000
+    karg['numbswep'] = 100000
     karg['numbburn'] = 10000
-    karg['factthin'] = 2000
-    #karg['verbtype'] = 2
-    karg['numbswepplot'] = 1000
-    #karg['optiprop'] = False
-    #karg['makeplot'] = False
+    karg['factthin'] = 9000
+    karg['numbswepplot'] = 10000
     karg['indxevttincl'] = array([2])
     karg['priofactdoff'] = 2.2
+    karg['condcatl'] = False
     karg['inittype'] = 'refr'
-    karg['propbacp'] = False
     karg['proppsfp'] = False
     karg['lgalcntr'] = 0.
     karg['bgalcntr'] = pi / 2.
@@ -94,17 +91,22 @@ def pcat_ferm_inpt_ngal_tim4():
 def pcat_ferm_mock_ngal():
      
     pcat.main.init( \
-                   numbswep=1000, \
-                   factthin=100, \
+                   numbswep=100000, \
+                   factthin=9000, \
+                   numbplot=10000, \
+                   numbburn=10000, \
                    lgalcntr=0., \
-                   propwithsing=True, \
-                   #optiprop=True, \
+                   #propwithsing=True, \
+                   indxenerincl=array([2]), \
+                   indxevttincl=array([3]), \
+                   optihess=True, \
+                   #makeplot=False, \
                    bgalcntr=pi / 2., \
                    back=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
                    strgexpo='fermexpo_cmp0_ngal.fits', \
                    numbsideheal=256, \
-                   maxmnumbpnts=array([10]), \
-                   truenumbpnts=array([5]), \
+                   maxmnumbpnts=array([200]), \
+                   truenumbpnts=array([100]), \
                   )
 
 globals().get(sys.argv[1])()
