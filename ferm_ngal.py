@@ -44,15 +44,15 @@ def pcat_ferm_inpt_ngal_intr( \
                        ): 
 
     karg = {}
-    karg['numbswep'] = 2000
-    karg['numbburn'] = 1000
-    karg['factthin'] = 100
+    karg['numbswep'] = 30000
+    karg['numbburn'] = 10000
+    karg['factthin'] = 2000
     #karg['verbtype'] = 2
     karg['numbswepplot'] = 1000
     #karg['optiprop'] = False
     #karg['makeplot'] = False
     karg['indxevttincl'] = array([2])
-    karg['priofactdoff'] = 2.1
+    karg['priofactdoff'] = 2.2
     karg['inittype'] = 'refr'
     karg['propbacp'] = False
     karg['proppsfp'] = False
