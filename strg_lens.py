@@ -158,8 +158,7 @@ def pcat_lens_mock_nomi():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=40000, \
-                       #verbtype=2, \
+                       numbswep=200000, \
                        makeplotintr=True, \
                        exprinfo=False, \
                        elemtype='lens', \
