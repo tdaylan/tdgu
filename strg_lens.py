@@ -126,12 +126,10 @@ def pcat_lens_mock_syst():
             maxmnumbpnts = None
 
         pcat.main.init( \
-                       numbswep=100, \
+                       numbswep=10000, \
                        seedstat=seedstat, \
                        exprinfo=False, \
-                       verbtype=2, \
                        elemtype='lens', \
-                       #makeplot=False, \
                        exprtype='hubb', \
                        minmnumbpnts=minmnumbpnts, \
                        maxmnumbpnts=maxmnumbpnts, \
@@ -143,19 +141,34 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=1000, \
-                       numbswepplot=250, \
-                       factthin=100, \
+                       numbswep=10000, \
                        makeplotintr=True, \
-                       makeplotfram=False, \
-                       optiprop=True, \
+                       optihess=True, \
                        exprinfo=False, \
                        elemtype='lens', \
                        inittype='refr', \
                        #checprio=True, \
                        exprtype='hubb', \
-                       truenumbpnts=array([5]), \
-                       maxmnumbpnts=array([10]), \
+                       truenumbpnts=array([50]), \
+                       maxmnumbpnts=array([100]), \
+                      )
+    
+def pcat_lens_mock_nomi():
+   
+    numbiter = 10
+    for k in range(numbiter):
+        pcat.main.init( \
+                       numbswep=40000, \
+                       #verbtype=2, \
+                       makeplotintr=True, \
+                       exprinfo=False, \
+                       elemtype='lens', \
+                       condcatl=False, \
+                       inittype='refr', \
+                       #checprio=True, \
+                       exprtype='hubb', \
+                       truenumbpnts=array([50]), \
+                       maxmnumbpnts=array([100]), \
                       )
     
 globals().get(sys.argv[1])()

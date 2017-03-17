@@ -47,7 +47,7 @@ def pcat_ferm_inpt_ngal_intr( \
     karg['numbswep'] = 100000
     karg['numbburn'] = 10000
     karg['factthin'] = 9000
-    karg['numbswepplot'] = 10000
+    karg['numbswepplot'] = 4000
     karg['indxevttincl'] = array([2])
     karg['priofactdoff'] = 2.2
     karg['condcatl'] = False
@@ -91,14 +91,14 @@ def pcat_ferm_inpt_ngal_tim4():
 def pcat_ferm_mock_ngal():
      
     pcat.main.init( \
-                   numbswep=100000, \
-                   factthin=9000, \
+                   numbswep=1000, \
+                   factthin=100, \
                    numbplot=10000, \
-                   numbburn=10000, \
+                   numbburn=0, \
                    lgalcntr=0., \
                    #propwithsing=True, \
-                   indxenerincl=array([2]), \
-                   indxevttincl=array([3]), \
+                   #indxenerincl=array([2]), \
+                   #indxevttincl=array([3]), \
                    optihess=True, \
                    #makeplot=False, \
                    bgalcntr=pi / 2., \
