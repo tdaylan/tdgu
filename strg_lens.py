@@ -141,14 +141,14 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=200, \
+                       numbswep=100000, \
                        makeplotintr=True, \
                        exprinfo=False, \
                        optihess=True, \
                        elemtype='lens', \
                        condcatl=False, \
                        inittype='refr', \
-                       checprio=True, \
+                       #checprio=True, \
                        exprtype='hubb', \
                        truenumbpnts=array([50]), \
                        maxmnumbpnts=array([100]), \
