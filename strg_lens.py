@@ -126,7 +126,7 @@ def pcat_lens_mock_syst():
             maxmnumbpnts = None
 
         pcat.main.init( \
-                       numbswep=10000, \
+                       numbswep=200000, \
                        seedstat=seedstat, \
                        exprinfo=False, \
                        elemtype='lens', \
