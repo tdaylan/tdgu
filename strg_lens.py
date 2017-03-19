@@ -144,6 +144,7 @@ def pcat_lens_mock():
                        numbswep=1000, \
                        numbproc=2, \
                        makeplotintr=True, \
+                       #makeplotfram=False, \
                        exprinfo=False, \
                        optihess=True, \
                        elemtype='lens', \
