@@ -141,27 +141,11 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=10000, \
+                       numbswep=100, \
                        makeplotintr=True, \
+                       makeplotfram=False, \
+                       exprinfo=False, \
                        optihess=True, \
-                       exprinfo=False, \
-                       elemtype='lens', \
-                       inittype='refr', \
-                       #checprio=True, \
-                       exprtype='hubb', \
-                       truenumbpnts=array([50]), \
-                       maxmnumbpnts=array([100]), \
-                      )
-    
-def pcat_lens_mock_nomi():
-   
-    numbiter = 10
-    for k in range(numbiter):
-        pcat.main.init( \
-                       numbswep=200, \
-                       makeplotintr=True, \
-                       #makeplotfram=False, \
-                       exprinfo=False, \
                        elemtype='lens', \
                        condcatl=False, \
                        inittype='refr', \
