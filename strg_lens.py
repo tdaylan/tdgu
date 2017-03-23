@@ -1,7 +1,13 @@
 from __init__ import *
 
 def pcat_lens_mock_grid():
-  
+
+
+
+    listnameoutpvarb = ['maxmllik', 'medilliktotl', 'stdvlliktotl', 'levi', 'info']
+    
+
+
     gdat = pcat.main.init(verbtype=0, elemtype='lens', exprtype='hubb', defa=True)
 
     numbcnfg = 3
@@ -99,42 +105,38 @@ def pcat_lens_mock_grid():
                 plt.close(figr)
     
 
-def pcat_lens_mock_zero():
-   
-    strgexpo = 0.
-    pcat.main.init( \
-                   numbswep=10000, \
-                   proppsfp=False, \
-                   exprinfo=False, \
-                   elemtype='lens', \
-                   exprtype='hubb', \
-                   strgexpo=1e-20, \
-                   truenumbpnts=array([40]), \
-                  )
-    
 def pcat_lens_mock_syst():
    
-    seedstat = get_state()
+    liststrgvarboutp = ['maxmllik', 'medilliktotl', 'stdvlliktotl', 'levi', 'info']
+    
+    dictargs = {}
+    dictargs['numbswep'] = 100
+    dictargs['elemtype'] = 'lens'
+    dictargs['exprtype'] = 'hubb'
+    #dictargs['makeplot'] = False
+    dictargs['makeplotintr'] = True
+    dictargs['truenumbpnts'] = array([50])
 
-    numbiter = 3
-    for k in range(numbiter):
-        if k < numbiter - 1:
-            minmnumbpnts = array([k+1])
-            maxmnumbpnts = array([k+1])
-        else:
-            minmnumbpnts = None
-            maxmnumbpnts = None
+    listlablinpt = ['$N=1$', '$N=2$']
+    dictargsvari = {}
+    #dictargsvari['minmnumbpnts'] = [array([1]), array([2]), array([3]), array([10]), array([50]), None]
+    #dictargsvari['maxmnumbpnts'] = [array([1]), array([2]), array([3]), array([10]), array([50]), None]
+    dictargsvari['minmnumbpnts'] = [array([1]), array([2])]#, array([3]), array([10]), array([50]), None]
+    dictargsvari['maxmnumbpnts'] = [array([1]), array([2])]#, array([3]), array([10]), array([50]), None]
 
-        pcat.main.init( \
-                       numbswep=200000, \
-                       seedstat=seedstat, \
-                       exprinfo=False, \
-                       elemtype='lens', \
-                       exprtype='hubb', \
-                       minmnumbpnts=minmnumbpnts, \
-                       maxmnumbpnts=maxmnumbpnts, \
-                       truenumbpnts=array([50]), \
-                      )
+    dictglob = pcat.main.initarry( \
+                                  liststrgvarboutp, \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  sameseed=True, \
+                                  listlablinpt=listlablinpt, \
+                                  makeplotarry=True, \
+                                 )
+    
+    print 'dictglob'
+    print dictglob
+
+
     
 def pcat_lens_mock():
    
@@ -142,17 +144,20 @@ def pcat_lens_mock():
     for k in range(numbiter):
         pcat.main.init( \
                        numbswep=1000, \
-                       verbtype=2, \
-                       numbswepplot=100, \
+                       factthin=100, \
+                       #verbtype=2, \
+                       #optihess=False, \
+                       #numbswepplot=500, \
+                       #makeplot=False, \
                        makeplotintr=True, \
-                       exprinfo=False, \
-                       propcomp=False, \
+                       #propcomp=False, \
+                       #probtran=0., \
                        elemtype='lens', \
                        inittype='refr', \
-                       checprio=True, \
+                       checprio=False, \
                        exprtype='hubb', \
-                       truenumbpnts=array([5]), \
-                       maxmnumbpnts=array([10]), \
+                       truenumbpnts=array([50]), \
+                       truemaxmnumbpnts=array([100]), \
                       )
     
 globals().get(sys.argv[1])()

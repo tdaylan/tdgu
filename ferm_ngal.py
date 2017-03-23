@@ -43,49 +43,49 @@ def pcat_ferm_inpt_ngal_intr( \
                         strgexpo='fermexpo_cmp0_ngal.fits', \
                        ): 
 
-    karg = {}
-    karg['numbswep'] = 100000
-    karg['numbburn'] = 10000
-    karg['factthin'] = 9000
-    karg['numbswepplot'] = 4000
-    karg['indxevttincl'] = array([2])
-    karg['priofactdoff'] = 2.2
-    karg['condcatl'] = False
-    karg['inittype'] = 'refr'
-    karg['proppsfp'] = False
-    karg['lgalcntr'] = 0.
-    karg['bgalcntr'] = pi / 2.
-    karg['back'] = ['fermisotflux.fits', 'fermfdfmflux_ngal.fits']
-    karg['strgexpo'] = strgexpo
-    karg['maxmnumbpnts'] = array([350])
-    karg['strgexprflux'] = strgexprflux
+    dictargs = {}
+    dictargs['numbswep'] = 100000
+    dictargs['numbburn'] = 10000
+    dictargs['factthin'] = 9000
+    dictargs['numbswepplot'] = 4000
+    dictargs['indxevttincl'] = array([2])
+    dictargs['priofactdoff'] = 2.2
+    dictargs['condcatl'] = False
+    dictargs['inittype'] = 'refr'
+    dictargs['proppsfp'] = False
+    dictargs['lgalcntr'] = 0.
+    dictargs['bgalcntr'] = pi / 2.
+    dictargs['back'] = ['fermisotflux.fits', 'fermfdfmflux_ngal.fits']
+    dictargs['strgexpo'] = strgexpo
+    dictargs['maxmnumbpnts'] = array([350])
+    dictargs['strgexprflux'] = strgexprflux
     
-    return karg
+    return dictargs
 
 
 def pcat_ferm_inpt_ngal():
-    karg = pcat_ferm_inpt_ngal_intr()
-    pcat.main.init(**karg)
+    dictargs = pcat_ferm_inpt_ngal_intr()
+    pcat.main.init(**dictargs)
 
 
 def pcat_ferm_inpt_ngal_cmp1():
-    karg = pcat_ferm_inpt_ngal_intr(strgexprflux='fermflux_cmp1_ngal.fits', strgexpo='fermexpo_cmp1_ngal.fits')
-    pcat.main.init(**karg)
+    dictargs = pcat_ferm_inpt_ngal_intr(strgexprflux='fermflux_cmp1_ngal.fits', strgexpo='fermexpo_cmp1_ngal.fits')
+    pcat.main.init(**dictargs)
 
 
 def pcat_ferm_inpt_ngal_cmp2():
-    karg = pcat_ferm_inpt_ngal_intr(strgexprflux='fermflux_cmp2_ngal.fits', strgexpo='fermexpo_cmp2_ngal.fits')
-    pcat.main.init(**karg)
+    dictargs = pcat_ferm_inpt_ngal_intr(strgexprflux='fermflux_cmp2_ngal.fits', strgexpo='fermexpo_cmp2_ngal.fits')
+    pcat.main.init(**dictargs)
 
 
 def pcat_ferm_inpt_ngal_cmp3():
-    karg = pcat_ferm_inpt_ngal_intr(strgexprflux='fermflux_cmp3_ngal.fits', strgexpo='fermexpo_cmp3_ngal.fits')
-    pcat.main.init(**karg)
+    dictargs = pcat_ferm_inpt_ngal_intr(strgexprflux='fermflux_cmp3_ngal.fits', strgexpo='fermexpo_cmp3_ngal.fits')
+    pcat.main.init(**dictargs)
 
 
 def pcat_ferm_inpt_ngal_tim4():
-    karg = pcat_ferm_inpt_ngal_intr(strgexprflux='fermflux_rec7_pnts_ngal_0256_tim4.fits', strgexpo='fermexpo_rec7_pnts_ngal_0256_tim4.fits')
-    pcat.main.init(**karg)
+    dictargs = pcat_ferm_inpt_ngal_intr(strgexprflux='fermflux_rec7_pnts_ngal_0256_tim4.fits', strgexpo='fermexpo_rec7_pnts_ngal_0256_tim4.fits')
+    pcat.main.init(**dictargs)
 
 
 def pcat_ferm_mock_ngal():
@@ -93,20 +93,18 @@ def pcat_ferm_mock_ngal():
     pcat.main.init( \
                    numbswep=1000, \
                    factthin=100, \
-                   numbplot=10000, \
-                   numbburn=0, \
+                   makeplot=False, \
                    lgalcntr=0., \
                    #propwithsing=True, \
                    #indxenerincl=array([2]), \
                    #indxevttincl=array([3]), \
-                   optihess=True, \
                    #makeplot=False, \
                    bgalcntr=pi / 2., \
                    back=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
                    strgexpo='fermexpo_cmp0_ngal.fits', \
                    numbsideheal=256, \
                    maxmnumbpnts=array([200]), \
-                   truenumbpnts=array([100]), \
+                   truenumbpnts=array([50]), \
                   )
 
 globals().get(sys.argv[1])()
