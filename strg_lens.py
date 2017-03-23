@@ -62,7 +62,7 @@ def pcat_lens_mock_grid():
                                       truespecsour=truespecsour, \
                                       truespechost=truespechost, \
                                       maxmnumbpnts=array([100]), \
-                                      truenumbpnts=array([50]), \
+                                      truenumbpnts=array([30]), \
                                      )
                 
                 for n in range(numboutpvarb):
@@ -115,14 +115,12 @@ def pcat_lens_mock_syst():
     dictargs['exprtype'] = 'hubb'
     #dictargs['makeplot'] = False
     dictargs['makeplotintr'] = True
-    dictargs['truenumbpnts'] = array([50])
+    dictargs['truenumbpnts'] = array([30])
 
     listlablinpt = ['$N=1$', '$N=2$']
     dictargsvari = {}
-    #dictargsvari['minmnumbpnts'] = [array([1]), array([2]), array([3]), array([10]), array([50]), None]
-    #dictargsvari['maxmnumbpnts'] = [array([1]), array([2]), array([3]), array([10]), array([50]), None]
-    dictargsvari['minmnumbpnts'] = [array([1]), array([2])]#, array([3]), array([10]), array([50]), None]
-    dictargsvari['maxmnumbpnts'] = [array([1]), array([2])]#, array([3]), array([10]), array([50]), None]
+    dictargsvari['minmnumbpnts'] = [array([1]), array([2])]#, array([3]), array([10]), array([30]), None]
+    dictargsvari['maxmnumbpnts'] = [array([1]), array([2])]#, array([3]), array([10]), array([30]), None]
 
     dictglob = pcat.main.initarry( \
                                   liststrgvarboutp, \
@@ -145,18 +143,12 @@ def pcat_lens_mock():
         pcat.main.init( \
                        numbswep=1000, \
                        factthin=100, \
-                       #verbtype=2, \
-                       #optihess=False, \
-                       #numbswepplot=500, \
-                       #makeplot=False, \
                        makeplotintr=True, \
-                       #propcomp=False, \
-                       #probtran=0., \
                        elemtype='lens', \
                        inittype='refr', \
                        checprio=False, \
                        exprtype='hubb', \
-                       truenumbpnts=array([50]), \
+                       truenumbpnts=array([30]), \
                        truemaxmnumbpnts=array([100]), \
                       )
     
