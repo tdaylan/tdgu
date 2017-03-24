@@ -113,7 +113,7 @@ def pcat_lens_mock_syst():
     dictargs['numbswep'] = 100
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
-    #dictargs['makeplot'] = False
+    dictargs['makeplot'] = False
     dictargs['makeplotintr'] = True
     dictargs['truenumbpnts'] = array([30])
 
@@ -121,7 +121,7 @@ def pcat_lens_mock_syst():
     dictargsvari = {}
     dictargsvari['minmnumbpnts'] = [array([1]), array([2])]#, array([3]), array([10]), array([30]), None]
     dictargsvari['maxmnumbpnts'] = [array([1]), array([2])]#, array([3]), array([10]), array([30]), None]
-
+    
     dictglob = pcat.main.initarry( \
                                   liststrgvarboutp, \
                                   dictargsvari, \
@@ -141,11 +141,15 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=30000, \
+                       numbswep=1000, \
+                       #verbtype=2, \
+                       #probtran=0., \
+                       factthin=100, \
                        makeplotintr=True, \
+                       #makeplot=False, \
                        elemtype='lens', \
                        inittype='refr', \
-                       checprio=False, \
+                       #checprio=False, \
                        exprtype='hubb', \
                        truenumbpnts=array([30]), \
                        truemaxmnumbpnts=array([100]), \
