@@ -110,17 +110,21 @@ def pcat_lens_mock_syst():
     liststrgvarboutp = ['maxmllik', 'medilliktotl', 'stdvlliktotl', 'levi', 'info']
     
     dictargs = {}
-    dictargs['numbswep'] = 100
+    dictargs['numbswep'] = 1000
+    dictargs['factthin'] = 100
+    dictargs['verbtype'] = 2
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
+    dictargs['propwithsing'] = True
+    dictargs['checprio'] = False
     dictargs['makeplot'] = False
     dictargs['makeplotintr'] = True
     dictargs['truenumbpnts'] = array([30])
 
     listlablinpt = ['$N=1$', '$N=2$']
     dictargsvari = {}
-    dictargsvari['minmnumbpnts'] = [array([30]), array([2])]#, array([3]), array([10]), array([30]), None]
-    dictargsvari['maxmnumbpnts'] = [array([30]), array([2])]#, array([3]), array([10]), array([30]), None]
+    dictargsvari['fittminmnumbpnts'] = [array([5]), array([2])]#, array([3]), array([10]), array([30]), None]
+    dictargsvari['fittmaxmnumbpnts'] = [array([5]), array([2])]#, array([3]), array([10]), array([30]), None]
     
     dictglob = pcat.main.initarry( \
                                   liststrgvarboutp, \
@@ -140,9 +144,10 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=1000, \
-                       numbswepplot=500, \
-                       factthin=100, \
+                       numbswep=200000, \
+                       #numbswepplot=1000, \
+                       #factthin=100, \
+                       #numbproc=2, \
                        #verbtype=2, \
                        #makeplot=False, \
                        makeplotintr=True, \
@@ -151,8 +156,8 @@ def pcat_lens_mock():
                        condcatl=False, \
                        checprio=False, \
                        exprtype='hubb', \
-                       truenumbpnts=array([30]), \
-                       truemaxmnumbpnts=array([60]), \
+                       truenumbpnts=array([20]), \
+                       truemaxmnumbpnts=array([40]), \
                       )
     
 globals().get(sys.argv[1])()
