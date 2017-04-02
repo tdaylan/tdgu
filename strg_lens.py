@@ -134,14 +134,14 @@ def pcat_lens_mock_syst():
     print 'dictglob'
     print dictglob
 
-
     
 def pcat_lens_mock():
    
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=10000, \
+                       numbswep=1000, \
+                       numbswepplot=500, \
                        factthin=100, \
                        #verbtype=2, \
                        #makeplot=False, \

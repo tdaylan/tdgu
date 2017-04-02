@@ -123,7 +123,7 @@ def pcat_chan_mock_zero():
     numbsidecart = 300
     gridchan = pcat.main.init( \
                               numbswep=10000, \
-                              back=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
+                              fittback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
                               numbsidecart=300, \
@@ -140,11 +140,11 @@ def pcat_chan_mock():
                               factthin=200,
                               verbtype=2, \
                               #makeplotfram=False, \
-                              back=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
+                              fittback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
                               numbsidecart=300, \
-                              maxmnumbpnts=array([10]), \
+                              truemaxmnumbpnts=array([10]), \
                               truenumbpnts=array([5]), \
                              )
 
@@ -153,7 +153,7 @@ def pcat_chan_mock_popl():
     numbsidecart = 300
     gridchan = pcat.main.init( \
                               numbswep=10000, \
-                              back=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
+                              fittback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
                               numbsidecart=300, \
