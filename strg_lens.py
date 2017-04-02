@@ -119,8 +119,8 @@ def pcat_lens_mock_syst():
 
     listlablinpt = ['$N=1$', '$N=2$']
     dictargsvari = {}
-    dictargsvari['minmnumbpnts'] = [array([1]), array([2])]#, array([3]), array([10]), array([30]), None]
-    dictargsvari['maxmnumbpnts'] = [array([1]), array([2])]#, array([3]), array([10]), array([30]), None]
+    dictargsvari['minmnumbpnts'] = [array([30]), array([2])]#, array([3]), array([10]), array([30]), None]
+    dictargsvari['maxmnumbpnts'] = [array([30]), array([2])]#, array([3]), array([10]), array([30]), None]
     
     dictglob = pcat.main.initarry( \
                                   liststrgvarboutp, \
