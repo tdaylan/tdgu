@@ -225,7 +225,7 @@ def writ_tgasdata():
     
     ekin = pf.getdata(path)['Ek']
     amom = pf.getdata(path)['L'][:, 0]
-    numbbins = 200
+    numbbins = 201
     minmamom = percentile(amom, 0.0)
     maxmamom = percentile(amom, 100.)
     maxmamom = max(abs(minmamom), maxmamom)
@@ -250,22 +250,57 @@ def writ_tgasdata():
     backcnts = copy(datacnts)
     backcnts[0, :, :, 0] = sp.ndimage.filters.gaussian_filter(backcnts[0, :, :, 0], sigma=5)
     backcnts[where(backcnts <= 0.)] = 1e-20
+   
+    set_printoptions(precision=1)
+    print 
+    print 'datacnts'
+    summgene(datacnts)
+    print 'backcnts'
+    summgene(backcnts)
+
+    print 'datacnts'
+    print datacnts[0, 180:, 90:110, 0]
+    print 'backcnts'
+    print backcnts[0, 180:, 90:110, 0]
+    print
 
     path = os.environ["PCAT_DATA_PATH"] + '/data/inpt/tgasback.fits'
     pf.writeto(path, backcnts, clobber=True)
 
 
-def pcat_tgas():
+def pcat_tgas_mock():
     
     pcat.main.init( \
-         numbswep=10000, \
+         numbswep=1000, \
          factthin=100, \
          exprtype='sdyn', \
          psfninfoprio=False, \
          strgexpo=1., \
-         back=['tgasback.fits'], \
+         trueminmnobj=1e-26, \
+         truemaxmnobj=1e-25, \
+         elemtype='clus', \
+         fittback=['tgasback.fits'], \
+         truenumbpnts=array([20]), \
+         fittmaxmnumbpnts=array([40]), \
+        )
+
+
+def pcat_tgas_inpt():
+    
+    pcat.main.init( \
+         numbswep=1000, \
+         factthin=100, \
+         exprtype='sdyn', \
+         psfninfoprio=False, \
+         checprio=False, \
+         condcatl=False, \
+         optihess=False, \
+         strgexpo=1., \
+         elemtype='clus', \
+         fittback=['tgasback.fits'], \
          strgexprflux='tgas.fits', \
-         #maxmnumbpnts=array([30]), \
+         inittype='rand', \
+         fittmaxmnumbpnts=array([40]), \
         )
 
 globals().get(sys.argv[1])()
