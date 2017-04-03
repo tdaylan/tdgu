@@ -112,7 +112,7 @@ def pcat_lens_mock_syst():
     dictargs = {}
     dictargs['numbswep'] = 1000
     dictargs['factthin'] = 100
-    dictargs['verbtype'] = 2
+    dictargs['verbtype'] = 1
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     dictargs['propwithsing'] = True
@@ -144,10 +144,9 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=200000, \
+                       numbswep=10000, \
                        #numbswepplot=1000, \
-                       #factthin=100, \
-                       #numbproc=2, \
+                       factthin=100, \
                        #verbtype=2, \
                        #makeplot=False, \
                        makeplotintr=True, \

@@ -258,11 +258,9 @@ def writ_tgasdata():
 def pcat_tgas():
     
     pcat.main.init( \
-         numbswep=100, \
-         factthin=10, \
-         maxmnumbpnts=array([10]), \
+         numbswep=10000, \
+         factthin=100, \
          exprtype='sdyn', \
-         #elemtype='clus', \
          psfninfoprio=False, \
          strgexpo=1., \
          back=['tgasback.fits'], \
