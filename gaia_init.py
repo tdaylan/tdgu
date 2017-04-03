@@ -271,13 +271,12 @@ def writ_tgasdata():
 def pcat_tgas_mock():
     
     pcat.main.init( \
-         numbswep=1000, \
-         factthin=100, \
+         numbswep=20000, \
          exprtype='sdyn', \
          psfninfoprio=False, \
+         checprio=False, \
+         condcatl=False, \
          strgexpo=1., \
-         trueminmnobj=1e-26, \
-         truemaxmnobj=1e-25, \
          elemtype='clus', \
          fittback=['tgasback.fits'], \
          truenumbpnts=array([20]), \
@@ -289,7 +288,6 @@ def pcat_tgas_inpt():
     
     pcat.main.init( \
          numbswep=20000, \
-         #factthin=100, \
          exprtype='sdyn', \
          psfninfoprio=False, \
          checprio=False, \
