@@ -288,8 +288,8 @@ def pcat_tgas_mock():
 def pcat_tgas_inpt():
     
     pcat.main.init( \
-         numbswep=1000, \
-         factthin=100, \
+         numbswep=20000, \
+         #factthin=100, \
          exprtype='sdyn', \
          psfninfoprio=False, \
          checprio=False, \
