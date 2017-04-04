@@ -123,8 +123,8 @@ def pcat_lens_mock_syst():
 
     listlablinpt = ['$N=1$', '$N=2$']
     dictargsvari = {}
-    dictargsvari['fittminmnumbpnts'] = [array([1]), array([2])], array([3]), array([10]), array([30]), None]
-    dictargsvari['fittmaxmnumbpnts'] = [array([1]), array([2])], array([3]), array([10]), array([30]), None]
+    dictargsvari['fittminmnumbpnts'] = [array([1]), array([2]), array([3]), array([10]), array([30]), None]
+    dictargsvari['fittmaxmnumbpnts'] = [array([1]), array([2]), array([3]), array([10]), array([30]), None]
     
     dictglob = pcat.main.initarry( \
                                   liststrgvarboutp, \
@@ -145,10 +145,6 @@ def pcat_lens_mock():
     for k in range(numbiter):
         pcat.main.init( \
                        numbswep=200000, \
-                       #numbswepplot=1000, \
-                       #factthin=10, \
-                       #verbtype=2, \
-                       #makeplot=False, \
                        makeplotintr=True, \
                        elemtype='lens', \
                        condcatl=False, \
