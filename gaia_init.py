@@ -248,21 +248,10 @@ def writ_tgasdata():
     pf.writeto(path, datacnts, clobber=True)
     
     backcnts = copy(datacnts)
-    backcnts[0, :, :, 0] = sp.ndimage.filters.gaussian_filter(backcnts[0, :, :, 0], sigma=5)
+    backcnts[0, :, :, 0] = sp.ndimage.filters.gaussian_filter(backcnts[0, :, :, 0], sigma=15)
     backcnts[where(backcnts <= 0.)] = 1e-20
    
     set_printoptions(precision=1)
-    print 
-    print 'datacnts'
-    summgene(datacnts)
-    print 'backcnts'
-    summgene(backcnts)
-
-    print 'datacnts'
-    print datacnts[0, 180:, 90:110, 0]
-    print 'backcnts'
-    print backcnts[0, 180:, 90:110, 0]
-    print
 
     path = os.environ["PCAT_DATA_PATH"] + '/data/inpt/tgasback.fits'
     pf.writeto(path, backcnts, clobber=True)
