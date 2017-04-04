@@ -110,21 +110,21 @@ def pcat_lens_mock_syst():
     liststrgvarboutp = ['maxmllik', 'medilliktotl', 'stdvlliktotl', 'levi', 'info']
     
     dictargs = {}
-    dictargs['numbswep'] = 1000
-    dictargs['factthin'] = 100
+    dictargs['numbswep'] = 100000
+    #dictargs['factthin'] = 100
     dictargs['verbtype'] = 1
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
-    dictargs['propwithsing'] = True
-    dictargs['checprio'] = False
-    dictargs['makeplot'] = False
+    #dictargs['propwithsing'] = True
+    #dictargs['checprio'] = False
+    #dictargs['makeplot'] = False
     dictargs['makeplotintr'] = True
     dictargs['truenumbpnts'] = array([30])
 
     listlablinpt = ['$N=1$', '$N=2$']
     dictargsvari = {}
-    dictargsvari['fittminmnumbpnts'] = [array([5]), array([2])]#, array([3]), array([10]), array([30]), None]
-    dictargsvari['fittmaxmnumbpnts'] = [array([5]), array([2])]#, array([3]), array([10]), array([30]), None]
+    dictargsvari['fittminmnumbpnts'] = [array([1]), array([2])], array([3]), array([10]), array([30]), None]
+    dictargsvari['fittmaxmnumbpnts'] = [array([1]), array([2])], array([3]), array([10]), array([30]), None]
     
     dictglob = pcat.main.initarry( \
                                   liststrgvarboutp, \
