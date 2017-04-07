@@ -221,18 +221,20 @@ def plot_gums():
 
 def writ_tgasdata():
 
-    path = os.environ["TDGU_DATA_PATH"] + '/gaia_init/data/tgas.fits'
+    #path = os.environ["TDGU_DATA_PATH"] + '/gaia_init/data/tgashalometa.fits'
+    path = os.environ["TDGU_DATA_PATH"] + '/gaia_init/data/tgashalokine.fits'
     
     ekin = pf.getdata(path)['Ek']
-    amom = pf.getdata(path)['L'][:, 0]
+    amom = pf.getdata(path)['Lz']
+    #amom = pf.getdata(path)['L'][:, 2]
     numbbins = 201
-    minmamom = percentile(amom, 0.0)
-    maxmamom = percentile(amom, 100.)
+    minmamom = percentile(amom, 10.)
+    maxmamom = percentile(amom, 90.)
     maxmamom = max(abs(minmamom), maxmamom)
     minmamom = -maxmamom
     
     minmekin = percentile(ekin, 0.)
-    maxmekin = percentile(ekin, 99.6)
+    maxmekin = percentile(ekin, 90.)
     
     binsamom = linspace(minmamom, maxmamom, numbbins)
     binsekin = linspace(minmekin, maxmekin, numbbins)
