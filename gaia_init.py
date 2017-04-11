@@ -266,7 +266,6 @@ def pcat_tgas_mock():
          exprtype='sdyn', \
          psfninfoprio=False, \
          checprio=False, \
-         condcatl=False, \
          strgexpo=1., \
          elemtype='clus', \
          fittback=['tgasback.fits'], \
@@ -282,7 +281,6 @@ def pcat_tgas_inpt():
          exprtype='sdyn', \
          psfninfoprio=False, \
          checprio=False, \
-         condcatl=False, \
          optihess=False, \
          strgexpo=1., \
          elemtype='clus', \

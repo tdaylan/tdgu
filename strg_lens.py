@@ -2,11 +2,7 @@ from __init__ import *
 
 def pcat_lens_mock_grid():
 
-
-
     listnameoutpvarb = ['maxmllik', 'medilliktotl', 'stdvlliktotl', 'levi', 'info']
-    
-
 
     gdat = pcat.main.init(verbtype=0, elemtype='lens', exprtype='hubb', defa=True)
 
@@ -109,22 +105,24 @@ def pcat_lens_mock_syst():
    
     liststrgvarboutp = ['maxmllik', 'medilliktotl', 'stdvlliktotl', 'levi', 'info']
     
+    numbswepnomi = 10000
     dictargs = {}
-    dictargs['numbswep'] = 100000
-    #dictargs['factthin'] = 100
-    dictargs['verbtype'] = 1
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
-    #dictargs['propwithsing'] = True
-    #dictargs['checprio'] = False
+    dictargs['factthin'] = 100
+    dictargs['inittype'] = 'rand'
+    dictargs['pertmodleval'] = True
+    dictargs['propwithsing'] = True
     #dictargs['makeplot'] = False
-    dictargs['makeplotintr'] = True
+    dictargs['checprio'] = False
     dictargs['truenumbpnts'] = array([30])
 
-    listlablinpt = ['$N=1$', '$N=2$']
+    listlablinpt = ['$N=1$', '$N=2$', r'$\alpha_{s,min}$', 'Nominal', 'Long']
     dictargsvari = {}
-    dictargsvari['fittminmnumbpnts'] = [array([1]), array([2]), array([3]), array([10]), array([30]), None]
-    dictargsvari['fittmaxmnumbpnts'] = [array([1]), array([2]), array([3]), array([10]), array([30]), None]
+    dictargsvari['numbswep'] = [numbswepnomi, numbswepnomi, numbswepnomi, 10*numbswepnomi]
+    dictargsvari['fittminmdefs'] = [None, None, 5e-3/3600./180.*pi, None]
+    dictargsvari['fittminmnumbpnts'] = [array([1]), array([2]), None, None]
+    dictargsvari['fittmaxmnumbpnts'] = [array([1]), array([2]), None, None]
     
     dictglob = pcat.main.initarry( \
                                   liststrgvarboutp, \
@@ -144,17 +142,28 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=1000, \
+                       #verbtype=2, \
+                       numbswep=5000, \
+                       #factthin=100, \
                        makeplotintr=True, \
                        elemtype='lens', \
                        makeplot=False, \
-                       condcatl=False, \
+                       #makeplotfram=False, \
+                       #minmdefs=1e-3/3600./180.*pi, \
+                       #propcomp=False, \
+                       #proplenp=False, \
+                       #propbacp=False, \
+                       #propdist=False, \
+                       #proppsfp=False, \
+                       #probtran=0., \
                        checprio=False, \
                        propwithsing=True, \
+                       pertmodleval=True, \
                        inittype='refr', \
                        exprtype='hubb', \
-                       truenumbpnts=array([20]), \
-                       truemaxmnumbpnts=array([40]), \
+                       truenumbpnts=array([50]), \
+                       #trueminmnumbpnts=array([1]), \
+                       truemaxmnumbpnts=array([100]), \
                       )
     
 globals().get(sys.argv[1])()
