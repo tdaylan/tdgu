@@ -96,17 +96,15 @@ def pcat_ferm_mock_ngal():
                    checprio=False, \
                    #indxenerincl=array([1]), \
                    #indxevttincl=array([3]), \
-                   propwithsing=True, \
-                   pertmodleval=True, \
-                   #minmflux=3e-10, \
+                   minmflux=3e-10, \
                    inittype='refr', \
                    lgalcntr=0., \
                    bgalcntr=pi / 2., \
                    back=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
                    strgexpo='fermexpo_cmp0_ngal.fits', \
                    numbsideheal=256, \
-                   truemaxmnumbpnts=array([400]), \
-                   truenumbpnts=array([200]), \
+                   truemaxmnumbpnts=array([80]), \
+                   truenumbpnts=array([40]), \
                   )
 
 globals().get(sys.argv[1])()

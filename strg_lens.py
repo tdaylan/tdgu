@@ -142,28 +142,18 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       #verbtype=2, \
-                       numbswep=5000, \
-                       #factthin=100, \
+                       numbswep=1000, \
+                       factthin=100, \
                        makeplotintr=True, \
+                       checprio=True, \
+                       trueminmbacpbac0ene0=1e5, \
+                       truemaxmbacpbac0ene0=1e7, \
+                       truebacpbac0ene0=1e6, \
                        elemtype='lens', \
-                       makeplot=False, \
-                       #makeplotfram=False, \
-                       #minmdefs=1e-3/3600./180.*pi, \
-                       #propcomp=False, \
-                       #proplenp=False, \
-                       #propbacp=False, \
-                       #propdist=False, \
-                       #proppsfp=False, \
-                       #probtran=0., \
-                       checprio=False, \
-                       propwithsing=True, \
-                       pertmodleval=True, \
                        inittype='refr', \
                        exprtype='hubb', \
-                       truenumbpnts=array([50]), \
-                       #trueminmnumbpnts=array([1]), \
-                       truemaxmnumbpnts=array([100]), \
+                       truenumbpnts=array([20]), \
+                       truemaxmnumbpnts=array([40]), \
                       )
     
 globals().get(sys.argv[1])()
