@@ -110,7 +110,7 @@ def pcat_lens_mock_syst():
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     dictargs['factthin'] = 100
-    dictargs['inittype'] = 'rand'
+    dictargs['inittype'] = 'pert'
     dictargs['pertmodleval'] = True
     dictargs['propwithsing'] = True
     #dictargs['makeplot'] = False
