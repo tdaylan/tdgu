@@ -161,8 +161,8 @@ def pcat_lens_mock():
         pcat.main.init( \
                        numbswep=1000, \
                        #intreval=True, \
-                       factthin=100, \
-                       #makeplot=False, \
+                       factthin=1, \
+                       makeplot=False, \
                        makeplotintr=True, \
                        #shrtfram=True, \
                        #checprio=True, \
