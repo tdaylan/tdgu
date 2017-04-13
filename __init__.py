@@ -1,6 +1,5 @@
 # plotting
 import matplotlib as mpl
-mpl.use('Agg')
 import matplotlib.pyplot as plt
 mpl.rc('image', interpolation='nearest', origin='lower')
 #mpl.rcParams['figure.figsize'] = (6., 5.)

@@ -105,15 +105,11 @@ def pcat_lens_mock_syst():
    
     liststrgvarboutp = ['maxmllik', 'medilliktotl', 'stdvlliktotl', 'levi', 'info']
     
-    numbswepnomi = 10000
+    numbswepnomi = 1000000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
-    dictargs['factthin'] = 100
     dictargs['inittype'] = 'pert'
-    dictargs['pertmodleval'] = True
-    dictargs['propwithsing'] = True
-    #dictargs['makeplot'] = False
     dictargs['checprio'] = False
     dictargs['truenumbpnts'] = array([30])
 
@@ -137,18 +133,42 @@ def pcat_lens_mock_syst():
     print dictglob
 
     
+def pcat_lens_mock_intr():
+   
+    numbiter = 10
+    for k in range(numbiter):
+        pcat.main.init( \
+                       numbswep=10000, \
+                       intreval=True, \
+                       factthin=1000, \
+                       makeplotintr=True, \
+                       #checprio=True, \
+                       #trueminmbacpbac0ene0=1e5, \
+                       #truemaxmbacpbac0ene0=1e7, \
+                       #truebacpbac0ene0=1e6, \
+                       elemtype='lens', \
+                       inittype='refr', \
+                       exprtype='hubb', \
+                       truenumbpnts=array([20]), \
+                       truemaxmnumbpnts=array([40]), \
+                      )
+    
+
 def pcat_lens_mock():
    
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
                        numbswep=1000, \
+                       #intreval=True, \
                        factthin=100, \
+                       #makeplot=False, \
                        makeplotintr=True, \
-                       checprio=True, \
-                       trueminmbacpbac0ene0=1e5, \
-                       truemaxmbacpbac0ene0=1e7, \
-                       truebacpbac0ene0=1e6, \
+                       #shrtfram=True, \
+                       #checprio=True, \
+                       #trueminmbacpbac0ene0=1e5, \
+                       #truemaxmbacpbac0ene0=1e7, \
+                       #truebacpbac0ene0=1e6, \
                        elemtype='lens', \
                        inittype='refr', \
                        exprtype='hubb', \
