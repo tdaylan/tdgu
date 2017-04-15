@@ -10,12 +10,12 @@ def pcat_lens_mock_grid():
     numbiter = 1
    
     varbinpt = tdpy.util.varb(numbcnfg)
-    varbinpt.defn_para('minmflux', 3e-4, 3e-2, scal='logt')
-    varbinpt.defn_para('back', 1e-1 * gdat.hubbexpofact / (pi * gdat.truesizesour**2), 1e1 * gdat.hubbexpofact / (pi * gdat.truesizesour**2), scal='logt')
+    varbinpt.defn_para('minmdefs', 3e-4, 3e-3, scal='logt')
+    varbinpt.defn_para('bacp', 1e-1 * gdat.hubbexpofact / (pi * gdat.truesizesour**2), 1e1 * gdat.hubbexpofact / (pi * gdat.truesizesour**2), scal='logt')
     varbinpt.defn_para('truespecsour', 1e-1 * gdat.hubbexpofact, 1e1 * gdat.hubbexpofact, scal='logt')
     varbinpt.defn_para('truespechost', 1e-1 * gdat.hubbexpofact, 1e1 * gdat.hubbexpofact, scal='logt')
 
-    listnameoutpvarb = ['fluxdistsloppop0', 'meanpntspop0', 'specassc', 'spechost', 'beinhost']
+    listnameoutpvarb = ['defsdistsloppop0', 'meanpntspop0', 'dotsassc', 'spechost', 'beinhost']
     numboutpvarb = len(listnameoutpvarb)
     liststrgoutpvarb = []
     listscaloutpvarb = []
@@ -38,10 +38,10 @@ def pcat_lens_mock_grid():
                     else:
                         varb = varbinpt.para[p][numbcnfg / 2]
                      
-                    if varbinpt.name[p] == 'minmflux':
-                        minmflux = varb / gdat.anglfact
-                    if varbinpt.name[p] == 'back':
-                        back = varb
+                    if varbinpt.name[p] == 'minmdefs':
+                        trueminmdefs = varb / gdat.anglfact
+                    if varbinpt.name[p] == 'bacp':
+                        truebacp = array([varb])
                     if varbinpt.name[p] == 'truespecsour':
                         truespecsour = varb
                     if varbinpt.name[p] == 'truespechost':
@@ -52,20 +52,21 @@ def pcat_lens_mock_grid():
                                       numbswep=100000, \
                                       factthin=800, \
                                       elemtype='lens', \
+                                      makeplot=False, \
                                       exprtype='hubb', \
-                                      back=[back], \
-                                      minmflux=minmflux, \
+                                      truebacp=truebacp, \
+                                      trueminmdefs=trueminmdefs, \
                                       truespecsour=truespecsour, \
                                       truespechost=truespechost, \
-                                      maxmnumbpnts=array([100]), \
+                                      truemaxmnumbpnts=array([100]), \
                                       truenumbpnts=array([30]), \
                                      )
                 
                 for n in range(numboutpvarb):
-                    if listnameoutpvarb[n] == 'specassc':
-                        grid[0, n, m, l] = gdat.fluxfactplot * gdat.medispecassc[0][gdat.indxenerfluxdist[0], 0]
-                        grid[1:3, n, m, l] = gdat.fluxfactplot * gdat.errrspecassc[0][:, gdat.indxenerfluxdist[0], 0]
-                        grid[3, n, m, l] = gdat.fluxfactplot * gdat.truespec[0][0, gdat.indxenerfluxdist[0], 0]
+                    if listnameoutpvarb[n] == 'dotsassc':
+                        grid[0, n, m, l] = gdat.defsfactplot * gdat.medidotsassc[0][0]
+                        grid[1:3, n, m, l] = gdat.defsfactplot * gdat.errrdotsassc[0][:, 0]
+                        grid[3, n, m, l] = gdat.defsfactplot * gdat.truedots[0][0, 0]
 
                         if k == 0 and m == 0 and l == 0:
                             liststrgoutpvarb.append(r'$\theta_{E,0}$')
@@ -105,7 +106,7 @@ def pcat_lens_mock_syst():
    
     liststrgvarboutp = ['maxmllik', 'medilliktotl', 'stdvlliktotl', 'levi', 'info']
     
-    numbswepnomi = 1000000
+    numbswepnomi = 100000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
@@ -132,7 +133,6 @@ def pcat_lens_mock_syst():
     
     print 'dictglob'
     print dictglob
-
     
 def pcat_lens_mock_intr():
    
