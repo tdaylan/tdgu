@@ -106,14 +106,13 @@ def pcat_lens_mock_syst():
    
     liststrgvarboutp = ['maxmllik', 'medilliktotl', 'stdvlliktotl', 'levi', 'info']
     
-    numbswepnomi = 100000
+    numbswepnomi = 200000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     dictargs['inittype'] = 'refr'
     dictargs['checprio'] = False
     dictargs['condcatl'] = False
-    dictargs['truenumbpnts'] = array([30])
 
     listlablinpt = ['Nominal', '$N=1$', r'$\alpha_{s,min}$', 'Long']
     dictargsvari = {}
@@ -133,7 +132,8 @@ def pcat_lens_mock_syst():
     
     print 'dictglob'
     print dictglob
-    
+
+
 def pcat_lens_mock_intr():
    
     numbiter = 10
@@ -155,41 +155,15 @@ def pcat_lens_mock_intr():
                       )
     
 
-def pcat_lens_mock_cova():
-   
-    numbiter = 10
-    for k in range(numbiter):
-        pcat.main.init( \
-                       numbswep=50000, \
-                       #intreval=True, \
-                       factthin=1000, \
-                       makeplotintr=True, \
-                       condcatl=False, \
-                       pertmodleval=False, \
-                       propwithsing=False, \
-                       #shrtfram=True, \
-                       #makeplot=False, \
-                       #checprio=True, \
-                       #trueminmbacpbac0ene0=1e5, \
-                       #truemaxmbacpbac0ene0=1e7, \
-                       #truebacpbac0ene0=1e6, \
-                       elemtype='lens', \
-                       inittype='refr', \
-                       exprtype='hubb', \
-                       truenumbpnts=array([30]), \
-                       truemaxmnumbpnts=array([60]), \
-                      )
-    
 def pcat_lens_mock():
    
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=1000000, \
+                       numbswep=200000, \
                        makeplotintr=True, \
                        condcatl=False, \
                        #shrtfram=True, \
-                       #makeplot=False, \
                        #checprio=True, \
                        #trueminmbacpbac0ene0=1e5, \
                        #truemaxmbacpbac0ene0=1e7, \
@@ -197,8 +171,6 @@ def pcat_lens_mock():
                        elemtype='lens', \
                        inittype='refr', \
                        exprtype='hubb', \
-                       truenumbpnts=array([30]), \
-                       truemaxmnumbpnts=array([60]), \
                       )
     
 globals().get(sys.argv[1])()
