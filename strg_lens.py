@@ -111,14 +111,15 @@ def pcat_lens_mock_syst():
     dictargs['exprtype'] = 'hubb'
     dictargs['inittype'] = 'pert'
     dictargs['checprio'] = False
+    dictargs['condcatl'] = False
     dictargs['truenumbpnts'] = array([30])
 
-    listlablinpt = ['$N=1$', '$N=2$', r'$\alpha_{s,min}$', 'Nominal', 'Long']
+    listlablinpt = ['Nominal', '$N=1$', r'$\alpha_{s,min}$', 'Long']
     dictargsvari = {}
     dictargsvari['numbswep'] = [numbswepnomi, numbswepnomi, numbswepnomi, 10*numbswepnomi]
-    dictargsvari['fittminmdefs'] = [None, None, 5e-3/3600./180.*pi, None]
-    dictargsvari['fittminmnumbpnts'] = [array([1]), array([2]), None, None]
-    dictargsvari['fittmaxmnumbpnts'] = [array([1]), array([2]), None, None]
+    dictargsvari['fittminmdefs'] = [None, 1e-2/3600./180.*pi, None, None]
+    dictargsvari['fittminmnumbpnts'] = [None, array([1]), None, None]
+    dictargsvari['fittmaxmnumbpnts'] = [None, array([1]), None, None]
     
     dictglob = pcat.main.initarry( \
                                   liststrgvarboutp, \
@@ -149,8 +150,8 @@ def pcat_lens_mock_intr():
                        elemtype='lens', \
                        inittype='refr', \
                        exprtype='hubb', \
-                       truenumbpnts=array([20]), \
-                       truemaxmnumbpnts=array([40]), \
+                       truenumbpnts=array([30]), \
+                       truemaxmnumbpnts=array([60]), \
                       )
     
 
@@ -159,11 +160,11 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=1000, \
+                       numbswep=100000, \
                        #intreval=True, \
-                       factthin=1, \
-                       makeplot=False, \
+                       factthin=1000, \
                        makeplotintr=True, \
+                       condcatl=False, \
                        #shrtfram=True, \
                        #checprio=True, \
                        #trueminmbacpbac0ene0=1e5, \
@@ -172,8 +173,8 @@ def pcat_lens_mock():
                        elemtype='lens', \
                        inittype='refr', \
                        exprtype='hubb', \
-                       truenumbpnts=array([20]), \
-                       truemaxmnumbpnts=array([40]), \
+                       truenumbpnts=array([30]), \
+                       truemaxmnumbpnts=array([60]), \
                       )
     
 globals().get(sys.argv[1])()
