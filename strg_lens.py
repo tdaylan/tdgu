@@ -109,7 +109,7 @@ def pcat_lens_mock_syst():
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
-    dictargs['inittype'] = 'pert'
+    dictargs['inittype'] = 'refr'
     dictargs['checprio'] = False
     dictargs['condcatl'] = False
     dictargs['truenumbpnts'] = array([30])
@@ -117,7 +117,7 @@ def pcat_lens_mock_syst():
     listlablinpt = ['Nominal', '$N=1$', r'$\alpha_{s,min}$', 'Long']
     dictargsvari = {}
     dictargsvari['numbswep'] = [numbswepnomi, numbswepnomi, numbswepnomi, 10*numbswepnomi]
-    dictargsvari['fittminmdefs'] = [None, 3e-2/3600./180.*pi, None, None]
+    dictargsvari['fittminmdefs'] = [None, 3e-3/3600./180.*pi, None, None]
     dictargsvari['fittminmnumbpnts'] = [None, array([1]), None, None]
     dictargsvari['fittmaxmnumbpnts'] = [None, array([1]), None, None]
     
@@ -185,9 +185,7 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=10000, \
-                       #intreval=True, \
-                       factthin=1000, \
+                       numbswep=1000000, \
                        makeplotintr=True, \
                        condcatl=False, \
                        #shrtfram=True, \
