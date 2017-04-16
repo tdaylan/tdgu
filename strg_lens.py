@@ -52,7 +52,6 @@ def pcat_lens_mock_grid():
                                       numbswep=100000, \
                                       factthin=800, \
                                       elemtype='lens', \
-                                      makeplot=False, \
                                       exprtype='hubb', \
                                       truebacp=truebacp, \
                                       trueminmdefs=trueminmdefs, \
@@ -106,7 +105,7 @@ def pcat_lens_mock_syst():
    
     liststrgvarboutp = ['maxmllik', 'medilliktotl', 'stdvlliktotl', 'levi', 'info']
     
-    numbswepnomi = 200000
+    numbswepnomi = 50000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
@@ -160,9 +159,11 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=200000, \
+                       numbswep=50000, \
                        makeplotintr=True, \
                        condcatl=False, \
+                       #makeplot=False, \
+                       optiprop=True, \
                        #shrtfram=True, \
                        #checprio=True, \
                        #trueminmbacpbac0ene0=1e5, \
