@@ -159,16 +159,12 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=1000000, \
+                       numbswep=100000, \
                        makeplotintr=True, \
                        condcatl=False, \
-                       #makeplot=False, \
                        #optiprop=True, \
                        #shrtfram=True, \
                        #checprio=True, \
-                       #trueminmbacpbac0ene0=1e5, \
-                       #truemaxmbacpbac0ene0=1e7, \
-                       #truebacpbac0ene0=1e6, \
                        elemtype='lens', \
                        inittype='refr', \
                        exprtype='hubb', \
