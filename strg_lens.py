@@ -105,7 +105,7 @@ def pcat_lens_mock_syst():
    
     liststrgvarboutp = ['maxmllik', 'medilliktotl', 'stdvlliktotl', 'levi', 'info']
     
-    numbswepnomi = 50000
+    numbswepnomi = 1000000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
@@ -159,11 +159,11 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=50000, \
+                       numbswep=1000000, \
                        makeplotintr=True, \
                        condcatl=False, \
                        #makeplot=False, \
-                       optiprop=True, \
+                       #optiprop=True, \
                        #shrtfram=True, \
                        #checprio=True, \
                        #trueminmbacpbac0ene0=1e5, \
