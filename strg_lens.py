@@ -10,7 +10,7 @@ def pcat_lens_mock_grid():
     numbiter = 1
    
     varbinpt = tdpy.util.varb(numbcnfg)
-    varbinpt.defn_para('minmdefs', 3e-4, 3e-3, scal='logt')
+    varbinpt.defn_para('minmdefs', 1e-3, 1e-2, scal='logt')
     varbinpt.defn_para('bacp', 1e-1 * gdat.hubbexpofact / (pi * gdat.truesizesour**2), 1e1 * gdat.hubbexpofact / (pi * gdat.truesizesour**2), scal='logt')
     varbinpt.defn_para('truespecsour', 1e-1 * gdat.hubbexpofact, 1e1 * gdat.hubbexpofact, scal='logt')
     varbinpt.defn_para('truespechost', 1e-1 * gdat.hubbexpofact, 1e1 * gdat.hubbexpofact, scal='logt')
@@ -49,16 +49,15 @@ def pcat_lens_mock_grid():
                 
                 gdat = pcat.main.init( \
                                       seedstat=seedstat, \
-                                      numbswep=100000, \
-                                      factthin=800, \
+                                      numbswep=10000, \
+                                      factthin=100, \
+                                      makeplot=False, \
                                       elemtype='lens', \
                                       exprtype='hubb', \
                                       truebacp=truebacp, \
                                       trueminmdefs=trueminmdefs, \
                                       truespecsour=truespecsour, \
                                       truespechost=truespechost, \
-                                      truemaxmnumbpnts=array([100]), \
-                                      truenumbpnts=array([30]), \
                                      )
                 
                 for n in range(numboutpvarb):
@@ -115,8 +114,8 @@ def pcat_lens_mock_syst():
 
     listlablinpt = ['Nominal', '$N=1$', r'$\alpha_{s,min}$', 'Long']
     dictargsvari = {}
-    dictargsvari['numbswep'] = [numbswepnomi, numbswepnomi, numbswepnomi, 10*numbswepnomi]
-    dictargsvari['fittminmdefs'] = [None, 3e-3/3600./180.*pi, None, None]
+    dictargsvari['numbswep'] = [numbswepnomi, numbswepnomi, numbswepnomi, 3*numbswepnomi]
+    dictargsvari['fittminmdefs'] = [None, 6e-3/3600./180.*pi, None, None]
     dictargsvari['fittminmnumbpnts'] = [None, array([1]), None, None]
     dictargsvari['fittmaxmnumbpnts'] = [None, array([1]), None, None]
     
@@ -135,23 +134,12 @@ def pcat_lens_mock_syst():
 
 def pcat_lens_mock_intr():
    
-    numbiter = 10
-    for k in range(numbiter):
-        pcat.main.init( \
-                       numbswep=10000, \
-                       intreval=True, \
-                       factthin=1000, \
-                       makeplotintr=True, \
-                       #checprio=True, \
-                       #trueminmbacpbac0ene0=1e5, \
-                       #truemaxmbacpbac0ene0=1e7, \
-                       #truebacpbac0ene0=1e6, \
-                       elemtype='lens', \
-                       inittype='refr', \
-                       exprtype='hubb', \
-                       truenumbpnts=array([30]), \
-                       truemaxmnumbpnts=array([60]), \
-                      )
+    pcat.main.init( \
+                   intreval=True, \
+                   elemtype='lens', \
+                   inittype='refr', \
+                   exprtype='hubb', \
+                  )
     
 
 def pcat_lens_mock():
@@ -159,12 +147,25 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=100000, \
+                       numbswep=1000000, \
                        makeplotintr=True, \
                        condcatl=False, \
-                       #optiprop=True, \
-                       #shrtfram=True, \
                        #checprio=True, \
+                       elemtype='lens', \
+                       inittype='refr', \
+                       exprtype='hubb', \
+                      )
+    
+
+def pcat_lens_mock_doff():
+   
+    numbiter = 10
+    for k in range(numbiter):
+        pcat.main.init( \
+                       numbswep=1000000, \
+                       makeplotintr=True, \
+                       condcatl=False, \
+                       priofactdoff=1., \
                        elemtype='lens', \
                        inittype='refr', \
                        exprtype='hubb', \
