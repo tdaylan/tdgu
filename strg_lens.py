@@ -112,13 +112,14 @@ def pcat_lens_mock_syst():
     dictargs['checprio'] = False
     dictargs['condcatl'] = False
 
-    listlablinpt = ['Nominal', '$N=1$', r'$\alpha_{s,min}$', 'Long']
+    listlablinpt = ['Nominal', '$N=1$', r'$\alpha_{s,min}$', 'Long', 'Penalty']
     dictargsvari = {}
-    dictargsvari['numbswep'] = [numbswepnomi, numbswepnomi, numbswepnomi, 3*numbswepnomi]
-    dictargsvari['fittminmdefs'] = [None, 6e-3/3600./180.*pi, None, None]
-    dictargsvari['fittminmnumbpnts'] = [None, array([1]), None, None]
-    dictargsvari['fittmaxmnumbpnts'] = [None, array([1]), None, None]
-    
+    dictargsvari['numbswep'] = [numbswepnomi, numbswepnomi, numbswepnomi, 3*numbswepnomi, None]
+    dictargsvari['fittminmdefs'] = [None, 6e-3/3600./180.*pi, None, None, None]
+    dictargsvari['fittminmnumbpnts'] = [None, array([1]), None, None, None]
+    dictargsvari['fittmaxmnumbpnts'] = [None, array([1]), None, None, None]
+    dictargsvari['priofactdoff'] = [None, None, None, None, 1.]
+
     dictglob = pcat.main.initarry( \
                                   liststrgvarboutp, \
                                   dictargsvari, \
@@ -157,18 +158,4 @@ def pcat_lens_mock():
                       )
     
 
-def pcat_lens_mock_doff():
-   
-    numbiter = 10
-    for k in range(numbiter):
-        pcat.main.init( \
-                       numbswep=1000000, \
-                       makeplotintr=True, \
-                       condcatl=False, \
-                       priofactdoff=1., \
-                       elemtype='lens', \
-                       inittype='refr', \
-                       exprtype='hubb', \
-                      )
-    
 globals().get(sys.argv[1])()
