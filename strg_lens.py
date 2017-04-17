@@ -118,6 +118,7 @@ def pcat_lens_mock_syst():
     dictargsvari = {}
     dictargsvari['numbswep'] = [numbswepnomi, numbswepnomi, numbswepnomi, 3*numbswepnomi, numbswepnomi, numbswepnomi]
     dictargsvari['fittminmdefs'] = [None, None, 6e-3/3600./180.*pi, None, None, None]
+    dictargsvari['inittype'] = ['refr', 'refr', 'pert', 'refr', 'refr', 'refr']
     dictargsvari['fittminmnumbpnts'] = [None, array([1]), None, None, None, None]
     dictargsvari['fittmaxmnumbpnts'] = [None, array([1]), None, None, None, None]
     dictargsvari['priofactdoff'] = [0., 0., 0., 0., 1., 0.]
