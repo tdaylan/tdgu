@@ -113,7 +113,7 @@ def pcat_lens_mock_syst():
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
-    dictargs['inittype'] = 'refr'
+    dictargs['inittype'] = 'pert'
     dictargs['checprio'] = False
     dictargs['condcatl'] = False
 
