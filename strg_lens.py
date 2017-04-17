@@ -109,7 +109,7 @@ def pcat_lens_mock_syst():
    
     liststrgvarboutp = ['maxmllik', 'medilliktotl', 'stdvlliktotl', 'levi', 'info']
     
-    numbswepnomi = 1000000
+    numbswepnomi = 200000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
@@ -117,13 +117,14 @@ def pcat_lens_mock_syst():
     dictargs['checprio'] = False
     dictargs['condcatl'] = False
 
-    listlablinpt = ['Nominal', '$N=1$', r'$\alpha_{s,min}$', 'Long', 'Penalty']
+    listlablinpt = ['Nominal', '$N=1$', r'$\alpha_{s,min}$', 'Long', 'Penalty', 'Prior Check']
     dictargsvari = {}
-    dictargsvari['numbswep'] = [numbswepnomi, numbswepnomi, numbswepnomi, 3*numbswepnomi, None]
-    dictargsvari['fittminmdefs'] = [None, 6e-3/3600./180.*pi, None, None, None]
-    dictargsvari['fittminmnumbpnts'] = [None, array([1]), None, None, None]
-    dictargsvari['fittmaxmnumbpnts'] = [None, array([1]), None, None, None]
-    dictargsvari['priofactdoff'] = [0., 0., 0., 0., 1.]
+    dictargsvari['numbswep'] = [numbswepnomi, numbswepnomi, numbswepnomi, 3*numbswepnomi, numbswepnomi, numbswepnomi]
+    dictargsvari['fittminmdefs'] = [None, 6e-3/3600./180.*pi, None, None, None, None]
+    dictargsvari['fittminmnumbpnts'] = [None, array([1]), None, None, None, None]
+    dictargsvari['fittmaxmnumbpnts'] = [None, array([1]), None, None, None, None]
+    dictargsvari['priofactdoff'] = [0., 0., 0., 0., 1., 0.]
+    dictargsvari['checprio'] = [False, False, False, False, False, True]
 
     dictglob = pcat.main.initarry( \
                                   liststrgvarboutp, \
