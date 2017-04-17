@@ -10,7 +10,7 @@ def pcat_lens_mock_grid():
     numbiter = 1
    
     varbinpt = tdpy.util.varb(numbcnfg)
-    varbinpt.defn_para('minmdefs', 1e-3, 1e-2, scal='logt')
+    varbinpt.defn_para('expo', 1.1e3 / gdat.hubbexpofact, 4.4e3 / gdat.hubbexpofact, scal='logt')
     varbinpt.defn_para('bacp', 1e-1 * gdat.hubbexpofact / (pi * gdat.truesizesour**2), 1e1 * gdat.hubbexpofact / (pi * gdat.truesizesour**2), scal='logt')
     varbinpt.defn_para('truespecsour', 1e-1 * gdat.hubbexpofact, 1e1 * gdat.hubbexpofact, scal='logt')
     varbinpt.defn_para('truespechost', 1e-1 * gdat.hubbexpofact, 1e1 * gdat.hubbexpofact, scal='logt')
@@ -38,8 +38,8 @@ def pcat_lens_mock_grid():
                     else:
                         varb = varbinpt.para[p][numbcnfg / 2]
                      
-                    if varbinpt.name[p] == 'minmdefs':
-                        trueminmdefs = varb / gdat.anglfact
+                    if varbinpt.name[p] == 'expo':
+                        expo = varb
                     if varbinpt.name[p] == 'bacp':
                         truebacp = array([varb])
                     if varbinpt.name[p] == 'truespecsour':
@@ -49,35 +49,40 @@ def pcat_lens_mock_grid():
                 
                 gdat = pcat.main.init( \
                                       seedstat=seedstat, \
-                                      numbswep=10000, \
-                                      factthin=100, \
-                                      makeplot=False, \
+                                      numbswep=1000000, \
+                                      condcatl=False, \
                                       elemtype='lens', \
                                       exprtype='hubb', \
+                                      expo=expo, \
                                       truebacp=truebacp, \
-                                      trueminmdefs=trueminmdefs, \
                                       truespecsour=truespecsour, \
                                       truespechost=truespechost, \
                                      )
                 
-                for n in range(numboutpvarb):
-                    if listnameoutpvarb[n] == 'dotsassc':
-                        grid[0, n, m, l] = gdat.defsfactplot * gdat.medidotsassc[0][0]
-                        grid[1:3, n, m, l] = gdat.defsfactplot * gdat.errrdotsassc[0][:, 0]
-                        grid[3, n, m, l] = gdat.defsfactplot * gdat.truedots[0][0, 0]
+                #for n in range(numboutpvarb):
+                #    if listnameoutpvarb[n] == 'dotsassc':
+                #        grid[0, n, m, l] = gdat.anglfact * gdat.medidotsassc[0][0]
+                #        grid[1:3, n, m, l] = gdat.anglfact * gdat.errrdotsassc[0][:, 0]
+                #        grid[3, n, m, l] = gdat.anglfact * gdat.truedots[0][0, 0]
 
-                        if k == 0 and m == 0 and l == 0:
-                            liststrgoutpvarb.append(r'$\theta_{E,0}$')
-                            listscaloutpvarb.append('logt')
-                    else:
-                        indx = where(gdat.namefixp == listnameoutpvarb[n])[0]
-
-                        grid[0, n, m, l] = gdat.factfixpplot[indx] * getattr(gdat, 'medifixp')[indx]
-                        grid[1:3, n, m, l] = gdat.factfixpplot[indx] * getattr(gdat, 'errrfixp')[:, indx].flatten()
-                        grid[3, n, m, l] = gdat.factfixpplot[indx] * getattr(gdat, 'truefixp')[indx]
-                        if k == 0 and m == 0 and l == 0:
-                            liststrgoutpvarb.append(getattr(gdat, 'strgfixp')[indx][0])
-                            listscaloutpvarb.append(getattr(gdat, 'scalfixp')[indx])
+                #        if k == 0 and m == 0 and l == 0:
+                #            liststrgoutpvarb.append(r'$\theta_{E,0}$')
+                #            listscaloutpvarb.append('logt')
+                #    else:
+                #        indx = where(gdat.fittnamefixp == listnameoutpvarb[n])[0]
+                #        print 'indx'
+                #        print indx
+                #        print 'gdat.fittfactfixpplot[indx]'
+                #        print gdat.fittfactfixpplot[indx]
+                #        print 'getattr(gdat, medifixp)[indx]'
+                #        print getattr(gdat, 'medifixp')[indx]
+                #        print
+                #        grid[0, n, m, l] = gdat.fittfactfixpplot[indx] * getattr(gdat, 'medifixp')[indx]
+                #        grid[1:3, n, m, l] = gdat.fittfactfixpplot[indx] * getattr(gdat, 'errrfixp')[:, indx].flatten()
+                #        grid[3, n, m, l] = gdat.fittfactfixpplot[indx] * getattr(gdat, 'truefixp')[indx]
+                #        if k == 0 and m == 0 and l == 0:
+                #            liststrgoutpvarb.append(gdat.fittlablfixp[indx][0])
+                #            listscaloutpvarb.append(gdat.fittscalfixp[indx])
                             
         path = os.environ["PCAT_DATA_PATH"] + '/imag/%s_lensgrid/' % gdat.strgtimestmp
         os.system('mkdir -p %s' % path)
@@ -148,7 +153,7 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=1000000, \
+                       numbswep=10000, \
                        makeplotintr=True, \
                        condcatl=False, \
                        #checprio=True, \
