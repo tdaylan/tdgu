@@ -13,7 +13,6 @@ def pcat_lens_mock_grid():
     varbinpt.defn_para('expo', 1.1e3 / gdat.hubbexpofact, 4.4e3 / gdat.hubbexpofact, scal='logt')
     varbinpt.defn_para('bacp', 1e-1 * gdat.hubbexpofact / (pi * gdat.truesizesour**2), 1e1 * gdat.hubbexpofact / (pi * gdat.truesizesour**2), scal='logt')
     varbinpt.defn_para('truespecsour', 1e-1 * gdat.hubbexpofact, 1e1 * gdat.hubbexpofact, scal='logt')
-    varbinpt.defn_para('truespechost', 1e-1 * gdat.hubbexpofact, 1e1 * gdat.hubbexpofact, scal='logt')
 
     listnameoutpvarb = ['defsdistsloppop0', 'meanpntspop0', 'dotsassc', 'spechost', 'beinhost']
     numboutpvarb = len(listnameoutpvarb)
@@ -44,15 +43,14 @@ def pcat_lens_mock_grid():
                         truebacp = array([varb])
                     if varbinpt.name[p] == 'truespecsour':
                         truespecsour = varb
-                    if varbinpt.name[p] == 'truespechost':
-                        truespechost = varb
                 
                 gdat = pcat.main.init( \
                                       seedstat=seedstat, \
-                                      numbswep=1000000, \
+                                      numbswep=200000, \
                                       condcatl=False, \
                                       elemtype='lens', \
                                       exprtype='hubb', \
+                                      inittype='refr', \
                                       expo=expo, \
                                       truebacp=truebacp, \
                                       truespecsour=truespecsour, \
@@ -113,7 +111,7 @@ def pcat_lens_mock_syst():
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
-    dictargs['inittype'] = 'pert'
+    dictargs['inittype'] = 'refr'
     dictargs['checprio'] = False
     dictargs['condcatl'] = False
 
