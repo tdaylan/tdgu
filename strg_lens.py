@@ -54,7 +54,6 @@ def pcat_lens_mock_grid():
                                       expo=expo, \
                                       truebacp=truebacp, \
                                       truespecsour=truespecsour, \
-                                      truespechost=truespechost, \
                                      )
                 
                 #for n in range(numboutpvarb):
@@ -118,7 +117,7 @@ def pcat_lens_mock_syst():
     listlablinpt = ['Nominal', '$N=1$', r'$\alpha_{s,min}$', 'Long', 'Penalty', 'Prior Check']
     dictargsvari = {}
     dictargsvari['numbswep'] = [numbswepnomi, numbswepnomi, numbswepnomi, 3*numbswepnomi, numbswepnomi, numbswepnomi]
-    dictargsvari['fittminmdefs'] = [None, 6e-3/3600./180.*pi, None, None, None, None]
+    dictargsvari['fittminmdefs'] = [None, None, 6e-3/3600./180.*pi, None, None, None]
     dictargsvari['fittminmnumbpnts'] = [None, array([1]), None, None, None, None]
     dictargsvari['fittmaxmnumbpnts'] = [None, array([1]), None, None, None, None]
     dictargsvari['priofactdoff'] = [0., 0., 0., 0., 1., 0.]
@@ -152,10 +151,11 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=10000, \
+                       numbswep=1000, \
+                       factthin=100, \
                        makeplotintr=True, \
+                       makeplotfram=False, \
                        condcatl=False, \
-                       #checprio=True, \
                        elemtype='lens', \
                        inittype='refr', \
                        exprtype='hubb', \
