@@ -23,7 +23,7 @@ def pcat_lens_mock_grid():
     grid = empty((4, numboutpvarb, varbinpt.size, numbcnfg))
     
     dictvarb = dict()
-    dictvarb['numbswep'] = 300000
+    dictvarb['numbswep'] = 100000
     dictvarb['condcatl'] = False
     dictvarb['elemtype'] = 'lens'
     dictvarb['inittype'] = 'pert'
