@@ -11,7 +11,7 @@ def pcat_lens_mock_grid():
    
     varbinpt = tdpy.util.varb(numbcnfg)
     #varbinpt.defn_para('expo', 1.1e3 / gdat.hubbexpofact, 4.4e3 / gdat.hubbexpofact, scal='logt')
-    varbinpt.defn_para('bacp', 3e-8, 3e-7, scal='logt')
+    varbinpt.defn_para('truebacpbac0ene0', 3e-8, 3e-7, scal='logt')
     #varbinpt.defn_para('truespecsour', 1e-1 * gdat.hubbexpofact, 1e1 * gdat.hubbexpofact, scal='logt')
 
     listnameoutpvarb = ['defsdistsloppop0', 'meanpntspop0', 'dotsassc', 'spechost', 'beinhost']
@@ -26,8 +26,9 @@ def pcat_lens_mock_grid():
     dictvarb['numbswep'] = 300000
     dictvarb['condcatl'] = False
     dictvarb['elemtype'] = 'lens'
+    dictvarb['inittype'] = 'pert'
+    dictvarb['makeplot'] = False
     dictvarb['exprtype'] = 'hubb'
-    dictvarb['inittype'] = 'refr'
     
     cntrcnfg = 0
     for k in range(numbiter):
@@ -45,7 +46,7 @@ def pcat_lens_mock_grid():
                     else:
                         dictvarb[varbinpt.name[p]] = varbinpt.para[p][numbcnfg / 2]
                     
-                    if varbinpt.name[p] == 'bacp':
+                    if varbinpt.name[p] == 'truebacpbac0ene0':
                         dictvarb[varbinpt.name[p]] = array([dictvarb[varbinpt.name[p]]])
                 
                 dictvarb['strgcnfg'] = 'pcat_lens_mock_grid_%04d' % cntrcnfg
@@ -107,19 +108,18 @@ def pcat_lens_mock_syst():
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
+    dictargs['inittype'] = 'pert'
     dictargs['checprio'] = False
     dictargs['condcatl'] = False
 
-    listlablinpt = ['Nominal', 'Pert', '$N=1$', r'$\alpha_{s,min}$', 'Penalty', 'Long']
+    listlablinpt = ['Nominal', '$N=1$', r'$\alpha_{s,min}$', 'No Penalty', 'Long']
     dictargsvari = {}
-    dictargsvari['numbswep'] =         [numbswepnomi, numbswepnomi, numbswepnomi, numbswepnomi,       numbswepnomi, 30*numbswepnomi]
-    dictargsvari['fittminmdefs'] =     [None,         None,         None,         6e-3/3600./180.*pi, None,         None           ]
-    dictargsvari['inittype'] =         ['refr',       'pert',       'refr',       'pert',             'refr',       'refr'         ]
-    dictargsvari['fittminmnumbpnts'] = [None,         None,         array([1]),   None,               None,         None           ]
-    dictargsvari['fittmaxmnumbpnts'] = [None,         None,         array([1]),   None,               None,         None           ]
-    dictargsvari['priofactdoff'] =     [0.,           0.,           0.,           0.,                 1.,           0.             ]
-    dictargsvari['checprio'] =         [True,         False,        False,        False,              False,        False          ]
-    dictargsvari['bacp'] =             [None,         None,         None,         None,               None,         None           ]
+    dictargsvari['numbswep'] =         [numbswepnomi, numbswepnomi, numbswepnomi,       numbswepnomi, 30*numbswepnomi]
+    dictargsvari['fittminmdefs'] =     [None,         None,         6e-3/3600./180.*pi, None,         None           ]
+    dictargsvari['fittminmnumbpnts'] = [None,         array([1]),   None,               None,         None           ]
+    dictargsvari['fittmaxmnumbpnts'] = [None,         array([1]),   None,               None,         None           ]
+    dictargsvari['priofactdoff'] =     [1.,           1.,           1.,                 0.,           1.             ]
+    dictargsvari['checprio'] =         [True,         False,        False,              False,        False          ]
 
     dictglob = pcat.main.initarry( \
                                   liststrgvarboutp, \
@@ -149,13 +149,15 @@ def pcat_lens_mock():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       numbswep=1000, \
-                       factthin=100, \
+                       numbswep=10000, \
+                       factthin=1000, \
+                       inittype='pert', \
                        makeplotintr=True, \
+                       #shrtfram=True, \
                        makeplotfram=False, \
                        condcatl=False, \
                        elemtype='lens', \
-                       inittype='refr', \
+                       #inittype='refr', \
                        exprtype='hubb', \
                       )
     
