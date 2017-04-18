@@ -10,9 +10,9 @@ def pcat_lens_mock_grid():
     numbiter = 1
    
     varbinpt = tdpy.util.varb(numbcnfg)
-    varbinpt.defn_para('expo', 1.1e3 / gdat.hubbexpofact, 4.4e3 / gdat.hubbexpofact, scal='logt')
-    varbinpt.defn_para('bacp', 1e-1 * gdat.hubbexpofact / (pi * gdat.truesizesour**2), 1e1 * gdat.hubbexpofact / (pi * gdat.truesizesour**2), scal='logt')
-    varbinpt.defn_para('truespecsour', 1e-1 * gdat.hubbexpofact, 1e1 * gdat.hubbexpofact, scal='logt')
+    #varbinpt.defn_para('expo', 1.1e3 / gdat.hubbexpofact, 4.4e3 / gdat.hubbexpofact, scal='logt')
+    varbinpt.defn_para('bacp', 3e-8, 3e-7, scal='logt')
+    #varbinpt.defn_para('truespecsour', 1e-1 * gdat.hubbexpofact, 1e1 * gdat.hubbexpofact, scal='logt')
 
     listnameoutpvarb = ['defsdistsloppop0', 'meanpntspop0', 'dotsassc', 'spechost', 'beinhost']
     numboutpvarb = len(listnameoutpvarb)
@@ -22,8 +22,16 @@ def pcat_lens_mock_grid():
     liststrgvarbinpt = [r'$\theta_{E,min}$ [arcsec]', '$A$ [1/cm$^2$/s]', r'$\epsilon$ [cm$^2$ s]', '$f_s$ [erg/cm$^2$/s]', '$f_h$ [erg/cm$^2$/s]']
     grid = empty((4, numboutpvarb, varbinpt.size, numbcnfg))
     
+    dictvarb = dict()
+    dictvarb['numbswep'] = 300000
+    dictvarb['condcatl'] = False
+    dictvarb['elemtype'] = 'lens'
+    dictvarb['exprtype'] = 'hubb'
+    dictvarb['inittype'] = 'refr'
+    
+    cntrcnfg = 0
     for k in range(numbiter):
-        seedstat = get_state()
+        dictvarb['seedstat'] = get_state()
         for m in range(varbinpt.size):
             for l in range(varbinpt.numb):
                 
@@ -33,29 +41,18 @@ def pcat_lens_mock_grid():
     
                 for p in range(varbinpt.size):
                     if p == m:
-                        varb = varbinpt.para[p][l]
+                        dictvarb[varbinpt.name[p]] = varbinpt.para[p][l]
                     else:
-                        varb = varbinpt.para[p][numbcnfg / 2]
-                     
-                    if varbinpt.name[p] == 'expo':
-                        expo = varb
+                        dictvarb[varbinpt.name[p]] = varbinpt.para[p][numbcnfg / 2]
+                    
                     if varbinpt.name[p] == 'bacp':
-                        truebacp = array([varb])
-                    if varbinpt.name[p] == 'truespecsour':
-                        truespecsour = varb
+                        dictvarb[varbinpt.name[p]] = array([dictvarb[varbinpt.name[p]]])
                 
-                gdat = pcat.main.init( \
-                                      seedstat=seedstat, \
-                                      numbswep=200000, \
-                                      condcatl=False, \
-                                      elemtype='lens', \
-                                      exprtype='hubb', \
-                                      inittype='refr', \
-                                      expo=expo, \
-                                      truebacp=truebacp, \
-                                      truespecsour=truespecsour, \
-                                     )
+                dictvarb['strgcnfg'] = 'pcat_lens_mock_grid_%04d' % cntrcnfg
                 
+                gdat = pcat.main.init(**dictvarb)
+                cntrcnfg += 1
+
                 #for n in range(numboutpvarb):
                 #    if listnameoutpvarb[n] == 'dotsassc':
                 #        grid[0, n, m, l] = gdat.anglfact * gdat.medidotsassc[0][0]
@@ -106,23 +103,23 @@ def pcat_lens_mock_syst():
    
     liststrgvarboutp = ['maxmllik', 'medilliktotl', 'stdvlliktotl', 'levi', 'info']
     
-    numbswepnomi = 200000
+    numbswepnomi = 300000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
-    dictargs['inittype'] = 'refr'
     dictargs['checprio'] = False
     dictargs['condcatl'] = False
 
-    listlablinpt = ['Nominal', '$N=1$', r'$\alpha_{s,min}$', 'Long', 'Penalty', 'Prior Check']
+    listlablinpt = ['Nominal', 'Pert', '$N=1$', r'$\alpha_{s,min}$', 'Penalty', 'Long']
     dictargsvari = {}
-    dictargsvari['numbswep'] = [numbswepnomi, numbswepnomi, numbswepnomi, 3*numbswepnomi, numbswepnomi, numbswepnomi]
-    dictargsvari['fittminmdefs'] = [None, None, 6e-3/3600./180.*pi, None, None, None]
-    dictargsvari['inittype'] = ['refr', 'refr', 'pert', 'refr', 'refr', 'refr']
-    dictargsvari['fittminmnumbpnts'] = [None, array([1]), None, None, None, None]
-    dictargsvari['fittmaxmnumbpnts'] = [None, array([1]), None, None, None, None]
-    dictargsvari['priofactdoff'] = [0., 0., 0., 0., 1., 0.]
-    dictargsvari['checprio'] = [False, False, False, False, False, True]
+    dictargsvari['numbswep'] =         [numbswepnomi, numbswepnomi, numbswepnomi, numbswepnomi,       numbswepnomi, 30*numbswepnomi]
+    dictargsvari['fittminmdefs'] =     [None,         None,         None,         6e-3/3600./180.*pi, None,         None           ]
+    dictargsvari['inittype'] =         ['refr',       'pert',       'refr',       'pert',             'refr',       'refr'         ]
+    dictargsvari['fittminmnumbpnts'] = [None,         None,         array([1]),   None,               None,         None           ]
+    dictargsvari['fittmaxmnumbpnts'] = [None,         None,         array([1]),   None,               None,         None           ]
+    dictargsvari['priofactdoff'] =     [0.,           0.,           0.,           0.,                 1.,           0.             ]
+    dictargsvari['checprio'] =         [True,         False,        False,        False,              False,        False          ]
+    dictargsvari['bacp'] =             [None,         None,         None,         None,               None,         None           ]
 
     dictglob = pcat.main.initarry( \
                                   liststrgvarboutp, \
