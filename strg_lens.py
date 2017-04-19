@@ -12,7 +12,7 @@ def pcat_lens_mock_grid():
     varbinpt = tdpy.util.varb(numbcnfg)
     #varbinpt.defn_para('expo', 1.1e3 / gdat.hubbexpofact, 4.4e3 / gdat.hubbexpofact, scal='logt')
     varbinpt.defn_para('truebacpbac0ene0', 3e-8, 3e-7, scal='logt')
-    #varbinpt.defn_para('truespecsour', 1e-1 * gdat.hubbexpofact, 1e1 * gdat.hubbexpofact, scal='logt')
+    varbinpt.defn_para('truespecsour', 3e-20, 3e-19, scal='logt')
 
     listnameoutpvarb = ['defsdistsloppop0', 'meanpntspop0', 'dotsassc', 'spechost', 'beinhost']
     numboutpvarb = len(listnameoutpvarb)
@@ -23,7 +23,7 @@ def pcat_lens_mock_grid():
     grid = empty((4, numboutpvarb, varbinpt.size, numbcnfg))
     
     dictvarb = dict()
-    dictvarb['numbswep'] = 300000
+    dictvarb['numbswep'] = 400000
     dictvarb['condcatl'] = False
     dictvarb['elemtype'] = 'lens'
     dictvarb['inittype'] = 'pert'
@@ -103,12 +103,11 @@ def pcat_lens_mock_syst():
    
     liststrgvarboutp = ['maxmllik', 'medilliktotl', 'stdvlliktotl', 'levi', 'info']
     
-    numbswepnomi = 300000
+    numbswepnomi = 400000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     dictargs['inittype'] = 'pert'
-    dictargs['checprio'] = False
     dictargs['condcatl'] = False
                 
     namecnfg = 'pcat_lens_mock_syst'
@@ -122,7 +121,7 @@ def pcat_lens_mock_syst():
     dictargsvari['fittminmnumbpnts'] = [None,               array([1]),         None,                None,               None              ]
     dictargsvari['fittmaxmnumbpnts'] = [None,               array([1]),         None,                None,               None              ]
     dictargsvari['priofactdoff'] =     [1.,                 1.,                 1.,                  0.,                 1.                ]
-    dictargsvari['checprio'] =         [True,               False,              False,               False,              False             ]
+    dictargsvari['checprio'] =         [False,              False,              False,               False,              False             ]
     dictargsvari['strgcnfg'] =         [namecnfg + '_0000', namecnfg + '_0001', namecnfg + '_0002',  namecnfg + '_0003', namecnfg + '_0004']
 
     dictglob = pcat.main.initarry( \
@@ -153,7 +152,7 @@ def pcat_lens_mock():
                        numbswep=1000, \
                        factthin=100, \
                        inittype='pert', \
-                       checprio=True, \
+                       #checprio=True, \
                        makeplotintr=True, \
                        #shrtfram=True, \
                        #makeplotfram=False, \
