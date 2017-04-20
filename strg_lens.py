@@ -144,6 +144,24 @@ def pcat_lens_mock_intr():
                   )
     
 
+def pcat_lens_mock_sing():
+   
+    numbiter = 10
+    for k in range(numbiter):
+        pcat.main.init( \
+                       numbswep=100000, \
+                       inittype='pert', \
+                       trueminmnumbpnts=array([1]), \
+                       truemaxmnumbpnts=array([1]), \
+                       truenumbpnts=array([1]), \
+                       trueminmdefs=5e-2/3600./180.*pi, \
+                       truemaxmdefs=1e-1/3600./180.*pi, \
+                       condcatl=False, \
+                       elemtype='lens', \
+                       exprtype='hubb', \
+                      )
+    
+
 def pcat_lens_mock():
    
     numbiter = 10
