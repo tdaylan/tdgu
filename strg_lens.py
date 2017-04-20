@@ -114,15 +114,15 @@ def pcat_lens_mock_syst():
 
     listlablinpt = ['Nominal', '$N=1$', r'$\alpha_{s,min}$', 'No Penalty', 'Long']
     dictargsvari = {}
-    dictargsvari['numbswep'] =         [numbswepnomi,       numbswepnomi,       numbswepnomi,        numbswepnomi,       10*numbswepnomi   ]
-    dictargsvari['truenumbpnts'] =     [None,               None,               180,                 None,               None              ]
-    dictargsvari['trueminmdefs'] =     [None,               None,               3e-4/3600./180.*pi,  None,               None              ]
-    dictargsvari['fittminmdefs'] =     [None,               None,               1e-3/3600./180.*pi,  None,               None              ]
-    dictargsvari['fittminmnumbpnts'] = [None,               array([1]),         None,                None,               None              ]
-    dictargsvari['fittmaxmnumbpnts'] = [None,               array([1]),         None,                None,               None              ]
-    dictargsvari['priofactdoff'] =     [1.,                 1.,                 1.,                  0.,                 1.                ]
-    dictargsvari['checprio'] =         [False,              False,              False,               False,              False             ]
-    dictargsvari['strgcnfg'] =         [namecnfg + '_0000', namecnfg + '_0001', namecnfg + '_0002',  namecnfg + '_0003', namecnfg + '_0004']
+    dictargsvari['numbswep'] =         [numbswepnomi, numbswepnomi, numbswepnomi, numbswepnomi,       numbswepnomi,  numbswepnomi, 10*numbswepnomi]
+    dictargsvari['truenumbpnts'] =     [None,         None,         None,         180,                None,          None,         None           ]
+    dictargsvari['trueminmdefs'] =     [None,         None,         None,         3e-4/3600./180.*pi, None,          None,         None           ]
+    dictargsvari['fittminmdefs'] =     [None,         None,         None,         1e-3/3600./180.*pi, None,          None,         None           ]
+    dictargsvari['fittminmnumbpnts'] = [None,         None,         array([1]),   None,               array([10]),   None,         None           ]
+    dictargsvari['fittmaxmnumbpnts'] = [None,         None,         array([1]),   None,               array([10]),   None,         None           ]
+    dictargsvari['inittype'] =         ['refr',       'pert',       'pert',       'pert',             'pert',        'pert',       'pert'         ]
+    dictargsvari['priofactdoff'] =     [1.,           1.,           1.,           1.,                 1.,            0.,           1.             ]
+    dictargsvari['checprio'] =         [False,        False,        False,        False,              False,         False,        False          ]
 
     dictglob = pcat.main.initarry( \
                                   liststrgvarboutp, \
@@ -152,6 +152,7 @@ def pcat_lens_mock():
                        numbswep=1000, \
                        factthin=100, \
                        inittype='pert', \
+                       makeplotfram=False, \
                        #checprio=True, \
                        makeplotintr=True, \
                        #shrtfram=True, \
