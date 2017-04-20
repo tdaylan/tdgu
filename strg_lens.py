@@ -103,13 +103,13 @@ def pcat_lens_mock_perf():
    
     liststrgvarboutp = ['maxmllik', 'medilliktotl', 'stdvlliktotl', 'levi', 'info']
     
-    numbswepnomi = 1000000
+    numbswepnomi = 10000000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     dictargs['inittype'] = 'pert'
     dictargs['condcatl'] = False
-    dictargs['priofactdoff'] = 0.5
+    dictargs['priofactdoff'] = 0.6
     
     anglfact = 3600. * 180. / pi
     listlablinpt = ['Nominal', '$N=1$', r'$\alpha_{s,min}$', 'No Penalty', 'Long']
