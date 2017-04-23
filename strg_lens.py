@@ -98,53 +98,40 @@ def pcat_lens_mock_grid():
 
 def pcat_lens_mock_perf():
    
-    liststrgvarboutp = ['maxmllik', 'medilliktotl', 'stdvlliktotl', 'levi', 'info']
-    
     numbswepnomi = 10000000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     
     anglfact = 3600. * 180. / pi
-    listlablinpt = ['Nominal', '$N=1$', r'$\alpha_{s,min}$', 'No Penalty', 'Long']
     dictargsvari = {}
     dictargsvari['trueminmdefs'] = [1e-3 / anglfact, 5e-3 / anglfact, 2.5e-2 / anglfact, None,          None,          None]
     dictargsvari['truemaxmdefs'] = [1e-2 / anglfact, 5e-2 / anglfact, 2.5e-1 / anglfact, None,          None,          None]
     dictargsvari['truebacp']     = [None,            None,            None,              array([3e-8]), array([1e-7]), array([3e-7])]
 
     dictglob = pcat.main.initarry( \
-                                  liststrgvarboutp, \
                                   dictargsvari, \
                                   dictargs, \
-                                  sameseed=True, \
-                                  listlablinpt=listlablinpt, \
-                                  makeplotarry=True, \
                                  )
     
 
 def pcat_lens_mock_syst():
    
-    liststrgvarboutp = ['maxmllik', 'medilliktotl', 'stdvlliktotl', 'levi', 'info']
-    
     numbswepnomi = 1000000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
                 
-    listlablinpt = ['Nominal', '$N=1$', r'$\alpha_{s,min}$', 'No Penalty', 'Long']
     dictargsvari = {}
-    dictargsvari['numbswep'] =         [numbswepnomi, numbswepnomi, numbswepnomi,       numbswepnomi,       numbswepnomi,  numbswepnomi, 5*numbswepnomi]
-    dictargsvari['fittminmdefs'] =     [None,         None,         5e-3/3600./180.*pi, None,               None,          None,         None          ]
-    dictargsvari['fittminmnumbpnts'] = [None,         None,         None,               array([1]),         array([10]),   None,         None          ]
-    dictargsvari['fittmaxmnumbpnts'] = [None,         None,         None,               array([1]),         array([10]),   None,         None          ]
-    dictargsvari['priofactdoff'] =     [0.  ,         1.,           0.,                 0.,                 0.,            0.,           0.            ]
-    dictargsvari['checprio'] =         [False,        False,        False,              False,              False,         False,        False         ]
+    dictargsvari['numbswep'] =         [numbswepnomi, numbswepnomi, numbswepnomi, numbswepnomi,       numbswepnomi, numbswepnomi,  5*numbswepnomi]
+    dictargsvari['fittminmdefs'] =     [None,         None,         None,         6e-3/3600./180.*pi, None,         None,          None          ]
+    dictargsvari['fittminmnumbpnts'] = [None,         None,         None,         None,               array([1]),   array([10]),   None          ]
+    dictargsvari['fittmaxmnumbpnts'] = [None,         None,         None,         None,               array([1]),   array([10]),   None          ]
+    dictargsvari['priofactdoff'] =     [0.  ,         1.,           1.,           0.,                 0.,           0.,            0.            ]
+    dictargsvari['checprio'] =         [True,         False,        False,        False,              False,        False,         False         ]
+    dictargsvari['dotnpowr'] =         [0.,           0.,           4.,           0.,                 0.,           0.,            0.            ]
 
     dictglob = pcat.main.initarry( \
-                                  liststrgvarboutp, \
                                   dictargsvari, \
                                   dictargs, \
-                                  sameseed=True, \
-                                  listlablinpt=listlablinpt, \
-                                  makeplotarry=True, \
                                  )
     
 
@@ -185,66 +172,50 @@ def pcat_lens_mock_spmr():
                       )
     
 
-def pcat_lens_mock_cond():
-   
-    pcat.main.init( \
-                   elemtype='lens', \
-                   numbswep=1000, \
-                   numbburn=0, \
-                   #verbtype=2, \
-                   factthin=100, \
-                   inittype='refr', \
-                   minmdefs=1e-2*pi/180./3600., \
-                   maxmdefs=1e-1*pi/180./3600., \
-                   truenumbpnts=array([2]), \
-                   truemaxmnumbpnts=array([4]), \
-                   makeplotfram=False, \
-                  )
-   
-
-def pcat_lens_mock_init():
-
+def pcat_lens_mock_dotn():
+  
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 1000000
     dictargsvari = {}
-    dictargsvari['inittype'] = ['refr', 'pert']
+    dictargsvari['dotnpowr'] = [0., 5., 10.]
 
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  sameseed=True, \
                                  )
 
 
-def pcat_lens_mock_dots():
-   
-    for dotnpowr in [20., 10., 5., 0.]:
-        try: 
-            pcat.main.init( \
-                           elemtype='lens', \
-                           numbswep=400000, \
-                           condcatl=False, \
-                           #truenumbpnts=array([100]), \
-                           #truemaxmnumbpnts=array([100]), \
-                           dotnpowr=dotnpowr, \
-                          )
-        except:
-            pass
-   
+def pcat_lens_mock_doff():
+  
+    dictargs = {}
+    dictargs['elemtype'] = 'lens'
+    dictargs['numbswep'] = 1000000
+    dictargsvari = {}
+    dictargsvari['priofactdoff'] = [0., 0.33, 0.66, 1.]
+
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                 )
+
 
 def pcat_lens_mock():
    
+    anglfact = 3600. * 180. / pi
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
                        elemtype='lens', \
-                       numbswep=30000, \
-                       factthin=300, \
+                       numbswep=100000, \
+                       trueminmdefs=1e-2/anglfact, \
+                       truemaxmdefs=5e-2/anglfact, \
+                       fittspatdisttype=['unif'], \
+                       priofactdoff=1., \
+                       #shrtfram=True, \
                        #makeplot=False, \
                        #checprio=True, \
-                       makeplotintr=True, \
-                       #shrtfram=True, \
+                       #makeplotintr=True, \
                       )
    
 
