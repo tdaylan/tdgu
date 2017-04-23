@@ -223,10 +223,8 @@ def pcat_lens_mock_dots():
         try: 
             pcat.main.init( \
                            elemtype='lens', \
-                           numbswep=300000, \
-                           #makeplot=False, \
+                           numbswep=400000, \
                            condcatl=False, \
-                           mockonly=True, \
                            #truenumbpnts=array([100]), \
                            #truemaxmnumbpnts=array([100]), \
                            dotnpowr=dotnpowr, \
