@@ -219,17 +219,18 @@ def pcat_lens_mock_init():
 
 def pcat_lens_mock_dots():
    
-    for dotnpowr in [2., 3., 4., 0.]:
-        
-        pcat.main.init( \
-                       elemtype='lens', \
-                       numbswep=200000, \
-                       makeplot=False, \
-                       #mockonly=True, \
-                       #truenumbpnts=array([100]), \
-                       #truemaxmnumbpnts=array([100]), \
-                       dotnpowr=dotnpowr, \
-                      )
+    for dotnpowr in [3., 2., 1., 0.]:
+        try: 
+            pcat.main.init( \
+                           elemtype='lens', \
+                           numbswep=200000, \
+                           #mockonly=True, \
+                           #truenumbpnts=array([100]), \
+                           #truemaxmnumbpnts=array([100]), \
+                           dotnpowr=dotnpowr, \
+                          )
+        except:
+            pass
    
 
 def pcat_lens_mock():
