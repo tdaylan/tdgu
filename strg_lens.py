@@ -24,7 +24,6 @@ def pcat_lens_mock_grid():
     
     dictvarb = dict()
     dictvarb['elemtype'] = 'lens'
-    dictvarb['numbswep'] = 400000
     
     cntrcnfg = 0
     for k in range(numbiter):
@@ -98,7 +97,6 @@ def pcat_lens_mock_grid():
 
 def pcat_lens_mock_perf():
    
-    numbswepnomi = 10000000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     
@@ -149,7 +147,6 @@ def pcat_lens_mock_sing():
     for k in range(numbiter):
         pcat.main.init( \
                        elemtype='lens', \
-                       numbswep=1000000, \
                        truenumbpnts=array([1]), \
                        trueminmdefs=5e-2/3600./180.*pi, \
                        truemaxmdefs=1e-1/3600./180.*pi, \
@@ -176,7 +173,6 @@ def pcat_lens_mock_dotn():
   
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 1000000
     dictargsvari = {}
     dictargsvari['dotnpowr'] = [0., 5., 10.]
 
@@ -190,7 +186,6 @@ def pcat_lens_mock_doff():
   
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 1000000
     dictargsvari = {}
     dictargsvari['priofactdoff'] = [0., 0.33, 0.66, 1.]
 
