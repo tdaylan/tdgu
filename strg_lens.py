@@ -115,9 +115,11 @@ def pcat_lens_mock_perf():
 
 def pcat_lens_mock_syst():
    
-    numbswepnomi = 2000000
+    numbswepnomi = 50000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
+    dictargs['makeplot'] = False
+    dictargs['factthin'] = 4000
                 
     dictargsvari = {}
     dictargsvari['numbswep'] =         [numbswepnomi, numbswepnomi,       numbswepnomi, 3*numbswepnomi]
@@ -196,6 +198,150 @@ def pcat_lens_mock_doff():
                                  )
 
 
+def pcat_lens_mock_sign():
+    
+    numbiter = 3
+
+    dictargs = {}
+    dictargs['mockonly'] = True
+    dictargs['trueminmdefs'] = 5e-4 / 3600. / 180. * pi
+    dictargs['truenumbpnts'] = array([1000])
+    dictargs['makeplot'] = False
+    dictargs['truemaxmnumbpnts'] = array([1000])
+    
+    liststrgvarboutp = ['truehistdefssign', 'truehistdefs', 'truedefssign', 'truedefs', 'trueindxelemsign']
+    
+    dictargsvari = {}
+    dictargsvari['elemtype'] = ['lens' for n in range(5)]
+    
+    numbinpt = len(dictargsvari['elemtype'])
+
+    for k in range(numbiter):
+        listgdat, dictglob = pcat.main.initarry( \
+                                      dictargsvari, \
+                                      dictargs, \
+                                      randseedelem=True, \
+                                      liststrgvarboutp=liststrgvarboutp, \
+                                     )
+        
+        gdat = listgdat[0]
+
+        hist = zeros((numbinpt, gdat.numbbinsplot))
+        histsign = zeros((numbinpt, gdat.numbbinsplot))
+        histfitt = zeros((numbinpt, gdat.numbbinsplot))
+        factsign = zeros((numbinpt, gdat.numbbinsplot))
+        for m in range(numbinpt):
+            hist[m, :] = dictglob['truehistdefs'][m][0, :]
+            histsign[m, :] = dictglob['truehistdefssign'][m][0, :]
+            factsign[m, :] = histsign[m, :] / hist[m, :]
+            
+            namepdfn, listpara = retr_pdfnscipbest(dictglob['truedefssign'][m][0], gdat.binsdefs, gdat.meandefs)
+            print 'namepdfn'
+            print namepdfn
+            alph, loca, beta = sp.stats.invgamma.fit(dictglob['truedefssign'][m][0], floc=0.)
+            histfitt[m, :] = len(dictglob['trueindxelemsign'][m][0]) * sp.stats.invgamma.pdf(gdat.meandefs, alph, loc=loca, scale=beta) * gdat.deltdefs
+        
+        meanfactsign = mean(factsign, 0)
+        
+        figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
+        for m in range(numbinpt):
+            axis.loglog(gdat.meandefs * gdat.factdefsplot, hist[m, :], color='g', alpha=0.1, ls='-')
+            axis.loglog(gdat.meandefs * gdat.factdefsplot, histsign[m, :], color='g', alpha=0.1, ls='--')
+            axis.loglog(gdat.meandefs * gdat.factdefsplot, histfitt[m, :], color='g', alpha=0.1, ls='-.')
+        axis.loglog(gdat.meandefs * gdat.factdefsplot, mean(hist, 0), color='g', ls='-')
+        axis.loglog(gdat.meandefs * gdat.factdefsplot, mean(histsign, 0), color='g', ls='--')
+        axis.loglog(gdat.meandefs * gdat.factdefsplot, mean(histfitt, 0), color='g', ls='-.')
+
+        axis.set_xlabel(gdat.labldefstotl)
+        axis.set_ylabel('$N$')
+        axis.set_ylim([0.5, None])
+        plt.tight_layout()
+        figr.savefig(gdat.pathimag + 'histdefs%04d.pdf' % k)
+        plt.close(figr)
+
+        figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
+        axis.loglog(gdat.meandefs * gdat.factdefsplot, meanfactsign, color='black')
+        for m in range(numbinpt):
+            axis.loglog(gdat.meandefs * gdat.factdefsplot, factsign[m, :], alpha=0.1, color='g')
+        axis.set_xlabel(gdat.labldefstotl)
+        axis.set_ylabel('$f$')
+        plt.tight_layout()
+        figr.savefig(gdat.pathimag + 'factsign%04d.pdf' % k)
+        plt.close(figr)
+
+
+def retr_pdfnscipbest(data, binsxdat, meanxdat):
+    
+    print 'binsxdat'
+    print binsxdat
+    print 'meanxdat'
+    print meanxdat
+
+    pdfndata = histogram(data, bins=binsxdat, normed=True)[0]
+    st = sp.stats 
+    listpdfnscip = [        
+        st.alpha,st.anglit,st.arcsine,st.beta,st.betaprime,st.bradford,st.burr,st.cauchy,st.chi,st.chi2,st.cosine,
+        st.dgamma,st.dweibull,st.erlang,st.expon,st.exponnorm,st.exponweib,st.exponpow,st.f,st.fatiguelife,st.fisk,
+        st.foldcauchy,st.foldnorm,st.frechet_r,st.frechet_l,st.genlogistic,st.genpareto,st.gennorm,st.genexpon,
+        st.genextreme,st.gausshyper,st.gamma,st.gengamma,st.genhalflogistic,st.gilbrat,st.gompertz,st.gumbel_r,
+        st.gumbel_l,st.halfcauchy,st.halflogistic,st.halfnorm,st.halfgennorm,st.hypsecant,st.invgamma,st.invgauss,
+        st.invweibull,st.johnsonsb,st.johnsonsu,st.ksone,st.kstwobign,st.laplace,st.levy,st.levy_l,st.levy_stable,
+        st.logistic,st.loggamma,st.loglaplace,st.lognorm,st.lomax,st.maxwell,st.mielke,st.nakagami,st.ncx2,st.ncf,
+        st.nct,st.norm,st.pareto,st.pearson3,st.powerlaw,st.powerlognorm,st.powernorm,st.rdist,st.reciprocal,
+        st.rayleigh,st.rice,st.recipinvgauss,st.semicircular,st.t,st.triang,st.truncexpon,st.truncnorm,st.tukeylambda,
+        st.uniform,st.vonmises,st.vonmises_line,st.wald,st.weibull_min,st.weibull_max,st.wrapcauchy
+    ]
+
+    pdfnscipbest = st.norm
+    listparabest = (0.0, 1.0)
+    chsqbest = inf
+
+    for pdfnscip in listpdfnscip:
+
+        try:
+            listpara = pdfnscip.fit(data, floc=0.)
+            arg = listpara[:-2]
+            loca = listpara[-2]
+            scal = listpara[-1]
+
+            pdfnfitt = pdfnscip.pdf(meanxdat, loc=loca, scale=scal, *arg)
+            chsq = sum((pdfndata - pdfnfitt)**2)
+
+            if chsqbest > chsq > 0:
+                print 'Updating best as ' + pdfnscip.name
+                pdfnscipbest = pdfnscip
+                listparabest = listpara
+                chsqbest = chsq
+
+        except Exception:
+            pass
+
+    return pdfnscipbest.name, listparabest
+
+
+def pcat_lens_mock_comp():
+    
+    anglfact = 3600. * 180. / pi
+    dictargs = {}
+    dictargs['elemtype'] = 'lens'
+    dictargs['numbswep'] = 250000
+    dictargs['numbswepplot'] = 50000
+    dictargs['factthin'] = 500
+    dictargs['numbburn'] = 200000
+    dictargs['verbtype'] = 1
+    dictargs['burntmpr'] = True
+    dictargs['shrtfram'] = True
+    dictargs['trueminmdefs'] = 5e-2 / anglfact
+    dictargs['truemaxmdefs'] = 1e-1 / anglfact
+    dictargsvari = {}
+    dictargsvari['inittype'] = ['pert', 'refr']
+
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                 )
+
+
 def pcat_lens_mock():
    
     anglfact = 3600. * 180. / pi
@@ -204,10 +350,19 @@ def pcat_lens_mock():
         pcat.main.init( \
                        elemtype='lens', \
                        numbswep=100000, \
-                       trueminmdefs=1e-2/anglfact, \
-                       truemaxmdefs=5e-2/anglfact, \
-                       fittspatdisttype=['unif'], \
+                       fittampldisttype='igam', \
+                       priofactdoff=0., \
+                       #verbtype=2, \
+                       numbswepplot=10000, \
+                       #variasca=False, \
+                       #variacut=False, \
+                       factthin=1000, \
                        #shrtfram=True, \
+                       #trueminmdefs=1e-2/anglfact, \
+                       #truemaxmdefs=5e-2/anglfact, \
+                       #makeplot=False, \
+                       #fittspatdisttype=['unif'], \
+                       shrtfram=True, \
                        #makeplot=False, \
                        #checprio=True, \
                        #makeplotintr=True, \

@@ -849,7 +849,6 @@ def pcat_ferm_inpt_ptch():
             pf.writeto(path, maps, clobber=True)
     
     pcat.main.init( \
-              inittype='pert', \
               maxmgangdata=deg2rad(20.), \
               indxenerincl=arange(1, 4), \
               indxevttincl=arange(2, 4), \
@@ -950,23 +949,16 @@ def pcat_ferm_mock_igal_syst():
 def pcat_ferm_mock_igal():
      
     pcat.main.init( \
-                   numbswep=1000, \
-                   numbburn=0, \
-                   factthin=200, \
-                   numbswepplot=200, \
-                   makeplot=False, \
+                   numbswep=10000, \
                    verbtype=2, \
-                   #numbproc=2, \
-                   strgexpo=1e-20, \
                    indxevttincl=arange(3, 4), \
                    indxenerincl=arange(1, 4), \
                    #strgexpo='fermexpo_cmp0_igal.fits', \
-                   #strgexpo=1e-10, \
-                   back=['isotflux.fits', 'fdfmflux.fits'], \
+                   trueback=['isotflux.fits', 'fdfmflux.fits'], \
                    maxmgangdata=deg2rad(10.), \
-                   minmflux=5e-11, \
-                   maxmflux=1e-7, \
-                   maxmnumbpnts=array([4, 4, 4]), \
+                   trueminmflux=5e-11, \
+                   truemaxmflux=1e-7, \
+                   truemaxmnumbpnts=array([4, 4, 4]), \
                    truenumbpnts=array([2, 2, 2]), \
                    #maxmnumbpnts=array([5, 5, 5]), \
                    #truenumbpnts=array([4, 4, 4]), \

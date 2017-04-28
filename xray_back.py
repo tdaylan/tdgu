@@ -135,17 +135,19 @@ def pcat_chan_mock():
     
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=1000, \
+                              numbswep=20000, \
+                              numbswepplot=5000, \
                               numbburn=0, \
+                              #evalcirc='full', \
                               factthin=200,
-                              verbtype=2, \
                               #makeplotfram=False, \
                               fittback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
                               numbsidecart=300, \
-                              truemaxmnumbpnts=array([10]), \
-                              truenumbpnts=array([5]), \
+                              propwithsing=False, \
+                              #truemaxmnumbpnts=array([10]), \
+                              truenumbpnts=array([50]), \
                              )
 
 def pcat_chan_mock_popl():
