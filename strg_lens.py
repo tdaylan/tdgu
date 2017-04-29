@@ -99,7 +99,7 @@ def pcat_lens_mock_perf():
    
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 2000000
+    dictargs['numbswep'] = 500000
     
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
@@ -115,11 +115,10 @@ def pcat_lens_mock_perf():
 
 def pcat_lens_mock_syst():
    
-    numbswepnomi = 50000
+    numbswepnomi = 500000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['makeplot'] = False
-    dictargs['factthin'] = 4000
                 
     dictargsvari = {}
     dictargsvari['numbswep'] =         [numbswepnomi, numbswepnomi,       numbswepnomi, 3*numbswepnomi]
@@ -156,27 +155,24 @@ def pcat_lens_mock_sing():
 
 def pcat_lens_mock_spmr():
    
-    numbiter = 10
-    for k in range(numbiter):
-        pcat.main.init( \
-                       elemtype='lens', \
-                       numbswep=1000, \
-                       factthin=100, \
-                       makeplot=False, \
-                       probbrde=0., \
-                       #checprio=True, \
-                       makeplotintr=True, \
-                       #shrtfram=True, \
-                      )
+    pcat.main.init( \
+                   elemtype='lens', \
+                   numbswep=1000, \
+                   factthin=100, \
+                   makeplot=False, \
+                   probbrde=0., \
+                   #shrtfram=True, \
+                  )
     
 
 def pcat_lens_mock_dotn():
   
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 2000000
+    dictargs['numbswep'] = 500000
     dictargsvari = {}
-    dictargsvari['dotnpowr'] = [8., 6., 4.]
+    dictargsvari['dotnpowr'] = [2., 1., 0.]
+    dictargsvari['spatdisttype'] = [['grad'], ['grad'], ['unif']]
 
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -188,7 +184,7 @@ def pcat_lens_mock_doff():
   
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 2000000
+    dictargs['numbswep'] = 500000
     dictargsvari = {}
     dictargsvari['priofactdoff'] = [1., 2., 0.5]
 
@@ -333,6 +329,29 @@ def pcat_lens_mock_comp():
     dictargs['shrtfram'] = True
     dictargs['trueminmdefs'] = 5e-2 / anglfact
     dictargs['truemaxmdefs'] = 1e-1 / anglfact
+    dictargsvari = {}
+    dictargsvari['inittype'] = ['pert', 'refr']
+
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                 )
+
+
+def pcat_lens_mock_macr():
+    
+    anglfact = 3600. * 180. / pi
+    dictargs = {}
+    dictargs['elemtype'] = 'lens'
+    dictargs['numbswep'] = 250000
+    dictargs['numbswepplot'] = 50000
+    dictargs['factthin'] = 500
+    dictargs['numbburn'] = 200000
+    dictargs['verbtype'] = 1
+    dictargs['burntmpr'] = True
+    dictargs['shrtfram'] = True
+    dictargs['truemaxmnumbpnts'] = array([0])
+    dictargs['truenumbpnts'] = array([0])
     dictargsvari = {}
     dictargsvari['inittype'] = ['pert', 'refr']
 
