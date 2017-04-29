@@ -99,7 +99,8 @@ def pcat_lens_mock_perf():
    
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 500000
+    dictargs['numbswep'] = 1000000
+    dictargs['fittampldisttype'] = 'igam'
     
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
@@ -115,10 +116,10 @@ def pcat_lens_mock_perf():
 
 def pcat_lens_mock_syst():
    
-    numbswepnomi = 500000
+    numbswepnomi = 1000000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['makeplot'] = False
+    dictargs['fittampldisttype'] = 'igam'
                 
     dictargsvari = {}
     dictargsvari['numbswep'] =         [numbswepnomi, numbswepnomi,       numbswepnomi, 3*numbswepnomi]
@@ -161,7 +162,6 @@ def pcat_lens_mock_spmr():
                    factthin=100, \
                    makeplot=False, \
                    probbrde=0., \
-                   #shrtfram=True, \
                   )
     
 
@@ -169,7 +169,8 @@ def pcat_lens_mock_dotn():
   
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 500000
+    dictargs['numbswep'] = 1000000
+    dictargs['fittampldisttype'] = 'igam'
     dictargsvari = {}
     dictargsvari['dotnpowr'] = [2., 1., 0.]
     dictargsvari['spatdisttype'] = [['grad'], ['grad'], ['unif']]
@@ -368,20 +369,19 @@ def pcat_lens_mock():
     for k in range(numbiter):
         pcat.main.init( \
                        elemtype='lens', \
-                       numbswep=100000, \
+                       numbswep=1000, \
                        fittampldisttype='igam', \
                        priofactdoff=0., \
                        #verbtype=2, \
                        numbswepplot=10000, \
                        #variasca=False, \
                        #variacut=False, \
-                       factthin=1000, \
-                       #shrtfram=True, \
+                       factthin=100, \
                        #trueminmdefs=1e-2/anglfact, \
                        #truemaxmdefs=5e-2/anglfact, \
                        #makeplot=False, \
                        #fittspatdisttype=['unif'], \
-                       shrtfram=True, \
+                       #shrtfram=True, \
                        #makeplot=False, \
                        #checprio=True, \
                        #makeplotintr=True, \
