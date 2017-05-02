@@ -148,8 +148,13 @@ def pcat_lens_mock_sing():
     for k in range(numbiter):
         pcat.main.init( \
                        elemtype='lens', \
+                       numbswep=20000, \
+                       numbswepplot=5000, \
                        truenumbpnts=array([1]), \
-                       trueminmdefs=5e-2/3600./180.*pi, \
+                       shrtfram=True, \
+                       variasca=False, \
+                       variacut=False, \
+                       trueminmdefs=1e-2/3600./180.*pi, \
                        truemaxmdefs=1e-1/3600./180.*pi, \
                       )
     
@@ -158,9 +163,16 @@ def pcat_lens_mock_spmr():
    
     pcat.main.init( \
                    elemtype='lens', \
-                   numbswep=1000, \
-                   factthin=100, \
+                   numbswep=30000, \
+                   numbswepplot=30000, \
+                   diagmode=True, \
                    makeplot=False, \
+                   verbtype=2, \
+                   factthin=100, \
+                   truemaxmnumbpnts=array([6]), \
+                   truenumbpnts=array([3]), \
+                   #shrtfram=True, \
+                   probtran=1., \
                    probbrde=0., \
                   )
     
@@ -321,13 +333,11 @@ def pcat_lens_mock_comp():
     anglfact = 3600. * 180. / pi
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 250000
-    dictargs['numbswepplot'] = 50000
-    dictargs['factthin'] = 500
-    dictargs['numbburn'] = 200000
-    dictargs['verbtype'] = 1
-    dictargs['burntmpr'] = True
-    dictargs['shrtfram'] = True
+    dictargs['numbswep'] = 50000
+    dictargs['numbswepplot'] = 10000
+    dictargs['factthin'] = 250
+    #dictargs['burntmpr'] = True
+    #dictargs['shrtfram'] = True
     dictargs['trueminmdefs'] = 5e-2 / anglfact
     dictargs['truemaxmdefs'] = 1e-1 / anglfact
     dictargsvari = {}
@@ -344,17 +354,17 @@ def pcat_lens_mock_macr():
     anglfact = 3600. * 180. / pi
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 250000
-    dictargs['numbswepplot'] = 50000
-    dictargs['factthin'] = 500
-    dictargs['numbburn'] = 200000
+    dictargs['numbswep'] = 2000000
+    dictargs['numbswepplot'] = 100000
+    dictargs['factthin'] = 200
+    dictargs['numbburn'] = 0
     dictargs['verbtype'] = 1
-    dictargs['burntmpr'] = True
-    dictargs['shrtfram'] = True
+    #dictargs['burntmpr'] = True
+    #dictargs['shrtfram'] = True
     dictargs['truemaxmnumbpnts'] = array([0])
     dictargs['truenumbpnts'] = array([0])
     dictargsvari = {}
-    dictargsvari['inittype'] = ['pert', 'refr']
+    dictargsvari['inittype'] = ['refr', 'rand']
 
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -371,20 +381,16 @@ def pcat_lens_mock():
                        elemtype='lens', \
                        numbswep=1000, \
                        fittampldisttype='igam', \
-                       priofactdoff=0., \
-                       #verbtype=2, \
-                       numbswepplot=10000, \
-                       #variasca=False, \
-                       #variacut=False, \
-                       factthin=100, \
+                       variasca=False, \
+                       variacut=False, \
+                       verbtype=2, \
+                       inittype='refr', \
+                       truemaxmnumbpnts=array([4]), \
+                       truenumbpnts=array([4]), \
                        #trueminmdefs=1e-2/anglfact, \
                        #truemaxmdefs=5e-2/anglfact, \
-                       #makeplot=False, \
                        #fittspatdisttype=['unif'], \
-                       #shrtfram=True, \
-                       #makeplot=False, \
                        #checprio=True, \
-                       #makeplotintr=True, \
                       )
    
 
