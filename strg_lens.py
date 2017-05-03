@@ -138,7 +138,7 @@ def pcat_lens_mock_syst():
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
     dictargsvari['numbswep'] =             [numbswepnomi, numbswepnomi,  numbswepnomi, numbswepnomi, 3*numbswepnomi]
-    dictargsvari['truenumbpnts'] =         [None,         320,           None,         None,         None          ]
+    dictargsvari['truenumbpnts'] =         [None,         array([320]),  None,         None,         None          ]
     dictargsvari['trueminmdefs'] =         [None,         5e-4/anglfact, None,         None,         None          ]
     dictargsvari['fittminmdefs'] =         [None,         2e-3/anglfact, None,         None,         None          ]
     dictargsvari['fittminmnumbpnts'] =     [None,         None,          array([1]),   None,         None          ]
