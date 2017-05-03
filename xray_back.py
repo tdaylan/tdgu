@@ -209,6 +209,7 @@ def pcat_chan_inpt():
                               numbswep=500000, \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
+                              priofactdoff=1., \
                               numbsidecart=numbsidecart, \
                               strgexprflux='chanflux_%04d_4msc.fits' % numbsidecart, \
                              )
