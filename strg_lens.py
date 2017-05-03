@@ -320,10 +320,7 @@ def pcat_lens_mock():
     for k in range(numbiter):
         pcat.main.init( \
                        elemtype='lens', \
-                       numbswep=1000, \
-                       factthin=100, \
-                       makeplotfram=False, \
-                       inittype='refr', \
+                       numbswep=100000, \
                       )
    
 
