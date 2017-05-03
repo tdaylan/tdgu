@@ -131,7 +131,7 @@ def pcat_lens_mock_spmr():
 
 def pcat_lens_mock_syst():
    
-    numbswepnomi = 100
+    numbswepnomi = 1000000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
                 
