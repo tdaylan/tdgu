@@ -297,6 +297,20 @@ def pcat_lens_mock_macr():
                   )
 
 
+def pcat_lens_mock_zero():
+
+    dictargs = {}
+    dictargs['elemtype'] = 'lens'
+    dictargs['fittmaxmnumbpnts'] = array([0])
+    dictargsvari = {}
+    dictargsvari['truenumbpnts'] = [array([0]), array([20])]
+
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                 )
+
+
 def pcat_lens_mock_test():
    
     dictargs = {}
