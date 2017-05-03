@@ -23,6 +23,8 @@ def pcat_lens_mock_grid():
     
     dictvarb = dict()
     dictvarb['elemtype'] = 'lens'
+    dictvarb['numbswep'] = 100
+    dictvarb['makeplot'] = False
     
     cntrcnfg = 0
     for k in range(numbiter):
@@ -134,7 +136,6 @@ def pcat_lens_mock_syst():
     numbswepnomi = 500000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['fittampldisttype'] = 'igam'
                 
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
@@ -157,7 +158,6 @@ def pcat_lens_mock_dotn():
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['numbswep'] = 500000
-    dictargs['fittampldisttype'] = 'igam'
     dictargsvari = {}
     dictargsvari['dotnpowr'] = [2., 1., 0.]
     dictargsvari['spatdisttype'] = [['grad'], ['grad'], ['unif']]
@@ -187,7 +187,6 @@ def pcat_lens_mock_perf():
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['numbswep'] = 500000
-    dictargs['fittampldisttype'] = 'igam'
     
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
@@ -205,10 +204,12 @@ def pcat_lens_mock_sign():
     
     numbiter = 3
 
+    anglfact = 3600. * 180. / pi
     dictargs = {}
     dictargs['mockonly'] = True
-    dictargs['trueminmdefs'] = 5e-4 / 3600. / 180. * pi
+    dictargs['trueminmdefs'] = 5e-4 / anglfact
     dictargs['truenumbpnts'] = array([1000])
+    dictargs['verbtype'] = 0
     dictargs['makeplot'] = False
     dictargs['truemaxmnumbpnts'] = array([1000])
     
@@ -218,7 +219,8 @@ def pcat_lens_mock_sign():
     dictargsvari['elemtype'] = ['lens' for n in range(5)]
     
     numbinpt = len(dictargsvari['elemtype'])
-
+    
+    matrdefscutf = empty((numbiter, numbinpt))
     for k in range(numbiter):
         listgdat, dictglob = pcat.main.initarry( \
                                       dictargsvari, \
@@ -237,19 +239,29 @@ def pcat_lens_mock_sign():
             hist[m, :] = dictglob['truehistdefs'][m][0, :]
             histsign[m, :] = dictglob['truehistdefssign'][m][0, :]
             factsign[m, :] = histsign[m, :] / hist[m, :]
-            alph, loca, beta = sp.stats.invgamma.fit(dictglob['truedefssign'][m][0], floc=0.)
-            histfitt[m, :] = len(dictglob['trueindxelemsign'][m][0]) * sp.stats.invgamma.pdf(gdat.meandefs, alph, loc=loca, scale=beta) * gdat.deltdefs
-        
+            alph, loca, defscutf = sp.stats.invgamma.fit(dictglob['truedefssign'][m][0], floc=0., f0=1.9)
+            histfitt[m, :] = len(dictglob['trueindxelemsign'][m][0]) * sp.stats.invgamma.pdf(gdat.meandefs, alph, loc=loca, scale=defscutf) * gdat.deltdefs
+            matrdefscutf[k, m] = defscutf
+            print 'defscutf'
+            print defscutf * anglfact
+            print 'loca'
+            print loca
+            print 'alph'
+            print alph
+            print
+
         meanfactsign = mean(factsign, 0)
         
         figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
         for m in range(numbinpt):
-            axis.loglog(gdat.meandefs * gdat.factdefsplot, hist[m, :], color='g', alpha=0.1, ls='-')
+            axis.loglog(gdat.meandefs * gdat.factdefsplot, hist[m, :], color='g', alpha=0.1, ls='-.')
             axis.loglog(gdat.meandefs * gdat.factdefsplot, histsign[m, :], color='g', alpha=0.1, ls='--')
-            axis.loglog(gdat.meandefs * gdat.factdefsplot, histfitt[m, :], color='g', alpha=0.1, ls='-.')
-        axis.loglog(gdat.meandefs * gdat.factdefsplot, mean(hist, 0), color='g', ls='-')
+            axis.loglog(gdat.meandefs * gdat.factdefsplot, histfitt[m, :], color='g', alpha=0.1, ls='-')
+            axis.axvline(matrdefscutf[k, m] * anglfact, color='black')
+
+        axis.loglog(gdat.meandefs * gdat.factdefsplot, mean(hist, 0), color='g', ls='-.')
         axis.loglog(gdat.meandefs * gdat.factdefsplot, mean(histsign, 0), color='g', ls='--')
-        axis.loglog(gdat.meandefs * gdat.factdefsplot, mean(histfitt, 0), color='g', ls='-.')
+        axis.loglog(gdat.meandefs * gdat.factdefsplot, mean(histfitt, 0), color='g', ls='-')
 
         axis.set_xlabel(gdat.labldefstotl)
         axis.set_ylabel('$N$')
@@ -262,6 +274,7 @@ def pcat_lens_mock_sign():
         axis.loglog(gdat.meandefs * gdat.factdefsplot, meanfactsign, color='black')
         for m in range(numbinpt):
             axis.loglog(gdat.meandefs * gdat.factdefsplot, factsign[m, :], alpha=0.1, color='g')
+            axis.axvline(matrdefscutf[k, m] * anglfact, color='black')
         axis.set_xlabel(gdat.labldefstotl)
         axis.set_ylabel('$f$')
         plt.tight_layout()
@@ -298,11 +311,15 @@ def pcat_lens_mock_macr():
 def pcat_lens_mock_test():
    
     dictargs = {}
+    dictargs['numbswep'] = 100000
+    dictargs['checprio'] = True
     dictargs['elemtype'] = 'lens'
     dictargsvari = {}
-    dictargsvari['inittype'] = ['refr', 'pert', 'pert']
-    dictargsvari['variasca'] = [False,  False,  True, ]
-    dictargsvari['variacut'] = [False,  False,  True, ]
+    dictargsvari['inittype'] =         ['refr', 'pert', 'pert', None,  ]
+    dictargsvari['variasca'] =         [False,  False,  True,   None,  ]
+    dictargsvari['variacut'] =         [False,  False,  True,   None,  ]
+    dictargsvari['fittampldisttype'] = [False,  False,  True,  'igam', ]
+    dictargsvari['priofactdoff'] =     [   1.,     1.,    1.,      0., ]
 
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -312,15 +329,12 @@ def pcat_lens_mock_test():
 
 def pcat_lens_mock():
    
-    anglfact = 3600. * 180. / pi
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
                        elemtype='lens', \
-                       numbswep=100000, \
-                       fittampldisttype='igam', \
-                       variasca=False, \
-                       variacut=False, \
+                       numbswep=1000, \
+                       makeplotfram=False, \
                        inittype='refr', \
                       )
    
