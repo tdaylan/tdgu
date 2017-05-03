@@ -19,7 +19,6 @@ def pcat_lens_mock_grid():
     liststrgoutpvarb = []
     listscaloutpvarb = []
 
-    liststrgvarbinpt = [r'$\theta_{E,min}$ [arcsec]', '$A$ [1/cm$^2$/s]', r'$\epsilon$ [cm$^2$ s]', '$f_s$ [erg/cm$^2$/s]', '$f_h$ [erg/cm$^2$/s]']
     grid = empty((4, numboutpvarb, varbinpt.size, numbcnfg))
     
     dictvarb = dict()
@@ -95,45 +94,6 @@ def pcat_lens_mock_grid():
                 plt.close(figr)
     
 
-def pcat_lens_mock_perf():
-   
-    dictargs = {}
-    dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 1000000
-    dictargs['fittampldisttype'] = 'igam'
-    
-    anglfact = 3600. * 180. / pi
-    dictargsvari = {}
-    dictargsvari['trueminmdefs'] = [1e-3 / anglfact, 2e-3 / anglfact, 4e-3 / anglfact, None,          None,          None]
-    dictargsvari['truemaxmdefs'] = [1e-2 / anglfact, 2e-2 / anglfact, 4e-2 / anglfact, None,          None,          None]
-    dictargsvari['truebacp']     = [None,            None,            None,            array([3e-8]), array([1e-7]), array([3e-7])]
-
-    dictglob = pcat.main.initarry( \
-                                  dictargsvari, \
-                                  dictargs, \
-                                 )
-    
-
-def pcat_lens_mock_syst():
-   
-    numbswepnomi = 1000000
-    dictargs = {}
-    dictargs['elemtype'] = 'lens'
-    dictargs['fittampldisttype'] = 'igam'
-                
-    dictargsvari = {}
-    dictargsvari['numbswep'] =         [numbswepnomi, numbswepnomi,       numbswepnomi, 3*numbswepnomi]
-    dictargsvari['fittminmdefs'] =     [None,         6e-3/3600./180.*pi, None,         None          ]
-    dictargsvari['fittminmnumbpnts'] = [None,         None,               array([1]),   None          ]
-    dictargsvari['fittmaxmnumbpnts'] = [None,         None,               array([1]),   None          ]
-    dictargsvari['checprio'] =         [True,         False,              False,        False         ]
-
-    dictglob = pcat.main.initarry( \
-                                  dictargsvari, \
-                                  dictargs, \
-                                 )
-    
-
 def pcat_lens_mock_intr():
    
     pcat.main.init( \
@@ -148,12 +108,8 @@ def pcat_lens_mock_sing():
     for k in range(numbiter):
         pcat.main.init( \
                        elemtype='lens', \
-                       numbswep=20000, \
-                       numbswepplot=5000, \
+                       numbswep=500000, \
                        truenumbpnts=array([1]), \
-                       shrtfram=True, \
-                       variasca=False, \
-                       variacut=False, \
                        trueminmdefs=1e-2/3600./180.*pi, \
                        truemaxmdefs=1e-1/3600./180.*pi, \
                       )
@@ -163,25 +119,44 @@ def pcat_lens_mock_spmr():
    
     pcat.main.init( \
                    elemtype='lens', \
-                   numbswep=30000, \
-                   numbswepplot=30000, \
-                   diagmode=True, \
-                   makeplot=False, \
-                   verbtype=2, \
-                   factthin=100, \
-                   truemaxmnumbpnts=array([6]), \
-                   truenumbpnts=array([3]), \
-                   #shrtfram=True, \
+                   numbswep=500000, \
+                   truelgalimps=array([0.]), \
+                   truebgalimps=array([0.]), \
+                   truedefsimps=array([1e-2 / anglfact]), \
+                   truenumbpnts=array([1]), \
                    probtran=1., \
                    probbrde=0., \
                   )
+    
+
+def pcat_lens_mock_syst():
+   
+    numbswepnomi = 500000
+    dictargs = {}
+    dictargs['elemtype'] = 'lens'
+    dictargs['fittampldisttype'] = 'igam'
+                
+    anglfact = 3600. * 180. / pi
+    dictargsvari = {}
+    dictargsvari['numbswep'] =         [numbswepnomi, numbswepnomi,       numbswepnomi, 3*numbswepnomi]
+    dictargsvari['truenumbpnts'] =     [None,         320,                None,         None          ]
+    dictargsvari['trueminmdefs'] =     [None,         5e-4/anglfact,      None,         None          ]
+    dictargsvari['fittminmdefs'] =     [None,         2e-3/anglfact,      None,         None          ]
+    dictargsvari['fittminmnumbpnts'] = [None,         None,               array([1]),   None          ]
+    dictargsvari['fittmaxmnumbpnts'] = [None,         None,               array([1]),   None          ]
+    dictargsvari['checprio'] =         [True,         False,              False,        False         ]
+
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                 )
     
 
 def pcat_lens_mock_dotn():
   
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 1000000
+    dictargs['numbswep'] = 500000
     dictargs['fittampldisttype'] = 'igam'
     dictargsvari = {}
     dictargsvari['dotnpowr'] = [2., 1., 0.]
@@ -206,6 +181,25 @@ def pcat_lens_mock_doff():
                                   dictargs, \
                                  )
 
+
+def pcat_lens_mock_perf():
+   
+    dictargs = {}
+    dictargs['elemtype'] = 'lens'
+    dictargs['numbswep'] = 500000
+    dictargs['fittampldisttype'] = 'igam'
+    
+    anglfact = 3600. * 180. / pi
+    dictargsvari = {}
+    dictargsvari['trueminmdefs'] = [1e-3 / anglfact, 2e-3 / anglfact, 4e-3 / anglfact, None,          None,          None]
+    dictargsvari['truemaxmdefs'] = [1e-2 / anglfact, 2e-2 / anglfact, 4e-2 / anglfact, None,          None,          None]
+    dictargsvari['truebacp']     = [None,            None,            None,            array([3e-8]), array([1e-7]), array([3e-7])]
+
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                 )
+    
 
 def pcat_lens_mock_sign():
     
@@ -243,10 +237,6 @@ def pcat_lens_mock_sign():
             hist[m, :] = dictglob['truehistdefs'][m][0, :]
             histsign[m, :] = dictglob['truehistdefssign'][m][0, :]
             factsign[m, :] = histsign[m, :] / hist[m, :]
-            
-            namepdfn, listpara = retr_pdfnscipbest(dictglob['truedefssign'][m][0], gdat.binsdefs, gdat.meandefs)
-            print 'namepdfn'
-            print namepdfn
             alph, loca, beta = sp.stats.invgamma.fit(dictglob['truedefssign'][m][0], floc=0.)
             histfitt[m, :] = len(dictglob['trueindxelemsign'][m][0]) * sp.stats.invgamma.pdf(gdat.meandefs, alph, loc=loca, scale=beta) * gdat.deltdefs
         
@@ -279,69 +269,16 @@ def pcat_lens_mock_sign():
         plt.close(figr)
 
 
-def retr_pdfnscipbest(data, binsxdat, meanxdat):
-    
-    print 'binsxdat'
-    print binsxdat
-    print 'meanxdat'
-    print meanxdat
-
-    pdfndata = histogram(data, bins=binsxdat, normed=True)[0]
-    st = sp.stats 
-    listpdfnscip = [        
-        st.alpha,st.anglit,st.arcsine,st.beta,st.betaprime,st.bradford,st.burr,st.cauchy,st.chi,st.chi2,st.cosine,
-        st.dgamma,st.dweibull,st.erlang,st.expon,st.exponnorm,st.exponweib,st.exponpow,st.f,st.fatiguelife,st.fisk,
-        st.foldcauchy,st.foldnorm,st.frechet_r,st.frechet_l,st.genlogistic,st.genpareto,st.gennorm,st.genexpon,
-        st.genextreme,st.gausshyper,st.gamma,st.gengamma,st.genhalflogistic,st.gilbrat,st.gompertz,st.gumbel_r,
-        st.gumbel_l,st.halfcauchy,st.halflogistic,st.halfnorm,st.halfgennorm,st.hypsecant,st.invgamma,st.invgauss,
-        st.invweibull,st.johnsonsb,st.johnsonsu,st.ksone,st.kstwobign,st.laplace,st.levy,st.levy_l,st.levy_stable,
-        st.logistic,st.loggamma,st.loglaplace,st.lognorm,st.lomax,st.maxwell,st.mielke,st.nakagami,st.ncx2,st.ncf,
-        st.nct,st.norm,st.pareto,st.pearson3,st.powerlaw,st.powerlognorm,st.powernorm,st.rdist,st.reciprocal,
-        st.rayleigh,st.rice,st.recipinvgauss,st.semicircular,st.t,st.triang,st.truncexpon,st.truncnorm,st.tukeylambda,
-        st.uniform,st.vonmises,st.vonmises_line,st.wald,st.weibull_min,st.weibull_max,st.wrapcauchy
-    ]
-
-    pdfnscipbest = st.norm
-    listparabest = (0.0, 1.0)
-    chsqbest = inf
-
-    for pdfnscip in listpdfnscip:
-
-        try:
-            listpara = pdfnscip.fit(data, floc=0.)
-            arg = listpara[:-2]
-            loca = listpara[-2]
-            scal = listpara[-1]
-
-            pdfnfitt = pdfnscip.pdf(meanxdat, loc=loca, scale=scal, *arg)
-            chsq = sum((pdfndata - pdfnfitt)**2)
-
-            if chsqbest > chsq > 0:
-                print 'Updating best as ' + pdfnscip.name
-                pdfnscipbest = pdfnscip
-                listparabest = listpara
-                chsqbest = chsq
-
-        except Exception:
-            pass
-
-    return pdfnscipbest.name, listparabest
-
-
-def pcat_lens_mock_comp():
+def pcat_lens_mock_tmpr():
     
     anglfact = 3600. * 180. / pi
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 50000
-    dictargs['numbswepplot'] = 10000
-    dictargs['factthin'] = 250
-    #dictargs['burntmpr'] = True
-    #dictargs['shrtfram'] = True
-    dictargs['trueminmdefs'] = 5e-2 / anglfact
-    dictargs['truemaxmdefs'] = 1e-1 / anglfact
+    dictargs['burntmpr'] = True
+    dictargs['truemaxmnumbpnts'] = array([0])
+    dictargs['truenumbpnts'] = array([0])
     dictargsvari = {}
-    dictargsvari['inittype'] = ['pert', 'refr']
+    dictargsvari['inittype'] = ['refr', 'rand']
 
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -351,20 +288,21 @@ def pcat_lens_mock_comp():
 
 def pcat_lens_mock_macr():
     
-    anglfact = 3600. * 180. / pi
+    pcat.main.init( \
+                   elemtype='lens', \
+                   truemaxmnumbpnts=array([0]), \
+                   truenumbpnts=array([0]), \
+                  )
+
+
+def pcat_lens_mock_test():
+   
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 2000000
-    dictargs['numbswepplot'] = 100000
-    dictargs['factthin'] = 200
-    dictargs['numbburn'] = 0
-    dictargs['verbtype'] = 1
-    #dictargs['burntmpr'] = True
-    #dictargs['shrtfram'] = True
-    dictargs['truemaxmnumbpnts'] = array([0])
-    dictargs['truenumbpnts'] = array([0])
     dictargsvari = {}
-    dictargsvari['inittype'] = ['refr', 'rand']
+    dictargsvari['inittype'] = ['refr', 'pert', 'pert']
+    dictargsvari['variasca'] = [False,  False,  True, ]
+    dictargsvari['variacut'] = [False,  False,  True, ]
 
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -379,18 +317,11 @@ def pcat_lens_mock():
     for k in range(numbiter):
         pcat.main.init( \
                        elemtype='lens', \
-                       numbswep=1000, \
+                       numbswep=100000, \
                        fittampldisttype='igam', \
                        variasca=False, \
                        variacut=False, \
-                       verbtype=2, \
                        inittype='refr', \
-                       truemaxmnumbpnts=array([4]), \
-                       truenumbpnts=array([4]), \
-                       #trueminmdefs=1e-2/anglfact, \
-                       #truemaxmdefs=5e-2/anglfact, \
-                       #fittspatdisttype=['unif'], \
-                       #checprio=True, \
                       )
    
 

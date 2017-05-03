@@ -17,7 +17,7 @@ def prep_maps():
     cntrindx[0] += numbpixlshft
     numbmaps = len(expomaps)
 
-    listnumbside = [200, 300, 1500]
+    listnumbside = [30, 200, 300]
     for numbside in listnumbside:
         minmindx = cntrindx - numbside / 2
         maxmindx = cntrindx + numbside / 2
@@ -141,21 +141,53 @@ def pcat_chan_mock():
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
                               numbsidecart=300, \
+                             )
 
-def pcat_chan_mock_spmr():
+# test suites
+
+def pcat_chan_mock_test():
     
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=10000, \
-                              probrbde=0., \
-                              probtran=1., \
-                              verbtype=2, \
-                              numbswepplot=1000, \
+                              numbswep=1000, \
+                              factthin=200, \
+                              #verbtype=2, \
                               shrtfram=True, \
+                              inittype='refr', \
+                              trueminmflux=1e-7, \
+                              truenumbpnts=array([1]), \
+                              truemaxmnumbpnts=array([6]), \
                               fittback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
                               numbsidecart=300, \
+                             )
+
+
+def pcat_chan_mock_spmr():
+   
+    anglfact = 3600. * 180. / pi
+    numbsidecart = 30
+    maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
+    gridchan = pcat.main.init( \
+                              numbswep=10000, \
+                              probbrde=0., \
+                              probtran=1., \
+                              #verbtype=2, \
+                              numbswepplot=1000, \
+                              shrtfram=True, \
+                              makeplotfram=False, \
+                              inittype='refr', \
+                              truelgalimps=array([0.]), \
+                              truebgalimps=array([0.]), \
+                              truefluximps=array([5e-7]), \
+                              truenumbpnts=array([1]), \
+                              truemaxmnumbpnts=array([6]), \
+                              fittback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
+                              strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
+                              exprtype='chan', \
+                              maxmgangdata=maxmgangdata, \
+                              numbsidecart=numbsidecart, \
                              )
 
 def pcat_chan_mock_popl():
