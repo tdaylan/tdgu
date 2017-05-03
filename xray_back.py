@@ -2,15 +2,19 @@ from __init__ import *
 from astropy.coordinates import SkyCoord
 from pcat.util import retr_chandata
 
-def prep_maps():
-
-    binsener = array([0.5, 2., 8.])
+def prep_maps(datatype='five'):
+    
+    if datatype == 'five':
+        binsener = array([0.5, 0.91, 1.66, 3.02, 5.49, 10.])
+        expomaps = [4]
+    else:
+        expomaps = [2, 4]
+        binsener = array([0.5, 2., 8.])
+    
     diffener = binsener[1:] - binsener[:-1]
     numbener = diffener.size
     indxener = arange(numbener)
     numbevtt = 1
-    
-    expomaps = [2, 4]
     
     cntrindx = array([3260, 3280]) / 2
     numbpixlshft = 30
@@ -41,7 +45,7 @@ def prep_maps():
             cntsback = empty((numbener, numbside, numbside, numbevtt))
 
             # paths
-            pathdata = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
+            pathdata = os.environ["TDGU_DATA_PATH"] + '/data/inpt/'
             path = pathdata + 'CDFS-4Ms-0p5to2-asca-im-bin1.fits'
             if expomaps[k] == 2:
                 path = pathdata + 'CDFS-2Ms-0p5to2-asca-im-bin1-astwk.fits'

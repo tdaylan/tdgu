@@ -137,13 +137,14 @@ def pcat_lens_mock_syst():
                 
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
-    dictargsvari['numbswep'] =         [numbswepnomi, numbswepnomi,       numbswepnomi, 3*numbswepnomi]
-    dictargsvari['truenumbpnts'] =     [None,         320,                None,         None          ]
-    dictargsvari['trueminmdefs'] =     [None,         5e-4/anglfact,      None,         None          ]
-    dictargsvari['fittminmdefs'] =     [None,         2e-3/anglfact,      None,         None          ]
-    dictargsvari['fittminmnumbpnts'] = [None,         None,               array([1]),   None          ]
-    dictargsvari['fittmaxmnumbpnts'] = [None,         None,               array([1]),   None          ]
-    dictargsvari['checprio'] =         [True,         False,              False,        False         ]
+    dictargsvari['numbswep'] =             [numbswepnomi, numbswepnomi,  numbswepnomi, numbswepnomi, 3*numbswepnomi]
+    dictargsvari['truenumbpnts'] =         [None,         320,           None,         None,         None          ]
+    dictargsvari['trueminmdefs'] =         [None,         5e-4/anglfact, None,         None,         None          ]
+    dictargsvari['fittminmdefs'] =         [None,         2e-3/anglfact, None,         None,         None          ]
+    dictargsvari['fittminmnumbpnts'] =     [None,         None,          array([1]),   None,         None          ]
+    dictargsvari['fittmaxmnumbpnts'] =     [None,         None,          array([1]),   None,         None          ]
+    dictargsvari['fittstdvdefsdistslop'] = [None,         None,          None,         'none',       None          ]
+    dictargsvari['checprio'] =             [True,         False,         False,        False,        False         ]
 
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -321,6 +322,7 @@ def pcat_lens_mock():
         pcat.main.init( \
                        elemtype='lens', \
                        numbswep=100000, \
+                       fittstdvdefsdistslop='none', \
                       )
    
 
