@@ -208,7 +208,6 @@ def pcat_chan_inpt():
     gridchan = pcat.main.init( \
                               numbswep=500000, \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
-                              inittype='refr', \
                               exprtype='chan', \
                               numbsidecart=numbsidecart, \
                               strgexprflux='chanflux_%04d_4msc.fits' % numbsidecart, \
