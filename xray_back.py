@@ -206,10 +206,9 @@ def pcat_chan_inpt():
     
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=500000, \
+                              numbswep=50000, \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
-                              priofactdoff=1., \
                               numbsidecart=numbsidecart, \
                               strgexprflux='chanflux_%04d_4msc.fits' % numbsidecart, \
                              )

@@ -110,7 +110,6 @@ def pcat_lens_mock_sing():
     for k in range(numbiter):
         pcat.main.init( \
                        elemtype='lens', \
-                       numbswep=500000, \
                        truenumbpnts=array([1]), \
                        trueminmdefs=1e-2/3600./180.*pi, \
                        truemaxmdefs=1e-1/3600./180.*pi, \
@@ -121,7 +120,6 @@ def pcat_lens_mock_spmr():
    
     pcat.main.init( \
                    elemtype='lens', \
-                   numbswep=500000, \
                    truelgalimps=array([0.]), \
                    truebgalimps=array([0.]), \
                    truedefsimps=array([1e-2 / anglfact]), \
@@ -133,7 +131,7 @@ def pcat_lens_mock_spmr():
 
 def pcat_lens_mock_syst():
    
-    numbswepnomi = 500000
+    numbswepnomi = 1000000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
                 
@@ -157,7 +155,6 @@ def pcat_lens_mock_dotn():
   
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 500000
     dictargsvari = {}
     dictargsvari['dotnpowr'] = [2., 1., 0.]
     dictargsvari['spatdisttype'] = [['grad'], ['grad'], ['unif']]
@@ -172,7 +169,6 @@ def pcat_lens_mock_doff():
   
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 500000
     dictargsvari = {}
     dictargsvari['priofactdoff'] = [1., 2., 0.5]
 
@@ -186,7 +182,6 @@ def pcat_lens_mock_perf():
    
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 500000
     
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
@@ -242,13 +237,6 @@ def pcat_lens_mock_sign():
             alph, loca, defscutf = sp.stats.invgamma.fit(dictglob['truedefssign'][m][0], floc=0., f0=1.9)
             histfitt[m, :] = len(dictglob['trueindxelemsign'][m][0]) * sp.stats.invgamma.pdf(gdat.meandefs, alph, loc=loca, scale=defscutf) * gdat.deltdefs
             matrdefscutf[k, m] = defscutf
-            print 'defscutf'
-            print defscutf * anglfact
-            print 'loca'
-            print loca
-            print 'alph'
-            print alph
-            print
 
         meanfactsign = mean(factsign, 0)
         
@@ -311,7 +299,6 @@ def pcat_lens_mock_macr():
 def pcat_lens_mock_test():
    
     dictargs = {}
-    dictargs['numbswep'] = 100000
     dictargs['checprio'] = True
     dictargs['elemtype'] = 'lens'
     dictargsvari = {}
@@ -334,6 +321,7 @@ def pcat_lens_mock():
         pcat.main.init( \
                        elemtype='lens', \
                        numbswep=1000, \
+                       factthin=100, \
                        makeplotfram=False, \
                        inittype='refr', \
                       )
