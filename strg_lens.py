@@ -143,7 +143,7 @@ def pcat_lens_mock_syst():
     dictargsvari['fittminmdefs'] =         [None,         2e-3/anglfact, None,         None,         None          ]
     dictargsvari['fittminmnumbpnts'] =     [None,         None,          array([1]),   None,         None          ]
     dictargsvari['fittmaxmnumbpnts'] =     [None,         None,          array([1]),   None,         None          ]
-    dictargsvari['truestdvdefsdistslop'] = [None,         None,          None,         'none',       None          ]
+    dictargsvari['truestdvdefsdistslop'] = [0.5,          0.5,           0.5,          'none',       0.5           ]
     dictargsvari['checprio'] =             [None,         False,         False,        False,        False         ]
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
