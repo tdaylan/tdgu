@@ -144,9 +144,8 @@ def pcat_lens_mock_syst():
     dictargsvari['fittminmdefs'] =         [None,         2e-3/anglfact, None,         None,         None          ]
     dictargsvari['fittminmnumbpnts'] =     [None,         None,          array([1]),   None,         None          ]
     dictargsvari['fittmaxmnumbpnts'] =     [None,         None,          array([1]),   None,         None          ]
-    dictargsvari['fittstdvdefsdistslop'] = [None,         None,          None,         'none',       None          ]
+    dictargsvari['truestdvdefsdistslop'] = [None,         None,          None,         'none',       None          ]
     dictargsvari['checprio'] =             [True,         False,         False,        False,        False         ]
-
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
@@ -272,6 +271,22 @@ def pcat_lens_mock_sign():
         plt.close(figr)
 
 
+def pcat_lens_mock_init():
+    
+    anglfact = 3600. * 180. / pi
+    dictargs = {}
+    dictargs['elemtype'] = 'lens'
+    dictargs['numbswep'] = 50000
+    dictargs['makeplot'] = False
+    dictargsvari = {}
+    dictargsvari['inittype'] = ['refr', 'pert']
+
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                 )
+
+
 def pcat_lens_mock_tmpr():
     
     anglfact = 3600. * 180. / pi
@@ -329,14 +344,27 @@ def pcat_lens_mock_test():
                                  )
 
 
-def pcat_lens_mock():
+def pcat_lens_mock_pars():
    
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
                        elemtype='lens', \
                        numbswep=100000, \
-                       fittstdvdefsdistslop='none', \
+                       factthin=10000, \
+                       numbproc=10, \
+                       makeplot=False, \
+                      )
+   
+
+def pcat_lens_mock():
+   
+    numbiter = 10
+    for k in range(numbiter):
+        pcat.main.init( \
+                       elemtype='lens', \
+                       numbswep=10000, \
+                       truestdvdefsdistslop='none', \
                       )
    
 
