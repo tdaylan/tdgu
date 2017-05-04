@@ -138,14 +138,13 @@ def pcat_lens_mock_syst():
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
     dictargsvari['numbswep'] =             [numbswepnomi, numbswepnomi,  numbswepnomi, numbswepnomi, 3*numbswepnomi]
-    dictargsvari['truemaxmnumbpnts'] =     [None,         array([1000]), None,         None,         None          ]
-    dictargsvari['truenumbpnts'] =         [None,         array([320]),  None,         None,         None          ]
-    dictargsvari['trueminmdefs'] =         [None,         5e-4/anglfact, None,         None,         None          ]
+    dictargsvari['truenumbpnts'] =         [None,         array([80]),   None,         None,         None          ]
+    dictargsvari['trueminmdefs'] =         [None,         1e-3/anglfact, None,         None,         None          ]
     dictargsvari['fittminmdefs'] =         [None,         2e-3/anglfact, None,         None,         None          ]
     dictargsvari['fittminmnumbpnts'] =     [None,         None,          array([1]),   None,         None          ]
     dictargsvari['fittmaxmnumbpnts'] =     [None,         None,          array([1]),   None,         None          ]
     dictargsvari['truestdvdefsdistslop'] = [None,         None,          None,         'none',       None          ]
-    dictargsvari['checprio'] =             [True,         False,         False,        False,        False         ]
+    dictargsvari['checprio'] =             [None,         False,         False,        False,        False         ]
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
@@ -276,7 +275,9 @@ def pcat_lens_mock_init():
     anglfact = 3600. * 180. / pi
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 50000
+    dictargs['numbswep'] = 100000
+    dictargs['factthin'] = 10000
+    dictargs['truestdvdefsdistslop'] = 'none'
     dictargs['makeplot'] = False
     dictargsvari = {}
     dictargsvari['inittype'] = ['refr', 'pert']
@@ -364,7 +365,7 @@ def pcat_lens_mock():
         pcat.main.init( \
                        elemtype='lens', \
                        numbswep=10000, \
-                       truestdvdefsdistslop='none', \
+                       makeplotintr=True, \
                       )
    
 
