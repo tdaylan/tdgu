@@ -360,11 +360,12 @@ def pcat_lens_mock_pars():
 
 def pcat_lens_mock():
    
-    numbiter = 10
+    numbiter = 1
     for k in range(numbiter):
         pcat.main.init( \
                        elemtype='lens', \
                        numbswep=10000, \
+                       mockonly=True, \
                        makeplotintr=True, \
                       )
    
