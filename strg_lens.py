@@ -131,9 +131,13 @@ def pcat_lens_mock_spmr():
 
 def pcat_lens_mock_syst():
    
-    numbswepnomi = 1000000
+    numbswepnomi = 100000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
+    #dictargs['verbtype'] = 2
+    dictargs['makeplotfram'] = False
+    dictargs['variasca'] = False
+    dictargs['variacut'] = False
                 
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
@@ -328,6 +332,23 @@ def pcat_lens_mock_zero():
                                  )
 
 
+def pcat_lens_mock_testvari():
+   
+    dictargs = {}
+    dictargs['elemtype'] = 'lens'
+    dictargs['variasca'] = False
+    dictargs['numbswep'] = 100000
+    dictargs['makeplotfram'] = False
+    dictargs['variacut'] = False
+    dictargsvari = {}
+    dictargsvari['inittype'] = ['refr', 'pert']
+
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                 )
+
+
 def pcat_lens_mock_test():
    
     dictargs = {}
@@ -364,7 +385,7 @@ def pcat_lens_mock():
     for k in range(numbiter):
         pcat.main.init( \
                        elemtype='lens', \
-                       numbswep=10000, \
+                       numbswep=100000, \
                        mockonly=True, \
                        makeplotintr=True, \
                       )
