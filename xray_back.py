@@ -174,12 +174,13 @@ def pcat_chan_mock_spmr():
     maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
     gridchan = pcat.main.init( \
                               numbswep=10000, \
+                              numbburn=0, \
                               probbrde=0., \
                               probtran=1., \
                               #verbtype=2, \
                               numbswepplot=1000, \
                               shrtfram=True, \
-                              makeplotfram=False, \
+                              #makeplot=False, \
                               inittype='refr', \
                               truelgalimps=array([0.]), \
                               truebgalimps=array([0.]), \

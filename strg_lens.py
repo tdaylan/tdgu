@@ -279,10 +279,10 @@ def pcat_lens_mock_init():
     anglfact = 3600. * 180. / pi
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 100000
-    dictargs['factthin'] = 10000
-    dictargs['truestdvdefsdistslop'] = 'none'
-    dictargs['makeplot'] = False
+    dictargs['numbswep'] = 200000
+    dictargs['variasca'] = False
+    dictargs['variacut'] = False
+    dictargs['makeplotfram'] = False
     dictargsvari = {}
     dictargsvari['inittype'] = ['refr', 'pert']
 
