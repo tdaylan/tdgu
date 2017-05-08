@@ -131,24 +131,24 @@ def pcat_lens_mock_spmr():
 
 def pcat_lens_mock_syst():
    
-    numbswepnomi = 100000
+    numbswepnomi = 1000000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     #dictargs['verbtype'] = 2
-    dictargs['makeplotfram'] = False
+    #dictargs['makeplotfram'] = False
     dictargs['variasca'] = False
     dictargs['variacut'] = False
                 
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
-    dictargsvari['numbswep'] =             [numbswepnomi, numbswepnomi,  numbswepnomi, numbswepnomi, 3*numbswepnomi]
-    dictargsvari['truenumbpnts'] =         [None,         array([80]),   None,         None,         None          ]
-    dictargsvari['trueminmdefs'] =         [None,         1e-3/anglfact, None,         None,         None          ]
-    dictargsvari['fittminmdefs'] =         [None,         2e-3/anglfact, None,         None,         None          ]
-    dictargsvari['fittminmnumbpnts'] =     [None,         None,          array([1]),   None,         None          ]
-    dictargsvari['fittmaxmnumbpnts'] =     [None,         None,          array([1]),   None,         None          ]
-    dictargsvari['truestdvdefsdistslop'] = [0.5,          0.5,           0.5,          'none',       0.5           ]
-    dictargsvari['checprio'] =             [None,         False,         False,        False,        False         ]
+    dictargsvari['numbswep'] =             [numbswepnomi, numbswepnomi,  numbswepnomi, numbswepnomi, numbswepnomi]
+    dictargsvari['truenumbpnts'] =         [None,         array([80]),   None,         None,         None        ]
+    dictargsvari['trueminmdefs'] =         [None,         1e-3/anglfact, None,         None,         None        ]
+    dictargsvari['fittminmdefs'] =         [None,         2e-3/anglfact, None,         None,         None        ]
+    dictargsvari['fittminmnumbpnts'] =     [None,         None,          array([1]),   None,         None        ]
+    dictargsvari['fittmaxmnumbpnts'] =     [None,         None,          array([1]),   None,         None        ]
+    dictargsvari['truestdvdefsdistslop'] = [0.5,          0.5,           0.5,          'none',       0.5         ]
+    dictargsvari['inittype'] =             ['refr',       'pert',        'refr',       'refr',       'pert'      ]
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
@@ -208,18 +208,26 @@ def pcat_lens_mock_sign():
     dictargs['mockonly'] = True
     dictargs['trueminmdefs'] = 5e-4 / anglfact
     dictargs['truenumbpnts'] = array([1000])
+    dictargs['variasca'] = False
+    dictargs['variacut'] = False
     dictargs['verbtype'] = 0
     dictargs['makeplot'] = False
     dictargs['truemaxmnumbpnts'] = array([1000])
     
-    liststrgvarboutp = ['truehistdefssign', 'truehistdefs', 'truedefssign', 'truedefs', 'trueindxelemsign']
+    liststrgvarbelem = ['dots']
+    liststrgvarboutp = ['trueindxelemsign']
+    for strgvarbelem in liststrgvarbelem:
+        liststrgvarboutp += ['truehist' + strgvarbelem + 'sign']
+        liststrgvarboutp += ['truehist' + strgvarbelem]
+        liststrgvarboutp += ['true' + strgvarbelem]
+        liststrgvarboutp += ['true' + strgvarbelem + 'sign']
     
     dictargsvari = {}
     dictargsvari['elemtype'] = ['lens' for n in range(5)]
     
     numbinpt = len(dictargsvari['elemtype'])
     
-    matrdefscutf = empty((numbiter, numbinpt))
+    matrcutf = empty((numbiter, numbinpt))
     for k in range(numbiter):
         listgdat, dictglob = pcat.main.initarry( \
                                       dictargsvari, \
@@ -230,48 +238,55 @@ def pcat_lens_mock_sign():
         
         gdat = listgdat[0]
 
+        
         hist = zeros((numbinpt, gdat.numbbinsplot))
         histsign = zeros((numbinpt, gdat.numbbinsplot))
         histfitt = zeros((numbinpt, gdat.numbbinsplot))
         factsign = zeros((numbinpt, gdat.numbbinsplot))
-        for m in range(numbinpt):
-            hist[m, :] = dictglob['truehistdefs'][m][0, :]
-            histsign[m, :] = dictglob['truehistdefssign'][m][0, :]
-            factsign[m, :] = histsign[m, :] / hist[m, :]
-            alph, loca, defscutf = sp.stats.invgamma.fit(dictglob['truedefssign'][m][0], floc=0., f0=1.9)
-            histfitt[m, :] = len(dictglob['trueindxelemsign'][m][0]) * sp.stats.invgamma.pdf(gdat.meandefs, alph, loc=loca, scale=defscutf) * gdat.deltdefs
-            matrdefscutf[k, m] = defscutf
-
-        meanfactsign = mean(factsign, 0)
         
-        figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
-        for m in range(numbinpt):
-            axis.loglog(gdat.meandefs * gdat.factdefsplot, hist[m, :], color='g', alpha=0.1, ls='-.')
-            axis.loglog(gdat.meandefs * gdat.factdefsplot, histsign[m, :], color='g', alpha=0.1, ls='--')
-            axis.loglog(gdat.meandefs * gdat.factdefsplot, histfitt[m, :], color='g', alpha=0.1, ls='-')
-            axis.axvline(matrdefscutf[k, m] * anglfact, color='black')
-
-        axis.loglog(gdat.meandefs * gdat.factdefsplot, mean(hist, 0), color='g', ls='-.')
-        axis.loglog(gdat.meandefs * gdat.factdefsplot, mean(histsign, 0), color='g', ls='--')
-        axis.loglog(gdat.meandefs * gdat.factdefsplot, mean(histfitt, 0), color='g', ls='-')
-
-        axis.set_xlabel(gdat.labldefstotl)
-        axis.set_ylabel('$N$')
-        axis.set_ylim([0.5, None])
-        plt.tight_layout()
-        figr.savefig(gdat.pathimag + 'histdefs%04d.pdf' % k)
-        plt.close(figr)
-
-        figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
-        axis.loglog(gdat.meandefs * gdat.factdefsplot, meanfactsign, color='black')
-        for m in range(numbinpt):
-            axis.loglog(gdat.meandefs * gdat.factdefsplot, factsign[m, :], alpha=0.1, color='g')
-            axis.axvline(matrdefscutf[k, m] * anglfact, color='black')
-        axis.set_xlabel(gdat.labldefstotl)
-        axis.set_ylabel('$f$')
-        plt.tight_layout()
-        figr.savefig(gdat.pathimag + 'factsign%04d.pdf' % k)
-        plt.close(figr)
+        for strgvarb in liststrgvarbelem:
+            lablvarbtotl = getattr(gdat, 'labl' + strgvarb + 'totl')
+            meanvarb = getattr(gdat, 'mean' + strgvarb)
+            deltvarb = getattr(gdat, 'delt' + strgvarb)
+            factvarbplot = getattr(gdat, 'fact' + strgvarb + 'plot')
+            for m in range(numbinpt):
+                hist[m, :] = dictglob['truehist' + strgvarb][m][0, :]
+                histsign[m, :] = dictglob['truehist' + strgvarb + 'sign'][m][0, :]
+                factsign[m, :] = histsign[m, :] / hist[m, :]
+                alph, loca, cutf = sp.stats.invgamma.fit(dictglob['true' + strgvarb + 'sign'][m][0], floc=0., f0=1.9)
+                histfitt[m, :] = len(dictglob['trueindxelemsign'][m][0]) * sp.stats.invgamma.pdf(meanvarb, alph, loc=loca, scale=cutf) * deltvarb
+                matrcutf[k, m] = cutf
+    
+            meanfactsign = mean(factsign, 0)
+            
+            figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
+            for m in range(numbinpt):
+                axis.loglog(meanvarb * factvarbplot, hist[m, :], color='g', alpha=0.1, ls='-.')
+                axis.loglog(meanvarb * factvarbplot, histsign[m, :], color='g', alpha=0.1, ls='--')
+                axis.loglog(meanvarb * factvarbplot, histfitt[m, :], color='g', alpha=0.1, ls='-')
+                axis.axvline(matrcutf[k, m] * factvarbplot, color='black')
+    
+            axis.loglog(meanvarb * factvarbplot, mean(hist, 0), color='g', ls='-.')
+            axis.loglog(meanvarb * factvarbplot, mean(histsign, 0), color='g', ls='--')
+            axis.loglog(meanvarb * factvarbplot, mean(histfitt, 0), color='g', ls='-')
+    
+            axis.set_xlabel(lablvarbtotl)
+            axis.set_ylabel('$N$')
+            axis.set_ylim([0.5, None])
+            plt.tight_layout()
+            figr.savefig(gdat.pathimag + 'hist' + strgvarb + '%04d.pdf' % k)
+            plt.close(figr)
+    
+            figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
+            axis.loglog(meanvarb * factvarbplot, meanfactsign, color='black')
+            for m in range(numbinpt):
+                axis.loglog(meanvarb * factvarbplot, factsign[m, :], alpha=0.1, color='g')
+                axis.axvline(matrcutf[k, m] * factvarbplot, color='black')
+            axis.set_xlabel(lablvarbtotl)
+            axis.set_ylabel('$f$')
+            plt.tight_layout()
+            figr.savefig(gdat.pathimag + 'fact' + strgvarb + '%04d.pdf' % k)
+            plt.close(figr)
 
 
 def pcat_lens_mock_init():

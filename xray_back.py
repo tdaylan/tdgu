@@ -177,6 +177,9 @@ def pcat_chan_mock_spmr():
                               numbburn=0, \
                               probbrde=0., \
                               probtran=1., \
+                              priofactdoff=0., \
+                              checprio=True, \
+                              indxenerincl=array([0]), \
                               #verbtype=2, \
                               numbswepplot=1000, \
                               shrtfram=True, \
