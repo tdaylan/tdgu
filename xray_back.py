@@ -2,7 +2,7 @@ from __init__ import *
 from astropy.coordinates import SkyCoord
 from pcat.util import retr_chandata
 
-def prep_maps(datatype='five'):
+def writ_maps(datatype='five'):
     
     if datatype == 'five':
         binsener = array([0.5, 0.91, 1.66, 3.02, 5.49, 10.])
@@ -45,7 +45,7 @@ def prep_maps(datatype='five'):
             cntsback = empty((numbener, numbside, numbside, numbevtt))
 
             # paths
-            pathdata = os.environ["TDGU_DATA_PATH"] + '/data/inpt/'
+            pathdata = os.environ["TDGU_DATA_PATH"] + '/xray_back/data/'
             path = pathdata + 'CDFS-4Ms-0p5to2-asca-im-bin1.fits'
             if expomaps[k] == 2:
                 path = pathdata + 'CDFS-2Ms-0p5to2-asca-im-bin1-astwk.fits'
@@ -72,8 +72,13 @@ def prep_maps(datatype='five'):
                 path = pathdata + 'CDFS-4Ms-2to8-bin1.emap'
             expo[1, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
             
-            print 'expo'
-            summgene(expo)
+            print 'expomaps[k]'
+            print expomaps[k]
+            print 'expo[0, :, :, 0]'
+            summgene(expo[0, :, :, 0])
+            print 'expo[1, :, :, 0]'
+            summgene(expo[1, :, :, 0])
+            print
 
             # background
             if expomaps[k] == 2:
@@ -143,6 +148,9 @@ def pcat_chan_mock():
                               fittback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
+                              inittype='refr', \
+                              verbtype=1, \
+                              makeplot=False, \
                               numbsidecart=numbsidecart, \
                              )
 

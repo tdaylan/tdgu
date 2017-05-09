@@ -155,12 +155,12 @@ def pcat_lens_mock_syst():
                                  )
     
 
-def pcat_lens_mock_dotn():
+def pcat_lens_mock_reln():
   
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargsvari = {}
-    dictargsvari['dotnpowr'] = [2., 1., 0.]
+    dictargsvari['relnpowr'] = [2., 1., 0.]
     dictargsvari['spatdisttype'] = [['grad'], ['grad'], ['unif']]
 
     dictglob = pcat.main.initarry( \
@@ -199,10 +199,11 @@ def pcat_lens_mock_perf():
                                  )
     
 
-def pcat_lens_mock_sign():
+def pcat_lens_mock_sele():
     
-    numbiter = 3
-
+    numbitermacr = 3
+    numbiterelem = 1
+    
     anglfact = 3600. * 180. / pi
     dictargs = {}
     dictargs['mockonly'] = True
@@ -210,25 +211,29 @@ def pcat_lens_mock_sign():
     dictargs['truenumbpnts'] = array([1000])
     dictargs['variasca'] = False
     dictargs['variacut'] = False
+    dictargs['allwfixdtrue'] = False
     dictargs['verbtype'] = 0
-    dictargs['makeplot'] = False
+    #dictargs['makeplot'] = False
     dictargs['truemaxmnumbpnts'] = array([1000])
     
-    liststrgvarbelem = ['dots']
-    liststrgvarboutp = ['trueindxelemsign']
-    for strgvarbelem in liststrgvarbelem:
-        liststrgvarboutp += ['truehist' + strgvarbelem + 'sign']
-        liststrgvarboutp += ['truehist' + strgvarbelem]
-        liststrgvarboutp += ['true' + strgvarbelem]
-        liststrgvarboutp += ['true' + strgvarbelem + 'sign']
-    
+    listnamesele = ['pars', 'nrel']
+    numbsele = len(listnamesele)
+    listnamefeatsele = ['defs', 'mcut', 'rele']
+    numbfeatsele = len(listnamefeatsele)
+
     dictargsvari = {}
-    dictargsvari['elemtype'] = ['lens' for n in range(5)]
+    dictargsvari['elemtype'] = ['lens' for n in range(numbiterelem)]
     
-    numbinpt = len(dictargsvari['elemtype'])
+    matrcutf = empty((numbitermacr, numbiterelem, numbfeatsele))
     
-    matrcutf = empty((numbiter, numbinpt))
-    for k in range(numbiter):
+    liststrgvarboutp = []
+    for strgvarbelem in listnamefeatsele:
+        liststrgvarboutp += ['truehist' + strgvarbelem]
+        for namesele in listnamesele:
+            liststrgvarboutp += ['true' + strgvarbelem + namesele]
+            liststrgvarboutp += ['truehist' + strgvarbelem + namesele]
+    
+    for k in range(numbitermacr):
         listgdat, dictglob = pcat.main.initarry( \
                                       dictargsvari, \
                                       dictargs, \
@@ -237,57 +242,94 @@ def pcat_lens_mock_sign():
                                      )
         
         gdat = listgdat[0]
+        
+        if k == 0:
+            hist = zeros((numbiterelem, gdat.numbbinsplot))
+            histsele = zeros((numbiterelem, gdat.numbbinsplot))
+            histfitt = zeros((numbiterelem, gdat.numbbinsplot))
+            factsele = zeros((numbiterelem, gdat.numbbinsplot))
+            for namesele in listnamesele:
+                pathimagsele = gdat.pathimag + 'sele/' + namesele + '/'
+                os.system('mkdir -p %s' % pathimagsele)
+            truefixp = empty((numbitermacr, gdat.truenumbfixp))
+            corrfixpcutf = empty(gdat.truenumbfixp)
+            pvalfixpcutf = empty(gdat.truenumbfixp)
+        
+        for namefixp in gdat.truenamefixp:
+            truefixp[k, :] = gdat.truefixp
 
-        
-        hist = zeros((numbinpt, gdat.numbbinsplot))
-        histsign = zeros((numbinpt, gdat.numbbinsplot))
-        histfitt = zeros((numbinpt, gdat.numbbinsplot))
-        factsign = zeros((numbinpt, gdat.numbbinsplot))
-        
-        for strgvarb in liststrgvarbelem:
-            lablvarbtotl = getattr(gdat, 'labl' + strgvarb + 'totl')
-            meanvarb = getattr(gdat, 'mean' + strgvarb)
-            deltvarb = getattr(gdat, 'delt' + strgvarb)
-            factvarbplot = getattr(gdat, 'fact' + strgvarb + 'plot')
-            for m in range(numbinpt):
-                hist[m, :] = dictglob['truehist' + strgvarb][m][0, :]
-                histsign[m, :] = dictglob['truehist' + strgvarb + 'sign'][m][0, :]
-                factsign[m, :] = histsign[m, :] / hist[m, :]
-                alph, loca, cutf = sp.stats.invgamma.fit(dictglob['true' + strgvarb + 'sign'][m][0], floc=0., f0=1.9)
-                histfitt[m, :] = len(dictglob['trueindxelemsign'][m][0]) * sp.stats.invgamma.pdf(meanvarb, alph, loc=loca, scale=cutf) * deltvarb
-                matrcutf[k, m] = cutf
+        for b, namefeat in enumerate(listnamefeatsele):
+            lablvarbtotl = getattr(gdat, 'labl' + namefeat + 'totl')
+            meanvarb = getattr(gdat, 'mean' + namefeat)
+            deltvarb = getattr(gdat, 'delt' + namefeat)
+            factvarbplot = getattr(gdat, 'fact' + namefeat + 'plot')
+            for m in range(numbiterelem):
+                hist[m, :] = dictglob['truehist' + namefeat][m][0, :]
+            for namesele in listnamesele:
+                pathimagsele = gdat.pathimag + 'sele/' + namesele + '/'
+                for m in range(numbiterelem):
+                    histsele[m, :] = dictglob['truehist' + namefeat + namesele][m][0, :]
+                    factsele[m, :] = histsele[m, :] / hist[m, :]
+                    alph, loca, cutf = sp.stats.invgamma.fit(dictglob['true' + namefeat + namesele][m][0], floc=0., f0=1.9)
+                    histfitt[m, :] = sum(histsele[m, :]) * sp.stats.invgamma.pdf(meanvarb, alph, loc=loca, scale=cutf) * deltvarb
+                    matrcutf[k, m, b] = cutf
     
-            meanfactsign = mean(factsign, 0)
-            
-            figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
-            for m in range(numbinpt):
-                axis.loglog(meanvarb * factvarbplot, hist[m, :], color='g', alpha=0.1, ls='-.')
-                axis.loglog(meanvarb * factvarbplot, histsign[m, :], color='g', alpha=0.1, ls='--')
-                axis.loglog(meanvarb * factvarbplot, histfitt[m, :], color='g', alpha=0.1, ls='-')
-                axis.axvline(matrcutf[k, m] * factvarbplot, color='black')
+                meanfactsele = mean(factsele, 0)
+                meanmatrcutf = mean(matrcutf, axis=1)
+
+                figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
+                for m in range(numbiterelem):
+                    axis.loglog(meanvarb * factvarbplot, hist[m, :], color='g', alpha=0.1, ls='-.')
+                    axis.loglog(meanvarb * factvarbplot, histsele[m, :], color='g', alpha=0.1, ls='--')
+                    axis.loglog(meanvarb * factvarbplot, histfitt[m, :], color='g', alpha=0.1, ls='-')
+                    axis.axvline(matrcutf[k, m, b] * factvarbplot, color='m', alpha=0.1)
+                axis.axvline(np.power(prod(matrcutf[k, m, b]), array([1. / numbiterelem])) * factvarbplot, color='m')
     
-            axis.loglog(meanvarb * factvarbplot, mean(hist, 0), color='g', ls='-.')
-            axis.loglog(meanvarb * factvarbplot, mean(histsign, 0), color='g', ls='--')
-            axis.loglog(meanvarb * factvarbplot, mean(histfitt, 0), color='g', ls='-')
+                axis.loglog(meanvarb * factvarbplot, mean(hist, 0), color='g', ls='-.')
+                axis.loglog(meanvarb * factvarbplot, mean(histsele, 0), color='g', ls='--')
+                axis.loglog(meanvarb * factvarbplot, mean(histfitt, 0), color='g', ls='-')
     
-            axis.set_xlabel(lablvarbtotl)
-            axis.set_ylabel('$N$')
-            axis.set_ylim([0.5, None])
+                axis.set_xlabel(lablvarbtotl)
+                axis.set_ylabel('$N$')
+                axis.set_ylim([0.5, None])
+                plt.tight_layout()
+                figr.savefig(pathimagsele + 'hist' + namefeat + '%04d.pdf' % k)
+                plt.close(figr)
+    
+                figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
+                axis.loglog(meanvarb * factvarbplot, meanfactsele, color='black')
+                for m in range(numbiterelem):
+                    axis.loglog(meanvarb * factvarbplot, factsele[m, :], alpha=0.1, color='g')
+                    axis.axvline(matrcutf[k, m, b] * factvarbplot, color='m', alpha=0.1)
+                axis.axvline(np.power(prod(matrcutf[k, :, b]), array([1. / numbiterelem])) * factvarbplot, color='m')
+                axis.set_xlabel(lablvarbtotl)
+                axis.set_ylabel('$f$')
+                plt.tight_layout()
+                figr.savefig(pathimagsele + 'fact' + namefeat + '%04d.pdf' % k)
+                plt.close(figr)
+    
+    for namesele in listnamesele:
+        pathimagsele = gdat.pathimag + 'sele/' + namesele + '/'
+        for b, namefeat in enumerate(listnamefeatsele):
+            for a, namefixp in enumerate(gdat.truenamefixp):
+                corrfixpcutf[a], pvalfixpcutf[a] = sp.stats.stats.pearsonr(truefixp[:, a], meanmatrcutf[:, b])
+                print gdat.truelablfixp[a]
+                print corrfixpcutf
+                print
+            indx = where(isfinite(corrfixpcutf) & (corrfixpcutf != 0.))[0]
+            numb = indx.size
+            figr, axis = plt.subplots(figsize=(2 * gdat.plotsize, gdat.plotsize))
+            for k in range(numb):
+                size = 6. * (1. - pvalfixpcutf[k]) + 5.
+                axis.plot(k + 0.5, corrfixpcutf[indx][k], ls='', marker='o', markersize=size, color='black')
+            axis.set_xticks(arange(numb) + 0.5)
+            axis.set_xticklabels(gdat.truelablfixp[indx])
+            axis.set_xlim([0., numb])
+            axis.set_ylabel(r'$\xi$')
             plt.tight_layout()
-            figr.savefig(gdat.pathimag + 'hist' + strgvarb + '%04d.pdf' % k)
+            figr.savefig(pathimagsele + 'corr' + namefeat + namesele + '.pdf')
             plt.close(figr)
     
-            figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
-            axis.loglog(meanvarb * factvarbplot, meanfactsign, color='black')
-            for m in range(numbinpt):
-                axis.loglog(meanvarb * factvarbplot, factsign[m, :], alpha=0.1, color='g')
-                axis.axvline(matrcutf[k, m] * factvarbplot, color='black')
-            axis.set_xlabel(lablvarbtotl)
-            axis.set_ylabel('$f$')
-            plt.tight_layout()
-            figr.savefig(gdat.pathimag + 'fact' + strgvarb + '%04d.pdf' % k)
-            plt.close(figr)
-
 
 def pcat_lens_mock_init():
     
@@ -380,19 +422,6 @@ def pcat_lens_mock_test():
                                   dictargs, \
                                  )
 
-
-def pcat_lens_mock_pars():
-   
-    numbiter = 10
-    for k in range(numbiter):
-        pcat.main.init( \
-                       elemtype='lens', \
-                       numbswep=100000, \
-                       factthin=10000, \
-                       numbproc=10, \
-                       makeplot=False, \
-                      )
-   
 
 def pcat_lens_mock():
    
