@@ -201,8 +201,8 @@ def pcat_lens_mock_perf():
 
 def pcat_lens_mock_sele():
     
-    numbitermacr = 3
-    numbiterelem = 1
+    numbitermacr = 30
+    numbiterelem = 10
     
     anglfact = 3600. * 180. / pi
     dictargs = {}
@@ -213,7 +213,7 @@ def pcat_lens_mock_sele():
     dictargs['variacut'] = False
     dictargs['allwfixdtrue'] = False
     dictargs['verbtype'] = 0
-    #dictargs['makeplot'] = False
+    dictargs['makeplot'] = False
     dictargs['truemaxmnumbpnts'] = array([1000])
     
     listnamesele = ['pars', 'nrel']
@@ -263,6 +263,7 @@ def pcat_lens_mock_sele():
             meanvarb = getattr(gdat, 'mean' + namefeat)
             deltvarb = getattr(gdat, 'delt' + namefeat)
             factvarbplot = getattr(gdat, 'fact' + namefeat + 'plot')
+            limtvarb = [factvarbplot * getattr(gdat, 'minm' + namefeat), factvarbplot * getattr(gdat, 'maxm' + namefeat)]
             for m in range(numbiterelem):
                 hist[m, :] = dictglob['truehist' + namefeat][m][0, :]
             for namesele in listnamesele:
@@ -273,7 +274,7 @@ def pcat_lens_mock_sele():
                     alph, loca, cutf = sp.stats.invgamma.fit(dictglob['true' + namefeat + namesele][m][0], floc=0., f0=1.9)
                     histfitt[m, :] = sum(histsele[m, :]) * sp.stats.invgamma.pdf(meanvarb, alph, loc=loca, scale=cutf) * deltvarb
                     matrcutf[k, m, b] = cutf
-    
+            
                 meanfactsele = mean(factsele, 0)
                 meanmatrcutf = mean(matrcutf, axis=1)
 
@@ -292,6 +293,7 @@ def pcat_lens_mock_sele():
                 axis.set_xlabel(lablvarbtotl)
                 axis.set_ylabel('$N$')
                 axis.set_ylim([0.5, None])
+                axis.set_xlim(limtvarb)
                 plt.tight_layout()
                 figr.savefig(pathimagsele + 'hist' + namefeat + '%04d.pdf' % k)
                 plt.close(figr)
@@ -304,6 +306,7 @@ def pcat_lens_mock_sele():
                 axis.axvline(np.power(prod(matrcutf[k, :, b]), array([1. / numbiterelem])) * factvarbplot, color='m')
                 axis.set_xlabel(lablvarbtotl)
                 axis.set_ylabel('$f$')
+                axis.set_xlim(limtvarb)
                 plt.tight_layout()
                 figr.savefig(pathimagsele + 'fact' + namefeat + '%04d.pdf' % k)
                 plt.close(figr)
@@ -316,11 +319,11 @@ def pcat_lens_mock_sele():
                 print gdat.truelablfixp[a]
                 print corrfixpcutf
                 print
-            indx = where(isfinite(corrfixpcutf) & (corrfixpcutf != 0.))[0]
+            indx = where(isfinite(corrfixpcutf) & (pvalfixpcutf < 0.1))[0]
             numb = indx.size
             figr, axis = plt.subplots(figsize=(2 * gdat.plotsize, gdat.plotsize))
             for k in range(numb):
-                size = 6. * (1. - pvalfixpcutf[k]) + 5.
+                size = 100. * (0.1 - pvalfixpcutf[k]) + 5.
                 axis.plot(k + 0.5, corrfixpcutf[indx][k], ls='', marker='o', markersize=size, color='black')
             axis.set_xticks(arange(numb) + 0.5)
             axis.set_xticklabels(gdat.truelablfixp[indx])
