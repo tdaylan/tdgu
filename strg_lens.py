@@ -136,8 +136,8 @@ def pcat_lens_mock_syst():
     dictargs['elemtype'] = 'lens'
     #dictargs['verbtype'] = 2
     #dictargs['makeplotfram'] = False
-    dictargs['variasca'] = False
-    dictargs['variacut'] = False
+    #dictargs['variasca'] = False
+    #dictargs['variacut'] = False
                 
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
@@ -159,9 +159,11 @@ def pcat_lens_mock_reln():
   
     dictargs = {}
     dictargs['elemtype'] = 'lens'
+    dictargs['relnindx'] = 1.
+    dictargs['liststrgfeatmodu'] = ['lgalbgal']
+    dictargs['liststrgpdfnmodu'] = ['tmplreln']
     dictargsvari = {}
     dictargsvari['relnpowr'] = [2., 1., 0.]
-    dictargsvari['spatdisttype'] = [['grad'], ['grad'], ['unif']]
 
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -432,9 +434,15 @@ def pcat_lens_mock():
     for k in range(numbiter):
         pcat.main.init( \
                        elemtype='lens', \
-                       numbswep=100000, \
-                       mockonly=True, \
-                       makeplotintr=True, \
+                       #verbtype=2, \
+                       #truenumbpnts=array([5]), \
+                       #truemaxmnumbpnts=array([10]), \
+                       #checprio=True, \
+                       shrtfram=True, \
+                       numbswep=20000, \
+                       numbswepplot=5000, \
+                       factthin=1000, \
+                       makeplotinit=False, \
                       )
    
 

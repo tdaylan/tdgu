@@ -2,7 +2,7 @@ from __init__ import *
 from astropy.coordinates import SkyCoord
 from pcat.util import retr_chandata
 
-def writ_maps(datatype='five'):
+def writ_maps(datatype='twoo'):
     
     if datatype == 'five':
         binsener = array([0.5, 0.91, 1.66, 3.02, 5.49, 10.])
@@ -99,6 +99,9 @@ def writ_maps(datatype='five'):
             for i in indxener:
                 indxtemp = where(expo[i, :, :, 0] > 0.)
                 flux[i, indxtemp[0], indxtemp[1], 0] = cnts[i, indxtemp[0], indxtemp[1], 0] / expo[i, indxtemp[0], indxtemp[1], 0] / diffener[i] / apix
+                print 'sum'
+                print summgene(flux[i, :, :, :])
+
             
             fluxback = zeros_like(cnts)
             for i in indxener:
@@ -144,13 +147,14 @@ def pcat_chan_mock():
     
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=500000, \
+                              numbswep=1000, \
                               fittback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
                               inittype='refr', \
                               verbtype=1, \
-                              makeplot=False, \
+                              makeplotinit=False, \
+                              shrtfram=True, \
                               numbsidecart=numbsidecart, \
                              )
 
@@ -188,10 +192,11 @@ def pcat_chan_mock_spmr():
                               priofactdoff=0., \
                               checprio=True, \
                               indxenerincl=array([0]), \
-                              #verbtype=2, \
-                              numbswepplot=1000, \
-                              shrtfram=True, \
+                              verbtype=2, \
                               #makeplot=False, \
+                              numbswepplot=1000, \
+                              #makeplotfram=False, \
+                              shrtfram=True, \
                               inittype='refr', \
                               truelgalimps=array([0.]), \
                               truebgalimps=array([0.]), \

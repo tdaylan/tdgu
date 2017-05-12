@@ -92,6 +92,8 @@ def pcat_ferm_mock_ngal():
     pcat.main.init( \
                    numbswep=50000, \
                    lgalcntr=0., \
+                   indxenerincl=arange(5), \
+                   #indxevttincl=arange(4), \
                    bgalcntr=pi / 2., \
                    back=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
                    strgexpo='fermexpo_cmp0_ngal.fits', \
