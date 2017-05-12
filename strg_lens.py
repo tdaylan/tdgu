@@ -131,7 +131,7 @@ def pcat_lens_mock_spmr():
 
 def pcat_lens_mock_syst():
    
-    numbswepnomi = 1000000
+    numbswepnomi = 100000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     #dictargs['verbtype'] = 2
@@ -428,6 +428,23 @@ def pcat_lens_mock_test():
                                  )
 
 
+def pcat_lens_mock_dofftest():
+   
+    pcat.main.init( \
+                   elemtype='lens', \
+                   #verbtype=2, \
+                   #truenumbpnts=array([5]), \
+                   #truemaxmnumbpnts=array([10]), \
+                   #checprio=True, \
+                   shrtfram=True, \
+                   numbswep=20000, \
+                   priofactdoff=1., \
+                   numbswepplot=5000, \
+                   factthin=1000, \
+                   makeplotinit=False, \
+                  )
+   
+
 def pcat_lens_mock():
    
     numbiter = 1
@@ -438,8 +455,9 @@ def pcat_lens_mock():
                        #truenumbpnts=array([5]), \
                        #truemaxmnumbpnts=array([10]), \
                        #checprio=True, \
+                       truestdvdefsdistslop='none', \
                        shrtfram=True, \
-                       numbswep=20000, \
+                       numbswep=100000, \
                        numbswepplot=5000, \
                        factthin=1000, \
                        makeplotinit=False, \
