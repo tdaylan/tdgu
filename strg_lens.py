@@ -134,6 +134,7 @@ def pcat_lens_mock_syst():
     numbswepnomi = 1000000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
+    dictargs['numbproc'] = 20
     #dictargs['verbtype'] = 2
     #dictargs['makeplotfram'] = False
     #dictargs['variasca'] = False
@@ -148,7 +149,7 @@ def pcat_lens_mock_syst():
     dictargsvari['fittminmnumbpnts'] =     [None,         None,          array([1]),   None,         None        ]
     dictargsvari['fittmaxmnumbpnts'] =     [None,         None,          array([1]),   None,         None        ]
     dictargsvari['truestdvdefsdistslop'] = [0.5,          0.5,           0.5,          'none',       0.5         ]
-    dictargsvari['inittype'] =             ['refr',       'pert',        'refr',       'refr',       'pert'      ]
+    dictargsvari['inittype'] =             ['refr',       'pert',        'pert',       'refr',       'pert'      ]
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
@@ -445,6 +446,26 @@ def pcat_lens_mock_dofftest():
                   )
    
 
+def pcat_lens_mock_plotfixx():
+   
+    numbiter = 1
+    for k in range(numbiter):
+        pcat.main.init( \
+                       elemtype='lens', \
+                       makeplotintr=True, \
+                       #verbtype=2, \
+                       #truenumbpnts=array([5]), \
+                       #truemaxmnumbpnts=array([10]), \
+                       #checprio=True, \
+                       evoltype='maxmllik', \
+                       truestdvdefsdistslop='none', \
+                       shrtfram=True, \
+                       numbswep=100000, \
+                       numbswepplot=5000, \
+                       factthin=1000, \
+                       mockonly=True, \
+                       #makeplotinit=False, \
+                      )
 def pcat_lens_mock():
    
     numbiter = 1
@@ -455,12 +476,12 @@ def pcat_lens_mock():
                        #truenumbpnts=array([5]), \
                        #truemaxmnumbpnts=array([10]), \
                        #checprio=True, \
+                       evoltype='maxmllik', \
                        truestdvdefsdistslop='none', \
                        shrtfram=True, \
                        numbswep=100000, \
                        numbswepplot=5000, \
                        factthin=1000, \
-                       makeplotinit=False, \
                       )
    
 
