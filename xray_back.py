@@ -152,8 +152,12 @@ def pcat_chan_mock():
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
                               inittype='refr', \
+                              factthin=100, \
                               verbtype=1, \
+                              optihess=False, \
+                              condcatl=True, \
                               makeplotinit=False, \
+                              makeplotfram=False, \
                               shrtfram=True, \
                               numbsidecart=numbsidecart, \
                              )

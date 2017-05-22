@@ -131,25 +131,20 @@ def pcat_lens_mock_spmr():
 
 def pcat_lens_mock_syst():
    
-    numbswepnomi = 10000
+    numbswepnomi = 1000000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    #dictargs['numbproc'] = 20
-    dictargs['factthin'] = 1000
-    #dictargs['verbtype'] = 2
-    dictargs['makeplot'] = False
-    #dictargs['variasca'] = False
-    #dictargs['variacut'] = False
                 
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
-    dictargsvari['numbswep'] =             [numbswepnomi, numbswepnomi,  numbswepnomi, numbswepnomi]
-    dictargsvari['truenumbpnts'] =         [None,         array([80]),   None,         None,       ]
-    dictargsvari['trueminmdefs'] =         [None,         1e-3/anglfact, None,         None,       ]
-    dictargsvari['fittminmdefs'] =         [None,         2e-3/anglfact, None,         None,       ]
-    dictargsvari['fittminmnumbpnts'] =     [None,         None,          array([1]),   None,       ]
-    dictargsvari['fittmaxmnumbpnts'] =     [None,         None,          array([1]),   None,       ]
-    dictargsvari['truestdvdefsdistslop'] = [0.5,          0.5,           0.5,          'none',     ]
+    dictargsvari['numbswep'] =             [numbswepnomi, numbswepnomi, numbswepnomi,  numbswepnomi, numbswepnomi]
+    dictargsvari['truenumbpnts'] =         [None,         None,         array([80]),   None,         None,       ]
+    dictargsvari['trueminmdefs'] =         [None,         None,         1e-3/anglfact, None,         None,       ]
+    dictargsvari['fittminmdefs'] =         [None,         None,         2e-3/anglfact, None,         None,       ]
+    dictargsvari['fittminmnumbpnts'] =     [None,         array([1]),   None,          None,         None,       ]
+    dictargsvari['fittmaxmnumbpnts'] =     [None,         array([1]),   None,          None,         None,       ]
+    dictargsvari['truestdvdefsdistslop'] = [0.5,          0.5,          0.5,           0.5,          'none',     ]
+    dictargsvari['truescalmeanpnts']     = ['self',       'logt',       'self',        'logt',       'self',     ]
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
@@ -494,13 +489,19 @@ def pcat_lens_mock():
                        #truenumbpnts=array([5]), \
                        #truemaxmnumbpnts=array([10]), \
                        #checprio=True, \
-                       evoltype='maxmllik', \
-                       truestdvdefsdistslop='none', \
+                       #evoltype='maxmllik', \
+                       #makeplot=False, \
                        #shrtfram=True, \
+                       #optihess=False, \
+                       #makeplot=False, \
                        #makeplotinit=False, \
-                       #makeplotfram=False, \
+                       plotelemcorr=False, \
+                       makeplotfram=False, \
+                       makeplotinit=False, \
+                       plotlpri=False, \
                        numbswep=1000, \
-                       numbswepplot=5000, \
+                       inittype='refr', \
+                       numbswepplot=6000, \
                        factthin=100, \
                       )
    
