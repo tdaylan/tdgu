@@ -153,6 +153,24 @@ def pcat_lens_mock_syst():
                                  )
     
 
+def pcat_lens_mock_perf():
+   
+    dictargs = {}
+    dictargs['elemtype'] = 'lens'
+    dictargs['numbswep'] = 2000000
+    
+    anglfact = 3600. * 180. / pi
+    dictargsvari = {}
+    dictargsvari['trueminmdefs'] = [2e-3 / anglfact, 4e-3 / anglfact, 8e-3 / anglfact, None,          None,          None]
+    dictargsvari['truemaxmdefs'] = [1e-2 / anglfact, 2e-2 / anglfact, 4e-2 / anglfact, None,          None,          None]
+    dictargsvari['truebacp']     = [None,            None,            None,            array([3e-8]), array([1e-7]), array([3e-7])]
+
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                 )
+    
+
 def pcat_lens_mock_reln():
   
     dictargs = {}
@@ -181,23 +199,6 @@ def pcat_lens_mock_doff():
                                   dictargs, \
                                  )
 
-
-def pcat_lens_mock_perf():
-   
-    dictargs = {}
-    dictargs['elemtype'] = 'lens'
-    
-    anglfact = 3600. * 180. / pi
-    dictargsvari = {}
-    dictargsvari['trueminmdefs'] = [2e-3 / anglfact, 4e-3 / anglfact, 8e-3 / anglfact, None,          None,          None]
-    dictargsvari['truemaxmdefs'] = [1e-2 / anglfact, 2e-2 / anglfact, 4e-2 / anglfact, None,          None,          None]
-    dictargsvari['truebacp']     = [None,            None,            None,            array([3e-8]), array([1e-7]), array([3e-7])]
-
-    dictglob = pcat.main.initarry( \
-                                  dictargsvari, \
-                                  dictargs, \
-                                 )
-    
 
 def pcat_lens_mock_sele():
     
