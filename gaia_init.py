@@ -244,7 +244,11 @@ def writ_tgasdata():
     numbside = int(sqrt(datacntstemp.size))
     datacnts = zeros((1, numbside, numbside, 1))
     datacnts[0, :, :, 0] = datacntstemp.T
-    datacnts *= numbbins**2 / 4.
+    print 'datacnts'
+    summgene(datacnts)
+    datacnts *= (numbbins - 1.)**2 / 4.
+    print 'datacnts'
+    summgene(datacnts)
     
     path = os.environ["PCAT_DATA_PATH"] + '/data/inpt/tgas.fits'
     pf.writeto(path, datacnts, clobber=True)
@@ -263,14 +267,17 @@ def pcat_tgas_mock():
     
     pcat.main.init( \
          numbswep=20000, \
+         numbswepplot=10000, \
+         elemtype='clus', \
          exprtype='sdyn', \
          psfninfoprio=False, \
-         checprio=False, \
          strgexpo=1., \
-         elemtype='clus', \
-         fittback=['tgasback.fits'], \
+         trueback=['tgasback.fits'], \
          truenumbpnts=array([20]), \
-         fittmaxmnumbpnts=array([40]), \
+         #verbtype=2, \
+         optihess=False, \
+         numbsidecart=200, \
+         truemaxmnumbpnts=array([40]), \
         )
 
 
@@ -278,15 +285,13 @@ def pcat_tgas_inpt():
     
     pcat.main.init( \
          numbswep=20000, \
+         elemtype='clus', \
          exprtype='sdyn', \
          psfninfoprio=False, \
-         checprio=False, \
          optihess=False, \
          strgexpo=1., \
-         elemtype='clus', \
          fittback=['tgasback.fits'], \
          strgexprflux='tgas.fits', \
-         inittype='rand', \
          fittmaxmnumbpnts=array([40]), \
         )
 

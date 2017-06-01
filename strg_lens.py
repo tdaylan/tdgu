@@ -131,7 +131,7 @@ def pcat_lens_mock_spmr():
 
 def pcat_lens_mock_syst():
    
-    seed(1)
+    seed(2)
     
     numbswepnomi = 10000
     dictargs = {}
@@ -444,26 +444,16 @@ def pcat_lens_mock_dofftest():
                   )
    
 
-def pcat_lens_mock_plotfixx():
+def pcat_lens_mockonly():
    
-    numbiter = 1
-    for k in range(numbiter):
-        pcat.main.init( \
-                       elemtype='lens', \
-                       makeplotintr=True, \
-                       #verbtype=2, \
-                       #truenumbpnts=array([5]), \
-                       #truemaxmnumbpnts=array([10]), \
-                       #checprio=True, \
-                       evoltype='maxmllik', \
-                       truestdvdefsdistslop='none', \
-                       shrtfram=True, \
-                       numbswep=100000, \
-                       numbswepplot=5000, \
-                       factthin=1000, \
-                       mockonly=True, \
-                       #makeplotinit=False, \
-                      )
+    pcat.main.init( \
+                   elemtype='lens', \
+                   truenumbpnts=array([400]), \
+                   truemaxmnumbpnts=array([400]), \
+                   mockonly=True, \
+                  )
+
+
 def pcat_lens_mock():
     
     seed(1)
