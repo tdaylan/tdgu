@@ -456,7 +456,7 @@ def pcat_lens_mockonly():
 
 def pcat_lens_mock():
     
-    seed(1)
+    seed(0)
     #path = '/Users/tansu/Documents/work/data/pcat/data/outp/20170524_145317_pcat_lens_mock_1000/stat.p'
     #with open(path, 'rb') as thisfile:
     #    #set_state(cPickle.load(thisfile))
@@ -479,7 +479,7 @@ def pcat_lens_mock():
                        plotelemcorr=False, \
                        makeplotfram=False, \
                        #makeplotintr=True, \
-                       makeplotinit=False, \
+                       #makeplotinit=False, \
                        plotlpri=False, \
                        numbswep=1000, \
                        inittype='refr', \
