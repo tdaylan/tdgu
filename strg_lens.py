@@ -478,8 +478,7 @@ def pcat_lens_mock():
                        #makeplotinit=False, \
                        plotelemcorr=False, \
                        makeplotfram=False, \
-                       #makeplotintr=True, \
-                       #makeplotinit=False, \
+                       makeplotinit=False, \
                        plotlpri=False, \
                        numbswep=1000, \
                        inittype='refr', \
