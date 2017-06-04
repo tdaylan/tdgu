@@ -147,18 +147,10 @@ def pcat_chan_mock():
     
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=1000, \
+                              numbswep=10000, \
                               fittback=['chanfluxisot_%04d_4msc.fits' % numbsidecart], \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
-                              inittype='refr', \
-                              factthin=100, \
-                              verbtype=1, \
-                              optihess=False, \
-                              condcatl=True, \
-                              makeplotinit=False, \
-                              makeplotfram=False, \
-                              shrtfram=True, \
                               numbsidecart=numbsidecart, \
                              )
 
@@ -231,7 +223,7 @@ def pcat_chan_inpt():
     
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=100000, \
+                              numbswep=10000, \
                               strgexpo='chanexpo_%04d_4msc.fits' % numbsidecart, \
                               exprtype='chan', \
                               numbsidecart=numbsidecart, \
