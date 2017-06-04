@@ -501,6 +501,8 @@ def pcat_lens_inpt():
                        elemtype='lens', \
                        numbswep=300000, \
                        numbswepplot=10000, \
+                       burntmpr=True, \
+                       optihess=False, \
                        #verbtype=2, \
                        #truenumbpnts=array([5]), \
                        #truemaxmnumbpnts=array([10]), \
