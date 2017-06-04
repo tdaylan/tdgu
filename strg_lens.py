@@ -499,8 +499,7 @@ def pcat_lens_inpt():
     for k in range(numbiter):
         pcat.main.init( \
                        elemtype='lens', \
-                       numbswep=30000, \
-                       factthin=100, \
+                       numbswep=300000, \
                        numbswepplot=10000, \
                        #verbtype=2, \
                        #truenumbpnts=array([5]), \
