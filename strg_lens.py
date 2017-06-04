@@ -487,4 +487,38 @@ def pcat_lens_mock():
                       )
    
 
+def pcat_lens_inpt():
+    
+    hubbexpofact = 7.0780856e-20
+    strgexpo = 7.37487548893e21
+    
+    maxmgangdata = 50. * 0.05 * pi / 180. / 3600.
+
+    numbiter = 1
+    #numbsidecart = 300
+    for k in range(numbiter):
+        pcat.main.init( \
+                       elemtype='lens', \
+                       numbswep=30000, \
+                       factthin=100, \
+                       numbswepplot=10000, \
+                       #verbtype=2, \
+                       #truenumbpnts=array([5]), \
+                       #truemaxmnumbpnts=array([10]), \
+                       #checprio=True, \
+                       #evoltype='maxmllik', \
+                       #makeplot=False, \
+                       #shrtfram=True, \
+                       #optihess=False, \
+                       #makeplot=False, \
+                       #makeplotinit=False, \
+                       strgexpo=strgexpo, \
+                       fittmaxmnumbpnts=array([0]), \
+                       maxmgangdata=maxmgangdata, \
+                       plotelemcorr=False, \
+                       strgexprflux='lens0029.fits', \
+                       plotlpri=False, \
+                      )
+   
+
 globals().get(sys.argv[1])()
