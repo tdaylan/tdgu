@@ -72,12 +72,6 @@ pathdatapcat = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
 path = pathdatapcat + 'lens0029.fits'
 print 'Writing to %s...' % path
 
-# cut out the image
-data = listdata[1][indxxaxi-numbsidehalf:indxxaxi+numbsidehalf, indxyaxi-numbsidehalf:indxyaxi+numbsidehalf]
-
-# gather different bands
-data = data[None, :, :, None]
-
 print 'EXPTIME'
 print listdata[4]['EXPTIME'][0]
 print 'PHOTFLAM'
@@ -85,12 +79,18 @@ print listdata[4]['PHOTFLAM'][0]
 print 'CCDGAIN'
 print listdata[4]['CCDGAIN'][0]
 
+# cut out the image
+data = listdata[1][indxxaxi-numbsidehalf:indxxaxi+numbsidehalf, indxyaxi-numbsidehalf:indxyaxi+numbsidehalf]
+
+# gather different bands
+data = data[None, :, :, None]
+
 # find the number of photons per area per time per A per solid angle
 expo = 1. / listdata[4]['PHOTFLAM'][0]
-print 'expo'
-print expo
 apix = (0.05 * pi / 3600. / 180.)**2
 
+print 'expo'
+print expo
 print 'data'
 summgene(data)
 data *= 1. / expo / apix

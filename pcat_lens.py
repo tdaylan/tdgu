@@ -508,8 +508,8 @@ def pcat_lens_intrevalresicnts():
     initanglhost = 0.5
     initserihost = 4.
     
-    initsherhost = 0.01
-    initsanghost = pi / 2.
+    initsherextr = 0.01
+    initsangextr = pi / 2.
 
     strgexpo = 7.37487548893e21
     maxmgangdata = 50. * 0.05 * pi / 180. / 3600.
@@ -537,8 +537,8 @@ def pcat_lens_intrevalresicnts():
                    initanglhost=initanglhost, \
                    initserihost=initserihost, \
                    
-                   initsherhost=initsherhost, \
-                   initsanghost=initsanghost, \
+                   initsherextr=initsherextr, \
+                   initsangextr=initsangextr, \
                    
                    fittmaxmnumbpnts=array([0]), \
                    maxmgangdata=maxmgangdata, \
@@ -571,8 +571,8 @@ def pcat_lens_inpt():
     initanglhost = 0.5
     initserihost = 4.
     
-    initsherhost = 0.01
-    initsanghost = pi / 2.
+    initsherextr = 0.01
+    initsangextr = pi / 2.
 
     numbiter = 1
     #numbsidecart = 300
@@ -581,34 +581,34 @@ def pcat_lens_inpt():
                        elemtype='lens', \
                        numbswep=100000, \
                        numbswepplot=10000, \
-                       burntmpr=True, \
+                       #burntmpr=True, \
                        #verbtype=2, \
                        optihess=False, \
                        #propbacp=False, \
                         
-                       #savestat=True, \
+                       savestat=True, \
                        recostat=True, \
 
-                       initsigcene0evt0=initsigcene0evt0, \
-                       initbacpbac0ene0=initbacpbac0ene0, \
-                       
-                       initlgalsour=initlgalsour, \
-                       initbgalsour=initbgalsour, \
-                       initspecsourene0=initspecsourene0, \
-                       initellpsour=initellpsour, \
-                       initanglsour=initanglsour, \
-                       
-                       initlgalhost=initlgalhost, \
-                       initbgalhost=initbgalhost, \
-                       initspechostene0=initspechostene0, \
-                       initsizehost=initsizehost, \
-                       initbeinhost=initbeinhost, \
-                       initellphost=initellphost, \
-                       initanglhost=initanglhost, \
-                       initserihost=initserihost, \
-                       
-                       initsherhost=initsherhost, \
-                       initsanghost=initsanghost, \
+                       #initsigcene0evt0=initsigcene0evt0, \
+                       #initbacpbac0ene0=initbacpbac0ene0, \
+                       #
+                       #initlgalsour=initlgalsour, \
+                       #initbgalsour=initbgalsour, \
+                       #initspecsourene0=initspecsourene0, \
+                       #initellpsour=initellpsour, \
+                       #initanglsour=initanglsour, \
+                       #
+                       #initlgalhost=initlgalhost, \
+                       #initbgalhost=initbgalhost, \
+                       #initspechostene0=initspechostene0, \
+                       #initsizehost=initsizehost, \
+                       #initbeinhost=initbeinhost, \
+                       #initellphost=initellphost, \
+                       #initanglhost=initanglhost, \
+                       #initserihost=initserihost, \
+                       #
+                       #initsherextr=initsherextr, \
+                       #initsangextr=initsangextr, \
                           
                        #proppsfp=False, \
                        #verbtype=2, \
