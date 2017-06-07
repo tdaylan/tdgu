@@ -569,11 +569,6 @@ def regrback( \
     gdat.numbpixl = gdat.indxpixlrofi.size
     gdat.indxpixl = arange(gdat.numbpixl)
        
-    minmlgal = -gdat.maxmgangdata
-    maxmlgal = gdat.maxmgangdata 
-    minmbgal = -gdat.maxmgangdata
-    maxmbgal = gdat.maxmgangdata 
-
     indxdatacubefilt = meshgrid(gdat.indxenerrofi, gdat.indxpixlrofi, gdat.indxevttrofi, indexing='ij')
     
     # get data structure
@@ -582,16 +577,12 @@ def regrback( \
     if gdat.numbswep == None:
         gdat.numbswep = 4 * gdat.numbpara * 1000
     
-    # get the time stamp
-    strgtimestmp = tdpy.util.retr_strgtimestmp()
-    
     # setup
     gdat.rtag = '%s' % (gdat.datatype)
-    gdat.extn = strgtimestmp + '_' + gdat.rtag
 
     # paths
-    gdat.pathdatatdpy = tdpy.util.retr_path('tdpy', dataonly=True)
-    gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('tdgu', 'ferm_igal/', 'ferm_igal/regrback/', gdat.extn)
+    #gdat.pathdatatdpy = tdpy.util.retr_path('tdpy', dataonly=True)
+    #gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('tdgu', 'ferm_igal/', 'ferm_igal/regrback/', gdat.extn)
 
     ## data
     if gdat.datatype == 'inpt':

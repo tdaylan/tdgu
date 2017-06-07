@@ -96,11 +96,14 @@ def pcat_lens_mock_grid():
                 plt.close(figr)
     
 
-def pcat_lens_mock_intr():
+def pcat_lens_intrevalmodlcnts():
    
     pcat.main.init( \
                    elemtype='lens', \
-                   intreval=True, \
+                   makeplotinit=False, \
+                   intrevalmodlcnts=True, \
+                   truenumbpnts=array([0]), \
+                   truemaxmnumbpnts=array([0]), \
                   )
     
 
@@ -476,10 +479,8 @@ def pcat_lens_mock():
                        #optihess=False, \
                        #makeplot=False, \
                        #makeplotinit=False, \
-                       plotelemcorr=False, \
-                       makeplotfram=False, \
-                       makeplotinit=False, \
-                       plotlpri=False, \
+                       trueserihost=4., \
+                       mockonly=True, \
                        numbswep=1000, \
                        inittype='refr', \
                        numbswepplot=6000, \
@@ -487,22 +488,129 @@ def pcat_lens_mock():
                       )
    
 
+def pcat_lens_intrevalresicnts():
+
+    initsigcene0evt0 = 2.4e-07
+    initbacpbac0ene0 = 1.5e-07
+    
+    initlgalsour = -1.818e-06
+    initbgalsour = 7.272e-07
+    initspecsourene0 = 1e-19
+    initellpsour = 0.01
+    initanglsour = pi / 2.
+
+    initlgalhost = -9.167e-07
+    initbgalhost = 2.533e-07
+    initspechostene0 = 1.2e-16
+    initsizehost = 4.256e-6
+    initbeinhost = 4.497e-6
+    initellphost = 0.099
+    initanglhost = 0.5
+    initserihost = 4.
+    
+    initsherhost = 0.01
+    initsanghost = pi / 2.
+
+    strgexpo = 7.37487548893e21
+    maxmgangdata = 50. * 0.05 * pi / 180. / 3600.
+    pcat.main.init( \
+                   elemtype='lens', \
+                   makeplotinit=False, \
+                   intrevalresicnts=True, \
+                   strgexpo=strgexpo, \
+                   
+                   initsigcene0evt0=initsigcene0evt0, \
+                   initbacpbac0ene0=initbacpbac0ene0, \
+                   
+                   initlgalsour=initlgalsour, \
+                   initbgalsour=initbgalsour, \
+                   initspecsourene0=initspecsourene0, \
+                   initellpsour=initellpsour, \
+                   initanglsour=initanglsour, \
+                   
+                   initlgalhost=initlgalhost, \
+                   initbgalhost=initbgalhost, \
+                   initspechostene0=initspechostene0, \
+                   initsizehost=initsizehost, \
+                   initbeinhost=initbeinhost, \
+                   initellphost=initellphost, \
+                   initanglhost=initanglhost, \
+                   initserihost=initserihost, \
+                   
+                   initsherhost=initsherhost, \
+                   initsanghost=initsanghost, \
+                   
+                   fittmaxmnumbpnts=array([0]), \
+                   maxmgangdata=maxmgangdata, \
+                   strgexprflux='lens0029.fits', \
+                  )
+    
+
 def pcat_lens_inpt():
     
     hubbexpofact = 7.0780856e-20
     strgexpo = 7.37487548893e21
-    
+
     maxmgangdata = 50. * 0.05 * pi / 180. / 3600.
+    
+    initsigcene0evt0 = 2.4e-07
+    initbacpbac0ene0 = 1.5e-07
+    
+    initlgalsour = -1.818e-06
+    initbgalsour = 7.272e-07
+    initspecsourene0 = 1e-19
+    initellpsour = 0.01
+    initanglsour = pi / 2.
+
+    initlgalhost = -9.167e-07
+    initbgalhost = 2.533e-07
+    initspechostene0 = 1.2e-16
+    initsizehost = 4.256e-6
+    initbeinhost = 4.497e-6
+    initellphost = 0.099
+    initanglhost = 0.5
+    initserihost = 4.
+    
+    initsherhost = 0.01
+    initsanghost = pi / 2.
 
     numbiter = 1
     #numbsidecart = 300
     for k in range(numbiter):
         pcat.main.init( \
                        elemtype='lens', \
-                       numbswep=300000, \
+                       numbswep=100000, \
                        numbswepplot=10000, \
                        burntmpr=True, \
+                       #verbtype=2, \
                        optihess=False, \
+                       #propbacp=False, \
+                        
+                       #savestat=True, \
+                       recostat=True, \
+
+                       initsigcene0evt0=initsigcene0evt0, \
+                       initbacpbac0ene0=initbacpbac0ene0, \
+                       
+                       initlgalsour=initlgalsour, \
+                       initbgalsour=initbgalsour, \
+                       initspecsourene0=initspecsourene0, \
+                       initellpsour=initellpsour, \
+                       initanglsour=initanglsour, \
+                       
+                       initlgalhost=initlgalhost, \
+                       initbgalhost=initbgalhost, \
+                       initspechostene0=initspechostene0, \
+                       initsizehost=initsizehost, \
+                       initbeinhost=initbeinhost, \
+                       initellphost=initellphost, \
+                       initanglhost=initanglhost, \
+                       initserihost=initserihost, \
+                       
+                       initsherhost=initsherhost, \
+                       initsanghost=initsanghost, \
+                          
+                       #proppsfp=False, \
                        #verbtype=2, \
                        #truenumbpnts=array([5]), \
                        #truemaxmnumbpnts=array([10]), \
