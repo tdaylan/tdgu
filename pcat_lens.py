@@ -519,26 +519,28 @@ def pcat_lens_intrevalresicnts():
                    intrevalresicnts=True, \
                    strgexpo=strgexpo, \
                    
-                   initsigcene0evt0=initsigcene0evt0, \
-                   initbacpbac0ene0=initbacpbac0ene0, \
+                   #initsigcene0evt0=initsigcene0evt0, \
+                   #initbacpbac0ene0=initbacpbac0ene0, \
+                   #
+                   #initlgalsour=initlgalsour, \
+                   #initbgalsour=initbgalsour, \
+                   #initspecsourene0=initspecsourene0, \
+                   #initellpsour=initellpsour, \
+                   #initanglsour=initanglsour, \
+                   #
+                   #initlgalhost=initlgalhost, \
+                   #initbgalhost=initbgalhost, \
+                   #initspechostene0=initspechostene0, \
+                   #initsizehost=initsizehost, \
+                   #initbeinhost=initbeinhost, \
+                   #initellphost=initellphost, \
+                   #initanglhost=initanglhost, \
+                   #initserihost=initserihost, \
+                   #
+                   #initsherextr=initsherextr, \
+                   #initsangextr=initsangextr, \
                    
-                   initlgalsour=initlgalsour, \
-                   initbgalsour=initbgalsour, \
-                   initspecsourene0=initspecsourene0, \
-                   initellpsour=initellpsour, \
-                   initanglsour=initanglsour, \
-                   
-                   initlgalhost=initlgalhost, \
-                   initbgalhost=initbgalhost, \
-                   initspechostene0=initspechostene0, \
-                   initsizehost=initsizehost, \
-                   initbeinhost=initbeinhost, \
-                   initellphost=initellphost, \
-                   initanglhost=initanglhost, \
-                   initserihost=initserihost, \
-                   
-                   initsherextr=initsherextr, \
-                   initsangextr=initsangextr, \
+                   recostat='pcat_lens_inpt', \
                    
                    fittmaxmnumbpnts=array([0]), \
                    maxmgangdata=maxmgangdata, \

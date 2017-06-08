@@ -861,12 +861,10 @@ def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermex
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
                    randinit=True, \
-                   proppsfp=False, \
-                   makeplot=False, \
                    diagmode=True, \
-                   #verbtype=2, \
                    minmflux=1e-8, \
                    maxmflux=3e-6, \
+                   makeplot=False, \
                    #maxmnumbpnts=array([10]), \
                    back=['isotflux.fits', 'fdfmflux.fits'], \
                    strgexpo=strgexpo, \
@@ -962,7 +960,7 @@ def pcat_ferm_mock_igal():
      
     pcat.main.init( \
                    numbswep=10000, \
-                   verbtype=2, \
+                   #verbtype=2, \
                    indxevttincl=arange(3, 4), \
                    indxenerincl=arange(1, 4), \
                    #strgexpo='fermexpo_cmp0_igal.fits', \
