@@ -134,23 +134,23 @@ def pcat_lens_mock_spmr():
 
 def pcat_lens_mock_syst():
    
-    seed(2)
+    seed(4)
     
-    numbswepnomi = 10000
+    numbswepnomi = 2000000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['factthin'] = 100
                 
+    numbelem = array([20. * 10.**0.9])
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
-    dictargsvari['numbswep'] =             [numbswepnomi, numbswepnomi, numbswepnomi,  numbswepnomi, numbswepnomi]
-    dictargsvari['truenumbpnts'] =         [None,         None,         array([75]),   None,         None,       ]
-    dictargsvari['trueminmdefs'] =         [None,         None,         2e-3/anglfact, None,         None,       ]
-    dictargsvari['fittminmdefs'] =         [None,         None,         4e-3/anglfact, None,         None,       ]
-    dictargsvari['fittminmnumbpnts'] =     [None,         array([1]),   None,          None,         None,       ]
-    dictargsvari['fittmaxmnumbpnts'] =     [None,         array([1]),   None,          None,         None,       ]
-    dictargsvari['truestdvdefsdistslop'] = [0.5,          0.5,          0.5,           0.5,          'none',     ]
-    dictargsvari['truescalmeanpnts']     = ['self',       'logt',       'self',        'logt',       'self',     ]
+    dictargsvari['numbswep'] =             [numbswepnomi, numbswepnomi, numbswepnomi,  numbswepnomi,  numbswepnomi, numbswepnomi]
+    dictargsvari['truenumbpnts'] =         [None,         None,         numbelem,      None,          None,         None,       ]
+    dictargsvari['trueminmdefs'] =         [None,         None,         1e-3/anglfact, None,          None,         None,       ]
+    dictargsvari['fittminmdefs'] =         [None,         None,         1e-2/anglfact, 3e-2/anglfact, None,         None,       ]
+    dictargsvari['fittminmnumbpnts'] =     [None,         array([1]),   None,          None,          None,         None,       ]
+    dictargsvari['fittmaxmnumbpnts'] =     [None,         array([1]),   None,          None,          None,         None,       ]
+    dictargsvari['truestdvdefsdistslop'] = [0.5,          0.5,          0.5,           0.5,           0.5,          'none',     ]
+    dictargsvari['truescalmeanpnts']     = ['self',       'logt',       'self',        'self',        'logt',       'self',     ]
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
@@ -510,7 +510,6 @@ def pcat_lens_intrevalresicnts():
 
 def pcat_lens_inpt():
     
-    hubbexpofact = 7.0780856e-20
     strgexpo = 7.37487548893e21
     maxmgangdata = 50. * 0.05 * pi / 180. / 3600.
     numbiter = 1

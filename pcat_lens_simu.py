@@ -80,24 +80,30 @@ print 'CCDGAIN'
 print listdata[4]['CCDGAIN'][0]
 
 # cut out the image
-data = listdata[1][indxxaxi-numbsidehalf:indxxaxi+numbsidehalf, indxyaxi-numbsidehalf:indxyaxi+numbsidehalf]
+rate = listdata[1][indxxaxi-numbsidehalf:indxxaxi+numbsidehalf, indxyaxi-numbsidehalf:indxyaxi+numbsidehalf] # s^-1
 
 # gather different bands
-data = data[None, :, :, None]
+rate = rate[None, :, :, None]
 
 # find the number of photons per area per time per A per solid angle
-expo = 1. / listdata[4]['PHOTFLAM'][0]
-apix = (0.05 * pi / 3600. / 180.)**2
-
+effa = 1. / listdata[4]['PHOTFLAM'][0] # erg^-1 cm^2 A
+timeobsv = listdata[4]['EXPTIME'][0] # s
+apix = (0.05 * pi / 3600. / 180.)**2 # sr^2
+expo = effa * timeobsv # erg^-1 cm^2 s A 
 print 'expo'
 print expo
-print 'data'
-summgene(data)
-data *= 1. / expo / apix
-print 'data'
-summgene(data)
+print 'rate'
+summgene(rate)
+flux = rate / effa / apix
+cnts = flux * expo * apix
+print 'mean(cnts[:10, :10])'
+print mean(cnts[:10, :10])
+print 'cnts'
+summgene(cnts)
+print 'flux'
+summgene(flux)
 
-pf.writeto(path, data, clobber=True)
+pf.writeto(path, flux, clobber=True)
 
 #globals().get(sys.argv[1])()
 
