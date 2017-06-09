@@ -139,6 +139,7 @@ def pcat_lens_mock_syst():
     numbswepnomi = 10000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
+    dictargs['factthin'] = 100
                 
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
@@ -451,7 +452,7 @@ def pcat_lens_mockonly():
    
     pcat.main.init( \
                    elemtype='lens', \
-                   truenumbpnts=array([400]), \
+                   truenumbpnts=array([20]), \
                    truemaxmnumbpnts=array([400]), \
                    mockonly=True, \
                   )
@@ -490,24 +491,6 @@ def pcat_lens_mock():
 
 def pcat_lens_intrevalresicnts():
 
-    initsigcene0evt0 = 2.4e-07
-    initbacpbac0ene0 = 1.5e-07
-    
-    initlgalsour = -1.818e-06
-    initbgalsour = 7.272e-07
-    initspecsourene0 = 1e-19
-    initellpsour = 0.01
-    initanglsour = pi / 2.
-
-    initlgalhost = -9.167e-07
-    initbgalhost = 2.533e-07
-    initspechostene0 = 1.2e-16
-    initsizehost = 4.256e-6
-    initbeinhost = 4.497e-6
-    initellphost = 0.099
-    initanglhost = 0.5
-    initserihost = 4.
-    
     initsherextr = 0.01
     initsangextr = pi / 2.
 
@@ -518,30 +501,7 @@ def pcat_lens_intrevalresicnts():
                    makeplotinit=False, \
                    intrevalresicnts=True, \
                    strgexpo=strgexpo, \
-                   
-                   #initsigcene0evt0=initsigcene0evt0, \
-                   #initbacpbac0ene0=initbacpbac0ene0, \
-                   #
-                   #initlgalsour=initlgalsour, \
-                   #initbgalsour=initbgalsour, \
-                   #initspecsourene0=initspecsourene0, \
-                   #initellpsour=initellpsour, \
-                   #initanglsour=initanglsour, \
-                   #
-                   #initlgalhost=initlgalhost, \
-                   #initbgalhost=initbgalhost, \
-                   #initspechostene0=initspechostene0, \
-                   #initsizehost=initsizehost, \
-                   #initbeinhost=initbeinhost, \
-                   #initellphost=initellphost, \
-                   #initanglhost=initanglhost, \
-                   #initserihost=initserihost, \
-                   #
-                   #initsherextr=initsherextr, \
-                   #initsangextr=initsangextr, \
-                   
                    recostat='pcat_lens_inpt', \
-                   
                    fittmaxmnumbpnts=array([0]), \
                    maxmgangdata=maxmgangdata, \
                    strgexprflux='lens0029.fits', \
@@ -552,83 +512,27 @@ def pcat_lens_inpt():
     
     hubbexpofact = 7.0780856e-20
     strgexpo = 7.37487548893e21
-
     maxmgangdata = 50. * 0.05 * pi / 180. / 3600.
-    
-    initsigcene0evt0 = 2.4e-07
-    initbacpbac0ene0 = 1.5e-07
-    
-    initlgalsour = -1.818e-06
-    initbgalsour = 7.272e-07
-    initspecsourene0 = 1e-19
-    initellpsour = 0.01
-    initanglsour = pi / 2.
-
-    initlgalhost = -9.167e-07
-    initbgalhost = 2.533e-07
-    initspechostene0 = 1.2e-16
-    initsizehost = 4.256e-6
-    initbeinhost = 4.497e-6
-    initellphost = 0.099
-    initanglhost = 0.5
-    initserihost = 4.
-    
-    initsherextr = 0.01
-    initsangextr = pi / 2.
-
     numbiter = 1
-    #numbsidecart = 300
     for k in range(numbiter):
         pcat.main.init( \
                        elemtype='lens', \
-                       numbswep=100000, \
+                       numbswep=10000, \
+                       factthin=1000, \
                        numbswepplot=10000, \
+                       mockonly=True, \
+                       makeplotintr=True, \
                        #burntmpr=True, \
-                       #verbtype=2, \
                        optihess=False, \
-                       #propbacp=False, \
-                        
                        savestat=True, \
                        recostat=True, \
-
-                       #initsigcene0evt0=initsigcene0evt0, \
-                       #initbacpbac0ene0=initbacpbac0ene0, \
-                       #
-                       #initlgalsour=initlgalsour, \
-                       #initbgalsour=initbgalsour, \
-                       #initspecsourene0=initspecsourene0, \
-                       #initellpsour=initellpsour, \
-                       #initanglsour=initanglsour, \
-                       #
-                       #initlgalhost=initlgalhost, \
-                       #initbgalhost=initbgalhost, \
-                       #initspechostene0=initspechostene0, \
-                       #initsizehost=initsizehost, \
-                       #initbeinhost=initbeinhost, \
-                       #initellphost=initellphost, \
-                       #initanglhost=initanglhost, \
-                       #initserihost=initserihost, \
-                       #
-                       #initsherextr=initsherextr, \
-                       #initsangextr=initsangextr, \
-                          
-                       #proppsfp=False, \
-                       #verbtype=2, \
-                       #truenumbpnts=array([5]), \
-                       #truemaxmnumbpnts=array([10]), \
-                       #checprio=True, \
-                       #evoltype='maxmllik', \
-                       #makeplot=False, \
-                       #shrtfram=True, \
-                       #optihess=False, \
-                       #makeplot=False, \
                        #makeplotinit=False, \
+                       makeplotfram=False, \
+                       makeplotlpri=False, \
                        strgexpo=strgexpo, \
                        fittmaxmnumbpnts=array([0]), \
                        maxmgangdata=maxmgangdata, \
-                       plotelemcorr=False, \
                        strgexprflux='lens0029.fits', \
-                       plotlpri=False, \
                       )
    
 
