@@ -154,6 +154,7 @@ def pcat_lens_mock_syst():
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  indxruns=1, \
                                  )
     
 
