@@ -140,13 +140,13 @@ def pcat_lens_mock_syst():
     dictargs = {}
     dictargs['elemtype'] = 'lens'
                 
-    numbelem = array([20. * 2.**0.9], dtype=int)
+    numbelem = array([15. * 2.**0.9], dtype=int)
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
     dictargsvari['numbswep'] =             [numbswepnomi, numbswepnomi, numbswepnomi,  numbswepnomi,  numbswepnomi, numbswepnomi]
     dictargsvari['truenumbpnts'] =         [None,         None,         numbelem,      None,          None,         None,       ]
     dictargsvari['trueminmdefs'] =         [None,         None,         5e-3/anglfact, None,          None,         None,       ]
-    dictargsvari['fittminmdefs'] =         [None,         None,         1e-2/anglfact, 3e-2/anglfact, None,         None,       ]
+    dictargsvari['fittminmdefs'] =         [None,         None,         1e-2/anglfact, 2e-2/anglfact, None,         None,       ]
     dictargsvari['fittminmnumbpnts'] =     [None,         array([1]),   None,          None,          None,         None,       ]
     dictargsvari['fittmaxmnumbpnts'] =     [None,         array([1]),   None,          None,          None,         None,       ]
     dictargsvari['truestdvdefsdistslop'] = [0.5,          0.5,          0.5,           0.5,           0.5,          'none',     ]
@@ -154,7 +154,7 @@ def pcat_lens_mock_syst():
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  #indxruns=1, \
+                                  indxruns=0, \
                                  )
     
 
