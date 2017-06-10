@@ -1,15 +1,17 @@
 from __init__ import *
 
+# RA/DEC lists
+liststrgrade = []
+listrade = [[], []]
+
 pathbase = os.environ["TDGU_DATA_PATH"] + '/pcat_lens_simu/'
 pathdata = pathbase + 'data/'
 pathimag = pathbase + 'imag/'
 
+# read SLACS tables
+print 'Reading SLACS tables...'
 pathslacpara = pathbase + 'data/slacpara.fits'
-#tdpy.util.read_fits(pathslacpara, pathimag)
-
 pathslacfull = pathbase + 'data/slacfull.fits'
-#tdpy.util.read_fits(pathslacfull, pathimag)
-
 hdun = pf.open(pathslacfull)
 numbhead = len(hdun)
 print '%s extensions found.' % numbhead
@@ -35,75 +37,147 @@ for k in range(numbhead):
     if len(listtype) != len(data[0]):
         raise Exception('Number of types does not match the number of fields.')
     
+# find the RA/DEC of relevant SLACS systems 
+indxgold = where((data['Mph'] == 'E') & (data['Mul'] == 'S') & (data['Lens'] == 'A'))[0]
+numbslac = indxgold.size
 
-indx = where((data['Mph'] == 'E') & (data['Mul'] == 'S') & (data['Lens'] == 'A'))[0]
-
-path = pathdata + 'list.txt'
+path = pathdata + 'slacdownlist.txt'
 fileobjt = open(path, 'w')
-for item in data['SDSS'][indx]:
-    fileobjt.write("%s %s %s %s %s %s \n" % (item[:2], item[2:4], item[4:9], item[9:12], item[12:14], item[14:]))
+for k in indxgold:
+    
+    # construct the delimited RA/DEC string
+    strgrade = '%s %s %s %s %s %s' % (data['SDSS'][k][:2], data['SDSS'][k][2:4], data['SDSS'][k][4:9], data['SDSS'][k][9:12], data['SDSS'][k][12:14], data['SDSS'][k][14:])
+    
+    ## fill the RA/DEC lists
+    liststrgrade.append(strgrade)
+    listrade[0].append(data['_RA'][k])
+    listrade[1].append(data['_DE'][k])
+    
+    ## write the RA/DEC list of relevant SLACS systems to disc
+    strgline = strgrade + ' \n'
+    fileobjt.write(strgline)
+    
 
-for k in range(len(indx)):
-    print '%20s %20s' % (data['SDSS'][indx[k]], data['Name'][indx][k])
+for k in range(len(indxgold)):
+    print '%20s %20s %20g %20g' % (data['SDSS'][indxgold[k]], data['Name'][indxgold][k], data['_RA'][indxgold][k], data['_DE'][indxgold][k])
 
-pathfile = pathdata + 'hst_10886_02_acs_wfc_f814w_drz.fits'
-listdata = tdpy.util.read_fits(pathfile, full=True)
+# list of files to be read
+listnamefile = ['hst_10886_02_acs_wfc_f814w_drz.fits']
 
-listhdun = astropy.io.fits.open(pathfile)
-wcso = astropy.wcs.WCS(listhdun[2].header)
-
-
-indxthis = where(data['SDSS'] == '002907.77-005550.5')[0]
-
-print 'Working with ' + data['SDSS'][indxthis][0]
-print data['_RA'][indxthis]
-print data['_DE'][indxthis]
-print
-
-# temp 0 or 1 makes a difference!
-indxyaxi, indxxaxi = wcso.wcs_world2pix(data['_RA'][indxthis], data['_DE'][indxthis], 0)
-
-indxxaxi = int(indxxaxi[0])
-indxyaxi = int(indxyaxi[0])
+# cutout properties
 numbside = 100
 numbsidehalf = numbside / 2
 
+# data path
 pathdatapcat = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
-path = pathdatapcat + 'lens0029.fits'
-print 'Writing to %s...' % path
 
-print 'EXPTIME'
-print listdata[4]['EXPTIME'][0]
-print 'PHOTFLAM'
-print listdata[4]['PHOTFLAM'][0]
-print 'CCDGAIN'
-print listdata[4]['CCDGAIN'][0]
+## RA/DEC string of the reference star
+#strgradestar = '00 29 12.65 -00 53 59.7'
+strgradestar = '00 29 06.79 -00 54 07.5'
+liststrgrade.append(strgradestar)
+coorstar = ap.coordinates.SkyCoord(strgradestar, unit=(ap.units.hourangle, ap.units.deg))
+listrade[0].append(coorstar.ra.degree)
+listrade[1].append(coorstar.dec.degree)
+#for strgrade in liststrgrade:
+#    print 'strgrade'
+#    print strgrade
+#    
+#    # convert RA/DEC strings to RA/DEC
+#    coor = ap.coordinates.SkyCoord(strgrade, unit=(ap.units.hourangle, ap.units.deg))
+#    listrade[0].append(coor.ra.degree)
+#    listrade[1].append(coor.dec.degree)
+    
+    
+# RA/DEC strings of the SLACS systems
+#liststrgrade.append('002907.77-005550.5')
+liststrgrade.append('00 29 07.77 -00 55 50.5')
 
-# cut out the image
-rate = listdata[1][indxxaxi-numbsidehalf:indxxaxi+numbsidehalf, indxyaxi-numbsidehalf:indxyaxi+numbsidehalf] # s^-1
+numbrade = len(listrade[0])
 
-# gather different bands
-rate = rate[None, :, :, None]
+print 'listrade'
+print listrade
+for k, namefile in enumerate(listnamefile):
+    
+    print 'k'
+    print k
+        
+    # read the data fields
+    pathfile = pathdata + namefile
+    listdata = tdpy.util.read_fits(pathfile)
+    
+    # read the WCS header
+    listhdun = ap.io.fits.open(pathfile)
+    wcso = ap.wcs.WCS(listhdun[2].header)
+    
+    # RA/DEC string
+    strgrade = liststrgrade[k]
 
-# find the number of photons per area per time per A per solid angle
-effa = 1. / listdata[4]['PHOTFLAM'][0] # erg^-1 cm^2 A
-timeobsv = listdata[4]['EXPTIME'][0] # s
-apix = (0.05 * pi / 3600. / 180.)**2 # sr^2
-expo = effa * timeobsv # erg^-1 cm^2 s A 
-print 'expo'
-print expo
-print 'rate'
-summgene(rate)
-flux = rate / effa / apix
-cnts = flux * expo * apix
-print 'mean(cnts[:10, :10])'
-print mean(cnts[:10, :10])
-print 'cnts'
-summgene(cnts)
-print 'flux'
-summgene(flux)
+    # iterate over the RA/DEC list    
+    for n in range(numbrade):
+        
+        # RA/DEC
+        strgrade = liststrgrade[n]
+        indxyaxi, indxxaxi = wcso.wcs_world2pix(listrade[0][n], listrade[1][n], 0)
+        # check if the coordinate is inside the image
+        if not isfinite(indxyaxi) or not isfinite(indxxaxi) or indxxaxi - numbsidehalf < 0 or indxyaxi - numbsidehalf < 0 or \
+                                                                    indxxaxi + numbsidehalf > listdata[1].shape[1] or indxyaxi + numbsidehalf > listdata[1].shape[0]:
+            continue
+            #raise Exception('')
 
-pf.writeto(path, flux, clobber=True)
+        path = pathdatapcat + 'lens%s%s%s%s.fits' % (liststrgrade[n][3:5], liststrgrade[n][6:8], liststrgrade[n][16:18], liststrgrade[n][19:21])
+        print 'Writing to %s...' % path
+        
+        print 'strgrade'
+        print strgrade
+        print 'listrade[0][n]'
+        print listrade[0][n]
+        print 'listrade[1][n]'
+        print listrade[1][n]
+        print 'indxxaxi'
+        print indxxaxi
+        print 'indxyaxi'
+        print indxyaxi
+        indxxaxi = int(indxxaxi)
+        indxyaxi = int(indxyaxi)
+        print 'indxxaxi'
+        print indxxaxi
+        print 'indxyaxi'
+        print indxyaxi
+        print 'listdata[1]'
+        summgene(listdata[1])
+        print 'EXPTIME'
+        print listdata[4]['EXPTIME'][0]
+        print 'PHOTFLAM'
+        print listdata[4]['PHOTFLAM'][0]
+        print 'CCDGAIN'
+        print listdata[4]['CCDGAIN'][0]
+        
+        # cut out the image
+        rate = listdata[1][indxxaxi-numbsidehalf:indxxaxi+numbsidehalf, indxyaxi-numbsidehalf:indxyaxi+numbsidehalf] # s^-1
 
-#globals().get(sys.argv[1])()
-
+        # gather different bands
+        rate = rate[None, :, :, None]
+        
+        # find the number of photons per area per time per A per solid angle
+        effa = 1. / listdata[4]['PHOTFLAM'][0] # erg^-1 cm^2 A
+        timeobsv = listdata[4]['EXPTIME'][0] # s
+        apix = (0.05 * pi / 3600. / 180.)**2 # sr^2
+        expo = effa * timeobsv # erg^-1 cm^2 s A 
+        print 'expo'
+        print expo
+        print 'rate'
+        summgene(rate)
+        flux = rate / effa / apix
+        cnts = flux * expo * apix
+        print 'mean(cnts[:10, :10])'
+        print mean(cnts[:10, :10])
+        print 'cnts'
+        summgene(cnts)
+        print 'flux'
+        summgene(flux)
+        
+        pf.writeto(path, flux, clobber=True)
+        
+    
+    #globals().get(sys.argv[1])()
+        

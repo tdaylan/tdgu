@@ -140,12 +140,12 @@ def pcat_lens_mock_syst():
     dictargs = {}
     dictargs['elemtype'] = 'lens'
                 
-    numbelem = array([20. * 10.**0.9])
+    numbelem = array([20. * 2.**0.9], dtype=int)
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
     dictargsvari['numbswep'] =             [numbswepnomi, numbswepnomi, numbswepnomi,  numbswepnomi,  numbswepnomi, numbswepnomi]
     dictargsvari['truenumbpnts'] =         [None,         None,         numbelem,      None,          None,         None,       ]
-    dictargsvari['trueminmdefs'] =         [None,         None,         1e-3/anglfact, None,          None,         None,       ]
+    dictargsvari['trueminmdefs'] =         [None,         None,         5e-3/anglfact, None,          None,         None,       ]
     dictargsvari['fittminmdefs'] =         [None,         None,         1e-2/anglfact, 3e-2/anglfact, None,         None,       ]
     dictargsvari['fittminmnumbpnts'] =     [None,         array([1]),   None,          None,          None,         None,       ]
     dictargsvari['fittmaxmnumbpnts'] =     [None,         array([1]),   None,          None,          None,         None,       ]
@@ -154,7 +154,7 @@ def pcat_lens_mock_syst():
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  indxruns=1, \
+                                  #indxruns=1, \
                                  )
     
 
@@ -461,11 +461,9 @@ def pcat_lens_mockonly():
 
 def pcat_lens_mock():
     
-    seed(0)
-    #path = '/Users/tansu/Documents/work/data/pcat/data/outp/20170524_145317_pcat_lens_mock_1000/stat.p'
-    #with open(path, 'rb') as thisfile:
-    #    #set_state(cPickle.load(thisfile))
-    #    seedstat = cPickle.load(thisfile)
+    seed(4)
+    
+    anglfact = 3600. * 180. / pi
 
     numbiter = 1
     for k in range(numbiter):
@@ -481,12 +479,24 @@ def pcat_lens_mock():
                        #optihess=False, \
                        #makeplot=False, \
                        #makeplotinit=False, \
-                       trueserihost=4., \
-                       mockonly=True, \
+                       #mockonly=True, \
                        numbswep=1000, \
-                       inittype='refr', \
-                       numbswepplot=6000, \
+                       #rtagredo='20170610_133749_pcat_lens_mock_10000', \
+                       #inittype='rand', \
+                       #optihess=False, \
+                       #savestat=True, \
+                       #recostat=True, \
+                       #initlgalsour=-1e-1 / anglfact, \
+                       #initbgalsour=1e-1 / anglfact, \
+                       #burntmpr=True, \
+                       makeplotlpri=False, \
                        factthin=100, \
+                       makeplotinit=False, \
+                       makeplotfram=False, \
+                       #makeplotlpri=False, \
+                       #fittmaxmnumbpnts=array([5]), \
+                       #shrtfram=True, \
+                       numbswepplot=6000, \
                       )
    
 
@@ -512,27 +522,62 @@ def pcat_lens_intrevalresicnts():
 def pcat_lens_inpt():
     
     strgexpo = 7.37487548893e21
-    maxmgangdata = 50. * 0.05 * pi / 180. / 3600.
+    anglfact = 3600. * 180. / pi
+    maxmgangdata = 50. * 0.05 / anglfact
     numbiter = 1
+    mask = array([-0.3, 0.1, -0.1, 0.2]) / anglfact
+    
     for k in range(numbiter):
         pcat.main.init( \
                        elemtype='lens', \
-                       numbswep=10000, \
-                       factthin=1000, \
+                       numbswep=50000, \
+                       factthin=500, \
                        numbswepplot=10000, \
-                       mockonly=True, \
-                       makeplotintr=True, \
+                       shrtfram=True, \
+                       #mockonly=True, \
+                       #makeplotintr=True, \
                        #burntmpr=True, \
+                       mask=mask, \
                        optihess=False, \
                        savestat=True, \
                        recostat=True, \
                        #makeplotinit=False, \
-                       makeplotfram=False, \
+                       #makeplotfram=False, \
                        makeplotlpri=False, \
                        strgexpo=strgexpo, \
                        fittmaxmnumbpnts=array([0]), \
                        maxmgangdata=maxmgangdata, \
                        strgexprflux='lens0029.fits', \
+                      )
+   
+
+def pcat_lens_psfn():
+    
+    strgexpo = 7.37487548893e21
+    anglfact = 3600. * 180. / pi
+    maxmgangdata = 50. * 0.05 / anglfact
+    numbiter = 1
+    
+    for k in range(numbiter):
+        pcat.main.init( \
+                       elemtype='lens', \
+                       numbswep=50000, \
+                       factthin=500, \
+                       numbswepplot=10000, \
+                       shrtfram=True, \
+                       #mockonly=True, \
+                       #makeplotintr=True, \
+                       #burntmpr=True, \
+                       optihess=False, \
+                       #savestat=True, \
+                       #recostat=True, \
+                       #makeplotinit=False, \
+                       #makeplotfram=False, \
+                       makeplotlpri=False, \
+                       strgexpo=strgexpo, \
+                       fittmaxmnumbpnts=array([0]), \
+                       maxmgangdata=maxmgangdata, \
+                       strgexprflux='lens29065407.fits', \
                       )
    
 

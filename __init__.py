@@ -34,7 +34,7 @@ from healpy import ang2pix
 # pyfits
 import pyfits as pf
 
-import astropy
+import astropy as ap
 
 # utilities
 import os, time, sys, datetime, warnings, getpass, glob, fnmatch, cPickle, inspect
