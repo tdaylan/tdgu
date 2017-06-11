@@ -853,25 +853,6 @@ def pcat_ferm_inpt_ptch():
              )
     
     
-def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
-    
-    pcat.main.init( \
-                   numbswep=10000, \
-                   maxmgangdata=deg2rad(20.), \
-                   indxenerincl=arange(1, 4), \
-                   indxevttincl=arange(2, 4), \
-                   randinit=True, \
-                   diagmode=True, \
-                   minmflux=1e-8, \
-                   maxmflux=3e-6, \
-                   makeplot=False, \
-                   #maxmnumbpnts=array([10]), \
-                   back=['isotflux.fits', 'fdfmflux.fits'], \
-                   strgexpo=strgexpo, \
-                   strgexprflux=strgexprflux, \
-                  )
-    
-    
 def pcat_ferm_inpt_igal_popl(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
     pcat.main.init( \
@@ -956,14 +937,33 @@ def pcat_ferm_mock_igal_syst():
                       )
 
 
+def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
+    
+    pcat.main.init( \
+                   numbswep=10000, \
+                   maxmgangdata=deg2rad(20.), \
+                   indxenerincl=arange(1, 4), \
+                   indxevttincl=arange(2, 4), \
+                   diagmode=True, \
+                   minmflux=1e-8, \
+                   maxmflux=3e-6, \
+                   makeplot=False, \
+                   #maxmnumbpnts=array([10]), \
+                   back=['isotflux.fits', 'fdfmflux.fits'], \
+                   strgexpo=strgexpo, \
+                   strgexprflux=strgexprflux, \
+                  )
+    
+    
 def pcat_ferm_mock_igal():
      
     pcat.main.init( \
                    numbswep=10000, \
-                   #verbtype=2, \
+                   verbtype=2, \
+                   numbproc=1, \
                    indxevttincl=arange(3, 4), \
                    indxenerincl=arange(1, 4), \
-                   #strgexpo='fermexpo_cmp0_igal.fits', \
+                   strgexpo='fermexpo_cmp0_igal.fits', \
                    trueback=['isotflux.fits', 'fdfmflux.fits'], \
                    maxmgangdata=deg2rad(10.), \
                    trueminmflux=5e-11, \
