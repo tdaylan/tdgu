@@ -141,6 +141,8 @@ def pcat_lens_mock_syst():
     dictargs['elemtype'] = 'lens'
                 
     numbelem = array([15. * 2.**0.9], dtype=int)
+    print 'numbelem'
+    print numbelem
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
     dictargsvari['numbswep'] =             [numbswepnomi, numbswepnomi, numbswepnomi,  numbswepnomi,  numbswepnomi, numbswepnomi]
