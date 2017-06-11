@@ -3,7 +3,7 @@ from astropy.coordinates import SkyCoord
 from pcat.util import retr_chandata
 
 def writ_maps(datatype='twoo'):
-    
+
     if datatype == 'five':
         binsener = array([0.5, 0.91, 1.66, 3.02, 5.49, 10.])
         expomaps = [4]
@@ -11,6 +11,11 @@ def writ_maps(datatype='twoo'):
         expomaps = [2, 4]
         binsener = array([0.5, 2., 8.])
     
+    print 'datatype'
+    print datatype
+    
+    print
+
     diffener = binsener[1:] - binsener[:-1]
     numbener = diffener.size
     indxener = arange(numbener)
@@ -231,4 +236,4 @@ def pcat_chan_inpt():
                              )
 
 
-globals().get(sys.argv[1])()
+globals().get(sys.argv[1])(*sys.argv[2:])

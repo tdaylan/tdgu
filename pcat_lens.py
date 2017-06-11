@@ -139,6 +139,8 @@ def pcat_lens_mock_syst():
     numbswepnomi = 2000000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
+    dictargs['numbswepplot'] = 10000
+    dictargs['makeplotinit'] = False
                 
     numbelem = array([15. * 2.**0.9], dtype=int)
     print 'numbelem'
@@ -483,6 +485,7 @@ def pcat_lens_mock():
                        #makeplotinit=False, \
                        #mockonly=True, \
                        numbswep=1000, \
+                       factthin=1, \
                        #rtagredo='20170610_133749_pcat_lens_mock_10000', \
                        #inittype='rand', \
                        #optihess=False, \
@@ -491,11 +494,7 @@ def pcat_lens_mock():
                        #initlgalsour=-1e-1 / anglfact, \
                        #initbgalsour=1e-1 / anglfact, \
                        #burntmpr=True, \
-                       makeplotlpri=False, \
-                       factthin=100, \
-                       makeplotinit=False, \
-                       makeplotfram=False, \
-                       #makeplotlpri=False, \
+                       makeplot=False, \
                        #fittmaxmnumbpnts=array([5]), \
                        #shrtfram=True, \
                        numbswepplot=6000, \
