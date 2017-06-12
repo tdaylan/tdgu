@@ -140,7 +140,7 @@ def pcat_lens_mock_syst():
     dictargs = {}
     dictargs['elemtype'] = 'lens'
                 
-    numbelem = array([35. * 10.**0.9], dtype=int)
+    numbelem = array([25. * 10.**0.9], dtype=int)
     print 'numbelem'
     print numbelem
     anglfact = 3600. * 180. / pi
