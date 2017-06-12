@@ -483,8 +483,12 @@ def pcat_lens_mock():
                        #makeplotinit=False, \
                        #mockonly=True, \
                        makeplot=False, \
-                       numbswep=1000, \
-                       factthin=100, \
+                       #truemaxmnumbpnts=array([5]), \
+                       #truenumbpnts=array([5]), \
+                       #verbtype=2, \
+                       numbswep=100000, \
+                       #truestdvdefsdistslop=0.01, \
+                       factthin=30000, \
                        #rtagredo='20170610_133749_pcat_lens_mock_10000', \
                        #inittype='rand', \
                        #optihess=False, \
