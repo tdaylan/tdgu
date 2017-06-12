@@ -136,12 +136,9 @@ def pcat_lens_mock_syst():
    
     seed(4)
     
-    numbswepnomi = 10000
+    numbswepnomi = 2000000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['factthin'] = 1000
-    dictargs['makeplotinit'] = False
-    dictargs['makeplotfram'] = False
                 
     numbelem = array([25. * 10.**0.9], dtype=int)
     print 'numbelem'
@@ -159,7 +156,7 @@ def pcat_lens_mock_syst():
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  indxruns=1, \
+                                  indxruns=0, \
                                  )
     
 
