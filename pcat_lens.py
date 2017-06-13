@@ -136,9 +136,10 @@ def pcat_lens_mock_syst():
    
     seed(4)
     
-    numbswepnomi = 2000000
+    numbswepnomi = 20000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
+    dictargs['factthin'] = 2000
                 
     numbelem = array([25. * 10.**0.9], dtype=int)
     print 'numbelem'
