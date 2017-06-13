@@ -136,13 +136,13 @@ def pcat_lens_mock_syst():
    
     seed(4)
     
-    numbswepnomi = 10000
+    numbswepnomi = 1000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['makeplot'] = False
-    dictargs['factthin'] = 1
-    dictargs['emptsamp'] = True
-    dictargs['numbproc'] = 2
+    dictargs['factthin'] = 100
+    #dictargs['emptsamp'] = True
+    #dictargs['numbproc'] = 2
                 
     numbelem = array([25. * 10.**0.9], dtype=int)
     print 'numbelem'
