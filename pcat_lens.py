@@ -136,11 +136,11 @@ def pcat_lens_mock_syst():
    
     seed(4)
     
-    numbswepnomi = 1000
+    numbswepnomi = 10000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['makeplot'] = False
-    dictargs['factthin'] = 100
+    #dictargs['makeplot'] = False
+    #dictargs['factthin'] = 100
     #dictargs['emptsamp'] = True
     #dictargs['numbproc'] = 2
                 
