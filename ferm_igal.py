@@ -961,6 +961,8 @@ def pcat_ferm_mock_igal():
                    numbswep=10000, \
                    verbtype=2, \
                    numbproc=1, \
+                   makeplot=False, \
+                   diagmode=True, \
                    indxevttincl=arange(3, 4), \
                    indxenerincl=arange(1, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
