@@ -143,7 +143,11 @@ def pcat_lens_mock_syst():
     #dictargs['factthin'] = 100
     #dictargs['emptsamp'] = True
     #dictargs['numbproc'] = 2
-                
+    #dictargs['initlgalsour'] = -2.41108523236e-07
+    #dictargs['initbgalsour'] = 1.2690938483e-07
+    #dictargs['initlgalhost'] = 1.1090807602e-07
+    #dictargs['initbgalhost'] = 2.26345624113e-08
+ 
     numbelem = array([25. * 10.**0.9], dtype=int)
     print 'numbelem'
     print numbelem
