@@ -944,9 +944,11 @@ def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermex
                    maxmgangdata=deg2rad(20.), \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
+                   verbtype=2, \
                    diagmode=True, \
                    minmflux=1e-8, \
                    maxmflux=3e-6, \
+                   fittmaxmnumbpnts=array([5]), \
                    makeplot=False, \
                    #maxmnumbpnts=array([10]), \
                    back=['isotflux.fits', 'fdfmflux.fits'], \
