@@ -552,8 +552,8 @@ def pcat_lens_inpt():
                        #burntmpr=True, \
                        #initsizesour=1.5/anglfact, \
                        #initspecsourene0=1.5e-18, \
-                       verbtype=2, \
-                       mask=mask, \
+                       #verbtype=2, \
+                       #mask=mask, \
                        optihess=False, \
                        savestat=True, \
                        recostat=True, \
