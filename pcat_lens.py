@@ -543,10 +543,8 @@ def pcat_lens_inpt():
     for k in range(numbiter):
         pcat.main.init( \
                        elemtype='lens', \
-                       numbswep=50000, \
-                       factthin=500, \
-                       numbswepplot=10000, \
-                       shrtfram=True, \
+                       numbswep=2000000, \
+                       #shrtfram=True, \
                        #mockonly=True, \
                        #makeplotintr=True, \
                        #burntmpr=True, \
@@ -554,6 +552,7 @@ def pcat_lens_inpt():
                        #initspecsourene0=1.5e-18, \
                        #verbtype=2, \
                        #mask=mask, \
+                       serstype='intp', \
                        optihess=False, \
                        savestat=True, \
                        recostat=True, \
