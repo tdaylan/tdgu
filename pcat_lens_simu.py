@@ -24,8 +24,9 @@ for k in range(numbhead):
         print 'Data is None, skipping...'
         continue
     else:
-        print 'data object has keys'
-        print data.names
+        pass
+        #print 'data object has keys'
+        #print data.names
 
     arry = array(stack((head.keys(), head.values()), 1))
     listtype = []
@@ -56,16 +57,12 @@ for k in indxgold:
     ## write the RA/DEC list of relevant SLACS systems to disc
     strgline = strgrade + ' \n'
     fileobjt.write(strgline)
-    
 
 for k in range(len(indxgold)):
     print '%20s %20s %20g %20g' % (data['SDSS'][indxgold[k]], data['Name'][indxgold][k], data['_RA'][indxgold][k], data['_DE'][indxgold][k])
 
-# list of files to be read
-listnamefile = ['hst_10886_02_acs_wfc_f814w_drz.fits']
-
 # cutout properties
-numbside = 100
+numbside = 400
 numbsidehalf = numbside / 2
 
 # data path
@@ -78,32 +75,22 @@ liststrgrade.append(strgradestar)
 coorstar = ap.coordinates.SkyCoord(strgradestar, unit=(ap.units.hourangle, ap.units.deg))
 listrade[0].append(coorstar.ra.degree)
 listrade[1].append(coorstar.dec.degree)
-#for strgrade in liststrgrade:
-#    print 'strgrade'
-#    print strgrade
-#    
-#    # convert RA/DEC strings to RA/DEC
-#    coor = ap.coordinates.SkyCoord(strgrade, unit=(ap.units.hourangle, ap.units.deg))
-#    listrade[0].append(coor.ra.degree)
-#    listrade[1].append(coor.dec.degree)
-    
-    
-# RA/DEC strings of the SLACS systems
-#liststrgrade.append('002907.77-005550.5')
-liststrgrade.append('00 29 07.77 -00 55 50.5')
 
 numbrade = len(listrade[0])
+print '%d coordinates found.' % numbrade
 
-print 'listrade'
-print listrade
+# list of files to be read
+listnamefile = ['hst_10886_02_acs_wfc_f814w_drz.fits']
+numbfile = len(listnamefile)
+print '%d files found.' % numbfile
+
 for k, namefile in enumerate(listnamefile):
     
-    print 'k'
-    print k
+    print 'File number %d' % k
         
     # read the data fields
     pathfile = pathdata + namefile
-    listdata = tdpy.util.read_fits(pathfile)
+    listdata = tdpy.util.read_fits(pathfile, verbtype=0)
     
     # read the WCS header
     listhdun = ap.io.fits.open(pathfile)
@@ -115,6 +102,8 @@ for k, namefile in enumerate(listnamefile):
     # iterate over the RA/DEC list    
     for n in range(numbrade):
         
+        print 'Coordinate number %d' % n
+        
         # RA/DEC
         strgrade = liststrgrade[n]
         indxyaxi, indxxaxi = wcso.wcs_world2pix(listrade[0][n], listrade[1][n], 0)
@@ -124,33 +113,44 @@ for k, namefile in enumerate(listnamefile):
             continue
             #raise Exception('')
 
-        path = pathdatapcat + 'lens%s%s%s%s.fits' % (liststrgrade[n][3:5], liststrgrade[n][6:8], liststrgrade[n][16:18], liststrgrade[n][19:21])
-        print 'Writing to %s...' % path
+        path = pathdatapcat + 'lens%s%s%s%s_%04d.fits' % (liststrgrade[n][3:5], liststrgrade[n][6:8], liststrgrade[n][16:18], liststrgrade[n][19:21], numbside)
+       
+        print 'listdata[4]'
+        print listdata[4].names
+        if False:
+            print 'strgrade'
+            print strgrade
+            print 'listrade[0][n]'
+            print listrade[0][n]
+            print 'listrade[1][n]'
+            print listrade[1][n]
+            print 'indxxaxi'
+            print indxxaxi
+            print 'indxyaxi'
+            print indxyaxi
         
-        print 'strgrade'
-        print strgrade
-        print 'listrade[0][n]'
-        print listrade[0][n]
-        print 'listrade[1][n]'
-        print listrade[1][n]
-        print 'indxxaxi'
-        print indxxaxi
-        print 'indxyaxi'
-        print indxyaxi
         indxxaxi = int(indxxaxi)
         indxyaxi = int(indxyaxi)
-        print 'indxxaxi'
-        print indxxaxi
-        print 'indxyaxi'
-        print indxyaxi
-        print 'listdata[1]'
-        summgene(listdata[1])
-        print 'EXPTIME'
-        print listdata[4]['EXPTIME'][0]
-        print 'PHOTFLAM'
-        print listdata[4]['PHOTFLAM'][0]
-        print 'CCDGAIN'
-        print listdata[4]['CCDGAIN'][0]
+       
+        print 'MDRIZSKY'
+        print listdata[4]['MDRIZSKY']
+        print 'SKYSUB'
+        print listdata[4]['SKYSUB']
+        print
+
+        if False:
+            print 'indxxaxi'
+            print indxxaxi
+            print 'indxyaxi'
+            print indxyaxi
+            print 'listdata[1]'
+            summgene(listdata[1])
+            print 'EXPTIME'
+            print listdata[4]['EXPTIME'][0]
+            print 'PHOTFLAM'
+            print listdata[4]['PHOTFLAM'][0]
+            print 'CCDGAIN'
+            print listdata[4]['CCDGAIN'][0]
         
         # cut out the image
         rate = listdata[1][indxxaxi-numbsidehalf:indxxaxi+numbsidehalf, indxyaxi-numbsidehalf:indxyaxi+numbsidehalf] # s^-1
@@ -163,19 +163,22 @@ for k, namefile in enumerate(listnamefile):
         timeobsv = listdata[4]['EXPTIME'][0] # s
         apix = (0.05 * pi / 3600. / 180.)**2 # sr^2
         expo = effa * timeobsv # erg^-1 cm^2 s A 
-        print 'expo'
-        print expo
-        print 'rate'
-        summgene(rate)
         flux = rate / effa / apix
         cnts = flux * expo * apix
-        print 'mean(cnts[:10, :10])'
-        print mean(cnts[:10, :10])
-        print 'cnts'
-        summgene(cnts)
-        print 'flux'
-        summgene(flux)
         
+        if False:
+            print 'expo'
+            print expo
+            print 'rate'
+            summgene(rate)
+            print 'mean(cnts[:10, :10])'
+            print mean(cnts[:10, :10])
+            print 'cnts'
+            summgene(cnts)
+            print 'flux'
+            summgene(flux)
+        
+        print 'Writing to %s...' % path
         pf.writeto(path, flux, clobber=True)
         
     

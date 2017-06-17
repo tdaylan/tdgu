@@ -515,55 +515,108 @@ def pcat_lens_mock():
 
 def pcat_lens_intrevalresicnts():
 
-    initsherextr = 0.01
-    initsangextr = pi / 2.
-
+    anglfact = 3600. * 180. / pi
+    sizepixl = 0.05 / anglfact
+    
+    # name of the dataset
+    namedatasets = 'lens29075550'
+    
+    # exposure
     strgexpo = 7.37487548893e21
-    maxmgangdata = 50. * 0.05 * pi / 180. / 3600.
+
+    # half-size of the image
+    numbside = 400
+    maxmgangdata = numbside * 0.5 * sizepixl
+    
+    # name of the data file
+    strgexprflux = namedatasets + '_%04d.fits' % numbside
+    
+    if namedatasets == 'lens29075550':
+        initbacpbac0ene0 = 1.1e-7
+        fittmeanbacpbac0ene0 = 1.1e-7
+        fittstdvbacpbac0ene0 = fittmeanbacpbac0ene0 * 1e-3
+        fittscalbacpbac0ene0 = 'gaus'
+    else:
+        initbacpbac0ene0 = None
+        fittmeanbacpbac0ene0 = None
+        fittstdvbacpbac0ene0 = None
+        fittscalbacpbac0ene0 = None
+
     pcat.main.init( \
                    elemtype='lens', \
                    makeplotinit=False, \
                    intrevalresicnts=True, \
                    strgexpo=strgexpo, \
+                   initbacpbac0ene0=initbacpbac0ene0, \
+                   fittmeanbacpbac0ene0=fittmeanbacpbac0ene0, \
+                   fittstdvbacpbac0ene0=fittstdvbacpbac0ene0, \
+                   fittscalbacpbac0ene0=fittscalbacpbac0ene0, \
                    recostat='pcat_lens_inpt', \
                    fittmaxmnumbpnts=array([0]), \
                    maxmgangdata=maxmgangdata, \
-                   strgexprflux='lens0029.fits', \
+                   strgexprflux=strgexprflux, \
                   )
     
 
 def pcat_lens_inpt():
     
-    strgexpo = 7.37487548893e21
     anglfact = 3600. * 180. / pi
-    maxmgangdata = 50. * 0.05 / anglfact
-    numbiter = 1
+    sizepixl = 0.05 / anglfact
+    
+    # name of the dataset
+    namedatasets = 'lens29075550'
+    
+    # exposure
+    strgexpo = 7.37487548893e21
+    
+    # half-size of the image in pixels
+    numbside = 400
+    maxmgangdata = numbside * 0.5 * sizepixl
+    
+    # name of the data file
+    strgexprflux = namedatasets + '_%04d.fits' % numbside
+    
+    if namedatasets == 'lens29075550':
+        initbacpbac0ene0 = 1.1e-7
+        fittmeanbacpbac0ene0 = 1.1e-7
+        fittstdvbacpbac0ene0 = fittmeanbacpbac0ene0 * 1e-3
+        fittscalbacpbac0ene0 = 'gaus'
+    else:
+        initbacpbac0ene0 = None
+        fittmeanbacpbac0ene0 = None
+        fittstdvbacpbac0ene0 = None
+        fittscalbacpbac0ene0 = None
+
     mask = array([-0.3, 0.1, -0.1, 0.2]) / anglfact
     
-    for k in range(numbiter):
-        pcat.main.init( \
-                       elemtype='lens', \
-                       numbswep=2000000, \
-                       #shrtfram=True, \
-                       #mockonly=True, \
-                       #makeplotintr=True, \
-                       #burntmpr=True, \
-                       #initsizesour=1.5/anglfact, \
-                       #initspecsourene0=1.5e-18, \
-                       #verbtype=2, \
-                       #mask=mask, \
-                       serstype='intp', \
-                       optihess=False, \
-                       savestat=True, \
-                       recostat=True, \
-                       #makeplotinit=False, \
-                       #makeplotfram=False, \
-                       makeplotlpri=False, \
-                       strgexpo=strgexpo, \
-                       fittmaxmnumbpnts=array([0]), \
-                       maxmgangdata=maxmgangdata, \
-                       strgexprflux='lens0029.fits', \
-                      )
+    pcat.main.init( \
+                   elemtype='lens', \
+                   numbswep=20000, \
+                   numbswepplot=1000, \
+                   #shrtfram=True, \
+                   #mockonly=True, \
+                   #makeplotintr=True, \
+                   #burntmpr=True, \
+                   #initsizesour=1.5/anglfact, \
+                   #initspecsourene0=1.5e-18, \
+                   #verbtype=2, \
+                   #mask=mask, \
+                   initbacpbac0ene0=initbacpbac0ene0, \
+                   fittmeanbacpbac0ene0=fittmeanbacpbac0ene0, \
+                   fittstdvbacpbac0ene0=fittstdvbacpbac0ene0, \
+                   fittscalbacpbac0ene0=fittscalbacpbac0ene0, \
+                   serstype='intp', \
+                   optihess=False, \
+                   savestat=True, \
+                   recostat=True, \
+                   #makeplotinit=False, \
+                   #makeplotfram=False, \
+                   makeplotlpri=False, \
+                   strgexpo=strgexpo, \
+                   fittmaxmnumbpnts=array([0]), \
+                   maxmgangdata=maxmgangdata, \
+                   strgexprflux=strgexprflux, \
+                  )
    
 
 def pcat_lens_psfn():
