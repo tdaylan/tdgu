@@ -5,6 +5,7 @@ def make_maps_rec7_back():
     gdat = tdpy.util.gdatstrt()
     gdat.recotype = ['rec7']
     gdat.enertype = ['back']
+    tdpy.util.writ_fdfm()
     tdpy.util.make_maps_main(gdat, os.environ["FERM_IGAL_DATA_PATH"])
     tdpy.util.prep_maps('rec7', 'back', 'igal', os.environ["FERM_IGAL_DATA_PATH"], 256, 'tim0')
 

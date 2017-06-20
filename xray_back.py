@@ -127,8 +127,8 @@ def writ_maps(datatype='extr'):
                 summgene(expo[i, :, :, 0])
                 print 'cnts[i, :, :, 0]'
                 summgene(cnts[i, :, :, 0])
-                print 'flux[i, :, :, :]'
-                summgene(flux[i, :, :, :])
+                print 'flux[i, :, :, 0]'
+                summgene(flux[i, :, :, 0])
 
             pathdatapcat = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
             
@@ -172,7 +172,8 @@ def pcat_chan_mock():
     numbsidecart = 300
     gridchan = pcat.main.init( \
                               numbswep=10000, \
-                              verbtype=2, \
+                              #verbtype=2, \
+                              diagmode=True, \
                               strgexpo='chanexpo%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               exprtype='chan', \
                               numbsidecart=numbsidecart, \
