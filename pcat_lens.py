@@ -570,7 +570,7 @@ def pcat_lens_inpt():
     strgexpo = 7.37487548893e21
     
     # half-size of the image in pixels
-    numbside = 400
+    numbside = 100
     maxmgangdata = numbside * 0.5 * sizepixl
     
     # name of the data file
@@ -608,7 +608,7 @@ def pcat_lens_inpt():
                    serstype='intp', \
                    optihess=False, \
                    savestat=True, \
-                   recostat=True, \
+                   #recostat=True, \
                    #makeplotinit=False, \
                    #makeplotfram=False, \
                    makeplotlpri=False, \

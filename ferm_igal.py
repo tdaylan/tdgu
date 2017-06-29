@@ -221,7 +221,7 @@ def mergmaps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     extn = strgtimestmp + '_' + rtag
     
     # paths
-    gdat.pathdatatdpy = tdpy.util.retr_path('tdpy', dataonly=True)
+    gdat.pathdatatdpy = tdpy.util.retr_path('tdpy', onlydata=True)
     gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('tdgu', 'ferm_igal/', 'ferm_igal/mergmaps/', extn)
 
     # time stamp
@@ -582,9 +582,9 @@ def regrback( \
     gdat.rtag = '%s' % (gdat.datatype)
 
     # paths
-    #gdat.pathdatatdpy = tdpy.util.retr_path('tdpy', dataonly=True)
-    #gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('tdgu', 'ferm_igal/', 'ferm_igal/regrback/', gdat.extn)
-
+    gdat.pathdatatdpy = tdpy.util.retr_path('tdpy', onlydata=True)
+    gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('tdgu', 'ferm_igal/', 'ferm_igal/regrback/', gdat.rtag)
+    
     ## data
     if gdat.datatype == 'inpt':
         
@@ -941,17 +941,14 @@ def pcat_ferm_mock_igal_syst():
 def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
     pcat.main.init( \
-                   numbswep=10000, \
+                   numbswep=100000, \
+                   numbswepplot=10000, \
                    maxmgangdata=deg2rad(20.), \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
-                   verbtype=2, \
-                   diagmode=True, \
                    minmflux=1e-8, \
                    maxmflux=3e-6, \
-                   fittmaxmnumbpnts=array([5]), \
-                   makeplot=False, \
-                   #maxmnumbpnts=array([10]), \
+                   fittmaxmnumbpnts=array([10]), \
                    back=['isotflux.fits', 'fdfmflux.fits'], \
                    strgexpo=strgexpo, \
                    strgexprflux=strgexprflux, \
@@ -964,7 +961,6 @@ def pcat_ferm_mock_igal():
                    numbswep=10000, \
                    verbtype=2, \
                    numbproc=1, \
-                   makeplot=False, \
                    diagmode=True, \
                    indxevttincl=arange(3, 4), \
                    indxenerincl=arange(1, 4), \

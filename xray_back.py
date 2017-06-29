@@ -165,30 +165,6 @@ def pcat_chan_mock_zero():
                               truenumbpnts=array([0]), \
                              )
 
-def pcat_chan_mock():
-    
-    datatype = 'home'
-    strgexpomaps = '4msc'
-    numbsidecart = 300
-    gridchan = pcat.main.init( \
-                              numbswep=10000, \
-                              factthin=1000, \
-                              numbswepplot=3000, \
-                              #verbtype=2, \
-                              #makeplot=False, \
-                              #diagmode=True, \
-                              #strgexpo='chanexpo%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
-                              strgexpo=1e6*600., \
-                              #evalcirc='full', \
-                              #makeplot=False, \
-                              #probtran=1., \
-                              truemaxmnumbpnts=array([100]), \
-                              truenumbpnts=array([50]), \
-                              #initnumbpntspop0=10, \
-                              exprtype='chan', \
-                              numbsidecart=numbsidecart, \
-                             )
-
 # test suites
 
 def pcat_chan_mock_test():
@@ -262,6 +238,23 @@ def pcat_chan_mock_popl():
                              )
 
 
+def pcat_chan_mock():
+    
+    datatype = 'home'
+    strgexpomaps = '4msc'
+    numbsidecart = 300
+    gridchan = pcat.main.init( \
+                              numbswep=200000, \
+                              numbswepplot=10000, \
+                              diagmode=True, \
+                              verbtype=2, \
+                              strgexpo='chanexpo%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
+                              truemaxmnumbpnts=array([4]), \
+                              truenumbpnts=array([2]), \
+                              exprtype='chan', \
+                              numbsidecart=numbsidecart, \
+                             )
+
 def pcat_chan_inpt():
     
     datatype = 'home'
@@ -270,6 +263,9 @@ def pcat_chan_inpt():
     
     gridchan = pcat.main.init( \
                               numbswep=10000, \
+                              verbtype=2, \
+                              diagmode=True, \
+                              fittmaxmnumbpnts=array([4]), \
                               numbswepplot=3000, \
                               strgexpo='chanexpo%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               exprtype='chan', \

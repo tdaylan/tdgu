@@ -62,7 +62,7 @@ for k in range(len(indxgold)):
     print '%20s %20s %20g %20g' % (data['SDSS'][indxgold[k]], data['Name'][indxgold][k], data['_RA'][indxgold][k], data['_DE'][indxgold][k])
 
 # cutout properties
-numbside = 400
+numbside = 100
 numbsidehalf = numbside / 2
 
 # data path
