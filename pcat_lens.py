@@ -570,7 +570,7 @@ def pcat_lens_inpt():
     strgexpo = 7.37487548893e21
     
     # half-size of the image in pixels
-    numbside = 100
+    numbside = 400
     maxmgangdata = numbside * 0.5 * sizepixl
     
     # name of the data file
@@ -591,7 +591,8 @@ def pcat_lens_inpt():
     
     pcat.main.init( \
                    elemtype='lens', \
-                   numbswep=20000, \
+                   lensmodltype='none', \
+                   numbswep=2000, \
                    numbswepplot=1000, \
                    #shrtfram=True, \
                    #mockonly=True, \
