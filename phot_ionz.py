@@ -478,10 +478,6 @@ def retr_fluxphotdmat(gdat):
     gdat.emiselecclmpenel = trapz(gdat.emiselecclmp, gdat.meanenel, axis=0) # [1/cm^3/s]
     gdat.diffemiselecclmpdiffmassenel = trapz(diffemiselecclmpdiffmass, gdat.meanenel, axis=0) # [1/cm^3/s/Msun]
     
-    print 'diffemiselecclmpdiffmassenel'
-    print gdat.diffemiselecclmpdiffmassenel[:, :, 0]
-    print gdat.diffemiselecclmpdiffmassenel[:, :, 1]
-    
     ## total
     gdat.emiselec = gdat.emiselecsmth + gdat.emiselecclmp
     gdat.emiselecenel = gdat.emiselecsmthenel + gdat.emiselecclmpenel
@@ -553,7 +549,7 @@ def plot_halo(gdat):
     
     # concentration parameter
     figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
-    for m in range(gdat.numbconcmodl):
+    for m in range(gdat.numbconcmodltype):
         for c in range(gdat.numbredsplotlate):
             axis.loglog(gdat.meanmass, gdat.conccatl[:, gdat.indxredsplotlate[c], m], ls=listlinestyl[m], color=listcolr[c])
     axis.set_xlabel('$M [M_\odot]$')
@@ -1140,39 +1136,41 @@ def plot_hm12(gdat, fluxphotdmat=None, listfluxphotdmat=None):
 def init( \
          datatype='inpt', \
          datalabl='XMM-Newton', \
-         numbswep=10000, \
+         numbswep=100000, \
          verbtype=1, \
          saveflux=True, \
          makeplot=True, \
-         propmodl='effi', \
-         concmodl='duff', \
-         subsmodl='smth', \
-         igmamodl='clum'
+         propmodltype='effi', \
+         concmodltype='duff', \
+         subsmodltype='smth', \
+         igmamodltype='clum'
         ):
 
     # global object
     gdat = tdpy.util.gdatstrt()
-
+    gdat.saveflux = saveflux
     gdat.makeplot = makeplot
-
+    gdat.propmodltype = propmodltype
+    gdat.concmodltype = concmodltype
+    gdat.subsmodltype = subsmodltype
+    gdat.igmamodltype = igmamodltype
+    
     datapara = retr_datapara(gdat)
     gdat.numbpara = len(datapara.name)
     gdat.indxpara = arange(gdat.numbpara)
+
+    # plotting
+    gdat.plotsize = 6
     
     gdat.strgmpol = ['s-wave', 'p-wave']
     
     gdat.anch = 'b'
-    
-    gdat.saveflux = saveflux
-
-    gdat.plotsize = 6
-
     gdat.demcsigm = 6.
-    gravlght = 1.19e-34 # [cm^3/MeV/s^2]
     
     # constants
     ## cosmological constants
 
+    gravlght = 1.19e-34 # [cm^3/MeV/s^2]
     gdat.omegbmat = 0.049 # baryonic matter abundance today
     gdat.omegdmat = 0.26 # dark matter abundance today
     gdat.omegradi = 4.8e-5 # radiation abundance today
@@ -1216,11 +1214,6 @@ def init( \
     gdat.sigm = 6. # ratio of mean squared relative velocity to 1-particle velocity variance
     gdat.gravconsredu = 1.19e-34 # [cm^3/MeV/s^2]
     gdat.cmet2angs = 1e8
-    
-    gdat.propmodl = propmodl
-    gdat.concmodl = concmodl
-    gdat.subsmodl = subsmodl
-    gdat.igmamodl = igmamodl
     
     # axis
     # temp
@@ -1332,7 +1325,7 @@ def init( \
     strgtimestmp = tdpy.util.retr_strgtimestmp()
     
     # run tag
-    gdat.rtag = '%s_%s_%s_%s_%s_%s' % (strgtimestmp, gdat.propmodl, gdat.concmodl, gdat.subsmodl, gdat.igmamodl, gdat.anch)
+    gdat.rtag = '%s_%s_%s_%s_%s_%s' % (strgtimestmp, gdat.propmodltype, gdat.concmodltype, gdat.subsmodltype, gdat.igmamodltype, gdat.anch)
     
     # paths
     gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('tdgu', 'phot_ionz/', 'phot_ionz/', gdat.rtag)
@@ -1407,14 +1400,14 @@ def init( \
     gdat.numbmpol = 2
 
     # halo concentration model
-    gdat.numbconcmodl = 3
-    gdat.conccatl = zeros((gdat.numbmass, gdat.numbreds, gdat.numbconcmodl))
+    gdat.numbconcmodltype = 3
+    gdat.conccatl = zeros((gdat.numbmass, gdat.numbreds, gdat.numbconcmodltype))
 
     ## Sanchez-Conde & Prada 2014
     cona = [37.5153, -1.5093, 1.636e-2, 3.66e-4, -2.89237e-5, 5.32e-7]
     for k in range(6):
         gdat.conccatl[:, :, 0] += cona[k] * log(gdat.meanmass[:, None] / gdat.hubbcons)**k * gdat.funchubb[None, :]**(-2./3.)
-    if gdat.concmodl == 'sanc':
+    if gdat.concmodltype == 'sanc':
         gdat.conc = gdat.conccatl[:, :, 0]
 
     ## Duffy et al. 2007
@@ -1423,7 +1416,7 @@ def init( \
     gdat.concmasspivt = 2e12 / gdat.hubbcons
     gdat.concnorm = 7.8
     gdat.conccatl[:,:,1] = gdat.concnorm * outer((gdat.meanmass / gdat.concmasspivt)**gdat.concmassslop, (1. + gdat.meanreds)**gdat.concredsslop)
-    if gdat.concmodl == 'duff':
+    if gdat.concmodltype == 'duff':
         gdat.conc = gdat.conccatl[:,:,1]
 
     ## Comerford & Natarajan 2007
@@ -1432,14 +1425,14 @@ def init( \
     gdat.concmasspivt = 1.3e13 / gdat.hubbcons
     gdat.concnorm = 14.5
     gdat.conccatl[:, :, 2] = gdat.concnorm * (gdat.meanmass[:, None] / gdat.concmasspivt)**gdat.concmassslop * (1. + gdat.meanreds[None, :])**gdat.concredsslop
-    if gdat.concmodl == 'come':
+    if gdat.concmodltype == 'come':
         gdat.conc = gdat.conccatl[:,:,2]
 
     # substructure model
     gdat.bostfact = empty(gdat.numbmass)
-    if gdat.subsmodl == 'smth':
+    if gdat.subsmodltype == 'smth':
         gdat.bostfact[:] = 1.
-    if gdat.subsmodl == 'clmp':
+    if gdat.subsmodltype == 'clmp':
         gdat.bostfact[:] = 1.6e-3 * mass**.39
     
     # cosmic ray escape model
@@ -1449,28 +1442,28 @@ def init( \
 
     # cosmic raw propagation model
     gdat.fesc = zeros((gdat.numbenel, gdat.numbmass, gdat.numbreds, gdat.numbrsph))
-    if gdat.propmodl == 'effi':
+    if gdat.propmodltype == 'effi':
         gdat.fesc[:] = 1.
     else:
-        if gdat.propmodl == 'minm':
+        if gdat.propmodltype == 'minm':
             magfd *= 0.2 # [muG]
             gasdn *= 0.2 # [1/cm^3]
             uisrf *= 0.2 # [MeV/cm^3]
-        if gdat.propmodl == 'maxm':
+        if gdat.propmodltype == 'maxm':
             magfd *= 5. # [muG]
             gasdn *= 5. # [1/cm^3]
             uisrf *= 5. # [MeV/cm^3]
 
         e0 = 1. # [GeV]
-        if gdat.propmodl == 'minm':
+        if gdat.propmodltype == 'minm':
             k0 = 5.074e-17 # [kpc^2/s]
             delta = 0.85
             lz = 1. # [kpc]
-        if gdat.propmodl == 'medi':
+        if gdat.propmodltype == 'medi':
             k0 = 3.551e-16 # [kpc^2/s]
             delta = 0.7
             lz = 4. # [kpc]
-        if gdat.propmodl == 'maxm':
+        if gdat.propmodltype == 'maxm':
             k0 = 2.426e-15 # [kpc^2/s]
             delta = 0.46
             lz = 8. # [kpc]
@@ -1482,7 +1475,7 @@ def init( \
     gdat.meanredsbrek = array([1.56, 5.5])
     gdat.odep = zeros((gdat.numbenph, gdat.numbreds, gdat.numbreds))
     gdat.odeprydb = zeros((gdat.numbreds, gdat.numbreds))
-    if gdat.igmamodl == 'clum':
+    if gdat.igmamodltype == 'clum':
         
         gdat.diffnabsdiffcdendiffreds = zeros((gdat.numbcden, gdat.numbreds))
 
@@ -1625,7 +1618,10 @@ def init( \
     thissamp = rand(numbproc * gdat.numbpara).reshape((numbproc, gdat.numbpara))
 
     numbplotside = gdat.numbpara
-    sampbund = tdpy.mcmc.init(retr_llik, datapara, initsamp=thissamp, numbswep=numbswep, gdatextr=gdat, optiprop=optiprop, \
+    sampbund = tdpy.mcmc.init(retr_llik, datapara, initsamp=thissamp, \
+                              numbswep=numbswep, \
+                              factthin=100, \
+                              gdatextr=gdat, optiprop=optiprop, \
                                     verbtype=verbtype, pathdata=gdat.pathdata, pathimag=gdat.pathimag, numbplotside=numbplotside)
     
     listsampvarb = sampbund[0]
