@@ -426,11 +426,12 @@ def writ_data( \
               makeplot=False, \
               strgexpr='fermflux_cmp0_igal.fits', \
               strgexpo='fermexpo_cmp0_igal.fits', \
-              listnameback=['isotflux', 'fdfmflux', 'darktemp'], \
-              #listnameback=['isotflux', 'fdfmflux', 'fdfmfluxnorm', 'plnkdust', 'wisestar', 'finkdust', 'darktemp']
+              listnameback=['fdfmflux', 'fdfmfluxnorm', 'darktemp'], \
+              #listnameback=['fdfmflux', 'fdfmfluxnorm', 'plnkdust', 'wisestar', 'finkdust', 'darktemp']
               indxenerrofi=arange(1, 4), \
               indxevttrofi=arange(3, 4), \
-              maxmgangdata=20.
+              maxmgangdata=20., \
+              writ=True, \
              ):
 
     smthmaps = False
@@ -494,6 +495,8 @@ def writ_data( \
     gdat.numbmapsplot = gdat.numbback + 1
     gdat.mapsplot = empty((gdat.numbmapsplot, gdat.numbpixlfull))
     
+    #    gdat.fluxbackorig = tdpy.util.retr_isot(gdat.binsenerfull)
+    
     ## templates
     gdat.numbbackwrit = len(listnameback)
     gdat.fluxbackfull = empty((gdat.numbbackwrit, gdat.numbenerfull, gdat.numbpixlfull, gdat.numbevttfull))
@@ -504,13 +507,11 @@ def writ_data( \
 
         # temp -- ROI should be fixed at 40 X 40 degree^2
         path = gdat.pathdatapcat + strg + '.fits'
-        if os.path.isfile(path):
+        if os.path.isfile(path) and not writ:
             print 'Reading %s...' % path
             gdat.fluxbackfull[c, :, :, :] = pf.getdata(path)
         else:
             
-            if strg == 'isotflux':
-                gdat.fluxbackorig = tdpy.util.retr_isot(gdat.binsenerfull)
             if strg.startswith('fdfmflux'):
                 gdat.fluxbackorig = tdpy.util.retr_fdfm(gdat.binsenerfull) 
             if strg == 'plnkdust':
@@ -530,7 +531,7 @@ def writ_data( \
 
             # make copies
             for m in gdat.indxevttfull:
-                if strg == 'isotflux' or strg.startswith('fdfmflux'):
+                if strg.startswith('fdfmflux'):
                     gdat.fluxbackfull[c, :, :, m] = gdat.fluxbackorig
                 else:
                     for i in gdat.indxenerfull:
@@ -547,6 +548,10 @@ def writ_data( \
                     for m in gdat.indxevttfull:
                         gdat.fluxbackfull[c, i, :, m] = gdat.fluxbackfull[c, i, :, m] / mean(gdat.fluxbackfull[c, i, gdat.indxpixlnorm, m])
             
+            print strg
+            summgene(gdat.fluxbackfull[c, :, :, :])
+            print
+
             # temp
             #gdat.fluxback[where(gdat.fluxback < 0.)] = 0.
             print 'Writing to %s...' % path
@@ -676,7 +681,7 @@ def pcat_ferm_inpt_ptch():
               bgalcntr=bgalcntr, \
               minmflux=3e-11, \
               maxmflux=3e-6, \
-              back=['isotflux.fits', 'fdfmflux%s.fits' % strgcntr], \
+              back=[1., 'fdfmfluxnorm%s.fits' % strgcntr], \
               strgexpo='fermexpo_cmp0_igal%s.fits' % strgcntr, \
               strgexprflux='fermflux_cmp0_igal%s.fits' % strgcntr, \
              )
@@ -696,7 +701,7 @@ def pcat_ferm_inpt_igal_popl(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='f
                    minmflux=1e-8, \
                    maxmflux=3e-6, \
                    #maxmnumbpnts=array([10]), \
-                   back=['isotflux.fits', 'fdfmflux.fits'], \
+                   back=[1., 'fdfmfluxnorm.fits'], \
                    strgexpo=strgexpo, \
                    strgexprflux=strgexprflux, \
                   )
@@ -714,7 +719,7 @@ def pcat_ferm_mock_igal_brok():
                        indxevttincl=arange(2, 4), \
                        indxenerincl=arange(1, 4), \
                        strgexpo='fermexpo_cmp0_igal.fits', \
-                       back=['isotflux.fits'], \
+                       back=[1., ], \
                        
                        maxmgangdata=deg2rad(20.), \
                        fluxdisttype=['brok'], \
@@ -752,7 +757,7 @@ def pcat_ferm_mock_igal_syst():
                        indxevttincl=arange(2, 4), \
                        indxenerincl=arange(1, 4), \
                        strgexpo='fermexpo_cmp0_igal.fits', \
-                       back=['isotflux.fits'], \
+                       back=[1.], \
                        maxmnumbpnts=array([20]), \
                        maxmgangdata=deg2rad(20.), \
                        minmflux=3e-11, \
@@ -769,15 +774,22 @@ def pcat_ferm_mock_igal_syst():
 def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
     pcat.main.init( \
-                   numbswep=100000, \
-                   numbswepplot=10000, \
+                   numbswep=10000, \
+                   factthin=100, \
+                   numbswepplot=3000, \
                    maxmgangdata=deg2rad(20.), \
                    diagmode=True, \
                    indxenerincl=arange(1, 4), \
+                   proppsfp=False, \
+                   savestat=True, \
+                   optiprop=True, \
+                   #recostat=True, \
+                   condcatl=False, \
                    indxevttincl=arange(2, 4), \
+                   fittmaxmnumbpnts=array([0]), \
                    minmflux=1e-8, \
                    maxmflux=3e-6, \
-                   back=[1., 'fdfmflux.fits'], \
+                   back=[1., 'fdfmfluxnorm.fits'], \
                    strgexpo=strgexpo, \
                    strgexprflux=strgexprflux, \
                   )
@@ -786,12 +798,15 @@ def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermex
 def pcat_ferm_mock_igal():
      
     pcat.main.init( \
-                   numbswep=100000, \
+                   numbswep=1000, \
                    diagmode=True, \
+                   factthin=100, \
+                   verbtype=2, \
                    indxevttincl=arange(3, 4), \
                    indxenerincl=arange(1, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
-                   trueback=['isotflux.fits', 'fdfmflux.fits'], \
+                   makeplot=False, \
+                   trueback=[1., 'fdfmfluxnorm.fits'], \
                    maxmgangdata=deg2rad(10.), \
                    trueminmflux=5e-11, \
                    truemaxmflux=1e-7, \

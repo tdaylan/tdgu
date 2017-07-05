@@ -250,6 +250,7 @@ def pcat_chan_mock():
                               strgexpo='chanexpo%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               trueminmflux=1e-8, \
                               truemaxmflux=1e-6, \
+                              condcatl=False, \
                               truenumbpnts=array([20]), \
                               exprtype='chan', \
                               numbsidecart=numbsidecart, \
@@ -270,6 +271,7 @@ def pcat_chan_inpt():
                               fittmaxmnumbpnts=array([40]), \
                               strgexpo='chanexpo%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               exprtype='chan', \
+                              condcatl=False, \
                               numbsidecart=numbsidecart, \
                               strgexprflux='chanflux_%04d_4msc.fits' % numbsidecart, \
                              )

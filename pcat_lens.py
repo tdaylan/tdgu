@@ -602,6 +602,7 @@ def pcat_lens_inpt():
                    #initspecsourene0=1.5e-18, \
                    #verbtype=2, \
                    #mask=mask, \
+                   indxenerincl=array([0]), \
                    initbacpbac0ene0=initbacpbac0ene0, \
                    fittmeanbacpbac0ene0=fittmeanbacpbac0ene0, \
                    fittstdvbacpbac0ene0=fittstdvbacpbac0ene0, \
