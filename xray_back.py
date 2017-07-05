@@ -104,12 +104,12 @@ def writ_data(datatype='extr'):
                 for i in indxener:
                     # count map
                     #path = pathdata + '%.2f-%.2f_thresh.img' % (binsener[i], binsener[i+1])
-                    path = pathdata + 'flux%04d.fits' % i
+                    path = pathdata + '%dmsc/flux%04d.fits' % (expomaps, i)
                     cnts[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
 
                     # exposure
                     #path = pathdata + '%.2f-%.2f_thresh.expmap' % (binsener[i], binsener[i+1])
-                    path = pathdata + 'expo%04d.fits' % i
+                    path = pathdata + '%dmsc/expo%04d.fits' % (expomaps, i)
                     expo[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
             
             flux = zeros_like(cnts)
