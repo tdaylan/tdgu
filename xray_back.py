@@ -2,7 +2,7 @@ from __init__ import *
 from astropy.coordinates import SkyCoord
 from pcat.util import retr_chandata
 
-def writ_maps(datatype='extr'):
+def writ_data(datatype='extr'):
 
     if datatype == 'home':
         binsener = array([0.5, 0.91, 1.66, 3.02, 5.49, 10.])
@@ -103,11 +103,13 @@ def writ_maps(datatype='extr'):
             if datatype == 'home':
                 for i in indxener:
                     # count map
-                    path = pathdata + '%.2f-%.2f_thresh.img' % (binsener[i], binsener[i+1])
+                    #path = pathdata + '%.2f-%.2f_thresh.img' % (binsener[i], binsener[i+1])
+                    path = pathdata + 'flux%04d.fits' % i
                     cnts[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
 
                     # exposure
-                    path = pathdata + '%.2f-%.2f_thresh.expmap' % (binsener[i], binsener[i+1])
+                    #path = pathdata + '%.2f-%.2f_thresh.expmap' % (binsener[i], binsener[i+1])
+                    path = pathdata + 'expo%04d.fits' % i
                     expo[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
             
             flux = zeros_like(cnts)
