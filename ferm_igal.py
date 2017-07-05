@@ -775,6 +775,7 @@ def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermex
     
     pcat.main.init( \
                    numbswep=10000, \
+                   verbtype=2, \
                    factthin=100, \
                    numbswepplot=3000, \
                    maxmgangdata=deg2rad(20.), \

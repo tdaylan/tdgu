@@ -262,6 +262,7 @@ def pcat_chan_inpt():
     strgexpomaps = '4msc'
     numbsidecart = 300
     
+    rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
                               numbswep=10000, \
                               numbswepplot=5000, \
@@ -269,11 +270,11 @@ def pcat_chan_inpt():
                               diagmode=True, \
                               
                               fittmaxmnumbpnts=array([40]), \
-                              strgexpo='chanexpo%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
+                              strgexpo='chanexpo%s.fits' % rtagdata, \
                               exprtype='chan', \
                               condcatl=False, \
                               numbsidecart=numbsidecart, \
-                              strgexprflux='chanflux_%04d_4msc.fits' % numbsidecart, \
+                              strgexprflux='chanflux%s.fits' % rtagdata, \
                              )
 
 
