@@ -1,6 +1,5 @@
 from __init__ import *
 
-
 # writing data
 def writ_maps_rec7_back():
     
@@ -107,12 +106,6 @@ def defn_gtbn():
     savetxt(path, limtener, fmt='%10.5g')
 
 
-def retr_axisener(gdat):
-    
-    gdat.binsenerfull = array([0.1, 0.3, 1., 3., 10., 100.])
-    gdat.binsenerfull, gdat.meanenerfull, gdat.diffenerfull, gdat.numbenerfull, gdat.indxenerfull = tdpy.util.retr_axis(bins=gdat.binsenerfull, scal='logt')
-
-
 def merg_maps_arry():
     
     merg_maps(numbside=512)
@@ -141,11 +134,7 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
 
     calcfactconv = False
     gdat.subspnts = True
-    
-    retr_axisener(gdat)
    
-    indxevttrofi = arange(4)
-
     # analysis setup
     ## plots
     alph = 0.5
@@ -160,9 +149,6 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     meanener = sqrt(binsener[1:] * binsener[:-1])
     numbener = meanener.size
     indxener = arange(numbener)
-    indxevttrofi = arange(3, 4)
-    numbevtt = indxevttrofi.size
-    indxevtt = arange(numbevtt)
 
     ## constants
     consplnk = 6.63e-34 # [J s]
@@ -201,7 +187,7 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     bgalfgl3 = datafgl3['glat']
     stdvfgl3 = tdpy.util.retr_fwhmferm(meanener, indxevttrofi) / 2.
     specfgl3 = stack((datafgl3['Flux100_300'], datafgl3['Flux300_1000'], datafgl3['Flux1000_3000'], \
-                                                            datafgl3['Flux3000_10000'], datafgl3['Flux10000_100000'])) / gdat.diffenerfull[:, None]
+                                                            datafgl3['Flux3000_10000'], datafgl3['Flux10000_100000'])) / gdat.diffener[:, None]
     
     # temp
     numbpntsfgl3 = 2
@@ -421,64 +407,47 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
             tdpy.util.plot_maps(path, mapsmerg[i, :] - mapsplnk, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, resi=True, satu=True)
         
 
-def writ_data( \
-              verbtype=1, \
-              makeplot=False, \
-              strgexpr='fermflux_cmp0_igal.fits', \
-              strgexpo='fermexpo_cmp0_igal.fits', \
-              listnameback=['fdfmflux', 'fdfmfluxnorm', 'darktemp'], \
-              #listnameback=['fdfmflux', 'fdfmfluxnorm', 'plnkdust', 'wisestar', 'finkdust', 'darktemp']
-              indxenerrofi=arange(1, 4), \
-              indxevttrofi=arange(3, 4), \
-              maxmgangdata=20., \
-              writ=True, \
-             ):
+def writ_data():
 
-    smthmaps = False
-    optiprop = True
-    
-    # construct the global object
     gdat = tdpy.util.gdatstrt()
-    gdat.verbtype = verbtype
-    gdat.makeplot = makeplot
-    gdat.strgexpr = strgexpr
-    gdat.strgexpo = strgexpo
-    gdat.indxenerrofi = indxenerrofi
-    gdat.indxevttrofi = indxevttrofi
-    gdat.maxmgangdata = maxmgangdata
+    
+    writ=True
+    
+    strgexpr='fermflux_cmp0_igal.fits'
+    
+    maxmgangdata=20.
+    
+    listnameback=['fdfmflux', 'fdfmfluxnorm', 'darktemp']
+    #listnameback=['fdfmflux', 'fdfmfluxnorm', 'plnkdust', 'wisestar', 'finkdust', 'darktemp']
+    for nameback in deepcopy(listnameback):
+        listnameback += [nameback + 'smth']
+    gdat.numbback = len(listnameback)
+    gdat.indxback = arange(gdat.numbback)
+
+    # construct the global object
     minmlgal = -maxmgangdata
     maxmlgal = maxmgangdata
     minmbgal = -maxmgangdata
     maxmbgal = maxmgangdata
     
     # axes
-    retr_axisener(gdat)
-    gdat.binsener = gdat.binsenerfull[gdat.indxenerrofi[0]:gdat.indxenerrofi[-1] + 2]
-
+    gdat.binsener = array([0.1, 0.3, 1., 3., 10., 100.])
     gdat.binsener, gdat.meanener, gdat.diffener, gdat.numbener, gdat.indxener = tdpy.util.retr_axis(bins=gdat.binsener, scal='logt')
     gdat.strgbinsener = ['%.3g GeV - %.3g GeV' % (gdat.binsener[i], gdat.binsener[i+1]) for i in gdat.indxener]
 
     ## event type
-    gdat.indxevttfull = arange(4)
-    gdat.numbevttfull = gdat.indxevttfull.size
-    gdat.indxevttrofi = gdat.indxevttfull[gdat.indxevttrofi]
-    gdat.numbevtt = gdat.indxevttrofi.size
+    gdat.indxevtt = arange(4)
+    gdat.numbevtt = gdat.indxevtt.size
     gdat.indxevtt = arange(gdat.numbevtt)
-
-    gdat.numbback = len(listnameback)
-    gdat.indxback = arange(gdat.numbback)
 
     ## pixelization
     gdat.numbside = 256
-    gdat.numbpixlfull = gdat.numbside**2 * 12
+    gdat.numbpixl = gdat.numbside**2 * 12
     gdat.lgalheal, gdat.bgalheal, gdat.numbpixl, gdat.apix = tdpy.util.retr_healgrid(gdat.numbside)
+    gdat.indxpixlrofi = where((abs(gdat.lgalheal) < maxmgangdata) & (abs(gdat.bgalheal) < maxmgangdata))[0]
     gdat.indxpixlnorm = where((abs(gdat.lgalheal) < 10.) & (abs(gdat.bgalheal) < 10.))[0]
-    gdat.indxpixlrofi = where((abs(gdat.lgalheal) < gdat.maxmgangdata) & (abs(gdat.bgalheal) < gdat.maxmgangdata))[0]
-    gdat.numbpixl = gdat.indxpixlrofi.size
     gdat.indxpixl = arange(gdat.numbpixl)
        
-    indxdatacubefilt = meshgrid(gdat.indxenerrofi, gdat.indxpixlrofi, gdat.indxevttrofi, indexing='ij')
-    
     # setup
     gdat.rtag = ''
 
@@ -487,23 +456,20 @@ def writ_data( \
     gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('tdgu', 'ferm_igal/', 'ferm_igal/', gdat.rtag)
      
     ## data
-    path = gdat.pathdata + gdat.strgexpr
+    path = gdat.pathdata + strgexpr
     gdat.exprflux = pf.getdata(path)
     gdat.dataflux = gdat.exprflux[indxdatacubefilt]
 
     # power spectrum calculation
     gdat.numbmapsplot = gdat.numbback + 1
-    gdat.mapsplot = empty((gdat.numbmapsplot, gdat.numbpixlfull))
+    gdat.mapsplot = empty((gdat.numbmapsplot, gdat.numbpixl))
     
-    #    gdat.fluxbackorig = tdpy.util.retr_isot(gdat.binsenerfull)
+    gdat.fluxbackorig = tdpy.util.retr_isot(gdat.binsener)
     
     ## templates
     gdat.numbbackwrit = len(listnameback)
-    gdat.fluxbackfull = empty((gdat.numbbackwrit, gdat.numbenerfull, gdat.numbpixlfull, gdat.numbevttfull))
+    gdat.fluxbackfull = empty((gdat.numbbackwrit, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
     for c, strg in enumerate(listnameback):
-
-        if smthmaps:
-            strg += 'smth'
 
         # temp -- ROI should be fixed at 40 X 40 degree^2
         path = gdat.pathdatapcat + strg + '.fits'
@@ -513,7 +479,7 @@ def writ_data( \
         else:
             
             if strg.startswith('fdfmflux'):
-                gdat.fluxbackorig = tdpy.util.retr_fdfm(gdat.binsenerfull) 
+                gdat.fluxbackorig = tdpy.util.retr_fdfm(gdat.binsener) 
             if strg == 'plnkdust':
                 pathtemp = gdat.pathdata + 'plnk/HFI_CompMap_ThermalDustModel_2048_R1.20.fits'
                 gdat.fluxbackorig = pf.getdata(pathtemp, 1)['RADIANCE']
@@ -530,42 +496,31 @@ def writ_data( \
                 gdat.fluxbackorig = tdpy.util.retr_nfwp(1., gdat.numbside)
 
             # make copies
-            for m in gdat.indxevttfull:
+            for m in gdat.indxevtt:
                 if strg.startswith('fdfmflux'):
-                    gdat.fluxbackfull[c, :, :, m] = gdat.fluxbackorig
+                    gdat.fluxback[c, :, :, m] = gdat.fluxbackorig
                 else:
-                    for i in gdat.indxenerfull:
+                    for i in gdat.indxener:
                         gdat.fluxbackfull[c, i, :, m] = gdat.fluxbackorig
             
             # smooth
-            if smthmaps:
+            if strg.endswith('smth'):
                 for c in gdat.indxback:
-                    gdat.fluxbackfull[c, :, :, :] = tdpy.util.smth_ferm(gdat.fluxbackfull[c, :, :, :], gdat.meanenerfull, gdat.indxevttfull)
+                    gdat.fluxbackfull[c, :, :, :] = tdpy.util.smth_ferm(gdat.fluxbackfull[c, :, :, :], gdat.meanener, gdat.indxevtt)
             
             # normalize
             if strg == 'fdfmfluxnorm':
-                for i in gdat.indxenerfull:
-                    for m in gdat.indxevttfull:
+                for i in gdat.indxener:
+                    for m in gdat.indxevtt:
                         gdat.fluxbackfull[c, i, :, m] = gdat.fluxbackfull[c, i, :, m] / mean(gdat.fluxbackfull[c, i, gdat.indxpixlnorm, m])
             
-            print strg
-            summgene(gdat.fluxbackfull[c, :, :, :])
-            print
-
             # temp
             #gdat.fluxback[where(gdat.fluxback < 0.)] = 0.
             print 'Writing to %s...' % path
             pf.writeto(path, gdat.fluxbackfull[c, :, :, :], clobber=True)
 
-    # take only the energy bins, spatial pixels and event types of interest
-    gdat.fluxback = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
-    for c in gdat.indxback:
-        for i in gdat.indxener:
-            for m in gdat.indxevtt:
-                gdat.fluxback[c, i, :, m] = gdat.fluxbackfull[c, gdat.indxenerrofi[i], gdat.indxpixlrofi, gdat.indxevttrofi[m]]
-
     # load the map to the array whose power spectrum will be calculated
-    gdat.mapsplot[1:, gdat.indxpixlrofi] = gdat.fluxback[:, 0, :, 0]
+    gdat.mapsplot[1:, :] = gdat.fluxback[:, 0, :, 0]
     
     # plot the power spectra
     listlabl = ['Data', 'Isotropic']
@@ -592,7 +547,7 @@ def writ_data( \
         for i in gdat.indxener:
             for m in gdat.indxevtt:
                 path = gdat.pathimag + 'fluxback_%d%d%d.pdf' % (c, i, m)
-                tdpy.util.plot_maps(path, gdat.fluxback[c, i, :, m], indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixlfull, \
+                tdpy.util.plot_maps(path, gdat.fluxback[c, i, :, m], indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixl, \
                                                                                 minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
            
     # plot the spectra of spatially averaged background components
@@ -783,14 +738,17 @@ def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermex
                    indxenerincl=arange(1, 4), \
                    proppsfp=False, \
                    savestat=True, \
+                   makeplotinit=False, \
+                   makeplotfram=False, \
+                   numbburn=0, \
                    #optihess=True, \
-                   #recostat=True, \
+                   recostat=True, \
                    condcatl=False, \
                    indxevttincl=arange(2, 4), \
                    fittmaxmnumbpnts=array([0]), \
                    minmflux=1e-8, \
                    maxmflux=3e-6, \
-                   back=[1., 'fdfmfluxnorm.fits'], \
+                   truebacktype=[1., 'fdfmfluxnorm.fits'], \
                    strgexpo=strgexpo, \
                    strgexprflux=strgexprflux, \
                   )

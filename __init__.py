@@ -34,6 +34,8 @@ from healpy import ang2pix
 # pyfits
 import pyfits as pf
 
+from copy import deepcopy
+
 import astropy as ap
 
 # utilities

@@ -83,23 +83,23 @@ def writ_data(datatype='extr'):
                 #print maxmindx[1]
                 print
             
-            cnts = empty((numbener, numbside, numbside, numbevtt))
+            cntp = empty((numbener, numbside, numbside, numbevtt))
             expo = empty((numbener, numbside, numbside, numbevtt))
-            cntsback = empty((numbener, numbside, numbside, numbevtt))
+            cntpback = empty((numbener, numbside, numbside, numbevtt))
             
             if datatype == 'extr':
                 if expomaps[k] == 2:
                     path = pathdata + 'CDFS-2Ms-0p5to2-asca-im-bin1-astwk.fits'
                 elif expomaps[k] == 4:
                     path = pathdata + 'CDFS-4Ms-0p5to2-asca-im-bin1.fits'
-                cnts[0, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                cntp[0, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
 
                 ## hard band
                 if expomaps[k] == 2:
                     path = pathdata + 'CDFS-2Ms-2to8-asca-im-bin1-astwk.fits'
                 elif expomaps[k] == 4:
                     path = pathdata + 'CDFS-4Ms-2to8-asca-im-bin1.fits'
-                cnts[1, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                cntp[1, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
 
                 # exposure
                 ## soft band
@@ -121,20 +121,20 @@ def writ_data(datatype='extr'):
                     path = pathdata + 'CDFS-4Ms-0p5to2-bin1.back'
                 elif expomaps[k] == 4:
                     path = pathdata + 'CDFS-2Ms-0p5to2-asca-bkg-bin1.fits'
-                cntsback[0, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                cntpback[0, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
                 ## hard band
                 if expomaps[k] == 2:
                     path = pathdata + 'CDFS-4Ms-2to8-bin1.back'
                 elif expomaps[k] == 4:
                     path = pathdata + 'CDFS-2Ms-2to8-asca-bkg-bin1.fits'
-                cntsback[1, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                cntpback[1, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
             
             if datatype == 'home':
                 for i in indxener:
                     # count map
                     path = pathdata + '%.2f-%.2f_thresh.img' % (binsener[i], binsener[i+1])
                     #path = pathdata + '%dmsc/flux%04d.fits' % (expomaps, i)
-                    cnts[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                    cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
 
                     # exposure
                     path = pathdata + '%.2f-%.2f_thresh.expmap' % (binsener[i], binsener[i+1])
@@ -144,15 +144,15 @@ def writ_data(datatype='extr'):
             numbsideyaxi = pf.getdata(path, 0).shape[0]
             numbsidexaxi = pf.getdata(path, 0).shape[1]
 
-            flux = zeros_like(cnts)
+            flux = zeros_like(cntp)
             for i in indxener:
                 indxtemp = where(expo[i, :, :, 0] > 0.)
-                flux[i, indxtemp[0], indxtemp[1], 0] = cnts[i, indxtemp[0], indxtemp[1], 0] / expo[i, indxtemp[0], indxtemp[1], 0] / diffener[i] / apix
+                flux[i, indxtemp[0], indxtemp[1], 0] = cntp[i, indxtemp[0], indxtemp[1], 0] / expo[i, indxtemp[0], indxtemp[1], 0] / diffener[i] / apix
             
-            fluxback = zeros_like(cnts)
+            fluxback = zeros_like(cntp)
             for i in indxener:
                 indxtemp = where(expo[i, :, :, 0] > 0.)
-                fluxback[i, indxtemp[0], indxtemp[1], 0] = cntsback[i, indxtemp[0], indxtemp[1], 0] / expo[i, indxtemp[0], indxtemp[1], 0] / diffener[i] / apix
+                fluxback[i, indxtemp[0], indxtemp[1], 0] = cntpback[i, indxtemp[0], indxtemp[1], 0] / expo[i, indxtemp[0], indxtemp[1], 0] / diffener[i] / apix
             
             if False:
                 for i in indxener:
@@ -160,8 +160,8 @@ def writ_data(datatype='extr'):
                     print i
                     print 'expo[i, :, :, 0]'
                     summgene(expo[i, :, :, 0])
-                    print 'cnts[i, :, :, 0]'
-                    summgene(cnts[i, :, :, 0])
+                    print 'cntp[i, :, :, 0]'
+                    summgene(cntp[i, :, :, 0])
                     print 'flux[i, :, :, 0]'
                     summgene(flux[i, :, :, 0])
 
@@ -297,15 +297,17 @@ def pcat_chan_inpt():
     
     datatype = 'home'
     strgexpomaps = '4msc'
-    numbsidecart = 1000
+    numbsidecart = 300
     
     rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
-                              numbswep=10000, \
+                              numbswep=50000, \
                               numbswepplot=5000, \
                               
-                              diagmode=True, \
-                              evalcirc='full', \
+                              #diagmode=True, \
+                              #evalcirc='full', \
+                              #recostat=True, \
+                              savestat=True, \
                               fittmaxmnumbpnts=array([40]), \
                               strgexpo='chanexpo%s.fits' % rtagdata, \
                               exprtype='chan', \
