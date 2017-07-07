@@ -417,8 +417,8 @@ def writ_data():
     
     maxmgangdata=20.
     
-    listnameback=['fdfmflux', 'fdfmfluxnorm', 'darktemp']
-    #listnameback=['fdfmflux', 'fdfmfluxnorm', 'plnkdust', 'wisestar', 'finkdust', 'darktemp']
+    #listnameback=['fdfmflux', 'fdfmfluxnorm', 'darktemp']
+    listnameback=['fdfmflux', 'fdfmfluxnorm', 'plnkdust', 'wisestar', 'finkdust', 'darktemp']
     for nameback in deepcopy(listnameback):
         listnameback += [nameback + 'smth']
     gdat.numbback = len(listnameback)
@@ -472,7 +472,7 @@ def writ_data():
 
         # temp -- ROI should be fixed at 40 X 40 degree^2
         path = gdat.pathdatapcat + strg + '.fits'
-        if os.path.isfile(path) and not writ:
+        if False and os.path.isfile(path) and not writ:
             print 'Reading %s...' % path
             gdat.sbrtback[c, :, :, :] = pf.getdata(path)
         else:
@@ -494,28 +494,28 @@ def writ_data():
             if strg == 'darktemp':
                 sbrtbacktemp = tdpy.util.retr_nfwp(1., gdat.numbside)
 
-            # make copies
-            for m in gdat.indxevtt:
-                if strg.startswith('fdfmflux'):
-                    gdat.sbrtback[c, :, :, m] = sbrtbacktemp
-                else:
-                    for i in gdat.indxener:
-                        gdat.sbrtback[c, i, :, m] = sbrtbacktemp
-            
-            # smooth
-            if strg.endswith('smth'):
-                gdat.sbrtback[c, :, :, :] = tdpy.util.smth_ferm(gdat.sbrtbackfull[c, :, :, :], gdat.meanener, gdat.indxevtt)
+            if not strg.endswith('smth'):
+                # make copies
+                for m in gdat.indxevtt:
+                    if strg.startswith('fdfmflux'):
+                        gdat.sbrtback[c, :, :, m] = sbrtbacktemp
+                    else:
+                        for i in gdat.indxener:
+                            gdat.sbrtback[c, i, :, m] = sbrtbacktemp
+            else:
+                # smooth
+                gdat.sbrtback[c, :, :, :] = tdpy.util.smth_ferm(gdat.sbrtback[c, :, :, :], gdat.meanener, gdat.indxevtt)
             
             # normalize
-            if strg == 'fdfmfluxnorm':
+            if strg.endswith('norm'):
                 for i in gdat.indxener:
-                    for m in gdat.indxevtt:
-                        gdat.sbrtbackfull[c, i, :, m] = gdat.sbrtbackfull[c, i, :, m] / mean(gdat.sbrtbackfull[c, i, gdat.indxpixlnorm, m])
+                    for m in arange(gdat.numbevtt + 1):
+                        gdat.sbrtback[c, i, :, m] = gdat.sbrtback[c, i, :, m] / mean(gdat.sbrtback[c, i, gdat.indxpixlnorm, m])
             
             # temp
             #gdat.sbrtback[where(gdat.sbrtback < 0.)] = 0.
             print 'Writing to %s...' % path
-            pf.writeto(path, gdat.sbrtbackfull[c, :, :, :], clobber=True)
+            pf.writeto(path, gdat.sbrtback[c, :, :, :], clobber=True)
 
     # load the map to the array whose power spectrum will be calculated
     gdat.mapsplot[1:, :] = gdat.sbrtback[:, 0, :, 0]
