@@ -457,70 +457,68 @@ def writ_data():
      
     ## data
     path = gdat.pathdata + strgexpr
-    gdat.exprflux = pf.getdata(path)
-    gdat.dataflux = gdat.exprflux[indxdatacubefilt]
+    gdat.sbrtdata = pf.getdata(path)
 
     # power spectrum calculation
     gdat.numbmapsplot = gdat.numbback + 1
     gdat.mapsplot = empty((gdat.numbmapsplot, gdat.numbpixl))
     
-    gdat.fluxbackorig = tdpy.util.retr_isot(gdat.binsener)
+    gdat.sbrtisot = tdpy.util.retr_isot(gdat.binsener)
     
     ## templates
     gdat.numbbackwrit = len(listnameback)
-    gdat.fluxbackfull = empty((gdat.numbbackwrit, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
+    gdat.sbrtback = empty((gdat.numbbackwrit, gdat.numbener, gdat.numbpixl, gdat.numbevtt + 1))
     for c, strg in enumerate(listnameback):
 
         # temp -- ROI should be fixed at 40 X 40 degree^2
         path = gdat.pathdatapcat + strg + '.fits'
         if os.path.isfile(path) and not writ:
             print 'Reading %s...' % path
-            gdat.fluxbackfull[c, :, :, :] = pf.getdata(path)
+            gdat.sbrtback[c, :, :, :] = pf.getdata(path)
         else:
             
             if strg.startswith('fdfmflux'):
-                gdat.fluxbackorig = tdpy.util.retr_fdfm(gdat.binsener) 
+                sbrtbacktemp = tdpy.util.retr_fdfm(gdat.binsener) 
             if strg == 'plnkdust':
                 pathtemp = gdat.pathdata + 'plnk/HFI_CompMap_ThermalDustModel_2048_R1.20.fits'
-                gdat.fluxbackorig = pf.getdata(pathtemp, 1)['RADIANCE']
-                gdat.fluxbackorig = hp.ud_grade(gdat.fluxbackorig, gdat.numbside, order_in='NESTED', order_out='RING')
+                sbrtbacktemp = pf.getdata(pathtemp, 1)['RADIANCE']
+                sbrtbacktemp = hp.ud_grade(sbrtbacktemp, gdat.numbside, order_in='NESTED', order_out='RING')
             if strg == 'wisestar':
                 pathtemp = gdat.pathdata + 'wssa_sample_1024.fits'
-                gdat.fluxbackorig = pf.getdata(pathtemp, 0)
-                gdat.fluxbackorig = hp.ud_grade(gdat.fluxbackorig, gdat.numbside, order_in='RING', order_out='RING')
+                sbrtbacktemp = pf.getdata(pathtemp, 0)
+                sbrtbacktemp = hp.ud_grade(sbrtbacktemp, gdat.numbside, order_in='RING', order_out='RING')
             if strg == 'finkdust':
                 pathtemp = gdat.pathdata + 'lambda_sfd_ebv.fits'
-                gdat.fluxbackorig = pf.getdata(pathtemp)['TEMPERATURE']
-                gdat.fluxbackorig = hp.ud_grade(gdat.fluxbackorig, gdat.numbside, order_in='NESTED', order_out='RING')
+                sbrtbacktemp = pf.getdata(pathtemp)['TEMPERATURE']
+                sbrtbacktemp = hp.ud_grade(sbrtbacktemp, gdat.numbside, order_in='NESTED', order_out='RING')
             if strg == 'darktemp':
-                gdat.fluxbackorig = tdpy.util.retr_nfwp(1., gdat.numbside)
+                sbrtbacktemp = tdpy.util.retr_nfwp(1., gdat.numbside)
 
             # make copies
             for m in gdat.indxevtt:
                 if strg.startswith('fdfmflux'):
-                    gdat.fluxback[c, :, :, m] = gdat.fluxbackorig
+                    gdat.sbrtback[c, :, :, m] = sbrtbacktemp
                 else:
                     for i in gdat.indxener:
-                        gdat.fluxbackfull[c, i, :, m] = gdat.fluxbackorig
+                        gdat.sbrtback[c, i, :, m] = sbrtbacktemp
             
             # smooth
             if strg.endswith('smth'):
-                for c in gdat.indxback:
-                    gdat.fluxbackfull[c, :, :, :] = tdpy.util.smth_ferm(gdat.fluxbackfull[c, :, :, :], gdat.meanener, gdat.indxevtt)
+                gdat.sbrtback[c, :, :, :] = tdpy.util.smth_ferm(gdat.sbrtbackfull[c, :, :, :], gdat.meanener, gdat.indxevtt)
             
             # normalize
             if strg == 'fdfmfluxnorm':
                 for i in gdat.indxener:
                     for m in gdat.indxevtt:
-                        gdat.fluxbackfull[c, i, :, m] = gdat.fluxbackfull[c, i, :, m] / mean(gdat.fluxbackfull[c, i, gdat.indxpixlnorm, m])
+                        gdat.sbrtbackfull[c, i, :, m] = gdat.sbrtbackfull[c, i, :, m] / mean(gdat.sbrtbackfull[c, i, gdat.indxpixlnorm, m])
             
             # temp
-            #gdat.fluxback[where(gdat.fluxback < 0.)] = 0.
+            #gdat.sbrtback[where(gdat.sbrtback < 0.)] = 0.
             print 'Writing to %s...' % path
-            pf.writeto(path, gdat.fluxbackfull[c, :, :, :], clobber=True)
+            pf.writeto(path, gdat.sbrtbackfull[c, :, :, :], clobber=True)
 
     # load the map to the array whose power spectrum will be calculated
-    gdat.mapsplot[1:, :] = gdat.fluxback[:, 0, :, 0]
+    gdat.mapsplot[1:, :] = gdat.sbrtback[:, 0, :, 0]
     
     # plot the power spectra
     listlabl = ['Data', 'Isotropic']
@@ -546,8 +544,8 @@ def writ_data():
     for c in gdat.indxback:
         for i in gdat.indxener:
             for m in gdat.indxevtt:
-                path = gdat.pathimag + 'fluxback_%d%d%d.pdf' % (c, i, m)
-                tdpy.util.plot_maps(path, gdat.fluxback[c, i, :, m], indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixl, \
+                path = gdat.pathimag + 'sbrtback_%d%d%d.pdf' % (c, i, m)
+                tdpy.util.plot_maps(path, gdat.sbrtback[c, i, :, m], indxpixlrofi=gdat.indxpixlrofi, numbpixl=gdat.numbpixl, \
                                                                                 minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal)
            
     # plot the spectra of spatially averaged background components
