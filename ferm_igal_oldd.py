@@ -418,7 +418,6 @@ def writ_data():
 
     verbtype=1
     strgexpr='fermflux_cmp0_igal.fits'
-    smthmaps = False
 
     # construct the global object
     gdat = tdpy.util.gdatstrt()
@@ -473,8 +472,12 @@ def writ_data():
     gdat.dataflux = gdat.exprflux[indxdatacubefilt]
 
     ## templates
-    strgback=['', '', '', 'plnk/HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'lambda_sfd_ebv.fits', '']
-    listnameback = ['isotflux', 'fdfmflux', 'fdfmfluxnorm', 'plnkdust', 'wisestar', 'finkdust', 'darktemp']
+    #strgback=['', '', '', 'plnk/HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'lambda_sfd_ebv.fits', '']
+    #listnameback = ['isotflux', 'fdfmflux', 'fdfmfluxnorm', 'plnkdust', 'wisestar', 'finkdust', 'darktemp']
+    strgback=['', '', '']
+    listnameback = ['isotflux', 'fdfmflux', 'darktemp']
+    for nameback in listnameback:
+        listnameback += [nameback + 'smth']
     numbback = len(listnameback)
     gdat.indxback = arange(numbback)
     gdat.fluxbackfull = empty((numbback, gdat.numbenerfull, gdat.numbpixlfull, gdat.numbevttfull))
@@ -486,9 +489,6 @@ def writ_data():
 
     for c, strg in enumerate(listnameback):
 
-        if smthmaps:
-            strg += 'smth'
-
         # temp -- ROI should be fixed at 40 X 40 degree^2
         path = gdat.pathdata + strg + '.fits'
         if False and os.path.isfile(path):
@@ -496,6 +496,10 @@ def writ_data():
             gdat.fluxbackfull[c, :, :, :] = pf.getdata(path)
         else:
             
+            print 'strg'
+            print strg
+            print
+
             if strg == 'isotflux':
                 gdat.fluxbackorig = tdpy.util.retr_isot(gdat.binsenerfull)
             if strg.startswith('fdfmflux'):
@@ -523,17 +527,17 @@ def writ_data():
                     for i in gdat.indxenerfull:
                         gdat.fluxbackfull[c, i, :, m] = gdat.fluxbackorig
             
-            # smooth
-            if smthmaps:
-                for c in gdat.indxback:
-                    gdat.fluxbackfull[c, :, :, :] = tdpy.util.smth_ferm(gdat.fluxbackfull[c, :, :, :], gdat.meanenerfull, gdat.indxevttfull)
-            
-            # normalize
-            #if strg == 'fdfmfluxnorm':
-            #    gdat.fluxbackorig = tdpy.util.retr_fdfm(gdat.binsenerfull)
-            #    for i in gdat.indxenerfull:
-            #        for m in gdat.indxevttfull:
-            #            gdat.fluxbackorig[i, :, m] = gdat.fluxbackorig[i, :, m] / mean(gdat.fluxbackorig[i, gdat.indxpixlnorm, m])
+            if strg.endswith('smth'):
+                
+                # normalize
+                indxbackorig = listnameback.indx(strg[:-4])
+                
+                # smooth
+                gdat.fluxbackfull[c, :, :, :] = tdpy.util.smth_ferm(gdat.fluxbackfull[indxbackorig, :, :, :], gdat.meanenerfull, gdat.indxevttfull)
+                
+                for i in gdat.indxenerfull:
+                    for m in gdat.indxevttfull:
+                        gdat.fluxbackfull[c, i, :, m] = gdat.fluxbackfull[c, i, :, m] / mean(gdat.fluxbackfull[c, gdat.indxpixlnorm, m])
             
             # temp
             #gdat.fluxback[where(gdat.fluxback < 0.)] = 0.
