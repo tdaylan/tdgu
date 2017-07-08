@@ -301,14 +301,13 @@ def pcat_chan_inpt():
     
     rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
-                              numbswep=100000, \
-                              numbswepplot=5000, \
-                              
-                              recostat=True, \
+                              numbswep=10000, \
+                              numbswepplot=10000, \
                               optihess=True, \
                               #verbtype=2, \
                               makeplot=False, \
                               #diagmode=True, \
+                              recostat=True, \
                               savestat=True, \
                               #fittmaxmnumbpnts=array([6]), \
                               strgexpo='chanexpo%s.fits' % rtagdata, \

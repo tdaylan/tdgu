@@ -417,8 +417,8 @@ def writ_data():
     
     maxmgangdata=20.
     
-    #listnameback=['fdfmflux', 'fdfmfluxnorm', 'darktemp']
-    listnameback=['fdfmflux', 'fdfmfluxnorm', 'plnkdust', 'wisestar', 'finkdust', 'darktemp']
+    listnameback=['fdfmflux', 'fdfmfluxnorm', 'darktemp']
+    #listnameback=['fdfmflux', 'fdfmfluxnorm', 'plnkdust', 'wisestar', 'finkdust', 'darktemp']
     for nameback in deepcopy(listnameback):
         listnameback += [nameback + 'smth']
     gdat.numbback = len(listnameback)
