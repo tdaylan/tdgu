@@ -326,7 +326,7 @@ def pcat_chan_inpt():
                               verbtype=2, \
                               makeplot=False, \
                               #diagmode=True, \
-                              #recostat=True, \
+                              recostat=True, \
                               savestat=True, \
                               fittmaxmnumbpnts=array([2]), \
                               strgexpo='chanexpo%s.fits' % rtagdata, \

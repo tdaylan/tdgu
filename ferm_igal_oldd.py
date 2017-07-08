@@ -476,7 +476,7 @@ def writ_data():
     #listnameback = ['isotflux', 'fdfmflux', 'fdfmfluxnorm', 'plnkdust', 'wisestar', 'finkdust', 'darktemp']
     strgback=['', '', '']
     listnameback = ['isotflux', 'fdfmflux', 'darktemp']
-    for nameback in listnameback:
+    for nameback in deepcopy(listnameback):
         listnameback += [nameback + 'smth']
     numbback = len(listnameback)
     gdat.indxback = arange(numbback)
@@ -530,7 +530,7 @@ def writ_data():
             if strg.endswith('smth'):
                 
                 # normalize
-                indxbackorig = listnameback.indx(strg[:-4])
+                indxbackorig = listnameback.index(strg[:-4])
                 
                 # smooth
                 gdat.fluxbackfull[c, :, :, :] = tdpy.util.smth_ferm(gdat.fluxbackfull[indxbackorig, :, :, :], gdat.meanenerfull, gdat.indxevttfull)
