@@ -293,6 +293,25 @@ def pcat_chan_mock():
                               numbsidecart=numbsidecart, \
                              )
 
+def pcat_chan_inpt_long():
+    
+    datatype = 'home'
+    strgexpomaps = '4msc'
+    numbsidecart = 300
+    
+    rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
+    gridchan = pcat.main.init( \
+                              numbswep=100000, \
+                              numbswepplot=10000, \
+                              optihess=True, \
+                              strgexpo='chanexpo%s.fits' % rtagdata, \
+                              exprtype='chan', \
+                              condcatl=False, \
+                              numbsidecart=numbsidecart, \
+                              strgexprflux='chanflux%s.fits' % rtagdata, \
+                             )
+
+
 def pcat_chan_inpt():
     
     datatype = 'home'
@@ -301,15 +320,15 @@ def pcat_chan_inpt():
     
     rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
-                              numbswep=5, \
+                              numbswep=100, \
                               numbswepplot=10000, \
                               optihess=True, \
                               verbtype=2, \
                               makeplot=False, \
                               #diagmode=True, \
-                              recostat=True, \
+                              #recostat=True, \
                               savestat=True, \
-                              fittmaxmnumbpnts=array([6]), \
+                              fittmaxmnumbpnts=array([4]), \
                               strgexpo='chanexpo%s.fits' % rtagdata, \
                               exprtype='chan', \
                               condcatl=False, \

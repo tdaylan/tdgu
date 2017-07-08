@@ -417,24 +417,20 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
 def writ_data():
 
     verbtype=1
-    makeplot=False
     strgexpr='fermflux_cmp0_igal.fits'
-    indxenerrofi=arange(1, 4)
-    indxevttrofi=arange(3, 4)
-    maxmgangdata=20.
     smthmaps = False
 
-    #strgback=['isotflux', 'fdfmflux', 'plnk/HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'lambda_sfd_ebv.fits', 'darktemp'], \
-    strgback=['isotflux', 'fdfmflux'], \
-    
     # construct the global object
     gdat = tdpy.util.gdatstrt()
     gdat.verbtype = verbtype
-    gdat.makeplot = makeplot
     gdat.strgexpr = strgexpr
-    gdat.strgback = strgback
+    
+    indxenerrofi=arange(1, 4)
+    indxevttrofi=arange(3, 4)
     gdat.indxenerrofi = indxenerrofi
     gdat.indxevttrofi = indxevttrofi
+    
+    maxmgangdata=20.
     gdat.maxmgangdata = maxmgangdata
     minmlgal = -maxmgangdata
     maxmlgal = maxmgangdata
@@ -447,16 +443,13 @@ def writ_data():
     gdat.binsener = gdat.binsenerfull[gdat.indxenerrofi[0]:gdat.indxenerrofi[-1] + 2]
     gdat.binsener, gdat.meanener, gdat.diffener, gdat.numbener, gdat.indxener = tdpy.util.retr_axis(bins=gdat.binsener, scal='logt')
     gdat.strgbinsener = ['%.3g GeV - %.3g GeV' % (gdat.binsener[i], gdat.binsener[i+1]) for i in gdat.indxener]
-
+    
     ## event type
     gdat.indxevttfull = arange(4)
     gdat.numbevttfull = gdat.indxevttfull.size
     gdat.indxevttrofi = gdat.indxevttfull[gdat.indxevttrofi]
     gdat.numbevtt = gdat.indxevttrofi.size
     gdat.indxevtt = arange(gdat.numbevtt)
-
-    gdat.numbback = len(strgback)
-    gdat.indxback = arange(gdat.numbback)
 
     ## pixelization
     gdat.numbside = 256
@@ -479,16 +472,18 @@ def writ_data():
     ### filter
     gdat.dataflux = gdat.exprflux[indxdatacubefilt]
 
-    # power spectrum calculation
-    gdat.numbmapsplot = gdat.numbback + 1
-    gdat.mapsplot = empty((gdat.numbmapsplot, gdat.numbpixlfull))
-    
-    gdat.mapsplot[0, gdat.indxpixlrofi] = sum(gdat.datacnts[1, :, :], 1)
-
     ## templates
+    strgback=['', '', '', 'plnk/HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'lambda_sfd_ebv.fits', '']
     listnameback = ['isotflux', 'fdfmflux', 'fdfmfluxnorm', 'plnkdust', 'wisestar', 'finkdust', 'darktemp']
-    gdat.numbbackwrit = len(listnameback)
-    gdat.fluxbackfull = empty((gdat.numbbackwrit, gdat.numbenerfull, gdat.numbpixlfull, gdat.numbevttfull))
+    numbback = len(listnameback)
+    gdat.indxback = arange(numbback)
+    gdat.fluxbackfull = empty((numbback, gdat.numbenerfull, gdat.numbpixlfull, gdat.numbevttfull))
+    
+    # power spectrum calculation
+    gdat.numbmapsplot = numbback + 1
+    gdat.mapsplot = empty((gdat.numbmapsplot, gdat.numbpixlfull))
+    gdat.mapsplot[0, gdat.indxpixlrofi] = sum(gdat.exprflux[1, gdat.indxpixlrofi, :], 1)
+
     for c, strg in enumerate(listnameback):
 
         if smthmaps:
@@ -496,7 +491,7 @@ def writ_data():
 
         # temp -- ROI should be fixed at 40 X 40 degree^2
         path = gdat.pathdata + strg + '.fits'
-        if os.path.isfile(path):
+        if False and os.path.isfile(path):
             print 'Reading %s...' % path
             gdat.fluxbackfull[c, :, :, :] = pf.getdata(path)
         else:
@@ -506,15 +501,15 @@ def writ_data():
             if strg.startswith('fdfmflux'):
                 gdat.fluxbackorig = tdpy.util.retr_fdfm(gdat.binsenerfull) 
             if strg == 'plnkdust':
-                pathtemp = gdat.pathdata + gdat.strgback[c]
+                pathtemp = gdat.pathdata + strgback[c]
                 gdat.fluxbackorig = pf.getdata(pathtemp, 1)['RADIANCE']
                 gdat.fluxbackorig = hp.ud_grade(gdat.fluxbackorig, gdat.numbside, order_in='NESTED', order_out='RING')
             if strg == 'wisestar':
-                pathtemp = gdat.pathdata + gdat.strgback[c]
+                pathtemp = gdat.pathdata + strgback[c]
                 gdat.fluxbackorig = pf.getdata(pathtemp, 0)
                 gdat.fluxbackorig = hp.ud_grade(gdat.fluxbackorig, gdat.numbside, order_in='RING', order_out='RING')
             if strg == 'finkdust':
-                pathtemp = gdat.pathdata + gdat.strgback[c]
+                pathtemp = gdat.pathdata + strgback[c]
                 gdat.fluxbackorig = pf.getdata(pathtemp)['TEMPERATURE']
                 gdat.fluxbackorig = hp.ud_grade(gdat.fluxbackorig, gdat.numbside, order_in='NESTED', order_out='RING')
             if strg == 'darktemp':
@@ -534,11 +529,11 @@ def writ_data():
                     gdat.fluxbackfull[c, :, :, :] = tdpy.util.smth_ferm(gdat.fluxbackfull[c, :, :, :], gdat.meanenerfull, gdat.indxevttfull)
             
             # normalize
-            if strg == 'fdfmfluxnorm':
-                gdat.fluxbackorig = tdpy.util.retr_fdfm(gdat.binsenerfull)
-                for i in gdat.indxenerfull:
-                    for m in gdat.indxevttfull:
-                        gdat.fluxbackorig[i, :, m] = gdat.fluxbackorig[i, :, m] / mean(gdat.fluxbackorig[i, gdat.indxpixlnorm, m])
+            #if strg == 'fdfmfluxnorm':
+            #    gdat.fluxbackorig = tdpy.util.retr_fdfm(gdat.binsenerfull)
+            #    for i in gdat.indxenerfull:
+            #        for m in gdat.indxevttfull:
+            #            gdat.fluxbackorig[i, :, m] = gdat.fluxbackorig[i, :, m] / mean(gdat.fluxbackorig[i, gdat.indxpixlnorm, m])
             
             # temp
             #gdat.fluxback[where(gdat.fluxback < 0.)] = 0.
@@ -546,7 +541,7 @@ def writ_data():
             pf.writeto(path, gdat.fluxbackfull[c, :, :, :], clobber=True)
 
     # take only the energy bins, spatial pixels and event types of interest
-    gdat.fluxback = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
+    gdat.fluxback = empty((numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
     for c in gdat.indxback:
         for i in gdat.indxener:
             for m in gdat.indxevtt:
@@ -565,9 +560,9 @@ def writ_data():
 
     figr, axis = plt.subplots()
     mpol = arange(3 * gdat.numbside, dtype=int)
-    for n in range(gdat.numbback):
+    for n in range(numbback):
         psec = hp.anafast(gdat.mapsplot[n, :])
-        axis.loglog(mpol, mpol * (mpol + 1.) * psec, color=listcolr[n], label=listlabl[n])
+        axis.loglog(mpol, mpol * (mpol + 1.) * psec)#, label=listlabl[n])
     axis.set_ylabel('$l(l+1)C_l$')
     axis.set_xlabel('$l$')
     axis.legend(loc=4, ncol=2)
@@ -589,7 +584,7 @@ def writ_data():
 
     figr, axis = plt.subplots()
     
-    numbvarb = gdat.numbback + 1
+    numbvarb = numbback + 1
     listydat = empty((numbvarb, gdat.numbener))
     listyerr = zeros((2, numbvarb, gdat.numbener))
     

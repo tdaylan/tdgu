@@ -495,7 +495,7 @@ def pcat_lens_mock():
                        #truenumbpnts=array([5]), \
                        #verbtype=2, \
                        condcatl=False, \
-                       numbswep=10000, \
+                       numbswep=100000, \
                        #truestdvdefsdistslop=0.01, \
                        factthin=3000, \
                        #rtagredo='20170610_133749_pcat_lens_mock_10000', \
