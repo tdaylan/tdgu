@@ -303,13 +303,14 @@ def pcat_chan_inpt():
     gridchan = pcat.main.init( \
                               numbswep=100000, \
                               numbswepplot=5000, \
+                              
                               recostat=True, \
                               optihess=True, \
                               #verbtype=2, \
                               makeplot=False, \
                               #diagmode=True, \
                               savestat=True, \
-                              fittmaxmnumbpnts=array([4]), \
+                              #fittmaxmnumbpnts=array([6]), \
                               strgexpo='chanexpo%s.fits' % rtagdata, \
                               exprtype='chan', \
                               condcatl=False, \
