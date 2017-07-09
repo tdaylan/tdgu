@@ -798,6 +798,7 @@ def pcat_ferm_mock_igal():
                    indxenerincl=arange(1, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
                    trueback=[1., 'fdfmfluxnorm.fits'], \
+                   condcatl=False, \
                    maxmgangdata=deg2rad(10.), \
                    trueminmflux=5e-11, \
                    truemaxmflux=1e-7, \

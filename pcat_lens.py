@@ -591,13 +591,8 @@ def pcat_lens_inpt():
     pcat.main.init( \
                    elemtype='lens', \
                    lensmodltype='none', \
-                   numbswep=100, \
-                   factthin=10, \
-                   #makeplot=False, \
-                   numbswepplot=1000, \
-                   #shrtfram=True, \
-                   #mockonly=True, \
-                   #makeplotintr=True, \
+                   numbswep=100000, \
+                   numbswepplot=10000, \
                    #burntmpr=True, \
                    #initsizesour=1.5/anglfact, \
                    #initspecsourene0=1.5e-18, \
@@ -612,9 +607,6 @@ def pcat_lens_inpt():
                    optihess=False, \
                    savestat=True, \
                    #recostat=True, \
-                   makeplotinit=False, \
-                   makeplotfram=False, \
-                   makeplotlpri=False, \
                    strgexpo=strgexpo, \
                    fittmaxmnumbpnts=array([0]), \
                    maxmgangdata=maxmgangdata, \

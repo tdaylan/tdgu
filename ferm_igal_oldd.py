@@ -424,9 +424,9 @@ def writ_data():
     gdat.verbtype = verbtype
     gdat.strgexpr = strgexpr
     
-    indxenerrofi=arange(1, 4)
+    #indxenerrofi=arange(1, 4)
     indxevttrofi=arange(3, 4)
-    gdat.indxenerrofi = indxenerrofi
+    #gdat.indxenerrofi = indxenerrofi
     gdat.indxevttrofi = indxevttrofi
     
     maxmgangdata=20.
@@ -437,10 +437,10 @@ def writ_data():
     maxmbgal = maxmgangdata
 
     # axes
-    gdat.binsenerfull = array([0.1, 0.3, 1., 3., 10., 100.])
-    gdat.binsenerfull, gdat.meanenerfull, gdat.diffenerfull, gdat.numbenerfull, gdat.indxenerfull = tdpy.util.retr_axis(bins=gdat.binsenerfull, scal='logt')
-    gdat.binsener = gdat.binsenerfull[gdat.indxenerrofi[0]:gdat.indxenerrofi[-1] + 2]
+    gdat.binsener = array([0.1, 0.3, 1., 3., 10., 100.])
     gdat.binsener, gdat.meanener, gdat.diffener, gdat.numbener, gdat.indxener = tdpy.util.retr_axis(bins=gdat.binsener, scal='logt')
+    #gdat.binsener = gdat.binsenerfull[gdat.indxenerrofi[0]:gdat.indxenerrofi[-1] + 2]
+    #gdat.binsener, gdat.meanener, gdat.diffener, gdat.numbener, gdat.indxener = tdpy.util.retr_axis(bins=gdat.binsener, scal='logt')
     gdat.strgbinsener = ['%.3g GeV - %.3g GeV' % (gdat.binsener[i], gdat.binsener[i+1]) for i in gdat.indxener]
     
     ## event type
@@ -459,7 +459,7 @@ def writ_data():
     gdat.numbpixl = gdat.indxpixlrofi.size
     gdat.indxpixl = arange(gdat.numbpixl)
        
-    indxdatacubefilt = meshgrid(gdat.indxenerrofi, gdat.indxpixlrofi, gdat.indxevttrofi, indexing='ij')
+    indxdatacubefilt = meshgrid(gdat.indxener, gdat.indxpixlrofi, gdat.indxevttrofi, indexing='ij')
     
     # paths
     gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('tdgu', 'ferm_igal/', 'ferm_igal/', 'inpt')
@@ -480,7 +480,7 @@ def writ_data():
         listnameback += [nameback + 'smth']
     numbback = len(listnameback)
     gdat.indxback = arange(numbback)
-    gdat.fluxbackfull = empty((numbback, gdat.numbenerfull, gdat.numbpixlfull, gdat.numbevttfull))
+    gdat.fluxbackfull = empty((numbback, gdat.numbener, gdat.numbpixlfull, gdat.numbevttfull))
     
     # power spectrum calculation
     gdat.numbmapsplot = numbback + 1
@@ -501,9 +501,9 @@ def writ_data():
             print
 
             if strg == 'isotflux':
-                gdat.fluxbackorig = tdpy.util.retr_isot(gdat.binsenerfull)
+                gdat.fluxbackorig = tdpy.util.retr_isot(gdat.binsener)
             if strg.startswith('fdfmflux'):
-                gdat.fluxbackorig = tdpy.util.retr_fdfm(gdat.binsenerfull) 
+                gdat.fluxbackorig = tdpy.util.retr_fdfm(gdat.binsener) 
             if strg == 'plnkdust':
                 pathtemp = gdat.pathdata + strgback[c]
                 gdat.fluxbackorig = pf.getdata(pathtemp, 1)['RADIANCE']
@@ -525,9 +525,9 @@ def writ_data():
                 indxbackorig = listnameback.index(strg[:-4])
                 
                 # smooth
-                gdat.fluxbackfull[c, :, :, :] = tdpy.util.smth_ferm(gdat.fluxbackfull[indxbackorig, :, :, :], gdat.meanenerfull, gdat.indxevttfull)
+                gdat.fluxbackfull[c, :, :, :] = tdpy.util.smth_ferm(gdat.fluxbackfull[indxbackorig, :, :, :], gdat.meanener, gdat.indxevttfull)
                 
-                for i in gdat.indxenerfull:
+                for i in gdat.indxener:
                     for m in gdat.indxevttfull:
                         gdat.fluxbackfull[c, i, :, m] = gdat.fluxbackfull[c, i, :, m] / mean(gdat.fluxbackfull[c, i, gdat.indxpixlnorm, m])
 
@@ -537,7 +537,7 @@ def writ_data():
                     if strg == 'isotflux' or strg.startswith('fdfmflux'):
                         gdat.fluxbackfull[c, :, :, m] = gdat.fluxbackorig
                     else:
-                        for i in gdat.indxenerfull:
+                        for i in gdat.indxener:
                             gdat.fluxbackfull[c, i, :, m] = gdat.fluxbackorig
             
             # temp
