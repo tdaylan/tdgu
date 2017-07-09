@@ -519,14 +519,6 @@ def writ_data():
             if strg == 'darktemp':
                 gdat.fluxbackorig = tdpy.util.retr_nfwp(1., gdat.numbside)
 
-            # make copies
-            for m in gdat.indxevttfull:
-                if strg == 'isotflux' or strg.startswith('fdfmflux'):
-                    gdat.fluxbackfull[c, :, :, m] = gdat.fluxbackorig
-                else:
-                    for i in gdat.indxenerfull:
-                        gdat.fluxbackfull[c, i, :, m] = gdat.fluxbackorig
-            
             if strg.endswith('smth'):
                 
                 # normalize
@@ -537,7 +529,16 @@ def writ_data():
                 
                 for i in gdat.indxenerfull:
                     for m in gdat.indxevttfull:
-                        gdat.fluxbackfull[c, i, :, m] = gdat.fluxbackfull[c, i, :, m] / mean(gdat.fluxbackfull[c, gdat.indxpixlnorm, m])
+                        gdat.fluxbackfull[c, i, :, m] = gdat.fluxbackfull[c, i, :, m] / mean(gdat.fluxbackfull[c, i, gdat.indxpixlnorm, m])
+
+            else:
+                # make copies
+                for m in gdat.indxevttfull:
+                    if strg == 'isotflux' or strg.startswith('fdfmflux'):
+                        gdat.fluxbackfull[c, :, :, m] = gdat.fluxbackorig
+                    else:
+                        for i in gdat.indxenerfull:
+                            gdat.fluxbackfull[c, i, :, m] = gdat.fluxbackorig
             
             # temp
             #gdat.fluxback[where(gdat.fluxback < 0.)] = 0.
