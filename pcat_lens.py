@@ -596,7 +596,6 @@ def pcat_lens_inpt():
                    #burntmpr=True, \
                    #initsizesour=1.5/anglfact, \
                    #initspecsourene0=1.5e-18, \
-                   verbtype=2, \
                    #mask=mask, \
                    indxenerincl=array([0]), \
                    initbacpbac0ene0=initbacpbac0ene0, \
