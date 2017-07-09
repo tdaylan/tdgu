@@ -424,9 +424,7 @@ def writ_data():
     gdat.verbtype = verbtype
     gdat.strgexpr = strgexpr
     
-    #indxenerrofi=arange(1, 4)
     indxevttrofi=arange(3, 4)
-    #gdat.indxenerrofi = indxenerrofi
     gdat.indxevttrofi = indxevttrofi
     
     maxmgangdata=20.
@@ -439,8 +437,6 @@ def writ_data():
     # axes
     gdat.binsener = array([0.1, 0.3, 1., 3., 10., 100.])
     gdat.binsener, gdat.meanener, gdat.diffener, gdat.numbener, gdat.indxener = tdpy.util.retr_axis(bins=gdat.binsener, scal='logt')
-    #gdat.binsener = gdat.binsenerfull[gdat.indxenerrofi[0]:gdat.indxenerrofi[-1] + 2]
-    #gdat.binsener, gdat.meanener, gdat.diffener, gdat.numbener, gdat.indxener = tdpy.util.retr_axis(bins=gdat.binsener, scal='logt')
     gdat.strgbinsener = ['%.3g GeV - %.3g GeV' % (gdat.binsener[i], gdat.binsener[i+1]) for i in gdat.indxener]
     
     ## event type
@@ -550,7 +546,7 @@ def writ_data():
     for c in gdat.indxback:
         for i in gdat.indxener:
             for m in gdat.indxevtt:
-                gdat.fluxback[c, i, :, m] = gdat.fluxbackfull[c, gdat.indxenerrofi[i], gdat.indxpixlrofi, gdat.indxevttrofi[m]]
+                gdat.fluxback[c, i, :, m] = gdat.fluxbackfull[c, gdat.indxener[i], gdat.indxpixlrofi, gdat.indxevttrofi[m]]
 
     # load the map to the array whose power spectrum will be calculated
     gdat.mapsplot[1:, gdat.indxpixlrofi] = gdat.fluxback[:, 0, :, 0]
