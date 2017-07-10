@@ -493,31 +493,35 @@ def writ_data():
             if strg == 'darktemp':
                 sbrtbacktemp = tdpy.util.retr_nfwp(1., gdat.numbside)
 
-            if not strg.endswith('smth'):
+            # temp
+            #gdat.sbrtback[where(gdat.sbrtback < 0.)] = 0.
+            
+            print 'listnameback[c]'
+            print listnameback[c]
+            print 'strg'
+            print strg
+            print
+
+            if listnameback[c].endswith('smth'):
+                print 'gdat.sbrtback[c, :, :, :]'
+                summgene(gdat.sbrtback[c, :, :, :])
+                # smooth
+                maps = tdpy.util.smth_ferm(gdat.sbrtback[c, :, :, :], gdat.meanener, gdat.indxevtt)
+                print 'maps'
+                summgene(maps)
+
+                # normalize
+                for i in gdat.indxener:
+                    for m in gdat.indxevtt: 
+                        maps[i, :, m] = maps[i, :, m] / mean(maps[i, gdat.indxpixlnorm, m])
+            else:
                 # make copies
                 for m in gdat.indxevtt:
-                    if strg.startswith('fdfmflux'):
+                    if listnameback[c].startswith('fdfmflux'):
                         gdat.sbrtback[c, :, :, m] = sbrtbacktemp
                     else:
                         for i in gdat.indxener:
                             gdat.sbrtback[c, i, :, m] = sbrtbacktemp
-            else:
-                # smooth
-                gdat.sbrtbacksmth[c, :, :, :] = tdpy.util.smth_ferm(gdat.sbrtback[c, :, :, :], gdat.meanener, gdat.indxevtt)
-            
-            # normalize
-            if strg.endswith('norm'):
-                for i in gdat.indxener:
-                    for m in gdat.indxevtt: 
-                        for maps in [gdat.sbrtback, gdat.sbrtbacksmth]:
-                            maps[c, i, :, m] = maps[c, i, :, m] / mean(maps[c, i, gdat.indxpixlnorm, m])
-            
-            # temp
-            #gdat.sbrtback[where(gdat.sbrtback < 0.)] = 0.
-            
-            if strg.endswith('smth'):
-                maps = gdat.sbrtbacksmth
-            else:
                 maps = gdat.sbrtback
             print 'Writing to %s...' % path
             pf.writeto(path, maps[c, :, :, :], clobber=True)
@@ -793,7 +797,10 @@ def pcat_ferm_mock_igal():
      
     pcat.main.init( \
                    numbswep=1000, \
+                   verbtype=2, \
                    diagmode=True, \
+                   #makeplotinit=False, \
+                   makeplotfram=False, \
                    indxevttincl=arange(3, 4), \
                    indxenerincl=arange(1, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
@@ -802,7 +809,8 @@ def pcat_ferm_mock_igal():
                    maxmgangdata=deg2rad(10.), \
                    trueminmflux=5e-11, \
                    truemaxmflux=1e-7, \
-                   truenumbpnts=array([100]), \
+                   truenumbpnts=array([10]), \
+                   truemaxmnumbpnts=array([10]), \
                   )
 
 

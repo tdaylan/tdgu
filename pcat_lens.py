@@ -620,7 +620,7 @@ def pcat_lens_inpt():
     pcat.main.init( \
                    elemtype='lens', \
                    lensmodltype='none', \
-                   numbswep=100000, \
+                   numbswep=1000, \
                    numbswepplot=10000, \
                    #burntmpr=True, \
                    #initsizesour=1.5/anglfact, \
