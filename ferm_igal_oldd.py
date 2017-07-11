@@ -135,7 +135,6 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
 
     calcfactconv = False
     gdat.subspnts = True
-    
    
     indxevttrofi = arange(4)
 
@@ -470,8 +469,10 @@ def writ_data():
     ## templates
     #strgback=['', '', '', 'plnk/HFI_CompMap_ThermalDustModel_2048_R1.20.fits', 'wssa_sample_1024.fits', 'lambda_sfd_ebv.fits', '']
     #listnameback = ['isotflux', 'fdfmflux', 'fdfmfluxnorm', 'plnkdust', 'wisestar', 'finkdust', 'darktemp']
-    strgback=['', '', '']
-    listnameback = ['isotflux', 'fdfmflux', 'darktemp']
+    strgback=['']
+    listnameback = ['fdfmflux']
+    #strgback=['', '', '']
+    #listnameback = ['isotflux', 'fdfmflux', 'darktemp']
     for nameback in deepcopy(listnameback):
         listnameback += [nameback + 'smth']
     numbback = len(listnameback)
@@ -492,9 +493,10 @@ def writ_data():
             gdat.fluxbackfull[c, :, :, :] = pf.getdata(path)
         else:
             
+            print 'c'
+            print c
             print 'strg'
             print strg
-            print
 
             if strg == 'isotflux':
                 gdat.fluxbackorig = tdpy.util.retr_isot(gdat.binsener)
@@ -517,12 +519,17 @@ def writ_data():
 
             if strg.endswith('smth'):
                 
-                # normalize
                 indxbackorig = listnameback.index(strg[:-4])
-                
+                print 'c'
+                print 'indxbackorig'
+                print indxbackorig
+                print 'gdat.fluxbackfull[indxbackorig, :, :, :]'
+                summgene(gdat.fluxbackfull[indxbackorig, :, :, :])
                 # smooth
                 gdat.fluxbackfull[c, :, :, :] = tdpy.util.smth_ferm(gdat.fluxbackfull[indxbackorig, :, :, :], gdat.meanener, gdat.indxevttfull)
-                
+                print 'gdat.fluxbackfull[c, :, :, :]'
+                summgene(gdat.fluxbackfull[c, :, :, :])
+                # normalize
                 for i in gdat.indxener:
                     for m in gdat.indxevttfull:
                         gdat.fluxbackfull[c, i, :, m] = gdat.fluxbackfull[c, i, :, m] / mean(gdat.fluxbackfull[c, i, gdat.indxpixlnorm, m])
@@ -540,6 +547,7 @@ def writ_data():
             #gdat.fluxback[where(gdat.fluxback < 0.)] = 0.
             print 'Writing to %s...' % path
             pf.writeto(path, gdat.fluxbackfull[c, :, :, :], clobber=True)
+            print
 
     # take only the energy bins, spatial pixels and event types of interest
     gdat.fluxback = empty((numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))

@@ -769,25 +769,25 @@ def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermex
     
     pcat.main.init( \
                    numbswep=10000, \
+                   #numbburn=0, \
+                   #factthin=1, \
                    #verbtype=2, \
-                   factthin=100, \
-                   numbswepplot=3000, \
+                   #numbswepplot=3000, \
                    maxmgangdata=deg2rad(20.), \
                    diagmode=True, \
+                   #indxevttincl=arange(2, 3), \
+                   indxevttincl=arange(2, 4), \
+                   #indxenerincl=arange(2, 3), \
                    indxenerincl=arange(1, 4), \
-                   proppsfp=False, \
-                   #savestat=True, \
-                   #recostat=True, \
-                   makeplotinit=False, \
-                   makeplotfram=False, \
-                   numbburn=0, \
+                   savestat=True, \
+                   recostat=True, \
                    #optihess=True, \
                    condcatl=False, \
-                   indxevttincl=arange(2, 4), \
-                   fittmaxmnumbpnts=array([0]), \
+                   #fittmaxmnumbpnts=array([3]), \
                    minmflux=1e-8, \
                    maxmflux=3e-6, \
                    truebacktype=[1., 'fdfmfluxnorm.fits'], \
+                   #truebacktype=[1.], \
                    strgexpo=strgexpo, \
                    strgexprflux=strgexprflux, \
                   )
@@ -797,20 +797,21 @@ def pcat_ferm_mock_igal():
      
     pcat.main.init( \
                    numbswep=1000, \
+                   factthin=250, \
                    verbtype=2, \
                    diagmode=True, \
-                   #makeplotinit=False, \
+                   makeplotinit=False, \
                    makeplotfram=False, \
                    indxevttincl=arange(3, 4), \
                    indxenerincl=arange(1, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
                    trueback=[1., 'fdfmfluxnorm.fits'], \
-                   condcatl=False, \
+                   #condcatl=False, \
                    maxmgangdata=deg2rad(10.), \
                    trueminmflux=5e-11, \
                    truemaxmflux=1e-7, \
-                   truenumbpnts=array([10]), \
-                   truemaxmnumbpnts=array([10]), \
+                   truenumbpnts=array([3]), \
+                   truemaxmnumbpnts=array([3]), \
                   )
 
 
