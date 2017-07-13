@@ -281,14 +281,47 @@ def pcat_chan_mock():
     strgexpomaps = '4msc'
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=10000, \
+                              numbswep=4, \
                               numbswepplot=3000, \
+                              #verbtype=2, \
+                              makeplot=False, \
+                              truefluxdistslop=1.1, \
                               diagmode=True, \
                               strgexpo='chanexpo%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               trueminmflux=1e-8, \
                               truemaxmflux=1e-6, \
+                              truebacpbac0ene0=1., \
+                              truebacpbac0ene1=2., \
+                              truebacpbac0ene2=3., \
+                              truebacpbac0ene3=4., \
+                              truebacpbac0ene4=5., \
+                              inittype='refr', \
+                              savestat=True, \
                               condcatl=False, \
-                              truenumbpnts=array([20]), \
+                              truenumbpnts=array([0]), \
+                              truemaxmnumbpnts=array([0]), \
+                              exprtype='chan', \
+                              numbsidecart=numbsidecart, \
+                             )
+
+def pcat_chan_mock_delt():
+    
+    datatype = 'home'
+    strgexpomaps = '4msc'
+    numbsidecart = 300
+    gridchan = pcat.main.init( \
+                              numbswep=1, \
+                              numbswepplot=3000, \
+                              mockonly=True, \
+                              verbtype=2, \
+                              truefluxdistslop=1.1, \
+                              diagmode=True, \
+                              strgexpo='chanexpo%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
+                              trueminmflux=1e-7, \
+                              truemaxmflux=1e-5, \
+                              condcatl=False, \
+                              truenumbpnts=array([3]), \
+                              truemaxmnumbpnts=array([3]), \
                               exprtype='chan', \
                               numbsidecart=numbsidecart, \
                              )
@@ -320,17 +353,17 @@ def pcat_chan_inpt():
     
     rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
-                              numbswep=5, \
+                              numbswep=10000, \
                               #factthin=1, \
                               #numbburn=0, \
                               numbswepplot=10000, \
-                              #optihess=True, \
+                              optihess=True, \
                               #verbtype=2, \
-                              makeplot=False, \
+                              #makeplot=False, \
                               #diagmode=True, \
-                              #recostat=True, \
+                              recostat=True, \
                               savestat=True, \
-                              fittmaxmnumbpnts=array([4]), \
+                              fittmaxmnumbpnts=array([50]), \
                               strgexpo='chanexpo%s.fits' % rtagdata, \
                               exprtype='chan', \
                               condcatl=False, \

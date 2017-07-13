@@ -798,7 +798,7 @@ def pcat_ferm_mock_igal():
     pcat.main.init( \
                    numbswep=1000, \
                    factthin=250, \
-                   verbtype=2, \
+                   #verbtype=2, \
                    diagmode=True, \
                    makeplotinit=False, \
                    makeplotfram=False, \
