@@ -522,9 +522,12 @@ def writ_data():
                     else:
                         for i in gdat.indxener:
                             gdat.sbrtback[c, i, :, m] = sbrtbacktemp
-                maps = gdat.sbrtback
+            
             print 'Writing to %s...' % path
-            pf.writeto(path, maps[c, :, :, :], clobber=True)
+            if listnameback[c].endswith('smth'):
+                pf.writeto(path, maps, clobber=True)
+            else:
+                pf.writeto(path, gdat.sbrtback[c, :, :, :], clobber=True)
 
     # load the map to the array whose power spectrum will be calculated
     gdat.mapsplot[1:, :] = gdat.sbrtback[:, 0, :, 0]

@@ -182,10 +182,6 @@ def writ_data(datatype='extr'):
             
         print
         print
-        print
-        print
-    print 'hey'
-    print 2.5e-10 / apix
 
 
 # test suites
