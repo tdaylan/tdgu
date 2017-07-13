@@ -188,20 +188,6 @@ def writ_data(datatype='extr'):
     print 2.5e-10 / apix
 
 
-def pcat_chan_mock_zero():
-    
-    datatype = 'home'
-    strgexpomaps = '4msc'
-    numbsidecart = 300
-    gridchan = pcat.main.init( \
-                              numbswep=10000, \
-                              strgexpo='chanexpo%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
-                              exprtype='chan', \
-                              numbsidecart=300, \
-                              diagmode=False, \
-                              truenumbpnts=array([0]), \
-                             )
-
 # test suites
 
 def pcat_chan_mock_test():
@@ -275,31 +261,32 @@ def pcat_chan_mock_popl():
                              )
 
 
+def pcat_chan_mock_zero():
+    
+    datatype = 'home'
+    strgexpomaps = '4msc'
+    numbsidecart = 300
+    gridchan = pcat.main.init( \
+                              numbswep=100000, \
+                              numbswepplot=10000, \
+                              strgexpo='chanexpo%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
+                              condcatl=False, \
+                              exprtype='chan', \
+                              numbsidecart=numbsidecart, \
+                              truenumbpnts=array([0]), \
+                             )
+
+
 def pcat_chan_mock():
     
     datatype = 'home'
     strgexpomaps = '4msc'
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=4, \
-                              numbswepplot=3000, \
-                              #verbtype=2, \
-                              makeplot=False, \
-                              truefluxdistslop=1.1, \
-                              diagmode=True, \
+                              numbswep=100000, \
+                              numbswepplot=10000, \
                               strgexpo='chanexpo%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
-                              trueminmflux=1e-8, \
-                              truemaxmflux=1e-6, \
-                              truebacpbac0ene0=1., \
-                              truebacpbac0ene1=2., \
-                              truebacpbac0ene2=3., \
-                              truebacpbac0ene3=4., \
-                              truebacpbac0ene4=5., \
-                              inittype='refr', \
-                              savestat=True, \
                               condcatl=False, \
-                              truenumbpnts=array([0]), \
-                              truemaxmnumbpnts=array([0]), \
                               exprtype='chan', \
                               numbsidecart=numbsidecart, \
                              )
@@ -326,7 +313,8 @@ def pcat_chan_mock_delt():
                               numbsidecart=numbsidecart, \
                              )
 
-def pcat_chan_inpt_long():
+
+def pcat_chan_inpt():
     
     datatype = 'home'
     strgexpomaps = '4msc'
@@ -337,33 +325,8 @@ def pcat_chan_inpt_long():
                               numbswep=100000, \
                               numbswepplot=10000, \
                               optihess=True, \
-                              strgexpo='chanexpo%s.fits' % rtagdata, \
-                              exprtype='chan', \
-                              condcatl=False, \
-                              numbsidecart=numbsidecart, \
-                              strgexprflux='chanflux%s.fits' % rtagdata, \
-                             )
-
-
-def pcat_chan_inpt():
-    
-    datatype = 'home'
-    strgexpomaps = '4msc'
-    numbsidecart = 300
-    
-    rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
-    gridchan = pcat.main.init( \
-                              numbswep=10000, \
-                              #factthin=1, \
-                              #numbburn=0, \
-                              numbswepplot=10000, \
-                              optihess=True, \
-                              #verbtype=2, \
-                              #makeplot=False, \
-                              #diagmode=True, \
                               recostat=True, \
                               savestat=True, \
-                              fittmaxmnumbpnts=array([50]), \
                               strgexpo='chanexpo%s.fits' % rtagdata, \
                               exprtype='chan', \
                               condcatl=False, \
