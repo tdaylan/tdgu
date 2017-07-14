@@ -273,13 +273,30 @@ def pcat_chan_mock_zero():
                              )
 
 
+def pcat_chan_mock_assc():
+    
+    datatype = 'home'
+    strgexpomaps = '4msc'
+    numbsidecart = 300
+    gridchan = pcat.main.init( \
+                              numbswep=10000, \
+                              inittype='refr', \
+                              makeplotinit=False, \
+                              numbswepplot=10000, \
+                              strgexpo='chanexpo%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
+                              condcatl=False, \
+                              exprtype='chan', \
+                              numbsidecart=numbsidecart, \
+                             )
+
 def pcat_chan_mock():
     
     datatype = 'home'
     strgexpomaps = '4msc'
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=100000, \
+                              numbswep=10000, \
+                              makeplotinit=False, \
                               numbswepplot=10000, \
                               strgexpo='chanexpo%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               condcatl=False, \
@@ -318,10 +335,33 @@ def pcat_chan_inpt():
     
     rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
+                              numbswep=10000, \
+                              numbswepplot=10000, \
+                              makeplotinit=False, \
+                              optihess=True, \
+                              #recostat=True, \
+                              #savestat=True, \
+                              strgexpo='chanexpo%s.fits' % rtagdata, \
+                              exprtype='chan', \
+                              condcatl=False, \
+                              numbsidecart=numbsidecart, \
+                              strgexprflux='chanflux%s.fits' % rtagdata, \
+                             )
+
+
+def pcat_chan_inpt_trai():
+    
+    datatype = 'home'
+    strgexpomaps = '4msc'
+    numbsidecart = 300
+    
+    rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
+    gridchan = pcat.main.init( \
                               numbswep=100000, \
                               numbswepplot=10000, \
+                              makeplot=False, \
                               optihess=True, \
-                              recostat=True, \
+                              #recostat=True, \
                               savestat=True, \
                               strgexpo='chanexpo%s.fits' % rtagdata, \
                               exprtype='chan', \
