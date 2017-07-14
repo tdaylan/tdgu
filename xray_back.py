@@ -335,11 +335,11 @@ def pcat_chan_inpt():
     
     rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
-                              numbswep=10000, \
+                              numbswep=100000, \
                               numbswepplot=10000, \
                               makeplotinit=False, \
                               optihess=True, \
-                              #recostat=True, \
+                              recostat=True, \
                               #savestat=True, \
                               strgexpo='chanexpo%s.fits' % rtagdata, \
                               exprtype='chan', \
@@ -361,7 +361,7 @@ def pcat_chan_inpt_trai():
                               numbswepplot=10000, \
                               makeplot=False, \
                               optihess=True, \
-                              #recostat=True, \
+                              recostat=True, \
                               savestat=True, \
                               strgexpo='chanexpo%s.fits' % rtagdata, \
                               exprtype='chan', \
