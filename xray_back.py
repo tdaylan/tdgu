@@ -295,8 +295,7 @@ def pcat_chan_mock():
     strgexpomaps = '4msc'
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=10000, \
-                              makeplotinit=False, \
+                              numbswep=100000, \
                               numbswepplot=10000, \
                               strgexpo='chanexpo%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               condcatl=False, \
