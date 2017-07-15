@@ -138,7 +138,7 @@ def pcat_lens_mock_next():
     
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 2000000
     dictargs['condcatl'] = False
     #dictargs['factthin'] = 100
  
@@ -153,7 +153,7 @@ def pcat_lens_mock_next():
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  indxruns=0, \
+                                  #indxruns=0, \
                                  )
     
 
@@ -161,7 +161,7 @@ def pcat_lens_mock_syst():
    
     seed(4)
     
-    numbswepnomi = 100000
+    numbswepnomi = 2000000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['condcatl'] = False
@@ -181,7 +181,7 @@ def pcat_lens_mock_syst():
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  indxruns=0, \
+                                  #indxruns=0, \
                                  )
     
 
