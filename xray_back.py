@@ -29,8 +29,7 @@ def writ_data(datatype='extr'):
 
     numbmaps = len(expomaps)
 
-    #listnumbside = [30, 200, 300]
-    listnumbside = [300, 1000]
+    listnumbside = [300, 480]
     for numbside in listnumbside:
 
         print 'numbside'
@@ -312,21 +311,21 @@ def pcat_chan_mock_delt():
                               numbswep=1, \
                               numbswepplot=3000, \
                               mockonly=True, \
-                              verbtype=2, \
+                              #verbtype=2, \
                               truefluxdistslop=1.1, \
                               diagmode=True, \
                               strgexpo='chanexpo%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
-                              trueminmflux=1e-9, \
-                              truemaxmflux=1e-7, \
+                              trueminmflux=5e-9, \
+                              truemaxmflux=5e-7, \
                               condcatl=False, \
-                              truenumbpnts=array([3]), \
-                              truemaxmnumbpnts=array([3]), \
+                              truenumbpnts=array([1000]), \
+                              truemaxmnumbpnts=array([1000]), \
                               exprtype='chan', \
                               numbsidecart=numbsidecart, \
                              )
 
 
-def pcat_chan_inpt():
+def pcat_chan_inpt_home():
     
     datatype = 'home'
     strgexpomaps = '4msc'
@@ -337,7 +336,8 @@ def pcat_chan_inpt():
                               numbswep=100000, \
                               numbswepplot=10000, \
                               optihess=True, \
-                              recostat=True, \
+                              #recostat=True, \
+                              anlytype=datatype, \
                               savestat=True, \
                               strgexpo='chanexpo%s.fits' % rtagdata, \
                               exprtype='chan', \
@@ -345,6 +345,32 @@ def pcat_chan_inpt():
                               numbsidecart=numbsidecart, \
                               strgexprflux='chanflux%s.fits' % rtagdata, \
                              )
+
+
+
+
+def pcat_chan_inpt_extr():
+    
+    datatype = 'extr'
+    strgexpomaps = '4msc'
+    numbsidecart = 300
+    anlytype = datatype + strgexpomaps
+    rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
+    gridchan = pcat.main.init( \
+                              numbswep=100000, \
+                              numbswepplot=10000, \
+                              optihess=True, \
+                              #recostat=True, \
+                              anlytype=anlytype, \
+                              savestat=True, \
+                              strgexpo='chanexpo%s.fits' % rtagdata, \
+                              exprtype='chan', \
+                              condcatl=False, \
+                              numbsidecart=numbsidecart, \
+                              strgexprflux='chanflux%s.fits' % rtagdata, \
+                             )
+
+
 
 
 globals().get(sys.argv[1])(*sys.argv[2:])
