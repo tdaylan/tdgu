@@ -294,8 +294,8 @@ def pcat_chan_mock():
     strgexpomaps = '4msc'
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=100000, \
-                              numbswepplot=10000, \
+                              numbswep=2000000, \
+                              numbswepplot=20000, \
                               strgexpo='chanexpo%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               condcatl=False, \
                               exprtype='chan', \
@@ -333,8 +333,8 @@ def pcat_chan_inpt_home():
     
     rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
-                              numbswep=100000, \
-                              numbswepplot=10000, \
+                              numbswep=2000000, \
+                              numbswepplot=20000, \
                               optihess=True, \
                               #recostat=True, \
                               anlytype=datatype, \
@@ -357,8 +357,8 @@ def pcat_chan_inpt_extr():
     anlytype = datatype + strgexpomaps
     rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
-                              numbswep=100000, \
-                              numbswepplot=10000, \
+                              numbswep=2000000, \
+                              numbswepplot=20000, \
                               optihess=True, \
                               #recostat=True, \
                               anlytype=anlytype, \
