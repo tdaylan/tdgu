@@ -352,8 +352,9 @@ def pcat_chan_inpt_extr4msc():
     anlytype = datatype + strgexpomaps
     rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
-                              numbswep=2000000, \
+                              numbswep=200000, \
                               numbswepplot=20000, \
+                              #makeplot=False, \
                               optihess=True, \
                               anlytype=anlytype, \
                               recostat=namestat, \

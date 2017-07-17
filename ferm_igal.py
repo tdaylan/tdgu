@@ -803,26 +803,20 @@ def pcat_ferm_mock_igal_popl():
 def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
     pcat.main.init( \
-                   numbswep=10000, \
-                   #numbburn=0, \
-                   #factthin=1, \
-                   #verbtype=2, \
-                   #numbswepplot=3000, \
+                   numbswep=200000, \
+                   numbswepplot=20000, \
+                   makeplotinit=False, \
+                   makeplotfram=False, \
                    maxmgangdata=deg2rad(20.), \
-                   diagmode=True, \
-                   #indxevttincl=arange(2, 3), \
                    indxevttincl=arange(2, 4), \
-                   #indxenerincl=arange(2, 3), \
                    indxenerincl=arange(1, 4), \
                    savestat=True, \
-                   #recostat=True, \
-                   #optihess=True, \
+                   recostat=True, \
+                   optihess=True, \
                    condcatl=False, \
-                   #fittmaxmnumbpnts=array([3]), \
                    minmflux=1e-8, \
                    maxmflux=3e-6, \
                    truebacktype=[1., 'fdfmfluxnorm.fits'], \
-                   #truebacktype=[1.], \
                    strgexpo=strgexpo, \
                    strgexprflux=strgexprflux, \
                   )
