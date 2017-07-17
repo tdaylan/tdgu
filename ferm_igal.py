@@ -815,7 +815,7 @@ def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermex
                    #indxenerincl=arange(2, 3), \
                    indxenerincl=arange(1, 4), \
                    savestat=True, \
-                   recostat=True, \
+                   #recostat=True, \
                    #optihess=True, \
                    condcatl=False, \
                    #fittmaxmnumbpnts=array([3]), \

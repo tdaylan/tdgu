@@ -325,6 +325,7 @@ def pcat_chan_inpt_extr2msc():
     datatype = 'extr'
     strgexpomaps = '2msc'
     numbsidecart = 300
+    namestat = 'pcat_chan_inpt_' + datatype + '%04d' % numbsidecart
     anlytype = datatype + strgexpomaps
     rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
@@ -332,8 +333,8 @@ def pcat_chan_inpt_extr2msc():
                               numbswepplot=20000, \
                               optihess=True, \
                               anlytype=anlytype, \
-                              recostat='pcat_chan_inpt', \
-                              savestat='pcat_chan_inpt', \
+                              recostat=namestat, \
+                              savestat=namestat, \
                               strgexpo='expochan%s.fits' % rtagdata, \
                               exprtype='chan', \
                               condcatl=False, \
@@ -347,6 +348,7 @@ def pcat_chan_inpt_extr4msc():
     datatype = 'extr'
     strgexpomaps = '4msc'
     numbsidecart = 300
+    namestat = 'pcat_chan_inpt_' + datatype + '%04d' % numbsidecart
     anlytype = datatype + strgexpomaps
     rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
@@ -354,8 +356,8 @@ def pcat_chan_inpt_extr4msc():
                               numbswepplot=20000, \
                               optihess=True, \
                               anlytype=anlytype, \
-                              recostat='pcat_chan_inpt', \
-                              savestat='pcat_chan_inpt', \
+                              recostat=namestat, \
+                              savestat=namestat, \
                               strgexpo='expochan%s.fits' % rtagdata, \
                               exprtype='chan', \
                               condcatl=False, \
@@ -369,15 +371,16 @@ def pcat_chan_inpt_home2msc():
     datatype = 'home'
     strgexpomaps = '2msc'
     numbsidecart = 300
-    
+    namestat = 'pcat_chan_inpt_' + datatype + '%04d' % numbsidecart
+    anlytype = datatype + strgexpomaps
     rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
                               numbswep=2000000, \
                               numbswepplot=20000, \
                               optihess=True, \
                               anlytype=datatype, \
-                              recostat='pcat_chan_inpt', \
-                              savestat='pcat_chan_inpt', \
+                              recostat=namestat, \
+                              savestat=namestat, \
                               strgexpo='expochan%s.fits' % rtagdata, \
                               exprtype='chan', \
                               condcatl=False, \
@@ -391,6 +394,7 @@ def pcat_chan_inpt_home4msc():
     datatype = 'home'
     strgexpomaps = '4msc'
     numbsidecart = 300
+    namestat = 'pcat_chan_inpt_' + datatype + '%04d' % numbsidecart
     anlytype = datatype + strgexpomaps
     rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
@@ -398,8 +402,8 @@ def pcat_chan_inpt_home4msc():
                               numbswepplot=20000, \
                               optihess=True, \
                               anlytype=anlytype, \
-                              recostat='pcat_chan_inpt', \
-                              savestat='pcat_chan_inpt', \
+                              recostat=namestat, \
+                              savestat=namestat, \
                               strgexpo='expochan%s.fits' % rtagdata, \
                               exprtype='chan', \
                               condcatl=False, \
@@ -413,6 +417,7 @@ def pcat_chan_inpt_home7msc():
     datatype = 'home'
     strgexpomaps = '7msc'
     numbsidecart = 300
+    namestat = 'pcat_chan_inpt_' + datatype + '%04d' % numbsidecart
     anlytype = datatype + strgexpomaps
     rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
@@ -420,8 +425,8 @@ def pcat_chan_inpt_home7msc():
                               numbswepplot=20000, \
                               optihess=True, \
                               anlytype=anlytype, \
-                              recostat='pcat_chan_inpt', \
-                              savestat='pcat_chan_inpt', \
+                              recostat=namestat, \
+                              savestat=namestat, \
                               strgexpo='expochan%s.fits' % rtagdata, \
                               exprtype='chan', \
                               condcatl=False, \
