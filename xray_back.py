@@ -10,7 +10,24 @@ def writ_data():
     apix = pixlsize**2
             
     numbevtt = 1
-    
+  
+	# read raw files 
+    gdat.strgproc = os.uname()[1]
+    if gdat.strgproc == 'fink1.rc.fas.harvard.edu' or gdat.strgproc == 'fink2.rc.fas.harvard.edu':
+        path = os.environ["TDGU_DATA_PATH"] + '/xray_back/data'
+	    strgvarb = ['thresh.expmap', 'flux.img']
+	    strgvarbmine = ['expo', 'sbrt']
+	    for a in range(2):
+	        for expo in [2, 4, 7]:
+	            for i in range(5):
+	                cmnd = 'mkdir -p %s/%dmsc' % (path, expo)
+	                print cmnd
+	                os.system(cmnd)
+	                cmnd = 'cp /n/fink1/rfeder/obsids/full/merged_%dMs/merged_%dMs_%d/%dMs_%d_%s %s/%dmsc/%s%04d.fits' \
+	                                                                            % (expo, expo, i, expo, i, strgvarb[a], path, expo, strgvarbmine[a], i)
+	                print cmnd
+	                #os.system(cmnd)
+
     #listnumbside = [300, 480]
     listnumbside = [300]
     listdatatype = ['home', 'extr']
