@@ -665,7 +665,7 @@ def pcat_ferm_inpt_igal_popl(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='f
                    #verbtype=2, \
                    minmflux=1e-8, \
                    maxmflux=3e-6, \
-                   #maxmnumbpnts=array([10]), \
+                   maxmnumbpnts=array([2]), \
                    back=[1., 'fdfmfluxnorm.fits'], \
                    strgexpo=strgexpo, \
                    strgexprflux=strgexprflux, \
@@ -771,9 +771,10 @@ def pcat_ferm_mock_igal_cond():
 def pcat_ferm_mock_igal_popl():
      
     pcat.main.init( \
-                   numbswep=1000, \
+                   numbswep=1200, \
+                   numbburn=0, \
+                   factthin=400, \
                    diagmode=True, \
-                   factthin=100, \
                    verbtype=2, \
                    indxevttincl=arange(3, 4), \
                    indxenerincl=arange(1, 4), \
@@ -783,27 +784,28 @@ def pcat_ferm_mock_igal_popl():
                    maxmgangdata=deg2rad(10.), \
                    trueminmflux=5e-11, \
                    truemaxmflux=1e-7, \
-                   truemaxmnumbpnts=array([4, 4, 4]), \
-                   truenumbpnts=array([2, 2, 2]), \
+                   truemaxmnumbpnts=array([4, 4]), \
+                   truenumbpnts=array([2, 2]), \
                    #maxmnumbpnts=array([5, 5, 5]), \
                    #truenumbpnts=array([4, 4, 4]), \
                    #maxmnumbpnts=array([10]), \
                    #truenumbpnts=array([10]), \
                    #truespatdisttype=['gang'], \
                    #truespatdisttype=['gang'], \
-                   truespatdisttype=['unif', 'disc', 'gang'], \
+                   #truespatdisttype=['unif', 'disc', 'gang'], \
+                   truespatdisttype=['unif', 'gang'], \
                    #truefluxdisttype='powr', \
                    #truespectype=['powr']
                    #truespectype=['powr', 'expc', 'expc']
                    #truespatdisttype=['unif', 'disc', 'gang'], \
-                   truespectype=['powr', 'expc', 'expc']
+                   truespectype=['powr', 'expc']
                   )
 
 
 def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
     pcat.main.init( \
-                   numbswep=20000, \
+                   numbswep=200000, \
                    numbswepplot=20000, \
                    makeplotinit=False, \
                    #makeplotfram=False, \
