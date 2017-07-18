@@ -126,15 +126,18 @@ def writ_data():
                 if datatype == 'home':
                     for i in indxener:
                         # count map
-                        path = pathdata + '%.2f-%.2f_thresh.img' % (binsener[i], binsener[i+1])
-                        #path = pathdata + '%dmsc/sbrt%04d.fits' % (expomaps, i)
+                        #path = pathdata + '%.2f-%.2f_thresh.img' % (binsener[i], binsener[i+1])
+                        path = pathdata + '%dmsc/sbrt%04d.fits' % (expomaps[k], i)
                         cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
 
                         # exposure
-                        path = pathdata + '%.2f-%.2f_thresh.expmap' % (binsener[i], binsener[i+1])
-                        #path = pathdata + '%dmsc/expo%04d.fits' % (expomaps, i)
+                        #path = pathdata + '%.2f-%.2f_thresh.expmap' % (binsener[i], binsener[i+1])
+                        path = pathdata + '%dmsc/expo%04d.fits' % (expomaps[k], i)
                         expo[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
-                 
+                
+                print 'cntp'
+                summgene(cntp)
+                
                 numbsideyaxi = pf.getdata(path, 0).shape[0]
                 numbsidexaxi = pf.getdata(path, 0).shape[1]
 
