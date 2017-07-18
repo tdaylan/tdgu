@@ -376,7 +376,8 @@ def pcat_chan_inpt_home2msc():
     anlytype = datatype + strgexpomaps
     rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
-                              numbswep=2000000, \
+                              numbswep=5000000, \
+                              factthin=1000, \
                               numbswepplot=20000, \
                               optihess=True, \
                               anlytype=datatype, \
@@ -399,7 +400,8 @@ def pcat_chan_inpt_home4msc():
     anlytype = datatype + strgexpomaps
     rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
-                              numbswep=2000000, \
+                              numbswep=5000000, \
+                              factthin=1000, \
                               numbswepplot=20000, \
                               optihess=True, \
                               anlytype=anlytype, \
@@ -422,7 +424,8 @@ def pcat_chan_inpt_home7msc():
     anlytype = datatype + strgexpomaps
     rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
-                              numbswep=2000000, \
+                              numbswep=5000000, \
+                              factthin=1000, \
                               numbswepplot=20000, \
                               optihess=True, \
                               anlytype=anlytype, \
