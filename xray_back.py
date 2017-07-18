@@ -11,23 +11,6 @@ def writ_data():
             
     numbevtt = 1
   
-	# read raw files 
-    strgproc = os.uname()[1]
-    if strgproc == 'fink1.rc.fas.harvard.edu' or strgproc == 'fink2.rc.fas.harvard.edu':
-        path = os.environ["TDGU_DATA_PATH"] + '/xray_back/data'
-        strgvarb = ['thresh.expmap', 'flux.img']
-        strgvarbmine = ['expo', 'sbrt']
-        for a in range(2):
-	        for expo in [2, 4, 7]:
-	            for i in range(5):
-	                cmnd = 'mkdir -p %s/%dmsc' % (path, expo)
-	                print cmnd
-	                os.system(cmnd)
-	                cmnd = 'cp /n/fink1/rfeder/obsids/full/merged_%dMs/merged_%dMs_%d/%dMs_%d_%s %s/%dmsc/%s%04d.fits' \
-	                                                                            % (expo, expo, i, expo, i, strgvarb[a], path, expo, strgvarbmine[a], i)
-	                print cmnd
-	                #os.system(cmnd)
-
     #listnumbside = [300, 480]
     listnumbside = [300]
     listdatatype = ['home', 'extr']
@@ -141,16 +124,16 @@ def writ_data():
                     cntpback[1, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
                 
                 if datatype == 'home':
+                    strgvarb = ['thresh.expmap', 'flux.img']
+                    strgvarbmine = ['expo', 'sbrt']
                     for i in indxener:
-                        # count map
-                        #path = pathdata + '%.2f-%.2f_thresh.img' % (binsener[i], binsener[i+1])
-                        path = pathdata + '%dmsc/sbrt%04d.fits' % (expomaps[k], i)
-                        cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
-
-                        # exposure
-                        #path = pathdata + '%.2f-%.2f_thresh.expmap' % (binsener[i], binsener[i+1])
-                        path = pathdata + '%dmsc/expo%04d.fits' % (expomaps[k], i)
-                        expo[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                        for a in range(2):
+	                        path = '/n/fink1/rfeder/obsids/full/merged_%dMs/merged_%dMs_%d/%dMs_%d_%s' \
+	                                                                  % (expomaps[k], expomaps[k], i, expomaps[k], i, strgvarb[a])
+                            if a == 0:
+                                cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                            if a == 1:
+                                expo[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
                 
                 print 'cntp'
                 summgene(cntp)
