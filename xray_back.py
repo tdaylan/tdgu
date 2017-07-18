@@ -12,12 +12,12 @@ def writ_data():
     numbevtt = 1
   
 	# read raw files 
-    gdat.strgproc = os.uname()[1]
-    if gdat.strgproc == 'fink1.rc.fas.harvard.edu' or gdat.strgproc == 'fink2.rc.fas.harvard.edu':
+    strgproc = os.uname()[1]
+    if strgproc == 'fink1.rc.fas.harvard.edu' or strgproc == 'fink2.rc.fas.harvard.edu':
         path = os.environ["TDGU_DATA_PATH"] + '/xray_back/data'
-	    strgvarb = ['thresh.expmap', 'flux.img']
-	    strgvarbmine = ['expo', 'sbrt']
-	    for a in range(2):
+        strgvarb = ['thresh.expmap', 'flux.img']
+        strgvarbmine = ['expo', 'sbrt']
+        for a in range(2):
 	        for expo in [2, 4, 7]:
 	            for i in range(5):
 	                cmnd = 'mkdir -p %s/%dmsc' % (path, expo)

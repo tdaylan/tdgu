@@ -806,7 +806,8 @@ def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermex
                    numbswep=20000, \
                    numbswepplot=20000, \
                    makeplotinit=False, \
-                   makeplotfram=False, \
+                   #makeplotfram=False, \
+                   shrtfram=True, \
                    maxmgangdata=deg2rad(20.), \
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
