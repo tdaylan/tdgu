@@ -382,7 +382,7 @@ def pcat_chan_inpt_home2msc():
                               optihess=True, \
                               anlytype=datatype, \
                               recostat=namestat, \
-                              savestat=namestat, \
+                              #savestat=namestat, \
                               strgexpo='expochan%s.fits' % rtagdata, \
                               exprtype='chan', \
                               condcatl=False, \
@@ -406,7 +406,7 @@ def pcat_chan_inpt_home4msc():
                               optihess=True, \
                               anlytype=anlytype, \
                               recostat=namestat, \
-                              savestat=namestat, \
+                              #savestat=namestat, \
                               strgexpo='expochan%s.fits' % rtagdata, \
                               exprtype='chan', \
                               condcatl=False, \
@@ -430,7 +430,7 @@ def pcat_chan_inpt_home7msc():
                               optihess=True, \
                               anlytype=anlytype, \
                               recostat=namestat, \
-                              savestat=namestat, \
+                              #savestat=namestat, \
                               strgexpo='expochan%s.fits' % rtagdata, \
                               exprtype='chan', \
                               condcatl=False, \
