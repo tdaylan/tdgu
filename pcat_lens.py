@@ -138,8 +138,9 @@ def pcat_lens_mock_next():
     
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 2000000
-    dictargs['condcatl'] = False
+    dictargs['numbswep'] = 2000
+    dictargs['verbtype'] = 2
+    dictargs['makeplot'] = False
     dictargs['truemaxmnumbpnts'] = array([300])
  
     numbelem = array([25. * 10.**0.9], dtype=int)
@@ -161,10 +162,9 @@ def pcat_lens_mock_syst():
    
     seed(4)
     
-    numbswepnomi = 2000000
+    numbswepnomi = 2000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['condcatl'] = False
     dictargs['verbtype'] = 2
     dictargs['makeplot'] = False
     #dictargs['factthin'] = 100
@@ -513,7 +513,6 @@ def pcat_lens_mock():
                        #truemaxmnumbpnts=array([5]), \
                        #truenumbpnts=array([5]), \
                        #verbtype=2, \
-                       condcatl=False, \
                        numbswep=100000, \
                        #truestdvdefsdistslop=0.01, \
                        factthin=3000, \
