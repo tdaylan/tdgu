@@ -140,7 +140,7 @@ def pcat_lens_mock_next():
     dictargs['elemtype'] = 'lens'
     dictargs['numbswep'] = 2000000
     dictargs['condcatl'] = False
-    #dictargs['factthin'] = 100
+    dictargs['truemaxmnumbpnts'] = array([300])
  
     numbelem = array([25. * 10.**0.9], dtype=int)
     anglfact = 3600. * 180. / pi
@@ -165,6 +165,8 @@ def pcat_lens_mock_syst():
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['condcatl'] = False
+    dictargs['verbtype'] = 2
+    dictargs['makeplot'] = False
     #dictargs['factthin'] = 100
  
     numbelem = array([25. * 10.**0.9], dtype=int)
@@ -181,7 +183,7 @@ def pcat_lens_mock_syst():
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  #indxruns=0, \
+                                  indxruns=1, \
                                  )
     
 
