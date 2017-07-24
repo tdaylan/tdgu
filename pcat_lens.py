@@ -138,9 +138,11 @@ def pcat_lens_mock_next():
     
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 2000
-    dictargs['verbtype'] = 2
-    dictargs['makeplot'] = False
+    dictargs['numbswep'] = 10000
+    #dictargs['verbtype'] = 2
+    dictargs['makeplotinit'] = False
+    dictargs['makeplotfram'] = False
+    dictargs['diagmode'] = True
     dictargs['truemaxmnumbpnts'] = array([300])
  
     numbelem = array([25. * 10.**0.9], dtype=int)
@@ -162,11 +164,13 @@ def pcat_lens_mock_syst():
    
     seed(4)
     
-    numbswepnomi = 2000
+    numbswepnomi = 10000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['verbtype'] = 2
-    dictargs['makeplot'] = False
+    #dictargs['verbtype'] = 2
+    dictargs['makeplotinit'] = False
+    dictargs['makeplotfram'] = False
+    dictargs['diagmode'] = True
     #dictargs['factthin'] = 100
  
     numbelem = array([25. * 10.**0.9], dtype=int)
@@ -520,7 +524,7 @@ def pcat_lens_mock():
                        #inittype='rand', \
                        #optihess=False, \
                        #savestat=True, \
-                       #recostat=True, \
+                       #inittype='reco', \
                        #initlgalsour=-1e-1 / anglfact, \
                        #initbgalsour=1e-1 / anglfact, \
                        #burntmpr=True, \
@@ -568,7 +572,8 @@ def pcat_lens_intrevalresicnts():
                    fittmeanbacpbac0ene0=fittmeanbacpbac0ene0, \
                    fittstdvbacpbac0ene0=fittstdvbacpbac0ene0, \
                    fittscalbacpbac0ene0=fittscalbacpbac0ene0, \
-                   recostat='pcat_lens_inpt', \
+                   inittype='reco', \
+                   namerecostat='pcat_lens_inpt', \
                    fittmaxmnumbpnts=array([0]), \
                    maxmgangdata=maxmgangdata, \
                    strgexprflux=strgexprflux, \
@@ -623,7 +628,7 @@ def pcat_lens_inpt():
                    serstype='intp', \
                    optihess=False, \
                    savestat=True, \
-                   #recostat=True, \
+                   #inittype='reco', \
                    strgexpo=strgexpo, \
                    fittmaxmnumbpnts=array([0]), \
                    maxmgangdata=maxmgangdata, \
@@ -650,7 +655,7 @@ def pcat_lens_psfn():
                        #burntmpr=True, \
                        optihess=False, \
                        #savestat=True, \
-                       #recostat=True, \
+                       #inittype='reco', \
                        #makeplotinit=False, \
                        #makeplotfram=False, \
                        makeplotlpri=False, \

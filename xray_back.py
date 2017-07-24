@@ -242,7 +242,6 @@ def pcat_chan_mock_zero():
                               numbswep=100000, \
                               numbswepplot=10000, \
                               strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
-                              condcatl=False, \
                               exprtype='chan', \
                               numbsidecart=numbsidecart, \
                               truenumbpnts=array([0]), \
@@ -263,11 +262,12 @@ def pcat_chan_inpt_assc():
                               numbswepplot=20000, \
                               optihess=True, \
                               anlytype=anlytype, \
-                              recostat=namestat, \
-                              #savestat=namestat, \
+                              namerecostat=namestat, \
+                              recostat='reco', \
+                              #savestat=True, \
+                              #namesavestat=namestat, \
                               strgexpo='expochan%s.fits' % rtagdata, \
                               exprtype='chan', \
-                              condcatl=False, \
                               numbsidecart=numbsidecart, \
                               strgexprsbrt='sbrtchan%s.fits' % rtagdata, \
                              )
@@ -282,9 +282,9 @@ def pcat_chan_mock():
     numbsidecart = 300
     gridchan = pcat.main.init( \
                               numbswep=2000000, \
+                              makeplotinit=False, \
                               numbswepplot=20000, \
                               strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
-                              condcatl=False, \
                               exprtype='chan', \
                               numbsidecart=numbsidecart, \
                              )
@@ -303,11 +303,12 @@ def pcat_chan_inpt_extr2msc():
                               numbswepplot=20000, \
                               optihess=True, \
                               anlytype=anlytype, \
-                              recostat=namestat, \
-                              savestat=namestat, \
+                              inittype='reco', \
+                              namerecostat=namestat, \
+                              namesavestat=namestat, \
+                              savestat=True, \
                               strgexpo='expochan%s.fits' % rtagdata, \
                               exprtype='chan', \
-                              condcatl=False, \
                               numbsidecart=numbsidecart, \
                               strgexprsbrt='sbrtchan%s.fits' % rtagdata, \
                              )
@@ -327,11 +328,12 @@ def pcat_chan_inpt_extr4msc():
                               #makeplot=False, \
                               optihess=True, \
                               anlytype=anlytype, \
-                              recostat=namestat, \
-                              savestat=namestat, \
+                              inittype='reco', \
+                              namerecostat=namestat, \
+                              namesavestat=namestat, \
+                              savestat=True, \
                               strgexpo='expochan%s.fits' % rtagdata, \
                               exprtype='chan', \
-                              condcatl=False, \
                               numbsidecart=numbsidecart, \
                               strgexprsbrt='sbrtchan%s.fits' % rtagdata, \
                              )
@@ -351,10 +353,10 @@ def pcat_chan_inpt_home2msc():
                               numbswepplot=20000, \
                               optihess=True, \
                               anlytype=datatype, \
-                              #recostat=namestat, \
+                              #inittype='reco', \
+                              #namerecostat=namestat, \
                               strgexpo='expochan%s.fits' % rtagdata, \
                               exprtype='chan', \
-                              condcatl=False, \
                               numbsidecart=numbsidecart, \
                               strgexprsbrt='sbrtchan%s.fits' % rtagdata, \
                              )
@@ -374,10 +376,10 @@ def pcat_chan_inpt_home4msc():
                               numbswepplot=20000, \
                               optihess=True, \
                               anlytype=anlytype, \
-                              #recostat=namestat, \
+                              #inittype='reco', \
+                              #namerecostat=namestat, \
                               strgexpo='expochan%s.fits' % rtagdata, \
                               exprtype='chan', \
-                              condcatl=False, \
                               numbsidecart=numbsidecart, \
                               strgexprsbrt='sbrtchan%s.fits' % rtagdata, \
                              )
@@ -392,16 +394,18 @@ def pcat_chan_inpt_home7msc():
     anlytype = datatype + strgexpomaps
     rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
-                              numbswep=5000000, \
+                              numbswep=20000, \
                               factthin=1000, \
                               numbswepplot=20000, \
                               optihess=True, \
+                              makeplotinit=False, \
                               anlytype=anlytype, \
-                              #recostat=namestat, \
-                              savestat=namestat, \
+                              #inittype='reco', \
+                              #namerecostat=namestat, \
+                              namesavestat=namestat, \
+                              savestat=True, \
                               strgexpo='expochan%s.fits' % rtagdata, \
                               exprtype='chan', \
-                              condcatl=False, \
                               numbsidecart=numbsidecart, \
                               strgexprsbrt='sbrtchan%s.fits' % rtagdata, \
                              )

@@ -814,14 +814,14 @@ def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermex
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
                    savestat=True, \
-                   recostat=True, \
+                   inittype='reco', \
                    optihess=True, \
-                   condcatl=False, \
                    fittmaxmnumbpnts=array([0]), \
                    #fittmaxmnumbpntspop0=0, \
                    fittpsfnevaltype='none', \
                    minmflux=1e-8, \
                    maxmflux=3e-6, \
+                   diagmode=True, \
                    truebacktype=[1., 'fdfmfluxnorm.fits'], \
                    strgexpo=strgexpo, \
                    strgexprflux=strgexprflux, \
@@ -836,7 +836,7 @@ def pcat_ferm_mock_igal():
                    indxenerincl=arange(1, 4), \
                    strgexpo='fermexpo_cmp0_igal.fits', \
                    trueback=[1., 'fdfmfluxnorm.fits'], \
-                   condcatl=False, \
+                   diagmode=True, \
                    maxmgangdata=deg2rad(10.), \
                   )
 
