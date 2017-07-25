@@ -417,10 +417,8 @@ def writ_data():
     
     maxmgangdata=20.
     
-    listnameback=['fdfmflux', 'fdfmfluxnorm', 'darktemp']
+    listnameback=['fdfmflux', 'darktemp']
     #listnameback=['fdfmflux', 'fdfmfluxnorm', 'plnkdust', 'wisestar', 'finkdust', 'darktemp']
-    for nameback in deepcopy(listnameback):
-        listnameback += [nameback + 'smth']
     gdat.numbback = len(listnameback)
     gdat.indxback = arange(gdat.numbback)
 
@@ -464,6 +462,8 @@ def writ_data():
     
     gdat.sbrtisot = tdpy.util.retr_isot(gdat.binsener)
     
+    smth = False
+
     ## templates
     gdat.sbrtback = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
     gdat.sbrtbacksmth = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
@@ -502,33 +502,48 @@ def writ_data():
             print strg
             print
 
-            if listnameback[c].endswith('smth'):
+            # make copies
+            for m in gdat.indxevtt:
+                if listnameback[c].startswith('fdfmflux'):
+                    gdat.sbrtback[c, :, :, m] = sbrtbacktemp
+                else:
+                    for i in gdat.indxener:
+                        gdat.sbrtback[c, i, :, m] = sbrtbacktemp
+
+            path = gdat.pathdatapcat + strg + '.fits'
+            print 'Writing to %s...' % path
+            print 'gdat.sbrtback[c, :, :, :]'
+            summgene(gdat.sbrtback[c, :, :, :])
+            pf.writeto(path, gdat.sbrtback[c, :, :, :], clobber=True)
+            
+            if smth:
+                print 'Smoothing...'
+                path = gdat.pathdatapcat + strg + 'smth.fits'
+                print 'Writing to %s...' % path
                 print 'gdat.sbrtback[c, :, :, :]'
                 summgene(gdat.sbrtback[c, :, :, :])
-                # smooth
-                maps = tdpy.util.smth_ferm(gdat.sbrtback[c, :, :, :], gdat.meanener, gdat.indxevtt)
-                print 'maps'
-                summgene(maps)
-
-                # normalize
+                gdat.sbrtbacksmth[c, :, :, :] = tdpy.util.smth_ferm(gdat.sbrtback[c, :, :, :], gdat.meanener, gdat.indxevtt)
+                
+            # normalize
+            for i in gdat.indxener:
+                for m in gdat.indxevtt: 
+                    gdat.sbrtback[c, i, :, m] = gdat.sbrtback[c, i, :, m] / mean(gdat.sbrtback[c, i, gdat.indxpixlnorm, m])
+            path = gdat.pathdatapcat + strg + 'norm.fits'
+            print 'Writing to %s...' % path
+            print 'gdat.sbrtback[c, :, :, :]'
+            summgene(gdat.sbrtback[c, :, :, :])
+            pf.writeto(path, gdat.sbrtback[c, :, :, :], clobber=True)
+            
+            if smth:
                 for i in gdat.indxener:
                     for m in gdat.indxevtt: 
-                        maps[i, :, m] = maps[i, :, m] / mean(maps[i, gdat.indxpixlnorm, m])
-            else:
-                # make copies
-                for m in gdat.indxevtt:
-                    if listnameback[c].startswith('fdfmflux'):
-                        gdat.sbrtback[c, :, :, m] = sbrtbacktemp
-                    else:
-                        for i in gdat.indxener:
-                            gdat.sbrtback[c, i, :, m] = sbrtbacktemp
+                        gdat.sbrtbacksmth[c, i, :, m] = gdat.sbrtbacksmth[c, i, :, m] / mean(gdat.sbrtbacksmth[c, i, gdat.indxpixlnorm, m])
+                path = gdat.pathdatapcat + strg + 'smthnorm.fits'
+                print 'Writing to %s...' % path
+                print 'gdat.sbrtback[c, :, :, :]'
+                summgene(gdat.sbrtback[c, :, :, :])
+                pf.writeto(path, gdat.sbrtbacksmth[c, :, :, :], clobber=True)
             
-            print 'Writing to %s...' % path
-            if listnameback[c].endswith('smth'):
-                pf.writeto(path, maps, clobber=True)
-            else:
-                pf.writeto(path, gdat.sbrtback[c, :, :, :], clobber=True)
-
     # load the map to the array whose power spectrum will be calculated
     gdat.mapsplot[1:, :] = gdat.sbrtback[:, 0, :, 0]
     
