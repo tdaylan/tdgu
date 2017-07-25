@@ -648,11 +648,11 @@ def pcat_ferm_inpt_ptch():
               maxmflux=3e-6, \
               back=[1., 'fdfmfluxnorm%s.fits' % strgcntr], \
               strgexpo='fermexpo_cmp0_igal%s.fits' % strgcntr, \
-              strgexprflux='fermflux_cmp0_igal%s.fits' % strgcntr, \
+              strgexprsbrt='fermflux_cmp0_igal%s.fits' % strgcntr, \
              )
     
     
-def pcat_ferm_inpt_igal_popl(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
+def pcat_ferm_inpt_igal_popl(strgexprsbrt='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
     pcat.main.init( \
                    numbswep=1000, \
@@ -668,7 +668,7 @@ def pcat_ferm_inpt_igal_popl(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='f
                    maxmnumbpnts=array([2]), \
                    back=[1., 'fdfmfluxnorm.fits'], \
                    strgexpo=strgexpo, \
-                   strgexprflux=strgexprflux, \
+                   strgexprsbrt=strgexprsbrt, \
                   )
     
     
@@ -802,10 +802,10 @@ def pcat_ferm_mock_igal_popl():
                   )
 
 
-def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
+def pcat_ferm_inpt_igal(strgexprsbrt='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
     
     pcat.main.init( \
-                   numbswep=200000, \
+                   numbswep=10, \
                    numbswepplot=20000, \
                    #makeplotinit=False, \
                    #makeplotfram=False, \
@@ -813,18 +813,18 @@ def pcat_ferm_inpt_igal(strgexprflux='fermflux_cmp0_igal.fits', strgexpo='fermex
                    maxmgangdata=deg2rad(20.), \
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
+                   verbtype=2, \
                    savestat=True, \
                    inittype='reco', \
-                   optihess=True, \
+                   #optihess=True, \
                    fittmaxmnumbpnts=array([0]), \
                    #fittmaxmnumbpntspop0=0, \
-                   fittpsfnevaltype='none', \
                    minmflux=1e-8, \
                    maxmflux=3e-6, \
                    diagmode=True, \
                    truebacktype=[1., 'fdfmfluxnorm.fits'], \
                    strgexpo=strgexpo, \
-                   strgexprflux=strgexprflux, \
+                   strgexprsbrt=strgexprsbrt, \
                   )
     
     
