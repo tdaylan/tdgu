@@ -1,23 +1,260 @@
 from __init__ import *
 
-# writing data
-def writ_maps_rec7_back():
-    
-    gdat = tdpy.util.gdatstrt()
-    gdat.recotype = ['rec7']
-    gdat.enertype = ['back']
-    tdpy.util.writ_fdfm()
-    tdpy.util.writ_maps_main(gdat, os.environ["FERM_IGAL_DATA_PATH"])
-    tdpy.util.prep_maps('rec7', 'back', 'igal', os.environ["FERM_IGAL_DATA_PATH"], 256, 'tim0')
 
 
-def writ_maps_rec8_back():
+def writ_ferm_rec8_back():
     
     gdat = tdpy.util.gdatstrt()
     gdat.recotype = ['rec8']
     gdat.enertype = ['back']
-    tdpy.util.writ_maps_main(gdat, os.environ["FERM_IGAL_DATA_PATH"])
-    tdpy.util.prep_maps('rec8', 'back', 'igal', os.environ["FERM_IGAL_DATA_PATH"], 256, 'tim0')
+    tdpy.util.writ_ferm_main(gdat, os.environ["FERM_IGAL_DATA_PATH"])
+    tdpy.util.writ_ferm('rec7', 'back', 'igal', os.environ["FERM_IGAL_DATA_PATH"], 256, 'tim0')
+    tdpy.util.writ_ferm('rec8', 'back', 'igal', os.environ["FERM_IGAL_DATA_PATH"], 256, 'tim0')
+
+
+def writ_ferm_raww():
+    
+    gdat = tdpy.util.gdatstrt()
+    
+    numbproc = len(gdat.recotype)
+    
+    if not hasattr(gdat, 'timetype'):
+        gdat.timetype = ['tim0' for k in range(numbproc)]
+    if not hasattr(gdat, 'enertype'):
+        gdat.enertype = ['pnts' for k in range(numbproc)]
+    if not hasattr(gdat, 'strgtime'):
+        gdat.strgtime = ['tmin=INDEF tmax=INDEF' for k in range(numbproc)]
+    if not hasattr(gdat, 'timefrac'):
+        gdat.timefrac = [1. for k in range(numbproc)]
+    if not hasattr(gdat, 'numbside'):
+        gdat.numbside = [256 for k in range(numbproc)]
+    if not hasattr(gdat, 'test'):
+        gdat.test = False
+
+    gdat.evtc = []
+    gdat.photpath = []
+    gdat.strgtime = []
+    gdat.weekinit = []
+    gdat.weekfinl = []
+    for n in range(numbproc):
+        if gdat.recotype[n] == 'rec7':
+            gdat.evtc.append(2)
+            gdat.photpath.append('p7v6c')
+            gdat.strgtime.append('tmin=239155201 tmax=364953603')
+            gdat.weekinit.append(9)
+            gdat.weekfinl.append(218)
+        if gdat.recotype[n] == 'rec8':
+            gdat.evtc.append(128)
+            gdat.photpath.append('photon')
+            gdat.strgtime.append('tmin=INDEF tmax=INDEF')
+            gdat.weekinit.append(11)
+            gdat.weekfinl.append(420)
+    
+    gdat.strgener = ['gtbndefn_%s.fits' % gdat.enertype[k] for k in range(numbproc)]
+    
+    gdat.indxevtt = arange(4)
+
+    gdat.evtt = [4, 8, 16, 32]
+
+    indxproc = arange(numbproc)
+    
+    if numbproc == 1:
+        writ_ferm_work(gdat, 0)
+    else:
+        # process pool
+        pool = mp.Pool(numbproc)
+
+        # spawn the processes
+        writ_ferm_part = functools.partial(writ_ferm_work, gdat)
+        pool.map(writ_ferm_part, indxproc)
+        pool.close()
+        pool.join()
+
+
+def writ_ferm_raww_work(gdat, indxprocwork):
+
+    rtag = '%s_%s_%04d_%s' % (gdat.recotype[indxprocwork], gdat.enertype[indxprocwork], gdat.numbside[indxprocwork], gdat.timetype[indxprocwork])
+    
+    # make file lists
+    infl = gdat.pathdata + '/phot_%s.txt' % rtag
+    spac = gdat.pathdata + '/spac_%s.txt' % rtag
+        
+    numbweek = (gdat.weekfinl[indxprocwork] - gdat.weekinit[indxprocwork]) * gdat.timefrac[indxprocwork]
+    listweek = floor(linspace(gdat.weekinit[indxprocwork], gdat.weekfinl[indxprocwork] - 1, numbweek)).astype(int)
+    cmnd = 'rm -f ' + infl
+    os.system(cmnd)
+    cmnd = 'rm -f ' + spac
+    os.system(cmnd)
+    for week in listweek:
+        cmnd = 'ls -d -1 $FERMI_DATA/weekly/spacecraft/*_w%03d_* >> ' % week + spac
+        os.system(cmnd)
+        cmnd = 'ls -d -1 $FERMI_DATA/weekly/%s/*_w%03d_* >> ' % (gdat.photpath[indxprocwork], week) + infl
+        os.system(cmnd)
+    for m in gdat.indxevtt:
+
+        if gdat.recotype[indxprocwork] == 'rec7':
+            strgirfn = 'P7REP_SOURCE_V15'
+        if gdat.recotype[indxprocwork] == 'rec8':
+            strgirfn = 'P8R2_SOURCE_V6'
+
+        if gdat.recotype[indxprocwork] == 'rec7':
+            if m == 3:
+                thisevtt = 1
+                thisevttdepr = 0
+            elif m == 2:
+                thisevtt = 2
+                thisevttdepr = 1
+            else:
+                continue
+            strgpsfn = 'convtype=%d' % thisevttdepr
+
+        if gdat.recotype[indxprocwork] == 'rec8':
+            thisevtt = gdat.evtt[m]
+            strgpsfn = 'evtype=%d' % thisevtt
+         
+        sele = gdat.pathdata + '/fermsele_%04d_%s.fits' % (thisevtt, rtag)
+        filt = gdat.pathdata + '/fermfilt_%04d_%s.fits' % (thisevtt, rtag)
+        live = gdat.pathdata + '/fermlive_%04d_%s.fits' % (thisevtt, rtag)
+        cntp = gdat.pathdata + '/cntpferm_%04d_%s.fits' % (thisevtt, rtag)
+        expo = gdat.pathdata + '/expoferm_%04d_%s.fits' % (thisevtt, rtag)
+        psfn = gdat.pathdata + '/psfnferm_%04d_%s.fits' % (thisevtt, rtag)
+
+        cmnd = 'gtselect infile=' + infl + ' outfile=' + sele + ' ra=INDEF dec=INDEF rad=INDEF ' + \
+            gdat.strgtime[indxprocwork] + ' emin=100 emax=100000 zmax=90 evclass=%d %s' % (gdat.evtc[indxprocwork], strgpsfn)
+        
+        if os.path.isfile(cntp) and os.path.isfile(expo):
+            continue
+        
+        if gdat.test:
+            print cmnd
+            print ''
+        else:
+            os.system(cmnd)
+
+        cmnd = 'gtmktime evfile=' + sele + ' scfile=' + spac + ' filter="DATA_QUAL==1 && LAT_CONFIG==1"' + ' outfile=' + filt + ' roicut=no'
+        if gdat.test:
+            print cmnd
+            print ''
+        else:
+            os.system(cmnd)
+
+        cmnd = 'gtbin evfile=' + filt + ' scfile=NONE outfile=' + cntp + \
+            ' ebinalg=FILE ebinfile=$TDPY_DATA_PATH/%s ' % gdat.strgener[indxprocwork] + \
+            'algorithm=HEALPIX hpx_ordering_scheme=RING coordsys=GAL hpx_order=%d hpx_ebin=yes' % log2(gdat.numbside[indxprocwork])
+        if gdat.test:
+            print cmnd
+            print ''
+        else:
+            os.system(cmnd)
+
+        cmnd = 'gtltcube evfile=' + filt + ' scfile=' + spac + ' outfile=' + live + ' dcostheta=0.025 binsz=1'
+        if gdat.test:
+            print cmnd
+            print ''
+        else:
+            os.system(cmnd)
+
+        cmnd = 'gtexpcube2 infile=' + live + ' cmap=' + cntp + ' outfile=' + expo + ' irfs=CALDB evtype=%03d bincalc=CENTER' % thisevtt
+        if gdat.test:
+            print cmnd
+            print ''
+        else:
+            os.system(cmnd)
+
+        psfno = gdat.pathdata + '/psfnferm_%04d_%s.fits' % (thisevtt, rtag)
+        cmnd = 'gtpsf %s %s %s %.4g %.4g ebinalg=FILE ebinfile=$TDPY_DATA_PATH/%s 10. 50' % (live, psfn, strgpsfn, rasc, decl) + \
+            ' ebinalg=FILE ebinfile=$TDPY_DATA_PATH/%s ' % gdat.strgener[indxprocwork]
+        if gdat.test:
+            print cmnd
+            print ''
+        else:
+            os.system(cmnd)
+
+    cmnd = 'rm %s %s %s %s %s' % (infl, spac, sele, filt, live)
+    os.system(cmnd)
+
+
+def writ_ferm(recotype='rec7', enertype='back', regitype='igal', numbside=256, timetype='tim0'):
+    
+    pathinpt = os.environ["TDGU_DATA_PATH"] + '/ferm_igal/data/'
+    pathoutp = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
+
+    if enertype == 'back':
+        numbener = 30
+        minmener = 0.1
+        maxmener = 100.
+        binsener = logspace(log10(minmener), log10(maxmener), numbener + 1)
+    else:
+        binsener = array([0.1, 0.3, 1., 3., 10., 100.])
+        numbener = binsener.size - 1
+    indxener = arange(numbener)
+    diffener = binsener[1:] - binsener[:-1]
+
+    numbside = 256
+    evtt = array([4, 8, 16, 32])
+
+    numbpixl = 12 * numbside**2
+    numbevtt = evtt.size
+    indxevtt = arange(numbevtt)
+    apix = 4. * pi / numbpixl
+
+    cntp = zeros((numbener, numbpixl, numbevtt))
+    expo = zeros((numbener, numbpixl, numbevtt))
+    sbrt = zeros((numbener, numbpixl, numbevtt))
+    
+    for m in indxevtt:
+
+        if recotype == 'rec7':
+            if m < 2:
+                continue
+            elif m == 2:
+                thisevtt = 2
+            elif m == 3:
+                thisevtt = 1
+        else:
+            thisevtt = evtt[m]
+
+        path = pathinpt + '/expoferm_%04d_%s_%s_%04d_%s.fits' % (thisevtt, recotype, enertype, numbside, timetype)
+        expoarry = pf.getdata(path, 1)
+        for i in indxener:
+            expo[i, :, m] = expoarry['ENERGY%d' % (i + 1)]
+
+        path = pathinpt + '/cntpferm_%04d_%s_%s_%04d_%s.fits' % (thisevtt, recotype, enertype, numbside, timetype)
+        cntparry = pf.getdata(path)
+        for i in indxener:
+            cntp[i, :, m] = cntparry['CHANNEL%d' % (i + 1)]
+
+    indxexpo = where(expo > 0.) 
+    sbrt[indxexpo] = cntp[indxexpo] / expo[indxexpo] / apix
+    sbrt /= diffener[:, None, None]
+
+    if regitype == 'ngal':
+        for i in indxener:
+            for m in indxevtt:
+                
+                if recotype == 'rec7':
+                    if m < 2:
+                        continue
+                    elif m == 2:
+                        thisevtt = 2
+                    elif m == 3:
+                        thisevtt = 1
+                else:
+                    thisevtt = evtt[m]
+
+                almc = hp.map2alm(sbrt[i, :, m])
+                hp.rotate_alm(almc, 0., 0.5 * pi, 0.)
+                sbrt[i, :, m] = hp.alm2map(almc, numbside)
+
+                almc = hp.map2alm(expo[i, :, m])
+                hp.rotate_alm(almc, 0., 0.5 * pi, 0.)
+                expo[i, :, m] = hp.alm2map(almc, numbside)
+
+    path = pathoutp + '/expoferm%s%s%s%04d%s.fits' % (recotype, enertype, regitype, numbside, timetype)
+    pf.writeto(path, expo, clobber=True)
+
+    path = pathoutp + '/sbrtferm%s%s%s%04d%s.fits' % (recotype, enertype, regitype, numbside, timetype)
+    pf.writeto(path, sbrt, clobber=True)
 
 
 def retr_plnkmapsorig(gdat, strgmapsplnk):
@@ -106,13 +343,6 @@ def defn_gtbn():
     savetxt(path, limtener, fmt='%10.5g')
 
 
-def merg_maps_arry():
-    
-    merg_maps(numbside=512)
-    merg_maps(mpolmerg=360.)
-    merg_maps(mpolmerg=90.)
-
-
 def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
 
     # construct the global object
@@ -167,7 +397,7 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     factconvplnk = loadtxt(gdat.pathdata + 'plnkunitconv.dat')
     
     ## Fermi-LAT flux map
-    path = gdat.pathdata + '/fermflux_cmp0_igal.fits'
+    path = gdat.pathdata + '/sbrtfermcmp0igal.fits'
     mapsfermorig = sum(pf.getdata(path), 2)
     numbpixlferm = mapsfermorig.shape[1]
     numbsideferm = int(sqrt(numbpixlferm / 12))
@@ -271,7 +501,7 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     ## Fermi Diffuse Model
     # temp
     print 'Reading the Fermi diffuse model...'
-    mapsfdfmorig = tdpy.util.retr_fdfm(binsener, numbside=numbside)
+    mapsfdfmorig = tdpy.util.retr_sbrtfdfm(binsener, numbside=numbside)
     mapsfdfmorig -= mean(mapsfdfmorig, 1)[:, None]
     mapsfdfmorig /= std(mapsfdfmorig, 1)[:, None]
     mapsfdfm = empty_like(mapsfdfmorig)
@@ -407,18 +637,18 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
             tdpy.util.plot_maps(path, mapsmerg[i, :] - mapsplnk, minmlgal=minmlgal, maxmlgal=maxmlgal, minmbgal=minmbgal, maxmbgal=maxmbgal, resi=True, satu=True)
         
 
-def writ_data():
+def writ_ferm_back():
 
     gdat = tdpy.util.gdatstrt()
     
     writ=True
     
-    strgexpr='fermflux_cmp0_igal.fits'
+    strgexpr='sbrtfermcmp0igal.fits'
     
     maxmgangdata=20.
     
-    listnameback=['fdfmflux', 'darktemp']
-    #listnameback=['fdfmflux', 'fdfmfluxnorm', 'plnkdust', 'wisestar', 'finkdust', 'darktemp']
+    listnameback=['sbrtfdfm', 'darktemp']
+    #listnameback=['sbrtfdfm', 'sbrtfdfmnorm', 'plnkdust', 'wisestar', 'finkdust', 'darktemp']
     gdat.numbback = len(listnameback)
     gdat.indxback = arange(gdat.numbback)
 
@@ -462,11 +692,12 @@ def writ_data():
     
     gdat.sbrtisot = tdpy.util.retr_isot(gdat.binsener)
     
-    smth = False
+    smth = True
 
     ## templates
     gdat.sbrtback = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
     gdat.sbrtbacksmth = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
+    gdat.sbrtbacknorm = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
     for c, strg in enumerate(listnameback):
 
         # temp -- ROI should be fixed at 40 X 40 degree^2
@@ -476,8 +707,8 @@ def writ_data():
             gdat.sbrtback[c, :, :, :] = pf.getdata(path)
         else:
             
-            if strg.startswith('fdfmflux'):
-                sbrtbacktemp = tdpy.util.retr_fdfm(gdat.binsener) 
+            if strg.startswith('sbrtfdfm'):
+                sbrtbacktemp = tdpy.util.retr_sbrtfdfm(gdat.binsener) 
             if strg == 'plnkdust':
                 pathtemp = gdat.pathdata + 'plnk/HFI_CompMap_ThermalDustModel_2048_R1.20.fits'
                 sbrtbacktemp = pf.getdata(pathtemp, 1)['RADIANCE']
@@ -504,46 +735,52 @@ def writ_data():
 
             # make copies
             for m in gdat.indxevtt:
-                if listnameback[c].startswith('fdfmflux'):
+                if listnameback[c].startswith('sbrtfdfm'):
                     gdat.sbrtback[c, :, :, m] = sbrtbacktemp
                 else:
                     for i in gdat.indxener:
                         gdat.sbrtback[c, i, :, m] = sbrtbacktemp
 
             path = gdat.pathdatapcat + strg + '.fits'
-            print 'Writing to %s...' % path
             print 'gdat.sbrtback[c, :, :, :]'
             summgene(gdat.sbrtback[c, :, :, :])
+            print 'Writing to %s...' % path
             pf.writeto(path, gdat.sbrtback[c, :, :, :], clobber=True)
             
-            if smth:
-                print 'Smoothing...'
-                path = gdat.pathdatapcat + strg + 'smth.fits'
-                print 'Writing to %s...' % path
-                print 'gdat.sbrtback[c, :, :, :]'
-                summgene(gdat.sbrtback[c, :, :, :])
-                gdat.sbrtbacksmth[c, :, :, :] = tdpy.util.smth_ferm(gdat.sbrtback[c, :, :, :], gdat.meanener, gdat.indxevtt)
-                
             # normalize
             for i in gdat.indxener:
                 for m in gdat.indxevtt: 
-                    gdat.sbrtback[c, i, :, m] = gdat.sbrtback[c, i, :, m] / mean(gdat.sbrtback[c, i, gdat.indxpixlnorm, m])
+                    gdat.sbrtbacknorm[c, i, :, m] = gdat.sbrtback[c, i, :, m] / mean(gdat.sbrtback[c, i, gdat.indxpixlnorm, m])
+            print 'gdat.sbrtbacknorm[c, :, :, :]'
+            summgene(gdat.sbrtbacknorm[c, :, :, :])
             path = gdat.pathdatapcat + strg + 'norm.fits'
             print 'Writing to %s...' % path
-            print 'gdat.sbrtback[c, :, :, :]'
-            summgene(gdat.sbrtback[c, :, :, :])
-            pf.writeto(path, gdat.sbrtback[c, :, :, :], clobber=True)
+            pf.writeto(path, gdat.sbrtbacknorm[c, :, :, :], clobber=True)
             
             if smth:
+                gdat.sbrtbacksmth[c, :, :, :] = tdpy.util.smth_ferm(gdat.sbrtback[c, :, :, :], gdat.meanener, gdat.indxevtt, kerntype='gaus')
+                
+                print 'gdat.sbrtbacksmth[c, :, :, :]'
+                summgene(gdat.sbrtbacksmth[c, :, :, :])
+                path = gdat.pathdatapcat + strg + 'smth.fits'
+                print 'Writing to %s...' % path
+                pf.writeto(path, gdat.sbrtbacksmth[c, :, :, :], clobber=True)
+                
+                # normalize
                 for i in gdat.indxener:
                     for m in gdat.indxevtt: 
                         gdat.sbrtbacksmth[c, i, :, m] = gdat.sbrtbacksmth[c, i, :, m] / mean(gdat.sbrtbacksmth[c, i, gdat.indxpixlnorm, m])
+                
+                print 'gdat.sbrtbacksmth[c, :, :, :]'
+                summgene(gdat.sbrtbacksmth[c, :, :, :])
                 path = gdat.pathdatapcat + strg + 'smthnorm.fits'
                 print 'Writing to %s...' % path
-                print 'gdat.sbrtback[c, :, :, :]'
-                summgene(gdat.sbrtback[c, :, :, :])
                 pf.writeto(path, gdat.sbrtbacksmth[c, :, :, :], clobber=True)
             
+    merg_maps(numbside=512)
+    merg_maps(mpolmerg=360.)
+    merg_maps(mpolmerg=90.)
+    
     # load the map to the array whose power spectrum will be calculated
     gdat.mapsplot[1:, :] = gdat.sbrtback[:, 0, :, 0]
     
@@ -630,7 +867,7 @@ def pcat_ferm_inpt_ptch():
     pathdata = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
     lgalcntr = deg2rad(0)
     bgalcntr = deg2rad(45.)
-    liststrg = ['fermflux_cmp0_igal', 'fermexpo_cmp0_igal', 'fdfmflux']
+    liststrg = ['sbrtfermcmp0igal', 'expofermcmp0igal', 'sbrtfdfm']
     numbmaps = len(liststrg)
     strgcntr = '_cntr%04d%04d' % (rad2deg(lgalcntr), rad2deg(bgalcntr))
     for k in range(numbmaps):
@@ -661,13 +898,13 @@ def pcat_ferm_inpt_ptch():
               bgalcntr=bgalcntr, \
               minmflux=3e-11, \
               maxmflux=3e-6, \
-              back=[1., 'fdfmfluxnorm%s.fits' % strgcntr], \
-              strgexpo='fermexpo_cmp0_igal%s.fits' % strgcntr, \
-              strgexprsbrt='fermflux_cmp0_igal%s.fits' % strgcntr, \
+              back=[1., 'sbrtfdfmnorm%s.fits' % strgcntr], \
+              strgexpo='expofermcmp0igal%s.fits' % strgcntr, \
+              strgexprsbrt='sbrtfermcmp0igal%s.fits' % strgcntr, \
              )
     
     
-def pcat_ferm_inpt_igal_popl(strgexprsbrt='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
+def pcat_ferm_inpt_igal_popl(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expofermcmp0igal.fits'):
     
     pcat.main.init( \
                    numbswep=1000, \
@@ -681,7 +918,7 @@ def pcat_ferm_inpt_igal_popl(strgexprsbrt='fermflux_cmp0_igal.fits', strgexpo='f
                    minmflux=1e-8, \
                    maxmflux=3e-6, \
                    maxmnumbpnts=array([2]), \
-                   back=[1., 'fdfmfluxnorm.fits'], \
+                   back=[1., 'sbrtfdfmnorm.fits'], \
                    strgexpo=strgexpo, \
                    strgexprsbrt=strgexprsbrt, \
                   )
@@ -698,7 +935,7 @@ def pcat_ferm_mock_igal_brok():
                        exprinfo=False, \
                        indxevttincl=arange(2, 4), \
                        indxenerincl=arange(1, 4), \
-                       strgexpo='fermexpo_cmp0_igal.fits', \
+                       strgexpo='expofermcmp0igal.fits', \
                        back=[1., ], \
                        
                        maxmgangdata=deg2rad(20.), \
@@ -736,7 +973,7 @@ def pcat_ferm_mock_igal_syst():
         pcat.main.init( \
                        indxevttincl=arange(2, 4), \
                        indxenerincl=arange(1, 4), \
-                       strgexpo='fermexpo_cmp0_igal.fits', \
+                       strgexpo='expofermcmp0igal.fits', \
                        back=[1.], \
                        maxmnumbpnts=array([20]), \
                        maxmgangdata=deg2rad(20.), \
@@ -751,38 +988,6 @@ def pcat_ferm_mock_igal_syst():
                       )
 
 
-def pcat_ferm_mock_igal_cond():
-     
-    pcat.main.init( \
-                   numbswep=1000, \
-                   diagmode=True, \
-                   factthin=100, \
-                   verbtype=2, \
-                   indxevttincl=arange(3, 4), \
-                   indxenerincl=arange(1, 4), \
-                   strgexpo='fermexpo_cmp0_igal.fits', \
-                   makeplot=False, \
-                   truebacktype=[1., 'fdfmfluxnorm.fits'], \
-                   maxmgangdata=deg2rad(10.), \
-                   trueminmflux=5e-11, \
-                   truemaxmflux=1e-7, \
-                   truemaxmnumbpnts=array([4, 4, 4]), \
-                   truenumbpnts=array([2, 2, 2]), \
-                   #maxmnumbpnts=array([5, 5, 5]), \
-                   #truenumbpnts=array([4, 4, 4]), \
-                   #maxmnumbpnts=array([10]), \
-                   #truenumbpnts=array([10]), \
-                   #truespatdisttype=['gang'], \
-                   #truespatdisttype=['gang'], \
-                   truespatdisttype=['unif', 'disc', 'gang'], \
-                   #truefluxdisttype='powr', \
-                   #truespectype=['powr']
-                   #truespectype=['powr', 'expc', 'expc']
-                   #truespatdisttype=['unif', 'disc', 'gang'], \
-                   truespectype=['powr', 'expc', 'expc']
-                  )
-
-
 def pcat_ferm_mock_igal_popl():
      
     pcat.main.init( \
@@ -793,9 +998,9 @@ def pcat_ferm_mock_igal_popl():
                    verbtype=2, \
                    indxevttincl=arange(3, 4), \
                    indxenerincl=arange(1, 4), \
-                   strgexpo='fermexpo_cmp0_igal.fits', \
+                   strgexpo='expofermcmp0igal.fits', \
                    makeplot=False, \
-                   truebacktype=[1., 'fdfmfluxnorm.fits'], \
+                   truebacktype=[1., 'sbrtfdfmnorm.fits'], \
                    maxmgangdata=deg2rad(10.), \
                    trueminmflux=5e-11, \
                    truemaxmflux=1e-7, \
@@ -817,16 +1022,18 @@ def pcat_ferm_mock_igal_popl():
                   )
 
 
-def pcat_ferm_inpt_igal(strgexprsbrt='fermflux_cmp0_igal.fits', strgexpo='fermexpo_cmp0_igal.fits'):
+def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expofermcmp0igal.fits'):
     
     pcat.main.init( \
-                   numbswep=100, \
+                   numbswep=10000, \
+                   numbburn=0, \
+                   factthin=100, \
                    numbswepplot=10000, \
-                   #makeplotinit=False, \
-                   #makeplotfram=False, \
-                   verbtype=2, \
+                   makeplotinit=False, \
+                   makeplotfram=False, \
+                   #makeplot=False, \
+                   #verbtype=2, \
                    proppsfp=False, \
-                   makeplot=False, \
                    #shrtfram=True, \
                    maxmgangdata=deg2rad(20.), \
                    #indxevttincl=arange(2, 4), \
@@ -835,13 +1042,12 @@ def pcat_ferm_inpt_igal(strgexprsbrt='fermflux_cmp0_igal.fits', strgexpo='fermex
                    indxenerincl=arange(1, 4), \
                    savestat=True, \
                    inittype='reco', \
-                   #optihess=True, \
-                   fittmaxmnumbpnts=array([0]), \
+                   #fittmaxmnumbpnts=array([0]), \
                    #fittmaxmnumbpntspop0=0, \
                    minmflux=1e-8, \
                    maxmflux=3e-6, \
                    #diagmode=True, \
-                   truebacktype=[1., 'fdfmfluxnorm.fits'], \
+                   truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
                    strgexpo=strgexpo, \
                    strgexprsbrt=strgexprsbrt, \
                   )
@@ -853,8 +1059,8 @@ def pcat_ferm_mock_igal():
                    numbswep=100000, \
                    indxevttincl=arange(3, 4), \
                    indxenerincl=arange(1, 4), \
-                   strgexpo='fermexpo_cmp0_igal.fits', \
-                   truebacktype=[1., 'fdfmfluxnorm.fits'], \
+                   strgexpo='expofermcmp0igal.fits', \
+                   truebacktype=[1., 'sbrtfdfmnorm.fits'], \
                    diagmode=True, \
                    maxmgangdata=deg2rad(10.), \
                   )

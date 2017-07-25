@@ -260,7 +260,6 @@ def pcat_chan_inpt_assc():
                               numbswep=1000, \
                               factthin=100, \
                               numbswepplot=20000, \
-                              optihess=True, \
                               anlytype=anlytype, \
                               namerecostat=namestat, \
                               recostat='reco', \
@@ -301,7 +300,6 @@ def pcat_chan_inpt_extr2msc():
     gridchan = pcat.main.init( \
                               numbswep=2000000, \
                               numbswepplot=20000, \
-                              optihess=True, \
                               anlytype=anlytype, \
                               inittype='reco', \
                               namerecostat=namestat, \
@@ -326,7 +324,6 @@ def pcat_chan_inpt_extr4msc():
                               numbswep=200000, \
                               numbswepplot=20000, \
                               #makeplot=False, \
-                              optihess=True, \
                               anlytype=anlytype, \
                               inittype='reco', \
                               namerecostat=namestat, \
@@ -351,7 +348,6 @@ def pcat_chan_inpt_home2msc():
                               numbswep=5000000, \
                               factthin=1000, \
                               numbswepplot=20000, \
-                              optihess=True, \
                               anlytype=datatype, \
                               #inittype='reco', \
                               #namerecostat=namestat, \
@@ -374,7 +370,6 @@ def pcat_chan_inpt_home4msc():
                               numbswep=5000000, \
                               factthin=1000, \
                               numbswepplot=20000, \
-                              optihess=True, \
                               anlytype=anlytype, \
                               #inittype='reco', \
                               #namerecostat=namestat, \
@@ -394,10 +389,10 @@ def pcat_chan_inpt_home7msc():
     anlytype = datatype + strgexpomaps
     rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
-                              numbswep=100000, \
+                              numbswep=10000, \
                               numbswepplot=20000, \
-                              optihess=True, \
                               anlytype=anlytype, \
+                              #fittmaxmnumbpnts=array([0]), \
                               #inittype='reco', \
                               #namerecostat=namestat, \
                               namesavestat=namestat, \

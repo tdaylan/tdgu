@@ -164,6 +164,8 @@ def pcat_lens_mock_syst():
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['diagmode'] = True
+    dictargs['makeplotinit'] = False
+    dictargs['makeplotfram'] = False
  
     numbelem = array([25. * 10.**0.9], dtype=int)
     anglfact = 3600. * 180. / pi
