@@ -138,21 +138,17 @@ def pcat_lens_mock_next():
     
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 10000
-    #dictargs['verbtype'] = 2
-    dictargs['makeplotinit'] = False
-    dictargs['makeplotfram'] = False
-    dictargs['diagmode'] = True
-    dictargs['truemaxmnumbpnts'] = array([300])
+    dictargs['numbswep'] = 20000
+    dictargs['numbswepplot'] = 20000
  
     numbelem = array([25. * 10.**0.9], dtype=int)
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
-    dictargsvari['truenumbpnts']     = [None,        array([25]),   array([25. * 0.1**0.9], dtype=int), array([25. * 10.**0.9], dtype=int)]
-    dictargsvari['trueminmdefs']     = [None,        3e-3/anglfact, 3e-2/anglfact,                      3e-4/anglfact]
-    dictargsvari['fittminmdefs']     = [None,        3e-4/anglfact, 3e-4/anglfact,                      3e-4/anglfact]
-    dictargsvari['priofactdoff']     = [0.,          1.,            1.,                                 1.]
-    dictargsvari['truescalmeanpnts'] = ['logt',      'logt',        'logt',                            'logt']
+    dictargsvari['truenumbpnts']     = [None,        array([0]),  array([0]),  array([25]),   array([25. * 0.1**0.9], dtype=int), array([25. * 10.**0.9], dtype=int)]
+    dictargsvari['trueminmdefs']     = [None,        None,        None,        3e-3/anglfact, 3e-2/anglfact,                      3e-4/anglfact]
+    dictargsvari['fittminmdefs']     = [None,        None,        None,        3e-4/anglfact, 3e-4/anglfact,                      3e-4/anglfact]
+    dictargsvari['priofactdoff']     = [0.,          0.,          1.,          1.,            1.,                                 1.]
+    dictargsvari['truescalmeanpnts'] = ['logt',      'logt',      'logt',      'logt',        'logt',                            'logt']
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
@@ -164,14 +160,11 @@ def pcat_lens_mock_syst():
    
     seed(4)
     
-    numbswepnomi = 10000
+    numbswepnomi = 100
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    #dictargs['verbtype'] = 2
-    dictargs['makeplotinit'] = False
-    dictargs['makeplotfram'] = False
+    dictargs['makeplot'] = False
     dictargs['diagmode'] = True
-    #dictargs['factthin'] = 100
  
     numbelem = array([25. * 10.**0.9], dtype=int)
     anglfact = 3600. * 180. / pi
@@ -187,7 +180,7 @@ def pcat_lens_mock_syst():
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  indxruns=1, \
+                                  #indxruns=1, \
                                  )
     
 

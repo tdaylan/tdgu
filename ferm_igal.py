@@ -811,8 +811,10 @@ def pcat_ferm_inpt_igal(strgexprsbrt='fermflux_cmp0_igal.fits', strgexpo='fermex
                    #makeplotfram=False, \
                    #shrtfram=True, \
                    maxmgangdata=deg2rad(20.), \
-                   indxevttincl=arange(2, 4), \
-                   indxenerincl=arange(1, 4), \
+                   #indxevttincl=arange(2, 4), \
+                   #indxenerincl=arange(1, 4), \
+                   indxevttincl=arange(2, 3), \
+                   indxenerincl=arange(2, 3), \
                    verbtype=2, \
                    savestat=True, \
                    inittype='reco', \
