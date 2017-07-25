@@ -16,7 +16,7 @@ def writ_ferm_raww():
     
     gdat = tdpy.util.gdatstrt()
     
-    gdat.test = False
+    gdat.test = True
     
     gdat.pathdata = os.environ["TDGU_DATA_PATH"] + '/ferm_igal/data/'
     gdat.recotype = ['rec7']
@@ -127,40 +127,35 @@ def writ_ferm_raww_work(gdat, indxprocwork):
         if os.path.isfile(cntp) and os.path.isfile(expo):
             continue
         
-        if gdat.test:
-            print cmnd
-            print ''
-        else:
+        print cmnd
+        print ''
+        if not gdat.test:
             os.system(cmnd)
 
         cmnd = 'gtmktime evfile=' + sele + ' scfile=' + spac + ' filter="DATA_QUAL==1 && LAT_CONFIG==1"' + ' outfile=' + filt + ' roicut=no'
-        if gdat.test:
-            print cmnd
-            print ''
-        else:
+        print cmnd
+        print ''
+        if not gdat.test:
             os.system(cmnd)
 
         cmnd = 'gtbin evfile=' + filt + ' scfile=NONE outfile=' + cntp + \
             ' ebinalg=FILE ebinfile=$TDPY_DATA_PATH/%s ' % gdat.strgener[indxprocwork] + \
             'algorithm=HEALPIX hpx_ordering_scheme=RING coordsys=GAL hpx_order=%d hpx_ebin=yes' % log2(gdat.numbside[indxprocwork])
-        if gdat.test:
-            print cmnd
-            print ''
-        else:
+        print cmnd
+        print ''
+        if not gdat.test:
             os.system(cmnd)
 
         cmnd = 'gtltcube evfile=' + filt + ' scfile=' + spac + ' outfile=' + live + ' dcostheta=0.025 binsz=1'
-        if gdat.test:
-            print cmnd
-            print ''
-        else:
+        print cmnd
+        print ''
+        if not gdat.test:
             os.system(cmnd)
 
         cmnd = 'gtexpcube2 infile=' + live + ' cmap=' + cntp + ' outfile=' + expo + ' irfs=CALDB evtype=%03d bincalc=CENTER' % thisevtt
-        if gdat.test:
-            print cmnd
-            print ''
-        else:
+        print cmnd
+        print ''
+        if not gdat.test:
             os.system(cmnd)
 
     cmnd = 'rm %s %s %s %s %s' % (infl, spac, sele, filt, live)
