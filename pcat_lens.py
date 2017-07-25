@@ -138,8 +138,8 @@ def pcat_lens_mock_next():
     
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['numbswep'] = 20000
-    dictargs['numbswepplot'] = 20000
+    dictargs['diagmode'] = True
+    dictargs['numbswep'] = 10000
  
     numbelem = array([25. * 10.**0.9], dtype=int)
     anglfact = 3600. * 180. / pi
@@ -160,10 +160,9 @@ def pcat_lens_mock_syst():
    
     seed(4)
     
-    numbswepnomi = 100
+    numbswepnomi = 10000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['makeplot'] = False
     dictargs['diagmode'] = True
  
     numbelem = array([25. * 10.**0.9], dtype=int)
