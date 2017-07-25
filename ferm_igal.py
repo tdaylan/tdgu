@@ -16,6 +16,10 @@ def writ_ferm_raww():
     
     gdat = tdpy.util.gdatstrt()
     
+    gdat.test = False
+    
+    gdat.pathdata = os.environ["TDGU_DATA_PATH"] + '/ferm_igal/data/'
+    gdat.recotype = ['rec7']
     numbproc = len(gdat.recotype)
     
     if not hasattr(gdat, 'timetype'):
@@ -28,8 +32,6 @@ def writ_ferm_raww():
         gdat.timefrac = [1. for k in range(numbproc)]
     if not hasattr(gdat, 'numbside'):
         gdat.numbside = [256 for k in range(numbproc)]
-    if not hasattr(gdat, 'test'):
-        gdat.test = False
 
     gdat.evtc = []
     gdat.photpath = []
@@ -59,13 +61,13 @@ def writ_ferm_raww():
     indxproc = arange(numbproc)
     
     if numbproc == 1:
-        writ_ferm_work(gdat, 0)
+        writ_ferm_raww_work(gdat, 0)
     else:
         # process pool
         pool = mp.Pool(numbproc)
 
         # spawn the processes
-        writ_ferm_part = functools.partial(writ_ferm_work, gdat)
+        writ_ferm_part = functools.partial(writ_ferm_raww_work, gdat)
         pool.map(writ_ferm_part, indxproc)
         pool.close()
         pool.join()
@@ -76,8 +78,8 @@ def writ_ferm_raww_work(gdat, indxprocwork):
     rtag = '%s_%s_%04d_%s' % (gdat.recotype[indxprocwork], gdat.enertype[indxprocwork], gdat.numbside[indxprocwork], gdat.timetype[indxprocwork])
     
     # make file lists
-    infl = gdat.pathdata + '/phot_%s.txt' % rtag
-    spac = gdat.pathdata + '/spac_%s.txt' % rtag
+    infl = gdat.pathdata + 'phot_%s.txt' % rtag
+    spac = gdat.pathdata + 'spac_%s.txt' % rtag
         
     numbweek = (gdat.weekfinl[indxprocwork] - gdat.weekinit[indxprocwork]) * gdat.timefrac[indxprocwork]
     listweek = floor(linspace(gdat.weekinit[indxprocwork], gdat.weekfinl[indxprocwork] - 1, numbweek)).astype(int)
@@ -112,12 +114,12 @@ def writ_ferm_raww_work(gdat, indxprocwork):
             thisevtt = gdat.evtt[m]
             strgpsfn = 'evtype=%d' % thisevtt
          
-        sele = gdat.pathdata + '/fermsele_%04d_%s.fits' % (thisevtt, rtag)
-        filt = gdat.pathdata + '/fermfilt_%04d_%s.fits' % (thisevtt, rtag)
-        live = gdat.pathdata + '/fermlive_%04d_%s.fits' % (thisevtt, rtag)
-        cntp = gdat.pathdata + '/cntpferm_%04d_%s.fits' % (thisevtt, rtag)
-        expo = gdat.pathdata + '/expoferm_%04d_%s.fits' % (thisevtt, rtag)
-        psfn = gdat.pathdata + '/psfnferm_%04d_%s.fits' % (thisevtt, rtag)
+        sele = gdat.pathdata + 'fermsele_%04d_%s.fits' % (thisevtt, rtag)
+        filt = gdat.pathdata + 'fermfilt_%04d_%s.fits' % (thisevtt, rtag)
+        live = gdat.pathdata + 'fermlive_%04d_%s.fits' % (thisevtt, rtag)
+        cntp = gdat.pathdata + 'cntpferm_%04d_%s.fits' % (thisevtt, rtag)
+        expo = gdat.pathdata + 'expoferm_%04d_%s.fits' % (thisevtt, rtag)
+        psfn = gdat.pathdata + 'psfnferm_%04d_%s.fits' % (thisevtt, rtag)
 
         cmnd = 'gtselect infile=' + infl + ' outfile=' + sele + ' ra=INDEF dec=INDEF rad=INDEF ' + \
             gdat.strgtime[indxprocwork] + ' emin=100 emax=100000 zmax=90 evclass=%d %s' % (gdat.evtc[indxprocwork], strgpsfn)
@@ -155,15 +157,6 @@ def writ_ferm_raww_work(gdat, indxprocwork):
             os.system(cmnd)
 
         cmnd = 'gtexpcube2 infile=' + live + ' cmap=' + cntp + ' outfile=' + expo + ' irfs=CALDB evtype=%03d bincalc=CENTER' % thisevtt
-        if gdat.test:
-            print cmnd
-            print ''
-        else:
-            os.system(cmnd)
-
-        psfno = gdat.pathdata + '/psfnferm_%04d_%s.fits' % (thisevtt, rtag)
-        cmnd = 'gtpsf %s %s %s %.4g %.4g ebinalg=FILE ebinfile=$TDPY_DATA_PATH/%s 10. 50' % (live, psfn, strgpsfn, rasc, decl) + \
-            ' ebinalg=FILE ebinfile=$TDPY_DATA_PATH/%s ' % gdat.strgener[indxprocwork]
         if gdat.test:
             print cmnd
             print ''
