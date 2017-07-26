@@ -19,36 +19,25 @@ def writ_ferm_raww():
     gdat.test = True
     
     gdat.pathdata = os.environ["TDGU_DATA_PATH"] + '/ferm_igal/data/'
-    gdat.recotype = ['rec7']
+    gdat.recotype = ['rec7', 'rec7', 'rec8', 'rec8', 'rec8']
+    gdat.enertype = ['pnts', 'pnts', 'pnts', 'back', 'back']
+    gdat.strgtime = ['tmin=239155201 tmax=364953603', 'tmin=INDEF tmax=INDEF', 'tmin=INDEF tmax=INDEF', 'tmin=INDEF tmax=INDEF', 'tmin=INDEF tmax=INDEF']
+    gdat.numbside = [256, 256, 256, 256, 512]
     numbproc = len(gdat.recotype)
-    
-    if not hasattr(gdat, 'timetype'):
-        gdat.timetype = ['tim0' for k in range(numbproc)]
-    if not hasattr(gdat, 'enertype'):
-        gdat.enertype = ['pnts' for k in range(numbproc)]
-    if not hasattr(gdat, 'strgtime'):
-        gdat.strgtime = ['tmin=INDEF tmax=INDEF' for k in range(numbproc)]
-    if not hasattr(gdat, 'timefrac'):
-        gdat.timefrac = [1. for k in range(numbproc)]
-    if not hasattr(gdat, 'numbside'):
-        gdat.numbside = [256 for k in range(numbproc)]
 
     gdat.evtc = []
     gdat.photpath = []
-    gdat.strgtime = []
     gdat.weekinit = []
     gdat.weekfinl = []
     for n in range(numbproc):
         if gdat.recotype[n] == 'rec7':
             gdat.evtc.append(2)
             gdat.photpath.append('p7v6c')
-            gdat.strgtime.append('tmin=239155201 tmax=364953603')
             gdat.weekinit.append(9)
             gdat.weekfinl.append(218)
         if gdat.recotype[n] == 'rec8':
             gdat.evtc.append(128)
             gdat.photpath.append('photon')
-            gdat.strgtime.append('tmin=INDEF tmax=INDEF')
             gdat.weekinit.append(11)
             gdat.weekfinl.append(420)
     
@@ -75,13 +64,13 @@ def writ_ferm_raww():
 
 def writ_ferm_raww_work(gdat, indxprocwork):
 
-    rtag = '%s_%s_%04d_%s' % (gdat.recotype[indxprocwork], gdat.enertype[indxprocwork], gdat.numbside[indxprocwork], gdat.timetype[indxprocwork])
+    rtag = '%s%s%04d' % (gdat.recotype[indxprocwork], gdat.enertype[indxprocwork], gdat.numbside[indxprocwork])
     
     # make file lists
     infl = gdat.pathdata + 'phot_%s.txt' % rtag
     spac = gdat.pathdata + 'spac_%s.txt' % rtag
         
-    numbweek = (gdat.weekfinl[indxprocwork] - gdat.weekinit[indxprocwork]) * gdat.timefrac[indxprocwork]
+    numbweek = (gdat.weekfinl[indxprocwork] - gdat.weekinit[indxprocwork])
     listweek = floor(linspace(gdat.weekinit[indxprocwork], gdat.weekfinl[indxprocwork] - 1, numbweek)).astype(int)
     cmnd = 'rm -f ' + infl
     os.system(cmnd)
@@ -114,12 +103,12 @@ def writ_ferm_raww_work(gdat, indxprocwork):
             thisevtt = gdat.evtt[m]
             strgpsfn = 'evtype=%d' % thisevtt
          
-        sele = gdat.pathdata + 'fermsele_%04d_%s.fits' % (thisevtt, rtag)
-        filt = gdat.pathdata + 'fermfilt_%04d_%s.fits' % (thisevtt, rtag)
-        live = gdat.pathdata + 'fermlive_%04d_%s.fits' % (thisevtt, rtag)
-        cntp = gdat.pathdata + 'cntpferm_%04d_%s.fits' % (thisevtt, rtag)
-        expo = gdat.pathdata + 'expoferm_%04d_%s.fits' % (thisevtt, rtag)
-        psfn = gdat.pathdata + 'psfnferm_%04d_%s.fits' % (thisevtt, rtag)
+        sele = gdat.pathdata + 'fermsele%04d%s.fits' % (thisevtt, rtag)
+        filt = gdat.pathdata + 'fermfilt%04d%s.fits' % (thisevtt, rtag)
+        live = gdat.pathdata + 'fermlive%04d%s.fits' % (thisevtt, rtag)
+        cntp = gdat.pathdata + 'cntpferm%04d%s.fits' % (thisevtt, rtag)
+        expo = gdat.pathdata + 'expoferm%04d%s.fits' % (thisevtt, rtag)
+        psfn = gdat.pathdata + 'psfnferm%04d%s.fits' % (thisevtt, rtag)
 
         cmnd = 'gtselect infile=' + infl + ' outfile=' + sele + ' ra=INDEF dec=INDEF rad=INDEF ' + \
             gdat.strgtime[indxprocwork] + ' emin=100 emax=100000 zmax=90 evclass=%d %s' % (gdat.evtc[indxprocwork], strgpsfn)
@@ -162,7 +151,7 @@ def writ_ferm_raww_work(gdat, indxprocwork):
     os.system(cmnd)
 
 
-def writ_ferm(recotype='rec7', enertype='back', regitype='igal', numbside=256, timetype='tim0'):
+def writ_ferm(recotype='rec7', enertype='back', regitype='igal', numbside=256):
     
     pathinpt = os.environ["TDGU_DATA_PATH"] + '/ferm_igal/data/'
     pathoutp = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
@@ -202,12 +191,12 @@ def writ_ferm(recotype='rec7', enertype='back', regitype='igal', numbside=256, t
         else:
             thisevtt = evtt[m]
 
-        path = pathinpt + '/expoferm_%04d_%s_%s_%04d_%s.fits' % (thisevtt, recotype, enertype, numbside, timetype)
+        path = pathinpt + '/expoferm%04d%s%s%04d.fits' % (thisevtt, recotype, enertype, numbside)
         expoarry = pf.getdata(path, 1)
         for i in indxener:
             expo[i, :, m] = expoarry['ENERGY%d' % (i + 1)]
 
-        path = pathinpt + '/cntpferm_%04d_%s_%s_%04d_%s.fits' % (thisevtt, recotype, enertype, numbside, timetype)
+        path = pathinpt + '/cntpferm%04d%s%s%04d.fits' % (thisevtt, recotype, enertype, numbside)
         cntparry = pf.getdata(path)
         for i in indxener:
             cntp[i, :, m] = cntparry['CHANNEL%d' % (i + 1)]
@@ -238,10 +227,10 @@ def writ_ferm(recotype='rec7', enertype='back', regitype='igal', numbside=256, t
                 hp.rotate_alm(almc, 0., 0.5 * pi, 0.)
                 expo[i, :, m] = hp.alm2map(almc, numbside)
 
-    path = pathoutp + '/expoferm%s%s%s%04d%s.fits' % (recotype, enertype, regitype, numbside, timetype)
+    path = pathoutp + '/expoferm%s%s%s%04d.fits' % (recotype, enertype, regitype, numbside)
     pf.writeto(path, expo, clobber=True)
 
-    path = pathoutp + '/sbrtferm%s%s%s%04d%s.fits' % (recotype, enertype, regitype, numbside, timetype)
+    path = pathoutp + '/sbrtferm%s%s%s%04d.fits' % (recotype, enertype, regitype, numbside)
     pf.writeto(path, sbrt, clobber=True)
 
 
@@ -1029,7 +1018,7 @@ def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expoferm
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
                    savestat=True, \
-                   inittype='reco', \
+                   #inittype='reco', \
                    #fittmaxmnumbpnts=array([0]), \
                    #fittmaxmnumbpntspop0=0, \
                    minmflux=1e-8, \
