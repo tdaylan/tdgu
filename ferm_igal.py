@@ -894,7 +894,7 @@ def pcat_ferm_inpt_igal_popl(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    #verbtype=2, \
                    minmflux=1e-8, \
                    maxmflux=3e-6, \
-                   maxmnumbpnts=array([2]), \
+                   fittmaxmnumbelem=array([2]), \
                    back=[1., 'sbrtfdfmnorm.fits'], \
                    strgexpo=strgexpo, \
                    strgexprsbrt=strgexprsbrt, \
@@ -952,7 +952,7 @@ def pcat_ferm_mock_igal_syst():
                        indxenerincl=arange(1, 4), \
                        strgexpo='expofermcmp0igal.fits', \
                        back=[1.], \
-                       maxmnumbpnts=array([20]), \
+                       fittmaxmnumbelem=array([20]), \
                        maxmgangdata=deg2rad(20.), \
                        minmflux=3e-11, \
                        maxmflux=3e-7, \
@@ -981,11 +981,11 @@ def pcat_ferm_mock_igal_popl():
                    maxmgangdata=deg2rad(10.), \
                    trueminmflux=5e-11, \
                    truemaxmflux=1e-7, \
-                   truemaxmnumbpnts=array([4, 4]), \
+                   truemaxmnumbelem=array([4, 4]), \
                    truenumbpnts=array([2, 2]), \
-                   #maxmnumbpnts=array([5, 5, 5]), \
+                   #fittmaxmnumbelem=array([5, 5, 5]), \
                    #truenumbpnts=array([4, 4, 4]), \
-                   #maxmnumbpnts=array([10]), \
+                   #fittmaxmnumbelem=array([10]), \
                    #truenumbpnts=array([10]), \
                    #truespatdisttype=['gang'], \
                    #truespatdisttype=['gang'], \
@@ -1002,12 +1002,14 @@ def pcat_ferm_mock_igal_popl():
 def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expofermcmp0igal.fits'):
     
     pcat.main.init( \
-                   numbswep=1000000, \
+                   numbswep=10000, \
                    numbburn=0, \
-                   factthin=10000, \
+                   factthin=100, \
                    numbswepplot=10000, \
+                   makeplot=False, \
                    proppsfp=False, \
                    maxmgangdata=deg2rad(20.), \
+                   fittmaxmnumbelem=array([0]), \
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
                    savestat=True, \
