@@ -1002,28 +1002,18 @@ def pcat_ferm_mock_igal_popl():
 def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expofermcmp0igal.fits'):
     
     pcat.main.init( \
-                   numbswep=10000, \
+                   numbswep=1000000, \
                    numbburn=0, \
-                   factthin=100, \
+                   factthin=10000, \
                    numbswepplot=10000, \
-                   makeplotinit=False, \
-                   makeplotfram=False, \
-                   #makeplot=False, \
-                   #verbtype=2, \
                    proppsfp=False, \
-                   #shrtfram=True, \
                    maxmgangdata=deg2rad(20.), \
-                   #indxevttincl=arange(2, 4), \
-                   #indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
                    savestat=True, \
                    #inittype='reco', \
-                   #fittmaxmnumbpnts=array([0]), \
-                   #fittmaxmnumbpntspop0=0, \
                    minmflux=1e-8, \
                    maxmflux=3e-6, \
-                   #diagmode=True, \
                    truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
                    strgexpo=strgexpo, \
                    strgexprsbrt=strgexprsbrt, \

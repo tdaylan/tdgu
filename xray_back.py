@@ -389,10 +389,11 @@ def pcat_chan_inpt_home7msc():
     anlytype = datatype + strgexpomaps
     rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
-                              numbswep=10000, \
-                              numbswepplot=20000, \
+                              numbswep=1000000, \
+                              numbburn=0, \
+                              factthin=10000, \
+                              numbswepplot=10000, \
                               anlytype=anlytype, \
-                              #fittmaxmnumbpnts=array([0]), \
                               #inittype='reco', \
                               #namerecostat=namestat, \
                               namesavestat=namestat, \
