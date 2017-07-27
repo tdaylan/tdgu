@@ -102,8 +102,8 @@ def pcat_lens_intrevalmodlcnts():
                    elemtype='lens', \
                    makeplotinit=False, \
                    intrevalmodlcnts=True, \
-                   truenumbpnts=array([0]), \
-                   truemaxmnumbpnts=array([0]), \
+                   truenumbelem=array([0]), \
+                   truemaxmnumbelem=array([0]), \
                   )
     
 
@@ -113,7 +113,7 @@ def pcat_lens_mock_sing():
     for k in range(numbiter):
         pcat.main.init( \
                        elemtype='lens', \
-                       truenumbpnts=array([1]), \
+                       truenumbelem=array([1]), \
                        trueminmdefs=1e-2/3600./180.*pi, \
                        truemaxmdefs=1e-1/3600./180.*pi, \
                       )
@@ -126,7 +126,7 @@ def pcat_lens_mock_spmr():
                    truelgalimps=array([0.]), \
                    truebgalimps=array([0.]), \
                    truedefsimps=array([1e-2 / anglfact]), \
-                   truenumbpnts=array([1]), \
+                   truenumbelem=array([1]), \
                    probtran=1., \
                    probbrde=0., \
                   )
@@ -144,7 +144,7 @@ def pcat_lens_mock_next():
     numbelem = array([25. * 10.**0.9], dtype=int)
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
-    dictargsvari['truenumbpnts']     = [None,        array([0]),  array([0]),  array([25]),   array([25. * 0.1**0.9], dtype=int), array([25. * 10.**0.9], dtype=int)]
+    dictargsvari['truenumbelem']     = [None,        array([0]),  array([0]),  array([25]),   array([25. * 0.1**0.9], dtype=int), array([25. * 10.**0.9], dtype=int)]
     dictargsvari['trueminmdefs']     = [None,        None,        None,        3e-3/anglfact, 3e-2/anglfact,                      3e-4/anglfact]
     dictargsvari['fittminmdefs']     = [None,        None,        None,        3e-4/anglfact, 3e-4/anglfact,                      3e-4/anglfact]
     dictargsvari['priofactdoff']     = [0.,          0.,          1.,          1.,            1.,                                 1.]
@@ -163,6 +163,8 @@ def pcat_lens_mock_syst():
     numbswepnomi = 10000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
+    dictargs['diagmode'] = True
+    dictargs['inittype'] = 'refr'
     #dictargs['diagmode'] = True
     #dictargs['makeplotinit'] = False
     #dictargs['makeplotfram'] = False
@@ -171,11 +173,11 @@ def pcat_lens_mock_syst():
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
     dictargsvari['numbswep'] =             [numbswepnomi, numbswepnomi, numbswepnomi,  numbswepnomi,  numbswepnomi, numbswepnomi]
-    dictargsvari['truenumbpnts'] =         [None,         None,         None,          numbelem,      None,         None,       ]
+    dictargsvari['truenumbelem'] =         [None,         None,         None,          numbelem,      None,         None,       ]
     dictargsvari['trueminmdefs'] =         [None,         None,         None,          3e-4/anglfact, None,         None,       ]
     dictargsvari['fittminmdefs'] =         [None,         None,         3e-3/anglfact, None,          None,         None,       ]
-    dictargsvari['fittminmnumbpnts'] =     [None,         array([1]),   None,          None,          None,         None,       ]
-    dictargsvari['fittmaxmnumbpnts'] =     [None,         array([1]),   None,          None,          None,         None,       ]
+    dictargsvari['fittminmnumbelem'] =     [None,         array([1]),   None,          None,          None,         None,       ]
+    dictargsvari['fittmaxmnumbelem'] =     [None,         array([1]),   None,          None,          None,         None,       ]
     dictargsvari['truestdvdefsdistslop'] = [0.5,          0.5,          0.5,           0.5,           0.5,          'none',     ]
     dictargsvari['truescalmeanpnts']     = ['self',       'logt',       'self',        'self',        'logt',       'self',     ]
     dictglob = pcat.main.initarry( \
@@ -241,13 +243,13 @@ def pcat_lens_mock_sele():
     dictargs = {}
     dictargs['mockonly'] = True
     dictargs['trueminmdefs'] = 5e-4 / anglfact
-    dictargs['truenumbpnts'] = array([1000])
+    dictargs['truenumbelem'] = array([1000])
     dictargs['variasca'] = False
     dictargs['variacut'] = False
     dictargs['allwfixdtrue'] = False
     dictargs['verbtype'] = 0
     dictargs['makeplot'] = False
-    dictargs['truemaxmnumbpnts'] = array([1000])
+    dictargs['truemaxmnumbelem'] = array([1000])
     
     listnamesele = ['pars', 'nrel']
     numbsele = len(listnamesele)
@@ -391,8 +393,8 @@ def pcat_lens_mock_tmpr():
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['burntmpr'] = True
-    dictargs['truemaxmnumbpnts'] = array([0])
-    dictargs['truenumbpnts'] = array([0])
+    dictargs['truemaxmnumbelem'] = array([0])
+    dictargs['truenumbelem'] = array([0])
     dictargsvari = {}
     dictargsvari['inittype'] = ['refr', 'rand']
 
@@ -406,8 +408,8 @@ def pcat_lens_mock_macr():
     
     pcat.main.init( \
                    elemtype='lens', \
-                   truemaxmnumbpnts=array([0]), \
-                   truenumbpnts=array([0]), \
+                   truemaxmnumbelem=array([0]), \
+                   truenumbelem=array([0]), \
                   )
 
 
@@ -415,9 +417,9 @@ def pcat_lens_mock_zero():
 
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['fittmaxmnumbpnts'] = array([0])
+    dictargs['fittmaxmnumbelem'] = array([0])
     dictargsvari = {}
-    dictargsvari['truenumbpnts'] = [array([0]), array([20])]
+    dictargsvari['truenumbelem'] = [array([0]), array([20])]
 
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -464,8 +466,8 @@ def pcat_lens_mock_dofftest():
     pcat.main.init( \
                    elemtype='lens', \
                    #verbtype=2, \
-                   #truenumbpnts=array([5]), \
-                   #truemaxmnumbpnts=array([10]), \
+                   #truenumbelem=array([5]), \
+                   #truemaxmnumbelem=array([10]), \
                    #checprio=True, \
                    shrtfram=True, \
                    numbswep=20000, \
@@ -480,8 +482,8 @@ def pcat_lens_mockonly():
    
     pcat.main.init( \
                    elemtype='lens', \
-                   truenumbpnts=array([20]), \
-                   truemaxmnumbpnts=array([400]), \
+                   truenumbelem=array([20]), \
+                   truemaxmnumbelem=array([400]), \
                    mockonly=True, \
                   )
 
@@ -497,8 +499,8 @@ def pcat_lens_mock():
         pcat.main.init( \
                        elemtype='lens', \
                        #verbtype=2, \
-                       #truenumbpnts=array([5]), \
-                       #truemaxmnumbpnts=array([10]), \
+                       #truenumbelem=array([5]), \
+                       #truemaxmnumbelem=array([10]), \
                        #checprio=True, \
                        #evoltype='maxmllik', \
                        #makeplot=False, \
@@ -508,8 +510,8 @@ def pcat_lens_mock():
                        #makeplotinit=False, \
                        #mockonly=True, \
                        #makeplot=False, \
-                       #truemaxmnumbpnts=array([5]), \
-                       #truenumbpnts=array([5]), \
+                       #truemaxmnumbelem=array([5]), \
+                       #truenumbelem=array([5]), \
                        #verbtype=2, \
                        numbswep=100000, \
                        #truestdvdefsdistslop=0.01, \
@@ -522,7 +524,7 @@ def pcat_lens_mock():
                        #initlgalsour=-1e-1 / anglfact, \
                        #initbgalsour=1e-1 / anglfact, \
                        #burntmpr=True, \
-                       #fittmaxmnumbpnts=array([5]), \
+                       #fittmaxmnumbelem=array([5]), \
                        #shrtfram=True, \
                        numbswepplot=6000, \
                       )

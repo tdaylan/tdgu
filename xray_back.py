@@ -209,8 +209,8 @@ def pcat_chan_mock_spmr():
                               truelgalimps=array([0.]), \
                               truebgalimps=array([0.]), \
                               truesbrtimps=array([5e-7]), \
-                              truenumbpnts=array([1]), \
-                              truemaxmnumbpnts=array([6]), \
+                              truenumbelem=array([1]), \
+                              truemaxmnumbelem=array([6]), \
                               strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               exprtype='chan', \
                               maxmgangdata=maxmgangdata, \
@@ -229,7 +229,7 @@ def pcat_chan_mock_popl():
                               strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               exprtype='chan', \
                               numbsidecart=300, \
-                              truenumbpnts=array([50, 40]), \
+                              truenumbelem=array([50, 40]), \
                              )
 
 
@@ -244,7 +244,7 @@ def pcat_chan_mock_zero():
                               strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               exprtype='chan', \
                               numbsidecart=numbsidecart, \
-                              truenumbpnts=array([0]), \
+                              truenumbelem=array([0]), \
                              )
 
 
@@ -390,12 +390,12 @@ def pcat_chan_inpt_home7msc():
     rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
     gridchan = pcat.main.init( \
                               numbswep=1000000, \
-                              numbburn=0, \
-                              factthin=10000, \
+                              factthin=1000, \
                               numbswepplot=10000, \
+                              diagmode=True, \
                               anlytype=anlytype, \
-                              #inittype='reco', \
-                              #namerecostat=namestat, \
+                              inittype='reco', \
+                              namerecostat=namestat, \
                               namesavestat=namestat, \
                               savestat=True, \
                               strgexpo='expochan%s.fits' % rtagdata, \

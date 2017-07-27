@@ -923,7 +923,7 @@ def pcat_ferm_mock_igal_brok():
                        minmflux=3e-11, \
                        maxmflux=3e-7, \
 
-                       truenumbpnts=array([100]), \
+                       truenumbelem=array([100]), \
                         
                        truefluxdisttype='brok', \
                        truefluxdistbrek=truefluxdistbrek, \
@@ -945,7 +945,7 @@ def pcat_ferm_mock_igal_syst():
     indxtupl = np.arange(numbtupl)
     strgtupl = []
     for k in range(numbtupl):
-        truenumbpnts = tupl[k]
+        truenumbelem = tupl[k]
 
         pcat.main.init( \
                        indxevttincl=arange(2, 4), \
@@ -956,7 +956,7 @@ def pcat_ferm_mock_igal_syst():
                        maxmgangdata=deg2rad(20.), \
                        minmflux=3e-11, \
                        maxmflux=3e-7, \
-                       truenumbpnts=array([10, 10, 10]), \
+                       truenumbelem=array([10, 10, 10]), \
                        truespatdisttype=['unif', 'disc', 'gang'], \
                        truefluxdisttype='powr', \
                        truefluxdistslop=array([2.6, 2.6, 3.5]), \
@@ -982,11 +982,11 @@ def pcat_ferm_mock_igal_popl():
                    trueminmflux=5e-11, \
                    truemaxmflux=1e-7, \
                    truemaxmnumbelem=array([4, 4]), \
-                   truenumbpnts=array([2, 2]), \
+                   truenumbelem=array([2, 2]), \
                    #fittmaxmnumbelem=array([5, 5, 5]), \
-                   #truenumbpnts=array([4, 4, 4]), \
+                   #truenumbelem=array([4, 4, 4]), \
                    #fittmaxmnumbelem=array([10]), \
-                   #truenumbpnts=array([10]), \
+                   #truenumbelem=array([10]), \
                    #truespatdisttype=['gang'], \
                    #truespatdisttype=['gang'], \
                    #truespatdisttype=['unif', 'disc', 'gang'], \
@@ -1004,16 +1004,18 @@ def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expoferm
     pcat.main.init( \
                    numbswep=10000, \
                    numbburn=0, \
-                   factthin=100, \
+                   factthin=1000, \
                    numbswepplot=10000, \
-                   makeplot=False, \
+                   diagmode=True, \
                    proppsfp=False, \
+                   #makeplotinit=False, \
+                   #shrtfram=True, \
+                   fittmaxmnumbelem=array([30]), \
                    maxmgangdata=deg2rad(20.), \
-                   fittmaxmnumbelem=array([0]), \
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
                    savestat=True, \
-                   #inittype='reco', \
+                   inittype='reco', \
                    minmflux=1e-8, \
                    maxmflux=3e-6, \
                    truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
