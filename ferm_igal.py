@@ -1010,7 +1010,7 @@ def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expoferm
                    proppsfp=False, \
                    #makeplotinit=False, \
                    #shrtfram=True, \
-                   fittmaxmnumbelem=array([30]), \
+                   fittmaxmnumbelem=array([200]), \
                    maxmgangdata=deg2rad(20.), \
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
