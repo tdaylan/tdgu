@@ -14,7 +14,9 @@ def writ_ferm_raww():
     
     gdat = tdpy.util.gdatstrt()
     
-    gdat.test = True
+    gdat.test = False
+        
+    defn_gtbn()
     
     gdat.pathdata = os.environ["TDGU_DATA_PATH"] + '/ferm_igal/data/'
     gdat.recotype = ['rec7', 'rec7', 'rec8', 'rec8', 'rec8']
@@ -45,7 +47,7 @@ def writ_ferm_raww():
     
     indxproc = arange(numbproc)
     
-    if numbproc == 1 or gdat.test:
+    if numbproc == 1 or gdat.test or True:
         writ_ferm_raww_work(gdat, 0)
     else:
         # process pool
@@ -305,15 +307,20 @@ def retr_plnkmapsorig(gdat, strgmapsplnk):
 
 def defn_gtbn():
     
-    numbener = 30
-    minmener = 0.1
-    maxmener = 100.
-    binsener = logspace(log10(minmener), log10(maxmener), numbener + 1)
-    lowrener = binsener[:-1]
-    upprener = binsener[1:]
-    limtener = stack((lowrener, upprener), axis=1)
-    path = os.environ["TDPY_DATA_PATH"] + '/gtbndefn_back.dat'
-    savetxt(path, limtener, fmt='%10.5g')
+    listenertype = ['pnts', 'back']
+    for enertype in listenertype:
+        if enertype == 'pnts':
+            limtener = array([0.1, 0.3, 1., 3., 10., 100.])
+        if enertype == 'back':
+            numbener = 30
+            minmener = 0.1
+            maxmener = 100.
+            binsener = logspace(log10(minmener), log10(maxmener), numbener + 1)
+            lowrener = binsener[:-1]
+            upprener = binsener[1:]
+            limtener = stack((lowrener, upprener), axis=1)
+        path = os.environ["TDPY_DATA_PATH"] + '/gtbndefn_%s.dat' % enertype
+        savetxt(path, limtener, fmt='%10.5g')
 
 
 def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
