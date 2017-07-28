@@ -43,7 +43,7 @@ def writ_ferm_raww():
             gdat.weekfinl.append(13)
             #gdat.weekfinl.append(420)
     
-    gdat.strgener = ['gtbndefn_%s.fits' % gdat.enertype[k] for k in range(numbproc)]
+    gdat.strgener = ['gtbndefn_%s.dat' % gdat.enertype[k] for k in range(numbproc)]
     
     indxproc = arange(numbproc)
     
@@ -119,7 +119,7 @@ def writ_ferm_raww_work(gdat, indxprocwork):
             os.system(cmnd)
 
         cmnd = 'gtbin evfile=' + filt + ' scfile=NONE outfile=' + cntp + \
-            ' ebinalg=FILE ebinfile=$TDPY_DATA_PATH/%s ' % gdat.strgener[indxprocwork] + \
+            ' ebinalg=FILE ebinfile=$TDGU_DATA_PATH/ferm_igal/data/%s ' % gdat.strgener[indxprocwork] + \
             'algorithm=HEALPIX hpx_ordering_scheme=RING coordsys=GAL hpx_order=%d hpx_ebin=yes' % log2(gdat.numbside[indxprocwork])
         print cmnd
         print ''
@@ -319,7 +319,8 @@ def defn_gtbn():
             lowrener = binsener[:-1]
             upprener = binsener[1:]
             limtener = stack((lowrener, upprener), axis=1)
-        path = os.environ["TDPY_DATA_PATH"] + '/gtbndefn_%s.dat' % enertype
+        path = os.environ["TDGU_DATA_PATH"] + '/ferm_igal/data/gtbndefn_%s.dat' % enertype
+        print 'Writing to %s...' % path
         savetxt(path, limtener, fmt='%10.5g')
 
 
