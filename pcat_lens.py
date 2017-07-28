@@ -160,13 +160,11 @@ def pcat_lens_mock_syst():
    
     seed(4)
     
-    numbswepnomi = 10000
+    numbswepnomi = 100000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
-    dictargs['makeplot'] = False
     dictargs['diagmode'] = True
-    dictargs['inittype'] = 'refr'
-    
+    #dictargs['inittype'] = 'refr'
     #dictargs['diagmode'] = True
     #dictargs['makeplotinit'] = False
     #dictargs['makeplotfram'] = False
