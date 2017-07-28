@@ -674,7 +674,7 @@ def writ_ferm_back():
     smth = True
     
     #listrecotype = ['rec7', 'rec8']
-    listrecotype = ['rec8']
+    listrecotype = ['manu']
     for recotype in listrecotype:
         gdat.evtt, gdat.numbevtt, gdat.indxevtt = tdpy.util.retr_evttferm(recotype)
         ## templates
@@ -1013,8 +1013,8 @@ def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expoferm
                    #indxevttincl=indxevttincl, \
                    savestat=True, \
                    inittype='reco', \
-                   #truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
-                   truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
+                   truebacktype=[1., 'sbrtfdfmsmthmanunorm.fits'], \
+                   #truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
                    strgexpo=strgexpo, \
                    strgexprsbrt=strgexprsbrt, \
                   )
