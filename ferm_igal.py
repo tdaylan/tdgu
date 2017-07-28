@@ -964,8 +964,8 @@ def pcat_ferm_inpt_igal_popl(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    savestat=True, \
                    truemaxmnumbelem=array([30, 30, 30]), \
                    truenumbelem=array([20, 20, 20]), \
-                   #truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
-                   truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
+                   truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
+                   #truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
                    strgexpo=strgexpo, \
                    strgexprsbrt=strgexprsbrt, \
                   )
@@ -984,8 +984,8 @@ def pcat_ferm_mock_igal_popl():
                    indxenerincl=arange(1, 4), \
                    proppsfp=False, \
                    strgexpo='expofermcmp0igal.fits', \
-                   #truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
-                   truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
+                   truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
+                   #truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
                    truemaxmnumbelem=array([30, 30, 30]), \
                    truenumbelem=array([20, 20, 20]), \
                    truespatdisttype=['unif', 'disc', 'gang'], \
@@ -1013,8 +1013,8 @@ def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expoferm
                    #indxevttincl=indxevttincl, \
                    savestat=True, \
                    inittype='reco', \
-                   truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
-                   #truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
+                   #truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
+                   truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
                    strgexpo=strgexpo, \
                    strgexprsbrt=strgexprsbrt, \
                   )
@@ -1032,8 +1032,8 @@ def pcat_ferm_mock_igal():
                    proppsfp=False, \
                    checprio=True, \
                    strgexpo='expofermcmp0igal.fits', \
-                   truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
-                   #truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
+                   #truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
+                   truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
                    diagmode=True, \
                    maxmgangdata=deg2rad(20.), \
                   )
