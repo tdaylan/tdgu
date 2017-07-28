@@ -887,27 +887,6 @@ def pcat_ferm_inpt_ptch():
              )
     
     
-def pcat_ferm_inpt_igal_popl(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expofermcmp0igal.fits'):
-    
-    recotype = 'rec7'
-    pcat.main.init( \
-                   numbswep=100000, \
-                   maxmgangdata=deg2rad(20.), \
-                   indxenerincl=arange(1, 4), \
-                   indxevttincl=arange(2, 4), \
-                   proppsfp=False, \
-                   diagmode=True, \
-                   #verbtype=2, \
-                   savestat=True, \
-                   minmflux=1e-8, \
-                   maxmflux=3e-6, \
-                   fittmaxmnumbelem=array([2]), \
-                   truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
-                   strgexpo=strgexpo, \
-                   strgexprsbrt=strgexprsbrt, \
-                  )
-    
-    
 def pcat_ferm_mock_igal_brok():
      
     listtruefluxdistbrek = array([1e-10, 3e-10, 1e-9, 3e-9, 1e-8])
@@ -971,39 +950,46 @@ def pcat_ferm_mock_igal_syst():
                       )
 
 
+def pcat_ferm_inpt_igal_popl(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expofermcmp0igal.fits'):
+    
+    recotype = 'rec7'
+    pcat.main.init( \
+                   numbswep=100000, \
+                   numbswepplot=10000, \
+                   maxmgangdata=deg2rad(20.), \
+                   indxenerincl=arange(1, 4), \
+                   indxevttincl=arange(2, 4), \
+                   proppsfp=False, \
+                   diagmode=True, \
+                   savestat=True, \
+                   truemaxmnumbelem=array([30, 30, 30]), \
+                   truenumbelem=array([20, 20, 20]), \
+                   #truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
+                   truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
+                   strgexpo=strgexpo, \
+                   strgexprsbrt=strgexprsbrt, \
+                  )
+    
+    
 def pcat_ferm_mock_igal_popl():
     
     recotype = 'rec7'
 
     pcat.main.init( \
-                   numbswep=1200, \
-                   numbburn=0, \
-                   factthin=400, \
+                   numbswep=100000, \
+                   numbswepplot=10000, \
+                   maxmgangdata=deg2rad(20.), \
                    diagmode=True, \
-                   verbtype=2, \
-                   indxevttincl=arange(3, 4), \
+                   indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
+                   proppsfp=False, \
                    strgexpo='expofermcmp0igal.fits', \
-                   makeplot=False, \
-                   truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
-                   maxmgangdata=deg2rad(10.), \
-                   trueminmflux=5e-11, \
-                   truemaxmflux=1e-7, \
-                   truemaxmnumbelem=array([4, 4]), \
-                   truenumbelem=array([2, 2]), \
-                   #fittmaxmnumbelem=array([5, 5, 5]), \
-                   #truenumbelem=array([4, 4, 4]), \
-                   #fittmaxmnumbelem=array([10]), \
-                   #truenumbelem=array([10]), \
-                   #truespatdisttype=['gang'], \
-                   #truespatdisttype=['gang'], \
-                   #truespatdisttype=['unif', 'disc', 'gang'], \
-                   truespatdisttype=['unif', 'gang'], \
-                   #truefluxdisttype='powr', \
-                   #truespectype=['powr']
-                   #truespectype=['powr', 'expc', 'expc']
-                   #truespatdisttype=['unif', 'disc', 'gang'], \
-                   truespectype=['powr', 'expc']
+                   #truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
+                   truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
+                   truemaxmnumbelem=array([30, 30, 30]), \
+                   truenumbelem=array([20, 20, 20]), \
+                   truespatdisttype=['unif', 'disc', 'gang'], \
+                   truespectype=['powr', 'expc', 'expc']
                   )
 
 
@@ -1016,24 +1002,19 @@ def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expoferm
         indxevttincl = array([2, 3])
 
     pcat.main.init( \
-                   numbswep=200000, \
-                   numbburn=0, \
-                   factthin=200, \
+                   numbswep=100000, \
                    numbswepplot=10000, \
-                   #diagmode=True, \
-                   killexpo=True, \
+                   diagmode=True, \
                    proppsfp=False, \
-                   #makeplotinit=False, \
-                   #shrtfram=True, \
-                   fittmaxmnumbelem=array([400]), \
                    maxmgangdata=deg2rad(20.), \
-                   indxevttincl=indxevttincl, \
-                   indxenerincl=arange(0, 5), \
+                   #indxenerincl=arange(0, 5), \
+                   indxenerincl=arange(1, 4), \
+                   indxevttincl=arange(2, 4), \
+                   #indxevttincl=indxevttincl, \
                    savestat=True, \
                    inittype='reco', \
-                   minmflux=3e-9, \
-                   maxmflux=3e-6, \
-                   truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
+                   truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
+                   #truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
                    strgexpo=strgexpo, \
                    strgexprsbrt=strgexprsbrt, \
                   )
@@ -1049,11 +1030,10 @@ def pcat_ferm_mock_igal():
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
                    proppsfp=False, \
-                   #makeplot=False, \
-                   killexpo=True, \
-                   #checprio=True, \
+                   checprio=True, \
                    strgexpo='expofermcmp0igal.fits', \
-                   truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
+                   truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
+                   #truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
                    diagmode=True, \
                    maxmgangdata=deg2rad(20.), \
                   )
