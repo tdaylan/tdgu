@@ -1,7 +1,5 @@
 from __init__ import *
 
-
-
 def writ_ferm_rec8_back():
     
     gdat = tdpy.util.gdatstrt()
@@ -43,10 +41,6 @@ def writ_ferm_raww():
     
     gdat.strgener = ['gtbndefn_%s.fits' % gdat.enertype[k] for k in range(numbproc)]
     
-    gdat.indxevtt = arange(4)
-
-    gdat.evtt = [4, 8, 16, 32]
-
     indxproc = arange(numbproc)
     
     if numbproc == 1:
@@ -69,6 +63,8 @@ def writ_ferm_raww_work(gdat, indxprocwork):
     # make file lists
     infl = gdat.pathdata + 'phot_%s.txt' % rtag
     spac = gdat.pathdata + 'spac_%s.txt' % rtag
+    
+    gdat.evtt, gdat.numbevtt, gdat.indxevtt = tdpy.util.retr_evttferm(gdat.recotype[indxprocwork])
         
     numbweek = (gdat.weekfinl[indxprocwork] - gdat.weekinit[indxprocwork])
     listweek = floor(linspace(gdat.weekinit[indxprocwork], gdat.weekfinl[indxprocwork] - 1, numbweek)).astype(int)
@@ -151,7 +147,12 @@ def writ_ferm_raww_work(gdat, indxprocwork):
     os.system(cmnd)
 
 
-def writ_ferm(recotype='rec7', enertype='back', regitype='igal', numbside=256):
+def writ_ferm():
+
+    recotype = 'rec7'
+    regitype = 'igal'
+    numbside = 256
+    enertype = 'pnts'
     
     pathinpt = os.environ["TDGU_DATA_PATH"] + '/ferm_igal/data/'
     pathoutp = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
@@ -168,11 +169,9 @@ def writ_ferm(recotype='rec7', enertype='back', regitype='igal', numbside=256):
     diffener = binsener[1:] - binsener[:-1]
 
     numbside = 256
-    evtt = array([4, 8, 16, 32])
+    evtt, numbevtt, indxevtt = tdpy.util.retr_evttferm(recotype)
 
     numbpixl = 12 * numbside**2
-    numbevtt = evtt.size
-    indxevtt = arange(numbevtt)
     apix = 4. * pi / numbpixl
 
     cntp = zeros((numbener, numbpixl, numbevtt))
@@ -181,23 +180,19 @@ def writ_ferm(recotype='rec7', enertype='back', regitype='igal', numbside=256):
     
     for m in indxevtt:
 
-        if recotype == 'rec7':
-            if m < 2:
-                continue
-            elif m == 2:
-                thisevtt = 2
-            elif m == 3:
-                thisevtt = 1
-        else:
-            thisevtt = evtt[m]
+        thisevtt = evtt[m]
 
         path = pathinpt + '/expoferm%04d%s%s%04d.fits' % (thisevtt, recotype, enertype, numbside)
         expoarry = pf.getdata(path, 1)
+        print 'expoarry'
+        summgene(expoarry)
         for i in indxener:
             expo[i, :, m] = expoarry['ENERGY%d' % (i + 1)]
 
         path = pathinpt + '/cntpferm%04d%s%s%04d.fits' % (thisevtt, recotype, enertype, numbside)
         cntparry = pf.getdata(path)
+        print 'cntparry'
+        summgene(cntparry)
         for i in indxener:
             cntp[i, :, m] = cntparry['CHANNEL%d' % (i + 1)]
 
@@ -228,9 +223,17 @@ def writ_ferm(recotype='rec7', enertype='back', regitype='igal', numbside=256):
                 expo[i, :, m] = hp.alm2map(almc, numbside)
 
     path = pathoutp + '/expoferm%s%s%s%04d.fits' % (recotype, enertype, regitype, numbside)
+    print 'Writing to %s...' % path
+    print 'expo'
+    summgene(expo)
+    print
     pf.writeto(path, expo, clobber=True)
 
     path = pathoutp + '/sbrtferm%s%s%s%04d.fits' % (recotype, enertype, regitype, numbside)
+    print 'Writing to %s...' % path
+    print 'sbrt'
+    summgene(sbrt)
+    print
     pf.writeto(path, sbrt, clobber=True)
 
 
@@ -392,7 +395,7 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     lgalfgl3 = datafgl3['glon']
     lgalfgl3 = ((lgalfgl3 - 180.) % 360.) - 180.
     bgalfgl3 = datafgl3['glat']
-    stdvfgl3 = tdpy.util.retr_fwhmferm(meanener, indxevttrofi) / 2.
+    stdvfgl3 = tdpy.util.retr_fwhmferm(meanener, indxevtt) / 2.
     specfgl3 = stack((datafgl3['Flux100_300'], datafgl3['Flux300_1000'], datafgl3['Flux1000_3000'], \
                                                             datafgl3['Flux3000_10000'], datafgl3['Flux10000_100000'])) / gdat.diffener[:, None]
     
@@ -640,10 +643,6 @@ def writ_ferm_back():
     gdat.binsener, gdat.meanener, gdat.diffener, gdat.numbener, gdat.indxener = tdpy.util.retr_axis(bins=gdat.binsener, scal='logt')
     gdat.strgbinsener = ['%.3g GeV - %.3g GeV' % (gdat.binsener[i], gdat.binsener[i+1]) for i in gdat.indxener]
 
-    ## event type
-    gdat.indxevtt = arange(4)
-    gdat.numbevtt = gdat.indxevtt.size
-    gdat.indxevtt = arange(gdat.numbevtt)
 
     ## pixelization
     gdat.numbside = 256
@@ -670,93 +669,97 @@ def writ_ferm_back():
     gdat.sbrtisot = tdpy.util.retr_isot(gdat.binsener)
     
     smth = True
+    
+    #listrecotype = ['rec7', 'rec8']
+    listrecotype = ['rec8']
+    for recotype in listrecotype:
+        gdat.evtt, gdat.numbevtt, gdat.indxevtt = tdpy.util.retr_evttferm(recotype)
+        ## templates
+        gdat.sbrtback = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
+        gdat.sbrtbacksmth = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
+        gdat.sbrtbacknorm = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
+        for c, strg in enumerate(listnameback):
 
-    ## templates
-    gdat.sbrtback = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
-    gdat.sbrtbacksmth = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
-    gdat.sbrtbacknorm = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
-    for c, strg in enumerate(listnameback):
-
-        # temp -- ROI should be fixed at 40 X 40 degree^2
-        path = gdat.pathdatapcat + strg + '.fits'
-        if False and os.path.isfile(path) and not writ:
-            print 'Reading %s...' % path
-            gdat.sbrtback[c, :, :, :] = pf.getdata(path)
-        else:
-            
-            if strg.startswith('sbrtfdfm'):
-                sbrtbacktemp = tdpy.util.retr_sbrtfdfm(gdat.binsener) 
-            if strg == 'plnkdust':
-                pathtemp = gdat.pathdata + 'plnk/HFI_CompMap_ThermalDustModel_2048_R1.20.fits'
-                sbrtbacktemp = pf.getdata(pathtemp, 1)['RADIANCE']
-                sbrtbacktemp = hp.ud_grade(sbrtbacktemp, gdat.numbside, order_in='NESTED', order_out='RING')
-            if strg == 'wisestar':
-                pathtemp = gdat.pathdata + 'wssa_sample_1024.fits'
-                sbrtbacktemp = pf.getdata(pathtemp, 0)
-                sbrtbacktemp = hp.ud_grade(sbrtbacktemp, gdat.numbside, order_in='RING', order_out='RING')
-            if strg == 'finkdust':
-                pathtemp = gdat.pathdata + 'lambda_sfd_ebv.fits'
-                sbrtbacktemp = pf.getdata(pathtemp)['TEMPERATURE']
-                sbrtbacktemp = hp.ud_grade(sbrtbacktemp, gdat.numbside, order_in='NESTED', order_out='RING')
-            if strg == 'darktemp':
-                sbrtbacktemp = tdpy.util.retr_nfwp(1., gdat.numbside)
-
-            # temp
-            #gdat.sbrtback[where(gdat.sbrtback < 0.)] = 0.
-            
-            print 'listnameback[c]'
-            print listnameback[c]
-            print 'strg'
-            print strg
-            print
-
-            # make copies
-            for m in gdat.indxevtt:
-                if listnameback[c].startswith('sbrtfdfm'):
-                    gdat.sbrtback[c, :, :, m] = sbrtbacktemp
-                else:
-                    for i in gdat.indxener:
-                        gdat.sbrtback[c, i, :, m] = sbrtbacktemp
-
+            # temp -- ROI should be fixed at 40 X 40 degree^2
             path = gdat.pathdatapcat + strg + '.fits'
-            print 'gdat.sbrtback[c, :, :, :]'
-            summgene(gdat.sbrtback[c, :, :, :])
-            print 'Writing to %s...' % path
-            pf.writeto(path, gdat.sbrtback[c, :, :, :], clobber=True)
-            
-            # normalize
-            for i in gdat.indxener:
-                for m in gdat.indxevtt: 
-                    gdat.sbrtbacknorm[c, i, :, m] = gdat.sbrtback[c, i, :, m] / mean(gdat.sbrtback[c, i, gdat.indxpixlnorm, m])
-            print 'gdat.sbrtbacknorm[c, :, :, :]'
-            summgene(gdat.sbrtbacknorm[c, :, :, :])
-            path = gdat.pathdatapcat + strg + 'norm.fits'
-            print 'Writing to %s...' % path
-            pf.writeto(path, gdat.sbrtbacknorm[c, :, :, :], clobber=True)
-            
-            if smth:
-                gdat.sbrtbacksmth[c, :, :, :] = tdpy.util.smth_ferm(gdat.sbrtback[c, :, :, :], gdat.meanener, gdat.indxevtt, kerntype='gaus')
+            if False and os.path.isfile(path) and not writ:
+                print 'Reading %s...' % path
+                gdat.sbrtback[c, :, :, :] = pf.getdata(path)
+            else:
                 
-                print 'gdat.sbrtbacksmth[c, :, :, :]'
-                summgene(gdat.sbrtbacksmth[c, :, :, :])
-                path = gdat.pathdatapcat + strg + 'smth.fits'
+                if strg.startswith('sbrtfdfm'):
+                    sbrtbacktemp = tdpy.util.retr_sbrtfdfm(gdat.binsener) 
+                if strg == 'plnkdust':
+                    pathtemp = gdat.pathdata + 'plnk/HFI_CompMap_ThermalDustModel_2048_R1.20.fits'
+                    sbrtbacktemp = pf.getdata(pathtemp, 1)['RADIANCE']
+                    sbrtbacktemp = hp.ud_grade(sbrtbacktemp, gdat.numbside, order_in='NESTED', order_out='RING')
+                if strg == 'wisestar':
+                    pathtemp = gdat.pathdata + 'wssa_sample_1024.fits'
+                    sbrtbacktemp = pf.getdata(pathtemp, 0)
+                    sbrtbacktemp = hp.ud_grade(sbrtbacktemp, gdat.numbside, order_in='RING', order_out='RING')
+                if strg == 'finkdust':
+                    pathtemp = gdat.pathdata + 'lambda_sfd_ebv.fits'
+                    sbrtbacktemp = pf.getdata(pathtemp)['TEMPERATURE']
+                    sbrtbacktemp = hp.ud_grade(sbrtbacktemp, gdat.numbside, order_in='NESTED', order_out='RING')
+                if strg == 'darktemp':
+                    sbrtbacktemp = tdpy.util.retr_nfwp(1., gdat.numbside)
+
+                # temp
+                #gdat.sbrtback[where(gdat.sbrtback < 0.)] = 0.
+                
+                print 'listnameback[c]'
+                print listnameback[c]
+                print 'strg'
+                print strg
+                print
+
+                # make copies
+                for m in gdat.indxevtt:
+                    if listnameback[c].startswith('sbrtfdfm'):
+                        gdat.sbrtback[c, :, :, m] = sbrtbacktemp
+                    else:
+                        for i in gdat.indxener:
+                            gdat.sbrtback[c, i, :, m] = sbrtbacktemp
+
+                path = gdat.pathdatapcat + strg + '.fits'
+                print 'gdat.sbrtback[c, :, :, :]'
+                summgene(gdat.sbrtback[c, :, :, :])
                 print 'Writing to %s...' % path
-                pf.writeto(path, gdat.sbrtbacksmth[c, :, :, :], clobber=True)
+                pf.writeto(path, gdat.sbrtback[c, :, :, :], clobber=True)
                 
                 # normalize
                 for i in gdat.indxener:
                     for m in gdat.indxevtt: 
-                        gdat.sbrtbacksmth[c, i, :, m] = gdat.sbrtbacksmth[c, i, :, m] / mean(gdat.sbrtbacksmth[c, i, gdat.indxpixlnorm, m])
-                
-                print 'gdat.sbrtbacksmth[c, :, :, :]'
-                summgene(gdat.sbrtbacksmth[c, :, :, :])
-                path = gdat.pathdatapcat + strg + 'smthnorm.fits'
+                        gdat.sbrtbacknorm[c, i, :, m] = gdat.sbrtback[c, i, :, m] / mean(gdat.sbrtback[c, i, gdat.indxpixlnorm, m])
+                print 'gdat.sbrtbacknorm[c, :, :, :]'
+                summgene(gdat.sbrtbacknorm[c, :, :, :])
+                path = gdat.pathdatapcat + strg + 'norm.fits'
                 print 'Writing to %s...' % path
-                pf.writeto(path, gdat.sbrtbacksmth[c, :, :, :], clobber=True)
+                pf.writeto(path, gdat.sbrtbacknorm[c, :, :, :], clobber=True)
+                
+                if smth:
+                    gdat.sbrtbacksmth[c, :, :, :] = tdpy.util.smth_ferm(gdat.sbrtback[c, :, :, :], gdat.meanener, recotype, kerntype='gaus')
+                    
+                    print 'gdat.sbrtbacksmth[c, :, :, :]'
+                    summgene(gdat.sbrtbacksmth[c, :, :, :])
+                    path = gdat.pathdatapcat + strg + 'smth%s.fits' % recotype
+                    print 'Writing to %s...' % path
+                    pf.writeto(path, gdat.sbrtbacksmth[c, :, :, :], clobber=True)
+                    
+                    # normalize
+                    for i in gdat.indxener:
+                        for m in gdat.indxevtt: 
+                            gdat.sbrtbacksmth[c, i, :, m] = gdat.sbrtbacksmth[c, i, :, m] / mean(gdat.sbrtbacksmth[c, i, gdat.indxpixlnorm, m])
+                    
+                    print 'gdat.sbrtbacksmth[c, :, :, :]'
+                    summgene(gdat.sbrtbacksmth[c, :, :, :])
+                    path = gdat.pathdatapcat + strg + 'smth%snorm.fits' % recotype
+                    print 'Writing to %s...' % path
+                    pf.writeto(path, gdat.sbrtbacksmth[c, :, :, :], clobber=True)
             
-    merg_maps(numbside=512)
-    merg_maps(mpolmerg=360.)
-    merg_maps(mpolmerg=90.)
+    #merg_maps(numbside=512)
+    #merg_maps(mpolmerg=360.)
+    #merg_maps(mpolmerg=90.)
     
     # load the map to the array whose power spectrum will be calculated
     gdat.mapsplot[1:, :] = gdat.sbrtback[:, 0, :, 0]
@@ -1001,24 +1004,31 @@ def pcat_ferm_mock_igal_popl():
 
 def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expofermcmp0igal.fits'):
     
+    recotype = 'rec7'
+    if recotype == 'rec7':
+        indxevttincl = array([0, 1])
+    if recotype == 'rec8':
+        indxevttincl = array([2, 3])
+
     pcat.main.init( \
-                   numbswep=10000, \
+                   numbswep=200000, \
                    numbburn=0, \
-                   factthin=1000, \
+                   factthin=200, \
                    numbswepplot=10000, \
-                   diagmode=True, \
+                   #diagmode=True, \
+                   killexpo=True, \
                    proppsfp=False, \
                    #makeplotinit=False, \
                    #shrtfram=True, \
-                   fittmaxmnumbelem=array([200]), \
+                   fittmaxmnumbelem=array([400]), \
                    maxmgangdata=deg2rad(20.), \
-                   indxevttincl=arange(2, 4), \
-                   indxenerincl=arange(1, 4), \
+                   indxevttincl=indxevttincl, \
+                   indxenerincl=arange(0, 5), \
                    savestat=True, \
                    inittype='reco', \
-                   minmflux=1e-8, \
+                   minmflux=3e-9, \
                    maxmflux=3e-6, \
-                   truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
+                   truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
                    strgexpo=strgexpo, \
                    strgexprsbrt=strgexprsbrt, \
                   )
@@ -1028,12 +1038,17 @@ def pcat_ferm_mock_igal():
      
     pcat.main.init( \
                    numbswep=100000, \
-                   indxevttincl=arange(3, 4), \
+                   numbswepplot=10000, \
+                   indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
+                   proppsfp=False, \
+                   #makeplot=False, \
+                   killexpo=True, \
+                   #checprio=True, \
                    strgexpo='expofermcmp0igal.fits', \
                    truebacktype=[1., 'sbrtfdfmnorm.fits'], \
                    diagmode=True, \
-                   maxmgangdata=deg2rad(10.), \
+                   maxmgangdata=deg2rad(20.), \
                   )
 
 

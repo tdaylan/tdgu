@@ -163,8 +163,10 @@ def pcat_lens_mock_syst():
     numbswepnomi = 10000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
+    dictargs['makeplot'] = False
     dictargs['diagmode'] = True
     dictargs['inittype'] = 'refr'
+    
     #dictargs['diagmode'] = True
     #dictargs['makeplotinit'] = False
     #dictargs['makeplotfram'] = False
@@ -498,6 +500,18 @@ def pcat_lens_mock():
     for k in range(numbiter):
         pcat.main.init( \
                        elemtype='lens', \
+                       inittype='refr', \
+                       numbswep=100000, \
+                       numbburn=0, \
+                       factthin=100, \
+                       #verbtype=2, \
+                       proppsfp=False, \
+                       makeplotinit=False, \
+                       #sqzeprop=True, \
+                       #makeplot=False, \
+                       makeplotfram=False, \
+                       #factthin=3000, \
+                       truemaxmnumbelem=array([0]), \
                        #verbtype=2, \
                        #truenumbelem=array([5]), \
                        #truemaxmnumbelem=array([10]), \
@@ -513,9 +527,7 @@ def pcat_lens_mock():
                        #truemaxmnumbelem=array([5]), \
                        #truenumbelem=array([5]), \
                        #verbtype=2, \
-                       numbswep=100000, \
                        #truestdvdefsdistslop=0.01, \
-                       factthin=3000, \
                        #rtagredo='20170610_133749_pcat_lens_mock_10000', \
                        #inittype='rand', \
                        #optihess=False, \
