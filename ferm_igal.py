@@ -32,18 +32,20 @@ def writ_ferm_raww():
             gdat.evtc.append(2)
             gdat.photpath.append('p7v6c')
             gdat.weekinit.append(9)
-            gdat.weekfinl.append(218)
+            gdat.weekfinl.append(11)
+            #gdat.weekfinl.append(218)
         if gdat.recotype[n] == 'rec8':
             gdat.evtc.append(128)
             gdat.photpath.append('photon')
             gdat.weekinit.append(11)
-            gdat.weekfinl.append(420)
+            gdat.weekfinl.append(13)
+            #gdat.weekfinl.append(420)
     
     gdat.strgener = ['gtbndefn_%s.fits' % gdat.enertype[k] for k in range(numbproc)]
     
     indxproc = arange(numbproc)
     
-    if numbproc == 1:
+    if numbproc == 1 or gdat.test:
         writ_ferm_raww_work(gdat, 0)
     else:
         # process pool
@@ -84,19 +86,10 @@ def writ_ferm_raww_work(gdat, indxprocwork):
         if gdat.recotype[indxprocwork] == 'rec8':
             strgirfn = 'P8R2_SOURCE_V6'
 
+        thisevtt = gdat.evtt[m]
         if gdat.recotype[indxprocwork] == 'rec7':
-            if m == 3:
-                thisevtt = 1
-                thisevttdepr = 0
-            elif m == 2:
-                thisevtt = 2
-                thisevttdepr = 1
-            else:
-                continue
-            strgpsfn = 'convtype=%d' % thisevttdepr
-
+            strgpsfn = 'convtype=%d' % thisevtt
         if gdat.recotype[indxprocwork] == 'rec8':
-            thisevtt = gdat.evtt[m]
             strgpsfn = 'evtype=%d' % thisevtt
          
         sele = gdat.pathdata + 'fermsele%04d%s.fits' % (thisevtt, rtag)
@@ -109,7 +102,7 @@ def writ_ferm_raww_work(gdat, indxprocwork):
         cmnd = 'gtselect infile=' + infl + ' outfile=' + sele + ' ra=INDEF dec=INDEF rad=INDEF ' + \
             gdat.strgtime[indxprocwork] + ' emin=100 emax=100000 zmax=90 evclass=%d %s' % (gdat.evtc[indxprocwork], strgpsfn)
         
-        if os.path.isfile(cntp) and os.path.isfile(expo):
+        if os.path.isfile(cntp) and os.path.isfile(expo) and not gdat.test:
             continue
         
         print cmnd
