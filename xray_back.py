@@ -2,16 +2,15 @@ from __init__ import *
 from astropy.coordinates import SkyCoord
 from pcat.util import retr_chandata
 
-def writ_data():
+def writ_chan():
 
-    print 'Producing CDF-S images for PCAT...'
+    print 'Writing CDF-S dataset for PCAT...'
     
     pixlsize = deg2rad(0.492 / 3600.)
     apix = pixlsize**2
             
     numbevtt = 1
   
-    #listnumbside = [300, 480]
     listnumbside = [300]
     listdatatype = ['home', 'extr']
     for datatype in listdatatype:
@@ -56,10 +55,10 @@ def writ_data():
                     if datatype == 'home':
                         for i in indxener:
                             # count map
-                            path = pathdata + '%.2f-%.2f_thresh.img' % (binsener[i], binsener[i+1])
-                            #path = pathdata + '%dmsc/sbrt%04d.fits' % (expomaps, i)
+                            path = '/n/fink1/rfeder/obsids/full/merged_%dMs/merged_%dMs_%d/%dMs_%d_%s' % (expomaps[k], expomaps[k], i, expomaps[k], i, 'thresh.expmap')
+                            #path = pathdata + '%.2f-%.2f_thresh.img' % (binsener[i], binsener[i+1])
                             temp = pf.getdata(path, 0)
-
+                    
                     numbsideyaxi = temp.shape[0]
                     numbsidexaxi = temp.shape[1]
                     cntrindx = array([numbsideyaxi, numbsidexaxi]) / 2
@@ -163,6 +162,13 @@ def writ_data():
 
                 pathdatapcat = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
                 
+                if numbside == 300:
+                    mapsbind = zeros((10, 10))
+                    for a in range(30):
+                        for b in range(30):
+                            mapsbind[a, b] = mean(expo[0, a*30:(a+1)*30, b*30:(b+1)*30, 0])
+                    print mapsbind
+
                 path = pathdatapcat + 'expochan%s.fits' % strgmaps
                 print 'Writing to %s...' % path
                 pf.writeto(path, expo, clobber=True)
