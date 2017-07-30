@@ -20,6 +20,7 @@ def writ_chan():
         if datatype == 'home':
             binsener = array([0.5, 0.91, 1.66, 3.02, 5.49, 10.])
             expomaps = [2, 4, 7]
+            strgener = ['0.5', '0.91028', '1.65723', '3.01709', '5.4928', '10.0']
         else:
             expomaps = [2, 4]
             binsener = array([0.5, 2., 8.])
@@ -55,7 +56,7 @@ def writ_chan():
                     if datatype == 'home':
                         for i in indxener:
                             # count map
-                            path = '/n/fink1/rfeder/obsids/full/merged_%dMs/rest_fov/%d/elow_ehigh_flux.img' % (expomaps[k], i)
+                            path = '/n/fink1/rfeder/obsids/full/merged_%dMs/rest_fov/%d/%s_%s_flux.img' % (expomaps[k], i, strgener[i], strgener[i+1])
                             #path = '/n/fink1/rfeder/obsids/full/merged_%dMs/merged_%dMs_%d/%dMs_%d_%s' % (expomaps[k], expomaps[k], i, expomaps[k], i, 'thresh.expmap')
                             #path = pathdata + '%.2f-%.2f_thresh.img' % (binsener[i], binsener[i+1])
                             temp = pf.getdata(path, 0)
@@ -128,7 +129,7 @@ def writ_chan():
                     strgvarbmine = ['expo', 'sbrt']
                     for i in indxener:
                         for a in range(2):
-                            path = '/n/fink1/rfeder/obsids/full/merged_%dMs/rest_fov/%d/elow_ehigh_%s' % (expomaps[k], i, strgvarb[a])
+                            path = '/n/fink1/rfeder/obsids/full/merged_%dMs/rest_fov/%d/%s_%s_%s' % (expomaps[k], i, strgener[i], strgener[i+1], strgvarb[a])
                             #path = '/n/fink1/rfeder/obsids/full/merged_%dMs/merged_%dMs_%d/%dMs_%d_%s' % (expomaps[k], expomaps[k], i, expomaps[k], i, strgvarb[a])
                             if a == 0:
                                 cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
