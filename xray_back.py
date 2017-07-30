@@ -78,8 +78,8 @@ def writ_chan():
                 print 'expomaps[k]'
                 print expomaps[k]
                 
-                cntp = empty((numbener, numbside, numbside, numbevtt))
-                expo = empty((numbener, numbside, numbside, numbevtt))
+                cntp = zeros((numbener, numbside, numbside, numbevtt))
+                expo = zeros((numbener, numbside, numbside, numbevtt))
                 cntpback = empty((numbener, numbside, numbside, numbevtt))
                 
                 if datatype == 'extr':
