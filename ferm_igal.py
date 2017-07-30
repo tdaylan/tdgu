@@ -979,6 +979,7 @@ def pcat_ferm_mock_igal_popl():
                    numbswep=100000, \
                    numbswepplot=10000, \
                    maxmgangdata=deg2rad(20.), \
+                   makeplot=False, \
                    diagmode=True, \
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
