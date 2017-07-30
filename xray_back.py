@@ -127,7 +127,9 @@ def writ_chan():
                     strgvarbmine = ['expo', 'sbrt']
                     for i in indxener:
                         for a in range(2):
-                            path = '/n/fink1/rfeder/obsids/full/merged_%dMs/merged_%dMs_%d/%dMs_%d_%s' % (expomaps[k], expomaps[k], i, expomaps[k], i, strgvarb[a])
+                            n/fink1/rfeder/obsids/full/[merged_2Ms]/rest_fov/[0]/elow_ehigh_flux.img
+                            path = '/n/fink1/rfeder/obsids/full/merged_%dMs/rest_fov/%d/elow_ehigh_%s' % (expomaps[k], i, strgvarb[a])
+                            #path = '/n/fink1/rfeder/obsids/full/merged_%dMs/merged_%dMs_%d/%dMs_%d_%s' % (expomaps[k], expomaps[k], i, expomaps[k], i, strgvarb[a])
                             if a == 0:
                                 cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
                             if a == 1:
@@ -149,7 +151,8 @@ def writ_chan():
                     indxtemp = where(expo[i, :, :, 0] > 0.)
                     sbrtback[i, indxtemp[0], indxtemp[1], 0] = cntpback[i, indxtemp[0], indxtemp[1], 0] / expo[i, indxtemp[0], indxtemp[1], 0] / diffener[i] / apix
                 
-                if False:
+                if True:
+                    
                     for i in indxener:
                         print 'i'
                         print i

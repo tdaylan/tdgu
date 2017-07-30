@@ -1008,6 +1008,8 @@ def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expoferm
                    proppsfp=False, \
                    maxmgangdata=deg2rad(20.), \
                    #indxenerincl=arange(0, 5), \
+                   shrtfram=True, \
+                   makeplotinit=False, \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
                    #indxevttincl=indxevttincl, \
