@@ -168,8 +168,8 @@ def writ_chan():
                 
                 if numbside == 300:
                     mapsbind = zeros((10, 10))
-                    for a in range(30):
-                        for b in range(30):
+                    for a in range(10):
+                        for b in range(10):
                             mapsbind[a, b] = mean(expo[0, a*30:(a+1)*30, b*30:(b+1)*30, 0])
                     print mapsbind
 
