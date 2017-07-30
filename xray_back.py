@@ -136,9 +136,6 @@ def writ_chan():
                             if a == 1:
                                 expo[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
                 
-                print 'cntp'
-                summgene(cntp)
-                
                 numbsideyaxi = pf.getdata(path, 0).shape[0]
                 numbsidexaxi = pf.getdata(path, 0).shape[1]
 
@@ -153,7 +150,6 @@ def writ_chan():
                     sbrtback[i, indxtemp[0], indxtemp[1], 0] = cntpback[i, indxtemp[0], indxtemp[1], 0] / expo[i, indxtemp[0], indxtemp[1], 0] / diffener[i] / apix
                 
                 if True:
-                    
                     for i in indxener:
                         print 'i'
                         print i
@@ -186,8 +182,11 @@ def writ_chan():
                     print 'Writing to %s...' % path
                     pf.writeto(path, sbrtback, clobber=True)
                 
-            print
-            print
+                print
+                print
+                print
+                print
+                print
 
 
 # test suites

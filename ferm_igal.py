@@ -1002,19 +1002,20 @@ def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expoferm
         indxevttincl = array([2, 3])
 
     pcat.main.init( \
-                   numbswep=100000, \
+                   numbswep=200000, \
                    numbswepplot=10000, \
                    diagmode=True, \
                    proppsfp=False, \
                    maxmgangdata=deg2rad(20.), \
                    #indxenerincl=arange(0, 5), \
-                   shrtfram=True, \
+                   #shrtfram=True, \
                    makeplotinit=False, \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
                    #indxevttincl=indxevttincl, \
                    savestat=True, \
                    inittype='reco', \
+                   allwrefr=False, \
                    truebacktype=[1., 'sbrtfdfmsmthmanunorm.fits'], \
                    #truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
                    strgexpo=strgexpo, \
