@@ -43,6 +43,9 @@ def writ_chan():
                 
                 strgmaps = '%s%dmsc%04d' % (datatype, expomaps[k], numbside)
 
+                print 'expomaps[k]'
+                print expomaps[k]
+                
                 # determine map shape
                 if k == 0:
                     if datatype == 'extr':
@@ -70,13 +73,14 @@ def writ_chan():
                     minmindx = cntrindx - numbside / 2
                     maxmindx = cntrindx + numbside / 2
                     
+                    print 'numbsideyaxi'
+                    print numbsideyaxi
+                    print 'numbsidexaxi'
+                    print numbsidexaxi
                     print 'minmindx[0]'
                     print minmindx[0]
                     print 'minmindx[1]'
                     print minmindx[1]
-                
-                print 'expomaps[k]'
-                print expomaps[k]
                 
                 cntp = zeros((numbener, numbside, numbside, numbevtt))
                 expo = zeros((numbener, numbside, numbside, numbevtt))
@@ -133,6 +137,8 @@ def writ_chan():
                             #path = '/n/fink1/rfeder/obsids/full/merged_%dMs/merged_%dMs_%d/%dMs_%d_%s' % (expomaps[k], expomaps[k], i, expomaps[k], i, strgvarb[a])
                             if a == 0:
                                 cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                                print 'pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]'
+                                summgene(pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]])
                             if a == 1:
                                 expo[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
                 
