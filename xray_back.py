@@ -85,6 +85,8 @@ def writ_chan():
                 cntp = zeros((numbener, numbside, numbside, numbevtt))
                 expo = zeros((numbener, numbside, numbside, numbevtt))
                 cntpback = empty((numbener, numbside, numbside, numbevtt))
+                sbrt = zeros_like(cntp)
+                sbrtback = zeros_like(cntp)
                 
                 if datatype == 'extr':
                     if expomaps[k] == 2:
@@ -128,32 +130,26 @@ def writ_chan():
                         path = pathdata + 'CDFS-2Ms-2to8-asca-bkg-bin1.fits'
                     cntpback[1, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
                 
+                    for i in indxener:
+                        indxtemp = where(expo[i, :, :, 0] > 0.)
+                        sbrtback[i, indxtemp[0], indxtemp[1], 0] = cntpback[i, indxtemp[0], indxtemp[1], 0] / expo[i, indxtemp[0], indxtemp[1], 0] / diffener[i] / apix
+                
                 if datatype == 'home':
-                    strgvarb = ['thresh.expmap', 'flux.img']
+                    strgvarb = ['thresh.expmap', 'thresh.img']
                     strgvarbmine = ['expo', 'sbrt']
                     for i in indxener:
                         for a in range(2):
                             path = '/n/fink1/rfeder/obsids/full/merged_%dMs/rest_fov/%d/%s-%s_%s' % (expomaps[k], i, strgener[i], strgener[i+1], strgvarb[a])
-                            #path = '/n/fink1/rfeder/obsids/full/merged_%dMs/merged_%dMs_%d/%dMs_%d_%s' % (expomaps[k], expomaps[k], i, expomaps[k], i, strgvarb[a])
                             if a == 0:
                                 expo[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
-                                print 'pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]'
-                                summgene(pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]])
                             if a == 1:
                                 cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
-                
                 numbsideyaxi = pf.getdata(path, 0).shape[0]
                 numbsidexaxi = pf.getdata(path, 0).shape[1]
 
-                sbrt = zeros_like(cntp)
                 for i in indxener:
                     indxtemp = where(expo[i, :, :, 0] > 0.)
                     sbrt[i, indxtemp[0], indxtemp[1], 0] = cntp[i, indxtemp[0], indxtemp[1], 0] / expo[i, indxtemp[0], indxtemp[1], 0] / diffener[i] / apix
-                
-                sbrtback = zeros_like(cntp)
-                for i in indxener:
-                    indxtemp = where(expo[i, :, :, 0] > 0.)
-                    sbrtback[i, indxtemp[0], indxtemp[1], 0] = cntpback[i, indxtemp[0], indxtemp[1], 0] / expo[i, indxtemp[0], indxtemp[1], 0] / diffener[i] / apix
                 
                 if True:
                     for i in indxener:
