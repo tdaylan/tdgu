@@ -966,6 +966,7 @@ def pcat_ferm_inpt_igal_popl(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
                    proppsfp=False, \
+                   fittpsfnevaltype='kern', \
                    diagmode=True, \
                    savestat=True, \
                    truemaxmnumbelem=array([30, 30, 30]), \
@@ -985,11 +986,12 @@ def pcat_ferm_mock_igal_popl():
                    numbswep=100000, \
                    numbswepplot=10000, \
                    maxmgangdata=deg2rad(20.), \
-                   makeplot=False, \
+                   #makeplot=False, \
                    diagmode=True, \
                    indxevttincl=arange(2, 4), \
                    indxenerincl=arange(1, 4), \
                    proppsfp=False, \
+                   truepsfnevaltype='kern', \
                    strgexpo='expofermcmp0igal.fits', \
                    truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
                    #truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
@@ -1009,17 +1011,19 @@ def pcat_ferm_inpt_igal_test(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
         indxevttincl = array([2, 3])
 
     pcat.main.init( \
-                   numbswep=200, \
+                   numbswep=1000, \
                    numbswepplot=10000, \
                    diagmode=True, \
                    penalpridiff=True, \
-                   psfnevaltype='kern', \
+                   fittpsfnevaltype='kern', \
                    proppsfp=False, \
                    maxmgangdata=deg2rad(20.), \
                    verbtype=2, \
+                   anlytype='deco', \
+                   propbacp=False, \
                    #indxenerincl=arange(0, 5), \
                    #shrtfram=True, \
-                   #makeplotinit=False, \
+                   #makeplot=False, \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
                    #indxevttincl=indxevttincl, \
@@ -1028,7 +1032,6 @@ def pcat_ferm_inpt_igal_test(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    pixltype='cart', \
                    savestat=True, \
                    #inittype='reco', \
-                   allwrefr=False, \
                    truebacktype=['data'], \
                    #truebacktype=[1., 'sbrtfdfmsmthmanunorm.fits'], \
                    #truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
@@ -1059,7 +1062,6 @@ def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expoferm
                    #indxevttincl=indxevttincl, \
                    savestat=True, \
                    inittype='reco', \
-                   allwrefr=False, \
                    truebacktype=[1., 'sbrtfdfmsmthrec7norm.fits'], \
                    #truebacktype=[1., 'sbrtfdfmsmthmanunorm.fits'], \
                    #truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
