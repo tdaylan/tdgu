@@ -1009,12 +1009,14 @@ def pcat_ferm_inpt_igal_test(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
         indxevttincl = array([2, 3])
 
     pcat.main.init( \
-                   numbswep=200000, \
+                   numbswep=200, \
                    numbswepplot=10000, \
                    diagmode=True, \
+                   penalpridiff=True, \
+                   psfnevaltype='kern', \
                    proppsfp=False, \
                    maxmgangdata=deg2rad(20.), \
-                   #verbtype=2, \
+                   verbtype=2, \
                    #indxenerincl=arange(0, 5), \
                    #shrtfram=True, \
                    #makeplotinit=False, \
