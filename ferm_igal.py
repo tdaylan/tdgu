@@ -630,7 +630,7 @@ def writ_ferm_back():
     
     maxmgangdata = 20.
     
-    listnameback = ['sbrtfdfm', 'darktemp']
+    listnameback = ['sbrtdatasmth', 'sbrtfdfm', 'darktemp']
     #listnameback = ['sbrtfdfm', 'sbrtfdfmnorm', 'plnkdust', 'wisestar', 'finkdust', 'darktemp']
     gdat.numbback = len(listnameback)
     gdat.indxback = arange(gdat.numbback)
@@ -673,8 +673,8 @@ def writ_ferm_back():
     
     smth = True
     
-    #listrecotype = ['rec7', 'rec8']
-    listrecotype = ['manu']
+    listrecotype = ['rec7', 'rec8']
+    #listrecotype = ['manu']
     for recotype in listrecotype:
         gdat.evtt, gdat.numbevtt, gdat.indxevtt = tdpy.util.retr_evttferm(recotype)
         ## templates
@@ -690,6 +690,9 @@ def writ_ferm_back():
                 gdat.sbrtback[c, :, :, :] = pf.getdata(path)
             else:
                 
+                if strg.startswith('sbrtdatasmth'):
+                    path = os.environ["PCAT_DATA_PATH"] + '/data/inpt/sbrtfermcmp0igal.fits'
+                    sbrtbacktemp = pf.getdata(path)
                 if strg.startswith('sbrtfdfm'):
                     sbrtbacktemp = tdpy.util.retr_sbrtfdfm(gdat.binsener) 
                 if strg == 'plnkdust':
@@ -740,6 +743,9 @@ def writ_ferm_back():
                 print 'Writing to %s...' % path
                 pf.writeto(path, gdat.sbrtbacknorm[c, :, :, :], clobber=True)
                 
+                if strg == 'sbrtdatasmth':
+                    continue
+
                 if smth:
                     gdat.sbrtbacksmth[c, :, :, :] = tdpy.util.smth_ferm(gdat.sbrtback[c, :, :, :], gdat.meanener, recotype, kerntype='gaus')
                     
@@ -994,6 +1000,41 @@ def pcat_ferm_mock_igal_popl():
                   )
 
 
+def pcat_ferm_inpt_igal_test(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expofermcmp0igal.fits'):
+    
+    recotype = 'rec7'
+    if recotype == 'rec7':
+        indxevttincl = array([0, 1])
+    if recotype == 'rec8':
+        indxevttincl = array([2, 3])
+
+    pcat.main.init( \
+                   numbswep=200000, \
+                   numbswepplot=10000, \
+                   diagmode=True, \
+                   proppsfp=False, \
+                   maxmgangdata=deg2rad(20.), \
+                   #verbtype=2, \
+                   #indxenerincl=arange(0, 5), \
+                   #shrtfram=True, \
+                   #makeplotinit=False, \
+                   indxenerincl=arange(1, 4), \
+                   indxevttincl=arange(2, 4), \
+                   #indxevttincl=indxevttincl, \
+                   forccart=True, \
+                   numbsidecart=100, \
+                   pixltype='cart', \
+                   savestat=True, \
+                   #inittype='reco', \
+                   allwrefr=False, \
+                   truebacktype=['data'], \
+                   #truebacktype=[1., 'sbrtfdfmsmthmanunorm.fits'], \
+                   #truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
+                   strgexpo=strgexpo, \
+                   strgexprsbrt=strgexprsbrt, \
+                  )
+    
+    
 def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expofermcmp0igal.fits'):
     
     recotype = 'rec7'
@@ -1017,7 +1058,8 @@ def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expoferm
                    savestat=True, \
                    inittype='reco', \
                    allwrefr=False, \
-                   truebacktype=[1., 'sbrtfdfmsmthmanunorm.fits'], \
+                   truebacktype=[1., 'sbrtfdfmsmthrec7norm.fits'], \
+                   #truebacktype=[1., 'sbrtfdfmsmthmanunorm.fits'], \
                    #truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
                    strgexpo=strgexpo, \
                    strgexprsbrt=strgexprsbrt, \
