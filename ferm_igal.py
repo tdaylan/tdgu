@@ -630,7 +630,7 @@ def writ_ferm_back():
     
     maxmgangdata = 20.
     
-    listnameback = ['sbrtdatasmth', 'sbrtfdfm', 'darktemp']
+    listnameback = ['sbrtfdfm', 'darktemp']
     #listnameback = ['sbrtfdfm', 'sbrtfdfmnorm', 'plnkdust', 'wisestar', 'finkdust', 'darktemp']
     gdat.numbback = len(listnameback)
     gdat.indxback = arange(gdat.numbback)
@@ -690,9 +690,6 @@ def writ_ferm_back():
                 gdat.sbrtback[c, :, :, :] = pf.getdata(path)
             else:
                 
-                if strg.startswith('sbrtdatasmth'):
-                    path = os.environ["PCAT_DATA_PATH"] + '/data/inpt/sbrtfermcmp0igal.fits'
-                    sbrtbacktemp = pf.getdata(path)
                 if strg.startswith('sbrtfdfm'):
                     sbrtbacktemp = tdpy.util.retr_sbrtfdfm(gdat.binsener) 
                 if strg == 'plnkdust':
@@ -743,9 +740,6 @@ def writ_ferm_back():
                 print 'Writing to %s...' % path
                 pf.writeto(path, gdat.sbrtbacknorm[c, :, :, :], clobber=True)
                 
-                if strg == 'sbrtdatasmth':
-                    continue
-
                 if smth:
                     gdat.sbrtbacksmth[c, :, :, :] = tdpy.util.smth_ferm(gdat.sbrtback[c, :, :, :], gdat.meanener, recotype, kerntype='gaus')
                     
