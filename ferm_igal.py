@@ -1005,8 +1005,9 @@ def pcat_ferm_inpt_igal_test(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
         indxevttincl = array([2, 3])
 
     pcat.main.init( \
-                   numbswep=100000, \
-                   numbswepplot=10000, \
+                   numbswep=2000000, \
+                   numbswepplot=20000, \
+                   numbburn=0, \
                    diagmode=True, \
                    #penalpridiff=True, \
                    fittpsfnevaltype='kern', \
