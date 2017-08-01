@@ -1005,14 +1005,14 @@ def pcat_ferm_inpt_igal_test(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
         indxevttincl = array([2, 3])
 
     pcat.main.init( \
-                   numbswep=1000, \
+                   numbswep=100000, \
                    numbswepplot=10000, \
                    diagmode=True, \
                    penalpridiff=True, \
                    fittpsfnevaltype='kern', \
                    proppsfp=False, \
                    maxmgangdata=deg2rad(20.), \
-                   verbtype=2, \
+                   #verbtype=2, \
                    anlytype='deco', \
                    propbacp=False, \
                    #indxenerincl=arange(0, 5), \
@@ -1020,6 +1020,7 @@ def pcat_ferm_inpt_igal_test(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    #makeplot=False, \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
+                   fittmaxmnumbelem=array([50]), \
                    #indxevttincl=indxevttincl, \
                    forccart=True, \
                    numbsidecart=100, \
