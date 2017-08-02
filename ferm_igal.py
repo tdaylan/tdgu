@@ -1028,7 +1028,7 @@ def pcat_ferm_inpt_igal_test(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    numbsidecart=100, \
                    pixltype='cart', \
                    savestat=True, \
-                   #inittype='reco', \
+                   inittype='reco', \
                    #fittbacktype=['data'], \
                    #truebacktype=['data'], \
                    #truebacktype=[1., 'sbrtfdfmsmthmanunorm.fits'], \
