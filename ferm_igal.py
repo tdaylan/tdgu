@@ -965,6 +965,7 @@ def pcat_ferm_inpt_igal_popl(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    diagmode=True, \
                    savestat=True, \
                    fittmaxmnumbelem=array([5, 5, 5]), \
+                   truemaxmnumbelem=array([5, 5, 5]), \
                    truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
                    #truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
                    strgexpo=strgexpo, \
