@@ -955,6 +955,7 @@ def pcat_ferm_inpt_igal_popl(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
     recotype = 'rec7'
     pcat.main.init( \
                    numbswep=100000, \
+                   numbburn=0, \
                    numbswepplot=10000, \
                    maxmgangdata=deg2rad(20.), \
                    indxenerincl=arange(1, 4), \
@@ -963,8 +964,7 @@ def pcat_ferm_inpt_igal_popl(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    fittpsfnevaltype='kern', \
                    diagmode=True, \
                    savestat=True, \
-                   truemaxmnumbelem=array([30, 30, 30]), \
-                   truenumbelem=array([20, 20, 20]), \
+                   fittmaxmnumbelem=array([5, 5, 5]), \
                    truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
                    #truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
                    strgexpo=strgexpo, \
@@ -1048,6 +1048,7 @@ def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expoferm
 
     pcat.main.init( \
                    numbswep=200000, \
+                   numbburn=0, \
                    numbswepplot=10000, \
                    diagmode=True, \
                    proppsfp=False, \
@@ -1055,6 +1056,7 @@ def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expoferm
                    #indxenerincl=arange(0, 5), \
                    #shrtfram=True, \
                    fittpsfnevaltype='kern', \
+                   fittmaxmnumbelem=array([5]), \
                    #makeplotinit=False, \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
