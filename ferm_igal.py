@@ -1054,12 +1054,13 @@ def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expoferm
                    maxmgangdata=deg2rad(20.), \
                    #indxenerincl=arange(0, 5), \
                    #shrtfram=True, \
-                   makeplotinit=False, \
+                   fittpsfnevaltype='kern', \
+                   #makeplotinit=False, \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
                    #indxevttincl=indxevttincl, \
                    savestat=True, \
-                   inittype='reco', \
+                   #inittype='reco', \
                    truebacktype=[1., 'sbrtfdfmsmthrec7norm.fits'], \
                    #truebacktype=[1., 'sbrtfdfmsmthmanunorm.fits'], \
                    #truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \

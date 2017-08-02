@@ -11,7 +11,7 @@ def writ_chan():
             
     numbevtt = 1
   
-    listnumbside = [300]
+    listnumbside = [300, 600]
     listdatatype = ['home', 'extr']
     for datatype in listdatatype:
         print 'datatype'
@@ -60,8 +60,6 @@ def writ_chan():
                         for i in indxener:
                             # count map
                             path = '/n/fink1/rfeder/obsids/full/merged_%dMs/rest_fov/%d/%s-%s_flux.img' % (expomaps[k], i, strgener[i], strgener[i+1])
-                            #path = '/n/fink1/rfeder/obsids/full/merged_%dMs/merged_%dMs_%d/%dMs_%d_%s' % (expomaps[k], expomaps[k], i, expomaps[k], i, 'thresh.expmap')
-                            #path = pathdata + '%.2f-%.2f_thresh.img' % (binsener[i], binsener[i+1])
                             temp = pf.getdata(path, 0)
                     
                     numbsideyaxi = temp.shape[0]
@@ -164,13 +162,6 @@ def writ_chan():
 
                 pathdatapcat = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
                 
-                if numbside == 300:
-                    mapsbind = zeros((10, 10))
-                    for a in range(10):
-                        for b in range(10):
-                            mapsbind[a, b] = mean(expo[0, a*30:(a+1)*30, b*30:(b+1)*30, 0])
-                    print mapsbind
-
                 path = pathdatapcat + 'expochan%s.fits' % strgmaps
                 print 'Writing to %s...' % path
                 pf.writeto(path, expo, clobber=True)
