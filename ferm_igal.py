@@ -696,6 +696,10 @@ def writ_ferm_back():
                     pathtemp = gdat.pathdata + 'plnk/HFI_CompMap_ThermalDustModel_2048_R1.20.fits'
                     sbrtbacktemp = pf.getdata(pathtemp, 1)['RADIANCE']
                     sbrtbacktemp = hp.ud_grade(sbrtbacktemp, gdat.numbside, order_in='NESTED', order_out='RING')
+                if strg == 'plnkcmon':
+                    pathtemp = gdat.pathdata + 'plnk/HFI_CompMap_ThermalDustModel_2048_R1.20.fits'
+                    sbrtbacktemp = pf.getdata(pathtemp, 1)['RADIANCE']
+                    sbrtbacktemp = hp.ud_grade(sbrtbacktemp, gdat.numbside, order_in='NESTED', order_out='RING')
                 if strg == 'wisestar':
                     pathtemp = gdat.pathdata + 'wssa_sample_1024.fits'
                     sbrtbacktemp = pf.getdata(pathtemp, 0)
@@ -1083,6 +1087,7 @@ def pcat_ferm_mock_igal():
                    indxenerincl=arange(1, 4), \
                    proppsfp=False, \
                    checprio=True, \
+                   psfnevaltype='kern', \
                    strgexpo='expofermcmp0igal.fits', \
                    #truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
                    truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
