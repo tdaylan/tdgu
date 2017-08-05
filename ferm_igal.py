@@ -1063,7 +1063,7 @@ def pcat_ferm_inpt_igal_popl(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    fittpsfnevaltype='kern', \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
-                   inittype='reco', \
+                   #inittype='reco', \
                    savestat=True, \
                    makeplotinit=False, \
                    fittmaxmnumbelem=array([100, 100, 100]), \
