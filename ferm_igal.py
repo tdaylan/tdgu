@@ -901,7 +901,7 @@ def pcat_ferm_inpt_ptch():
             pf.writeto(path, maps, clobber=True)
     
     pcat.main.init( \
-              maxmgangdata=deg2rad(20.), \
+              maxmgangdata=deg2rad(15.), \
               indxenerincl=arange(1, 4), \
               indxevttincl=arange(2, 4), \
               lgalcntr=lgalcntr, \
@@ -927,7 +927,7 @@ def pcat_ferm_mock_igal_brok():
                        indxenerincl=arange(1, 4), \
                        strgexpo='expofermcmp0igal.fits', \
                        truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
-                       maxmgangdata=deg2rad(20.), \
+                       maxmgangdata=deg2rad(15.), \
                        fluxdisttype=['brok'], \
                        
                        boolpropfluxdistbrek=False, \
@@ -965,7 +965,7 @@ def pcat_ferm_mock_igal_syst():
                        strgexpo='expofermcmp0igal.fits', \
                        truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
                        fittmaxmnumbelem=array([20]), \
-                       maxmgangdata=deg2rad(20.), \
+                       maxmgangdata=deg2rad(15.), \
                        minmflux=3e-11, \
                        maxmflux=3e-7, \
                        truenumbelem=array([10, 10, 10]), \
@@ -993,7 +993,7 @@ def pcat_ferm_inpt_igal_test(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    #penalpridiff=True, \
                    psfnevaltype='kern', \
                    proppsfp=False, \
-                   maxmgangdata=deg2rad(20.), \
+                   maxmgangdata=deg2rad(15.), \
                    #verbtype=2, \
                    #anlytype='deco', \
                    #anlytype='expa', \
@@ -1029,7 +1029,7 @@ def pcat_ferm_mock_igal_popl():
                    numbswepplot=1000, \
                    diagmode=True, \
                    proppsfp=False, \
-                   maxmgangdata=deg2rad(20.), \
+                   maxmgangdata=deg2rad(15.), \
                    allwrefr=False, \
                    shrtfram=True, \
                    mockpsfnevaltype='kern', \
@@ -1057,7 +1057,7 @@ def pcat_ferm_inpt_igal_popl(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    numbswepplot=10000, \
                    diagmode=True, \
                    proppsfp=False, \
-                   maxmgangdata=deg2rad(20.), \
+                   maxmgangdata=deg2rad(15.), \
                    allwrefr=False, \
                    shrtfram=True, \
                    fittpsfnevaltype='kern', \
@@ -1066,7 +1066,7 @@ def pcat_ferm_inpt_igal_popl(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    #inittype='reco', \
                    savestat=True, \
                    makeplotinit=False, \
-                   fittmaxmnumbelem=array([100, 100, 100]), \
+                   fittmaxmnumbelem=array([50, 50, 50]), \
                    fittbacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
                    strgexpo=strgexpo, \
                    strgexprsbrt=strgexprsbrt, \
@@ -1088,7 +1088,7 @@ def pcat_ferm_inpt_igal_totl(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    numbswepplot=10000, \
                    diagmode=True, \
                    proppsfp=False, \
-                   maxmgangdata=deg2rad(20.), \
+                   maxmgangdata=deg2rad(15.), \
                    allwrefr=False, \
                    #shrtfram=True, \
                    psfnevaltype='kern', \
@@ -1120,11 +1120,11 @@ def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expoferm
                    numbswepplot=10000, \
                    diagmode=True, \
                    proppsfp=False, \
-                   maxmgangdata=deg2rad(20.), \
+                   maxmgangdata=deg2rad(15.), \
                    allwrefr=False, \
                    shrtfram=True, \
                    psfnevaltype='kern', \
-                   fittmaxmnumbelem=array([300]), \
+                   fittmaxmnumbelem=array([100]), \
                    makeplotinit=False, \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
@@ -1157,7 +1157,7 @@ def pcat_ferm_mock_igal():
                    #truebacktype=[1., 'sbrtfdfmsmthnorm.fits'], \
                    truebacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
                    diagmode=True, \
-                   maxmgangdata=deg2rad(20.), \
+                   maxmgangdata=deg2rad(15.), \
                   )
 
 
