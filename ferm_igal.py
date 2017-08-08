@@ -1188,7 +1188,7 @@ def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expoferm
                    #fittmaxmnumbelem=array([0]), \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
-                   savestat=True, \
+                   #savestat=True, \
                    inittype='reco', \
                    fittlistnameback=['isot', 'fdfm', 'dark'], \
                    fittbacktype=[1., 'sbrtfdfmsmthmanunorm.fits', 'darktempsmthmanunorm.fits'], \
