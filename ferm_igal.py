@@ -916,10 +916,10 @@ def pcat_ferm_inpt_ptch():
     
 def pcat_ferm_mock_igal_brok():
      
-    listtruefluxdistbrek = array([1e-10, 3e-10, 1e-9, 3e-9, 1e-8])
-    truefluxdistbrek = array([1e-9])
-    listtruefluxdistsloplowr = array([1.9, 2.2, 2.8, 3.1, 3.4])
-    numbiter = listtruefluxdistsloplowr.size
+    listfluxdistbrek = array([1e-10, 3e-10, 1e-9, 3e-9, 1e-8])
+    fluxdistbrek = array([1e-9])
+    listfluxdistsloplowr = array([1.9, 2.2, 2.8, 3.1, 3.4])
+    numbiter = listfluxdistsloplowr.size
     for k in range(numbiter):
         pcat.main.init( \
                        exprinfo=False, \
@@ -935,15 +935,13 @@ def pcat_ferm_mock_igal_brok():
                        minmflux=3e-11, \
                        maxmflux=3e-7, \
 
-                       truenumbelem=array([100]), \
-                        
-                       truefluxdisttype='brok', \
-                       truefluxdistbrek=truefluxdistbrek, \
-                       truefluxdistsloplowr=array([listtruefluxdistsloplowr[k]]), \
-                       truefluxdistslopuppr=array([1.6]), \
+                       numbelemreg0pop0=100, \
+                       fluxdistbrek=fluxdistbrek, \
+                       fluxdistsloplowr=array([listfluxdistsloplowr[k]]), \
+                       fluxdistslopuppr=array([1.6]), \
                        
-                       truesinddiststdv=array([.5]), \
-                       truesinddistmean=array([2.]), \
+                       sinddiststdv=array([.5]), \
+                       sinddistmean=array([2.]), \
                       )
 
 
@@ -957,27 +955,30 @@ def pcat_ferm_mock_igal_syst():
     indxtupl = np.arange(numbtupl)
     strgtupl = []
     for k in range(numbtupl):
-        truenumbelem = tupl[k]
+        numbelem = tupl[k]
 
         pcat.main.init( \
                        indxevttincl=arange(2, 4), \
                        indxenerincl=arange(1, 4), \
                        strgexpo='expofermcmp0igal.fits', \
                        backtype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype], \
-                       fittmaxmnumbelem=array([20]), \
+                       maxmnumbelemreg0pop0=20, \
                        maxmgangdata=deg2rad(15.), \
                        minmflux=3e-11, \
                        maxmflux=3e-7, \
-                       truenumbelem=array([10, 10, 10]), \
-                       truespatdisttype=['unif', 'disc', 'gang'], \
-                       truefluxdisttype='powr', \
-                       truefluxdistslop=array([2.6, 2.6, 3.5]), \
-                       truesinddiststdv=array([.5, .5, .5]), \
-                       truesinddistmean=array([2., 2., 2.]), \
+                       numbpopl=3, \
+                       numbelemreg0pop0=10, \
+                       numbelemreg0pop1=10, \
+                       numbelemreg0pop2=10, \
+                       spatdisttype=['unif', 'disc', 'gang'], \
+                       fluxdisttype='powr', \
+                       fluxdistslop=array([2.6, 2.6, 3.5]), \
+                       sinddiststdv=array([.5, .5, .5]), \
+                       sinddistmean=array([2., 2., 2.]), \
                       )
 
 
-def pcat_ferm_inpt_igal_test(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expofermcmp0igal.fits'):
+def pcat_ferm_inpt_igal_four(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expofermcmp0igal.fits'):
     
     recotype = 'rec7'
     if recotype == 'rec7':
@@ -995,23 +996,22 @@ def pcat_ferm_inpt_igal_test(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    proppsfp=False, \
                    maxmgangdata=deg2rad(15.), \
                    #verbtype=2, \
-                   #anlytype='deco', \
-                   #anlytype='expa', \
+                   anlytype='four', \
                    #propbacp=False, \
                    #indxenerincl=arange(0, 5), \
                    #shrtfram=True, \
                    #makeplot=False, \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
-                   fittmaxmnumbelem=array([10]), \
+                   maxmnumbelemreg0pop0=10, \
                    #indxevttincl=indxevttincl, \
                    forccart=True, \
                    #numbsidecart=100, \
                    #pixltype='cart', \
                    savestat=True, \
                    inittype='reco', \
-                   #fittbacktype=['data'], \
-                   fittbacktype=[1., 'sbrtfdfmsmthmanunorm.fits', 'cmonsmthmanunorm.fits'], \
+                   #backtype=['data'], \
+                   backtype=[1., 'sbrtfdfmsmthmanunorm.fits', 'cmonsmthmanunorm.fits'], \
                    strgexpo=strgexpo, \
                    strgexprsbrt=strgexprsbrt, \
                   )
@@ -1022,11 +1022,13 @@ def pcat_ferm_mock_igal_popl():
     recotype = 'manu'
 
     pcat.main.init( \
-                   numbswep=10000, \
+                   numbswep=100000, \
                    factthin=1000, \
                    numbburn=0, \
+                   inittype='refr', \
                    numbswepplot=1000, \
                    diagmode=True, \
+                   verbtype=2, \
                    proppsfp=False, \
                    maxmgangdata=deg2rad(15.), \
                    #allwrefr=False, \
@@ -1037,10 +1039,16 @@ def pcat_ferm_mock_igal_popl():
                    indxevttincl=arange(2, 4), \
                    strgexpo='expofermcmp0igal.fits', \
                    backtype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype, 'darktempsmthmanunorm.fits'], \
-                   truemaxmnumbelem=array([3, 3, 3]), \
-                   truenumbelem=array([2, 2, 2]), \
-                   truespatdisttype=['unif', 'disc', 'gang'], \
-                   truespectype=['powr', 'expc', 'expc']
+                   listnameback=['isot', 'fdfm', 'dark'], \
+                   numbpopl=3, \
+                   maxmnumbelemreg0pop0=3, \
+                   maxmnumbelemreg0pop1=3, \
+                   maxmnumbelemreg0pop2=3, \
+                   numbelemreg0pop0=2, \
+                   numbelemreg0pop1=2, \
+                   numbelemreg0pop2=2, \
+                   spatdisttype=['unif', 'disc', 'gang'], \
+                   spectype=['powr', 'expc', 'expc']
                   )
 
 
@@ -1057,15 +1065,18 @@ def pcat_ferm_inpt_igal_popl(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    maxmgangdata=deg2rad(15.), \
                    allwrefr=False, \
                    #shrtfram=True, \
-                   fittpsfnevaltype='kern', \
+                   psfnevaltype='kern', \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
                    #inittype='reco', \
                    savestat=True, \
                    #makeplotinit=False, \
-                   fittmaxmnumbelem=array([50, 50, 50]), \
-                   fittlistnameback=['isot', 'fdfm', 'dark'], \
-                   fittbacktype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype, 'darktempsmthmanunorm.fits'], \
+                   numbpopl=3, \
+                   maxmnumbelemreg0pop0=50, \
+                   maxmnumbelemreg0pop1=50, \
+                   maxmnumbelemreg0pop2=50, \
+                   listnameback=['isot', 'fdfm', 'dark'], \
+                   backtype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype, 'darktempsmthmanunorm.fits'], \
                    strgexpo=strgexpo, \
                    strgexprsbrt=strgexprsbrt, \
                   )
@@ -1090,40 +1101,15 @@ def pcat_ferm_inpt_igal_totl(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    allwrefr=False, \
                    #shrtfram=True, \
                    psfnevaltype='kern', \
-                   fittmaxmnumbelem=array([0]), \
+                   maxmnumbelemreg0pop0=0, \
                    #makeplotinit=False, \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
                    savestat=True, \
                    #inittype='reco', \
-                   fittlistnameback=['isot', 'hydr', 'cmon', 'dustsfdd', 'dark', 'wise'], \
-                   fittbacktype=[1., 'sbrtfdfmsmthmanunorm.fits', 'hydrsmthmanunorm.fits', 'cmonsmthmanunorm.fits', \
+                   listnameback=['isot', 'hydr', 'cmon', 'dustsfdd', 'dark', 'wise'], \
+                   backtype=[1., 'sbrtfdfmsmthmanunorm.fits', 'hydrsmthmanunorm.fits', 'cmonsmthmanunorm.fits', \
                                                     'dustsfddsmthmanunorm.fits', 'darktempsmthmanunorm.fits', 'wisesmthmanunorm.fits'], \
-                   strgexpo=strgexpo, \
-                   strgexprsbrt=strgexprsbrt, \
-                  )
-    
-    
-def pcat_ferm_inpt_igal_allwfals(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expofermcmp0igal.fits'):
-    
-    pcat.main.init( \
-                   numbswep=1000000, \
-                   factthin=1000, \
-                   numbburn=0, \
-                   numbswepplot=10000, \
-                   verbtype=2, \
-                   diagmode=True, \
-                   proppsfp=False, \
-                   maxmgangdata=deg2rad(15.), \
-                   namerecostat='pcat_ferm_inpt_igal', \
-                   allwrefr=False, \
-                   spectype=['colr'], \
-                   psfnevaltype='kern', \
-                   indxenerincl=arange(1, 4), \
-                   indxevttincl=arange(2, 4), \
-                   #inittype='reco', \
-                   fittlistnameback=['isot', 'fdfm', 'dark'], \
-                   fittbacktype=[1., 'sbrtfdfmsmthmanunorm.fits', 'darktempsmthmanunorm.fits'], \
                    strgexpo=strgexpo, \
                    strgexprsbrt=strgexprsbrt, \
                   )
@@ -1141,8 +1127,7 @@ def pcat_ferm_inpt_igal_mask(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    makeplotinit=False, \
                    #makeplot=False, \
                    mask=array([-30., 30., -2., 2.]) / 180. * pi, \
-                   #maxmnumbelem=array([0]), \
-                   maxmnumbelem=array([100]), \
+                   maxmnumbelemreg0pop0=100, \
                    maxmgangdata=deg2rad(15.), \
                    #namerecostat='pcat_ferm_inpt_igal', \
                    savestat=True, \
@@ -1151,8 +1136,46 @@ def pcat_ferm_inpt_igal_mask(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
                    inittype='reco', \
-                   fittlistnameback=['isot', 'fdfm', 'dark'], \
-                   fittbacktype=[1., 'sbrtfdfmsmthmanunorm.fits', 'darktempsmthmanunorm.fits'], \
+                   listnameback=['isot', 'fdfm', 'dark'], \
+                   backtype=[1., 'sbrtfdfmsmthmanunorm.fits', 'darktempsmthmanunorm.fits'], \
+                   strgexpo=strgexpo, \
+                   strgexprsbrt=strgexprsbrt, \
+                  )
+    
+    
+def pcat_ferm_inpt_igal_zeropena(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expofermcmp0igal.fits'):
+    
+    recotype = 'rec7'
+    if recotype == 'rec7':
+        indxevttincl = array([0, 1])
+    if recotype == 'rec8':
+        indxevttincl = array([2, 3])
+
+    pcat.main.init( \
+                   numbswep=1000000, \
+                   factthin=1000, \
+                   numbburn=0, \
+                   numbswepplot=20000, \
+                   diagmode=True, \
+                   #forcsavestat=True, \
+                   #probbrde=0.2, \
+                   proppsfp=False, \
+                   makeplotinit=False, \
+                   #allwrefr=False, \
+                   priofactdoff=0., \
+                   #verbtype=2, \
+                   #makeplot=False, \
+                   #shrtfram=True, \
+                   maxmgangdata=deg2rad(15.), \
+                   spectype=['colr'], \
+                   psfnevaltype='kern', \
+                   maxmnumbelemreg0pop0=500, \
+                   indxenerincl=arange(1, 4), \
+                   indxevttincl=arange(2, 4), \
+                   savestat=True, \
+                   inittype='reco', \
+                   listnameback=['isot', 'fdfm', 'dark'], \
+                   backtype=[1., 'sbrtfdfmsmthmanunorm.fits', 'darktempsmthmanunorm.fits'], \
                    strgexpo=strgexpo, \
                    strgexprsbrt=strgexprsbrt, \
                   )
@@ -1167,49 +1190,10 @@ def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expoferm
         indxevttincl = array([2, 3])
 
     pcat.main.init( \
-                   numbswep=100000, \
+                   numbswep=1000000, \
                    factthin=1000, \
                    numbburn=0, \
-                   numbswepplot=10000, \
-                   diagmode=True, \
-                   #forcsavestat=True, \
-                   #probbrde=0.2, \
-                   proppsfp=False, \
-                   makeplotinit=False, \
-                   #allwrefr=False, \
-                   priofactdoff=0., \
-                   #verbtype=2, \
-                   #makeplot=False, \
-                   #shrtfram=True, \
-                   maxmgangdata=deg2rad(15.), \
-                   spectype=['colr'], \
-                   psfnevaltype='kern', \
-                   fittmaxmnumbelem=array([500]), \
-                   #fittmaxmnumbelem=array([0]), \
-                   indxenerincl=arange(1, 4), \
-                   indxevttincl=arange(2, 4), \
-                   #savestat=True, \
-                   inittype='reco', \
-                   fittlistnameback=['isot', 'fdfm', 'dark'], \
-                   fittbacktype=[1., 'sbrtfdfmsmthmanunorm.fits', 'darktempsmthmanunorm.fits'], \
-                   strgexpo=strgexpo, \
-                   strgexprsbrt=strgexprsbrt, \
-                  )
-    
-    
-def pcat_ferm_inpt_igal_pena(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expofermcmp0igal.fits'):
-    
-    recotype = 'rec7'
-    if recotype == 'rec7':
-        indxevttincl = array([0, 1])
-    if recotype == 'rec8':
-        indxevttincl = array([2, 3])
-
-    pcat.main.init( \
-                   numbswep=100000, \
-                   factthin=1000, \
-                   numbburn=0, \
-                   numbswepplot=10000, \
+                   numbswepplot=20000, \
                    diagmode=True, \
                    #forcsavestat=True, \
                    #probbrde=0.2, \
@@ -1222,14 +1206,13 @@ def pcat_ferm_inpt_igal_pena(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    maxmgangdata=deg2rad(15.), \
                    spectype=['colr'], \
                    psfnevaltype='kern', \
-                   fittmaxmnumbelem=array([300]), \
-                   #fittmaxmnumbelem=array([0]), \
+                   maxmnumbelemreg0pop0=300, \
                    indxenerincl=arange(1, 4), \
                    indxevttincl=arange(2, 4), \
                    savestat=True, \
                    inittype='reco', \
-                   fittlistnameback=['isot', 'fdfm', 'dark'], \
-                   fittbacktype=[1., 'sbrtfdfmsmthmanunorm.fits', 'darktempsmthmanunorm.fits'], \
+                   listnameback=['isot', 'fdfm', 'dark'], \
+                   backtype=[1., 'sbrtfdfmsmthmanunorm.fits', 'darktempsmthmanunorm.fits'], \
                    strgexpo=strgexpo, \
                    strgexprsbrt=strgexprsbrt, \
                   )
@@ -1256,10 +1239,8 @@ def pcat_ferm_mock_igal():
                    #checprio=True, \
                    #allwrefr=False, \
                    psfnevaltype='kern', \
-                   maxmnumbelem=array([500]), \
-                   #maxmnumbelem=array([0]), \
-                   numbelem=array([300]), \
-                   #numbelem=array([0]), \
+                   maxmnumbelemreg0pop0=500, \
+                   numbelemreg0pop0=300, \
                    listnameback=listnameback, \
                    strgexpo='expofermcmp0igal.fits', \
                    backtype=backtype, \

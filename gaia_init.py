@@ -189,7 +189,6 @@ def plot_gums():
     #_Glon|_Glat|VMAG|Mbol|Gmag|GBmag|GRmag|RAJ2000|DEJ2000|r|V-I|Av|Mass|[Fe/H]|Teff|logg|fI
     #deg|deg|mag|mag|mag|mag|mag|deg|deg|pc|mag|mag|Sun|[Sun]|K|[cm/s2]|
     
-    
     path = os.environ["DUST_PRLX_PATH"] + '/dat/gums.dat'
     gums = loadtxt(path, skiprows=72)
     
@@ -242,8 +241,8 @@ def writ_tgasdata():
     datacntstemp = histogram2d(ekin, amom, bins=(binsekin, binsamom))[0]
     
     numbside = int(sqrt(datacntstemp.size))
-    datacnts = zeros((1, numbside, numbside, 1))
-    datacnts[0, :, :, 0] = datacntstemp.T
+    datacnts = zeros((1, 1, numbside, numbside, 1))
+    datacnts[0, 0, :, :, 0] = datacntstemp.T
     print 'datacnts'
     summgene(datacnts)
     datacnts *= (numbbins - 1.)**2 / 4.
@@ -254,7 +253,7 @@ def writ_tgasdata():
     pf.writeto(path, datacnts, clobber=True)
     
     backcnts = copy(datacnts)
-    backcnts[0, :, :, 0] = sp.ndimage.filters.gaussian_filter(backcnts[0, :, :, 0], sigma=15)
+    backcnts[0, 0, :, :, 0] = sp.ndimage.filters.gaussian_filter(backcnts[0, :, :, 0], sigma=15)
     backcnts[where(backcnts <= 0.)] = 1e-20
    
     set_printoptions(precision=1)
@@ -273,27 +272,29 @@ def pcat_tgas_mock():
          #psfninfoprio=False, \
          minmdatacnts=0., \
          strgexpo=1., \
-         trueback=['tgasback.fits'], \
-         truenumbpnts=array([20]), \
+         back=['tgasback.fits'], \
+         numbpnts=array([20]), \
          verbtype=2, \
          #optihess=False, \
          numbsidecart=200, \
-         truemaxmnumbpnts=array([40]), \
+         maxmnumbpnts=array([40]), \
         )
 
 
 def pcat_tgas_inpt():
     
     pcat.main.init( \
-         numbswep=20000, \
+         numbswep=100000, \
          elemtype='clus', \
          exprtype='sdyn', \
+         verbtype=2, \
+         diagmode=True, \
          psfninfoprio=False, \
          minmdatacnts=0., \
          strgexpo=1., \
-         fittback=['tgasback.fits'], \
-         strgexprflux='tgas.fits', \
-         fittmaxmnumbpnts=array([40]), \
+         back=['tgasback.fits'], \
+         strgexprsbrt='tgas.fits', \
+         maxmnumbpnts=array([40]), \
         )
 
 globals().get(sys.argv[1])()

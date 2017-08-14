@@ -1,6 +1,6 @@
 from __init__ import *
 from astropy.coordinates import SkyCoord
-from pcat.util import retr_chandata
+from pcat.util import retr_refrchaninit
 
 def writ_chan():
 
@@ -208,11 +208,11 @@ def pcat_chan_mock_spmr():
                               #makeplotfram=False, \
                               shrtfram=True, \
                               inittype='refr', \
-                              truelgalimps=array([0.]), \
-                              truebgalimps=array([0.]), \
-                              truesbrtimps=array([5e-7]), \
-                              truenumbelem=array([1]), \
-                              truemaxmnumbelem=array([6]), \
+                              lgalimps=array([0.]), \
+                              bgalimps=array([0.]), \
+                              sbrtimps=array([5e-7]), \
+                              numbelemreg0pop0=1, \
+                              maxmnumbelemreg0pop0=6, \
                               strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               exprtype='chan', \
                               maxmgangdata=maxmgangdata, \
@@ -231,7 +231,25 @@ def pcat_chan_mock_popl():
                               strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               exprtype='chan', \
                               numbsidecart=300, \
-                              truenumbelem=array([50, 40]), \
+                              numbpopl=2, \
+                              numbelemreg0pop0=50, \
+                              numbelemreg0pop1=50, \
+                             )
+
+
+def pcat_chan_mock_spec():
+    
+    datatype = 'home'
+    strgexpomaps = '4msc'
+    gridchan = pcat.main.init( \
+                              numbswep=100000, \
+                              numbswepplot=10000, \
+                              #strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
+                              elemtype='line', \
+                              allwrefr=False, \
+                              exprtype='chan', \
+                              numbsidecart=1, \
+                              numbelemreg0pop0=0, \
                              )
 
 
@@ -246,7 +264,7 @@ def pcat_chan_mock_zero():
                               strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               exprtype='chan', \
                               numbsidecart=numbsidecart, \
-                              truenumbelem=array([0]), \
+                              numbelemreg0pop0=0, \
                              )
 
 
