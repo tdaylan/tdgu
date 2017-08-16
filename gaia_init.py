@@ -285,6 +285,7 @@ def pcat_tgas_inpt():
     
     pcat.main.init( \
          numbswep=100000, \
+         maxmnumbelemreg0pop0=2, \
          elemtype='clus', \
          exprtype='sdyn', \
          verbtype=2, \

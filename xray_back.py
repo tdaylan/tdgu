@@ -242,9 +242,10 @@ def pcat_chan_mock_spec():
     datatype = 'home'
     strgexpomaps = '4msc'
     gridchan = pcat.main.init( \
-                              numbswep=100000, \
+                              numbswep=100, \
                               numbswepplot=10000, \
                               #strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
+                              verbtype=2, \
                               elemtype='line', \
                               allwrefr=False, \
                               exprtype='chan', \

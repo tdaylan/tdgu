@@ -1041,12 +1041,12 @@ def pcat_ferm_mock_igal_popl():
                    backtype=[1., 'sbrtfdfmsmth%snorm.fits' % recotype, 'darktempsmthmanunorm.fits'], \
                    listnameback=['isot', 'fdfm', 'dark'], \
                    numbpopl=3, \
-                   maxmnumbelemreg0pop0=3, \
-                   maxmnumbelemreg0pop1=3, \
-                   maxmnumbelemreg0pop2=3, \
-                   numbelemreg0pop0=2, \
-                   numbelemreg0pop1=2, \
-                   numbelemreg0pop2=2, \
+                   maxmnumbelemreg0pop0=1, \
+                   maxmnumbelemreg0pop1=1, \
+                   maxmnumbelemreg0pop2=1, \
+                   numbelemreg0pop0=1, \
+                   numbelemreg0pop1=1, \
+                   numbelemreg0pop2=1, \
                    spatdisttype=['unif', 'disc', 'gang'], \
                    spectype=['powr', 'expc', 'expc']
                   )
