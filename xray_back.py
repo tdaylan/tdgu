@@ -208,12 +208,14 @@ def pcat_chan_mock_spmr():
                               #makeplotfram=False, \
                               shrtfram=True, \
                               inittype='refr', \
-                              lgalimps=array([0.]), \
-                              bgalimps=array([0.]), \
-                              sbrtimps=array([5e-7]), \
+                              truelgal=array([0.]), \
+                              truebgal=array([0.]), \
+                              truesbrt=array([5e-7]), \
                               numbelemreg0pop0=1, \
+                              minmnumbelemreg0pop0=1, \
                               maxmnumbelemreg0pop0=6, \
-                              strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
+                              strgexpo=1e9, \
+                              #'expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               exprtype='chan', \
                               maxmgangdata=maxmgangdata, \
                               numbsidecart=numbsidecart, \
@@ -242,15 +244,22 @@ def pcat_chan_mock_spec():
     datatype = 'home'
     strgexpomaps = '4msc'
     gridchan = pcat.main.init( \
-                              numbswep=100, \
-                              numbswepplot=10000, \
+                              numbswep=1000, \
+                              numbswepplot=500, \
+                              #makeplot=False, \
                               #strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
-                              verbtype=2, \
+                              #verbtype=2, \
+                              maxmgangdata=1200./3600./180.*pi, \
+                              spectype=['gaus'], \
+                              strgexpo=1e10, \
                               elemtype='line', \
                               allwrefr=False, \
                               exprtype='chan', \
+                              anlytype='spec', \
                               numbsidecart=1, \
-                              numbelemreg0pop0=0, \
+                              #maxmnumbelemreg0pop0=10, \
+                              maxmnumbelemreg0pop0=0, \
+                              #numbelemreg0pop0=3, \
                              )
 
 
@@ -301,8 +310,17 @@ def pcat_chan_mock():
     strgexpomaps = '4msc'
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=2000000, \
-                              makeplotinit=False, \
+                              numbswep=100000, \
+                              numbburn=0, \
+                              factthin=100, \
+                              #verbtype=2, \
+                              #makeplot=False, \
+                              #makeplotinit=False, \
+                              makeplotfram=False, \
+                              inittype='refr', \
+                              #killexpo=True, \
+                              numbelemreg0pop0=100, \
+                              maxmnumbelemreg0pop0=200, \
                               numbswepplot=20000, \
                               strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               exprtype='chan', \

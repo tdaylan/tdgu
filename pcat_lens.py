@@ -165,12 +165,12 @@ def pcat_lens_mock_syst():
    
     seed(4)
     
-    numbswepnomi = 10
+    numbswepnomi = 10000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     dictargs['diagmode'] = True
-    dictargs['makeplot'] = False
+    #dictargs['makeplot'] = False
     #dictargs['verbtype'] = 2
     #dictargs['inittype'] = 'refr'
     #dictargs['diagmode'] = True
@@ -485,12 +485,14 @@ def pcat_lens_mock_many():
     pcat.main.init( \
                    elemtype='lens', \
                    exprtype='hubb', \
+                   numbswep=100, \
                    numbelemreg0pop0=2, \
                    maxmnumbelemreg0pop0=4, \
                    numbelemreg1pop0=1, \
                    maxmnumbelemreg1pop0=3, \
-                   makeplot=False, \
-                   verbtype=2, \
+                   #makeplot=False, \
+                   explprop=True, \
+                   #verbtype=0, \
                    numbregi=2, \
                    #mockonly=True, \
                   )

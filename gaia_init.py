@@ -273,29 +273,31 @@ def pcat_tgas_mock():
          minmdatacnts=0., \
          strgexpo=1., \
          back=['tgasback.fits'], \
-         numbpnts=array([20]), \
+         numbelemreg0pop0=50, \
          verbtype=2, \
          #optihess=False, \
          numbsidecart=200, \
-         maxmnumbpnts=array([40]), \
         )
 
 
 def pcat_tgas_inpt():
     
     pcat.main.init( \
-         numbswep=100000, \
-         maxmnumbelemreg0pop0=2, \
+         numbswep=10000, \
+         #factthin=1, \
+         #numbburn=0, \
+         maxmnumbelemreg0pop0=20, \
          elemtype='clus', \
          exprtype='sdyn', \
-         verbtype=2, \
          diagmode=True, \
+         verbtype=2, \
+         #makeplot=False, \
+         #probtran=1., \
          psfninfoprio=False, \
          minmdatacnts=0., \
          strgexpo=1., \
          back=['tgasback.fits'], \
          strgexprsbrt='tgas.fits', \
-         maxmnumbpnts=array([40]), \
         )
 
 globals().get(sys.argv[1])()
