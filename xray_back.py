@@ -244,12 +244,12 @@ def pcat_chan_mock_spec():
     datatype = 'home'
     strgexpomaps = '4msc'
     gridchan = pcat.main.init( \
-                              numbswep=10000, \
+                              numbswep=1000, \
                               numbswepplot=3000, \
                               #makeplot=False, \
                               #strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
-                              #verbtype=2, \
                               maxmgangdata=1200./3600./180.*pi, \
+                              #diagmode=True, \
                               spectype=['gaus'], \
                               strgexpo=1e10, \
                               elemtype='line', \
@@ -258,9 +258,14 @@ def pcat_chan_mock_spec():
                               exprtype='chan', \
                               anlytype='spec', \
                               numbsidecart=1, \
+                              #propcomp=False, \
+                              #prophypr=False, \
+                              #propbacp=False, \
+                              #probtran=1., \
                               maxmnumbelemreg0pop0=100, \
                               #maxmnumbelemreg0pop0=0, \
                               numbelemreg0pop0=30, \
+                              #numbelemreg0pop0=0, \
                              )
 
 

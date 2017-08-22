@@ -172,11 +172,280 @@ def pcat_lens_mock_syst():
     dictargs['diagmode'] = True
     #dictargs['makeplot'] = False
     #dictargs['verbtype'] = 2
-    #dictargs['inittype'] = 'refr'
+    dictargs['inittype'] = 'refr'
     #dictargs['diagmode'] = True
-    #dictargs['makeplotinit'] = False
+    dictargs['makeplotinit'] = False
     #dictargs['makeplotfram'] = False
- 
+    #numbelemreg0pop0 25
+    #    meanelempop0 25
+    #defsdistsloppop0 1.9
+    #    sigcene0evt0 3.878509449e-07
+    #bacpbac0reg0ene0 2e-07
+    #    lgalsourreg0 -5.50574787e-07
+    #    bgalsourreg0 9.236174866e-07
+    #    fluxsourreg0 1.074363576e-22
+    #    sizesourreg0 1.034457157e-06
+    #    ellpsourreg0 0.2173957662
+    #    anglsourreg0 2.448503661
+    #    lgalhostreg0 -5.862656473e-07
+    #    bgalhostreg0 7.039363471e-07
+    #    fluxhostreg0 8.260443896e-16
+    #    sizehostreg0 4.84814e-06
+    #    beinhostreg0 7.27221e-06
+    #    ellphostreg0 0.2
+    #    anglhostreg0 1.21445
+    #    serihostreg0 4
+    #    sherextrreg0 0.0956653
+    #    sangextrreg0 1.5708
+
+    dictargs['truenumbpntsreg0pop0'] = 25
+    dictargs['truemeanpntspop0'] = 25
+    dictargs['truedefsdistsloppop0'] = 1.9
+    dictargs['truesigcene0evt0'] = 4.21788e-07
+    dictargs['truebacpbac0reg0ene0'] = 2e-07
+    dictargs['truelgalsourreg0'] = -2.41109e-07
+    dictargs['truebgalsourreg0'] = 1.26909e-07
+    dictargs['truefluxsourreg0'] = 1e-18
+    dictargs['truesizesourreg0'] = 1.45444e-06
+    dictargs['trueellpsourreg0'] = 0.2
+    dictargs['trueanglsourreg0'] = 2.4485
+    dictargs['truelgalhostreg0'] = 1.10908e-07
+    dictargs['truebgalhostreg0'] = 2.26346e-08
+    dictargs['truefluxhostreg0'] = 1e-16
+    dictargs['truesizehostreg0'] = 4.84814e-06
+    dictargs['truebeinhostreg0'] = 7.27221e-06
+    dictargs['trueellphostreg0'] = 0.2
+    dictargs['trueanglhostreg0'] = 1.21445
+    dictargs['trueserihostreg0'] = 4
+    dictargs['truesherextrreg0'] = 0.0956653
+    dictargs['truesangextrreg0'] = 1.5708
+    dictargs['truelgalreg0pop00000'] = 8.70681e-06
+    dictargs['truebgalreg0pop00000'] = 5.5522e-06
+    dictargs['truedefsreg0pop00000'] = 4.46996e-07
+    dictargs['trueascareg0pop00000'] = 8.3953e-08
+    dictargs['trueacutreg0pop00000'] = 7.26722e-07
+    dictargs['truelgalreg0pop00001'] = 1.95366e-06
+    dictargs['truebgalreg0pop00001'] = -6.43887e-06
+    dictargs['truedefsreg0pop00001'] = 2.0933e-07
+    dictargs['trueascareg0pop00001'] = 1.98019e-07
+    dictargs['trueacutreg0pop00001'] = 5.11875e-06
+    dictargs['truelgalreg0pop00002'] = 8.48563e-06
+    dictargs['truebgalreg0pop00002'] = 4.20743e-07
+    dictargs['truedefsreg0pop00002'] = 5.50444e-08
+    dictargs['trueascareg0pop00002'] = 7.67089e-08
+    dictargs['trueacutreg0pop00002'] = 5.28643e-06
+    dictargs['truelgalreg0pop00003'] = 4.73257e-07
+    dictargs['truebgalreg0pop00003'] = 2.66861e-06
+    dictargs['truedefsreg0pop00003'] = 8.56312e-08
+    dictargs['trueascareg0pop00003'] = 3.15034e-07
+    dictargs['trueacutreg0pop00003'] = 3.84845e-06
+    dictargs['truelgalreg0pop00004'] = 2.40305e-06
+    dictargs['truebgalreg0pop00004'] = 5.18566e-06
+    dictargs['truedefsreg0pop00004'] = 6.03287e-08
+    dictargs['trueascareg0pop00004'] = 1.82084e-07
+    dictargs['trueacutreg0pop00004'] = 4.8727e-06
+    dictargs['truelgalreg0pop00005'] = 3.61995e-06
+    dictargs['truebgalreg0pop00005'] = -4.77678e-06
+    dictargs['truedefsreg0pop00005'] = 1.18797e-07
+    dictargs['trueascareg0pop00005'] = 3.02975e-07
+    dictargs['trueacutreg0pop00005'] = 8.68302e-06
+    dictargs['truelgalreg0pop00006'] = -2.65962e-06
+    dictargs['truebgalreg0pop00006'] = 2.66758e-06
+    dictargs['truedefsreg0pop00006'] = 6.1361e-08
+    dictargs['trueascareg0pop00006'] = 2.41337e-07
+    dictargs['trueacutreg0pop00006'] = 1.76904e-06
+    dictargs['truelgalreg0pop00007'] = 8.11351e-06
+    dictargs['truebgalreg0pop00000'] = -1.32214e-06
+    dictargs['truedefsreg0pop00000'] = 3.43939e-07
+    dictargs['trueascareg0pop00000'] = 2.02059e-07
+    dictargs['trueacutreg0pop00000'] = 8.7719e-06
+    dictargs['truelgalreg0pop00000'] = -1.84568e-06
+    dictargs['truebgalreg0pop00000'] = -3.27396e-06
+    dictargs['truedefsreg0pop00000'] = 1.24152e-07
+    dictargs['trueascareg0pop00000'] = 4.09883e-07
+    dictargs['trueacutreg0pop00000'] = 8.34863e-06
+    dictargs['truelgalreg0pop00000'] = 1.85564e-06
+    dictargs['truebgalreg0pop00000'] = -8.05447e-06
+    dictargs['truedefsreg0pop00000'] = 1.32745e-07
+    dictargs['trueascareg0pop00000'] = 1.18999e-07
+    dictargs['trueacutreg0pop00000'] = 7.10343e-06
+    dictargs['truelgalreg0pop00000'] = 7.65329e-06
+    dictargs['truebgalreg0pop00000'] = 2.85729e-07
+    dictargs['truedefsreg0pop00000'] = 1.35078e-07
+    dictargs['trueascareg0pop00000'] = 3.15458e-08
+    dictargs['trueacutreg0pop00000'] = 5.23671e-06
+    dictargs['truelgalreg0pop00000'] = -7.19101e-06
+    dictargs['truebgalreg0pop00000'] = 2.22167e-06
+    dictargs['truedefsreg0pop00000'] = 8.00093e-08
+    dictargs['trueascareg0pop00000'] = 3.7222e-07
+    dictargs['trueacutreg0pop00000'] =  4.706e-07
+    dictargs['truelgalreg0pop00000'] = -7.56662e-06
+    dictargs['truebgalreg0pop00000'] = 3.56868e-06
+    dictargs['truedefsreg0pop00000'] = 1.07991e-07
+    dictargs['trueascareg0pop00000'] = 2.7714e-07
+    dictargs['trueacutreg0pop00000'] = 8.18081e-06
+    dictargs['truelgalreg0pop00000'] = -2.37798e-07
+    dictargs['truebgalreg0pop00000'] = 6.01449e-06
+    dictargs['truedefsreg0pop00000'] = 1.06915e-07
+    dictargs['trueascareg0pop00000'] = 4.49287e-07
+    dictargs['trueacutreg0pop00000'] = 6.46671e-06
+    dictargs['truelgalreg0pop00000'] = -6.81208e-06
+    dictargs['truebgalreg0pop00000'] = -2.62666e-06
+    dictargs['truedefsreg0pop00000'] = 4.45121e-07
+    dictargs['trueascareg0pop00000'] = 1.69823e-07
+    dictargs['trueacutreg0pop00000'] = 1.83285e-06
+    dictargs['truelgalreg0pop00000'] = -5.30943e-07
+    dictargs['truebgalreg0pop00000'] = -2.07925e-06
+    dictargs['truedefsreg0pop00000'] = 1.41112e-07
+    dictargs['trueascareg0pop00000'] = 2.1175e-07
+    dictargs['trueacutreg0pop00000'] = 2.52997e-06
+    dictargs['truelgalreg0pop00000'] = -1.69739e-06
+    dictargs['truebgalreg0pop00000'] = -1.57014e-06
+    dictargs['truedefsreg0pop00000'] = 6.30512e-07
+    dictargs['trueascareg0pop00000'] = 4.74931e-07
+    dictargs['trueacutreg0pop00000'] = 6.04629e-06
+    dictargs['truelgalreg0pop00000'] = -8.08312e-06
+    dictargs['truebgalreg0pop00000'] = 4.51844e-06
+    dictargs['truedefsreg0pop00000'] = 1.70373e-07
+    dictargs['trueascareg0pop00000'] = 4.00467e-07
+    dictargs['trueacutreg0pop00000'] = 3.36898e-06
+    dictargs['truelgalreg0pop00000'] = -8.55444e-06
+    dictargs['truebgalreg0pop00000'] = 2.16851e-06
+    dictargs['truedefsreg0pop00000'] = 5.61476e-08
+    dictargs['trueascareg0pop00000'] = 3.6823e-07
+    dictargs['trueacutreg0pop00000'] = 7.70295e-06
+    dictargs['truelgalreg0pop00000'] = -1.77196e-06
+    dictargs['truebgalreg0pop00000'] = 8.60636e-06
+    dictargs['truedefsreg0pop00000'] = 5.99085e-08
+    dictargs['trueascareg0pop00000'] = 4.56979e-07
+    dictargs['trueacutreg0pop00000'] = 4.51352e-06
+
+    dictargs['truelgalreg0pop00000'] = 8.70681e-06
+    dictargs['truebgalreg0pop00000'] = 5.5522e-06
+    dictargs['truedefsreg0pop00000'] = 4.46996e-07
+    dictargs['trueascareg0pop00000'] = 8.3953e-08
+    dictargs['trueacutreg0pop00000'] = 7.26722e-07
+    dictargs['truelgalreg0pop00001'] = 1.95366e-06
+    dictargs['truebgalreg0pop00001'] = -6.43887e-06
+    dictargs['truedefsreg0pop00001'] = 2.0933e-07
+    dictargs['trueascareg0pop00001'] = 1.98019e-07
+    dictargs['trueacutreg0pop00001'] = 5.11875e-06
+    dictargs['truelgalreg0pop00002'] = 8.48563e-06
+    dictargs['truebgalreg0pop00002'] = 4.20743e-07
+    dictargs['truedefsreg0pop00002'] = 5.50444e-08
+    dictargs['trueascareg0pop00002'] = 7.67089e-08
+    dictargs['trueacutreg0pop00002'] = 5.28643e-06
+    dictargs['truelgalreg0pop00003'] = 4.73257e-07
+    dictargs['truebgalreg0pop00003'] = 2.66861e-06
+    dictargs['truedefsreg0pop00003'] = 8.56312e-08
+    dictargs['trueascareg0pop00003'] = 3.15034e-07
+    dictargs['trueacutreg0pop00003'] = 3.84845e-06
+    dictargs['truelgalreg0pop00004'] = 2.40305e-06
+    dictargs['truebgalreg0pop00004'] = 5.18566e-06
+    dictargs['truedefsreg0pop00004'] = 6.03287e-08
+    dictargs['trueascareg0pop00004'] = 1.82084e-07
+    dictargs['trueacutreg0pop00004'] = 4.8727e-06
+    dictargs['truelgalreg0pop00005'] = 3.61995e-06
+    dictargs['truebgalreg0pop00005'] = -4.77678e-06
+    dictargs['truedefsreg0pop00005'] = 1.18797e-07
+    dictargs['trueascareg0pop00005'] = 3.02975e-07
+    dictargs['trueacutreg0pop00005'] = 8.68302e-06
+    dictargs['truelgalreg0pop00006'] = -2.65962e-06
+    dictargs['truebgalreg0pop00006'] = 2.66758e-06
+    dictargs['truedefsreg0pop00006'] = 6.1361e-08
+    dictargs['trueascareg0pop00006'] = 2.41337e-07
+    dictargs['trueacutreg0pop00006'] = 1.76904e-06
+    dictargs['truelgalreg0pop00007'] = 8.11351e-06
+    dictargs['truebgalreg0pop00007'] = -1.32214e-06
+    dictargs['truedefsreg0pop00007'] = 3.43939e-07
+    dictargs['trueascareg0pop00007'] = 2.02059e-07
+    dictargs['trueacutreg0pop00007'] = 8.7719e-06
+    dictargs['truelgalreg0pop00008'] = -1.84568e-06
+    dictargs['truebgalreg0pop00008'] = -3.27396e-06
+    dictargs['truedefsreg0pop00008'] = 1.24152e-07
+    dictargs['trueascareg0pop00008'] = 4.09883e-07
+    dictargs['trueacutreg0pop00008'] = 8.34863e-06
+    dictargs['truelgalreg0pop00009'] = 1.85564e-06
+    dictargs['truebgalreg0pop00009'] = -8.05447e-06
+    dictargs['truedefsreg0pop00009'] = 1.32745e-07
+    dictargs['trueascareg0pop00009'] = 1.18999e-07
+    dictargs['trueacutreg0pop00009'] = 7.10343e-06
+    dictargs['truelgalreg0pop00010'] = 7.65329e-06
+    dictargs['truebgalreg0pop00010'] = 2.85729e-07
+    dictargs['truedefsreg0pop00010'] = 1.35078e-07
+    dictargs['trueascareg0pop00010'] = 3.15458e-08
+    dictargs['trueacutreg0pop00010'] = 5.23671e-06
+    dictargs['truelgalreg0pop00011'] = -7.19101e-06
+    dictargs['truebgalreg0pop00011'] = 2.22167e-06
+    dictargs['truedefsreg0pop00011'] = 8.00093e-08
+    dictargs['trueascareg0pop00011'] = 3.7222e-07
+    dictargs['trueacutreg0pop00011'] =  4.706e-07
+    dictargs['truelgalreg0pop00012'] = -7.56662e-06
+    dictargs['truebgalreg0pop00012'] = 3.56868e-06
+    dictargs['truedefsreg0pop00012'] = 1.07991e-07
+    dictargs['trueascareg0pop00012'] = 2.7714e-07
+    dictargs['trueacutreg0pop00012'] = 8.18081e-06
+    dictargs['truelgalreg0pop00013'] = -2.37798e-07
+    dictargs['truebgalreg0pop00013'] = 6.01449e-06
+    dictargs['truedefsreg0pop00013'] = 1.06915e-07
+    dictargs['trueascareg0pop00013'] = 4.49287e-07
+    dictargs['trueacutreg0pop00013'] = 6.46671e-06
+    dictargs['truelgalreg0pop00014'] = -6.81208e-06
+    dictargs['truebgalreg0pop00014'] = -2.62666e-06
+    dictargs['truedefsreg0pop00014'] = 4.45121e-07
+    dictargs['trueascareg0pop00014'] = 1.69823e-07
+    dictargs['trueacutreg0pop00014'] = 1.83285e-06
+    dictargs['truelgalreg0pop00015'] = -5.30943e-07
+    dictargs['truebgalreg0pop00015'] = -2.07925e-06
+    dictargs['truedefsreg0pop00015'] = 1.41112e-07
+    dictargs['trueascareg0pop00015'] = 2.1175e-07
+    dictargs['trueacutreg0pop00015'] = 2.52997e-06
+    dictargs['truelgalreg0pop00016'] = -1.69739e-06
+    dictargs['truebgalreg0pop00016'] = -1.57014e-06
+    dictargs['truedefsreg0pop00016'] = 6.30512e-07
+    dictargs['trueascareg0pop00016'] = 4.74931e-07
+    dictargs['trueacutreg0pop00016'] = 6.04629e-06
+    dictargs['truelgalreg0pop00017'] = -8.08312e-06
+    dictargs['truebgalreg0pop00017'] = 4.51844e-06
+    dictargs['truedefsreg0pop00017'] = 1.70373e-07
+    dictargs['trueascareg0pop00017'] = 4.00467e-07
+    dictargs['trueacutreg0pop00017'] = 3.36898e-06
+    dictargs['truelgalreg0pop00018'] = -8.55444e-06
+    dictargs['truebgalreg0pop00018'] = 2.16851e-06
+    dictargs['truedefsreg0pop00018'] = 5.61476e-08
+    dictargs['trueascareg0pop00018'] = 3.6823e-07
+    dictargs['trueacutreg0pop00018'] = 7.70295e-06
+    dictargs['truelgalreg0pop00019'] = -1.77196e-06
+    dictargs['truebgalreg0pop00019'] = 8.60636e-06
+    dictargs['truedefsreg0pop00019'] = 5.99085e-08
+    dictargs['trueascareg0pop00019'] = 4.56979e-07
+    dictargs['trueacutreg0pop00019'] = 4.51352e-06
+    dictargs['truelgalreg0pop00020'] = 5.10012e-06
+    dictargs['truebgalreg0pop00020'] = 4.90283e-06
+    dictargs['truedefsreg0pop00020'] = 3.59422e-06
+    dictargs['trueascareg0pop00020'] = 4.71858e-07
+    dictargs['trueacutreg0pop00020'] = 3.88735e-07
+    dictargs['truelgalreg0pop00021'] = -9.38655e-06
+    dictargs['truebgalreg0pop00021'] = 8.39509e-07
+    dictargs['truedefsreg0pop00021'] =  5.037e-08
+    dictargs['trueascareg0pop00021'] = 3.18758e-07
+    dictargs['trueacutreg0pop00021'] = 5.18656e-06
+    dictargs['truelgalreg0pop00022'] = 3.22999e-06
+    dictargs['truebgalreg0pop00022'] = -1.13755e-06
+    dictargs['truedefsreg0pop00022'] = 6.89786e-08
+    dictargs['trueascareg0pop00022'] = 4.60412e-07
+    dictargs['trueacutreg0pop00022'] = 7.0615e-06
+    dictargs['truelgalreg0pop00023'] = -9.57364e-06
+    dictargs['truebgalreg0pop00023'] = -7.77006e-06
+    dictargs['truedefsreg0pop00023'] = 1.46526e-07
+    dictargs['trueascareg0pop00023'] = 1.39644e-07
+    dictargs['trueacutreg0pop00023'] = 3.95241e-06
+    dictargs['truelgalreg0pop00024'] = 5.45961e-06
+    dictargs['truebgalreg0pop00024'] = -2.82849e-06
+    dictargs['truedefsreg0pop00024'] = 8.48926e-07
+    dictargs['trueascareg0pop00024'] = 3.49285e-07
+    dictargs['trueacutreg0pop00024'] = 5.35163e-06
+
     numbelem = int(25. * 10.**0.9)
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
@@ -522,20 +791,10 @@ def pcat_lens_mock():
                        exprtype='hubb', \
                        inittype='refr', \
                        numbswep=100000, \
-                       numbburn=0, \
-                       factthin=100, \
-                       #verbtype=2, \
-                       proppsfp=False, \
-                       makeplotinit=False, \
-                       #sqzeprop=True, \
-                       #makeplot=False, \
-                       makeplotfram=False, \
-                       #factthin=3000, \
-                       maxmnumbelemreg0pop0=0, \
-                       #verbtype=2, \
-                       #checprio=True, \
-                       #evoltype='maxmllik', \
-                       #makeplot=False, \
+                       #numbswepplot=6000, \
+                       verbtype=2, \
+                       maxmnumbelemreg0pop0=10, \
+                       numbelemreg0pop0=5, \
                        #shrtfram=True, \
                        #optihess=False, \
                        #makeplot=False, \
@@ -553,7 +812,6 @@ def pcat_lens_mock():
                        #initbgalsour=1e-1 / anglfact, \
                        #burntmpr=True, \
                        #shrtfram=True, \
-                       numbswepplot=6000, \
                       )
    
 
