@@ -253,13 +253,14 @@ def pcat_chan_mock_spec():
                               spectype=['gaus'], \
                               strgexpo=1e10, \
                               elemtype='line', \
-                              allwrefr=False, \
+                              asscrefr=False, \
+                              #verbtype=2, \
                               exprtype='chan', \
                               anlytype='spec', \
                               numbsidecart=1, \
-                              #maxmnumbelemreg0pop0=10, \
-                              maxmnumbelemreg0pop0=0, \
-                              #numbelemreg0pop0=3, \
+                              maxmnumbelemreg0pop0=100, \
+                              #maxmnumbelemreg0pop0=0, \
+                              numbelemreg0pop0=30, \
                              )
 
 
