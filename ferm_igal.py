@@ -879,6 +879,7 @@ def pcat_ferm_inpt_ptch():
     bgalcntr = deg2rad(45.)
     liststrg = ['sbrtfermcmp0igal', 'expofermcmp0igal', 'sbrtfdfm']
     numbmaps = len(liststrg)
+    recotype = 'rec7'
     strgcntr = '_cntr%04d%04d' % (rad2deg(lgalcntr), rad2deg(bgalcntr))
     for k in range(numbmaps):
         path = pathdata + liststrg[k] + strgcntr + '.fits'
@@ -918,6 +919,7 @@ def pcat_ferm_mock_igal_brok():
      
     listfluxdistbrek = array([1e-10, 3e-10, 1e-9, 3e-9, 1e-8])
     fluxdistbrek = array([1e-9])
+    recotype = 'rec7'
     listfluxdistsloplowr = array([1.9, 2.2, 2.8, 3.1, 3.4])
     numbiter = listfluxdistsloplowr.size
     for k in range(numbiter):
@@ -952,6 +954,7 @@ def pcat_ferm_mock_igal_syst():
             [50, 100, ], \
            ]
     numbtupl = len(tupl)
+    recotype = 'rec7'
     indxtupl = np.arange(numbtupl)
     strgtupl = []
     for k in range(numbtupl):

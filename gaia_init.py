@@ -268,13 +268,14 @@ def pcat_tgas_mock():
          numbswep=300, \
          numbswepplot=10000, \
          elemtype='clus', \
+         initnumbelemreg0pop0=10, \
          exprtype='sdyn', \
          #psfninfoprio=False, \
          minmdatacnts=0., \
          strgexpo=1., \
          back=['tgasback.fits'], \
          numbelemreg0pop0=50, \
-         verbtype=2, \
+         #verbtype=2, \
          #optihess=False, \
          numbsidecart=200, \
         )
