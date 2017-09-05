@@ -92,6 +92,9 @@ def pcat_ferm_mock_ngal():
     pcat.main.init( \
                    numbswep=50000, \
                    lgalcntr=0., \
+                   forccart=True, \
+                   pixltype='cart', \
+                   numbsidecart=100, \
                    #indxenerincl=arange(5), \
                    #indxevttincl=arange(4), \
                    bgalcntr=pi / 2., \

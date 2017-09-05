@@ -218,7 +218,7 @@ def plot_gums():
     plt.show()
     
 
-def writ_tgasdata():
+def writ_tgas():
 
     #path = os.environ["TDGU_DATA_PATH"] + '/gaia_init/data/tgashalometa.fits'
     path = os.environ["TDGU_DATA_PATH"] + '/gaia_init/data/tgashalokine.fits'
@@ -243,21 +243,17 @@ def writ_tgasdata():
     numbside = int(sqrt(datacntstemp.size))
     datacnts = zeros((1, 1, numbside, numbside, 1))
     datacnts[0, 0, :, :, 0] = datacntstemp.T
-    print 'datacnts'
-    summgene(datacnts)
     datacnts *= (numbbins - 1.)**2 / 4.
-    print 'datacnts'
-    summgene(datacnts)
     
     path = os.environ["PCAT_DATA_PATH"] + '/data/inpt/tgas.fits'
     pf.writeto(path, datacnts, clobber=True)
     
     backcnts = copy(datacnts)
-    backcnts[0, 0, :, :, 0] = sp.ndimage.filters.gaussian_filter(backcnts[0, :, :, 0], sigma=15)
-    backcnts[where(backcnts <= 0.)] = 1e-20
+    backcnts[0, 0, :, :, 0] = sp.ndimage.filters.gaussian_filter(backcnts[0, 0, :, :, 0], sigma=15)
+    backcnts[where(backcnts <= 0.)] = 1e-5
    
     set_printoptions(precision=1)
-
+    
     path = os.environ["PCAT_DATA_PATH"] + '/data/inpt/tgasback.fits'
     pf.writeto(path, backcnts, clobber=True)
 
@@ -265,15 +261,14 @@ def writ_tgasdata():
 def pcat_tgas_mock():
     
     pcat.main.init( \
-         numbswep=300, \
+         numbswep=100000, \
          numbswepplot=10000, \
          elemtype='clus', \
-         initnumbelemreg0pop0=10, \
          exprtype='sdyn', \
          #psfninfoprio=False, \
          minmdatacnts=0., \
          strgexpo=1., \
-         back=['tgasback.fits'], \
+         backtype=['tgasback.fits'], \
          numbelemreg0pop0=50, \
          #verbtype=2, \
          #optihess=False, \
@@ -284,20 +279,16 @@ def pcat_tgas_mock():
 def pcat_tgas_inpt():
     
     pcat.main.init( \
-         numbswep=10000, \
-         #factthin=1, \
-         #numbburn=0, \
-         maxmnumbelemreg0pop0=20, \
+         numbswep=100000, \
+         numbswepplot=10000, \
          elemtype='clus', \
          exprtype='sdyn', \
-         diagmode=True, \
-         verbtype=2, \
-         #makeplot=False, \
-         #probtran=1., \
+         savestat=True, \
+         inittype='reco', \
          psfninfoprio=False, \
          minmdatacnts=0., \
          strgexpo=1., \
-         back=['tgasback.fits'], \
+         backtype=['tgasback.fits'], \
          strgexprsbrt='tgas.fits', \
         )
 

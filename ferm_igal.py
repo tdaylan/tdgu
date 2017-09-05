@@ -981,7 +981,7 @@ def pcat_ferm_mock_igal_syst():
                       )
 
 
-def pcat_ferm_inpt_igal_four(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expofermcmp0igal.fits'):
+def pcat_ferm_inpt_igal_bfun(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expofermcmp0igal.fits'):
     
     recotype = 'rec7'
     if recotype == 'rec7':
@@ -999,7 +999,7 @@ def pcat_ferm_inpt_igal_four(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    proppsfp=False, \
                    maxmgangdata=deg2rad(15.), \
                    #verbtype=2, \
-                   anlytype='four', \
+                   anlytype='bfun', \
                    #propbacp=False, \
                    #indxenerincl=arange(0, 5), \
                    #shrtfram=True, \
@@ -1008,13 +1008,15 @@ def pcat_ferm_inpt_igal_four(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    indxevttincl=arange(2, 4), \
                    maxmnumbelemreg0pop0=10, \
                    #indxevttincl=indxevttincl, \
+                   numbsidecart=100, \
+                   pixltype='cart', \
                    forccart=True, \
                    #numbsidecart=100, \
                    #pixltype='cart', \
                    savestat=True, \
-                   inittype='reco', \
+                   #inittype='reco', \
                    #backtype=['data'], \
-                   backtype=[1., 'sbrtfdfmsmthmanunorm.fits', 'cmonsmthmanunorm.fits'], \
+                   #backtype=[1., 'sbrtfdfmsmthmanunorm.fits', 'cmonsmthmanunorm.fits'], \
                    strgexpo=strgexpo, \
                    strgexprsbrt=strgexprsbrt, \
                   )

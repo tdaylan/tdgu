@@ -195,21 +195,25 @@ def pcat_chan_mock_spmr():
     maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
     
     gridchan = pcat.main.init( \
-                              numbswep=10000, \
+                              numbswep=100000, \
+                              factthin=1000, \
                               numbburn=0, \
                               probbrde=0., \
                               probtran=1., \
                               priofactdoff=0., \
                               checprio=True, \
                               indxenerincl=array([0]), \
-                              verbtype=2, \
+                              #verbtype=2, \
                               #makeplot=False, \
-                              numbswepplot=1000, \
+                              numbswepplot=2000, \
+                              makeplot=False, \
+                              #makeplotinit=False, \
                               #makeplotfram=False, \
                               shrtfram=True, \
                               inittype='refr', \
-                              truelgal=array([0.]), \
-                              truebgal=array([0.]), \
+                              truelgalreg0pop00000=0., \
+                              truebgalreg0pop00000=0., \
+                              truefluxreg0pop00000=3e-8, \
                               truesbrt=array([5e-7]), \
                               numbelemreg0pop0=1, \
                               minmnumbelemreg0pop0=1, \
@@ -244,27 +248,35 @@ def pcat_chan_mock_spec():
     datatype = 'home'
     strgexpomaps = '4msc'
     gridchan = pcat.main.init( \
-                              numbswep=1000, \
+                              numbswep=10000, \
+                              numbburn=0, \
+                              factthin=10, \
                               numbswepplot=3000, \
                               #makeplot=False, \
                               #strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               maxmgangdata=1200./3600./180.*pi, \
                               #diagmode=True, \
                               spectype=['gaus'], \
-                              strgexpo=1e10, \
+                              strgexpo=1e2, \
                               elemtype='line', \
                               asscrefr=False, \
+                              inittype='refr', \
                               #verbtype=2, \
                               exprtype='chan', \
                               anlytype='spec', \
                               numbsidecart=1, \
+                              #makeplotinit=False, \
+                              #makeplotfram=False, \
                               #propcomp=False, \
                               #prophypr=False, \
                               #propbacp=False, \
                               #probtran=1., \
-                              maxmnumbelemreg0pop0=100, \
+                              #propcomp=False, \
+                              #probtran=0., \
+                              #propbacp=False, \
+                              maxmnumbelemreg0pop0=10, \
                               #maxmnumbelemreg0pop0=0, \
-                              numbelemreg0pop0=30, \
+                              numbelemreg0pop0=5, \
                               #numbelemreg0pop0=0, \
                              )
 
@@ -316,9 +328,41 @@ def pcat_chan_mock():
     strgexpomaps = '4msc'
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=100000, \
-                              numbburn=0, \
+                              numbswep=400000, \
+                              numbburn=100000, \
                               factthin=1000, \
+                              #verbtype=2, \
+                              #highexpo=True, \
+                              #makeplot=False, \
+                              #proppsfp=False, \
+                              #propcomp=False, \
+                              #propbacp=False, \
+                              #makeplotinit=False, \
+                              #shrtfram=True, \
+                              #makeplotfram=False, \
+                              inittype='refr', \
+                              #killexpo=True, \
+                              #verbtype=2, \
+                              #makeplot=False, \
+                              numbelemreg0pop0=100, \
+                              #maxmnumbelemreg0pop0=3, \
+                              numbswepplot=10000, \
+                              strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
+                              exprtype='chan', \
+                              numbsidecart=numbsidecart, \
+                             )
+
+
+def pcat_chan_mock_maxm():
+    
+    datatype = 'home'
+    strgexpomaps = '4msc'
+    numbsidecart = 300
+    gridchan = pcat.main.init( \
+                              numbswep=100, \
+                              numbburn=0, \
+                              evoltype='maxmllik', \
+                              factthin=1, \
                               #verbtype=2, \
                               #makeplot=False, \
                               #makeplotinit=False, \
@@ -326,8 +370,10 @@ def pcat_chan_mock():
                               #makeplotfram=False, \
                               inittype='refr', \
                               #killexpo=True, \
-                              numbelemreg0pop0=100, \
-                              maxmnumbelemreg0pop0=200, \
+                              verbtype=2, \
+                              makeplot=False, \
+                              numbelemreg0pop0=2, \
+                              maxmnumbelemreg0pop0=3, \
                               numbswepplot=20000, \
                               strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               exprtype='chan', \
