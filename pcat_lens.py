@@ -166,13 +166,13 @@ def pcat_lens_mock_syst():
    
     seed(4)
     
-    numbswepnomi = 100000
+    numbswepnomi = 1000000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
-    dictargs['diagmode'] = True
-    dictargs['makeplotinit'] = False
-    dictargs['shrtfram'] = True
+    #dictargs['diagmode'] = True
+    #dictargs['makeplotinit'] = False
+    #dictargs['shrtfram'] = True
     dictargs['numbswepplot'] = 10000
     #dictargs['verbtype'] = 2
     #dictargs['inittype'] = 'refr'
@@ -674,9 +674,9 @@ def pcat_lens_mock():
         pcat.main.init( \
                        elemtype='lens', \
                        exprtype='hubb', \
-                       diagmode=True, \
-                       makeplotinit=False, \
-                       shrtfram=True, \
+                       #diagmode=True, \
+                       #makeplotinit=False, \
+                       #shrtfram=True, \
                        #verbtype=2, \
                        numbswep=1000000, \
                        numbburn=0, \
