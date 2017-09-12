@@ -144,7 +144,8 @@ def pcat_lens_mock_next():
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     dictargs['diagmode'] = True
-    dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 1000
+    dictargs['verbtype'] = 2
  
     numbelem = array([25. * 10.**0.9], dtype=int)
     anglfact = 3600. * 180. / pi
@@ -170,7 +171,9 @@ def pcat_lens_mock_syst():
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     dictargs['diagmode'] = True
-    #dictargs['makeplot'] = False
+    dictargs['makeplotinit'] = False
+    dictargs['shrtfram'] = True
+    dictargs['numbswepplot'] = 10000
     #dictargs['verbtype'] = 2
     #dictargs['inittype'] = 'refr'
     #dictargs['diagmode'] = True
@@ -322,7 +325,7 @@ def pcat_lens_mock_syst():
     dictargs['truedefsreg0pop00024'] = 8.48926e-07
     dictargs['trueascareg0pop00024'] = 3.49285e-07
     dictargs['trueacutreg0pop00024'] = 5.35163e-06
-    dictargs['verbtype'] = 2
+    #dictargs['verbtype'] = 2
 
     numbelem = int(25. * 10.**0.9)
     anglfact = 3600. * 180. / pi
@@ -634,6 +637,7 @@ def pcat_lens_mock_many():
                    exprtype='hubb', \
                    numbswep=100000, \
                    factthin=1000, \
+                   diagmode=True, \
                    numbburn=0, \
                    inittype='refr', \
                    numbelemreg0pop0=25, \
@@ -670,12 +674,18 @@ def pcat_lens_mock():
         pcat.main.init( \
                        elemtype='lens', \
                        exprtype='hubb', \
+                       diagmode=True, \
+                       makeplotinit=False, \
+                       shrtfram=True, \
+                       #verbtype=2, \
+                       numbswep=1000000, \
+                       numbburn=0, \
+                       factthin=200, \
+                       numbswepplot=10000, \
                        inittype='refr', \
-                       numbswep=100000, \
-                       #numbswepplot=6000, \
-                       verbtype=2, \
-                       maxmnumbelemreg0pop0=10, \
-                       numbelemreg0pop0=5, \
+                       maxmnumbelemreg0pop0=0, \
+                       minmdefs=0.3/anglfact, \
+                       numbelemreg0pop0=0, \
                        #shrtfram=True, \
                        #optihess=False, \
                        #makeplot=False, \

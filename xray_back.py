@@ -190,40 +190,38 @@ def pcat_chan_mock_spmr():
     
     datatype = 'home'
     strgexpomaps = '4msc'
-    numbsidecart = 30
+    numbsidecart = 15
     
     maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
+
+    dictargs = {}
+    dictargs['numbswep'] = 100000
+    dictargs['numbburn'] = 0
+    dictargs['factthin'] = 100
+    dictargs['exprtype'] = 'chan'
+    dictargs['inittype'] = 'refr'
+    dictargs['shrtfram'] = False
+    dictargs['probbrde'] = 0.
+    dictargs['probtran'] = 1.
+    dictargs['indxenerincl'] = array([0])
+    dictargs['numbswepplot'] = 1000
+    dictargs['truelgalreg0pop00000'] = 0.
+    dictargs['truebgalreg0pop00000'] = 0.
+    dictargs['truesbrt'] = array([5e-7])
+    dictargs['numbelemreg0pop0'] = 1
+    dictargs['minmnumbelemreg0pop0'] = 1
+    dictargs['maxmnumbelemreg0pop0'] = 2
+    dictargs['strgexpo'] = 1e9
+    dictargs['maxmgangdata'] = maxmgangdata
+    dictargs['numbsidecart'] = numbsidecart
     
-    gridchan = pcat.main.init( \
-                              numbswep=100000, \
-                              factthin=1000, \
-                              numbburn=0, \
-                              probbrde=0., \
-                              probtran=1., \
-                              priofactdoff=0., \
-                              checprio=True, \
-                              indxenerincl=array([0]), \
-                              #verbtype=2, \
-                              #makeplot=False, \
-                              numbswepplot=2000, \
-                              makeplot=False, \
-                              #makeplotinit=False, \
-                              #makeplotfram=False, \
-                              shrtfram=True, \
-                              inittype='refr', \
-                              truelgalreg0pop00000=0., \
-                              truebgalreg0pop00000=0., \
-                              truefluxreg0pop00000=3e-8, \
-                              truesbrt=array([5e-7]), \
-                              numbelemreg0pop0=1, \
-                              minmnumbelemreg0pop0=1, \
-                              maxmnumbelemreg0pop0=6, \
-                              strgexpo=1e9, \
-                              #'expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
-                              exprtype='chan', \
-                              maxmgangdata=maxmgangdata, \
-                              numbsidecart=numbsidecart, \
-                             )
+    dictargsvari = {}
+    dictargsvari['priofactdoff'] = [0., 0., 0., 1.]
+    dictargsvari['truefluxreg0pop00000'] = [3e-8,  6e-8,  1e-7, 1e-7]
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                 )
 
 
 def pcat_chan_mock_popl():
@@ -321,6 +319,28 @@ def pcat_chan_inpt_assc():
 
 
 # science suites
+def pcat_chan_mock_syst():
+   
+    seed(4)
+    
+    dictargs = {}
+    dictargs['exprtype'] = 'hubb'
+    dictargs['numbswep'] = 100000
+    dictargs['numbburn'] = 20000
+    dictargs['factthin'] = 800
+    dictargs['inittype'] = 'refr'
+    dictargs['numbelemreg0pop0'] = 300
+    
+    dictargsvari = {}
+    dictargsvari['trueminmflux'] = [3e-10, 3e-10, 3e-10, ]
+    dictargsvari['fittminmflux'] = [1e-9,  3e-9,  1e-8,  ]
+    dictargsvari['priofactdoff'] = [0.,    1.,    1.,    ]
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  #indxruns=0, \
+                                 )
+    
 
 def pcat_chan_mock():
     
@@ -328,24 +348,29 @@ def pcat_chan_mock():
     strgexpomaps = '4msc'
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=400000, \
-                              numbburn=100000, \
-                              factthin=1000, \
-                              #verbtype=2, \
-                              #highexpo=True, \
-                              #makeplot=False, \
-                              #proppsfp=False, \
-                              #propcomp=False, \
-                              #propbacp=False, \
-                              #makeplotinit=False, \
-                              #shrtfram=True, \
-                              #makeplotfram=False, \
+                              numbswep=100000, \
+                              numbburn=20000, \
+                              factthin=800, \
                               inittype='refr', \
-                              #killexpo=True, \
-                              #verbtype=2, \
-                              #makeplot=False, \
                               numbelemreg0pop0=100, \
-                              #maxmnumbelemreg0pop0=3, \
+                              numbswepplot=10000, \
+                              strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
+                              exprtype='chan', \
+                              numbsidecart=numbsidecart, \
+                             )
+
+
+def pcat_chan_mock():
+    
+    datatype = 'home'
+    strgexpomaps = '4msc'
+    numbsidecart = 300
+    gridchan = pcat.main.init( \
+                              numbswep=100000, \
+                              numbburn=10000, \
+                              factthin=900, \
+                              inittype='refr', \
+                              numbelemreg0pop0=100, \
                               numbswepplot=10000, \
                               strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               exprtype='chan', \

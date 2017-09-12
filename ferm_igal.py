@@ -990,8 +990,9 @@ def pcat_ferm_inpt_igal_bfun(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
         indxevttincl = array([2, 3])
 
     pcat.main.init( \
-                   numbswep=2000000, \
-                   numbswepplot=20000, \
+                   numbswep=10000, \
+                   numbswepplot=1000, \
+                   factthin=100, \
                    numbburn=0, \
                    diagmode=True, \
                    #penalpridiff=True, \
@@ -999,14 +1000,14 @@ def pcat_ferm_inpt_igal_bfun(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='exp
                    proppsfp=False, \
                    maxmgangdata=deg2rad(15.), \
                    #verbtype=2, \
-                   anlytype='bfun', \
+                   anlytype='rec7bfun', \
                    #propbacp=False, \
                    #indxenerincl=arange(0, 5), \
                    #shrtfram=True, \
                    #makeplot=False, \
                    indxenerincl=arange(1, 4), \
-                   indxevttincl=arange(2, 4), \
-                   maxmnumbelemreg0pop0=10, \
+                   indxevttincl=indxevttincl, \
+                   maxmnumbelemreg0pop0=0, \
                    #indxevttincl=indxevttincl, \
                    numbsidecart=100, \
                    pixltype='cart', \
