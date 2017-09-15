@@ -143,9 +143,13 @@ def pcat_lens_mock_next():
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
-    dictargs['diagmode'] = True
-    dictargs['numbswep'] = 1000
-    dictargs['verbtype'] = 2
+    #dictargs['diagmode'] = True
+    dictargs['numbswep'] = 100000
+    dictargs['numbswepplot'] = 10000
+    #dictargs['makeplot'] = False
+    #dictargs['numbelemreg0pop0'] = 4
+    #dictargs['maxmnumbelemreg0pop0'] = 30
+    #dictargs['verbtype'] = 2
  
     numbelem = array([25. * 10.**0.9], dtype=int)
     anglfact = 3600. * 180. / pi
