@@ -688,10 +688,11 @@ def pcat_lens_mock():
                        #verbtype=2, \
                        numbswep=1000000, \
                        numbburn=0, \
-                       factthin=500, \
-                       makeplotinit=False, \
+                       factthin=400, \
+                       #numbproc=3, \
+                       #makeplotinit=False, \
                        shrtfram=True, \
-                       numbswepplot=10000, \
+                       numbswepplot=50000, \
                        #verbtype=2, \
                        inittype='refr', \
                        maxmnumbelemreg0pop0=0, \
