@@ -144,9 +144,9 @@ def pcat_lens_mock_next():
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     dictargs['diagmode'] = True
-    dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 1000000
     dictargs['numbburn'] = 0
-    dictargs['factthin'] = 100
+    dictargs['factthin'] = 250
     dictargs['inittype'] = 'refr'
     dictargs['numbswepplot'] = 10000
     dictargs['makeplotinit'] = False
