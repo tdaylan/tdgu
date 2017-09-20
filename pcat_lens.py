@@ -143,11 +143,14 @@ def pcat_lens_mock_next():
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
-    #dictargs['diagmode'] = True
+    dictargs['diagmode'] = True
     dictargs['numbswep'] = 100000
+    dictargs['numbburn'] = 0
+    dictargs['factthin'] = 100
+    dictargs['inittype'] = 'refr'
     dictargs['numbswepplot'] = 10000
-    #dictargs['makeplot'] = False
-    #dictargs['numbelemreg0pop0'] = 4
+    dictargs['makeplotinit'] = False
+    dictargs['numbelemreg0pop0'] = 25
     #dictargs['maxmnumbelemreg0pop0'] = 30
     #dictargs['verbtype'] = 2
  
@@ -170,17 +173,16 @@ def pcat_lens_mock_syst():
    
     seed(4)
     
-    numbswepnomi = 1000000
+    numbswepnomi = 100000
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
-    #dictargs['diagmode'] = True
-    #dictargs['makeplotinit'] = False
-    #dictargs['shrtfram'] = True
+    dictargs['diagmode'] = True
+    dictargs['makeplotinit'] = False
+    dictargs['numbburn'] = 0
+    dictargs['factthin'] = 1000
     dictargs['numbswepplot'] = 10000
-    #dictargs['verbtype'] = 2
-    #dictargs['inittype'] = 'refr'
-    #dictargs['diagmode'] = True
+    dictargs['inittype'] = 'refr'
 
     dictargs['truenumbpntsreg0pop0'] = 25
     dictargs['truemeanpntspop0'] = 25
@@ -639,18 +641,20 @@ def pcat_lens_mock_many():
     pcat.main.init( \
                    elemtype='lens', \
                    exprtype='hubb', \
-                   numbswep=100000, \
-                   factthin=1000, \
-                   diagmode=True, \
+                   numbswep=10000, \
                    numbburn=0, \
+                   factthin=10, \
+                   diagmode=True, \
+                   shrtfram=True, \
+                   makeplotinit=False, \
                    inittype='refr', \
-                   numbelemreg0pop0=25, \
-                   maxmnumbelemreg0pop0=100, \
-                   numbelemreg1pop0=25, \
-                   maxmnumbelemreg1pop0=100, \
+                   numbelemreg0pop0=0, \
+                   maxmnumbelemreg0pop0=0, \
+                   numbelemreg1pop0=0, \
+                   maxmnumbelemreg1pop0=0, \
                    #makeplot=False, \
                    #explprop=True, \
-                   #verbtype=0, \
+                   verbtype=2, \
                    numbregi=2, \
                    #mockonly=True, \
                   )
@@ -684,12 +688,16 @@ def pcat_lens_mock():
                        #verbtype=2, \
                        numbswep=1000000, \
                        numbburn=0, \
-                       factthin=200, \
+                       factthin=100, \
+                       makeplotinit=False, \
+                       shrtfram=True, \
                        numbswepplot=10000, \
+                       #verbtype=2, \
                        inittype='refr', \
                        maxmnumbelemreg0pop0=0, \
                        minmdefs=0.3/anglfact, \
                        numbelemreg0pop0=0, \
+                       #numbelemreg0pop0=25, \
                        #shrtfram=True, \
                        #optihess=False, \
                        #makeplot=False, \

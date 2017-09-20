@@ -1227,13 +1227,17 @@ def pcat_ferm_inpt_igal(strgexprsbrt='sbrtfermcmp0igal.fits', strgexpo='expoferm
 def pcat_ferm_mock_igal():
     
     recotype = 'manu'
+    if recotype == 'rec7' or recotype == 'manu':
+        indxevttincl = array([0, 1])
+    if recotype == 'rec8':
+        indxevttincl = array([2, 3])
     listnameback=['isot', 'fdfm', 'dark']
     backtype = [1., 'sbrtfdfmsmth%snorm.fits' % recotype, 'darktempsmth%snorm.fits' % recotype]
 
     pcat.main.init( \
                    numbswep=100000, \
                    numbswepplot=10000, \
-                   indxevttincl=arange(2, 4), \
+                   indxevttincl=indxevttincl, \
                    indxenerincl=arange(1, 4), \
                    proppsfp=False, \
                    inittype='refr', \
