@@ -688,7 +688,7 @@ def pcat_lens_mock():
                        #verbtype=2, \
                        numbswep=1000000, \
                        numbburn=0, \
-                       factthin=100, \
+                       factthin=500, \
                        makeplotinit=False, \
                        shrtfram=True, \
                        numbswepplot=10000, \
