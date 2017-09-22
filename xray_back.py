@@ -184,7 +184,7 @@ def writ_chan():
 
 # test suites
 
-def pcat_chan_mock_spmr():
+def pcat_chan_mock_spmr(nameconfexec=None):
    
     anglfact = 3600. * 180. / pi
     
@@ -200,7 +200,6 @@ def pcat_chan_mock_spmr():
     dictargs['factthin'] = 100
     dictargs['exprtype'] = 'chan'
     dictargs['inittype'] = 'refr'
-    dictargs['shrtfram'] = False
     dictargs['probbrde'] = 0.
     dictargs['probtran'] = 1.
     dictargs['indxenerincl'] = array([0])
@@ -214,13 +213,20 @@ def pcat_chan_mock_spmr():
     dictargs['strgexpo'] = 1e9
     dictargs['maxmgangdata'] = maxmgangdata
     dictargs['numbsidecart'] = numbsidecart
+    dictargs['makeplotinit'] = False
+    dictargs['shrtfram'] = True
     
+    listnameconf = ['pars', 'genebrgt', 'genefain']
     dictargsvari = {}
-    dictargsvari['priofactdoff'] = [0., 0., 0., 1.]
-    dictargsvari['truefluxreg0pop00000'] = [3e-8,  6e-8,  1e-7, 1e-7]
+    for nameconf in listnameconf:
+        dictargsvari[nameconf] = {}
+    dictargsvari['pars']['priofactdoff'] = 1.
+    dictargsvari['genebrgt']['truefluxreg0pop00000'] = 1e-7
+    dictargsvari['genefain']['truefluxreg0pop00000'] = 3e-8
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  nameconfexec=nameconfexec, \
                                  )
 
 
@@ -319,26 +325,28 @@ def pcat_chan_inpt_assc():
 
 
 # science suites
-def pcat_chan_mock_syst():
+def pcat_chan_mock_syst(nameconfexec=None):
    
-    seed(4)
-    
     dictargs = {}
-    dictargs['exprtype'] = 'hubb'
-    dictargs['numbswep'] = 100000
-    dictargs['numbburn'] = 20000
-    dictargs['factthin'] = 800
-    dictargs['inittype'] = 'refr'
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 10
     dictargs['numbelemreg0pop0'] = 300
+    dictargs['trueminmflux'] = 3e-10
+    dictargs['makeplotinit'] = False
+    dictargs['shrtfram'] = True
     
+    listnameconf = ['nomi', 'unrsbadd', 'unrsfine']
     dictargsvari = {}
-    dictargsvari['trueminmflux'] = [3e-10, 3e-10, 3e-10, ]
-    dictargsvari['fittminmflux'] = [1e-9,  3e-9,  1e-8,  ]
-    dictargsvari['priofactdoff'] = [0.,    1.,    1.,    ]
+    for nameconf in listnameconf:
+        dictargsvari[nameconf] = {}
+    dictargsvari['nomi']['fittminmflux'] = 3e-10
+    dictargsvari['unrsbadd']['fittminmflux'] = 3e-9
+    dictargsvari['unrsfine']['fittminmflux'] = 3e-8
+    
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  #indxruns=0, \
+                                  nameconfexec=nameconfexec, \
                                  )
     
 
