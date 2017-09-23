@@ -87,7 +87,7 @@ def pcat_ferm_inpt_ngal_tim4():
     pcat.main.init(**dictargs)
 
 
-def pcat_ferm_mock_ngal():
+def pcat_ferm_ngal_mock():
      
     pcat.main.init( \
                    numbswep=10000, \

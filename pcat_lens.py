@@ -176,13 +176,19 @@ def pcat_lens_mock_syst(nameconfexec=None):
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
-    dictargs['numbswep'] = 2000000
+    dictargs['numbswep'] = 2000
+    #dictargs['numbswep'] = 2000000
     dictargs['diagmode'] = True
-    dictargs['makeplotinit'] = False
-    dictargs['shrtfram'] = True
-    dictargs['numbsamp'] = 2000
-    dictargs['numbswepplot'] = 20000
-    dictargs['inittype'] = 'refr'
+    dictargs['numbsamp'] = 20
+    #dictargs['numbsamp'] = 2000
+    dictargs['numbswepplot'] = 40000
+    
+    # temp
+    #dictargs['makeplot'] = False
+    #dictargs['makeplotinit'] = False
+    #dictargs['shrtfram'] = True
+    dictargs['verbtype'] = 2
+    #dictargs['inittype'] = 'refr'
 
     dictargs['truenumbpntspop0reg0'] = 25
     dictargs['truemeanpntspop0'] = 25
@@ -331,7 +337,6 @@ def pcat_lens_mock_syst(nameconfexec=None):
     dictargs['truedefspop0reg00024'] = 8.48926e-07
     dictargs['trueascapop0reg00024'] = 3.49285e-07
     dictargs['trueacutpop0reg00024'] = 5.35163e-06
-    #dictargs['verbtype'] = 2
     
     numbelem = int(25. * 10.**0.9)
     anglfact = 3600. * 180. / pi
