@@ -176,19 +176,17 @@ def pcat_lens_mock_syst(nameconfexec=None):
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
-    dictargs['numbswep'] = 200
-    #dictargs['numbswep'] = 2000000
-    dictargs['diagmode'] = True
-    #dictargs['numbsamp'] = 20
-    dictargs['numbsamp'] = 1
-    dictargs['numbswepplot'] = 400
+    dictargs['numbswep'] = 2000000
+    #dictargs['diagmode'] = True
+    dictargs['numbsamp'] = 2000
+    dictargs['numbswepplot'] = 40000
     
     # temp
     #dictargs['makeplot'] = False
-    dictargs['makeplotinit'] = False
+    #dictargs['makeplotinit'] = False
     #dictargs['makeplotfr'] = False
     #dictargs['makeplotpost'] = False
-    dictargs['shrtfram'] = True
+    #dictargs['shrtfram'] = True
     #dictargs['verbtype'] = 2
     #dictargs['inittype'] = 'refr'
 
