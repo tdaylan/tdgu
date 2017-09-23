@@ -204,12 +204,14 @@ def pcat_chan_mock_spmr(nameconfexec=None):
     dictargs['probtran'] = 1.
     dictargs['indxenerincl'] = array([0])
     dictargs['numbswepplot'] = 1000
-    dictargs['truelgalreg0pop00000'] = 0.
-    dictargs['truebgalreg0pop00000'] = 0.
+    dictargs['truelgalpop0reg00000'] = 0.
+    dictargs['truebgalpop0reg00000'] = 0.
+    dictargs['truefluxpop0reg00000'] = 3e-8
     dictargs['truesbrt'] = array([5e-7])
-    dictargs['numbelemreg0pop0'] = 1
-    dictargs['minmnumbelemreg0pop0'] = 1
-    dictargs['maxmnumbelemreg0pop0'] = 2
+    dictargs['numbelempop0reg0'] = 1
+    dictargs['minmnumbelempop0reg0'] = 1
+    dictargs['priofactdoff'] = 0.
+    dictargs['maxmnumbelempop0reg0'] = 2
     dictargs['strgexpo'] = 1e9
     dictargs['maxmgangdata'] = maxmgangdata
     dictargs['numbsidecart'] = numbsidecart
@@ -220,9 +222,12 @@ def pcat_chan_mock_spmr(nameconfexec=None):
     dictargsvari = {}
     for nameconf in listnameconf:
         dictargsvari[nameconf] = {}
+    
     dictargsvari['pars']['priofactdoff'] = 1.
-    dictargsvari['genebrgt']['truefluxreg0pop00000'] = 1e-7
-    dictargsvari['genefain']['truefluxreg0pop00000'] = 3e-8
+    
+    dictargsvari['genebrgt']['truefluxpop0reg00000'] = 3e-7
+    
+    dictargsvari['genefain']['truefluxpop0reg00000'] = 3e-9
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
@@ -242,8 +247,8 @@ def pcat_chan_mock_popl():
                               exprtype='chan', \
                               numbsidecart=300, \
                               numbpopl=2, \
-                              numbelemreg0pop0=50, \
-                              numbelemreg0pop1=50, \
+                              numbelempop0reg0=50, \
+                              numbelempop1reg0=50, \
                              )
 
 
@@ -278,10 +283,10 @@ def pcat_chan_mock_spec():
                               #propcomp=False, \
                               #probtran=0., \
                               #propbacp=False, \
-                              maxmnumbelemreg0pop0=10, \
-                              #maxmnumbelemreg0pop0=0, \
-                              numbelemreg0pop0=5, \
-                              #numbelemreg0pop0=0, \
+                              maxmnumbelempop0reg0=10, \
+                              #maxmnumbelempop0reg0=0, \
+                              numbelempop0reg0=5, \
+                              #numbelempop0reg0=0, \
                              )
 
 
@@ -296,7 +301,7 @@ def pcat_chan_mock_zero():
                               strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               exprtype='chan', \
                               numbsidecart=numbsidecart, \
-                              numbelemreg0pop0=0, \
+                              numbelempop0reg0=0, \
                              )
 
 
@@ -330,7 +335,7 @@ def pcat_chan_mock_syst(nameconfexec=None):
     dictargs = {}
     dictargs['numbswep'] = 10000
     dictargs['numbsamp'] = 10
-    dictargs['numbelemreg0pop0'] = 300
+    dictargs['numbelempop0reg0'] = 300
     dictargs['trueminmflux'] = 3e-10
     dictargs['makeplotinit'] = False
     dictargs['shrtfram'] = True
@@ -360,7 +365,7 @@ def pcat_chan_mock():
                               numbburn=20000, \
                               factthin=800, \
                               inittype='refr', \
-                              numbelemreg0pop0=100, \
+                              numbelempop0reg0=100, \
                               numbswepplot=10000, \
                               strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               exprtype='chan', \
@@ -378,7 +383,7 @@ def pcat_chan_mock():
                               numbburn=10000, \
                               factthin=900, \
                               inittype='refr', \
-                              numbelemreg0pop0=100, \
+                              numbelempop0reg0=100, \
                               numbswepplot=10000, \
                               strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               exprtype='chan', \
@@ -405,8 +410,8 @@ def pcat_chan_mock_maxm():
                               #killexpo=True, \
                               verbtype=2, \
                               makeplot=False, \
-                              numbelemreg0pop0=2, \
-                              maxmnumbelemreg0pop0=3, \
+                              numbelempop0reg0=2, \
+                              maxmnumbelempop0reg0=3, \
                               numbswepplot=20000, \
                               strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               exprtype='chan', \
@@ -499,7 +504,7 @@ def pcat_chan_inpt_home4msc():
                               makeplotinit=False, \
                               inittype='reco', \
                               namerecostat=namestat, \
-                              maxmnumbelemreg0pop0=10, \
+                              maxmnumbelempop0reg0=10, \
                               namesavestat=namestat, \
                               savestat=True, \
                               strgexpo='expochan%s.fits' % rtagdata, \
