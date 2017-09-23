@@ -196,6 +196,7 @@ def pcat_chan_mock_spmr(nameconfexec=None):
 
     dictargs = {}
     dictargs['numbswep'] = 100000
+    dictargs['numbswepplot'] = 2000
     dictargs['numbburn'] = 0
     dictargs['factthin'] = 100
     dictargs['exprtype'] = 'chan'
@@ -203,10 +204,9 @@ def pcat_chan_mock_spmr(nameconfexec=None):
     dictargs['probbrde'] = 0.
     dictargs['probtran'] = 1.
     dictargs['indxenerincl'] = array([0])
-    dictargs['numbswepplot'] = 2000
     dictargs['truelgalpop0reg00000'] = 0.
     dictargs['truebgalpop0reg00000'] = 0.
-    dictargs['truefluxpop0reg00000'] = 3e-7
+    dictargs['truefluxpop0reg00000'] = 1e-7
     dictargs['truesbrt'] = array([5e-7])
     dictargs['numbelempop0reg0'] = 1
     dictargs['minmnumbelempop0reg0'] = 1
@@ -216,16 +216,17 @@ def pcat_chan_mock_spmr(nameconfexec=None):
     dictargs['maxmgangdata'] = maxmgangdata
     dictargs['numbsidecart'] = numbsidecart
     #dictargs['makeplotinit'] = False
+    #dictargs['makeplotpost'] = False
     #dictargs['shrtfram'] = True
     
-    listnameconf = ['pars', 'genebrgt', 'genefain']
+    listnameconf = ['nomi', 'pars', 'genebrgt', 'genefain']
     dictargsvari = {}
     for nameconf in listnameconf:
         dictargsvari[nameconf] = {}
     
     dictargsvari['pars']['priofactdoff'] = 1.
     
-    dictargsvari['genebrgt']['truefluxpop0reg00000'] = 3e-6
+    dictargsvari['genebrgt']['truefluxpop0reg00000'] = 3e-7
     
     dictargsvari['genefain']['truefluxpop0reg00000'] = 3e-8
     dictglob = pcat.main.initarry( \
