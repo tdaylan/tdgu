@@ -215,9 +215,6 @@ def pcat_chan_mock_spmr(nameconfexec=None):
     dictargs['strgexpo'] = 1e9
     dictargs['maxmgangdata'] = maxmgangdata
     dictargs['numbsidecart'] = numbsidecart
-    #dictargs['makeplotinit'] = False
-    #dictargs['makeplotpost'] = False
-    #dictargs['shrtfram'] = True
     
     listnameconf = ['nomi', 'pars', 'genebrgt', 'genefain']
     dictargsvari = {}
@@ -243,9 +240,8 @@ def pcat_chan_mock_popl():
     numbsidecart = 300
     
     gridchan = pcat.main.init( \
-                              numbswep=10000, \
-                              strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               exprtype='chan', \
+                              strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               numbsidecart=300, \
                               numbpopl=2, \
                               numbelempop0reg0=50, \
@@ -291,63 +287,23 @@ def pcat_chan_mock_spec():
                              )
 
 
-def pcat_chan_mock_zero():
-    
-    datatype = 'home'
-    strgexpomaps = '4msc'
-    numbsidecart = 300
-    gridchan = pcat.main.init( \
-                              numbswep=100000, \
-                              numbswepplot=10000, \
-                              strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
-                              exprtype='chan', \
-                              numbsidecart=numbsidecart, \
-                              numbelempop0reg0=0, \
-                             )
-
-
-def pcat_chan_inpt_assc():
-    
-    datatype = 'home'
-    strgexpomaps = '7msc'
-    numbsidecart = 300
-    namestat = 'pcat_chan_inpt_' + datatype + '%04d' % numbsidecart
-    anlytype = datatype + strgexpomaps
-    rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
-    gridchan = pcat.main.init( \
-                              numbswep=1000, \
-                              factthin=100, \
-                              numbswepplot=20000, \
-                              anlytype=anlytype, \
-                              namerecostat=namestat, \
-                              recostat='reco', \
-                              #savestat=True, \
-                              #namesavestat=namestat, \
-                              strgexpo='expochan%s.fits' % rtagdata, \
-                              exprtype='chan', \
-                              numbsidecart=numbsidecart, \
-                              strgexprsbrt='sbrtchan%s.fits' % rtagdata, \
-                             )
-
-
 # science suites
 def pcat_chan_mock_syst(nameconfexec=None):
    
     dictargs = {}
-    dictargs['numbswep'] = 10000
-    dictargs['numbsamp'] = 10
-    dictargs['numbelempop0reg0'] = 300
-    dictargs['trueminmflux'] = 3e-10
-    dictargs['makeplotinit'] = False
-    dictargs['shrtfram'] = True
+    dictargs['numbswep'] = 2000000
+    dictargs['numbsamp'] = 2000
+    dictargs['numbelempop0reg0'] = 100
+    dictargs['exprtype'] = 'chan'
     
-    listnameconf = ['nomi', 'unrsbadd', 'unrsfine']
+    listnameconf = ['nomi', 'lowrmodl', 'unrsbadd', 'unrsfine']
     dictargsvari = {}
     for nameconf in listnameconf:
         dictargsvari[nameconf] = {}
-    dictargsvari['nomi']['fittminmflux'] = 3e-10
-    dictargsvari['unrsbadd']['fittminmflux'] = 3e-9
-    dictargsvari['unrsfine']['fittminmflux'] = 3e-8
+    dictargsvari['lowrmodl']['fittminmflux'] = 1e-9
+    dictargsvari['unrsbadd']['fittminmflux'] = 3e-8
+    dictargsvari['unrsfine']['fittminmflux'] = 1e-8
+    dictargsvari['zerosgnl']['truenumbelempop0reg0'] = 0
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -356,43 +312,7 @@ def pcat_chan_mock_syst(nameconfexec=None):
                                  )
     
 
-def pcat_chan_mock():
-    
-    datatype = 'home'
-    strgexpomaps = '4msc'
-    numbsidecart = 300
-    gridchan = pcat.main.init( \
-                              numbswep=100000, \
-                              numbburn=20000, \
-                              factthin=800, \
-                              inittype='refr', \
-                              numbelempop0reg0=100, \
-                              numbswepplot=10000, \
-                              strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
-                              exprtype='chan', \
-                              numbsidecart=numbsidecart, \
-                             )
-
-
-def pcat_chan_mock():
-    
-    datatype = 'home'
-    strgexpomaps = '4msc'
-    numbsidecart = 300
-    gridchan = pcat.main.init( \
-                              numbswep=100000, \
-                              numbburn=10000, \
-                              factthin=900, \
-                              inittype='refr', \
-                              numbelempop0reg0=100, \
-                              numbswepplot=10000, \
-                              strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
-                              exprtype='chan', \
-                              numbsidecart=numbsidecart, \
-                             )
-
-
-def pcat_chan_mock_maxm():
+def pcat_chan_mock_maxmllik():
     
     datatype = 'home'
     strgexpomaps = '4msc'
@@ -420,123 +340,42 @@ def pcat_chan_mock_maxm():
                              )
 
 
-def pcat_chan_inpt_extr2msc():
+def pcat_chan_inpt(nameconfexec=None):
+   
+    dictargs = {}
+    dictargs['exprtype'] = 'chan'
+    dictargs['inittype'] = 'reco'
+    dictargs['namerecostat'] = 'extr7msc0300'
     
-    datatype = 'extr'
-    strgexpomaps = '2msc'
-    numbsidecart = 300
-    namestat = 'pcat_chan_inpt_' + datatype + '%04d' % numbsidecart
-    anlytype = datatype + strgexpomaps
-    rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
-    gridchan = pcat.main.init( \
-                              numbswep=100000, \
-                              numbswepplot=10000, \
-                              anlytype=anlytype, \
-                              inittype='reco', \
-                              namerecostat=namestat, \
-                              namesavestat=namestat, \
-                              savestat=True, \
-                              strgexpo='expochan%s.fits' % rtagdata, \
-                              exprtype='chan', \
-                              numbsidecart=numbsidecart, \
-                              strgexprsbrt='sbrtchan%s.fits' % rtagdata, \
-                             )
-
-
-def pcat_chan_inpt_extr4msc():
+    listnameconf = ['extr2msc0300', 'extr4msc0300', 'home2msc0300', 'home4msc0300', 'home7msc0300']
+    dictargsvari = {}
+    for nameconf in listnameconf:
+        dictargsvari[nameconf] = {}
+   
+    for nameconf in listnameconf:
+        numbsidecart, strgexpo, strgexprsbrt, namestat, anlytype = retr_argschan(nameconf[:4], nameconf[4:8], int(nameconf[8:]))
+        dictargsvari[anlytype]['anlytype'] = anlytype
+        dictargsvari[anlytype]['numbsidecart'] = numbsidecart
+        dictargsvari[anlytype]['strgexpo'] = strgexpo
+        dictargsvari[anlytype]['strgexprsbrt'] = strgexprsbrt
+        if nameconf[:8] == 'extr4msc' or nameconf[:8] == 'home7msc':
+            dictargsvari[anlytype]['savestat'] = True
     
-    datatype = 'extr'
-    strgexpomaps = '4msc'
-    numbsidecart = 300
-    namestat = 'pcat_chan_inpt_' + datatype + '%04d' % numbsidecart
-    anlytype = datatype + strgexpomaps
-    rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
-    gridchan = pcat.main.init( \
-                              numbswep=100000, \
-                              numbswepplot=10000, \
-                              anlytype=anlytype, \
-                              makeplot=False, \
-                              #inittype='reco', \
-                              #namerecostat=namestat, \
-                              namesavestat=namestat, \
-                              savestat=True, \
-                              strgexpo='expochan%s.fits' % rtagdata, \
-                              exprtype='chan', \
-                              numbsidecart=numbsidecart, \
-                              strgexprsbrt='sbrtchan%s.fits' % rtagdata, \
-                             )
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  nameconfexec=nameconfexec, \
+                                 )
+   
 
-
-def pcat_chan_inpt_home2msc():
+def retr_argschan(datatype, strgexpomaps, numbsidecart):
     
-    datatype = 'home'
-    strgexpomaps = '2msc'
-    numbsidecart = 300
-    namestat = 'pcat_chan_inpt_' + datatype + '%04d' % numbsidecart
-    anlytype = datatype + strgexpomaps
-    rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
-    gridchan = pcat.main.init( \
-                              numbswep=2000000, \
-                              numbswepplot=10000, \
-                              anlytype=datatype, \
-                              #inittype='reco', \
-                              #namerecostat=namestat, \
-                              strgexpo='expochan%s.fits' % rtagdata, \
-                              exprtype='chan', \
-                              numbsidecart=numbsidecart, \
-                              strgexprsbrt='sbrtchan%s.fits' % rtagdata, \
-                             )
+    anlytype = datatype + strgexpomaps + '%04d' % numbsidecart
+    namestat = 'pcat_chan_inpt_' + anlytype
+    strgexpo = 'expochan%s.fits' % anlytype
+    strgexprsbrt = 'sbrtchan%s.fits' % anlytype
 
-
-def pcat_chan_inpt_home4msc():
-    
-    datatype = 'home'
-    strgexpomaps = '4msc'
-    numbsidecart = 300
-    namestat = 'pcat_chan_inpt_' + datatype + '%04d' % numbsidecart
-    anlytype = datatype + strgexpomaps
-    rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
-    gridchan = pcat.main.init( \
-                              numbswep=100000, \
-                              numbburn=0, \
-                              numbswepplot=10000, \
-                              anlytype=anlytype, \
-                              shrtfram=True, \
-                              makeplotinit=False, \
-                              inittype='reco', \
-                              namerecostat=namestat, \
-                              maxmnumbelempop0reg0=10, \
-                              namesavestat=namestat, \
-                              savestat=True, \
-                              strgexpo='expochan%s.fits' % rtagdata, \
-                              exprtype='chan', \
-                              numbsidecart=numbsidecart, \
-                              strgexprsbrt='sbrtchan%s.fits' % rtagdata, \
-                             )
-
-
-def pcat_chan_inpt_home7msc():
-    
-    datatype = 'home'
-    strgexpomaps = '7msc'
-    numbsidecart = 300
-    namestat = 'pcat_chan_inpt_' + datatype + '%04d' % numbsidecart
-    anlytype = datatype + strgexpomaps
-    rtagdata = '%s%s%04d' % (datatype, strgexpomaps, numbsidecart)
-    gridchan = pcat.main.init( \
-                              numbswep=2000000, \
-                              numbswepplot=10000, \
-                              diagmode=True, \
-                              anlytype=anlytype, \
-                              #inittype='reco', \
-                              #namerecostat=namestat, \
-                              #namesavestat=namestat, \
-                              #savestat=True, \
-                              strgexpo='expochan%s.fits' % rtagdata, \
-                              exprtype='chan', \
-                              numbsidecart=numbsidecart, \
-                              strgexprsbrt='sbrtchan%s.fits' % rtagdata, \
-                             )
+    return numbsidecart, strgexpo, strgexprsbrt, namestat, anlytype
 
 
 globals().get(sys.argv[1])(*sys.argv[2:])

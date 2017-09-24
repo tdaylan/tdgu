@@ -2,7 +2,7 @@ from __init__ import *
 
 
 path = os.environ["TDGU_PATH"] + '/'
-fileoutp = open(path + 'subm.log', 'w')
+fileoutp = open(path + 'pcatsubm.log', 'w')
 cntr = 0
 for name in os.listdir(path):
     if name.endswith(".py"):

@@ -136,38 +136,53 @@ def pcat_lens_mock_spmr():
                   )
     
 
-def pcat_lens_mock_next():
+def pcat_lens_mock_next(nameconfexec=None):
    
     seed(4)
+    
+    numbelem = int(25. * 10.**0.9)
+    anglfact = 3600. * 180. / pi
     
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     dictargs['diagmode'] = True
-    dictargs['numbswep'] = 1000000
-    dictargs['numbburn'] = 0
-    dictargs['factthin'] = 250
-    dictargs['inittype'] = 'refr'
-    dictargs['numbswepplot'] = 10000
-    dictargs['makeplotinit'] = False
     dictargs['numbelempop0reg0'] = 25
-    #dictargs['maxmnumbelempop0reg0'] = 30
-    #dictargs['verbtype'] = 2
  
-    numbelem = array([25. * 10.**0.9], dtype=int)
-    anglfact = 3600. * 180. / pi
+    #dictargsvari['numbelempop0reg0']     = [None,        0,  0,  25,   int(25. * 0.1**0.9), int(25. * 10.**0.9)]
+    #dictargsvari['trueminmdefs']     = [None,        None,        None,        3e-3/anglfact, 3e-2/anglfact,                      3e-4/anglfact]
+    #dictargsvari['fittminmdefs']     = [None,        None,        None,        3e-4/anglfact, 3e-4/anglfact,                      3e-4/anglfact]
+    #dictargsvari['priofactdoff']     = [0.,          0.,          1.,          1.,            1.,                                 1.]
+    #dictargsvari['scalmeanpnts'] = ['logt',      'logt',      'logt',      'logt',        'logt',                            'logt']
+   
+    listnameconf = ['nomi', 'parsnone', 'parsloww', 'parsmore', 'parshigh', 'zerosgnl']
     dictargsvari = {}
-    dictargsvari['numbelempop0reg0']     = [None,        0,  0,  25,   int(25. * 0.1**0.9), int(25. * 10.**0.9)]
-    dictargsvari['trueminmdefs']     = [None,        None,        None,        3e-3/anglfact, 3e-2/anglfact,                      3e-4/anglfact]
-    dictargsvari['fittminmdefs']     = [None,        None,        None,        3e-4/anglfact, 3e-4/anglfact,                      3e-4/anglfact]
-    dictargsvari['priofactdoff']     = [0.,          0.,          1.,          1.,            1.,                                 1.]
-    dictargsvari['scalmeanpnts'] = ['logt',      'logt',      'logt',      'logt',        'logt',                            'logt']
+    for nameconf in listnameconf:
+        dictargsvari[nameconf] = {}
+    
+    dictargsvari['zerosgnl']['numbelempop0reg0'] = 0
+    
+    dictargsvari['zerosgnl']['numbelempop0reg0'] = 0
+    
+    dictargsvari['parsnone']['priofactdoff'] = 0.
+    dictargsvari['parsloww']['priofactdoff'] = 0.5
+    dictargsvari['parsmore']['priofactdoff'] = 1.5
+    dictargsvari['parshigh']['priofactdoff'] = 2.
+    
+    #dictargsvari['oneh']['fittminmnumbelempop0reg0'] = 1
+    #dictargsvari['oneh']['fittmaxmnumbelempop0reg0'] = 1
+
+    #dictargsvari['lowrtrue']['truenumbelempop0reg0'] = int(25. * 10.**0.9)
+    #dictargsvari['lowrtrue']['trueminmdefs'] = 3e-3 / anglfact
+    #dictargsvari['lowrtrue']['fittminmdefs'] = 3e-3 / anglfact
+    #
+
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  #nameconfexec=0, \
+                                  nameconfexec=nameconfexec, \
                                  )
-    
+
 
 def pcat_lens_mock_syst(nameconfexec=None):
    
@@ -176,20 +191,7 @@ def pcat_lens_mock_syst(nameconfexec=None):
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
-    dictargs['numbswep'] = 2000000
-    #dictargs['diagmode'] = True
-    dictargs['numbsamp'] = 2000
-    dictargs['numbswepplot'] = 40000
     
-    # temp
-    #dictargs['makeplot'] = False
-    #dictargs['makeplotinit'] = False
-    #dictargs['makeplotfr'] = False
-    #dictargs['makeplotpost'] = False
-    #dictargs['shrtfram'] = True
-    #dictargs['verbtype'] = 2
-    #dictargs['inittype'] = 'refr'
-
     dictargs['truenumbpntspop0reg0'] = 25
     dictargs['truemeanpntspop0'] = 25
     dictargs['truedefsdistsloppop0'] = 1.9
@@ -353,7 +355,7 @@ def pcat_lens_mock_syst(nameconfexec=None):
     dictargsvari['lowrtrue']['trueminmdefs'] = 3e-3 / anglfact
     dictargsvari['lowrtrue']['fittminmdefs'] = 3e-3 / anglfact
     
-    dictargsvari['pars']['priofactdoff'] = 1.
+    dictargsvari['pars']['priofactdoff'] = 0.
 
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -367,7 +369,6 @@ def pcat_lens_mock_perf():
     dictargs = {}
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
-    dictargs['numbswep'] = 2000000
     
     anglfact = 3600. * 180. / pi
     dictargsvari = {}
@@ -391,20 +392,6 @@ def pcat_lens_mock_reln():
     dictargs['liststrgpdfnmodu'] = ['tmplreln']
     dictargsvari = {}
     dictargsvari['relnpowr'] = [2., 1., 0.]
-
-    dictglob = pcat.main.initarry( \
-                                  dictargsvari, \
-                                  dictargs, \
-                                 )
-
-
-def pcat_lens_mock_doff():
-  
-    dictargs = {}
-    dictargs['elemtype'] = 'lens'
-    dictargs['exprtype'] = 'hubb'
-    dictargsvari = {}
-    dictargsvari['priofactdoff'] = [1., 2., 0.5]
 
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -548,25 +535,6 @@ def pcat_lens_mock_sele():
             plt.close(figr)
     
 
-def pcat_lens_mock_init():
-    
-    anglfact = 3600. * 180. / pi
-    dictargs = {}
-    dictargs['elemtype'] = 'lens'
-    dictargs['exprtype'] = 'hubb'
-    dictargs['numbswep'] = 200000
-    dictargs['variasca'] = False
-    dictargs['variacut'] = False
-    dictargs['makeplotfram'] = False
-    dictargsvari = {}
-    dictargsvari['inittype'] = ['refr', 'pert']
-
-    dictglob = pcat.main.initarry( \
-                                  dictargsvari, \
-                                  dictargs, \
-                                 )
-
-
 def pcat_lens_mock_tmpr():
     
     anglfact = 3600. * 180. / pi
@@ -595,24 +563,6 @@ def pcat_lens_mock_macr():
                   )
 
 
-def pcat_lens_mock_testvari():
-   
-    dictargs = {}
-    dictargs['elemtype'] = 'lens'
-    dictargs['exprtype'] = 'hubb'
-    dictargs['variasca'] = False
-    dictargs['numbswep'] = 100000
-    dictargs['makeplotfram'] = False
-    dictargs['variacut'] = False
-    dictargsvari = {}
-    dictargsvari['inittype'] = ['refr', 'pert']
-
-    dictglob = pcat.main.initarry( \
-                                  dictargsvari, \
-                                  dictargs, \
-                                 )
-
-
 def pcat_lens_mock_test():
    
     dictargs = {}
@@ -630,22 +580,6 @@ def pcat_lens_mock_test():
                                   dictargs, \
                                  )
 
-
-def pcat_lens_mock_dofftest():
-   
-    pcat.main.init( \
-                   elemtype='lens', \
-                   exprtype='hubb', \
-                   #verbtype=2, \
-                   #checprio=True, \
-                   shrtfram=True, \
-                   numbswep=20000, \
-                   priofactdoff=1., \
-                   numbswepplot=5000, \
-                   factthin=1000, \
-                   makeplotinit=False, \
-                  )
-   
 
 def pcat_lens_mock_many():
    
@@ -671,6 +605,328 @@ def pcat_lens_mock_many():
                   )
 
 
+def writ_data():
+
+    # RA/DEC lists
+    liststrgrade = []
+    listrade = [[], []]
+    
+    pathbase = os.environ["TDGU_DATA_PATH"] + '/pcat_lens_inpt/'
+    pathdata = pathbase + 'data/'
+    pathimag = pathbase + 'imag/'
+    
+    # read SLACS tables
+    print 'Reading SLACS tables...'
+    pathslacpara = pathbase + 'data/slacpara.fits'
+    pathslacfull = pathbase + 'data/slacfull.fits'
+    hdun = pf.open(pathslacfull)
+    numbhead = len(hdun)
+    print '%s extensions found.' % numbhead
+    for k in range(numbhead):
+        print 'Extension %d' % k
+        head = hdun[k].header
+        data = hdun[k].data
+        
+        if data == None:
+            print 'Data is None, skipping...'
+            continue
+        else:
+            pass
+            #print 'data object has keys'
+            #print data.names
+    
+        arry = array(stack((head.keys(), head.values()), 1))
+        listtype = []
+    
+        for n in range(arry.shape[0]):
+            if arry[n, 0].startswith('TTYPE'):
+                listtype.append(arry[n, 1])
+        
+        if len(listtype) != len(data[0]):
+            raise Exception('Number of types does not match the number of fields.')
+        
+    # find the RA/DEC of relevant SLACS systems 
+    indxgold = where((data['Mph'] == 'E') & (data['Mul'] == 'S') & (data['Lens'] == 'A'))[0]
+    numbslac = indxgold.size
+    
+    path = pathdata + 'slacdownlist.txt'
+    fileobjt = open(path, 'w')
+    for k in indxgold:
+        
+        # construct the delimited RA/DEC string
+        strgrade = '%s %s %s %s %s %s' % (data['SDSS'][k][:2], data['SDSS'][k][2:4], data['SDSS'][k][4:9], data['SDSS'][k][9:12], data['SDSS'][k][12:14], data['SDSS'][k][14:])
+        
+        ## fill the RA/DEC lists
+        liststrgrade.append(strgrade)
+        listrade[0].append(data['_RA'][k])
+        listrade[1].append(data['_DE'][k])
+        
+        ## write the RA/DEC list of relevant SLACS systems to disc
+        strgline = strgrade + ' \n'
+        fileobjt.write(strgline)
+    
+    for k in range(len(indxgold)):
+        print '%20s %20s %20g %20g' % (data['SDSS'][indxgold[k]], data['Name'][indxgold][k], data['_RA'][indxgold][k], data['_DE'][indxgold][k])
+    
+    # cutout properties
+    numbside = 400
+    numbsidehalf = numbside / 2
+    
+    # data path
+    pathdatapcat = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
+    
+    ## RA/DEC string of the reference star
+    #strgradestar = '00 29 12.65 -00 53 59.7'
+    strgradestar = '00 29 06.79 -00 54 07.5'
+    liststrgrade.append(strgradestar)
+    coorstar = ap.coordinates.SkyCoord(strgradestar, unit=(ap.units.hourangle, ap.units.deg))
+    listrade[0].append(coorstar.ra.degree)
+    listrade[1].append(coorstar.dec.degree)
+    
+    numbrade = len(listrade[0])
+    print '%d coordinates found.' % numbrade
+    
+    # list of files to be read
+    listnamefile = ['hst_10886_02_acs_wfc_f814w_drz.fits']
+    numbfile = len(listnamefile)
+    print '%d files found.' % numbfile
+    
+    for k, namefile in enumerate(listnamefile):
+        
+        print 'File number %d' % k
+            
+        # read the data fields
+        pathfile = pathdata + namefile
+        listdata = tdpy.util.read_fits(pathfile, verbtype=0)
+        
+        # read the WCS header
+        listhdun = ap.io.fits.open(pathfile)
+        wcso = ap.wcs.WCS(listhdun[2].header)
+        
+        # RA/DEC string
+        strgrade = liststrgrade[k]
+    
+        # iterate over the RA/DEC list    
+        for n in range(numbrade):
+            
+            # RA/DEC
+            strgrade = liststrgrade[n]
+            indxyaxi, indxxaxi = wcso.wcs_world2pix(listrade[0][n], listrade[1][n], 0)
+            # check if the coordinate is inside the image
+            if not isfinite(indxyaxi) or not isfinite(indxxaxi) or indxxaxi - numbsidehalf < 0 or indxyaxi - numbsidehalf < 0 or \
+                                                                        indxxaxi + numbsidehalf > listdata[1].shape[1] or indxyaxi + numbsidehalf > listdata[1].shape[0]:
+                continue
+                #raise Exception('')
+    
+            path = pathdatapcat + 'lens%s%s%s%s_%04d.fits' % (liststrgrade[n][3:5], liststrgrade[n][6:8], liststrgrade[n][16:18], liststrgrade[n][19:21], numbside)
+           
+            if False:
+                print 'listdata[4]'
+                print listdata[4].names
+                print 'strgrade'
+                print strgrade
+                print 'listrade[0][n]'
+                print listrade[0][n]
+                print 'listrade[1][n]'
+                print listrade[1][n]
+                print 'indxxaxi'
+                print indxxaxi
+                print 'indxyaxi'
+                print indxyaxi
+            
+            indxxaxi = int(indxxaxi)
+            indxyaxi = int(indxyaxi)
+           
+    
+            if False:
+                print 'MDRIZSKY'
+                print listdata[4]['MDRIZSKY']
+                print 'SKYSUB'
+                print listdata[4]['SKYSUB']
+                print 'indxxaxi'
+                print indxxaxi
+                print 'indxyaxi'
+                print indxyaxi
+                print 'listdata[1]'
+                summgene(listdata[1])
+                print 'EXPTIME'
+                print listdata[4]['EXPTIME'][0]
+                print 'PHOTFLAM'
+                print listdata[4]['PHOTFLAM'][0]
+                print 'CCDGAIN'
+                print listdata[4]['CCDGAIN'][0]
+                print
+            
+            # cut out the image
+            rate = listdata[1][indxxaxi-numbsidehalf:indxxaxi+numbsidehalf, indxyaxi-numbsidehalf:indxyaxi+numbsidehalf] # s^-1
+    
+            # gather different bands
+            rate = rate[None, :, :, None]
+            
+            # find the number of photons per area per time per A per solid angle
+            effa = 1. / listdata[4]['PHOTFLAM'][0] # erg^-1 cm^2 A
+            timeobsv = listdata[4]['EXPTIME'][0] # s
+            apix = (0.05 * pi / 3600. / 180.)**2 # sr^2
+            expo = effa * timeobsv # erg^-1 cm^2 s A 
+            sbrt = rate / effa / apix
+            cntp = sbrt * expo * apix
+            
+            if False:
+                print 'expo'
+                print expo
+                print 'rate'
+                summgene(rate)
+                print 'mean(cntp[:10, :10])'
+                print mean(cntp[:10, :10])
+                print 'cntp'
+                summgene(cntp)
+                print 'sbrt'
+                summgene(sbrt)
+            if True:
+                print 'sbrt'
+                summgene(sbrt)
+                print 'apix'
+                print apix
+            
+            print 'Writing to %s...' % path
+            pf.writeto(path, sbrt, clobber=True)
+            
+        
+
+def pcat_lens_inpt():
+    
+    anglfact = 3600. * 180. / pi
+    sizepixl = 0.05 / anglfact
+    
+    # name of the dataset
+    namedatasets = 'lens29075550'
+    
+    # exposure
+    strgexpo = 7.37487548893e21
+    
+    # half-size of the image in pixels
+    numbside = 400
+    maxmgangdata = numbside * 0.5 * sizepixl
+
+    # name of the data file
+    strgexprsbrt = namedatasets + '_%04d.fits' % numbside
+    
+    if namedatasets == 'lens29075550':
+        initbacpbac0ene0 = 1.1e-7
+        fittmeanbacpbac0ene0 = 1.1e-7
+        fittstdvbacpbac0ene0 = fittmeanbacpbac0ene0 * 1e-3
+        fittscalbacpbac0ene0 = 'gaus'
+    else:
+        initbacpbac0ene0 = None
+        fittmeanbacpbac0ene0 = None
+        fittstdvbacpbac0ene0 = None
+        fittscalbacpbac0ene0 = None
+
+    mask = array([-0.3, 0.1, -0.1, 0.2]) / anglfact
+    
+    pcat.main.init( \
+                   exprtype='hubb', \
+                   elemtype='lens', \
+                   lensmodltype='none', \
+                   numbswep=4000, \
+                   numbswepplot=1000, \
+                   #pixltype='cart', \
+                   #burntmpr=True, \
+                   #initsizesour=1.5/anglfact, \
+                   #initspecsourene0=1.5e-18, \
+                   #mask=mask, \
+                   indxenerincl=array([0]), \
+                   initbacpbac0ene0=initbacpbac0ene0, \
+                   fittmeanbacpbac0ene0=fittmeanbacpbac0ene0, \
+                   fittstdvbacpbac0ene0=fittstdvbacpbac0ene0, \
+                   fittscalbacpbac0ene0=fittscalbacpbac0ene0, \
+                   maxmnumbelempop0reg0=0, \
+                   serstype='intp', \
+                   optihess=False, \
+                   savestat=True, \
+                   #inittype='reco', \
+                   strgexpo=strgexpo, \
+                   maxmgangdata=maxmgangdata, \
+                   strgexprsbrt=strgexprsbrt, \
+                  )
+   
+
+def pcat_lens_psfn():
+    
+    strgexpo = 7.37487548893e21
+    anglfact = 3600. * 180. / pi
+    maxmgangdata = 50. * 0.05 / anglfact
+    numbiter = 1
+    
+    for k in range(numbiter):
+        pcat.main.init( \
+                       elemtype='lens', \
+                       numbswep=50000, \
+                       factthin=500, \
+                       numbswepplot=10000, \
+                       shrtfram=True, \
+                       #mockonly=True, \
+                       #makeplotintr=True, \
+                       #burntmpr=True, \
+                       optihess=False, \
+                       #savestat=True, \
+                       #inittype='reco', \
+                       #makeplotinit=False, \
+                       #makeplotfram=False, \
+                       makeplotlpri=False, \
+                       strgexpo=strgexpo, \
+                       fittmaxmnumbpnts=array([0]), \
+                       maxmgangdata=maxmgangdata, \
+                       strgexprsbrt='lens29065407.fits', \
+                      )
+   
+
+def pcat_lens_intrevalresicntp():
+
+    anglfact = 3600. * 180. / pi
+    sizepixl = 0.05 / anglfact
+    
+    # name of the dataset
+    namedatasets = 'lens29075550'
+    
+    # exposure
+    strgexpo = 7.37487548893e21
+
+    # half-size of the image
+    numbside = 400
+    maxmgangdata = numbside * 0.5 * sizepixl
+    
+    # name of the data file
+    strgexprsbrt = namedatasets + '_%04d.fits' % numbside
+    
+    if namedatasets == 'lens29075550':
+        initbacpbac0ene0 = 1.1e-7
+        fittmeanbacpbac0ene0 = 1.1e-7
+        fittstdvbacpbac0ene0 = fittmeanbacpbac0ene0 * 1e-3
+        fittscalbacpbac0ene0 = 'gaus'
+    else:
+        initbacpbac0ene0 = None
+        fittmeanbacpbac0ene0 = None
+        fittstdvbacpbac0ene0 = None
+        fittscalbacpbac0ene0 = None
+
+    pcat.main.init( \
+                   elemtype='lens', \
+                   makeplotinit=False, \
+                   intrevalresicntp=True, \
+                   strgexpo=strgexpo, \
+                   initbacpbac0ene0=initbacpbac0ene0, \
+                   fittmeanbacpbac0ene0=fittmeanbacpbac0ene0, \
+                   fittstdvbacpbac0ene0=fittstdvbacpbac0ene0, \
+                   fittscalbacpbac0ene0=fittscalbacpbac0ene0, \
+                   inittype='reco', \
+                   namerecostat='pcat_lens_inpt', \
+                   fittmaxmnumbpnts=array([0]), \
+                   maxmgangdata=maxmgangdata, \
+                   strgexprsbrt=strgexprsbrt, \
+                  )
+    
+
 def pcat_lens_mockonly():
    
     pcat.main.init( \
@@ -682,50 +938,4 @@ def pcat_lens_mockonly():
                   )
 
 
-def pcat_lens_mock():
-    
-    seed(4)
-    
-    anglfact = 3600. * 180. / pi
-
-    numbiter = 1
-    for k in range(numbiter):
-        pcat.main.init( \
-                       elemtype='lens', \
-                       exprtype='hubb', \
-                       diagmode=True, \
-                       #makeplotinit=False, \
-                       #shrtfram=True, \
-                       makeplot=False, \
-                       numbswep=10000, \
-                       numbburn=0, \
-                       numbproc=1, \
-                       factthin=1000, \
-                       numbswepplot=50000, \
-                       #verbtype=2, \
-                       inittype='refr', \
-                       maxmnumbelempop0reg0=1, \
-                       #propcomp=False, \
-                       #minmdefs=0.3/anglfact, \
-                       #numbelempop0reg0=, \
-                       numbelempop0reg0=1, \
-                       #shrtfram=True, \
-                       #optihess=False, \
-                       #makeplot=False, \
-                       #makeplotinit=False, \
-                       #mockonly=True, \
-                       #makeplot=False, \
-                       #verbtype=2, \
-                       #stdvdefsdistslop=0.01, \
-                       #rtagredo='20170610_133749_pcat_lens_mock_10000', \
-                       #inittype='rand', \
-                       #optihess=False, \
-                       #savestat=True, \
-                       #inittype='reco', \
-                       #initlgalsour=-1e-1 / anglfact, \
-                       #initbgalsour=1e-1 / anglfact, \
-                       #burntmpr=True, \
-                       #shrtfram=True, \
-                      )
-   
 globals().get(sys.argv[1])(*sys.argv[2:])

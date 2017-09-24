@@ -980,7 +980,7 @@ def pcat_ferm_mock_igal_popl():
                   )
 
 
-def pcat_lens_inpt_igal_syst(nameconfexec=None):
+def pcat_ferm_igal_inpt_grid(nameconfexec=None):
    
     dictargs = {}
     dictargs['numbswep'] = 1000000
@@ -996,13 +996,10 @@ def pcat_lens_inpt_igal_syst(nameconfexec=None):
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
     
-    # temp
-    dictargs['makeplotinit'] = False
-    dictargs['shrtfram'] = True
-    dictargs['diagmode'] = True
-    #dictargs['verbtype'] = 2
- 
+    listnameconf = ['nomi', 'rec7', 'mask', 'popl', 'bfunwfou', 'bfuntemp']
     dictargsvari = {}
+    for nameconf in listnameconf:
+        dictargsvari[nameconf] = {}
     
     dictargsvari['nomi']['listnameback'] = ['isot', 'fdfm', 'dark', 'mask']
     dictargsvari['nomi']['backtype'] = [1., 'sbrtfdfmsmthmanunorm.fits', 'darktempsmthmanunorm.fits']
@@ -1014,7 +1011,7 @@ def pcat_lens_inpt_igal_syst(nameconfexec=None):
     dictargsvari['popl']['numbpopl'] = 3
                    
     dictargsvari['bfunwfou']['listnameback'] = ['isot', 'fdfm', 'dark', 'wfou']
-    dictargsvari['bfuntemp']['backtype'] = [1., 'sbrtfdfmsmthmanunorm.fits', 'darktempsmthmanunorm.fits', 'wfou']
+    dictargsvari['bfunwfou']['backtype'] = [1., 'sbrtfdfmsmthmanunorm.fits', 'darktempsmthmanunorm.fits', 'wfou']
                    
     dictargsvari['bfuntemp']['listnameback'] = ['isot', 'hydr', 'cmon', 'dustsfdd', 'dark', 'wise']
     dictargsvari['bfuntemp']['backtype'] = [1., 'sbrtfdfmsmthmanunorm.fits', 'hydrsmthmanunorm.fits', 'cmonsmthmanunorm.fits', \
@@ -1067,8 +1064,3 @@ def pcat_ferm_inpt_ptch():
              )
     
 globals().get(sys.argv[1])(*sys.argv[2:])
-    
-#if len(sys.argv) == 3:
-#    globals().get(sys.argv[1])(sys.argv[2])
-#else:
-#    globals().get(sys.argv[1])()
