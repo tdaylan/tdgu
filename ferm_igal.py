@@ -988,7 +988,7 @@ def pcat_ferm_igal_inpt_grid(nameconfexec=None):
     dictargs['factthin'] = 250
     dictargs['numbswepplot'] = 10000
     dictargs['strgexprsbrt'] = 'sbrtfermcmp0igal.fits'
-    dictargs['spectype'] = 'colr'
+    dictargs['spectype'] = ['colr']
     dictargs['savestat'] = True
     dictargs['inittype'] = 'reco'
     

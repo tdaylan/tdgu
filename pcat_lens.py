@@ -147,7 +147,7 @@ def pcat_lens_mock_next(nameconfexec=None):
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     dictargs['diagmode'] = True
-    dictargs['numbelempop0reg0'] = 25
+    dictargs['truenumbelempop0reg0'] = 25
  
     #dictargsvari['numbelempop0reg0']     = [None,        0,  0,  25,   int(25. * 0.1**0.9), int(25. * 10.**0.9)]
     #dictargsvari['trueminmdefs']     = [None,        None,        None,        3e-3/anglfact, 3e-2/anglfact,                      3e-4/anglfact]
@@ -160,9 +160,9 @@ def pcat_lens_mock_next(nameconfexec=None):
     for nameconf in listnameconf:
         dictargsvari[nameconf] = {}
     
-    dictargsvari['zerosgnl']['numbelempop0reg0'] = 0
-    
-    dictargsvari['zerosgnl']['numbelempop0reg0'] = 0
+    dictargsvari['zerosgnl']['truenumbelempop0reg0'] = 0
+    dictargsvari['zerosgnl']['truemaxmnumbelempop0reg0'] = 0
+    dictargsvari['zerosgnl']['fittmaxmnumbelempop0reg0'] = 100
     
     dictargsvari['parsnone']['priofactdoff'] = 0.
     dictargsvari['parsloww']['priofactdoff'] = 0.5
@@ -844,7 +844,7 @@ def pcat_lens_inpt():
                    serstype='intp', \
                    optihess=False, \
                    savestat=True, \
-                   #inittype='reco', \
+                   inittype='reco', \
                    strgexpo=strgexpo, \
                    maxmgangdata=maxmgangdata, \
                    strgexprsbrt=strgexprsbrt, \

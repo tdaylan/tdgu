@@ -249,54 +249,72 @@ def pcat_chan_mock_popl():
                              )
 
 
-def pcat_chan_mock_spec():
+def pcat_chan_mock_spec_syst(nameconfexec=None):
     
-    datatype = 'home'
-    strgexpomaps = '4msc'
-    gridchan = pcat.main.init( \
-                              numbswep=10000, \
-                              numbburn=0, \
-                              factthin=10, \
-                              numbswepplot=3000, \
-                              #makeplot=False, \
-                              #strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
-                              maxmgangdata=1200./3600./180.*pi, \
-                              #diagmode=True, \
-                              spectype=['gaus'], \
-                              strgexpo=1e2, \
-                              elemtype='line', \
-                              asscrefr=False, \
-                              inittype='refr', \
-                              #verbtype=2, \
-                              exprtype='chan', \
-                              anlytype='spec', \
-                              numbsidecart=1, \
-                              #makeplotinit=False, \
-                              #makeplotfram=False, \
-                              #propcomp=False, \
-                              #prophypr=False, \
-                              #propbacp=False, \
-                              #probtran=1., \
-                              #propcomp=False, \
-                              #probtran=0., \
-                              #propbacp=False, \
-                              maxmnumbelempop0reg0=10, \
-                              #maxmnumbelempop0reg0=0, \
-                              numbelempop0reg0=5, \
-                              #numbelempop0reg0=0, \
-                             )
-
+    anglfact = 3600. * 180. / pi
+    
+    dictargs = {}
+    dictargs['numbswep'] = 10000
+    dictargs['numbswep'] = 3000
+    dictargs['numbsamp'] = 100
+    dictargs['diagmode'] = True
+    dictargs['numbelempop0reg0'] = 10
+    dictargs['exprtype'] = 'chan'
+    dictargs['makeplotfram'] = False
+    dictargs['makeplotpost'] = False
+    
+    dictargs['spectype'] = ['gaus']
+    dictargs['strgexpo'] = 1e2
+    dictargs['elemtype'] = 'line'
+    dictargs['inittype'] = 'refr'
+    #dictargs['verbtype'] = 2
+    dictargs['anlytype'] = 'spec'
+    # assume a pixel with side 100 arcsec
+    dictargs['maxmgangdata'] = 100. / anglfact
+    dictargs['numbsidecart'] = 1
+    
+    # true < thrs < modl -- trad 
+    # true < modl < thrs -- pcat
+    
+    # thrs < true < modl -- trad
+    # modl < true < thrs -- pcat
+    
+    # thrs < modl < true -- trad
+    # modl < thrs < true -- pcat
+    listnameconf = ['nomi', 'lowrmodl']
+    dictargsvari = {}
+    for nameconf in listnameconf:
+        dictargsvari[nameconf] = {}
+    dictargsvari['lowrmodl']['fittminmflux'] = 3e-7
+    
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  nameconfexec=nameconfexec, \
+                                 )
+    
 
 # science suites
 def pcat_chan_mock_syst(nameconfexec=None):
    
     dictargs = {}
-    dictargs['numbswep'] = 2000000
-    dictargs['numbsamp'] = 2000
-    dictargs['numbelempop0reg0'] = 100
     dictargs['exprtype'] = 'chan'
+    dictargs['numbswep'] = 2000
+    dictargs['numbsamp'] = 20
+    dictargs['strgexpo'] = 'expochanhome4msc0300.fits'
+    #dictargs['numbelempop0reg0'] = 100
     
-    listnameconf = ['nomi', 'lowrmodl', 'unrsbadd', 'unrsfine']
+    dictargs['numbelempop0reg0'] = 1
+    dictargs['makeplot'] = False
+    dictargs['propcomp'] = False
+    dictargs['probtran'] = 0.
+    dictargs['probbacp'] = False
+    dictargs['verbtype'] = 2
+    dictargs['minmnumbelempop0reg0'] = 1
+    dictargs['maxmnumbelempop0reg0'] = 1
+    
+    
+    listnameconf = ['nomi', 'lowrmodl', 'unrsbadd', 'unrsfine', 'zerosgnl']
     dictargsvari = {}
     for nameconf in listnameconf:
         dictargsvari[nameconf] = {}
