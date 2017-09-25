@@ -829,7 +829,10 @@ def pcat_lens_inpt():
                    elemtype='lens', \
                    lensmodltype='none', \
                    numbswep=4000, \
+                   numbburn=0, \
                    numbswepplot=1000, \
+                   diagmode=True, \
+                   #verbtype=2, \
                    #pixltype='cart', \
                    #burntmpr=True, \
                    #initsizesour=1.5/anglfact, \
@@ -842,7 +845,6 @@ def pcat_lens_inpt():
                    fittscalbacpbac0ene0=fittscalbacpbac0ene0, \
                    maxmnumbelempop0reg0=0, \
                    serstype='intp', \
-                   optihess=False, \
                    savestat=True, \
                    inittype='reco', \
                    strgexpo=strgexpo, \
@@ -868,7 +870,6 @@ def pcat_lens_psfn():
                        #mockonly=True, \
                        #makeplotintr=True, \
                        #burntmpr=True, \
-                       optihess=False, \
                        #savestat=True, \
                        #inittype='reco', \
                        #makeplotinit=False, \
