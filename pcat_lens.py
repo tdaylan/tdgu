@@ -144,6 +144,11 @@ def pcat_lens_mock_next(nameconfexec=None):
     anglfact = 3600. * 180. / pi
     
     dictargs = {}
+    dictargs['numbswep'] = 100000
+    dictargs['numbsamp'] = 100
+    
+    #dictargs['makeplot'] = False
+    #dictargs['numbproc'] = 3
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     dictargs['diagmode'] = True
@@ -812,11 +817,15 @@ def pcat_lens_inpt():
     strgexprsbrt = namedatasets + '_%04d.fits' % numbside
     
     if namedatasets == 'lens29075550':
+        initlgalsourreg0 = -0.5 / anglfact
+        initbgalsourreg0 = 0.1 / anglfact
         initbacpbac0ene0 = 1.1e-7
         fittmeanbacpbac0ene0 = 1.1e-7
         fittstdvbacpbac0ene0 = fittmeanbacpbac0ene0 * 1e-3
         fittscalbacpbac0ene0 = 'gaus'
     else:
+        initlgalsourreg0 = None
+        initbgalsourreg0 = None
         initbacpbac0ene0 = None
         fittmeanbacpbac0ene0 = None
         fittstdvbacpbac0ene0 = None
@@ -827,11 +836,15 @@ def pcat_lens_inpt():
     pcat.main.init( \
                    exprtype='hubb', \
                    elemtype='lens', \
-                   lensmodltype='none', \
-                   numbswep=4000, \
+                   #lensmodltype='none', \
+                   #explprop=True, \
+                   numbswep=10000, \
                    numbburn=0, \
+                   numbsamp=100, \
+                   optitype='hess', \
                    numbswepplot=1000, \
                    diagmode=True, \
+                   #fittmaxmellphostreg0=0.1, \
                    #verbtype=2, \
                    #pixltype='cart', \
                    #burntmpr=True, \
@@ -839,6 +852,8 @@ def pcat_lens_inpt():
                    #initspecsourene0=1.5e-18, \
                    #mask=mask, \
                    indxenerincl=array([0]), \
+                   #initlgalsourreg0=initlgalsourreg0, \
+                   #initbgalsourreg0=initbgalsourreg0, \
                    initbacpbac0ene0=initbacpbac0ene0, \
                    fittmeanbacpbac0ene0=fittmeanbacpbac0ene0, \
                    fittstdvbacpbac0ene0=fittstdvbacpbac0ene0, \

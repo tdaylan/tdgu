@@ -201,9 +201,6 @@ def pcat_chan_mock_spmr(nameconfexec=None):
     dictargs['factthin'] = 100
     dictargs['exprtype'] = 'chan'
     dictargs['inittype'] = 'refr'
-    dictargs['probbrde'] = 0.
-    dictargs['probtran'] = 1.
-    dictargs['indxenerincl'] = array([0])
     dictargs['truelgalpop0reg00000'] = 0.
     dictargs['truebgalpop0reg00000'] = 0.
     dictargs['truefluxpop0reg00000'] = 1e-7
@@ -211,12 +208,15 @@ def pcat_chan_mock_spmr(nameconfexec=None):
     dictargs['numbelempop0reg0'] = 1
     dictargs['minmnumbelempop0reg0'] = 1
     dictargs['priofactdoff'] = 0.
-    dictargs['maxmnumbelempop0reg0'] = 10
     dictargs['strgexpo'] = 1e9
     dictargs['maxmgangdata'] = maxmgangdata
     dictargs['numbsidecart'] = numbsidecart
     
-    listnameconf = ['nomi', 'pars', 'genebrgt', 'genefain']
+    dictargs['probtran'] = 1.
+    dictargs['probspmr'] = 0.5
+    dictargs['indxenerincl'] = array([0])
+    
+    listnameconf = ['nomi', 'pars', 'genebrgt', 'genefain', 'psfn']
     dictargsvari = {}
     for nameconf in listnameconf:
         dictargsvari[nameconf] = {}
@@ -226,6 +226,11 @@ def pcat_chan_mock_spmr(nameconfexec=None):
     dictargsvari['genebrgt']['truefluxpop0reg00000'] = 3e-7
     
     dictargsvari['genefain']['truefluxpop0reg00000'] = 3e-8
+    
+    dictargsvari['psfn']['truefluxpop0reg00000'] = 3e-8
+    dictargsvari['psfn']['probtran'] = 0.
+    dictargsvari['psfn']['indxenerincl'] = None
+    
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
