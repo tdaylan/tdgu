@@ -377,6 +377,7 @@ def pcat_chan_inpt_grid(nameconfexec=None):
     #dictargs['inittype'] = 'reco'
     dictargs['makeplotinit'] = False
     dictargs['numbswep'] = 1000
+    dictargs['diagmode'] = True
     dictargs['initnumbelempop0reg0'] = 1
     dictargs['numbsamp'] = 1
     dictargs['optitype'] = 'none'

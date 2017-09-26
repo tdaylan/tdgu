@@ -144,13 +144,14 @@ def pcat_lens_mock_next(nameconfexec=None):
     anglfact = 3600. * 180. / pi
     
     dictargs = {}
-    #dictargs['numbswep'] = 100
-    #dictargs['numbsamp'] = 100
+    dictargs['numbswep'] = 1000
+    dictargs['numbburn'] = 0
+    dictargs['factthin'] = 1000
     
     #dictargs['makeplot'] = False
-    #dictargs['numbproc'] = 3
-    #dictargs['makeplotinit'] = False
-    #dictargs['makeplotfram'] = False
+    dictargs['numbproc'] = 2
+    dictargs['makeplotinit'] = False
+    dictargs['makeplotfram'] = False
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     #dictargs['diagmode'] = True
@@ -862,7 +863,7 @@ def pcat_lens_inpt():
                    fittscalbacpbac0ene0=fittscalbacpbac0ene0, \
                    maxmnumbelempop0reg0=0, \
                    serstype='intp', \
-                   savestat=True, \
+                   #savestat=True, \
                    inittype='reco', \
                    strgexpo=strgexpo, \
                    maxmgangdata=maxmgangdata, \
