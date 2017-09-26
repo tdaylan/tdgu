@@ -216,10 +216,16 @@ def pcat_chan_mock_spmr(nameconfexec=None):
     dictargs['probspmr'] = 0.5
     dictargs['indxenerincl'] = array([0])
     
-    listnameconf = ['nomi', 'pars', 'genebrgt', 'genefain', 'psfn']
+    listnameconf = ['free', 'nomi', 'pars', 'genebrgt', 'genefain', 'psfn']
     dictargsvari = {}
     for nameconf in listnameconf:
         dictargsvari[nameconf] = {}
+    
+    dictargsvari['free']['minmnumbelempop0reg0'] = 0.
+    dictargsvari['free']['maxmnumbelempop0reg0'] = 0.
+    dictargsvari['free']['inittype'] = 'rand'
+    dictargsvari['free']['probtran'] = 0.4
+    dictargsvari['free']['probspmr'] = 0.3
     
     dictargsvari['pars']['priofactdoff'] = 1.
     
@@ -360,12 +366,22 @@ def pcat_chan_mock_maxmllik():
                              )
 
 
-def pcat_chan_inpt(nameconfexec=None):
+def pcat_chan_inpt_grid(nameconfexec=None):
    
     dictargs = {}
     dictargs['exprtype'] = 'chan'
-    dictargs['inittype'] = 'reco'
     dictargs['namerecostat'] = 'extr7msc0300'
+    #dictargs['inittype'] = 'reco'
+    
+    # temp
+    #dictargs['inittype'] = 'reco'
+    dictargs['makeplotinit'] = False
+    dictargs['numbswep'] = 1000
+    dictargs['initnumbelempop0reg0'] = 1
+    dictargs['numbsamp'] = 1
+    dictargs['optitype'] = 'none'
+    dictargs['makeplotpost'] = False
+    dictargs['shrtfram'] = True
     
     listnameconf = ['extr2msc0300', 'extr4msc0300', 'home2msc0300', 'home4msc0300', 'home7msc0300']
     dictargsvari = {}
