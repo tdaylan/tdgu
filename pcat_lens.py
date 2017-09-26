@@ -817,10 +817,10 @@ def pcat_lens_inpt():
     strgexprsbrt = namedatasets + '_%04d.fits' % numbside
     
     if namedatasets == 'lens29075550':
-        initlgalsourreg0 = -0.5 / anglfact
+        initlgalsourreg0 = -0.1 / anglfact
         initbgalsourreg0 = 0.1 / anglfact
-        initbacpbac0ene0 = 1.1e-7
-        fittmeanbacpbac0ene0 = 1.1e-7
+        initbacpbac0ene0 = 1e-7
+        fittmeanbacpbac0ene0 = 1.115e-7
         fittstdvbacpbac0ene0 = fittmeanbacpbac0ene0 * 1e-3
         fittscalbacpbac0ene0 = 'gaus'
     else:

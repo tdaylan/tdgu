@@ -263,16 +263,22 @@ def pcat_chan_mock_spec_syst(nameconfexec=None):
     dictargs['numbswep'] = 3000
     dictargs['numbsamp'] = 100
     dictargs['diagmode'] = True
-    dictargs['numbelempop0reg0'] = 10
+    dictargs['numbelempop0reg0'] = 1
+    dictargs['minmnumbelempop0reg0'] = 0
+    dictargs['maxmnumbelempop0reg0'] = 2
     dictargs['exprtype'] = 'chan'
     dictargs['makeplotfram'] = False
     dictargs['makeplotpost'] = False
+    dictargs['propbacp'] = False
+    dictargs['propmeanelem'] = False
+    dictargs['propdist'] = False
+    dictargs['probtran'] = 0.
     
     dictargs['spectype'] = ['gaus']
-    dictargs['strgexpo'] = 1e2
+    dictargs['strgexpo'] = 1e8
     dictargs['elemtype'] = 'line'
     dictargs['inittype'] = 'refr'
-    #dictargs['verbtype'] = 2
+    dictargs['verbtype'] = 2
     dictargs['anlytype'] = 'spec'
     # assume a pixel with side 100 arcsec
     dictargs['maxmgangdata'] = 100. / anglfact
@@ -304,20 +310,11 @@ def pcat_chan_mock_syst(nameconfexec=None):
    
     dictargs = {}
     dictargs['exprtype'] = 'chan'
-    dictargs['numbswep'] = 200000
-    dictargs['numbsamp'] = 2000
+    dictargs['makeplotinit'] = False
+    dictargs['numbswep'] = 100000
+    dictargs['shrtfram'] = True
     dictargs['strgexpo'] = 'expochanhome4msc0300.fits'
     #dictargs['numbelempop0reg0'] = 100
-    
-    dictargs['numbelempop0reg0'] = 10
-    #dictargs['makeplotinit'] = False
-    #dictargs['shrtfram'] = True
-    #dictargs['propcomp'] = False
-    #dictargs['probtran'] = 0.
-    #dictargs['propbacp'] = False
-    dictargs['verbtype'] = 2
-    dictargs['minmnumbelempop0reg0'] = 0
-    dictargs['maxmnumbelempop0reg0'] = 40
     
     listnameconf = ['nomi', 'lowrmodl', 'unrsbadd', 'unrsfine', 'zerosgnl']
     dictargsvari = {}
