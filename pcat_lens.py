@@ -144,8 +144,8 @@ def pcat_lens_mock_next(nameconfexec=None):
     anglfact = 3600. * 180. / pi
     
     dictargs = {}
-    dictargs['numbswep'] = 100000
-    dictargs['numbsamp'] = 100
+    #dictargs['numbswep'] = 100000
+    #dictargs['numbsamp'] = 100
     
     #dictargs['makeplot'] = False
     #dictargs['numbproc'] = 3
