@@ -144,14 +144,8 @@ def pcat_lens_mock_next(nameconfexec=None):
     anglfact = 3600. * 180. / pi
     
     dictargs = {}
-    #dictargs['numbswep'] = 1000
-    #dictargs['numbburn'] = 0
-    #dictargs['factthin'] = 1000
+    dictargs['numbswep'] = 1000
     
-    #dictargs['makeplot'] = False
-    #dictargs['numbproc'] = 2
-    #dictargs['makeplotinit'] = False
-    #dictargs['makeplotfram'] = False
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     #dictargs['diagmode'] = True
@@ -197,6 +191,7 @@ def pcat_lens_mock_syst(nameconfexec=None):
     seed(4)
     
     dictargs = {}
+    dictargs['numbswep'] = 1000
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     
@@ -802,7 +797,7 @@ def writ_data():
         
 
 def pcat_lens_inpt():
-    
+   
     anglfact = 3600. * 180. / pi
     sizepixl = 0.05 / anglfact
     
@@ -836,14 +831,23 @@ def pcat_lens_inpt():
 
     mask = array([-0.3, 0.1, -0.1, 0.2]) / anglfact
     
+    dictargs = {}
+    dictargs['elemtype'] = 'lens'
+    dictargs['exprtype'] = 'hubb'
+ 
+    listnameconf = ['largrofi', 'largrofimask', 'nomi', 'mask']
+    dictargsvari = {}
+    for nameconf in listnameconf:
+        dictargsvari[nameconf] = {}
+    
+    dictargsvari['largrofi']['numbswep'] = 10000
+    
+    dictargsvari['largrofimask']['numbswep'] = 10000
+    
+    dictargsvari['nomi']['truenumbelempop0reg0'] = 0
+    
     pcat.main.init( \
-                   exprtype='hubb', \
-                   elemtype='lens', \
-                   #lensmodltype='none', \
-                   #explprop=True, \
                    numbswep=10000, \
-                   numbburn=0, \
-                   numbsamp=100, \
                    optitype='hess', \
                    numbswepplot=1000, \
                    diagmode=True, \
@@ -870,6 +874,12 @@ def pcat_lens_inpt():
                    strgexprsbrt=strgexprsbrt, \
                   )
    
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  nameconfexec=nameconfexec, \
+                                 )
+
 
 def pcat_lens_psfn():
     
