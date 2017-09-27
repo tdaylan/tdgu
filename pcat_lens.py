@@ -144,7 +144,7 @@ def pcat_lens_mock_next(nameconfexec=None):
     anglfact = 3600. * 180. / pi
     
     dictargs = {}
-    dictargs['numbswep'] = 1000
+    #dictargs['numbswep'] = 1000
     
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
@@ -191,7 +191,7 @@ def pcat_lens_mock_syst(nameconfexec=None):
     seed(4)
     
     dictargs = {}
-    dictargs['numbswep'] = 1000
+    #dictargs['numbswep'] = 1000
     dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     
