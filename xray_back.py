@@ -221,8 +221,8 @@ def pcat_chan_mock_spmr(nameconfexec=None):
     for nameconf in listnameconf:
         dictargsvari[nameconf] = {}
     
-    dictargsvari['free']['minmnumbelempop0reg0'] = 0.
-    dictargsvari['free']['maxmnumbelempop0reg0'] = 0.
+    #dictargsvari['free']['minmnumbelempop0reg0'] = 0.
+    #dictargsvari['free']['maxmnumbelempop0reg0'] = 0.
     dictargsvari['free']['inittype'] = 'rand'
     dictargsvari['free']['probtran'] = 0.4
     dictargsvari['free']['probspmr'] = 0.3
