@@ -4,7 +4,7 @@ def pcat_lens_mock_grid():
 
     listnameoutpvarb = ['maxmllik', 'medilliktotl', 'stdvlliktotl', 'levi', 'info']
 
-    gdat = pcat.main.init(elemtype='lens', defa=True, verbtype=0)
+    gdat = pcat.main.init(exprtype='hubb', defa=True, verbtype=0)
 
     numbcnfg = 3
     numbiter = 1
@@ -22,7 +22,6 @@ def pcat_lens_mock_grid():
     grid = empty((4, numboutpvarb, varbinpt.size, numbcnfg))
     
     dictvarb = dict()
-    dictvarb['elemtype'] = 'lens'
     dictvarb['exprtype'] = 'hubb'
     dictvarb['numbswep'] = 100
     dictvarb['makeplot'] = False
@@ -100,7 +99,6 @@ def pcat_lens_mock_grid():
 def pcat_lens_intrevalmodlcnts():
    
     pcat.main.init( \
-                   elemtype='lens', \
                    exprtype='hubb', \
                    makeplotinit=False, \
                    intrevalmodlcnts=True, \
@@ -114,7 +112,6 @@ def pcat_lens_mock_sing():
     numbiter = 10
     for k in range(numbiter):
         pcat.main.init( \
-                       elemtype='lens', \
                        exprtype='hubb', \
                        numbelempop0reg0=1, \
                        minmdefs=1e-2/3600./180.*pi, \
@@ -125,7 +122,6 @@ def pcat_lens_mock_sing():
 def pcat_lens_mock_spmr():
    
     pcat.main.init( \
-                   elemtype='lens', \
                    exprtype='hubb', \
                    lgalimps=array([0.]), \
                    bgalimps=array([0.]), \
@@ -146,7 +142,6 @@ def pcat_lens_mock_next(nameconfexec=None):
     dictargs = {}
     #dictargs['numbswep'] = 1000
     
-    dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     #dictargs['diagmode'] = True
     dictargs['truenumbelempop0reg0'] = 25
@@ -192,10 +187,16 @@ def pcat_lens_mock_syst(nameconfexec=None):
     
     dictargs = {}
     #dictargs['numbswep'] = 1000
-    dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     
-    dictargs['truenumbpntspop0reg0'] = 25
+    dictargs['numbelempop0reg0'] = 2
+    dictargs['maxmnumbelempop0reg0'] = 4
+    dictargs['numbelempop1reg0'] = 2
+    dictargs['maxmnumbelempop1reg0'] = 4
+    dictargs['numbelempop2reg0'] = 2
+    dictargs['maxmnumbelempop2reg0'] = 4
+    
+    dictargs['truenumbelempop0reg0'] = 25
     dictargs['truemeanpntspop0'] = 25
     dictargs['truedefsdistsloppop0'] = 1.9
     dictargs['truesigcene0evt0'] = 4.21788e-07
@@ -344,8 +345,11 @@ def pcat_lens_mock_syst(nameconfexec=None):
     dictargs['trueacutpop0reg00024'] = 5.35163e-06
     
     #dictargs['makeplot'] = False
-    #dictargs['numbswep'] = 1000
-    #dictargs['optitype'] = 'none'
+    dictargs['numbswep'] = 10000
+    dictargs['optitype'] = 'none'
+    dictargs['makeplotinit'] = False
+    dictargs['makeplotfram'] = False
+    dictargs['verbtype'] = 2
     
     numbelem = int(25. * 10.**0.9)
     anglfact = 3600. * 180. / pi
@@ -398,7 +402,6 @@ def pcat_lens_mock_syst(nameconfexec=None):
 def pcat_lens_mock_perf():
    
     dictargs = {}
-    dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     
     anglfact = 3600. * 180. / pi
@@ -416,7 +419,6 @@ def pcat_lens_mock_perf():
 def pcat_lens_mock_reln():
   
     dictargs = {}
-    dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     dictargs['relnindx'] = 1.
     dictargs['liststrgfeatmodu'] = ['lgalbgal']
@@ -454,7 +456,6 @@ def pcat_lens_mock_sele():
     numbfeatsele = len(listnamefeatsele)
 
     dictargsvari = {}
-    dictargsvari['elemtype'] = ['lens' for n in range(numbiterelem)]
     
     matrcutf = empty((numbitermacr, numbiterelem, numbfeatsele))
     
@@ -570,7 +571,6 @@ def pcat_lens_mock_tmpr():
     
     anglfact = 3600. * 180. / pi
     dictargs = {}
-    dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     dictargs['burntmpr'] = True
     dictargs['maxmnumbelempop0reg0'] = 0
@@ -587,7 +587,6 @@ def pcat_lens_mock_tmpr():
 def pcat_lens_mock_macr():
     
     pcat.main.init( \
-                   elemtype='lens', \
                    exprtype='hubb', \
                    maxmnumbelempop0reg0=0, \
                    numbelempop0reg0=0, \
@@ -597,7 +596,6 @@ def pcat_lens_mock_macr():
 def pcat_lens_mock_test():
    
     dictargs = {}
-    dictargs['elemtype'] = 'lens'
     dictargs['exprtype'] = 'hubb'
     dictargsvari = {}
     dictargsvari['inittype'] =         ['refr', 'pert', 'pert', None,  ]
@@ -615,7 +613,6 @@ def pcat_lens_mock_test():
 def pcat_lens_mock_many():
    
     pcat.main.init( \
-                   elemtype='lens', \
                    exprtype='hubb', \
                    numbswep=10000, \
                    numbburn=0, \
@@ -630,7 +627,7 @@ def pcat_lens_mock_many():
                    maxmnumbelemreg1pop0=0, \
                    #makeplot=False, \
                    #explprop=True, \
-                   verbtype=2, \
+                   #verbtype=2, \
                    numbregi=2, \
                    #mockonly=True, \
                   )
@@ -824,7 +821,7 @@ def writ_data():
             
         
 
-def pcat_lens_inpt():
+def pcat_lens_inpt(nameconfexec=None):
    
     anglfact = 3600. * 180. / pi
     sizepixl = 0.05 / anglfact
@@ -836,11 +833,12 @@ def pcat_lens_inpt():
     strgexpo = 7.37487548893e21
     
     # half-size of the image in pixels
-    numbside = 400
-    maxmgangdata = numbside * 0.5 * sizepixl
+    maxmgangdata = 100 * 0.5 * sizepixl
+    maxmgangdatalarg = 400 * 0.5 * sizepixl
 
     # name of the data file
-    strgexprsbrt = namedatasets + '_%04d.fits' % numbside
+    strgexprsbrt = namedatasets + '_0100.fits'
+    strgexprsbrtlarg = namedatasets + '_0400.fits'
     
     if namedatasets == 'lens29075550':
         initlgalsourreg0 = -0.1 / anglfact
@@ -857,50 +855,62 @@ def pcat_lens_inpt():
         fittstdvbacpbac0ene0 = None
         fittscalbacpbac0ene0 = None
 
-    mask = array([-0.3, 0.1, -0.1, 0.2]) / anglfact
+    listmask = [
+                ['sqre', -0.3, 0.1, -0.1, 0.2] , \
+                ['circ', -9, 8, 1] , \
+               ]
+    for k, mask in enumerate(listmask):
+        for n, valu in enumerate(mask):
+            if not isinstance(valu, str):
+                listmask[k][n] = valu / anglfact
     
     dictargs = {}
-    dictargs['elemtype'] = 'lens'
+    dictargs['elemtype'] = ['lens']
+    dictargs['numbswep'] = 10
     dictargs['exprtype'] = 'hubb'
+    dictargs['strgexpo'] = strgexpo
+    dictargs['indxenerincl'] = array([0])
+    dictargs['savestat'] = True
+    dictargs['serstype'] = 'intp'
+    dictargs['inittype'] = 'reco'
+    dictargs['namerecostat'] = 'pcat_lens_inpt'
+    # temp
+    dictargs['optitype'] = 'none'
+    dictargs['makeplot'] = False
+    dictargs['verbtype'] = 2
  
     listnameconf = ['largrofi', 'largrofimask', 'nomi', 'mask']
     dictargsvari = {}
     for nameconf in listnameconf:
         dictargsvari[nameconf] = {}
     
-    dictargsvari['largrofi']['numbswep'] = 10000
+    #dictargsvari['largrofi']['numbswep'] = 10000
+    dictargsvari['largrofi']['numbswepplot'] = 1000
+    dictargsvari['largrofi']['maxmnumbelempop0reg0'] = 0
+    dictargsvari['largrofi']['maxmnumbelempop1reg0'] = 0
+    dictargsvari['largrofi']['maxmnumbelempop2reg0'] = 0
+    dictargsvari['largrofi']['strgexprsbrt'] = strgexprsbrtlarg
+    dictargsvari['largrofi']['maxmgangdata'] = maxmgangdatalarg
     
-    dictargsvari['largrofimask']['numbswep'] = 10000
+    #dictargsvari['largrofimask']['numbswep'] = 10000
+    dictargsvari['largrofimask']['numbswepplot'] = 1000
+    dictargsvari['largrofimask']['maxmnumbelempop0reg0'] = 0
+    dictargsvari['largrofimask']['maxmnumbelempop1reg0'] = 0
+    dictargsvari['largrofimask']['maxmnumbelempop2reg0'] = 0
+    dictargsvari['largrofimask']['listmask'] = listmask
+    dictargsvari['largrofimask']['strgexprsbrt'] = strgexprsbrtlarg
+    dictargsvari['largrofimask']['maxmgangdata'] = maxmgangdatalarg
     
-    dictargsvari['nomi']['truenumbelempop0reg0'] = 0
+    dictargsvari['nomi']['strgexprsbrt'] = strgexprsbrt
+    dictargsvari['nomi']['maxmgangdata'] = maxmgangdata
     
-    pcat.main.init( \
-                   numbswep=10000, \
-                   optitype='hess', \
-                   numbswepplot=1000, \
-                   diagmode=True, \
-                   #fittmaxmellphostreg0=0.1, \
-                   #verbtype=2, \
-                   #pixltype='cart', \
-                   #burntmpr=True, \
-                   #initsizesour=1.5/anglfact, \
-                   #initspecsourene0=1.5e-18, \
-                   #mask=mask, \
-                   indxenerincl=array([0]), \
-                   #initlgalsourreg0=initlgalsourreg0, \
-                   #initbgalsourreg0=initbgalsourreg0, \
-                   initbacpbac0ene0=initbacpbac0ene0, \
-                   fittmeanbacpbac0ene0=fittmeanbacpbac0ene0, \
-                   fittstdvbacpbac0ene0=fittstdvbacpbac0ene0, \
-                   fittscalbacpbac0ene0=fittscalbacpbac0ene0, \
-                   maxmnumbelempop0reg0=0, \
-                   serstype='intp', \
-                   #savestat=True, \
-                   inittype='reco', \
-                   strgexpo=strgexpo, \
-                   maxmgangdata=maxmgangdata, \
-                   strgexprsbrt=strgexprsbrt, \
-                  )
+    dictargsvari['mask']['listmask'] = listmask
+    dictargsvari['mask']['strgexprsbrt'] = strgexprsbrt
+    dictargsvari['mask']['maxmgangdata'] = maxmgangdata
+    
+    #fittmeanbacpbac0ene0=fittmeanbacpbac0ene0, \
+    #fittstdvbacpbac0ene0=fittstdvbacpbac0ene0, \
+    #fittscalbacpbac0ene0=fittscalbacpbac0ene0, \
    
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -918,7 +928,7 @@ def pcat_lens_psfn():
     
     for k in range(numbiter):
         pcat.main.init( \
-                       elemtype='lens', \
+                       exprtype='hubb', \
                        numbswep=50000, \
                        factthin=500, \
                        numbswepplot=10000, \
@@ -932,7 +942,7 @@ def pcat_lens_psfn():
                        #makeplotfram=False, \
                        makeplotlpri=False, \
                        strgexpo=strgexpo, \
-                       fittmaxmnumbpnts=array([0]), \
+                       fittmaxmnumbelem=array([0]), \
                        maxmgangdata=maxmgangdata, \
                        strgexprsbrt='lens29065407.fits', \
                       )
@@ -968,7 +978,7 @@ def pcat_lens_intrevalresicntp():
         fittscalbacpbac0ene0 = None
 
     pcat.main.init( \
-                   elemtype='lens', \
+                   exprtype='hubb', \
                    makeplotinit=False, \
                    intrevalresicntp=True, \
                    strgexpo=strgexpo, \
@@ -978,7 +988,7 @@ def pcat_lens_intrevalresicntp():
                    fittscalbacpbac0ene0=fittscalbacpbac0ene0, \
                    inittype='reco', \
                    namerecostat='pcat_lens_inpt', \
-                   fittmaxmnumbpnts=array([0]), \
+                   fittmaxmnumbelem=array([0]), \
                    maxmgangdata=maxmgangdata, \
                    strgexprsbrt=strgexprsbrt, \
                   )
@@ -987,7 +997,6 @@ def pcat_lens_intrevalresicntp():
 def pcat_lens_mockonly():
    
     pcat.main.init( \
-                   elemtype='lens', \
                    exprtype='hubb', \
                    numbelempop0reg0=20, \
                    maxmnumbelempop0reg0=400, \

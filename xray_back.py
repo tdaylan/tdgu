@@ -211,9 +211,8 @@ def pcat_chan_mock_spmr(nameconfexec=None):
     dictargs['strgexpo'] = 1e9
     dictargs['maxmgangdata'] = maxmgangdata
     dictargs['numbsidecart'] = numbsidecart
-    
     dictargs['probtran'] = 1.
-    dictargs['probspmr'] = 0.5
+    dictargs['probspmr'] = 1.
     dictargs['indxenerincl'] = array([0])
     
     listnameconf = ['free', 'nomi', 'pars', 'genebrgt', 'genefain', 'psfn']
@@ -282,7 +281,7 @@ def pcat_chan_mock_spec_syst(nameconfexec=None):
     
     dictargs['spectype'] = ['gaus']
     dictargs['strgexpo'] = 1e8
-    dictargs['elemtype'] = 'line'
+    dictargs['elemtype'] = ['line']
     dictargs['inittype'] = 'refr'
     dictargs['verbtype'] = 2
     dictargs['anlytype'] = 'spec'
@@ -371,18 +370,25 @@ def pcat_chan_inpt_grid(nameconfexec=None):
     dictargs = {}
     dictargs['exprtype'] = 'chan'
     dictargs['namerecostat'] = 'extr7msc0300'
-    #dictargs['inittype'] = 'reco'
     
     # temp
     #dictargs['inittype'] = 'reco'
+    #dictargs['diagmode'] = False
+    #dictargs['inittype'] = 'reco'
     dictargs['makeplotinit'] = False
+    dictargs['shrtfram'] = True
+    dictargs['makeplotpost'] = False
+    dictargs['proppsfp'] = False
+    dictargs['propbacp'] = False
+    dictargs['propdist'] = False
+    #dictargs['propmeanelem'] = False
     dictargs['numbswep'] = 1000
-    dictargs['diagmode'] = True
     dictargs['initnumbelempop0reg0'] = 1
+    dictargs['maxmnumbelempop0reg0'] = 1
+    
+    #dictargs['verbtype'] = 2
     dictargs['numbsamp'] = 1
     dictargs['optitype'] = 'none'
-    dictargs['makeplotpost'] = False
-    dictargs['shrtfram'] = True
     
     listnameconf = ['extr2msc0300', 'extr4msc0300', 'home2msc0300', 'home4msc0300', 'home7msc0300']
     dictargsvari = {}

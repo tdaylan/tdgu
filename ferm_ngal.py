@@ -96,6 +96,10 @@ def pcat_ferm_ngal_mock():
                    forccart=True, \
                    pixltype='cart', \
                    numbsidecart=100, \
+                   #verbtype=2, \
+                   numbelempop0reg0=5, \
+                   maxmnumbelempop0reg0=5, \
+                   makeplot=False, \
                    #indxenerincl=arange(5), \
                    #indxevttincl=arange(4), \
                    bgalcntr=pi / 2., \

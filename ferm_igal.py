@@ -887,6 +887,7 @@ def pcat_ferm_igal_mock_syst(nameconfexec=None):
     dictargs['truenumbelempop2reg0'] = 1#50
     
     dictargs['truenumbpopl'] = 3
+    dictargs['trueelemtype'] = ['lght', 'lght', 'lght']
     dictargs['truefluxdistsloppop0'] = 2.6
     dictargs['truefluxdistsloppop1'] = 2.6
     dictargs['truefluxdistsloppop2'] = 3.5
@@ -909,11 +910,11 @@ def pcat_ferm_igal_mock_syst(nameconfexec=None):
     dictargs['numbsidecart'] = 100
     
     # temp
-    dictargs['makeplotinit'] = False
-    dictargs['shrtfram'] = True
+    #dictargs['makeplotinit'] = False
+    #dictargs['shrtfram'] = True
     dictargs['diagmode'] = True
     dictargs['verbtype'] = 2
-    dictargs['inittype'] = 'refr'
+    #dictargs['inittype'] = 'refr'
  
     listnameconf = ['nomi', 'truedark', 'bfun', 'heal', 'penalpridiff', 'checprio', 'fixdpsfn', 'parsnone', 'popl']
     dictargsvari = {}
@@ -1010,12 +1011,16 @@ def pcat_ferm_igal_inpt_grid(nameconfexec=None):
     
     dictargsvari['popl']['numbpopl'] = 3
                    
-    dictargsvari['bfunwfou']['listnameback'] = ['isot', 'fdfm', 'dark', 'wfou']
-    dictargsvari['bfunwfou']['backtype'] = [1., 'sbrtfdfmsmthmanunorm.fits', 'darktempsmthmanunorm.fits', 'wfou']
+    dictargsvari['bfunwfou']['maxmnumbelempop0reg0'] = 0
+    dictargsvari['bfunwfou']['optitype'] = 'none'
+    dictargsvari['bfunwfou']['anlytype'] = 'manubfun'
+    dictargsvari['bfunwfou']['listnameback'] = ['isot', 'fdfm', 'dark', 'bfunwfou']
+    dictargsvari['bfunwfou']['backtype'] = [1., 'sbrtfdfmsmthmanunorm.fits', 'darktempsmthmanunorm.fits', 'bfunfour0004']
                    
+    dictargsvari['bfuntemp']['anlytype'] = 'manubfun'
     dictargsvari['bfuntemp']['listnameback'] = ['isot', 'hydr', 'cmon', 'dustsfdd', 'dark', 'wise']
     dictargsvari['bfuntemp']['backtype'] = [1., 'sbrtfdfmsmthmanunorm.fits', 'hydrsmthmanunorm.fits', 'cmonsmthmanunorm.fits', \
-                                                                                    'dustsfddsmthmanunorm.fits', 'darktempsmthmanunorm.fits', 'wisesmthmanunorm.fits'], \
+                                                                                    'dustsfddsmthmanunorm.fits', 'darktempsmthmanunorm.fits', 'wisesmthmanunorm.fits']
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
