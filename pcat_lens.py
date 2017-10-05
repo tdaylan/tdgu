@@ -347,9 +347,9 @@ def pcat_lens_mock_syst(nameconfexec=None):
     #dictargs['makeplot'] = False
     dictargs['numbswep'] = 10000
     dictargs['optitype'] = 'none'
-    dictargs['makeplotinit'] = False
-    dictargs['makeplotfram'] = False
-    #dictargs['verbtype'] = 2
+    #dictargs['makeplotinit'] = False
+    #dictargs['makeplotfram'] = False
+    dictargs['verbtype'] = 2
     
     numbelem = int(25. * 10.**0.9)
     anglfact = 3600. * 180. / pi
