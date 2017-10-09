@@ -338,7 +338,9 @@ def pcat_lens_mock_syst(nameconfexec=None):
     dictargs['trueacutpop0reg00024'] = 5.35163e-06
     
     #dictargs['makeplot'] = False
-    dictargs['numbswep'] = 10000
+    dictargs['numbswep'] = 100
+    dictargs['numbburn'] = 0
+    dictargs['factthin'] = 100
     dictargs['optitype'] = 'none'
     dictargs['makeplotinit'] = False
     dictargs['makeplotfram'] = False
@@ -410,7 +412,7 @@ def pcat_lens_mock_sour(nameconfexec=None):
     dictargs['refrlegdpopl'] = ['PS', 'Subhalo', 'Blob']
     
     dictargs['optitype'] = 'none'
-    #dictargs['makeplot'] = False
+    dictargs['makeplot'] = False
     #dictargs['makeplotinit'] = False
     #dictargs['makeplotfram'] = False
     dictargs['verbtype'] = 2
