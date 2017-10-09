@@ -189,13 +189,6 @@ def pcat_lens_mock_syst(nameconfexec=None):
     #dictargs['numbswep'] = 1000
     dictargs['exprtype'] = 'hubb'
     
-    dictargs['numbelempop0reg0'] = 2
-    dictargs['maxmnumbelempop0reg0'] = 4
-    dictargs['numbelempop1reg0'] = 2
-    dictargs['maxmnumbelempop1reg0'] = 4
-    dictargs['numbelempop2reg0'] = 2
-    dictargs['maxmnumbelempop2reg0'] = 4
-    
     dictargs['truenumbelempop0reg0'] = 25
     dictargs['truemeanpntspop0'] = 25
     dictargs['truedefsdistsloppop0'] = 1.9
@@ -347,6 +340,77 @@ def pcat_lens_mock_syst(nameconfexec=None):
     #dictargs['makeplot'] = False
     dictargs['numbswep'] = 10000
     dictargs['optitype'] = 'none'
+    dictargs['makeplotinit'] = False
+    dictargs['makeplotfram'] = False
+    #dictargs['verbtype'] = 2
+    dictargs['elemtype'] = ['lens']
+    
+    numbelem = int(25. * 10.**0.9)
+    anglfact = 3600. * 180. / pi
+
+    listnameconf = ['nomi', 'zerodata', 'oneh', 'lowrtrue', 'pars', 'verylowrtrue', 'medihighs2nr', 'veryhighs2nr', 'init']
+    dictargsvari = {}
+    for nameconf in listnameconf:
+        dictargsvari[nameconf] = {}
+    
+    dictargsvari['zerodata']['killexpo'] = True
+    #dictargsvari['zerodata']['optitype'] = 'none'
+    #dictargsvari['zerodata']['verbtype'] = 2
+    #dictargsvari['zerodata']['numbswep'] = 100000
+    #dictargsvari['zerodata']['numbswepplot'] = 10000
+    #dictargsvari['zerodata']['propcomp'] = False
+    #dictargsvari['zerodata']['propmeanelem'] = False
+    #dictargsvari['zerodata']['proppsfp'] = False
+    #dictargsvari['zerodata']['propbacp'] = False
+    #dictargsvari['zerodata']['proplenp'] = False
+    #dictargsvari['zerodata']['numbburn'] = 0
+    #dictargsvari['zerodata']['factthin'] = 1000
+    #dictargsvari['zerodata']['minmnumbelempop0reg0'] = 15
+    #dictargsvari['zerodata']['maxmnumbelempop0reg0'] = 15
+    #dictargsvari['zerodata']['numbelempop0reg0'] = 15
+    
+    dictargsvari['oneh']['fittminmnumbelempop0reg0'] = 1
+    dictargsvari['oneh']['fittmaxmnumbelempop0reg0'] = 1
+
+    dictargsvari['lowrtrue']['fittminmdefs'] = 0.01 / anglfact
+    
+    dictargsvari['verylowrtrue']['truenumbelempop0reg0'] = int(25. * 10.**0.9)
+    dictargsvari['verylowrtrue']['trueminmdefs'] = 3e-4 / anglfact
+    dictargsvari['verylowrtrue']['fittminmdefs'] = 0.01 / anglfact
+    
+    dictargsvari['pars']['priofactdoff'] = 0.
+        
+    dictargsvari['medihighs2nr']['strgexpo'] = 1e4 / 1.63050e-19
+    
+    dictargsvari['veryhighs2nr']['strgexpo'] = 1e5 / 1.63050e-19
+
+    dictargsvari['init']['inittype'] = 'refr'
+
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  nameconfexec=nameconfexec, \
+                                 )
+    
+
+def pcat_lens_mock_sour(nameconfexec=None):
+   
+    seed(4)
+    
+    dictargs = {}
+    dictargs['numbswep'] = 1000
+    dictargs['exprtype'] = 'hubb'
+    
+    dictargs['numbelempop0reg0'] = 2
+    dictargs['maxmnumbelempop0reg0'] = 4
+    dictargs['numbelempop1reg0'] = 2
+    dictargs['maxmnumbelempop1reg0'] = 4
+    dictargs['numbelempop2reg0'] = 2
+    dictargs['maxmnumbelempop2reg0'] = 4
+    dictargs['refrlegdpopl'] = ['PS', 'Subhalo', 'Blob']
+    
+    dictargs['optitype'] = 'none'
+    #dictargs['makeplot'] = False
     #dictargs['makeplotinit'] = False
     #dictargs['makeplotfram'] = False
     dictargs['verbtype'] = 2
