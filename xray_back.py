@@ -195,9 +195,12 @@ def pcat_chan_mock_spmr(nameconfexec=None):
     maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
 
     dictargs = {}
-    dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 100
+    #dictargs['verbtype'] = 2
     dictargs['numbswepplot'] = 2000
     dictargs['numbburn'] = 0
+    dictargs['makeplotinit'] = False
+    dictargs['shrtfram'] = True
     dictargs['factthin'] = 100
     dictargs['exprtype'] = 'chan'
     dictargs['inittype'] = 'refr'
@@ -214,6 +217,9 @@ def pcat_chan_mock_spmr(nameconfexec=None):
     dictargs['probtran'] = 1.
     dictargs['probspmr'] = 1.
     dictargs['indxenerincl'] = array([0])
+    
+    # temp
+    dictargs['maxmnumbelempop0reg0'] = 5
     
     listnameconf = ['free', 'nomi', 'pars', 'genebrgt', 'genefain', 'psfn']
     dictargsvari = {}
@@ -235,6 +241,13 @@ def pcat_chan_mock_spmr(nameconfexec=None):
     dictargsvari['psfn']['truefluxpop0reg00000'] = 3e-8
     dictargsvari['psfn']['probtran'] = 0.
     dictargsvari['psfn']['indxenerincl'] = None
+    # temp
+    #dictargsvari['psfn']['propdist'] = False
+    #dictargsvari['psfn']['propbacp'] = False
+    dictargsvari['psfn']['propcomp'] = False
+    #dictargsvari['psfn']['proppsfn'] = False
+    dictargsvari['psfn']['inittype'] = 'refr'
+    dictargsvari['psfn']['elemspatevaltype'] = ['full']
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -315,9 +328,9 @@ def pcat_chan_mock_syst(nameconfexec=None):
    
     dictargs = {}
     dictargs['exprtype'] = 'chan'
-    dictargs['makeplotinit'] = False
     dictargs['numbswep'] = 100000
     dictargs['shrtfram'] = True
+    dictargs['diagmode'] = False
     dictargs['strgexpo'] = 'expochanhome4msc0300.fits'
     #dictargs['numbelempop0reg0'] = 100
     

@@ -397,24 +397,38 @@ def pcat_lens_mock_syst(nameconfexec=None):
 
 def pcat_lens_mock_sour(nameconfexec=None):
    
+    anglfact = 3600. * 180. / pi
     seed(4)
     
     dictargs = {}
-    dictargs['numbswep'] = 1000
+    dictargs['numbswep'] = 10000
+    dictargs['numbburn'] = 0
+    dictargs['factthin'] = 1000
     dictargs['exprtype'] = 'hubb'
     
     dictargs['numbelempop0reg0'] = 2
     dictargs['maxmnumbelempop0reg0'] = 4
     dictargs['numbelempop1reg0'] = 2
     dictargs['maxmnumbelempop1reg0'] = 4
+    dictargs['truelgalsourreg0'] = 0.
+    dictargs['truebgalsourreg0'] = 0.
+    dictargs['truefluxsourreg0'] = 3e-18
+    dictargs['truelgalpop2reg00000'] = -0.1 / anglfact
+    dictargs['truebgalpop2reg00000'] = 0.
+    dictargs['truefluxpop2reg00000'] = 3e-19
+    dictargs['truelgalpop2reg00001'] = 0.1 / anglfact
+    dictargs['truebgalpop2reg00001'] = 0.
+    dictargs['truefluxpop2reg00000'] = 2e-19
     dictargs['numbelempop2reg0'] = 2
     dictargs['maxmnumbelempop2reg0'] = 4
     dictargs['refrlegdpopl'] = ['PS', 'Subhalo', 'Blob']
     
     dictargs['optitype'] = 'none'
-    dictargs['makeplot'] = False
+    #dictargs['makeplot'] = False
+    #dictargs['spatdisttype'] = ['unif', 'unif', 'gang']
     #dictargs['makeplotinit'] = False
     #dictargs['makeplotfram'] = False
+    #dictargs['probtran'] = 1.
     dictargs['verbtype'] = 2
     
     numbelem = int(25. * 10.**0.9)
@@ -693,8 +707,27 @@ def pcat_lens_mock_many():
                    maxmnumbelemreg1pop0=0, \
                    #makeplot=False, \
                    #explprop=True, \
-                   #verbtype=2, \
+                   verbtype=2, \
                    numbregi=2, \
+                   #mockonly=True, \
+                  )
+
+
+def pcat_lens_mock():
+   
+    pcat.main.init( \
+                   exprtype='hubb', \
+                   numbswep=10000, \
+                   numbburn=0, \
+                   factthin=10, \
+                   shrtfram=True, \
+                   makeplotinit=False, \
+                   inittype='refr', \
+                   numbelempop0reg0=3, \
+                   maxmnumbelempop0reg0=5, \
+                   #makeplot=False, \
+                   #explprop=True, \
+                   verbtype=2, \
                    #mockonly=True, \
                   )
 

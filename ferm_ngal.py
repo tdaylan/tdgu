@@ -90,7 +90,9 @@ def pcat_ferm_inpt_ngal_tim4():
 def pcat_ferm_ngal_mock():
      
     pcat.main.init( \
-                   numbswep=10000, \
+                   numbswep=1000, \
+                   factthin=100, \
+                   numbburn=0, \
                    numbswepplot=1000, \
                    lgalcntr=0., \
                    forccart=True, \
