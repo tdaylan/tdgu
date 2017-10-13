@@ -913,7 +913,6 @@ def pcat_ferm_igal_mock_syst(nameconfexec=None):
     # temp
     #dictargs['makeplotinit'] = False
     #dictargs['shrtfram'] = True
-    dictargs['diagmode'] = True
     #dictargs['verbtype'] = 2
     #dictargs['inittype'] = 'refr'
  

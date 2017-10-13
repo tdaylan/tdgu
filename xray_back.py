@@ -195,7 +195,7 @@ def pcat_chan_mock_spmr(nameconfexec=None):
     maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
 
     dictargs = {}
-    dictargs['numbswep'] = 100
+    dictargs['numbswep'] = 10000
     #dictargs['verbtype'] = 2
     dictargs['numbswepplot'] = 2000
     dictargs['numbburn'] = 0
@@ -280,7 +280,6 @@ def pcat_chan_mock_spec_syst(nameconfexec=None):
     dictargs['numbswep'] = 10000
     dictargs['numbswep'] = 3000
     dictargs['numbsamp'] = 100
-    dictargs['diagmode'] = True
     dictargs['numbelempop0reg0'] = 1
     dictargs['minmnumbelempop0reg0'] = 0
     dictargs['maxmnumbelempop0reg0'] = 2
@@ -330,7 +329,6 @@ def pcat_chan_mock_syst(nameconfexec=None):
     dictargs['exprtype'] = 'chan'
     dictargs['numbswep'] = 100000
     dictargs['shrtfram'] = True
-    dictargs['diagmode'] = False
     dictargs['strgexpo'] = 'expochanhome4msc0300.fits'
     #dictargs['numbelempop0reg0'] = 100
     
@@ -385,8 +383,6 @@ def pcat_chan_inpt_grid(nameconfexec=None):
     dictargs['namerecostat'] = 'extr7msc0300'
     
     # temp
-    #dictargs['inittype'] = 'reco'
-    #dictargs['diagmode'] = False
     #dictargs['inittype'] = 'reco'
     dictargs['makeplotinit'] = False
     dictargs['shrtfram'] = True

@@ -695,16 +695,14 @@ def pcat_lens_mock_test():
 
 
 def pcat_lens_mock_many():
-   
+    
+    seed(0)
+
     pcat.main.init( \
                    exprtype='hubb', \
                    numbswep=10000, \
                    numbburn=0, \
-                   factthin=10, \
-                   diagmode=True, \
-                   #shrtfram=True, \
-                   #makeplotinit=False, \
-                   inittype='refr', \
+                   factthin=100, \
                    numbelempop0reg0=0, \
                    numbelempop0reg1=0, \
                    numbelempop1reg0=0, \
@@ -717,11 +715,15 @@ def pcat_lens_mock_many():
                    maxmnumbelempop1reg1=0, \
                    maxmnumbelempop2reg0=0, \
                    maxmnumbelempop2reg1=0, \
-                   #makeplot=False, \
-                   #explprop=True, \
-                   verbtype=2, \
                    numbregi=2, \
-                   #mockonly=True, \
+                   # temp
+                   inittype='refr', \
+                   optitype='none', \
+                   verbtype=2, \
+                   makeplot=False, \
+                   #explprop=True, \
+                   #shrtfram=True, \
+                   #makeplotinit=False, \
                   )
 
 
