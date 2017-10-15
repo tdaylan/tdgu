@@ -700,9 +700,9 @@ def pcat_lens_mock_many():
 
     pcat.main.init( \
                    exprtype='hubb', \
-                   numbswep=10000, \
+                   numbswep=100, \
                    numbburn=0, \
-                   factthin=100, \
+                   factthin=10, \
                    numbelempop0reg0=0, \
                    numbelempop0reg1=0, \
                    numbelempop1reg0=0, \
@@ -731,17 +731,20 @@ def pcat_lens_mock():
    
     pcat.main.init( \
                    exprtype='hubb', \
+                   
+                   # temp
                    numbswep=10000, \
                    numbburn=0, \
                    factthin=10, \
                    shrtfram=True, \
+                   optitype='none', \
                    makeplotinit=False, \
                    inittype='refr', \
-                   numbelempop0reg0=3, \
-                   maxmnumbelempop0reg0=5, \
+                   numbelempop0reg0=25, \
+                   #maxmnumbelempop0reg0=5, \
                    #makeplot=False, \
                    #explprop=True, \
-                   verbtype=2, \
+                   #verbtype=2, \
                    #mockonly=True, \
                   )
 

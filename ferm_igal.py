@@ -916,7 +916,7 @@ def pcat_ferm_igal_mock_syst(nameconfexec=None):
     #dictargs['verbtype'] = 2
     #dictargs['inittype'] = 'refr'
  
-    listnameconf = ['nomi', 'truedark', 'bfun', 'heal', 'penalpridiff', 'checprio', 'fixdpsfn', 'parsnone', 'popl']
+    listnameconf = ['nomi', 'truedark', 'bfun', 'heal', 'penalpridiff', 'checprio', 'fixdpsfn', 'parsnone', 'popl', 'puls']
     dictargsvari = {}
     for nameconf in listnameconf:
         dictargsvari[nameconf] = {}
@@ -926,6 +926,8 @@ def pcat_ferm_igal_mock_syst(nameconfexec=None):
 
     dictargsvari['heal']['forccart'] = False
     dictargsvari['heal']['anlytype'] = 'rec8bfun'
+    
+    dictargsvari['puls']['trueelemtype'] = ['lghtpnts', 'lghtpnts', 'lghtpntspuls']
     
     dictargsvari['penalpridiff']['penalpridiff'] = True
     
@@ -997,13 +999,16 @@ def pcat_ferm_igal_inpt_grid(nameconfexec=None):
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
     
-    listnameconf = ['nomi', 'rec7', 'mask', 'popl', 'bfunwfou', 'bfuntemp']
+    listnameconf = ['nomi', 'rec7', 'mask', 'popl', 'bfunwfou', 'bfuntemp', 'dark']
     dictargsvari = {}
     for nameconf in listnameconf:
         dictargsvari[nameconf] = {}
     
-    dictargsvari['nomi']['listnameback'] = ['isot', 'fdfm', 'dark', 'mask']
-    dictargsvari['nomi']['backtype'] = [1., 'sbrtfdfmsmthmanunorm.fits', 'darktempsmthmanunorm.fits']
+    dictargsvari['dark']['listnameback'] = ['isot', 'fdfm', 'dark']
+    dictargsvari['dark']['backtype'] = [1., 'sbrtfdfmsmthmanunorm.fits', 'darktempsmthmanunorm.fits']
+    
+    dictargsvari['nomi']['listnameback'] = ['isot', 'fdfm']
+    dictargsvari['nomi']['backtype'] = [1., 'sbrtfdfmsmthmanunorm.fits']
     
     dictargsvari['rec7']['strgexpo'] = 'expofermcmp0igal.fits'
                  
