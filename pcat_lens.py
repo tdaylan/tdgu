@@ -344,6 +344,7 @@ def pcat_lens_mock_syst(nameconfexec=None):
     dictargs['optitype'] = 'none'
     dictargs['makeplotinit'] = False
     dictargs['makeplotfram'] = False
+    dictargs['diagmode'] = False
     #dictargs['verbtype'] = 2
     dictargs['elemtype'] = ['lens']
     
@@ -996,7 +997,7 @@ def pcat_lens_inpt(nameconfexec=None):
     # temp
     dictargs['optitype'] = 'none'
     dictargs['makeplot'] = False
-    #dictargs['verbtype'] = 2
+    dictargs['verbtype'] = 2
  
     listnameconf = ['largrofi', 'largrofimask', 'nomi', 'mask']
     dictargsvari = {}
