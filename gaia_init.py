@@ -269,8 +269,8 @@ def pcat_tgas_mock():
          backtype=['tgasback.fits'], \
          numbsidecart=200, \
          #numbelempop0reg0=10, \
-         numbswep=1000, \
-         numbswepplot=10000, \
+         numbswep=300000, \
+         numbswepplot=4000, \
          
          # temp
          #maxmnumbelempop0reg0=3, \
@@ -283,14 +283,14 @@ def pcat_tgas_mock():
          #propcomp=False, \
          #minmnobj=1e3, \
          #maxmnobj=1e4, \
-         numbelempop0reg0=10, \
-         factthin=100, \
+         numbelempop0reg0=100, \
+         numbsamp=1000, \
          makeplotinit=False, \
          shrtfram=True, \
          diagmode=False, \
          #verbtype=2, \
          #maxmnumbelempop0reg0=4, \
-         optitype='none', \
+         #optitype='none', \
         )
 
 
