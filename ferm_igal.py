@@ -879,12 +879,12 @@ def pcat_ferm_igal_mock_syst(nameconfexec=None):
     dictargs['numbburn'] = 0
     dictargs['factthin'] = 1000
     dictargs['numbswepplot'] = 10000
-    dictargs['truemaxmnumbelempop0reg0'] = 100
-    dictargs['truemaxmnumbelempop1reg0'] = 100
-    dictargs['truemaxmnumbelempop2reg0'] = 100
-    dictargs['truenumbelempop0reg0'] = 100
-    dictargs['truenumbelempop1reg0'] = 100
-    dictargs['truenumbelempop2reg0'] = 100
+    dictargs['truemaxmnumbelempop0reg0'] = 10
+    dictargs['truemaxmnumbelempop1reg0'] = 10
+    dictargs['truemaxmnumbelempop2reg0'] = 10
+    dictargs['truenumbelempop0reg0'] = 10
+    dictargs['truenumbelempop1reg0'] = 10
+    dictargs['truenumbelempop2reg0'] = 10
     
     dictargs['truenumbpopl'] = 3
     dictargs['refrlegdpopl'] = ['AGN', 'Disk MSP', 'GC MSP']
@@ -898,12 +898,12 @@ def pcat_ferm_igal_mock_syst(nameconfexec=None):
     dictargs['truesinddiststdvpop0'] = 0.5
     dictargs['truesinddiststdvpop1'] = 0.5
     dictargs['truesinddiststdvpop2'] = 0.5
-    dictargs['truespatdisttype'] = ['unif', 'disc', 'gang']
+    dictargs['truespatdisttype'] = ['self', 'disc', 'glc3']
     dictargs['truespectype'] = ['powr', 'expc', 'expc']
     dictargs['trueelemregitype'] = [True, True, True]
     
     dictargs['fittnumbpopl'] = 1
-    dictargs['fittspatdisttype'] = ['unif']
+    dictargs['fittspatdisttype'] = ['self']
     dictargs['fittspectype'] = ['colr']
     
     dictargs['forccart'] = True
@@ -911,8 +911,11 @@ def pcat_ferm_igal_mock_syst(nameconfexec=None):
     dictargs['numbsidecart'] = 100
     
     # temp
-    #dictargs['makeplotinit'] = False
-    #dictargs['shrtfram'] = True
+    #dictargs['makeplot'] = False
+    dictargs['makeplotinit'] = False
+    dictargs['shrtfram'] = True
+    dictargs['diagmode'] = False
+    dictargs['optitype'] = 'none'
     #dictargs['verbtype'] = 2
     #dictargs['inittype'] = 'refr'
  
@@ -940,7 +943,7 @@ def pcat_ferm_igal_mock_syst(nameconfexec=None):
     dictargsvari['parsnone']['priofactdoff'] = 0.
     
     dictargsvari['popl']['fittnumbpopl'] = 3
-    dictargsvari['popl']['fittspatdisttype'] = ['unif', 'disc', 'gang']
+    dictargsvari['popl']['fittspatdisttype'] = ['self', 'disc', 'los3']
     dictargsvari['popl']['fittspectype'] = ['powr', 'expc', 'expc']
     dictargsvari['popl']['fittelemregitype'] = [True, True, True]
     

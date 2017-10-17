@@ -261,18 +261,36 @@ def writ_tgas():
 def pcat_tgas_mock():
     
     pcat.main.init( \
-         numbswep=100000, \
-         numbswepplot=10000, \
-         elemtype='clus', \
          exprtype='sdyn', \
+         refrlegdpopl=['Cluster'], \
          #psfninfoprio=False, \
          minmdatacnts=0., \
          strgexpo=1., \
          backtype=['tgasback.fits'], \
-         numbelemreg0pop0=50, \
-         #verbtype=2, \
-         #optihess=False, \
          numbsidecart=200, \
+         #numbelempop0reg0=10, \
+         numbswep=1000, \
+         numbswepplot=10000, \
+         
+         # temp
+         #maxmnumbelempop0reg0=3, \
+         #probtran=1., \
+         #probspmr=0., \
+         #proppsfp=False, \
+         #propbacp=False, \
+         #propmeanelem=False, \
+         #propdist=False, \
+         #propcomp=False, \
+         #minmnobj=1e3, \
+         #maxmnobj=1e4, \
+         numbelempop0reg0=10, \
+         factthin=100, \
+         makeplotinit=False, \
+         shrtfram=True, \
+         diagmode=False, \
+         #verbtype=2, \
+         #maxmnumbelempop0reg0=4, \
+         optitype='none', \
         )
 
 

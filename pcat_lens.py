@@ -189,6 +189,8 @@ def pcat_lens_mock_syst(nameconfexec=None):
     #dictargs['numbswep'] = 1000
     dictargs['exprtype'] = 'hubb'
     
+    dictargs['initnumbelempop0reg0'] = 25
+    
     dictargs['truenumbelempop0reg0'] = 25
     dictargs['truemeanpntspop0'] = 25
     dictargs['truedefsdistsloppop0'] = 1.9
@@ -338,12 +340,12 @@ def pcat_lens_mock_syst(nameconfexec=None):
     dictargs['trueacutpop0reg00024'] = 5.35163e-06
     
     #dictargs['makeplot'] = False
-    dictargs['numbswep'] = 100
+    dictargs['numbswep'] = 10000
     dictargs['numbburn'] = 0
     dictargs['factthin'] = 100
     dictargs['optitype'] = 'none'
-    dictargs['makeplotinit'] = False
-    dictargs['makeplotfram'] = False
+    #dictargs['makeplotinit'] = False
+    #dictargs['makeplotfram'] = False
     dictargs['diagmode'] = False
     #dictargs['verbtype'] = 2
     dictargs['elemtype'] = ['lens']
@@ -402,7 +404,7 @@ def pcat_lens_mock_sour(nameconfexec=None):
     seed(4)
     
     dictargs = {}
-    dictargs['numbswep'] = 1000
+    dictargs['numbswep'] = 10000
     dictargs['numbburn'] = 0
     dictargs['factthin'] = 100
     dictargs['exprtype'] = 'hubb'
@@ -424,8 +426,8 @@ def pcat_lens_mock_sour(nameconfexec=None):
     dictargs['truefluxpop2reg00000'] = 2e-19
     dictargs['refrlegdpopl'] = ['PS', 'Subhalo', 'Blob']
     
-    #dictargs['spatdisttype'] = ['unif', 'unif', 'gang']
-    dictargs['makeplot'] = False
+    #dictargs['spatdisttype'] = ['unif', 'unif', 'gangprop']
+    #dictargs['makeplot'] = False
     dictargs['optitype'] = 'none'
     dictargs['makeplotinit'] = False
     dictargs['shrtfram'] = True
@@ -983,7 +985,7 @@ def pcat_lens_inpt(nameconfexec=None):
     
     dictargs = {}
     dictargs['elemtype'] = ['lens']
-    dictargs['numbswep'] = 10
+    dictargs['numbswep'] = 10000
     dictargs['exprtype'] = 'hubb'
     dictargs['strgexpo'] = strgexpo
     dictargs['indxenerincl'] = array([0])
@@ -995,9 +997,11 @@ def pcat_lens_inpt(nameconfexec=None):
     dictargs['maxmnumbelempop1reg0'] = 5
     dictargs['maxmnumbelempop2reg0'] = 5
     # temp
-    dictargs['optitype'] = 'none'
-    dictargs['makeplot'] = False
-    dictargs['verbtype'] = 2
+    #dictargs['optitype'] = 'none'
+    dictargs['makeplotinit'] = False
+    dictargs['numbswepplot'] = 1000
+    dictargs['shrtfram'] = True
+    #dictargs['verbtype'] = 2
  
     listnameconf = ['largrofi', 'largrofimask', 'nomi', 'mask']
     dictargsvari = {}
