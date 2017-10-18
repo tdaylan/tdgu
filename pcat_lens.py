@@ -1002,7 +1002,7 @@ def pcat_lens_inpt(nameconfexec=None):
     dictargs['makeplotinit'] = False
     dictargs['numbswepplot'] = 1000
     dictargs['shrtfram'] = True
-    #dictargs['verbtype'] = 2
+    dictargs['verbtype'] = 2
  
     listnameconf = ['largrofi', 'largrofimask', 'nomi', 'mask']
     dictargsvari = {}

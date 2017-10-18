@@ -281,12 +281,12 @@ def pcat_tgas_mock():
          #propcomp=False, \
          #minmnobj=1e3, \
          #maxmnobj=1e4, \
-         numbswep=3000, \
+         numbswep=300000, \
          numbswepplot=4000, \
          numbelempop0reg0=100, \
-         numbsamp=10, \
+         numbsamp=1000, \
          #makeplotinit=False, \
-         chekprio=True, \
+         #chekprio=True, \
          #shrtfram=True, \
          diagmode=False, \
          #verbtype=2, \
