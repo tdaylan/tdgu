@@ -433,6 +433,7 @@ def pcat_lens_mock_sour(nameconfexec=None):
     dictargs['shrtfram'] = True
     dictargs['numbswepplot'] = 2000
     dictargs['diagmode'] = False
+    dictargs['inittype'] = 'refr'
     #dictargs['makeplotfram'] = False
     #dictargs['probtran'] = 1.
     #dictargs['verbtype'] = 2
