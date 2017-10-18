@@ -19,10 +19,14 @@ def writ_ferm_raww():
     defn_gtbn()
 
     gdat.pathdata = os.environ["TDGU_DATA_PATH"] + '/ferm_igal/data/'
-    gdat.recotype = ['rec7', 'rec7', 'rec8', 'rec8', 'rec8']
-    gdat.enertype = ['pnts', 'pnts', 'pnts', 'back', 'back']
-    gdat.strgtime = ['tmin=239155201 tmax=364953603', 'tmin=INDEF tmax=INDEF', 'tmin=INDEF tmax=INDEF', 'tmin=INDEF tmax=INDEF', 'tmin=INDEF tmax=INDEF']
-    gdat.numbside = [256, 256, 256, 256, 512]
+    #gdat.recotype = ['rec7', 'rec7', 'rec8', 'rec8', 'rec8']
+    #gdat.enertype = ['pnts', 'pnts', 'pnts', 'back', 'back']
+    #gdat.strgtime = ['tmin=239155201 tmax=364953603', 'tmin=INDEF tmax=INDEF', 'tmin=INDEF tmax=INDEF', 'tmin=INDEF tmax=INDEF', 'tmin=INDEF tmax=INDEF']
+    #gdat.numbside = [256, 256, 256, 256, 512]
+    gdat.recotype = ['rec8', 'rec8']
+    gdat.enertype = ['pnts', 'back']
+    gdat.strgtime = ['tmin=INDEF tmax=INDEF', 'tmin=INDEF tmax=INDEF']
+    gdat.numbside = [256, 256]
     numbproc = len(gdat.recotype)
 
     gdat.evtc = []
@@ -35,12 +39,13 @@ def writ_ferm_raww():
             gdat.photpath.append('p7v6c')
             gdat.weekinit.append(9)
             gdat.weekfinl.append(11)
-            #gdat.weekfinl.append(218)
+            gdat.weekfinl.append(5000)
         if gdat.recotype[n] == 'rec8':
             gdat.evtc.append(128)
             gdat.photpath.append('photon')
             gdat.weekinit.append(11)
-            gdat.weekfinl.append(13)
+            #gdat.weekfinl.append(13)
+            gdat.weekfinl.append(700)
             #gdat.weekfinl.append(420)
     
     gdat.strgener = ['gtbndefn_%s.fits' % gdat.enertype[k] for k in range(numbproc)]
@@ -144,7 +149,7 @@ def writ_ferm_raww_work(gdat, indxprocwork):
 
 def writ_ferm():
 
-    recotype = 'rec7'
+    recotype = 'rec8'
     regitype = 'igal'
     numbside = 256
     enertype = 'pnts'
@@ -179,15 +184,11 @@ def writ_ferm():
 
         path = pathinpt + '/expoferm%04d%s%s%04d.fits' % (thisevtt, recotype, enertype, numbside)
         expoarry = pf.getdata(path, 1)
-        print 'expoarry'
-        summgene(expoarry)
         for i in indxener:
             expo[i, :, m] = expoarry['ENERGY%d' % (i + 1)]
 
         path = pathinpt + '/cntpferm%04d%s%s%04d.fits' % (thisevtt, recotype, enertype, numbside)
         cntparry = pf.getdata(path)
-        print 'cntparry'
-        summgene(cntparry)
         for i in indxener:
             cntp[i, :, m] = cntparry['CHANNEL%d' % (i + 1)]
 
