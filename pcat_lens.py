@@ -997,6 +997,7 @@ def pcat_lens_inpt(nameconfexec=None):
     dictargs['maxmnumbelempop1reg0'] = 5
     dictargs['maxmnumbelempop2reg0'] = 5
     # temp
+    dictargs['numbswep'] = 10
     #dictargs['optitype'] = 'none'
     dictargs['makeplotinit'] = False
     dictargs['numbswepplot'] = 1000
@@ -1015,6 +1016,10 @@ def pcat_lens_inpt(nameconfexec=None):
     dictargsvari['largrofi']['maxmnumbelempop2reg0'] = 0
     dictargsvari['largrofi']['strgexprsbrt'] = strgexprsbrtlarg
     dictargsvari['largrofi']['maxmgangdata'] = maxmgangdatalarg
+    dictargsvari['largrofi']['initlgalhostreg0'] = 0.
+    dictargsvari['largrofi']['initbgalhostreg0'] = 0.
+    dictargsvari['largrofi']['initlgalsourreg0'] = 0.
+    dictargsvari['largrofi']['initbgalsourreg0'] = 0.
     
     #dictargsvari['largrofimask']['numbswep'] = 10000
     dictargsvari['largrofimask']['numbswepplot'] = 1000
