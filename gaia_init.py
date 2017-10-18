@@ -285,9 +285,9 @@ def pcat_tgas_mock():
          numbswepplot=4000, \
          numbelempop0reg0=100, \
          numbsamp=10, \
-         makeplotinit=False, \
+         #makeplotinit=False, \
          chekprio=True, \
-         shrtfram=True, \
+         #shrtfram=True, \
          diagmode=False, \
          #verbtype=2, \
          #maxmnumbelempop0reg0=4, \
