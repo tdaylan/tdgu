@@ -701,8 +701,8 @@ def pcat_lens_mock_many():
 
     pcat.main.init( \
                    exprtype='hubb', \
-                   numbswep=10000, \
-                   numbsamp=1000, \
+                   numbswep=300000, \
+                   numbsamp=2000, \
                    #numbburn=0, \
                    #factthin=10, \
                    numbelempop0reg0=0, \
@@ -721,7 +721,7 @@ def pcat_lens_mock_many():
                    optitype='hess', \
                    # temp
                    inittype='refr', \
-                   numbswepplot=2000, \
+                   numbswepplot=10000, \
                    #verbtype=2, \
                    #makeplot=False, \
                    #explprop=True, \
