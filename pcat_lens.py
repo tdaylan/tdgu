@@ -343,7 +343,6 @@ def pcat_lens_mock_syst(nameconfexec=None):
     dictargs['numbswep'] = 10000
     dictargs['numbburn'] = 0
     dictargs['factthin'] = 100
-    dictargs['optitype'] = 'none'
     #dictargs['makeplotinit'] = False
     #dictargs['makeplotfram'] = False
     dictargs['diagmode'] = False
@@ -359,7 +358,6 @@ def pcat_lens_mock_syst(nameconfexec=None):
         dictargsvari[nameconf] = {}
     
     dictargsvari['zerodata']['killexpo'] = True
-    #dictargsvari['zerodata']['optitype'] = 'none'
     #dictargsvari['zerodata']['verbtype'] = 2
     #dictargsvari['zerodata']['numbswep'] = 100000
     #dictargsvari['zerodata']['numbswepplot'] = 10000
@@ -424,13 +422,12 @@ def pcat_lens_mock_sour(nameconfexec=None):
     dictargs['truelgalpop2reg00001'] = 0.1 / anglfact
     dictargs['truebgalpop2reg00001'] = 0.
     dictargs['truefluxpop2reg00000'] = 2e-19
-    dictargs['refrlegdpopl'] = ['PS', 'Subhalo', 'Blob']
+    #dictargs['refrlegdpopl'] = ['PS', 'Subhalo', 'Blob']
     
     #dictargs['spatdisttype'] = ['unif', 'unif', 'gangprop']
     #dictargs['makeplot'] = False
-    dictargs['optitype'] = 'none'
     dictargs['makeplotinit'] = False
-    dictargs['shrtfram'] = True
+    #dictargs['shrtfram'] = True
     dictargs['numbswepplot'] = 2000
     dictargs['diagmode'] = False
     dictargs['inittype'] = 'refr'
@@ -448,7 +445,6 @@ def pcat_lens_mock_sour(nameconfexec=None):
         dictargsvari[nameconf] = {}
     
     dictargsvari['zerodata']['killexpo'] = True
-    #dictargsvari['zerodata']['optitype'] = 'none'
     #dictargsvari['zerodata']['verbtype'] = 2
     #dictargsvari['zerodata']['numbswep'] = 100000
     #dictargsvari['zerodata']['numbswepplot'] = 10000
@@ -722,7 +718,6 @@ def pcat_lens_mock_many():
                    numbregi=2, \
                    # temp
                    inittype='refr', \
-                   optitype='none', \
                    verbtype=2, \
                    makeplot=False, \
                    #explprop=True, \
@@ -741,7 +736,6 @@ def pcat_lens_mock():
                    numbburn=0, \
                    factthin=10, \
                    shrtfram=True, \
-                   optitype='none', \
                    makeplotinit=False, \
                    inittype='refr', \
                    numbelempop0reg0=25, \
@@ -998,12 +992,12 @@ def pcat_lens_inpt(nameconfexec=None):
     dictargs['maxmnumbelempop1reg0'] = 5
     dictargs['maxmnumbelempop2reg0'] = 5
     # temp
-    dictargs['numbswep'] = 10
-    #dictargs['optitype'] = 'none'
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 100
     dictargs['makeplotinit'] = False
     dictargs['numbswepplot'] = 1000
     dictargs['shrtfram'] = True
-    dictargs['verbtype'] = 2
+    #dictargs['verbtype'] = 2
  
     listnameconf = ['largrofi', 'largrofimask', 'nomi', 'mask']
     dictargsvari = {}

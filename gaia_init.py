@@ -291,7 +291,6 @@ def pcat_tgas_mock():
          diagmode=False, \
          #verbtype=2, \
          #maxmnumbelempop0reg0=4, \
-         #optitype='none', \
         )
 
 

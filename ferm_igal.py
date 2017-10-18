@@ -915,7 +915,6 @@ def pcat_ferm_igal_mock_syst(nameconfexec=None):
     #dictargs['makeplotinit'] = False
     #dictargs['shrtfram'] = True
     dictargs['diagmode'] = False
-    dictargs['optitype'] = 'none'
     #dictargs['verbtype'] = 2
     #dictargs['inittype'] = 'refr'
  
@@ -1020,7 +1019,6 @@ def pcat_ferm_igal_inpt_grid(nameconfexec=None):
     dictargsvari['popl']['numbpopl'] = 3
                    
     dictargsvari['bfunwfou']['maxmnumbelempop0reg0'] = 0
-    dictargsvari['bfunwfou']['optitype'] = 'none'
     dictargsvari['bfunwfou']['anlytype'] = 'manubfun'
     dictargsvari['bfunwfou']['listnameback'] = ['isot', 'fdfm', 'dark', 'bfunwfou']
     dictargsvari['bfunwfou']['backtype'] = [1., 'sbrtfdfmsmthmanunorm.fits', 'darktempsmthmanunorm.fits', 'bfunfour0004']
