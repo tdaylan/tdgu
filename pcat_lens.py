@@ -426,7 +426,7 @@ def pcat_lens_mock_sour(nameconfexec=None):
     #dictargs['refrlegdpopl'] = ['PS', 'Subhalo', 'Blob']
     
     #dictargs['spatdisttype'] = ['unif', 'unif', 'gangprop']
-    #dictargs['makeplot'] = False
+    dictargs['makeplot'] = False
     dictargs['makeplotinit'] = False
     #dictargs['shrtfram'] = True
     dictargs['numbswepplot'] = 2000
@@ -434,7 +434,7 @@ def pcat_lens_mock_sour(nameconfexec=None):
     dictargs['inittype'] = 'refr'
     #dictargs['makeplotfram'] = False
     #dictargs['probtran'] = 1.
-    #dictargs['verbtype'] = 2
+    dictargs['verbtype'] = 2
     #dictargs['propdist'] = False
     
     numbelem = int(25. * 10.**0.9)
@@ -701,9 +701,10 @@ def pcat_lens_mock_many():
 
     pcat.main.init( \
                    exprtype='hubb', \
-                   numbswep=100, \
-                   numbburn=0, \
-                   factthin=10, \
+                   numbswep=10000, \
+                   numbsamp=1000, \
+                   #numbburn=0, \
+                   #factthin=10, \
                    numbelempop0reg0=0, \
                    numbelempop0reg1=0, \
                    numbelempop1reg0=0, \
@@ -717,10 +718,12 @@ def pcat_lens_mock_many():
                    maxmnumbelempop2reg0=0, \
                    maxmnumbelempop2reg1=0, \
                    numbregi=2, \
+                   optitype='hess', \
                    # temp
                    inittype='refr', \
-                   verbtype=2, \
-                   makeplot=False, \
+                   numbswepplot=2000, \
+                   #verbtype=2, \
+                   #makeplot=False, \
                    #explprop=True, \
                    #shrtfram=True, \
                    #makeplotinit=False, \
