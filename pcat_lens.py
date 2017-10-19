@@ -143,7 +143,6 @@ def pcat_lens_mock_next(nameconfexec=None):
     #dictargs['numbswep'] = 1000
     
     dictargs['exprtype'] = 'hubb'
-    #dictargs['diagmode'] = True
     dictargs['truenumbelempop0reg0'] = 25
  
     #dictargsvari['numbelempop0reg0']     = [None,        0,  0,  25,   int(25. * 0.1**0.9), int(25. * 10.**0.9)]
@@ -403,9 +402,9 @@ def pcat_lens_mock_sour(nameconfexec=None):
     seed(4)
     
     dictargs = {}
-    dictargs['numbswep'] = 10000
+    dictargs['numbswep'] = 1000000
     dictargs['numbburn'] = 0
-    dictargs['factthin'] = 100
+    dictargs['factthin'] = 10000
     dictargs['exprtype'] = 'hubb'
     
     dictargs['numbelempop0reg0'] = 2
@@ -430,7 +429,6 @@ def pcat_lens_mock_sour(nameconfexec=None):
     dictargs['makeplotinit'] = False
     #dictargs['shrtfram'] = True
     dictargs['numbswepplot'] = 2000
-    dictargs['diagmode'] = False
     dictargs['inittype'] = 'refr'
     #dictargs['makeplotfram'] = False
     #dictargs['probtran'] = 1.
@@ -701,7 +699,7 @@ def pcat_lens_mock_many():
 
     pcat.main.init( \
                    exprtype='hubb', \
-                   numbswep=300000, \
+                   numbswep=10000, \
                    numbsamp=2000, \
                    #numbburn=0, \
                    #factthin=10, \
@@ -720,6 +718,7 @@ def pcat_lens_mock_many():
                    numbregi=2, \
                    optitype='hess', \
                    # temp
+                   #proplenp=False, \
                    inittype='refr', \
                    numbswepplot=10000, \
                    #verbtype=2, \
@@ -984,19 +983,19 @@ def pcat_lens_inpt(nameconfexec=None):
     
     dictargs = {}
     dictargs['elemtype'] = ['lens']
-    dictargs['numbswep'] = 10000
     dictargs['exprtype'] = 'hubb'
     dictargs['strgexpo'] = strgexpo
     dictargs['indxenerincl'] = array([0])
     dictargs['savestat'] = True
     dictargs['serstype'] = 'intp'
     dictargs['inittype'] = 'reco'
-    dictargs['namerecostat'] = 'pcat_lens_inpt'
+    #dictargs['namerecostat'] = 'pcat_lens_inpt'
     dictargs['maxmnumbelempop0reg0'] = 5
     dictargs['maxmnumbelempop1reg0'] = 5
     dictargs['maxmnumbelempop2reg0'] = 5
     # temp
-    dictargs['numbswep'] = 10000
+    dictargs['sqzeprop'] = True
+    dictargs['numbswep'] = 1000
     dictargs['numbsamp'] = 100
     dictargs['makeplotinit'] = False
     dictargs['numbswepplot'] = 1000
@@ -1015,10 +1014,11 @@ def pcat_lens_inpt(nameconfexec=None):
     dictargsvari['largrofi']['maxmnumbelempop2reg0'] = 0
     dictargsvari['largrofi']['strgexprsbrt'] = strgexprsbrtlarg
     dictargsvari['largrofi']['maxmgangdata'] = maxmgangdatalarg
-    dictargsvari['largrofi']['initlgalhostreg0'] = 0.
-    dictargsvari['largrofi']['initbgalhostreg0'] = 0.
-    dictargsvari['largrofi']['initlgalsourreg0'] = 0.
-    dictargsvari['largrofi']['initbgalsourreg0'] = 0.
+    #dictargsvari['largrofi']['thindata'] = True
+    #dictargsvari['largrofi']['initlgalhostreg0'] = 0.
+    #dictargsvari['largrofi']['initbgalhostreg0'] = 0.
+    #dictargsvari['largrofi']['initlgalsourreg0'] = 0.
+    #dictargsvari['largrofi']['initbgalsourreg0'] = 0.
     
     #dictargsvari['largrofimask']['numbswep'] = 10000
     dictargsvari['largrofimask']['numbswepplot'] = 1000

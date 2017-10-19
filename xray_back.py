@@ -195,13 +195,14 @@ def pcat_chan_mock_spmr(nameconfexec=None):
     maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
 
     dictargs = {}
-    dictargs['numbswep'] = 10000
-    #dictargs['verbtype'] = 2
-    dictargs['numbswepplot'] = 2000
+    dictargs['numbswep'] = 1000
     dictargs['numbburn'] = 0
+    dictargs['numbsamp'] = 10
+    dictargs['numbswepplot'] = 2000
+    #dictargs['numbburn'] = 0
     dictargs['makeplotinit'] = False
     dictargs['shrtfram'] = True
-    dictargs['factthin'] = 100
+    #dictargs['factthin'] = 100
     dictargs['exprtype'] = 'chan'
     dictargs['inittype'] = 'refr'
     dictargs['truelgalpop0reg00000'] = 0.
@@ -219,7 +220,9 @@ def pcat_chan_mock_spmr(nameconfexec=None):
     dictargs['indxenerincl'] = array([0])
     
     # temp
+    #dictargs['evoltype'] = 'maxmllik'
     dictargs['maxmnumbelempop0reg0'] = 5
+    #dictargs['verbtype'] = 2
     
     listnameconf = ['free', 'nomi', 'pars', 'genebrgt', 'genefain', 'psfn']
     dictargsvari = {}
@@ -240,6 +243,8 @@ def pcat_chan_mock_spmr(nameconfexec=None):
     
     dictargsvari['psfn']['truefluxpop0reg00000'] = 3e-8
     dictargsvari['psfn']['probtran'] = 0.
+    #dictargsvari['psfn']['proppsfp'] = False
+    #dictargsvari['psfn']['propbacp'] = False
     dictargsvari['psfn']['indxenerincl'] = None
     # temp
     #dictargsvari['psfn']['propdist'] = False
