@@ -298,7 +298,7 @@ def pcat_chan_mock_spec_syst(nameconfexec=None):
     
     dictargs['spectype'] = ['gaus']
     dictargs['strgexpo'] = 1e8
-    dictargs['elemtype'] = ['line']
+    dictargs['elemtype'] = ['lghtline']
     dictargs['inittype'] = 'refr'
     dictargs['verbtype'] = 2
     dictargs['anlytype'] = 'spec'

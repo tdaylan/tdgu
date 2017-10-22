@@ -299,7 +299,7 @@ def pcat_tgas_inpt():
     pcat.main.init( \
          numbswep=100000, \
          numbswepplot=10000, \
-         elemtype='clus', \
+         elemtype=['clus'], \
          exprtype='sdyn', \
          savestat=True, \
          inittype='reco', \
@@ -308,6 +308,8 @@ def pcat_tgas_inpt():
          strgexpo=1., \
          backtype=['tgasback.fits'], \
          strgexprsbrt='tgas.fits', \
+         # temp
+         verbtype=2, \
         )
 
 globals().get(sys.argv[1])()
