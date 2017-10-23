@@ -281,10 +281,10 @@ def pcat_tgas_mock():
          #propcomp=False, \
          #minmnobj=1e3, \
          #maxmnobj=1e4, \
-         numbswep=300000, \
-         numbswepplot=4000, \
+         numbswep=1000000, \
+         numbswepplot=20000, \
          numbelempop0reg0=100, \
-         numbsamp=1000, \
+         numbsamp=2000, \
          #makeplotinit=False, \
          makeplot=False, \
          #chekprio=True, \
@@ -298,8 +298,9 @@ def pcat_tgas_mock():
 def pcat_tgas_inpt():
     
     pcat.main.init( \
-         numbswep=100000, \
-         numbswepplot=10000, \
+         numbswep=1000000, \
+         numbsamp=2000, \
+         numbswepplot=20000, \
          exprtype='sdyn', \
          savestat=True, \
          inittype='reco', \
@@ -309,7 +310,8 @@ def pcat_tgas_inpt():
          backtype=['tgasback.fits'], \
          strgexprsbrt='tgas.fits', \
          # temp
-         verbtype=2, \
+         #maxmnumbelempop0reg0=4, \
+         #verbtype=2, \
         )
 
 globals().get(sys.argv[1])()

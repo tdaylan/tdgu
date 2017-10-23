@@ -743,7 +743,12 @@ def pcat_lens_mock():
                    #makeplotinit=False, \
                    inittype='refr', \
                    numbelempop0reg0=3, \
+                   numbelempop1reg0=5, \
+                   numbelempop2reg0=5, \
+                   sqzeprop=True, \
                    maxmnumbelempop0reg0=5, \
+                   maxmnumbelempop1reg0=5, \
+                   maxmnumbelempop2reg0=5, \
                    makeplot=False, \
                    #explprop=True, \
                    verbtype=2, \
