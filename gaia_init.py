@@ -274,7 +274,7 @@ def pcat_tgas_mock():
          #maxmnumbelempop0reg0=3, \
          #probtran=1., \
          #probspmr=0., \
-         #proppsfp=False, \
+         proppsfp=False, \
          #propbacp=False, \
          #propmeanelem=False, \
          #propdist=False, \

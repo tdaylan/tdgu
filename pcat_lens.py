@@ -338,7 +338,7 @@ def pcat_lens_mock_syst(nameconfexec=None):
     dictargs['trueascapop0reg00024'] = 3.49285e-07
     dictargs['trueacutpop0reg00024'] = 5.35163e-06
     
-    #dictargs['makeplot'] = False
+    dictargs['makeplot'] = False
     dictargs['numbswep'] = 2000000
     #dictargs['numbburn'] = 0
     #dictargs['factthin'] = 100
