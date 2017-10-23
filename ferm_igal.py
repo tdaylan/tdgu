@@ -633,7 +633,8 @@ def writ_ferm_back():
     maxmgangdata = 20.
     
     #listnameback = ['sbrtfdfm', 'sfdd', 'cmon', 'hydr', 'hasl', 'haslwise', 'wise', 'darktemp']
-    listnameback = ['sbrtfdfm', 'dustsfdd', 'cmon', 'hydr', 'wise', 'darktemp']
+    #listnameback = ['sbrtfdfm', 'dustsfdd', 'cmon', 'hydr', 'wise', 'darktemp']
+    listnameback = ['sbrtfdfm', 'darktemp']
     #listnameback = ['sbrtfdfm', 'sbrtfdfmnorm', 'plnkdust', 'wisestar', 'finkdust', 'darktemp']
     gdat.numbback = len(listnameback)
     gdat.indxback = arange(gdat.numbback)
@@ -665,8 +666,8 @@ def writ_ferm_back():
     gdat.pathimag, gdat.pathdata = tdpy.util.retr_path('tdgu', 'ferm_igal/', 'ferm_igal/', gdat.rtag)
      
     ## data
-    path = gdat.pathdata + strgexpr
-    gdat.sbrtdata = pf.getdata(path)
+    #path = gdat.pathdata + strgexpr
+    #gdat.sbrtdata = pf.getdata(path)
 
     # power spectrum calculation
     gdat.numbmapsplot = gdat.numbback + 1
@@ -677,7 +678,7 @@ def writ_ferm_back():
     smth = True
     
     #listrecotype = ['rec7', 'rec8']
-    listrecotype = ['manu']
+    listrecotype = ['manu', 'rec7', 'rec8']
     for recotype in listrecotype:
         gdat.evtt, gdat.numbevtt, gdat.indxevtt = tdpy.util.retr_evttferm(recotype)
         ## templates

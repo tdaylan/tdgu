@@ -338,15 +338,16 @@ def pcat_lens_mock_syst(nameconfexec=None):
     dictargs['trueascapop0reg00024'] = 3.49285e-07
     dictargs['trueacutpop0reg00024'] = 5.35163e-06
     
-    dictargs['makeplot'] = False
-    dictargs['numbswep'] = 2000000
+    #dictargs['makeplot'] = False
+    dictargs['numbswep'] = 100000
     #dictargs['numbburn'] = 0
     #dictargs['factthin'] = 100
-    dictargs['numbsamp'] = 2000
+    #dictargs['numbsamp'] = 2000
+    dictargs['numbsamp'] = 100
     #dictargs['makeplotinit'] = False
     #dictargs['makeplotfram'] = False
     dictargs['diagmode'] = False
-    #dictargs['verbtype'] = 2
+    dictargs['verbtype'] = 2
     dictargs['elemtype'] = ['lens']
     
     numbelem = int(25. * 10.**0.9)
@@ -733,19 +734,19 @@ def pcat_lens_mock():
    
     pcat.main.init( \
                    exprtype='hubb', \
-                   
                    # temp
                    numbswep=10000, \
-                   numbburn=0, \
-                   factthin=10, \
-                   shrtfram=True, \
-                   makeplotinit=False, \
+                   numbsamp=10, \
+                   #numbburn=0, \
+                   #factthin=10, \
+                   #shrtfram=True, \
+                   #makeplotinit=False, \
                    inittype='refr', \
-                   numbelempop0reg0=25, \
-                   #maxmnumbelempop0reg0=5, \
-                   #makeplot=False, \
+                   numbelempop0reg0=3, \
+                   maxmnumbelempop0reg0=5, \
+                   makeplot=False, \
                    #explprop=True, \
-                   #verbtype=2, \
+                   verbtype=2, \
                    #mockonly=True, \
                   )
 
