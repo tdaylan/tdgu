@@ -286,9 +286,10 @@ def pcat_tgas_mock():
          numbelempop0reg0=100, \
          numbsamp=1000, \
          #makeplotinit=False, \
+         makeplot=False, \
          #chekprio=True, \
          #shrtfram=True, \
-         diagmode=False, \
+         #diagmode=False, \
          #verbtype=2, \
          #maxmnumbelempop0reg0=4, \
         )

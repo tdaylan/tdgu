@@ -311,7 +311,8 @@ def defn_gtbn():
     listenertype = ['pnts', 'back']
     for enertype in listenertype:
         if enertype == 'pnts':
-            limtener = array([0.1, 0.3, 1., 3., 10., 100.])
+            lowrener = array([0.1, 0.3, 1., 3., 10.])
+            upprener = array([0.3, 1., 3., 10., 100.])
         if enertype == 'back':
             numbener = 30
             minmener = 0.1
@@ -319,7 +320,7 @@ def defn_gtbn():
             binsener = logspace(log10(minmener), log10(maxmener), numbener + 1)
             lowrener = binsener[:-1]
             upprener = binsener[1:]
-            limtener = stack((lowrener, upprener), axis=1)
+        limtener = stack((lowrener, upprener), axis=1)
         pathinpt = os.environ["TDGU_DATA_PATH"] + '/ferm_igal/data/gtbndefn_%s.dat' % enertype
         pathoutp = os.environ["TDGU_DATA_PATH"] + '/ferm_igal/data/gtbndefn_%s.fits' % enertype
         print 'Writing to %s...' % pathinpt
