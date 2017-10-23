@@ -300,7 +300,6 @@ def pcat_tgas_inpt():
     pcat.main.init( \
          numbswep=100000, \
          numbswepplot=10000, \
-         elemtype=['clus'], \
          exprtype='sdyn', \
          savestat=True, \
          inittype='reco', \

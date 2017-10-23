@@ -293,6 +293,7 @@ def pcat_chan_mock_spec_syst(nameconfexec=None):
     dictargs['makeplotpost'] = False
     dictargs['propbacp'] = False
     dictargs['propmeanelem'] = False
+    dictargs['spatdisttype'] = ['line']
     dictargs['propdist'] = False
     dictargs['probtran'] = 0.
     
