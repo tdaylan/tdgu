@@ -23,10 +23,17 @@ def writ_ferm_raww():
     #gdat.enertype = ['pnts', 'pnts', 'pnts', 'back', 'back']
     #gdat.strgtime = ['tmin=239155201 tmax=364953603', 'tmin=INDEF tmax=INDEF', 'tmin=INDEF tmax=INDEF', 'tmin=INDEF tmax=INDEF', 'tmin=INDEF tmax=INDEF']
     #gdat.numbside = [256, 256, 256, 256, 512]
-    gdat.recotype = ['rec8', 'rec8']
-    gdat.enertype = ['pnts', 'back']
-    gdat.strgtime = ['tmin=INDEF tmax=INDEF', 'tmin=INDEF tmax=INDEF']
-    gdat.numbside = [256, 256]
+    
+    #gdat.recotype = ['rec8', 'rec8']
+    #gdat.enertype = ['pnts', 'back']
+    #gdat.strgtime = ['tmin=INDEF tmax=INDEF', 'tmin=INDEF tmax=INDEF']
+    #gdat.numbside = [256, 256]
+    
+    gdat.recotype = ['rec8']
+    gdat.enertype = ['pnts']
+    gdat.strgtime = ['tmin=INDEF tmax=INDEF']
+    gdat.numbside = [256]
+    
     numbproc = len(gdat.recotype)
 
     gdat.evtc = []
@@ -52,7 +59,7 @@ def writ_ferm_raww():
     
     indxproc = arange(numbproc)
     
-    if numbproc == 1 or gdat.test or True:
+    if numbproc == 1 or gdat.test:
         writ_ferm_raww_work(gdat, 0)
     else:
         # process pool
