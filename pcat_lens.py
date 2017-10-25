@@ -358,6 +358,7 @@ def pcat_lens_mock_syst(nameconfexec=None):
     #dictargs['makeplotfram'] = False
     #dictargs['diagmode'] = False
     #dictargs['verbtype'] = 2
+    #dictargs['numbproc'] = 1
     
     numbelem = int(25. * 10.**0.9)
     anglfact = 3600. * 180. / pi
@@ -448,7 +449,7 @@ def pcat_lens_mock_sour(nameconfexec=None):
     dictargs['inittype'] = 'refr'
     #dictargs['makeplotfram'] = False
     #dictargs['probtran'] = 1.
-    #dictargs['verbtype'] = 2
+    dictargs['verbtype'] = 2
     #dictargs['propdist'] = False
     
     numbelem = int(25. * 10.**0.9)
