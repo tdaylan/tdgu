@@ -185,7 +185,6 @@ def pcat_lens_mock_syst(nameconfexec=None):
     seed(4)
     
     dictargs = {}
-    #dictargs['numbswep'] = 1000
     dictargs['exprtype'] = 'hubb'
     dictargs['elemtype'] = ['lens']
     
@@ -342,7 +341,6 @@ def pcat_lens_mock_syst(nameconfexec=None):
     #dictargs['makeplot'] = False
     #dictargs['shrtfram'] = True
     dictargs['numbswep'] = 2000000
-    dictargs['probspmr'] = 0.
     dictargs['numbswepplot'] = 50000
     dictargs['numbsamp'] = 4000
     #dictargs['numbburn'] = 0
@@ -355,7 +353,6 @@ def pcat_lens_mock_syst(nameconfexec=None):
     #dictargs['proplenp'] = False
     #dictargs['propcomp'] = False
     #dictargs['probtran'] = 0.
-    #dictargs['probspmr'] = 0.
     #dictargs['makeplotinit'] = False
     #dictargs['makeplotfram'] = False
     #dictargs['diagmode'] = False
@@ -742,7 +739,7 @@ def pcat_lens_mock_many():
                    #proplenp=False, \
                    inittype='refr', \
                    numbswepplot=10000, \
-                   #verbtype=2, \
+                   verbtype=2, \
                    #makeplot=False, \
                    #explprop=True, \
                    #shrtfram=True, \

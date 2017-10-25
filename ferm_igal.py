@@ -924,8 +924,9 @@ def pcat_ferm_igal_mock_syst(nameconfexec=None):
     #dictargs['makeplot'] = False
     #dictargs['makeplotinit'] = False
     #dictargs['shrtfram'] = True
-    #dictargs['verbtype'] = 2
+    dictargs['verbtype'] = 2
     #dictargs['inittype'] = 'refr'
+    dictargs['fittmaxmnumbelempop0reg0'] = 5
  
     listnameconf = ['nomi', 'truedark', 'bfun', 'heal', 'penalpridiff', 'checprio', 'fixdpsfn', 'parsnone', 'popl', 'puls']
     dictargsvari = {}

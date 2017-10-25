@@ -195,9 +195,9 @@ def pcat_chan_mock_spmr(nameconfexec=None):
     maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
 
     dictargs = {}
-    dictargs['numbswep'] = 1000
+    dictargs['numbswep'] = 100000
     dictargs['numbburn'] = 0
-    dictargs['numbsamp'] = 10
+    dictargs['numbsamp'] = 1000
     dictargs['numbswepplot'] = 2000
     #dictargs['numbburn'] = 0
     dictargs['makeplotinit'] = False
@@ -282,31 +282,23 @@ def pcat_chan_mock_spec_syst(nameconfexec=None):
     anglfact = 3600. * 180. / pi
     
     dictargs = {}
-    dictargs['numbswep'] = 10000
-    dictargs['numbswep'] = 3000
-    dictargs['numbsamp'] = 100
-    dictargs['numbelempop0reg0'] = 1
-    dictargs['minmnumbelempop0reg0'] = 0
-    dictargs['maxmnumbelempop0reg0'] = 2
     dictargs['exprtype'] = 'chan'
     dictargs['spatdisttype'] = ['line']
     dictargs['spectype'] = ['gaus']
     dictargs['strgexpo'] = 1e8
     dictargs['elemtype'] = ['lghtline']
     dictargs['inittype'] = 'refr'
-    dictargs['verbtype'] = 2
-    dictargs['anlytype'] = 'spec'
+    #dictargs['anlytype'] = 'spec'
     # assume a pixel with side 100 arcsec
     dictargs['maxmgangdata'] = 100. / anglfact
     dictargs['numbsidecart'] = 1
     
     # temp
-    dictargs['makeplotfram'] = False
-    dictargs['makeplotpost'] = False
-    dictargs['propmeanelem'] = False
-    dictargs['propdist'] = False
-    dictargs['propbacp'] = False
-    dictargs['probtran'] = 0.
+    #dictargs['verbtype'] = 2
+    #dictargs['numbelempop0reg0'] = 1
+    #dictargs['maxmnumbelempop0reg0'] = 2
+    dictargs['numbswep'] = 100000
+    dictargs['numbsamp'] = 2000
     
     # true < thrs < modl -- trad 
     # true < modl < thrs -- pcat
