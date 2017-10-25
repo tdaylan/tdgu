@@ -289,14 +289,7 @@ def pcat_chan_mock_spec_syst(nameconfexec=None):
     dictargs['minmnumbelempop0reg0'] = 0
     dictargs['maxmnumbelempop0reg0'] = 2
     dictargs['exprtype'] = 'chan'
-    dictargs['makeplotfram'] = False
-    dictargs['makeplotpost'] = False
-    dictargs['propbacp'] = False
-    dictargs['propmeanelem'] = False
     dictargs['spatdisttype'] = ['line']
-    dictargs['propdist'] = False
-    dictargs['probtran'] = 0.
-    
     dictargs['spectype'] = ['gaus']
     dictargs['strgexpo'] = 1e8
     dictargs['elemtype'] = ['lghtline']
@@ -306,6 +299,14 @@ def pcat_chan_mock_spec_syst(nameconfexec=None):
     # assume a pixel with side 100 arcsec
     dictargs['maxmgangdata'] = 100. / anglfact
     dictargs['numbsidecart'] = 1
+    
+    # temp
+    dictargs['makeplotfram'] = False
+    dictargs['makeplotpost'] = False
+    dictargs['propmeanelem'] = False
+    dictargs['propdist'] = False
+    dictargs['propbacp'] = False
+    dictargs['probtran'] = 0.
     
     # true < thrs < modl -- trad 
     # true < modl < thrs -- pcat

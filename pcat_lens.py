@@ -187,6 +187,7 @@ def pcat_lens_mock_syst(nameconfexec=None):
     dictargs = {}
     #dictargs['numbswep'] = 1000
     dictargs['exprtype'] = 'hubb'
+    dictargs['elemtype'] = ['lens']
     
     dictargs['initnumbelempop0reg0'] = 25
     
@@ -339,16 +340,24 @@ def pcat_lens_mock_syst(nameconfexec=None):
     dictargs['trueacutpop0reg00024'] = 5.35163e-06
     
     #dictargs['makeplot'] = False
-    dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 20000
+    dictargs['numbswepplot'] = 40000
     #dictargs['numbburn'] = 0
     #dictargs['factthin'] = 100
     #dictargs['numbsamp'] = 2000
     dictargs['numbsamp'] = 100
+    #dictargs['propdist'] = False
+    #dictargs['proppsfp'] = False
+    #dictargs['propmeanelem'] = False
+    #dictargs['propbacp'] = False
+    #dictargs['proplenp'] = False
+    #dictargs['propcomp'] = False
+    #dictargs['probtran'] = 0.
+    #dictargs['probspmr'] = 0.
     #dictargs['makeplotinit'] = False
     #dictargs['makeplotfram'] = False
-    dictargs['diagmode'] = False
-    dictargs['verbtype'] = 2
-    dictargs['elemtype'] = ['lens']
+    #dictargs['diagmode'] = False
+    #dictargs['verbtype'] = 2
     
     numbelem = int(25. * 10.**0.9)
     anglfact = 3600. * 180. / pi
@@ -403,37 +412,43 @@ def pcat_lens_mock_sour(nameconfexec=None):
     seed(4)
     
     dictargs = {}
-    dictargs['numbswep'] = 1000000
+    dictargs['numbswep'] = 100000
     dictargs['numbburn'] = 0
-    dictargs['factthin'] = 10000
+    dictargs['factthin'] = 1000
     dictargs['exprtype'] = 'hubb'
     
-    dictargs['numbelempop0reg0'] = 2
-    dictargs['maxmnumbelempop0reg0'] = 4
-    dictargs['numbelempop1reg0'] = 2
-    dictargs['maxmnumbelempop1reg0'] = 4
-    dictargs['numbelempop2reg0'] = 2
-    dictargs['maxmnumbelempop2reg0'] = 4
+    dictargs['numbelempop0reg0'] = 10
+    dictargs['maxmnumbelempop0reg0'] = 20
+    dictargs['numbelempop1reg0'] = 10
+    dictargs['maxmnumbelempop1reg0'] = 20
+    dictargs['numbelempop2reg0'] = 4
+    dictargs['maxmnumbelempop2reg0'] = 20
     dictargs['truelgalsourreg0'] = 0.
     dictargs['truebgalsourreg0'] = 0.
     dictargs['truefluxsourreg0'] = 3e-18
-    dictargs['truelgalpop2reg00000'] = -0.1 / anglfact
+    dictargs['truelgalpop2reg00000'] = -0.2 / anglfact
     dictargs['truebgalpop2reg00000'] = 0.
-    dictargs['truefluxpop2reg00000'] = 3e-19
-    dictargs['truelgalpop2reg00001'] = 0.1 / anglfact
+    dictargs['truefluxpop2reg00000'] = 1e-19
+    dictargs['truelgalpop2reg00001'] = -0.1 / anglfact
     dictargs['truebgalpop2reg00001'] = 0.
-    dictargs['truefluxpop2reg00000'] = 2e-19
+    dictargs['truefluxpop2reg00001'] = 3e-19
+    dictargs['truelgalpop2reg00002'] = 0.1 / anglfact
+    dictargs['truebgalpop2reg00002'] = 0.
+    dictargs['truefluxpop2reg00002'] = 3e-19
+    dictargs['truelgalpop2reg00003'] = 0.2 / anglfact
+    dictargs['truebgalpop2reg00003'] = 0.
+    dictargs['truefluxpop2reg00003'] = 1e-19
     #dictargs['refrlegdpopl'] = ['PS', 'Subhalo', 'Blob']
     
     #dictargs['spatdisttype'] = ['unif', 'unif', 'gangprop']
-    dictargs['makeplot'] = False
+    #dictargs['makeplot'] = False
     dictargs['makeplotinit'] = False
     #dictargs['shrtfram'] = True
     dictargs['numbswepplot'] = 2000
     dictargs['inittype'] = 'refr'
     #dictargs['makeplotfram'] = False
     #dictargs['probtran'] = 1.
-    dictargs['verbtype'] = 2
+    #dictargs['verbtype'] = 2
     #dictargs['propdist'] = False
     
     numbelem = int(25. * 10.**0.9)
@@ -734,24 +749,26 @@ def pcat_lens_mock():
    
     pcat.main.init( \
                    exprtype='hubb', \
-                   # temp
                    numbswep=10000, \
                    numbsamp=10, \
                    #numbburn=0, \
                    #factthin=10, \
-                   #shrtfram=True, \
-                   #makeplotinit=False, \
                    inittype='refr', \
-                   numbelempop0reg0=3, \
-                   numbelempop1reg0=5, \
-                   numbelempop2reg0=5, \
-                   sqzeprop=True, \
-                   maxmnumbelempop0reg0=5, \
-                   maxmnumbelempop1reg0=5, \
-                   maxmnumbelempop2reg0=5, \
-                   makeplot=False, \
+                   numbelempop0reg0=10, \
+                   numbelempop1reg0=10, \
+                   numbelempop2reg0=10, \
+                   
+                   # temp
+                   #probtran=0., \
+                   #sqzeprop=True, \
+                   #maxmnumbelempop0reg0=1, \
+                   #maxmnumbelempop1reg0=1, \
+                   #maxmnumbelempop2reg0=1, \
+                   #makeplot=False, \
+                   #makeplotinit=False, \
+                   #shrtfram=True, \
                    #explprop=True, \
-                   verbtype=2, \
+                   #verbtype=2, \
                    #mockonly=True, \
                   )
 

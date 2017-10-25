@@ -268,22 +268,21 @@ def pcat_tgas_mock():
          strgexpo=1., \
          backtype=['tgasback.fits'], \
          numbsidecart=200, \
-         #numbelempop0reg0=10, \
          
          # temp
-         #maxmnumbelempop0reg0=3, \
+         numbelempop0reg0=3, \
+         maxmnumbelempop0reg0=3, \
          #probtran=1., \
          #probspmr=0., \
-         proppsfp=False, \
+         #proppsfp=False, \
          #propbacp=False, \
          #propmeanelem=False, \
          #propdist=False, \
          #propcomp=False, \
          #minmnobj=1e3, \
          #maxmnobj=1e4, \
-         numbswep=1000000, \
+         numbswep=10000, \
          numbswepplot=20000, \
-         numbelempop0reg0=100, \
          numbsamp=2000, \
          #makeplotinit=False, \
          makeplot=False, \
