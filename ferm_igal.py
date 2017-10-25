@@ -885,10 +885,10 @@ def writ_ferm_back():
 def pcat_ferm_igal_mock_syst(nameconfexec=None):
     
     dictargs = {}
-    dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 10000
     dictargs['numbburn'] = 0
-    dictargs['factthin'] = 1000
-    dictargs['numbswepplot'] = 10000
+    dictargs['factthin'] = 100
+    dictargs['numbswepplot'] = 1000
     dictargs['truemaxmnumbelempop0reg0'] = 100
     dictargs['truemaxmnumbelempop1reg0'] = 100
     dictargs['truemaxmnumbelempop2reg0'] = 100
