@@ -714,37 +714,115 @@ def pcat_lens_mock_test():
 def pcat_lens_mock_many():
     
     seed(0)
+    
+    anglfact = 3600. * 180. / pi
+    
+    dictargs = {}
+    dictargs['exprtype'] = 'hubb'
+    dictargs['burntmpr'] = True
+    dictargs['maxmnumbelempop0reg0'] = 0
+    dictargs['numbelempop0reg0'] = 0
+    
+    #dictargs['makeplotinit'] = False
+    #dictargs['shrtfram'] = False
+    #dictargs['verbtype'] = 2
+    dictargs['inittype'] = 'pert'
+    dictargs['numbswep'] = 100000
+    dictargs['numbswepplot'] = 10000
+    dictargs['numbsamp'] = 100
+    dictargs['elemtype'] = ['lens']
+    dictargs['numbregi'] = 3
+    
+    listnameconf = ['nomi', 'regising', 'regimany']
+    dictargsvari = {}
+    for nameconf in listnameconf:
+        dictargsvari[nameconf] = {}
+    
+    dictargsvari['regising']['numbregi'] = 1 
+    dictargsvari['regimany']['numbregi'] = 5
+    
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                 )
 
-    pcat.main.init( \
-                   exprtype='hubb', \
-                   numbswep=10000, \
-                   numbsamp=2000, \
-                   #numbburn=0, \
-                   #factthin=10, \
-                   numbelempop0reg0=0, \
-                   numbelempop0reg1=0, \
-                   numbelempop1reg0=0, \
-                   numbelempop1reg1=0, \
-                   numbelempop2reg0=0, \
-                   numbelempop2reg1=0, \
-                   maxmnumbelempop0reg0=0, \
-                   maxmnumbelempop0reg1=0, \
-                   maxmnumbelempop1reg0=0, \
-                   maxmnumbelempop1reg1=0, \
-                   maxmnumbelempop2reg0=0, \
-                   maxmnumbelempop2reg1=0, \
-                   numbregi=2, \
-                   optitype='hess', \
-                   # temp
-                   #proplenp=False, \
-                   inittype='refr', \
-                   numbswepplot=10000, \
-                   verbtype=2, \
-                   #makeplot=False, \
-                   #explprop=True, \
-                   #shrtfram=True, \
-                   #makeplotinit=False, \
-                  )
+
+def pcat_lens_mock_spmr(nameconfexec=None):
+  
+    seed(1)
+
+    anglfact = 3600. * 180. / pi
+    
+    datatype = 'home'
+    strgexpomaps = '4msc'
+    numbsidecart = 15
+    
+    maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
+
+    dictargs = {}
+    dictargs['exprtype'] = 'hubb'
+    dictargs['inittype'] = 'refr'
+    dictargs['truelgalpop0reg00000'] = 1. / anglfact
+    dictargs['truebgalpop0reg00000'] = 0.5 / anglfact
+    dictargs['truedefspop0reg00000'] = 1e-2 / anglfact
+    dictargs['numbelempop0reg0'] = 1
+    dictargs['minmnumbelempop0reg0'] = 1
+    dictargs['priofactdoff'] = 0.
+    #dictargs['strgexpo'] = 1e9
+    #dictargs['maxmgangdata'] = maxmgangdata
+    #dictargs['numbsidecart'] = numbsidecart
+    dictargs['probtran'] = 1.
+    dictargs['elemtype'] = ['lens']
+    dictargs['probspmr'] = 1.
+    dictargs['indxenerincl'] = array([0])
+    
+    # temp
+    #dictargs['makeplotinit'] = False
+    #dictargs['shrtfram'] = True
+    #dictargs['evoltype'] = 'maxmllik'
+    dictargs['numbswep'] = 100000
+    dictargs['numbburn'] = 0
+    dictargs['numbsamp'] = 1000
+    dictargs['numbswepplot'] = 2000
+    #dictargs['factthin'] = 100
+    dictargs['maxmnumbelempop0reg0'] = 5
+    #dictargs['verbtype'] = 2
+    
+    listnameconf = ['free', 'nomi', 'pars', 'genebrgt', 'genefain', 'psfn']
+    dictargsvari = {}
+    for nameconf in listnameconf:
+        dictargsvari[nameconf] = {}
+    
+    #dictargsvari['free']['minmnumbelempop0reg0'] = 0.
+    #dictargsvari['free']['maxmnumbelempop0reg0'] = 0.
+    dictargsvari['free']['inittype'] = 'rand'
+    dictargsvari['free']['probtran'] = 0.4
+    dictargsvari['free']['probspmr'] = 0.3
+    
+    dictargsvari['pars']['priofactdoff'] = 1.
+    
+    dictargsvari['genebrgt']['truefluxpop0reg00000'] = 3e-7
+    
+    dictargsvari['genefain']['truefluxpop0reg00000'] = 3e-8
+    
+    dictargsvari['psfn']['truefluxpop0reg00000'] = 3e-8
+    dictargsvari['psfn']['probtran'] = 0.
+    #dictargsvari['psfn']['proppsfp'] = False
+    #dictargsvari['psfn']['propbacp'] = False
+    dictargsvari['psfn']['indxenerincl'] = None
+    # temp
+    #dictargsvari['psfn']['propdist'] = False
+    #dictargsvari['psfn']['propbacp'] = False
+    dictargsvari['psfn']['propcomp'] = False
+    #dictargsvari['psfn']['proppsfn'] = False
+    dictargsvari['psfn']['inittype'] = 'refr'
+    dictargsvari['psfn']['elemspatevaltype'] = ['full']
+    
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  nameconfexec=nameconfexec, \
+                                 )
 
 
 def pcat_lens_mock():

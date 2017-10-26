@@ -299,6 +299,7 @@ def pcat_chan_mock_spec_syst(nameconfexec=None):
     #dictargs['maxmnumbelempop0reg0'] = 2
     dictargs['numbswep'] = 100000
     dictargs['numbsamp'] = 2000
+    dictargs['sqzeprop'] = True
     
     # true < thrs < modl -- trad 
     # true < modl < thrs -- pcat
