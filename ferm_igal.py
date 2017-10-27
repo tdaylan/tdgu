@@ -132,7 +132,7 @@ def writ_ferm_raww_work(gdat, indxprocwork):
         if not gdat.test and not os.path.isfile(sele):
             os.system(cmnd)
 
-        cmnd = 'gtmktime evfile=' + sele + ' scfile=' + spac + ' filter="DATA_QUAL==1 && LAT_CONFIG==1"' + ' outfile=' + filt + ' roicut=no'
+        cmnd = 'gtmktime evfile=' + sele + ' scfile=' + spac + ' filter="DATA_QUAL==1 && LAT_CONFIG==1 && ABS(ROCK_ANGLE)<52"' + ' outfile=' + filt + ' roicut=no'
         print cmnd
         print ''
         if not gdat.test and not os.path.isfile(filt):
