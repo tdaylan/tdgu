@@ -52,8 +52,8 @@ def writ_ferm_raww():
             gdat.evtc.append(128)
             gdat.photpath.append('photon')
             gdat.weekinit.append(11)
-            gdat.weekfinl.append(13)
-            gdat.weekfinl.append(700)
+            gdat.weekfinl.append(12)
+            #gdat.weekfinl.append(700)
             #gdat.weekfinl.append(420)
    
     gdat.strgener = [[] for k in indxproc]
@@ -129,13 +129,13 @@ def writ_ferm_raww_work(gdat, indxprocwork):
         
         print cmnd
         print ''
-        if not gdat.test:
+        if not gdat.test and not os.path.isfile(sele):
             os.system(cmnd)
 
         cmnd = 'gtmktime evfile=' + sele + ' scfile=' + spac + ' filter="DATA_QUAL==1 && LAT_CONFIG==1"' + ' outfile=' + filt + ' roicut=no'
         print cmnd
         print ''
-        if not gdat.test:
+        if not gdat.test and not os.path.isfile(filt):
             os.system(cmnd)
 
         cmnd = 'gtbin evfile=' + filt + ' scfile=NONE outfile=' + cntp + \
@@ -143,19 +143,19 @@ def writ_ferm_raww_work(gdat, indxprocwork):
             'algorithm=HEALPIX hpx_ordering_scheme=RING coordsys=GAL hpx_order=%d hpx_ebin=yes' % log2(gdat.numbside[indxprocwork])
         print cmnd
         print ''
-        if not gdat.test:
+        if not gdat.test and not os.path.isfile(cntp):
             os.system(cmnd)
 
         cmnd = 'gtltcube evfile=' + filt + ' scfile=' + spac + ' outfile=' + live + ' dcostheta=0.025 binsz=1'
         print cmnd
         print ''
-        if not gdat.test:
+        if not gdat.test and not os.path.isfile(live):
             os.system(cmnd)
 
         cmnd = 'gtexpcube2 infile=' + live + ' cmap=' + cntp + ' outfile=' + expo + ' irfs=CALDB evtype=%03d bincalc=CENTER' % thisevtt
         print cmnd
         print ''
-        if not gdat.test:
+        if not gdat.test and not os.path.isfile(expo):
             os.system(cmnd)
 
     cmnd = 'rm %s %s %s %s %s' % (infl, spac, sele, filt, live)
