@@ -14,7 +14,7 @@ def writ_ferm_raww():
     
     gdat = tdpy.util.gdatstrt()
     
-    gdat.test = True
+    gdat.test = False
         
     #defn_gtbn()
 
@@ -122,7 +122,7 @@ def writ_ferm_raww_work(gdat, indxprocwork):
         psfn = gdat.pathdata + 'psfnferm%04d%s.fits' % (thisevtt, rtag)
 
         cmnd = 'gtselect infile=' + infl + ' outfile=' + sele + ' ra=INDEF dec=INDEF rad=INDEF ' + \
-            gdat.strgtime[indxprocwork] + ' emin=INDEF emax=INDEF zmax=90 evclass=%d %s' % (gdat.evtc[indxprocwork], strgpsfn)
+            gdat.strgtime[indxprocwork] + ' emin=300 emax=300000 zmax=90 evclass=%d %s' % (gdat.evtc[indxprocwork], strgpsfn)
         
         if os.path.isfile(cntp) and os.path.isfile(expo) and not gdat.test:
             continue
