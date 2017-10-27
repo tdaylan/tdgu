@@ -28,7 +28,6 @@ def pcat_lens_mock_grid():
     
     cntrcnfg = 0
     for k in range(numbiter):
-        dictvarb['seedstat'] = get_state()
         for m in range(varbinpt.size):
             for l in range(varbinpt.numb):
                 
@@ -134,8 +133,6 @@ def pcat_lens_mock_spmr():
 
 def pcat_lens_mock_next(nameconfexec=None):
    
-    seed(4)
-    
     numbelem = int(25. * 10.**0.9)
     anglfact = 3600. * 180. / pi
     
@@ -182,11 +179,11 @@ def pcat_lens_mock_next(nameconfexec=None):
 
 def pcat_lens_mock_syst(nameconfexec=None):
    
-    seed(4)
-    
     dictargs = {}
     dictargs['exprtype'] = 'hubb'
     dictargs['elemtype'] = ['lens']
+    dictargs['seedtype'] = 4
+    #dictargs['seedelemtype'] = 4
     
     dictargs['initnumbelempop0reg0'] = 25
     
@@ -338,7 +335,7 @@ def pcat_lens_mock_syst(nameconfexec=None):
     dictargs['trueascapop0reg00024'] = 3.49285e-07
     dictargs['trueacutpop0reg00024'] = 5.35163e-06
     
-    #dictargs['makeplot'] = False
+    dictargs['makeplotinit'] = True
     #dictargs['shrtfram'] = True
     dictargs['numbswep'] = 2000000
     dictargs['numbswepplot'] = 50000
@@ -409,12 +406,12 @@ def pcat_lens_mock_syst(nameconfexec=None):
 def pcat_lens_mock_sour(nameconfexec=None):
    
     anglfact = 3600. * 180. / pi
-    seed(4)
     
     dictargs = {}
-    dictargs['numbswep'] = 100000
-    dictargs['numbburn'] = 0
-    dictargs['factthin'] = 60
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 100
+    #dictargs['numbburn'] = 0
+    #dictargs['factthin'] = 60
     dictargs['exprtype'] = 'hubb'
     
     dictargs['numbelempop0reg0'] = 2
@@ -444,10 +441,11 @@ def pcat_lens_mock_sour(nameconfexec=None):
     
     #dictargs['spatdisttype'] = ['unif', 'unif', 'gangprop']
     #dictargs['makeplot'] = False
-    dictargs['makeplotinit'] = False
-    dictargs['shrtfram'] = True
+    #dictargs['makeplotinit'] = True
+    #dictargs['shrtfram'] = False
     dictargs['numbswepplot'] = 2000
     dictargs['inittype'] = 'refr'
+    #dictargs['optitype'] = 'none'
     #dictargs['makeplotfram'] = False
     #dictargs['probtran'] = 1.
     #dictargs['verbtype'] = 2
@@ -571,7 +569,7 @@ def pcat_lens_mock_sele():
         listgdat, dictglob = pcat.main.initarry( \
                                       dictargsvari, \
                                       dictargs, \
-                                      randseedelem=True, \
+                                      seedelemtype='rand', \
                                       liststrgvarboutp=liststrgvarboutp, \
                                      )
         
@@ -713,8 +711,6 @@ def pcat_lens_mock_test():
 
 def pcat_lens_mock_many():
     
-    seed(0)
-    
     anglfact = 3600. * 180. / pi
     
     dictargs = {}
@@ -749,8 +745,6 @@ def pcat_lens_mock_many():
 
 def pcat_lens_mock_spmr(nameconfexec=None):
   
-    seed(1)
-
     anglfact = 3600. * 180. / pi
     
     datatype = 'home'
@@ -762,6 +756,7 @@ def pcat_lens_mock_spmr(nameconfexec=None):
     dictargs = {}
     dictargs['exprtype'] = 'hubb'
     dictargs['inittype'] = 'refr'
+    dictargs['seedtype'] = 1
     dictargs['truelgalpop0reg00000'] = 1. / anglfact
     dictargs['truebgalpop0reg00000'] = 0.5 / anglfact
     dictargs['truedefspop0reg00000'] = 1e-2 / anglfact

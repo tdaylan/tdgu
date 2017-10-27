@@ -884,8 +884,6 @@ def writ_ferm_back():
 
 def pcat_ferm_igal_mock_syst(nameconfexec=None):
     
-    seed(1)
-
     dictargs = {}
     dictargs['numbswep'] = 10000
     dictargs['numbburn'] = 0
@@ -928,6 +926,7 @@ def pcat_ferm_igal_mock_syst(nameconfexec=None):
     #dictargs['makeplotinit'] = False
     #dictargs['shrtfram'] = True
     #dictargs['verbtype'] = 2
+    dictargs['optitype'] = 'none'
     #dictargs['inittype'] = 'refr'
     #dictargs['fittmaxmnumbelempop0reg0'] = 5
  

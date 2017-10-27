@@ -258,6 +258,27 @@ def writ_tgas():
     pf.writeto(path, backcnts, clobber=True)
 
 
+def pcat_tgas_mock_vari():
+    
+    pcat.main.init( \
+         exprtype='sdyn', \
+         refrlegdpopl=['Cluster'], \
+         minmdatacnts=0., \
+         elemtype=['clusvari'], \
+         strgexpo=1., \
+         backtype=['tgasback.fits'], \
+         numbsidecart=200, \
+         
+         # temp
+         makeplot=False, \
+         optitype='none', \
+         #makeplotinit=False, \
+         #makeplotfram=False, \
+         numbswep=1000, \
+         numbsamp=1, \
+        )
+
+
 def pcat_tgas_mock():
     
     pcat.main.init( \
@@ -289,29 +310,40 @@ def pcat_tgas_mock():
          #chekprio=True, \
          #shrtfram=True, \
          #diagmode=False, \
-         #verbtype=2, \
+         verbtype=2, \
          #maxmnumbelempop0reg0=4, \
         )
 
 
-def pcat_tgas_inpt():
+def pcat_tgas_inpt_grid():
     
-    pcat.main.init( \
-         numbswep=1000000, \
-         numbsamp=2000, \
-         numbswepplot=20000, \
-         exprtype='sdyn', \
-         savestat=True, \
-         inittype='reco', \
-         psfninfoprio=False, \
-         minmdatacnts=0., \
-         strgexpo=1., \
-         backtype=['tgasback.fits'], \
-         strgexprsbrt='tgas.fits', \
-         # temp
-         #maxmnumbelempop0reg0=4, \
-         #verbtype=2, \
-        )
+    dictargs = {}
+    dictargs['exprtype'] = 'sdyn'
+    #dictargs['minmdatacnts'] = 0.
+    dictargs['backtype'] = ['tgasback.fits']
+    dictargs['strgexprsbrt'] = 'tgas.fits'
+    dictargs['strgexpo'] = 1.
+    dictargs['elemtype'] = ['clusvari']
+    
+    # temp
+    dictargs['numbswep'] = 100000
+    dictargs['numbsamp'] = 1000
+    dictargs['numbswepplot'] = 4000
+
+    listnameconf = ['nomi', 'consinfo', 'cons']
+    dictargsvari = {}
+    for nameconf in listnameconf:
+        dictargsvari[nameconf] = {}
+    
+    dictargsvari['consinfo']['elemtype'] = ['clus']
+    
+    dictargsvari['cons']['psfninfoprio'] = False
+    dictargsvari['cons']['elemtype'] = ['clus']
+    
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                 )
 
 globals().get(sys.argv[1])()
 
