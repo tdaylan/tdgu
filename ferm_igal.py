@@ -52,9 +52,8 @@ def writ_ferm_raww():
             gdat.evtc.append(128)
             gdat.photpath.append('photon')
             gdat.weekinit.append(11)
-            gdat.weekfinl.append(12)
-            #gdat.weekfinl.append(700)
-            #gdat.weekfinl.append(420)
+            #gdat.weekfinl.append(12)
+            gdat.weekfinl.append(700)
    
     gdat.strgener = [[] for k in indxproc]
     for k in indxproc:
