@@ -198,6 +198,13 @@ def writ_ferm():
         thisevtt = evtt[m]
 
         path = pathinpt + '/expoferm%04d%s%s%04d.fits' % (thisevtt, recotype, enertype, numbside)
+        listhdun = pf.open(path)
+        for k in range(len(listhdun)):
+            if k != 0:
+                print listhdun[k].columns
+                print listhdun[k].data
+                print
+
         expoarry = pf.getdata(path, 1)
         for i in indxener:
             expo[i, :, m] = expoarry['ENERGY%d' % (i + 1)]
