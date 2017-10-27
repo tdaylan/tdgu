@@ -14,9 +14,9 @@ def writ_ferm_raww():
     
     gdat = tdpy.util.gdatstrt()
     
-    gdat.test = False
+    gdat.test = True
         
-    defn_gtbn()
+    #defn_gtbn()
 
     gdat.pathdata = os.environ["TDGU_DATA_PATH"] + '/ferm_igal/data/'
     #gdat.recotype = ['rec7', 'rec7', 'rec8', 'rec8', 'rec8']
@@ -24,17 +24,18 @@ def writ_ferm_raww():
     #gdat.strgtime = ['tmin=239155201 tmax=364953603', 'tmin=INDEF tmax=INDEF', 'tmin=INDEF tmax=INDEF', 'tmin=INDEF tmax=INDEF', 'tmin=INDEF tmax=INDEF']
     #gdat.numbside = [256, 256, 256, 256, 512]
     
-    #gdat.recotype = ['rec8', 'rec8']
-    #gdat.enertype = ['pnts', 'back']
-    #gdat.strgtime = ['tmin=INDEF tmax=INDEF', 'tmin=INDEF tmax=INDEF']
-    #gdat.numbside = [256, 256]
+    gdat.recotype = ['rec8', 'rec8']
+    gdat.enertype = ['pnts', 'back']
+    gdat.strgtime = ['tmin=INDEF tmax=INDEF', 'tmin=INDEF tmax=INDEF']
+    gdat.numbside = [256, 256]
     
-    gdat.recotype = ['rec8']
-    gdat.enertype = ['pnts']
-    gdat.strgtime = ['tmin=INDEF tmax=INDEF']
-    gdat.numbside = [256]
+    #gdat.recotype = ['rec8']
+    #gdat.enertype = ['pnts']
+    #gdat.strgtime = ['tmin=INDEF tmax=INDEF']
+    #gdat.numbside = [256]
     
     numbproc = len(gdat.recotype)
+    indxproc = arange(numbproc)
 
     gdat.evtc = []
     gdat.photpath = []
@@ -51,11 +52,18 @@ def writ_ferm_raww():
             gdat.evtc.append(128)
             gdat.photpath.append('photon')
             gdat.weekinit.append(11)
-            #gdat.weekfinl.append(13)
+            gdat.weekfinl.append(13)
             gdat.weekfinl.append(700)
             #gdat.weekfinl.append(420)
-    
-    gdat.strgener = ['gtbndefn_%s.fits' % gdat.enertype[k] for k in range(numbproc)]
+   
+    gdat.strgener = [[] for k in indxproc]
+    for k in indxproc:
+        if gdat.enertype[k] == '3fgl':
+            gdat.strgener[k] = 'ebinalg=FILE ebinfile=$TDGU_DATA_PATH/ferm_igal/data/gtbndefn_%s.fits' % gdat.enertype[k]
+        if gdat.enertype[k] == 'pnts':
+            gdat.strgener[k] = 'ebinalg=LOG EMIN=300 EMAX=10000 ENUMBINS=3'
+        if gdat.enertype[k] == 'back':
+            gdat.strgener[k] = 'ebinalg=LOG EMIN=300 EMAX=300000 ENUMBINS=30'
     
     indxproc = arange(numbproc)
     
@@ -114,7 +122,7 @@ def writ_ferm_raww_work(gdat, indxprocwork):
         psfn = gdat.pathdata + 'psfnferm%04d%s.fits' % (thisevtt, rtag)
 
         cmnd = 'gtselect infile=' + infl + ' outfile=' + sele + ' ra=INDEF dec=INDEF rad=INDEF ' + \
-            gdat.strgtime[indxprocwork] + ' emin=100 emax=100000 zmax=90 evclass=%d %s' % (gdat.evtc[indxprocwork], strgpsfn)
+            gdat.strgtime[indxprocwork] + ' emin=INDEF emax=INDEF zmax=90 evclass=%d %s' % (gdat.evtc[indxprocwork], strgpsfn)
         
         if os.path.isfile(cntp) and os.path.isfile(expo) and not gdat.test:
             continue
@@ -131,7 +139,7 @@ def writ_ferm_raww_work(gdat, indxprocwork):
             os.system(cmnd)
 
         cmnd = 'gtbin evfile=' + filt + ' scfile=NONE outfile=' + cntp + \
-            ' ebinalg=FILE ebinfile=$TDGU_DATA_PATH/ferm_igal/data/%s ' % gdat.strgener[indxprocwork] + \
+            ' %s ' % gdat.strgener[indxprocwork] + \
             'algorithm=HEALPIX hpx_ordering_scheme=RING coordsys=GAL hpx_order=%d hpx_ebin=yes' % log2(gdat.numbside[indxprocwork])
         print cmnd
         print ''
@@ -317,13 +325,19 @@ def defn_gtbn():
     
     listenertype = ['pnts', 'back']
     for enertype in listenertype:
-        if enertype == 'pnts':
+        # this does not work with healpix
+        if enertype == 'ferm':
             lowrener = array([0.1, 0.3, 1., 3., 10.])
             upprener = array([0.3, 1., 3., 10., 100.])
-        if enertype == 'back':
-            numbener = 30
-            minmener = 0.1
-            maxmener = 100.
+        if enertype == 'pnts' or enertype == 'back':
+            if enertype == 'pnts':
+                numbener = 3
+                minmener = 0.3
+                maxmener = 10.
+            if enertype == 'back':
+                numbener = 30
+                minmener = 0.1
+                maxmener = 100.
             binsener = logspace(log10(minmener), log10(maxmener), numbener + 1)
             lowrener = binsener[:-1]
             upprener = binsener[1:]
