@@ -146,7 +146,7 @@ def pcat_lens_mock_next(nameconfexec=None):
     # temp
     dictargs['shrtfram'] = False
     dictargs['numbswep'] = 1000000
-    dictargs['numbswepplot'] = 50000
+    dictargs['numbswepplot'] = 20000
     dictargs['numbsamp'] = 2000
     #dictargs['numbswep'] = 20000
  
@@ -416,10 +416,6 @@ def pcat_lens_mock_sour(nameconfexec=None):
     anglfact = 3600. * 180. / pi
     
     dictargs = {}
-    dictargs['numbswep'] = 10000
-    dictargs['numbsamp'] = 100
-    #dictargs['numbburn'] = 0
-    #dictargs['factthin'] = 60
     dictargs['exprtype'] = 'hubb'
     
     dictargs['numbelempop0reg0'] = 2
@@ -450,14 +446,12 @@ def pcat_lens_mock_sour(nameconfexec=None):
     # temp
     dictargs['shrtfram'] = False
     dictargs['numbswep'] = 1000000
-    dictargs['numbswepplot'] = 50000
+    dictargs['numbswepplot'] = 20000
     dictargs['numbsamp'] = 2000
-
     #dictargs['spatdisttype'] = ['unif', 'unif', 'gangprop']
     #dictargs['makeplot'] = False
     #dictargs['makeplotinit'] = True
     #dictargs['shrtfram'] = False
-    dictargs['numbswepplot'] = 2000
     dictargs['inittype'] = 'refr'
     dictargs['optitype'] = 'none'
     #dictargs['makeplotfram'] = False
