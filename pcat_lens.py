@@ -142,9 +142,12 @@ def pcat_lens_mock_next(nameconfexec=None):
     dictargs['exprtype'] = 'hubb'
     dictargs['truenumbelempop0reg0'] = 25
     dictargs['elemtype'] = ['lens']
-    
-    dictargs['numbswep'] = 2000
-    dictargs['numbsamp'] = 100
+   
+    # temp
+    dictargs['shrtfram'] = False
+    dictargs['numbswep'] = 1000000
+    dictargs['numbswepplot'] = 50000
+    dictargs['numbsamp'] = 2000
     #dictargs['numbswep'] = 20000
  
     #dictargsvari['numbelempop0reg0']     = [None,        0,  0,  25,   int(25. * 0.1**0.9), int(25. * 10.**0.9)]
@@ -443,7 +446,13 @@ def pcat_lens_mock_sour(nameconfexec=None):
     dictargs['truebgalpop2reg00003'] = 0.
     dictargs['truefluxpop2reg00003'] = 1e-19
     #dictargs['refrlegdpopl'] = ['PS', 'Subhalo', 'Blob']
-    
+   
+    # temp
+    dictargs['shrtfram'] = False
+    dictargs['numbswep'] = 1000000
+    dictargs['numbswepplot'] = 50000
+    dictargs['numbsamp'] = 2000
+
     #dictargs['spatdisttype'] = ['unif', 'unif', 'gangprop']
     #dictargs['makeplot'] = False
     #dictargs['makeplotinit'] = True
