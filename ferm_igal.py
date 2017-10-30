@@ -125,7 +125,17 @@ def writ_ferm_raww_work(gdat, indxprocwork):
         
         if os.path.isfile(cntp) and os.path.isfile(expo) and not gdat.test:
             continue
-        
+     
+        if thisevtt != 8:
+            continue
+        else:
+            cmnd = 'gtexpcube2 infile=' + live + ' cmap=' + cntp + ' outfile=' + expo + ' irfs=CALDB evtype=%03d bincalc=CENTER' % thisevtt
+            print cmnd
+            print ''
+            if not gdat.test and not os.path.isfile(expo):
+                os.system(cmnd)
+            continue
+            
         print cmnd
         print ''
         if not gdat.test and not os.path.isfile(sele):
@@ -157,8 +167,8 @@ def writ_ferm_raww_work(gdat, indxprocwork):
         if not gdat.test and not os.path.isfile(expo):
             os.system(cmnd)
 
-    cmnd = 'rm %s %s %s %s %s' % (infl, spac, sele, filt, live)
-    os.system(cmnd)
+    #cmnd = 'rm %s %s %s %s %s' % (infl, spac, sele, filt, live)
+    #os.system(cmnd)
 
 
 def writ_ferm():
