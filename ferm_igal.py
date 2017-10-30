@@ -955,13 +955,8 @@ def pcat_ferm_igal_mock_syst(nameconfexec=None):
     for nameconf in listnameconf:
         dictargsvari[nameconf] = {}
     
-    dictargsvari['truedark']['listnameback'] = ['isot', 'fdfm', 'dark']
-    dictargsvari['truedark']['backtype'] = [1., 'sbrtfdfmsmthrec7norm.fits', 'darktempsmthrec7norm.fits']
-
     dictargsvari['heal']['forccart'] = False
     dictargsvari['heal']['anlytype'] = 'rec8bfun'
-    
-    dictargsvari['puls']['trueelemtype'] = ['lghtpnts', 'lghtpnts', 'lghtpntspuls']
     
     dictargsvari['penalpridiff']['penalpridiff'] = True
     
@@ -972,6 +967,12 @@ def pcat_ferm_igal_mock_syst(nameconfexec=None):
     
     dictargsvari['parsnone']['scalmeanpnts'] = 'self'
     dictargsvari['parsnone']['priofactdoff'] = 0.
+    
+    # prim
+    dictargsvari['truedark']['listnameback'] = ['isot', 'fdfm', 'dark']
+    dictargsvari['truedark']['backtype'] = [1., 'sbrtfdfmsmthrec7norm.fits', 'darktempsmthrec7norm.fits']
+
+    dictargsvari['puls']['trueelemtype'] = ['lghtpnts', 'lghtpnts', 'lghtpntspuls']
     
     dictargsvari['popl']['fittnumbpopl'] = 3
     dictargsvari['popl']['fittspatdisttype'] = ['self', 'disc', 'los3']
