@@ -173,8 +173,13 @@ def writ_ferm():
 
     if enertype == 'back':
         numbener = 30
-        minmener = 0.1
-        maxmener = 100.
+        minmener = 0.3
+        maxmener = 300.
+        binsener = logspace(log10(minmener), log10(maxmener), numbener + 1)
+    elif enertype == 'pnts':
+        numbener = 3
+        minmener = 0.3
+        maxmener = 10.
         binsener = logspace(log10(minmener), log10(maxmener), numbener + 1)
     else:
         binsener = array([0.1, 0.3, 1., 3., 10., 100.])
