@@ -141,6 +141,11 @@ def pcat_lens_mock_next(nameconfexec=None):
     
     dictargs['exprtype'] = 'hubb'
     dictargs['truenumbelempop0reg0'] = 25
+    dictargs['elemtype'] = ['lens']
+    
+    dictargs['numbswep'] = 2000
+    dictargs['numbsamp'] = 100
+    #dictargs['numbswep'] = 20000
  
     #dictargsvari['numbelempop0reg0']     = [None,        0,  0,  25,   int(25. * 0.1**0.9), int(25. * 10.**0.9)]
     #dictargsvari['trueminmdefs']     = [None,        None,        None,        3e-3/anglfact, 3e-2/anglfact,                      3e-4/anglfact]
