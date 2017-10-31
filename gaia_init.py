@@ -258,47 +258,32 @@ def writ_tgas():
     pf.writeto(path, backcnts, clobber=True)
 
 
-def pcat_tgas_mock_vari():
+def pcat_tgas_mock_grid():
     
-    pcat.main.init( \
-         exprtype='sdyn', \
-         refrlegdpopl=['Cluster'], \
-         minmdatacnts=0., \
-         elemtype=['clusvari'], \
-         strgexpo=1., \
-         backtype=['tgasback.fits'], \
-         numbsidecart=200, \
-         
-         # temp
-         makeplot=False, \
-         optitype='none', \
-         #makeplotinit=False, \
-         #makeplotfram=False, \
-         numbswep=1000, \
-         numbsamp=1, \
-        )
-
-
-def pcat_tgas_mock():
+    dictargs = {}
+    dictargs['exprtype'] = 'sdyn'
+    dictargs['backtype'] = ['tgasback.fits']
+    dictargs['numbsidecart'] = 200
+    dictargs['minmdatacnts'] = 0.
+    dictargs['strgexpo'] = 1.
+    dictargs['elemtype'] = ['clusvari']
     
-    pcat.main.init( \
-         exprtype='sdyn', \
-         refrlegdpopl=['Cluster'], \
-         psfninfoprio=False, \
-         numbswep=100000, \
-         minmdatacnts=0., \
-         strgexpo=1., \
-         backtype=['tgasback.fits'], \
-         numbsidecart=200, \
-         
-         # temp
-         #chekprio=True, \
-         #numbelempop0reg0=3, \
-         #maxmnumbelempop0reg0=3, \
-         #shrtfram=True, \
-         #verbtype=2, \
-         #maxmnumbelempop0reg0=4, \
-        )
+    dictargs['numbswep'] = 100000
+    
+    listnameconf = ['nomi', 'consinfo', 'cons']
+    dictargsvari = {}
+    for nameconf in listnameconf:
+        dictargsvari[nameconf] = {}
+    
+    dictargsvari['consinfo']['elemtype'] = ['clus']
+    
+    dictargsvari['cons']['psfninfoprio'] = False
+    dictargsvari['cons']['elemtype'] = ['clus']
+    
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                 )
 
 
 def pcat_tgas_inpt_grid():
@@ -307,7 +292,6 @@ def pcat_tgas_inpt_grid():
     dictargs['exprtype'] = 'sdyn'
     dictargs['backtype'] = ['tgasback.fits']
     dictargs['strgexprsbrt'] = 'tgas.fits'
-    dictargs['psfninfoprio'] = False
     dictargs['numbswep'] = 100000
     dictargs['strgexpo'] = 1.
     dictargs['elemtype'] = ['clusvari']
