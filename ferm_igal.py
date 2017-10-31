@@ -203,11 +203,11 @@ def writ_ferm():
     
     for m in indxevtt:
         
-        # m == 1 exposure files are corrupted!
-        if m == 1:
-            continue
-
         thisevtt = evtt[m]
+
+        # m == 1 exposure files are corrupted!
+        if thisevtt == 8:
+            continue
 
         path = pathinpt + '/expoferm%04d%s%s%04d.fits' % (thisevtt, recotype, enertype, numbside)
         listhdun = pf.open(path)
@@ -723,8 +723,8 @@ def writ_ferm_back():
     
     smth = True
     
-    #listrecotype = ['rec7', 'rec8']
-    listrecotype = ['manu', 'rec7', 'rec8']
+    listrecotype = ['rec8']
+    #listrecotype = ['manu', 'rec7', 'rec8']
     for recotype in listrecotype:
         gdat.evtt, gdat.numbevtt, gdat.indxevtt = tdpy.util.retr_evttferm(recotype)
         ## templates
