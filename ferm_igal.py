@@ -199,6 +199,7 @@ def writ_ferm():
     
     for m in indxevtt:
         
+        # m == 1 exposure files are corrupted!
         if m == 1:
             continue
 
@@ -206,11 +207,6 @@ def writ_ferm():
 
         path = pathinpt + '/expoferm%04d%s%s%04d.fits' % (thisevtt, recotype, enertype, numbside)
         listhdun = pf.open(path)
-        for k in range(len(listhdun)):
-            if k != 0:
-                print listhdun[k].columns
-                print listhdun[k].data
-                print
 
         expoarry = pf.getdata(path, 1)
         for i in indxener:
@@ -417,7 +413,7 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     factconvplnk = loadtxt(gdat.pathdata + 'plnkunitconv.dat')
     
     ## Fermi-LAT flux map
-    path = gdat.pathdata + '/sbrtfermcmp0igal.fits'
+    path = gdat.pathdata + '/sbrtfermrec8pntsigal0256.fits'
     mapsfermorig = sum(pf.getdata(path), 2)
     numbpixlferm = mapsfermorig.shape[1]
     numbsideferm = int(sqrt(numbpixlferm / 12))
@@ -663,7 +659,7 @@ def writ_ferm_back():
     
     writ=True
     
-    strgexpr = 'sbrtfermcmp0igal.fits'
+    strgexpr = 'sbrtfermrec8pntsigal0256.fits'
     
     maxmgangdata = 20.
     
@@ -1033,7 +1029,7 @@ def pcat_ferm_igal_inpt_grid(nameconfexec=None):
     dictargs['numbburn'] = 0
     dictargs['factthin'] = 250
     dictargs['numbswepplot'] = 10000
-    dictargs['strgexprsbrt'] = 'sbrtfermcmp0igal.fits'
+    dictargs['strgexprsbrt'] = 'sbrtfermrec8pntsigal0256.fits'
     dictargs['spectype'] = ['colr']
     dictargs['savestat'] = True
     dictargs['inittype'] = 'reco'
@@ -1053,7 +1049,7 @@ def pcat_ferm_igal_inpt_grid(nameconfexec=None):
     dictargsvari['nomi']['listnameback'] = ['isot', 'fdfm']
     dictargsvari['nomi']['backtype'] = [1., 'sbrtfdfmsmthmanunorm.fits']
     
-    dictargsvari['rec7']['strgexpo'] = 'expofermcmp0igal.fits'
+    dictargsvari['rec7']['strgexpo'] = 'expofermrec8pntsigal0256.fits'
                  
     dictargsvari['mask']['mask'] = array([-30., 30., -2., 2.]) / 180. * pi
     
@@ -1081,7 +1077,7 @@ def pcat_ferm_inpt_ptch():
     pathdata = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
     lgalcntr = deg2rad(0)
     bgalcntr = deg2rad(45.)
-    liststrg = ['sbrtfermcmp0igal', 'expofermcmp0igal', 'sbrtfdfm']
+    liststrg = ['sbrtfermrec8pntsigal0256', 'expofermrec8pntsigal0256', 'sbrtfdfm']
     numbmaps = len(liststrg)
     recotype = 'rec7'
     strgcntr = '_cntr%04d%04d' % (rad2deg(lgalcntr), rad2deg(bgalcntr))
@@ -1111,8 +1107,8 @@ def pcat_ferm_inpt_ptch():
               minmflux=3e-11, \
               maxmflux=3e-6, \
               backtype=[1., 'sbrtfdfmsmth%snorm.fits' % (recotype, strgcnts)], \
-              strgexpo='expofermcmp0igal%s.fits' % strgcntr, \
-              strgexprsbrt='sbrtfermcmp0igal%s.fits' % strgcntr, \
+              strgexpo='expofermrec8pntsigal0256%s.fits' % strgcntr, \
+              strgexprsbrt='expofermrec8pntsigal0256%s.fits' % strgcntr, \
              )
     
 globals().get(sys.argv[1])(*sys.argv[2:])
