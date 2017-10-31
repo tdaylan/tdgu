@@ -284,33 +284,19 @@ def pcat_tgas_mock():
     pcat.main.init( \
          exprtype='sdyn', \
          refrlegdpopl=['Cluster'], \
-         #psfninfoprio=False, \
+         psfninfoprio=False, \
+         numbswep=100000, \
          minmdatacnts=0., \
          strgexpo=1., \
          backtype=['tgasback.fits'], \
          numbsidecart=200, \
          
          # temp
-         numbelempop0reg0=3, \
-         maxmnumbelempop0reg0=3, \
-         #probtran=1., \
-         #probspmr=0., \
-         #proppsfp=False, \
-         #propbacp=False, \
-         #propmeanelem=False, \
-         #propdist=False, \
-         #propcomp=False, \
-         #minmnobj=1e3, \
-         #maxmnobj=1e4, \
-         numbswep=10000, \
-         numbswepplot=20000, \
-         numbsamp=2000, \
-         #makeplotinit=False, \
-         makeplot=False, \
          #chekprio=True, \
+         #numbelempop0reg0=3, \
+         #maxmnumbelempop0reg0=3, \
          #shrtfram=True, \
-         #diagmode=False, \
-         verbtype=2, \
+         #verbtype=2, \
          #maxmnumbelempop0reg0=4, \
         )
 
@@ -319,17 +305,13 @@ def pcat_tgas_inpt_grid():
     
     dictargs = {}
     dictargs['exprtype'] = 'sdyn'
-    #dictargs['minmdatacnts'] = 0.
     dictargs['backtype'] = ['tgasback.fits']
     dictargs['strgexprsbrt'] = 'tgas.fits'
+    dictargs['psfninfoprio'] = False
+    dictargs['numbswep'] = 100000
     dictargs['strgexpo'] = 1.
     dictargs['elemtype'] = ['clusvari']
     
-    # temp
-    dictargs['numbswep'] = 100000
-    dictargs['numbsamp'] = 1000
-    dictargs['numbswepplot'] = 4000
-
     listnameconf = ['nomi', 'consinfo', 'cons']
     dictargsvari = {}
     for nameconf in listnameconf:
