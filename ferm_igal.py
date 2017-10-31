@@ -242,6 +242,17 @@ def writ_ferm():
                 almc = hp.map2alm(expo[i, :, m])
                 hp.rotate_alm(almc, 0., 0.5 * pi, 0.)
                 expo[i, :, m] = hp.alm2map(almc, numbside)
+    
+    for i in indxener:
+        for m in indxevtt:
+            if (sbrt[i, :, m] == 0.).all():
+                print 'im'
+                print i, m
+                raise Exception('')
+            if (expo[i, :, m] == 0.).all():
+                print 'im'
+                print i, m
+                raise Exception('')
 
     path = pathoutp + '/expoferm%s%s%s%04d.fits' % (recotype, enertype, regitype, numbside)
     print 'Writing to %s...' % path
