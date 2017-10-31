@@ -445,8 +445,8 @@ def pcat_lens_mock_sour(nameconfexec=None):
    
     # temp
     #dictargs['shrtfram'] = False
-    dictargs['numbswep'] = 100000
-    dictargs['numbswepplot'] = 10000
+    dictargs['numbswep'] = 200000
+    dictargs['numbswepplot'] = 4000
     dictargs['numbsamp'] = 1000
     #dictargs['spatdisttype'] = ['unif', 'unif', 'gangprop']
     #dictargs['makeplot'] = False
