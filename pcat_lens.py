@@ -444,10 +444,10 @@ def pcat_lens_mock_sour(nameconfexec=None):
     #dictargs['refrlegdpopl'] = ['PS', 'Subhalo', 'Blob']
    
     # temp
-    dictargs['shrtfram'] = False
-    dictargs['numbswep'] = 1000000
-    dictargs['numbswepplot'] = 20000
-    dictargs['numbsamp'] = 2000
+    #dictargs['shrtfram'] = False
+    dictargs['numbswep'] = 100000
+    dictargs['numbswepplot'] = 10000
+    dictargs['numbsamp'] = 1000
     #dictargs['spatdisttype'] = ['unif', 'unif', 'gangprop']
     #dictargs['makeplot'] = False
     #dictargs['makeplotinit'] = True
@@ -485,6 +485,7 @@ def pcat_lens_mock_sour(nameconfexec=None):
     dictargsvari['oneh']['fittminmnumbelempop0reg0'] = 1
     dictargsvari['oneh']['fittmaxmnumbelempop0reg0'] = 1
 
+    dictargsvari['verylowrtrue']['truenumbelempop0reg0'] = 30
     dictargsvari['lowrtrue']['fittminmdefs'] = 0.01 / anglfact
     
     dictargsvari['verylowrtrue']['truenumbelempop0reg0'] = int(25. * 10.**0.9)
