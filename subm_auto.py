@@ -18,7 +18,7 @@ for name in os.listdir(path):
                 cmnd = 'python $TDGU_PATH/%s %s' % (name, namefunc)
                 print cmnd
                 try:
-                    #os.system(cmnd)
+                    os.system(cmnd)
                     fileoutp.write('%s successfull.\n' % namefunc)
                 except Exception as excp:
                     strg = str(excp)
