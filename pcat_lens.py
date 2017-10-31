@@ -462,7 +462,7 @@ def pcat_lens_mock_sour(nameconfexec=None):
     numbelem = int(25. * 10.**0.9)
     anglfact = 3600. * 180. / pi
 
-    listnameconf = ['nomi', 'zerodata', 'oneh', 'lowrtrue', 'pars', 'verylowrtrue', 'medihighs2nr', 'veryhighs2nr', 'init']
+    listnameconf = ['nomi', 'zerodata', 'oneh', 'lowrtrue', 'pars', 'verylowrtrue', 'medihighs2nr', 'veryhighs2nr', 'init', 'signhigh']
     dictargsvari = {}
     for nameconf in listnameconf:
         dictargsvari[nameconf] = {}
@@ -493,6 +493,8 @@ def pcat_lens_mock_sour(nameconfexec=None):
     dictargsvari['verylowrtrue']['fittminmdefs'] = 0.01 / anglfact
     
     dictargsvari['pars']['priofactdoff'] = 0.
+    
+    dictargsvari['signhigh']['minmdefs'] = 1e-1 / anglfact
         
     dictargsvari['medihighs2nr']['strgexpo'] = 1e4 / 1.63050e-19
     

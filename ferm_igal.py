@@ -190,6 +190,10 @@ def writ_ferm():
     numbside = 256
     evtt, numbevtt, indxevtt = tdpy.util.retr_evttferm(recotype)
     
+    evtt = [16, 32]
+    numbevtt = 2
+    indxevtt = [0, 1]
+
     numbpixl = 12 * numbside**2
     apix = 4. * pi / numbpixl
 
@@ -917,7 +921,7 @@ def writ_ferm_back():
     #plot_backspec(gdat, indxpixlmean)
 
 
-def pcat_ferm_igal_mock_syst(nameconfexec=None):
+def pcat_ferm_igal_mock(nameconfexec=None):
     
     dictargs = {}
     dictargs['numbswep'] = 10000
@@ -1033,7 +1037,7 @@ def pcat_ferm_mock_igal_popl():
                   )
 
 
-def pcat_ferm_igal_inpt_grid(nameconfexec=None):
+def pcat_ferm_igal_inpt(nameconfexec=None):
    
     dictargs = {}
     dictargs['numbswep'] = 1000000
