@@ -691,9 +691,15 @@ def writ_ferm_back():
     minmbgal = -maxmgangdata
     maxmbgal = maxmgangdata
     
+    anlytype = 'back'
+
     # axes
-    gdat.binsener = array([0.1, 0.3, 1., 3., 10., 100.])
-    gdat.binsener, gdat.meanener, gdat.diffener, gdat.numbener, gdat.indxener = tdpy.util.retr_axis(bins=gdat.binsener, scal='logt')
+    if anlytype == 'back':
+        gdat.numbener = 30
+        gdat.minmener = 0.3
+        gdat.maxmener = 10.
+    gdat.binsener, gdat.meanener, gdat.diffener, gdat.numbener, gdat.indxener = tdpy.util.retr_axis(minm=gdat.minmener, maxm=gdat.maxmener, numb=gdat.numbener, scal='logt')
+    
     gdat.strgbinsener = ['%.3g GeV - %.3g GeV' % (gdat.binsener[i], gdat.binsener[i+1]) for i in gdat.indxener]
 
 
@@ -921,6 +927,49 @@ def writ_ferm_back():
     #plot_backspec(gdat, indxpixlmean)
 
 
+def pcat_ferm_bubb(nameconfexec=None):
+    
+    anglfact = 180. / pi
+
+    dictargs = {}
+    dictargs['maxmnumbelempop0reg0'] = 0
+    
+    dictargs['anlytype'] = 'rec8back'
+    dictargs['minmlgalrofi'] = -25. / anglfact
+    dictargs['maxmlgalrofi'] = 25. / anglfact
+    dictargs['minmbgalrofi'] = -25. / anglfact
+    dictargs['maxmbgalrofi'] = 25. / anglfact
+    
+    dictargs['psfnevaltype'] = 'init'
+    dictargs['trueelemregitype'] = [True, True, True]
+    
+    dictargs['numbswep'] = 10000
+    dictargs['numbburn'] = 0
+    dictargs['factthin'] = 100
+    dictargs['numbswepplot'] = 1000
+    
+    # temp
+    #dictargs['makeplot'] = False
+    #dictargs['makeplotinit'] = False
+    #dictargs['shrtfram'] = True
+    #dictargs['verbtype'] = 2
+    dictargs['optitype'] = 'none'
+    #dictargs['inittype'] = 'refr'
+ 
+    listnameconf = ['nomi', 'truedark', 'bfun', 'heal', 'penalpridiff', 'checprio', 'fixdpsfn', 'parsnone', 'popl', 'puls']
+    dictargsvari = {}
+    for nameconf in listnameconf:
+        dictargsvari[nameconf] = {}
+    
+    dictargsvari['nomi']['forccart'] = False
+    
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  nameconfexec=nameconfexec, \
+                                 )
+
+
 def pcat_ferm_igal_mock(nameconfexec=None):
     
     dictargs = {}
@@ -1097,32 +1146,45 @@ def pcat_ferm_igal_inpt(nameconfexec=None):
 
 def pcat_ferm_inpt_ptch():
 
+    anglfact = 180. / pi
     pathdata = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
-    lgalcntr = deg2rad(0)
-    bgalcntr = deg2rad(45.)
-    liststrg = ['sbrtfermrec8pntsigal0256', 'expofermrec8pntsigal0256', 'sbrtfdfm']
-    numbmaps = len(liststrg)
-    recotype = 'rec7'
-    strgcntr = '_cntr%04d%04d' % (rad2deg(lgalcntr), rad2deg(bgalcntr))
-    for k in range(numbmaps):
-        path = pathdata + liststrg[k] + strgcntr + '.fits'
-        if os.path.isfile(path):
-            print 'Reading %s...' % path
-            maps = pf.getdata(path)
-        else:
-            pathorig = pathdata + liststrg[k] + '.fits'
-            maps = pf.getdata(pathorig)
-            numbener = maps.shape[0]
-            numbevtt = maps.shape[2]
-            numbside = int(sqrt(maps.shape[1] / 12))
-            for i in range(numbener):
-                for m in range(numbevtt):
-                    almc = hp.map2alm(maps[i, :, m])
-                    # temp
-                    #hp.rotate_alm(almc, 0., bgalcntr, 0.)
-                    hp.rotate_alm(almc, lgalcntr, bgalcntr, 0.)
-                    maps[i, :, m] = hp.alm2map(almc, numbside)
-            pf.writeto(path, maps, clobber=True)
+    
+    lgalcntr = 0.
+    bgalcntr = 5. / anglfact
+    
+    # rotate the input map
+    if gdat.pixltype == 'heal' and (gdat.lgalcntr != 0. or gdat.bgalcntr != 0.):
+        strgcntr = 'cntr%04d%04d' % (rad2deg(lgalcntr), rad2deg(bgalcntr))
+        
+        listcubertttr = [gdat.sbrtdata, gdat.expo]
+        for strgbacktemp in strgback:
+            if isinstance(strgbacktemp, str):
+                listvarb.append(strgbacktemp)
+        numbcuberttr = len(listcuberttr)
+
+        for k in range(numbcuberttr):
+            path = pathdata + strgback[k] + strgcntr + '.fits'
+            if False and os.path.isfile(path):
+                print 'Reading %s...' % path
+                maps = pf.getdata(path)
+            else:
+                pathorig = pathdata + strgback[k] + '.fits'
+                maps = pf.getdata(pathorig)
+                print 'Rotating the data cube in %s...' % pathorig
+                numbener = maps.shape[0]
+                numbevtt = maps.shape[2]
+                numbside = int(sqrt(maps.shape[1] / 12))
+                for i in range(numbener):
+                    for m in range(numbevtt):
+                        almc = hp.map2alm(maps[i, :, m])
+                        # temp
+                        #hp.rotate_alm(almc, 0., bgalcntr, 0.)
+                        print 'i m'
+                        print i, m
+                        maps[i, :, m] = hp.rotate_alm(almc, lgalcntr, bgalcntr, 0.)
+                        #maps[i, :, m] = hp.alm2map(almc, numbside)
+                print 'Writing to %s...' % path
+                pf.writeto(path, maps, clobber=True)
     
     pcat.main.init( \
               lgalcntr=lgalcntr, \
