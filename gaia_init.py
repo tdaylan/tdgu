@@ -271,10 +271,10 @@ def pcat_tgas_mock():
    
     # temp
     dictargs['optitype'] = 'none'
-    dictargs['numbswep'] = 1000
-    dictargs['numbsamp'] = 10
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 100
     dictargs['makeplotinit'] = False
-    dictargs['makeplotfram'] = False
+    #dictargs['makeplotfram'] = False
     
     listnameconf = ['nomi', 'consinfo', 'cons']
     dictargsvari = {}
