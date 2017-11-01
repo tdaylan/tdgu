@@ -268,8 +268,13 @@ def pcat_tgas_mock():
     dictargs['psfnevaltype'] = 'none'
     dictargs['strgexpo'] = 1.
     dictargs['elemtype'] = ['clusvari']
-    
-    dictargs['numbswep'] = 100000
+   
+    # temp
+    dictargs['optitype'] = 'none'
+    dictargs['numbswep'] = 1000
+    dictargs['numbsamp'] = 10
+    dictargs['makeplotinit'] = False
+    dictargs['makeplotfram'] = False
     
     listnameconf = ['nomi', 'consinfo', 'cons']
     dictargsvari = {}
