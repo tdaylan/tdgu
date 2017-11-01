@@ -1,7 +1,9 @@
 from __init__ import *
 
 path = os.environ["TDGU_PATH"] + '/'
-fileoutp = open(path + 'subm_auto.log', 'w')
+pathfileoutp = path + 'subm_auto.log'
+os.system('rm %s' % pathfileoutp)
+fileoutp = open(pathfileoutp, 'w')
 cntr = 0
 for name in os.listdir(path):
     if name.endswith(".py"):

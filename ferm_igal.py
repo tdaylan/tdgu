@@ -1049,6 +1049,14 @@ def pcat_ferm_igal_inpt(nameconfexec=None):
     dictargs['savestat'] = True
     dictargs['inittype'] = 'reco'
     
+    
+    # overplot NPTF results
+    refrplothistflux = zeros((2, 4))
+    refrplothistflux[0, :] = [1e-11, 1e-10, 3e-10, 5e-10]
+    refrplothistflux[1, :] = [1e6, 1e7, 1e4, 1e6]
+
+    dictargs['refrplothistfluxpop2'] = refrplothistflux
+    
     dictargs['forccart'] = True
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100

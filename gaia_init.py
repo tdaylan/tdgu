@@ -258,7 +258,7 @@ def writ_tgas():
     pf.writeto(path, backcnts, clobber=True)
 
 
-def pcat_tgas_mock_grid():
+def pcat_tgas_mock():
     
     dictargs = {}
     dictargs['exprtype'] = 'sdyn'
@@ -286,7 +286,7 @@ def pcat_tgas_mock_grid():
                                  )
 
 
-def pcat_tgas_inpt_grid():
+def pcat_tgas_inpt():
     
     dictargs = {}
     dictargs['exprtype'] = 'sdyn'
