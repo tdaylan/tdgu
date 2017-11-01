@@ -265,6 +265,7 @@ def pcat_tgas_mock():
     dictargs['backtype'] = ['tgasback.fits']
     dictargs['numbsidecart'] = 200
     dictargs['minmdatacnts'] = 0.
+    dictargs['psfnevaltype'] = 'none'
     dictargs['strgexpo'] = 1.
     dictargs['elemtype'] = ['clusvari']
     
@@ -276,8 +277,10 @@ def pcat_tgas_mock():
         dictargsvari[nameconf] = {}
     
     dictargsvari['consinfo']['elemtype'] = ['clus']
+    dictargsvari['consinfo']['psfnevaltype'] = 'kern'
     
     dictargsvari['cons']['psfninfoprio'] = False
+    dictargsvari['cons']['psfnevaltype'] = 'kern'
     dictargsvari['cons']['elemtype'] = ['clus']
     
     dictglob = pcat.main.initarry( \
