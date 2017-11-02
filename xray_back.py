@@ -397,8 +397,8 @@ def pcat_chan_inpt_grid(nameconfexec=None):
     dictargs['initnumbelempop0reg0'] = 1
     dictargs['maxmnumbelempop0reg0'] = 1
     
-    #dictargs['verbtype'] = 2
-    dictargs['numbsamp'] = 1
+    dictargs['verbtype'] = 2
+    #dictargs['numbsamp'] = 1
     
     listnameconf = ['extr2msc0300', 'extr4msc0300', 'home2msc0300', 'home4msc0300', 'home7msc0300']
     dictargsvari = {}

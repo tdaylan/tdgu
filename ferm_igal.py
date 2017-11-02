@@ -1101,9 +1101,14 @@ def pcat_ferm_igal_inpt(nameconfexec=None):
     dictargs['inittype'] = 'reco'
     
     # temp
-    dictargs['numbswep'] = 1000000
+    dictargs['numbswep'] = 1000
+    dictargs['numbburn'] = 0
+    dictargs['propbacp'] = False
+    dictargs['proppsfp'] = False
     dictargs['numbsamp'] = 1000
     #dictargs['factthin'] = 250
+    dictargs['verbtype'] = 2
+    dictargs['maxmnumbelempop0reg0'] = 3
     #dictargs['numbswepplot'] = 10000
     
     dictargs['refrplothistfluxpop2'] = refrplothistflux
