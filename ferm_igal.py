@@ -975,10 +975,6 @@ def pcat_ferm_bubb(nameconfexec=None):
 def pcat_ferm_igal_mock(nameconfexec=None):
     
     dictargs = {}
-    dictargs['numbswep'] = 10000
-    dictargs['numbburn'] = 0
-    dictargs['factthin'] = 100
-    dictargs['numbswepplot'] = 1000
     dictargs['truemaxmnumbelempop0reg0'] = 100
     dictargs['truemaxmnumbelempop1reg0'] = 100
     dictargs['truemaxmnumbelempop2reg0'] = 100
@@ -1012,11 +1008,14 @@ def pcat_ferm_igal_mock(nameconfexec=None):
     dictargs['numbsidecart'] = 100
     
     # temp
+    dictargs['numbswep'] = 1000000
+    dictargs['numbsamp'] = 1000
+    #dictargs['numbswepplot'] = 4000
     #dictargs['makeplot'] = False
     #dictargs['makeplotinit'] = False
     #dictargs['shrtfram'] = True
     #dictargs['verbtype'] = 2
-    dictargs['optitype'] = 'none'
+    #dictargs['optitype'] = 'none'
     #dictargs['inittype'] = 'refr'
     #dictargs['fittmaxmnumbelempop0reg0'] = 5
  
@@ -1090,22 +1089,23 @@ def pcat_ferm_mock_igal_popl():
 
 def pcat_ferm_igal_inpt(nameconfexec=None):
    
-    dictargs = {}
-    dictargs['numbswep'] = 1000000
-    dictargs['numbburn'] = 0
-    dictargs['factthin'] = 250
-    dictargs['numbswepplot'] = 10000
-    dictargs['strgexprsbrt'] = 'sbrtfermrec8pntsigal0256.fits'
-    dictargs['spectype'] = ['colr']
-    dictargs['savestat'] = True
-    dictargs['inittype'] = 'reco'
-    
-    
     # overplot NPTF results
     refrplothistflux = zeros((2, 4))
     refrplothistflux[0, :] = [1e-11, 1e-10, 3e-10, 5e-10]
     refrplothistflux[1, :] = [1e6, 1e7, 1e4, 1e6]
 
+    dictargs = {}
+    dictargs['strgexprsbrt'] = 'sbrtfermrec8pntsigal0256.fits'
+    dictargs['spectype'] = ['colr']
+    dictargs['savestat'] = True
+    dictargs['inittype'] = 'reco'
+    
+    # temp
+    dictargs['numbswep'] = 1000000
+    dictargs['numbsamp'] = 1000
+    #dictargs['factthin'] = 250
+    #dictargs['numbswepplot'] = 10000
+    
     dictargs['refrplothistfluxpop2'] = refrplothistflux
     
     dictargs['forccart'] = True

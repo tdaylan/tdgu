@@ -5,9 +5,6 @@ pathfileoutp = path + 'subm_auto.log'
 os.system('rm %s' % pathfileoutp)
 fileoutp = open(pathfileoutp, 'w')
                
-# list of PCAT run plot outputs
-pathimag = os.environ["PCAT_DATA_PATH"] + '/imag/'
-listrtag = fnmatch.filter(os.listdir(pathimag), '2*')
 
 for name in os.listdir(path):
     if name.endswith(".py"):
@@ -21,14 +18,8 @@ for name in os.listdir(path):
                 print 'Function %s' % namefunc
                     
                 # check the available run outputs
-                booltemp = False
-                for rtag in listrtag:
-                    strgstat = os.environ["PCAT_DATA_PATH"] + '/data/outp/' + rtag
-                    if rtag.startswith(namefunc) and os.path.isfile(strgstat):
-                        filestat = open(strgstat, 'r')
-                        for line in filestat:
-                            if line == 'gdatfinl written.\n':
-                                booltemp = True
+                booltemp = chec_runsprev(namefunc)
+
                 if booltemp:
                     print 'Found a previously completed run.'
                     continue
