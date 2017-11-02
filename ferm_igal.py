@@ -1,15 +1,5 @@
 from __init__ import *
 
-def writ_ferm_rec8_back():
-    
-    gdat = tdpy.util.gdatstrt()
-    gdat.recotype = ['rec8']
-    gdat.enertype = ['back']
-    tdpy.util.writ_ferm_main(gdat, os.environ["FERM_IGAL_DATA_PATH"])
-    tdpy.util.writ_ferm('rec7', 'back', 'igal', os.environ["FERM_IGAL_DATA_PATH"], 256, 'tim0')
-    tdpy.util.writ_ferm('rec8', 'back', 'igal', os.environ["FERM_IGAL_DATA_PATH"], 256, 'tim0')
-
-
 def writ_ferm_raww():
     
     gdat = tdpy.util.gdatstrt()
@@ -678,10 +668,10 @@ def writ_ferm_back():
     
     maxmgangdata = 20.
     
-    #listnameback = ['sbrtfdfm', 'sfdd', 'cmon', 'hydr', 'hasl', 'haslwise', 'wise', 'darktemp']
-    #listnameback = ['sbrtfdfm', 'dustsfdd', 'cmon', 'hydr', 'wise', 'darktemp']
-    listnameback = ['sbrtfdfm', 'darktemp']
-    #listnameback = ['sbrtfdfm', 'sbrtfdfmnorm', 'plnkdust', 'wisestar', 'finkdust', 'darktemp']
+    #listnameback = ['sbrtfdfm', 'sfdd', 'cmon', 'hydr', 'hasl', 'haslwise', 'wise', 'sbrtdarknorm']
+    #listnameback = ['sbrtfdfm', 'dustsfdd', 'cmon', 'hydr', 'wise', 'sbrtdarknorm']
+    listnameback = ['sbrtfdfm', 'sbrtdarknorm']
+    #listnameback = ['sbrtfdfm', 'sbrtfdfmnorm', 'plnkdust', 'wisestar', 'finkdust', 'sbrtdarknorm']
     gdat.numbback = len(listnameback)
     gdat.indxback = arange(gdat.numbback)
 
@@ -691,17 +681,22 @@ def writ_ferm_back():
     minmbgal = -maxmgangdata
     maxmbgal = maxmgangdata
     
-    anlytype = 'back'
-
+    enertype = 'pnts'
     # axes
-    if anlytype == 'back':
+    if enertype == 'back':
         gdat.numbener = 30
+        gdat.minmener = 0.3
+        gdat.maxmener = 300.
+    if enertype == 'pnts':
+        gdat.numbener = 3
         gdat.minmener = 0.3
         gdat.maxmener = 10.
     gdat.binsener, gdat.meanener, gdat.diffener, gdat.numbener, gdat.indxener = tdpy.util.retr_axis(minm=gdat.minmener, maxm=gdat.maxmener, numb=gdat.numbener, scal='logt')
     
     gdat.strgbinsener = ['%.3g GeV - %.3g GeV' % (gdat.binsener[i], gdat.binsener[i+1]) for i in gdat.indxener]
-
+    
+    print 'gdat.binsener'
+    print gdat.binsener
 
     ## pixelization
     gdat.numbside = 256
@@ -732,7 +727,11 @@ def writ_ferm_back():
     listrecotype = ['rec8']
     #listrecotype = ['manu', 'rec7', 'rec8']
     for recotype in listrecotype:
+        anlytype = recotype + enertype
         gdat.evtt, gdat.numbevtt, gdat.indxevtt = tdpy.util.retr_evttferm(recotype)
+        gdat.numbevtt = 2
+        gdat.evtt = [16, 32]
+        gdat.indxevtt = [0, 1]
         ## templates
         gdat.sbrtback = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
         gdat.sbrtbacksmth = empty((gdat.numbback, gdat.numbener, gdat.numbpixl, gdat.numbevtt))
@@ -781,7 +780,7 @@ def writ_ferm_back():
                     tdpy.util.read_fits(pathtemp, verbtype=2) 
                     sbrtbacktemp = pf.getdata(pathtemp, 0)
                     sbrtbacktemp = hp.ud_grade(sbrtbacktemp, gdat.numbside, order_in='RING', order_out='RING')
-                if strg == 'darktemp':
+                if strg == 'sbrtdarknorm':
                     sbrtbacktemp = tdpy.util.retr_nfwp(1., gdat.numbside)
 
                 # temp
@@ -801,7 +800,7 @@ def writ_ferm_back():
                         for i in gdat.indxener:
                             gdat.sbrtback[c, i, :, m] = sbrtbacktemp
 
-                path = gdat.pathdatapcat + strg + '.fits'
+                path = gdat.pathdatapcat + strg + enertype + '.fits'
                 print 'gdat.sbrtback[c, :, :, :]'
                 summgene(gdat.sbrtback[c, :, :, :])
                 print 'Writing to %s...' % path
@@ -813,11 +812,14 @@ def writ_ferm_back():
                         gdat.sbrtbacknorm[c, i, :, m] = gdat.sbrtback[c, i, :, m] / mean(gdat.sbrtback[c, i, gdat.indxpixlnorm, m])
                 print 'gdat.sbrtbacknorm[c, :, :, :]'
                 summgene(gdat.sbrtbacknorm[c, :, :, :])
-                path = gdat.pathdatapcat + strg + 'norm.fits'
+                path = gdat.pathdatapcat + strg + enertype + 'norm.fits'
                 print 'Writing to %s...' % path
                 pf.writeto(path, gdat.sbrtbacknorm[c, :, :, :], clobber=True)
                 
                 if smth:
+                    print 'gdat.sbrtback'
+                    summgene(gdat.sbrtback)
+                    print
                     gdat.sbrtbacksmth[c, :, :, :] = tdpy.util.smth_ferm(gdat.sbrtback[c, :, :, :], gdat.meanener, recotype, kerntype='gaus')
                     
                     indxbadd = where(gdat.sbrtbacksmth[c, :, :, :] < 0.)
@@ -827,7 +829,7 @@ def writ_ferm_back():
 
                     print 'gdat.sbrtbacksmth[c, :, :, :]'
                     summgene(gdat.sbrtbacksmth[c, :, :, :])
-                    path = gdat.pathdatapcat + strg + 'smth%s.fits' % recotype
+                    path = gdat.pathdatapcat + strg + 'smth%s.fits' % anlytype
                     print 'Writing to %s...' % path
                     pf.writeto(path, gdat.sbrtbacksmth[c, :, :, :], clobber=True)
                     
@@ -838,7 +840,7 @@ def writ_ferm_back():
                     
                     print 'gdat.sbrtbacksmth[c, :, :, :]'
                     summgene(gdat.sbrtbacksmth[c, :, :, :])
-                    path = gdat.pathdatapcat + strg + 'smth%snorm.fits' % recotype
+                    path = gdat.pathdatapcat + strg + 'smth%snorm.fits' % anlytype
                     print 'Writing to %s...' % path
                     pf.writeto(path, gdat.sbrtbacksmth[c, :, :, :], clobber=True)
             
@@ -1038,7 +1040,7 @@ def pcat_ferm_igal_mock(nameconfexec=None):
     
     # prim
     dictargsvari['truedark']['listnameback'] = ['isot', 'fdfm', 'dark']
-    dictargsvari['truedark']['backtype'] = [1., 'sbrtfdfmsmthrec7norm.fits', 'darktempsmthrec7norm.fits']
+    dictargsvari['truedark']['backtype'] = [1., 'sbrtfdfmrec8pntssmthnorm.fits', 'sbrtdarkrec8pntssmthnorm.fits']
 
     dictargsvari['puls']['trueelemtype'] = ['lghtpnts', 'lghtpnts', 'lghtpntspuls']
     
@@ -1116,26 +1118,26 @@ def pcat_ferm_igal_inpt(nameconfexec=None):
         dictargsvari[nameconf] = {}
     
     dictargsvari['dark']['listnameback'] = ['isot', 'fdfm', 'dark']
-    dictargsvari['dark']['backtype'] = [1., 'sbrtfdfmsmthmanunorm.fits', 'darktempsmthmanunorm.fits']
+    dictargsvari['dark']['backtype'] = [1., 'sbrtfdfmsmthrec8pntsnorm.fits', 'sbrtdarkrec8pntssmthnorm.fits']
     
     dictargsvari['nomi']['listnameback'] = ['isot', 'fdfm']
-    dictargsvari['nomi']['backtype'] = [1., 'sbrtfdfmsmthmanunorm.fits']
+    dictargsvari['nomi']['backtype'] = [1., 'sbrtfdfmsmthrec8pntsnorm.fits']
     
-    dictargsvari['rec7']['strgexpo'] = 'expofermrec8pntsigal0256.fits'
+    dictargsvari['rec7']['strgexpo'] = 'expofermrec7pntsigal0256.fits'
                  
     dictargsvari['mask']['mask'] = array([-30., 30., -2., 2.]) / 180. * pi
     
     dictargsvari['popl']['numbpopl'] = 3
                    
     dictargsvari['bfunwfou']['maxmnumbelempop0reg0'] = 0
-    dictargsvari['bfunwfou']['anlytype'] = 'manubfun'
+    dictargsvari['bfunwfou']['anlytype'] = 'rec8pntsbfun'
     dictargsvari['bfunwfou']['listnameback'] = ['isot', 'fdfm', 'dark', 'bfunwfou']
-    dictargsvari['bfunwfou']['backtype'] = [1., 'sbrtfdfmsmthmanunorm.fits', 'darktempsmthmanunorm.fits', 'bfunfour0004']
+    dictargsvari['bfunwfou']['backtype'] = [1., 'sbrtfdfmsmthrec8pntsnorm.fits', 'sbrtdarkrec8pntssmthnorm.fits', 'bfunfour0004']
                    
-    dictargsvari['bfuntemp']['anlytype'] = 'manubfun'
+    dictargsvari['bfuntemp']['anlytype'] = 'rec8pntsbfun'
     dictargsvari['bfuntemp']['listnameback'] = ['isot', 'hydr', 'cmon', 'dustsfdd', 'dark', 'wise']
-    dictargsvari['bfuntemp']['backtype'] = [1., 'sbrtfdfmsmthmanunorm.fits', 'hydrsmthmanunorm.fits', 'cmonsmthmanunorm.fits', \
-                                                                                    'dustsfddsmthmanunorm.fits', 'darktempsmthmanunorm.fits', 'wisesmthmanunorm.fits']
+    dictargsvari['bfuntemp']['backtype'] = [1., 'sbrtfdfmsmthrec8pntsnorm.fits', 'hydrsmthrec8pntsnorm.fits', 'cmonsmthrec8pntsnorm.fits', \
+                                                                                    'dustsfddsmthrec8pntsnorm.fits', 'sbrtdarkrec8pntssmthnorm.fits', 'wisesmthrec8pntsnorm.fits']
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
