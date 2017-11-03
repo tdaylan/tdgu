@@ -15,13 +15,14 @@ for name in os.listdir(path):
                 
                 namefunc = line[4:-1].split('(')[0]
                 
-                print 'Function %s' % namefunc
+                print 'Processing confugiration %s...' % namefunc
                     
                 # check the available run outputs
                 booltemp = chec_runsprev(namefunc)
 
                 if booltemp:
                     print 'Found a previously completed run.'
+                    print
                     continue
 
                 cmnd = 'python $TDGU_PATH/%s %s' % (name, namefunc)
@@ -33,13 +34,6 @@ for name in os.listdir(path):
                     strg = str(excp)
                     fileoutp.write('%s failed.\n' % namefunc)
                     fileoutp.write(strg)
-                print
-                print
-                print
-                print
-                print
-                print
-                print
                 print
 
 fileoutp.close()

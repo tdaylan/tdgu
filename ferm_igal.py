@@ -681,7 +681,7 @@ def writ_ferm_back():
     minmbgal = -maxmgangdata
     maxmbgal = maxmgangdata
     
-    enertype = 'pnts'
+    enertype = 'back'
     # axes
     if enertype == 'back':
         gdat.numbener = 30
@@ -695,9 +695,6 @@ def writ_ferm_back():
     
     gdat.strgbinsener = ['%.3g GeV - %.3g GeV' % (gdat.binsener[i], gdat.binsener[i+1]) for i in gdat.indxener]
     
-    print 'gdat.binsener'
-    print gdat.binsener
-
     ## pixelization
     gdat.numbside = 256
     gdat.lgalheal, gdat.bgalheal, gdat.numbpixl, gdat.apix = tdpy.util.retr_healgrid(gdat.numbside)
@@ -800,7 +797,7 @@ def writ_ferm_back():
                         for i in gdat.indxener:
                             gdat.sbrtback[c, i, :, m] = sbrtbacktemp
 
-                path = gdat.pathdatapcat + strg + enertype + '.fits'
+                path = gdat.pathdatapcat + strg + anlytype + '.fits'
                 print 'gdat.sbrtback[c, :, :, :]'
                 summgene(gdat.sbrtback[c, :, :, :])
                 print 'Writing to %s...' % path
@@ -812,7 +809,7 @@ def writ_ferm_back():
                         gdat.sbrtbacknorm[c, i, :, m] = gdat.sbrtback[c, i, :, m] / mean(gdat.sbrtback[c, i, gdat.indxpixlnorm, m])
                 print 'gdat.sbrtbacknorm[c, :, :, :]'
                 summgene(gdat.sbrtbacknorm[c, :, :, :])
-                path = gdat.pathdatapcat + strg + enertype + 'norm.fits'
+                path = gdat.pathdatapcat + strg + anlytype + 'norm.fits'
                 print 'Writing to %s...' % path
                 pf.writeto(path, gdat.sbrtbacknorm[c, :, :, :], clobber=True)
                 
@@ -949,6 +946,8 @@ def pcat_ferm_bubb(nameconfexec=None):
     dictargs['numbburn'] = 0
     dictargs['factthin'] = 100
     dictargs['numbswepplot'] = 1000
+    
+    dictargs['backtype'] = [1., 'sbrtfdfmrec8backsmthnorm.fits', 'sbrtdarkrec8backsmthnorm.fits']
     
     # temp
     #dictargs['makeplot'] = False
@@ -1103,12 +1102,18 @@ def pcat_ferm_igal_inpt(nameconfexec=None):
     # temp
     dictargs['numbswep'] = 1000
     dictargs['numbburn'] = 0
-    dictargs['propbacp'] = False
-    #dictargs['proppsfp'] = False
+    #dictargs['propbacp'] = False
+    dictargs['probtran'] = 0.
+    dictargs['propmeanelem'] = False
+    dictargs['propdist'] = False
+    dictargs['propcomp'] = False
+    dictargs['proppsfp'] = False
     dictargs['numbsamp'] = 1000
     #dictargs['factthin'] = 250
+    dictargs['sqzeprop'] = True
     dictargs['verbtype'] = 2
-    dictargs['maxmnumbelempop0reg0'] = 3
+    dictargs['makeplot'] = False
+    dictargs['maxmnumbelempop0reg0'] = 0
     #dictargs['numbswepplot'] = 10000
     
     dictargs['refrplothistfluxpop2'] = refrplothistflux
