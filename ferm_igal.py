@@ -1007,8 +1007,9 @@ def pcat_ferm_igal_mock(nameconfexec=None):
     dictargs['numbsidecart'] = 100
     
     # temp
-    dictargs['numbswep'] = 1000000
-    dictargs['numbsamp'] = 1000
+    dictargs['numbswep'] = 10000000
+    dictargs['numbswepplot'] = 50000
+    dictargs['numbsamp'] = 4000
     #dictargs['numbswepplot'] = 4000
     #dictargs['makeplot'] = False
     #dictargs['makeplotinit'] = False
