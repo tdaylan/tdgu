@@ -18,7 +18,7 @@ for name in os.listdir(path):
                 print 'Processing confugiration %s...' % namefunc
                     
                 # check the available run outputs
-                booltemp = chec_runsprev(namefunc)
+                booltemp = pcat.util.chec_runsprev(namefunc)
 
                 if booltemp:
                     print 'Found a previously completed run.'
