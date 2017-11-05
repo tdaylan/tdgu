@@ -345,6 +345,7 @@ def pcat_lens_mock_syst(nameconfexec=None):
     
     #dictargs['makeplotintr'] = True
     dictargs['makeplotinit'] = True
+    dictargs['makeplot'] = False
     #dictargs['shrtfram'] = True
     dictargs['numbswep'] = 2000000
     dictargs['numbswepplot'] = 50000
@@ -362,7 +363,7 @@ def pcat_lens_mock_syst(nameconfexec=None):
     #dictargs['makeplotinit'] = False
     #dictargs['makeplotfram'] = False
     #dictargs['diagmode'] = False
-    #dictargs['verbtype'] = 2
+    dictargs['verbtype'] = 2
     #dictargs['numbproc'] = 1
     
     numbelem = int(25. * 10.**0.9)
@@ -844,7 +845,8 @@ def pcat_lens_mock():
                    numbelempop0reg0=10, \
                    numbelempop1reg0=10, \
                    numbelempop2reg0=10, \
-                   
+                   makeplotintr=True, \
+
                    # temp
                    #probtran=0., \
                    #sqzeprop=True, \
