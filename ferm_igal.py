@@ -681,7 +681,7 @@ def writ_ferm_back():
     minmbgal = -maxmgangdata
     maxmbgal = maxmgangdata
     
-    enertype = 'back'
+    enertype = 'pnts'
     # axes
     if enertype == 'back':
         gdat.numbener = 30
