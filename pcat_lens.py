@@ -343,12 +343,11 @@ def pcat_lens_mock_syst(nameconfexec=None):
     dictargs['trueascapop0reg00024'] = 3.49285e-07
     dictargs['trueacutpop0reg00024'] = 5.35163e-06
     
-    #dictargs['makeplotintr'] = True
     dictargs['makeplotinit'] = True
-    dictargs['makeplot'] = False
+    #dictargs['makeplot'] = False
     #dictargs['shrtfram'] = True
-    dictargs['numbswep'] = 2000000
-    dictargs['numbswepplot'] = 50000
+    dictargs['numbswep'] = 200000
+    dictargs['numbswepplot'] = 5000
     dictargs['numbsamp'] = 4000
     #dictargs['numbburn'] = 0
     #dictargs['factthin'] = 100
@@ -363,7 +362,7 @@ def pcat_lens_mock_syst(nameconfexec=None):
     #dictargs['makeplotinit'] = False
     #dictargs['makeplotfram'] = False
     #dictargs['diagmode'] = False
-    dictargs['verbtype'] = 2
+    #dictargs['verbtype'] = 2
     #dictargs['numbproc'] = 1
     
     numbelem = int(25. * 10.**0.9)
