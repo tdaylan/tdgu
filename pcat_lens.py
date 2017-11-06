@@ -144,11 +144,12 @@ def pcat_lens_mock_next(nameconfexec=None):
     dictargs['elemtype'] = ['lens']
    
     # temp
+    dictargs['makeplotinit'] = True
     dictargs['shrtfram'] = False
-    dictargs['numbswep'] = 1000000
-    dictargs['numbswepplot'] = 20000
+    dictargs['numbswep'] = 500000
+    dictargs['numbswepplot'] = 50000
     dictargs['numbsamp'] = 2000
-    #dictargs['numbswep'] = 20000
+    dictargs['probspmr'] = 0.
  
     #dictargsvari['numbelempop0reg0']     = [None,        0,  0,  25,   int(25. * 0.1**0.9), int(25. * 10.**0.9)]
     #dictargsvari['trueminmdefs']     = [None,        None,        None,        3e-3/anglfact, 3e-2/anglfact,                      3e-4/anglfact]
@@ -344,12 +345,10 @@ def pcat_lens_mock_syst(nameconfexec=None):
     dictargs['trueacutpop0reg00024'] = 5.35163e-06
     
     dictargs['makeplotinit'] = True
-    dictargs['optitype'] = 'none'
-    #dictargs['makeplot'] = False
-    #dictargs['shrtfram'] = True
-    dictargs['numbswep'] = 200000
-    dictargs['numbswepplot'] = 5000
-    dictargs['numbsamp'] = 4000
+    dictargs['shrtfram'] = False
+    dictargs['numbswep'] = 500000
+    dictargs['numbswepplot'] = 50000
+    dictargs['numbsamp'] = 2000
     dictargs['probspmr'] = 0.
     #dictargs['numbburn'] = 0
     #dictargs['factthin'] = 100
