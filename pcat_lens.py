@@ -165,14 +165,12 @@ def pcat_lens_mock_next(nameconfexec=None):
     # temp
     #dictargs['makeplotinit'] = True
     #dictargs['shrtfram'] = False
-    dictargs['numbswep'] = 20000
-    dictargs['numbburn'] = 0
-    dictargs['factthin'] = 200
+    dictargs['numbswep'] = 50000
+    dictargs['numbburn'] = 20000
+    dictargs['factthin'] = 300
     dictargs['diagmode'] = False
-    dictargs['numbswepplot'] = 4000
-    #dictargs['numbsamp'] = 2000
-    #dictargs['proppsfp'] = False
     dictargs['probspmr'] = 0.
+    dictargs['priofactdoff'] = 0.
  
     #dictargsvari['numbelempop0reg0']     = [None,        0,  0,  25,   int(25. * 0.1**0.9), int(25. * 10.**0.9)]
     #dictargsvari['trueminmdefs']     = [None,        None,        None,        3e-3/anglfact, 3e-2/anglfact,                      3e-4/anglfact]
@@ -367,12 +365,14 @@ def pcat_lens_mock_syst(nameconfexec=None):
     dictargs['trueascapop0reg00024'] = 3.49285e-07
     dictargs['trueacutpop0reg00024'] = 5.35163e-06
     
-    dictargs['makeplotinit'] = True
-    dictargs['shrtfram'] = False
-    dictargs['numbswep'] = 500000
-    dictargs['numbswepplot'] = 50000
-    dictargs['numbsamp'] = 2000
+    #dictargs['makeplotinit'] = True
+    #dictargs['shrtfram'] = False
+    dictargs['numbswep'] = 50000
+    dictargs['numbburn'] = 20000
+    dictargs['factthin'] = 300
+    dictargs['diagmode'] = False
     dictargs['probspmr'] = 0.
+    dictargs['priofactdoff'] = 0.
     #dictargs['numbburn'] = 0
     #dictargs['factthin'] = 100
     #dictargs['numbsamp'] = 2000
@@ -410,7 +410,9 @@ def pcat_lens_mock_syst(nameconfexec=None):
     #dictargsvari['zerodata']['maxmnumbelempop0reg0'] = 15
     #dictargsvari['zerodata']['numbelempop0reg0'] = 15
     
-    dictargsvari['oneh']['fittminmnumbelempop0reg0'] = 1
+    dictargsvari['oneh']['probtran'] = 0.
+    dictargsvari['oneh']['initnumbelempop0reg0'] = 1
+    dictargsvari['oneh']['fittminmnumbelempop0reg0'] = 0
     dictargsvari['oneh']['fittmaxmnumbelempop0reg0'] = 1
 
     dictargsvari['lowrtrue']['fittminmdefs'] = 0.01 / anglfact
