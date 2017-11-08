@@ -1055,7 +1055,7 @@ def pcat_ferm_igal_mock(nameconfexec=None):
                                  )
 
 
-def pcat_ferm_mock_igal_brok():
+def pcat_ferm_mock_igal_brok(nameconfexec=None):
      
     listnameconf = ['breklowr', 'brekuppr']
     dictargsvari = {}
@@ -1077,14 +1077,6 @@ def pcat_ferm_mock_igal_brok():
                                   dictargs, \
                                   nameconfexec=nameconfexec, \
                                  )
-
-
-
-
-def pcat_ferm_mock_igal_popl():
-    
-    pcat.main.init( \
-                  )
 
 
 def pcat_ferm_igal_inpt(nameconfexec=None):
@@ -1158,7 +1150,7 @@ def pcat_ferm_igal_inpt(nameconfexec=None):
                                  )
     
 
-def pcat_ferm_inpt_ptch():
+def pcat_ferm_inpt_ptch(nameconfexec=None):
 
     anglfact = 180. / pi
     pathdata = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'

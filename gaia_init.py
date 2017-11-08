@@ -258,7 +258,7 @@ def writ_tgas():
     pf.writeto(path, backcnts, clobber=True)
 
 
-def pcat_tgas_mock():
+def pcat_tgas_mock(nameconfexec=None):
     
     dictargs = {}
     dictargs['exprtype'] = 'sdyn'
@@ -272,14 +272,36 @@ def pcat_tgas_mock():
     # temp
     dictargs['optitype'] = 'none'
     dictargs['numbswep'] = 10000
-    dictargs['numbsamp'] = 100
+    dictargs['numbburn'] = 0
+    dictargs['factthin'] = 10
+    #dictargs['probspmr'] = 0.
+    #dictargs['verbtype'] = 2
+    #dictargs['propcomp'] = False
+    dictargs['numbelempop0reg0'] = 2
+    dictargs['maxmnumbelempop0reg0'] = 2
+    
     dictargs['makeplotinit'] = False
     #dictargs['makeplotfram'] = False
     
-    listnameconf = ['nomi', 'consinfo', 'cons']
+    listnameconf = ['nomi', 'consinfo', 'cons', 'spmr', 'tranonly', 'spmronly']
     dictargsvari = {}
     for nameconf in listnameconf:
         dictargsvari[nameconf] = {}
+   
+    # to test splits and merges
+    dictargsvari['tranonly']['elemtype'] = ['clus']
+    dictargsvari['tranonly']['psfnevaltype'] = 'kern'
+    dictargsvari['tranonly']['probtran'] = 1.
+    dictargsvari['tranonly']['inittype'] = 'pert'
+    
+    dictargsvari['spmronly']['elemtype'] = ['clus']
+    dictargsvari['spmronly']['psfnevaltype'] = 'kern'
+    #dictargsvari['spmronly']['probtran'] = 1.
+    #dictargsvari['spmronly']['maxmnumbelempop0reg0'] = 3
+    #dictargsvari['spmronly']['numbelempop0reg0'] = 3
+    #dictargsvari['spmronly']['verbtype'] = 2
+    #dictargsvari['spmronly']['probspmr'] = 1.
+    dictargsvari['spmronly']['inittype'] = 'pert'
     
     dictargsvari['consinfo']['elemtype'] = ['clus']
     dictargsvari['consinfo']['psfnevaltype'] = 'kern'
@@ -291,10 +313,11 @@ def pcat_tgas_mock():
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  nameconfexec=nameconfexec, \
                                  )
 
 
-def pcat_tgas_inpt():
+def pcat_tgas_inpt(nameconfexec=None):
     
     dictargs = {}
     dictargs['exprtype'] = 'sdyn'
@@ -317,8 +340,8 @@ def pcat_tgas_inpt():
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  nameconfexec=nameconfexec, \
                                  )
 
-globals().get(sys.argv[1])()
 
-
+globals().get(sys.argv[1])(*sys.argv[2:])

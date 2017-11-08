@@ -95,14 +95,33 @@ def pcat_lens_mock_grid():
                 plt.close(figr)
     
 
-def pcat_lens_intrevalmodlcnts():
+def pcat_lens_intrevalcntpresi():
    
     pcat.main.init( \
                    exprtype='hubb', \
                    makeplotinit=False, \
-                   intrevalmodlcnts=True, \
-                   numbelempop0reg0=0, \
-                   maxmnumbelempop0reg0=0, \
+                   intrevalcntpresi=True, \
+                   numbelempop0reg0=1, \
+                   maxmnumbelempop0reg0=1, \
+                   numbelempop1reg0=1, \
+                   maxmnumbelempop1reg0=1, \
+                   numbelempop2reg0=1, \
+                   maxmnumbelempop2reg0=1, \
+                  )
+    
+
+def pcat_lens_intrevalcntpmodl():
+   
+    pcat.main.init( \
+                   exprtype='hubb', \
+                   makeplotinit=False, \
+                   intrevalcntpmodl=True, \
+                   numbelempop0reg0=1, \
+                   maxmnumbelempop0reg0=1, \
+                   numbelempop1reg0=1, \
+                   maxmnumbelempop1reg0=1, \
+                   numbelempop2reg0=1, \
+                   maxmnumbelempop2reg0=1, \
                   )
     
 
@@ -144,11 +163,15 @@ def pcat_lens_mock_next(nameconfexec=None):
     dictargs['elemtype'] = ['lens']
    
     # temp
-    dictargs['makeplotinit'] = True
-    dictargs['shrtfram'] = False
-    dictargs['numbswep'] = 500000
-    dictargs['numbswepplot'] = 50000
-    dictargs['numbsamp'] = 2000
+    #dictargs['makeplotinit'] = True
+    #dictargs['shrtfram'] = False
+    dictargs['numbswep'] = 20000
+    dictargs['numbburn'] = 0
+    dictargs['factthin'] = 200
+    dictargs['diagmode'] = False
+    dictargs['numbswepplot'] = 4000
+    #dictargs['numbsamp'] = 2000
+    #dictargs['proppsfp'] = False
     dictargs['probspmr'] = 0.
  
     #dictargsvari['numbelempop0reg0']     = [None,        0,  0,  25,   int(25. * 0.1**0.9), int(25. * 10.**0.9)]
@@ -361,8 +384,6 @@ def pcat_lens_mock_syst(nameconfexec=None):
     #dictargs['propcomp'] = False
     #dictargs['probtran'] = 0.
     #dictargs['makeplotinit'] = False
-    #dictargs['makeplotfram'] = False
-    #dictargs['diagmode'] = False
     #dictargs['verbtype'] = 2
     #dictargs['numbproc'] = 1
     
@@ -422,10 +443,12 @@ def pcat_lens_mock_sour(nameconfexec=None):
     
     dictargs['numbelempop0reg0'] = 2
     dictargs['maxmnumbelempop0reg0'] = 20
-    dictargs['numbelempop1reg0'] = 10
-    dictargs['maxmnumbelempop1reg0'] = 20
-    dictargs['numbelempop2reg0'] = 4
-    dictargs['maxmnumbelempop2reg0'] = 20
+    dictargs['numbelempop1reg0'] = 50
+    dictargs['maxmnumbelempop1reg0'] = 100
+    
+    dictargs['numbelempop2reg0'] = 0
+    dictargs['maxmnumbelempop2reg0'] = 0
+    
     dictargs['truelgalsourreg0'] = 0.
     dictargs['truebgalsourreg0'] = 0.
     dictargs['truefluxsourreg0'] = 3e-18
@@ -447,19 +470,29 @@ def pcat_lens_mock_sour(nameconfexec=None):
    
     # temp
     #dictargs['shrtfram'] = False
-    dictargs['numbswep'] = 200000
+    dictargs['numbswep'] = 40000
     dictargs['numbswepplot'] = 4000
-    dictargs['numbsamp'] = 1000
+    dictargs['numbsamp'] = 100
+    dictargs['probspmr'] = 0.
     #dictargs['spatdisttype'] = ['unif', 'unif', 'gangprop']
     #dictargs['makeplot'] = False
     #dictargs['makeplotinit'] = True
     #dictargs['shrtfram'] = False
     dictargs['inittype'] = 'refr'
     dictargs['optitype'] = 'none'
-    #dictargs['makeplotfram'] = False
-    #dictargs['probtran'] = 1.
-    #dictargs['verbtype'] = 2
+    dictargs['verbtype'] = 1
+    
+    #dictargs['propmeanelem'] = False
     #dictargs['propdist'] = False
+    #dictargs['propbacp'] = False
+    #dictargs['proplenp'] = False
+    #dictargs['proppsfp'] = False
+    #dictargs['probtran'] = 0.
+    #dictargs['numbelempop0reg0'] = 0
+    #dictargs['maxmnumbelempop0reg0'] = 0
+    #dictargs['numbelempop1reg0'] = 0
+    #dictargs['maxmnumbelempop1reg0'] = 0
+    #dictargs['probtran'] = 1.
     
     numbelem = int(25. * 10.**0.9)
     anglfact = 3600. * 180. / pi
@@ -488,6 +521,7 @@ def pcat_lens_mock_sour(nameconfexec=None):
     dictargsvari['oneh']['fittmaxmnumbelempop0reg0'] = 1
 
     dictargsvari['verylowrtrue']['truenumbelempop0reg0'] = 30
+    
     dictargsvari['lowrtrue']['fittminmdefs'] = 0.01 / anglfact
     
     dictargsvari['verylowrtrue']['truenumbelempop0reg0'] = int(25. * 10.**0.9)
@@ -846,6 +880,7 @@ def pcat_lens_mock():
                    numbelempop1reg0=10, \
                    numbelempop2reg0=10, \
                    makeplotintr=True, \
+                   makeplotinit=True, \
 
                    # temp
                    #probtran=0., \
@@ -1179,7 +1214,6 @@ def pcat_lens_psfn():
                        #savestat=True, \
                        #inittype='reco', \
                        #makeplotinit=False, \
-                       #makeplotfram=False, \
                        makeplotlpri=False, \
                        strgexpo=strgexpo, \
                        fittmaxmnumbelem=array([0]), \
@@ -1238,8 +1272,14 @@ def pcat_lens_mockonly():
    
     pcat.main.init( \
                    exprtype='hubb', \
-                   numbelempop0reg0=20, \
-                   maxmnumbelempop0reg0=400, \
+                   maxmnumbelempop0reg0=0, \
+                   numbelempop0reg0=0, \
+                   maxmnumbelempop1reg0=1000, \
+                   numbelempop1reg0=1000, \
+                   maxmnumbelempop2reg0=0, \
+                   numbelempop2reg0=0, \
+                   makeplotinit=True, \
+                   makeplotintr=True, \
                    mockonly=True, \
                   )
 

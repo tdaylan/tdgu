@@ -263,7 +263,7 @@ def pcat_chan_mock_spmr(nameconfexec=None):
                                  )
 
 
-def pcat_chan_mock_popl():
+def pcat_chan_mock_popl(nameconfexec=None):
     
     datatype = 'home'
     strgexpomaps = '4msc'
@@ -279,7 +279,7 @@ def pcat_chan_mock_popl():
                              )
 
 
-def pcat_chan_mock_spec_syst(nameconfexec=None):
+def pcat_chan_mock_spec(nameconfexec=None):
     
     anglfact = 3600. * 180. / pi
     
@@ -325,7 +325,7 @@ def pcat_chan_mock_spec_syst(nameconfexec=None):
     
 
 # science suites
-def pcat_chan_mock_syst(nameconfexec=None):
+def pcat_chan_mock(nameconfexec=None):
    
     dictargs = {}
     dictargs['exprtype'] = 'chan'
@@ -350,7 +350,7 @@ def pcat_chan_mock_syst(nameconfexec=None):
                                  )
     
 
-def pcat_chan_mock_maxmllik():
+def pcat_chan_mock_maxmllik(nameconfexec=None):
     
     datatype = 'home'
     strgexpomaps = '4msc'
