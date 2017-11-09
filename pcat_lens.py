@@ -168,7 +168,6 @@ def pcat_lens_mock_next(nameconfexec=None):
     dictargs['numbswep'] = 50000
     dictargs['numbburn'] = 20000
     dictargs['factthin'] = 300
-    dictargs['diagmode'] = False
     dictargs['probspmr'] = 0.
     dictargs['priofactdoff'] = 0.
  
@@ -370,7 +369,6 @@ def pcat_lens_mock_syst(nameconfexec=None):
     dictargs['numbswep'] = 50000
     dictargs['numbburn'] = 20000
     dictargs['factthin'] = 300
-    dictargs['diagmode'] = False
     dictargs['probspmr'] = 0.
     dictargs['priofactdoff'] = 0.
     #dictargs['numbburn'] = 0
@@ -878,11 +876,16 @@ def pcat_lens_mock():
                    #numbburn=0, \
                    #factthin=10, \
                    inittype='refr', \
-                   numbelempop0reg0=10, \
-                   numbelempop1reg0=10, \
-                   numbelempop2reg0=10, \
-                   makeplotintr=True, \
-                   makeplotinit=True, \
+                   numbelempop0reg0=3, \
+                   numbelempop1reg0=3, \
+                   numbelempop2reg0=3, \
+                   maxmnumbelempop0reg0=3, \
+                   maxmnumbelempop1reg0=3, \
+                   maxmnumbelempop2reg0=3, \
+                   makeplot=False, \
+                   
+                   #makeplotintr=True, \
+                   #makeplotinit=True, \
 
                    # temp
                    #probtran=0., \
@@ -894,7 +897,7 @@ def pcat_lens_mock():
                    #makeplotinit=False, \
                    #shrtfram=True, \
                    #explprop=True, \
-                   #verbtype=2, \
+                   verbtype=2, \
                    #mockonly=True, \
                   )
 

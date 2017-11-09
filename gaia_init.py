@@ -270,17 +270,15 @@ def pcat_tgas_mock(nameconfexec=None):
     dictargs['elemtype'] = ['clusvari']
    
     # temp
-    dictargs['optitype'] = 'none'
     dictargs['numbswep'] = 10000
     dictargs['numbburn'] = 0
-    dictargs['factthin'] = 10
-    #dictargs['probspmr'] = 0.
-    #dictargs['verbtype'] = 2
-    #dictargs['propcomp'] = False
-    dictargs['numbelempop0reg0'] = 2
-    dictargs['maxmnumbelempop0reg0'] = 2
+    dictargs['factthin'] = 100
+    dictargs['optitype'] = 'none'
+    dictargs['verbtype'] = 2
+    dictargs['numbelempop0reg0'] = 1
+    dictargs['maxmnumbelempop0reg0'] = 1
     
-    dictargs['makeplotinit'] = False
+    #dictargs['makeplotinit'] = False
     #dictargs['makeplotfram'] = False
     
     listnameconf = ['nomi', 'consinfo', 'cons', 'spmr', 'tranonly', 'spmronly']
@@ -296,6 +294,12 @@ def pcat_tgas_mock(nameconfexec=None):
     
     dictargsvari['spmronly']['elemtype'] = ['clus']
     dictargsvari['spmronly']['psfnevaltype'] = 'kern'
+    dictargsvari['spmronly']['propmeanelem'] = False
+    dictargsvari['spmronly']['propdist'] = False
+    dictargsvari['spmronly']['propbacp'] = False
+    dictargsvari['spmronly']['proppsfp'] = False
+    dictargsvari['spmronly']['propcomp'] = False
+    dictargsvari['spmronly']['probspmr'] = 0.
     #dictargsvari['spmronly']['probtran'] = 1.
     #dictargsvari['spmronly']['maxmnumbelempop0reg0'] = 3
     #dictargsvari['spmronly']['numbelempop0reg0'] = 3
