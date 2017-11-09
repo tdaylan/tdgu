@@ -140,6 +140,18 @@ def writ_chan():
                         for a in range(2):
                             #path = '/n/fink1/rfeder/xray_pcat/obsids/full/merged_%dMs/rest_fov/%d/%s-%s_%s' % (expomaps[k], i, strgener[i], strgener[i+1], strgvarb[a])
                             path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[i], strgener[i+1])
+                            
+                            print 'a'
+                            print a
+                            print 'Reading %s - %s...' % (strgener[i], strgener[i+1])
+                            print 'minmindx'
+                            print minmindx
+                            print 'maxmindx'
+                            print maxmindx
+                            print 'pf.getdata(path, 0)'
+                            summgene(pf.getdata(path, 0))
+                            print
+
                             if a == 0:
                                 expo[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
                             if a == 1:
