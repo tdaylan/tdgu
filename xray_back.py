@@ -186,7 +186,7 @@ def writ_chan():
 
 # test suites
 
-def pcat_chan_mock_spmr(nameconfexec=None):
+def pcat_chan_mock_spmr(strgcnfgextnexec=None):
    
     anglfact = 3600. * 180. / pi
     
@@ -226,10 +226,10 @@ def pcat_chan_mock_spmr(nameconfexec=None):
     dictargs['maxmnumbelempop0reg0'] = 5
     #dictargs['verbtype'] = 2
     
-    listnameconf = ['free', 'nomi', 'pars', 'genebrgt', 'genefain', 'psfn']
+    listnamecnfgextn = ['free', 'nomi', 'pars', 'genebrgt', 'genefain', 'psfn']
     dictargsvari = {}
-    for nameconf in listnameconf:
-        dictargsvari[nameconf] = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
     
     #dictargsvari['free']['minmnumbelempop0reg0'] = 0.
     #dictargsvari['free']['maxmnumbelempop0reg0'] = 0.
@@ -259,11 +259,11 @@ def pcat_chan_mock_spmr(nameconfexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  nameconfexec=nameconfexec, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
 
-def pcat_chan_mock_popl(nameconfexec=None):
+def pcat_chan_mock_popl(strgcnfgextnexec=None):
     
     datatype = 'home'
     strgexpomaps = '4msc'
@@ -279,7 +279,7 @@ def pcat_chan_mock_popl(nameconfexec=None):
                              )
 
 
-def pcat_chan_mock_spec(nameconfexec=None):
+def pcat_chan_mock_spec(strgcnfgextnexec=None):
     
     anglfact = 3600. * 180. / pi
     
@@ -311,21 +311,21 @@ def pcat_chan_mock_spec(nameconfexec=None):
     
     # thrs < modl < true -- trad
     # modl < thrs < true -- pcat
-    listnameconf = ['nomi', 'lowrmodl']
+    listnamecnfgextn = ['nomi', 'lowrmodl']
     dictargsvari = {}
-    for nameconf in listnameconf:
-        dictargsvari[nameconf] = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
     dictargsvari['lowrmodl']['fittminmflux'] = 3e-7
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  nameconfexec=nameconfexec, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
                                  )
     
 
 # science suites
-def pcat_chan_mock(nameconfexec=None):
+def pcat_chan_mock(strgcnfgextnexec=None):
    
     dictargs = {}
     dictargs['exprtype'] = 'chan'
@@ -334,10 +334,10 @@ def pcat_chan_mock(nameconfexec=None):
     dictargs['strgexpo'] = 'expochanhome4msc0300.fits'
     #dictargs['numbelempop0reg0'] = 100
     
-    listnameconf = ['nomi', 'lowrmodl', 'unrsbadd', 'unrsfine', 'zerosgnl']
+    listnamecnfgextn = ['nomi', 'lowrmodl', 'unrsbadd', 'unrsfine', 'zerosgnl']
     dictargsvari = {}
-    for nameconf in listnameconf:
-        dictargsvari[nameconf] = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
     dictargsvari['lowrmodl']['fittminmflux'] = 1e-9
     dictargsvari['unrsbadd']['fittminmflux'] = 3e-8
     dictargsvari['unrsfine']['fittminmflux'] = 1e-8
@@ -346,11 +346,11 @@ def pcat_chan_mock(nameconfexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  nameconfexec=nameconfexec, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
                                  )
     
 
-def pcat_chan_mock_maxmllik(nameconfexec=None):
+def pcat_chan_mock_maxmllik(strgcnfgextnexec=None):
     
     datatype = 'home'
     strgexpomaps = '4msc'
@@ -378,7 +378,7 @@ def pcat_chan_mock_maxmllik(nameconfexec=None):
                              )
 
 
-def pcat_chan_inpt_grid(nameconfexec=None):
+def pcat_chan_inpt_grid(strgcnfgextnexec=None):
    
     dictargs = {}
     dictargs['exprtype'] = 'chan'
@@ -400,24 +400,24 @@ def pcat_chan_inpt_grid(nameconfexec=None):
     dictargs['verbtype'] = 2
     #dictargs['numbsamp'] = 1
     
-    listnameconf = ['extr2msc0300', 'extr4msc0300', 'home2msc0300', 'home4msc0300', 'home7msc0300']
+    listnamecnfgextn = ['extr2msc0300', 'extr4msc0300', 'home2msc0300', 'home4msc0300', 'home7msc0300']
     dictargsvari = {}
-    for nameconf in listnameconf:
-        dictargsvari[nameconf] = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
    
-    for nameconf in listnameconf:
-        numbsidecart, strgexpo, strgexprsbrt, namestat, anlytype = retr_argschan(nameconf[:4], nameconf[4:8], int(nameconf[8:]))
+    for namecnfgextn in listnamecnfgextn:
+        numbsidecart, strgexpo, strgexprsbrt, namestat, anlytype = retr_argschan(namecnfgextn[:4], namecnfgextn[4:8], int(namecnfgextn[8:]))
         dictargsvari[anlytype]['anlytype'] = anlytype
         dictargsvari[anlytype]['numbsidecart'] = numbsidecart
         dictargsvari[anlytype]['strgexpo'] = strgexpo
         dictargsvari[anlytype]['strgexprsbrt'] = strgexprsbrt
-        if nameconf[:8] == 'extr4msc' or nameconf[:8] == 'home7msc':
+        if namecnfgextn[:8] == 'extr4msc' or namecnfgextn[:8] == 'home7msc':
             dictargsvari[anlytype]['savestat'] = True
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  nameconfexec=nameconfexec, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
                                  )
    
 

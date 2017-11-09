@@ -258,7 +258,7 @@ def writ_tgas():
     pf.writeto(path, backcnts, clobber=True)
 
 
-def pcat_tgas_mock(nameconfexec=None):
+def pcat_tgas_mock(strgcnfgextnexec=None):
     
     dictargs = {}
     dictargs['exprtype'] = 'sdyn'
@@ -268,60 +268,51 @@ def pcat_tgas_mock(nameconfexec=None):
     dictargs['psfnevaltype'] = 'none'
     dictargs['strgexpo'] = 1.
     dictargs['elemtype'] = ['clusvari']
+    dictargs['psfninfoprio'] = False
    
     # temp
-    dictargs['numbswep'] = 10000
-    dictargs['numbburn'] = 0
-    dictargs['factthin'] = 100
+    dictargs['numbswep'] = 100000
+    dictargs['numbsamp'] = 1000
+    dictargs['maxmnumbelempop0reg0'] = 1
+    dictargs['numbelempop0reg0'] = 1
     dictargs['optitype'] = 'none'
     dictargs['verbtype'] = 2
-    dictargs['numbelempop0reg0'] = 1
-    dictargs['maxmnumbelempop0reg0'] = 1
     
-    #dictargs['makeplotinit'] = False
-    #dictargs['makeplotfram'] = False
-    
-    listnameconf = ['nomi', 'consinfo', 'cons', 'spmr', 'tranonly', 'spmronly']
+    listnamecnfgextn = ['shapvari', 'shapconsinfo', 'shapcons', 'shapconsproptran', 'shapconspropspmr']
     dictargsvari = {}
-    for nameconf in listnameconf:
-        dictargsvari[nameconf] = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
    
     # to test splits and merges
-    dictargsvari['tranonly']['elemtype'] = ['clus']
-    dictargsvari['tranonly']['psfnevaltype'] = 'kern'
-    dictargsvari['tranonly']['probtran'] = 1.
-    dictargsvari['tranonly']['inittype'] = 'pert'
+    dictargsvari['shapconsproptran']['elemtype'] = ['clus']
+    dictargsvari['shapconsproptran']['psfnevaltype'] = 'kern'
+    dictargsvari['shapconsproptran']['probtran'] = 1.
+    # temp
+    dictargsvari['shapconsproptran']['probspmr'] = 0.
     
-    dictargsvari['spmronly']['elemtype'] = ['clus']
-    dictargsvari['spmronly']['psfnevaltype'] = 'kern'
-    dictargsvari['spmronly']['propmeanelem'] = False
-    dictargsvari['spmronly']['propdist'] = False
-    dictargsvari['spmronly']['propbacp'] = False
-    dictargsvari['spmronly']['proppsfp'] = False
-    dictargsvari['spmronly']['propcomp'] = False
-    dictargsvari['spmronly']['probspmr'] = 0.
-    #dictargsvari['spmronly']['probtran'] = 1.
-    #dictargsvari['spmronly']['maxmnumbelempop0reg0'] = 3
-    #dictargsvari['spmronly']['numbelempop0reg0'] = 3
-    #dictargsvari['spmronly']['verbtype'] = 2
-    #dictargsvari['spmronly']['probspmr'] = 1.
-    dictargsvari['spmronly']['inittype'] = 'pert'
+    dictargsvari['shapconspropspmr']['elemtype'] = ['clus']
+    dictargsvari['shapconspropspmr']['psfnevaltype'] = 'kern'
+    dictargsvari['shapconspropspmr']['probtran'] = 1.
+    dictargsvari['shapconspropspmr']['probspmr'] = 1.
     
-    dictargsvari['consinfo']['elemtype'] = ['clus']
-    dictargsvari['consinfo']['psfnevaltype'] = 'kern'
+    dictargsvari['shapconsinfo']['elemtype'] = ['clus']
+    dictargsvari['shapconsinfo']['psfnevaltype'] = 'kern'
+    dictargsvari['shapconsinfo']['psfninfoprio'] = True
     
-    dictargsvari['cons']['psfninfoprio'] = False
-    dictargsvari['cons']['psfnevaltype'] = 'kern'
-    dictargsvari['cons']['elemtype'] = ['clus']
+    dictargsvari['shapcons']['elemtype'] = ['clus']
+    dictargsvari['shapcons']['psfnevaltype'] = 'kern'
+    
+    dictargsvari['shapvari']['elemtype'] = ['clusvari']
+    dictargsvari['shapvari']['psfnevaltype'] = 'none'
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  nameconfexec=nameconfexec, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
 
-def pcat_tgas_inpt(nameconfexec=None):
+def pcat_tgas_inpt(strgcnfgextnexec=None):
     
     dictargs = {}
     dictargs['exprtype'] = 'sdyn'
@@ -331,10 +322,10 @@ def pcat_tgas_inpt(nameconfexec=None):
     dictargs['strgexpo'] = 1.
     dictargs['elemtype'] = ['clusvari']
     
-    listnameconf = ['nomi', 'consinfo', 'cons']
+    listnamecnfgextn = ['nomi', 'consinfo', 'cons']
     dictargsvari = {}
-    for nameconf in listnameconf:
-        dictargsvari[nameconf] = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
     
     dictargsvari['consinfo']['elemtype'] = ['clus']
     
@@ -344,7 +335,7 @@ def pcat_tgas_inpt(nameconfexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  nameconfexec=nameconfexec, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
 

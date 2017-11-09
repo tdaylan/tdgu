@@ -926,7 +926,7 @@ def writ_ferm_back():
     #plot_backspec(gdat, indxpixlmean)
 
 
-def pcat_ferm_bubb(nameconfexec=None):
+def pcat_ferm_bubb(strgcnfgextnexec=None):
     
     anglfact = 180. / pi
 
@@ -957,21 +957,21 @@ def pcat_ferm_bubb(nameconfexec=None):
     dictargs['optitype'] = 'none'
     #dictargs['inittype'] = 'refr'
  
-    listnameconf = ['nomi', 'truedark', 'bfun', 'heal', 'penalpridiff', 'checprio', 'fixdpsfn', 'parsnone', 'popl', 'puls']
+    listnamecnfgextn = ['nomi', 'truedark', 'bfun', 'heal', 'penalpridiff', 'checprio', 'fixdpsfn', 'parsnone', 'popl', 'puls']
     dictargsvari = {}
-    for nameconf in listnameconf:
-        dictargsvari[nameconf] = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
     
     dictargsvari['nomi']['forccart'] = False
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  nameconfexec=nameconfexec, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
 
-def pcat_ferm_igal_mock(nameconfexec=None):
+def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     
     dictargs = {}
     dictargs['truemaxmnumbelempop0reg0'] = 100
@@ -1019,10 +1019,10 @@ def pcat_ferm_igal_mock(nameconfexec=None):
     #dictargs['inittype'] = 'refr'
     #dictargs['fittmaxmnumbelempop0reg0'] = 5
  
-    listnameconf = ['nomi', 'truedark', 'bfun', 'heal', 'penalpridiff', 'checprio', 'fixdpsfn', 'parsnone', 'popl', 'puls']
+    listnamecnfgextn = ['nomi', 'truedark', 'bfun', 'heal', 'penalpridiff', 'checprio', 'fixdpsfn', 'parsnone', 'popl', 'puls']
     dictargsvari = {}
-    for nameconf in listnameconf:
-        dictargsvari[nameconf] = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
     
     dictargsvari['heal']['forccart'] = False
     dictargsvari['heal']['anlytype'] = 'rec8bfun'
@@ -1051,16 +1051,16 @@ def pcat_ferm_igal_mock(nameconfexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  nameconfexec=nameconfexec, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
 
-def pcat_ferm_mock_igal_brok(nameconfexec=None):
+def pcat_ferm_mock_igal_brok(strgcnfgextnexec=None):
      
-    listnameconf = ['breklowr', 'brekuppr']
+    listnamecnfgextn = ['breklowr', 'brekuppr']
     dictargsvari = {}
-    for nameconf in listnameconf:
-        dictargsvari[nameconf] = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
     
     dictargsvari['breklowr']['truefluxdistslop0000pop0'] = 2.
     dictargsvari['breklowr']['truefluxdistbrek0000pop0'] = 1e-10
@@ -1075,11 +1075,11 @@ def pcat_ferm_mock_igal_brok(nameconfexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  nameconfexec=nameconfexec, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
 
-def pcat_ferm_igal_inpt(nameconfexec=None):
+def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
    
     # overplot NPTF results
     refrplothistflux = zeros((2, 4))
@@ -1116,10 +1116,10 @@ def pcat_ferm_igal_inpt(nameconfexec=None):
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
     
-    listnameconf = ['nomi', 'rec7', 'mask', 'popl', 'bfunwfou', 'bfuntemp', 'dark']
+    listnamecnfgextn = ['nomi', 'rec7', 'mask', 'popl', 'bfunwfou', 'bfuntemp', 'dark']
     dictargsvari = {}
-    for nameconf in listnameconf:
-        dictargsvari[nameconf] = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
     
     dictargsvari['dark']['listnameback'] = ['isot', 'fdfm', 'dark']
     dictargsvari['dark']['backtype'] = [1., 'sbrtfdfmsmthrec8pntsnorm.fits', 'sbrtdarkrec8pntssmthnorm.fits']
@@ -1146,11 +1146,11 @@ def pcat_ferm_igal_inpt(nameconfexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  nameconfexec=nameconfexec, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
                                  )
     
 
-def pcat_ferm_inpt_ptch(nameconfexec=None):
+def pcat_ferm_inpt_ptch(strgcnfgextnexec=None):
 
     anglfact = 180. / pi
     pathdata = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'

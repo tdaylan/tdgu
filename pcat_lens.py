@@ -137,20 +137,7 @@ def pcat_lens_mock_sing():
                       )
     
 
-def pcat_lens_mock_spmr():
-   
-    pcat.main.init( \
-                   exprtype='hubb', \
-                   lgalimps=array([0.]), \
-                   bgalimps=array([0.]), \
-                   defsimps=array([1e-2 / anglfact]), \
-                   numbelempop0reg0=1, \
-                   probtran=1., \
-                   probbrde=0., \
-                  )
-    
-
-def pcat_lens_mock_next(nameconfexec=None):
+def pcat_lens_mock_next(strgcnfgextnexec=None):
    
     numbelem = int(25. * 10.**0.9)
     anglfact = 3600. * 180. / pi
@@ -177,10 +164,10 @@ def pcat_lens_mock_next(nameconfexec=None):
     #dictargsvari['priofactdoff']     = [0.,          0.,          1.,          1.,            1.,                                 1.]
     #dictargsvari['scalmeanpnts'] = ['logt',      'logt',      'logt',      'logt',        'logt',                            'logt']
    
-    listnameconf = ['nomi', 'parsnone', 'parsloww', 'parsmore', 'parshigh', 'zerosgnl']
+    listnamecnfgextn = ['nomi', 'parsnone', 'parsloww', 'parsmore', 'parshigh', 'zerosgnl']
     dictargsvari = {}
-    for nameconf in listnameconf:
-        dictargsvari[nameconf] = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
     
     dictargsvari['zerosgnl']['truenumbelempop0reg0'] = 0
     dictargsvari['zerosgnl']['truemaxmnumbelempop0reg0'] = 0
@@ -191,28 +178,27 @@ def pcat_lens_mock_next(nameconfexec=None):
     dictargsvari['parsmore']['priofactdoff'] = 1.5
     dictargsvari['parshigh']['priofactdoff'] = 2.
     
-    #dictargsvari['oneh']['fittminmnumbelempop0reg0'] = 1
-    #dictargsvari['oneh']['fittmaxmnumbelempop0reg0'] = 1
+    #dictargsvari['subhsing']['fittminmnumbelempop0reg0'] = 1
+    #dictargsvari['subhsing']['fittmaxmnumbelempop0reg0'] = 1
 
-    #dictargsvari['lowrtrue']['truenumbelempop0reg0'] = int(25. * 10.**0.9)
-    #dictargsvari['lowrtrue']['trueminmdefs'] = 3e-3 / anglfact
-    #dictargsvari['lowrtrue']['fittminmdefs'] = 3e-3 / anglfact
+    #dictargsvari['truelowr']['truenumbelempop0reg0'] = int(25. * 10.**0.9)
+    #dictargsvari['truelowr']['trueminmdefs'] = 3e-3 / anglfact
+    #dictargsvari['truelowr']['fittminmdefs'] = 3e-3 / anglfact
     #
 
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  nameconfexec=nameconfexec, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
 
-def pcat_lens_mock_syst(nameconfexec=None):
+def pcat_lens_mock_syst(strgcnfgextnexec=None):
    
     dictargs = {}
     dictargs['exprtype'] = 'hubb'
     dictargs['elemtype'] = ['lens']
     dictargs['seedtype'] = 4
-    #dictargs['seedelemtype'] = 4
     
     dictargs['initnumbelempop0reg0'] = 25
     
@@ -363,78 +349,49 @@ def pcat_lens_mock_syst(nameconfexec=None):
     dictargs['truedefspop0reg00024'] = 8.48926e-07
     dictargs['trueascapop0reg00024'] = 3.49285e-07
     dictargs['trueacutpop0reg00024'] = 5.35163e-06
-    
+   
+    # temp
     #dictargs['makeplotinit'] = True
     #dictargs['shrtfram'] = False
-    dictargs['numbswep'] = 50000
-    dictargs['numbburn'] = 20000
-    dictargs['factthin'] = 300
-    dictargs['probspmr'] = 0.
-    dictargs['priofactdoff'] = 0.
-    #dictargs['numbburn'] = 0
-    #dictargs['factthin'] = 100
-    #dictargs['numbsamp'] = 2000
-    #dictargs['propdist'] = False
-    #dictargs['proppsfp'] = False
-    #dictargs['propmeanelem'] = False
-    #dictargs['propbacp'] = False
-    #dictargs['proplenp'] = False
-    #dictargs['propcomp'] = False
-    #dictargs['probtran'] = 0.
-    #dictargs['makeplotinit'] = False
+    dictargs['numbswep'] = 100000
     #dictargs['verbtype'] = 2
-    #dictargs['numbproc'] = 1
     
     numbelem = int(25. * 10.**0.9)
     anglfact = 3600. * 180. / pi
 
-    listnameconf = ['nomi', 'zerodata', 'oneh', 'lowrtrue', 'pars', 'verylowrtrue', 'medihighs2nr', 'veryhighs2nr', 'init']
+    listnamecnfgextn = ['nomi', 'truelowr', 'truelowrparsnone', 'subhsing', 'truevlow', 's2nrhigh', 's2nrvhig', 'datanone']
     dictargsvari = {}
-    for nameconf in listnameconf:
-        dictargsvari[nameconf] = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
     
-    dictargsvari['zerodata']['killexpo'] = True
-    #dictargsvari['zerodata']['verbtype'] = 2
-    #dictargsvari['zerodata']['numbswep'] = 100000
-    #dictargsvari['zerodata']['numbswepplot'] = 10000
-    #dictargsvari['zerodata']['propcomp'] = False
-    #dictargsvari['zerodata']['propmeanelem'] = False
-    #dictargsvari['zerodata']['proppsfp'] = False
-    #dictargsvari['zerodata']['propbacp'] = False
-    #dictargsvari['zerodata']['proplenp'] = False
-    #dictargsvari['zerodata']['numbburn'] = 0
-    #dictargsvari['zerodata']['factthin'] = 1000
-    #dictargsvari['zerodata']['minmnumbelempop0reg0'] = 15
-    #dictargsvari['zerodata']['maxmnumbelempop0reg0'] = 15
-    #dictargsvari['zerodata']['numbelempop0reg0'] = 15
+    dictargsvari['truelowr']['fittminmdefs'] = 0.01 / anglfact
     
-    dictargsvari['oneh']['probtran'] = 0.
-    dictargsvari['oneh']['initnumbelempop0reg0'] = 1
-    dictargsvari['oneh']['fittminmnumbelempop0reg0'] = 0
-    dictargsvari['oneh']['fittmaxmnumbelempop0reg0'] = 1
+    dictargsvari['truelowrparsnone']['fittminmdefs'] = 0.01 / anglfact
+    dictargsvari['truelowrparsnone']['priofactdoff'] = 0.
 
-    dictargsvari['lowrtrue']['fittminmdefs'] = 0.01 / anglfact
+    dictargsvari['subhsing']['probtran'] = 0.
+    dictargsvari['subhsing']['initnumbelempop0reg0'] = 1
+    dictargsvari['subhsing']['fittminmnumbelempop0reg0'] = 0
+    dictargsvari['subhsing']['fittmaxmnumbelempop0reg0'] = 1
     
-    dictargsvari['verylowrtrue']['truenumbelempop0reg0'] = int(25. * 10.**0.9)
-    dictargsvari['verylowrtrue']['trueminmdefs'] = 3e-4 / anglfact
-    dictargsvari['verylowrtrue']['fittminmdefs'] = 0.01 / anglfact
+    dictargsvari['truevlow']['truenumbelempop0reg0'] = int(25. * 10.**0.9)
+    dictargsvari['truevlow']['trueminmdefs'] = 3e-4 / anglfact
+    dictargsvari['truevlow']['fittminmdefs'] = 0.01 / anglfact
     
-    dictargsvari['pars']['priofactdoff'] = 0.
-        
-    dictargsvari['medihighs2nr']['strgexpo'] = 1e4 / 1.63050e-19
+    dictargsvari['s2nrhigh']['strgexpo'] = 1e4 / 1.63050e-19
     
-    dictargsvari['veryhighs2nr']['strgexpo'] = 1e5 / 1.63050e-19
+    dictargsvari['s2nrvhig']['strgexpo'] = 1e5 / 1.63050e-19
 
-    dictargsvari['init']['inittype'] = 'refr'
-
+    dictargsvari['datanone']['killexpo'] = True
+    
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  nameconfexec=nameconfexec, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
                                  )
     
 
-def pcat_lens_mock_sour(nameconfexec=None):
+def pcat_lens_mock_sour(strgcnfgextnexec=None):
    
     anglfact = 3600. * 180. / pi
     
@@ -469,6 +426,7 @@ def pcat_lens_mock_sour(nameconfexec=None):
     #dictargs['refrlegdpopl'] = ['PS', 'Subhalo', 'Blob']
    
     # temp
+    #dictargs['makeplotinit'] = True
     #dictargs['shrtfram'] = False
     dictargs['numbswep'] = 40000
     dictargs['numbswepplot'] = 4000
@@ -476,72 +434,44 @@ def pcat_lens_mock_sour(nameconfexec=None):
     dictargs['probspmr'] = 0.
     #dictargs['spatdisttype'] = ['unif', 'unif', 'gangprop']
     #dictargs['makeplot'] = False
-    #dictargs['makeplotinit'] = True
-    #dictargs['shrtfram'] = False
-    dictargs['inittype'] = 'refr'
-    dictargs['optitype'] = 'none'
-    dictargs['verbtype'] = 1
     
-    #dictargs['propmeanelem'] = False
-    #dictargs['propdist'] = False
-    #dictargs['propbacp'] = False
-    #dictargs['proplenp'] = False
-    #dictargs['proppsfp'] = False
-    #dictargs['probtran'] = 0.
-    #dictargs['numbelempop0reg0'] = 0
-    #dictargs['maxmnumbelempop0reg0'] = 0
-    #dictargs['numbelempop1reg0'] = 0
-    #dictargs['maxmnumbelempop1reg0'] = 0
-    #dictargs['probtran'] = 1.
+    #dictargs['inittype'] = 'refr'
+    #dictargs['optitype'] = 'none'
+    #dictargs['verbtype'] = 2
     
     numbelem = int(25. * 10.**0.9)
     anglfact = 3600. * 180. / pi
 
-    listnameconf = ['nomi', 'zerodata', 'oneh', 'lowrtrue', 'pars', 'verylowrtrue', 'medihighs2nr', 'veryhighs2nr', 'init', 'signhigh']
+    listnamecnfgextn = ['nomi', 'datanone', 'subhsing', 'truelowr', 'pars', 'truevlow', 's2nrhigh', 's2nrvhig', 'amplhigh']
     dictargsvari = {}
-    for nameconf in listnameconf:
-        dictargsvari[nameconf] = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
     
-    dictargsvari['zerodata']['killexpo'] = True
-    #dictargsvari['zerodata']['verbtype'] = 2
-    #dictargsvari['zerodata']['numbswep'] = 100000
-    #dictargsvari['zerodata']['numbswepplot'] = 10000
-    #dictargsvari['zerodata']['propcomp'] = False
-    #dictargsvari['zerodata']['propmeanelem'] = False
-    #dictargsvari['zerodata']['proppsfp'] = False
-    #dictargsvari['zerodata']['propbacp'] = False
-    #dictargsvari['zerodata']['proplenp'] = False
-    #dictargsvari['zerodata']['numbburn'] = 0
-    #dictargsvari['zerodata']['factthin'] = 1000
-    #dictargsvari['zerodata']['minmnumbelempop0reg0'] = 15
-    #dictargsvari['zerodata']['maxmnumbelempop0reg0'] = 15
-    #dictargsvari['zerodata']['numbelempop0reg0'] = 15
+    dictargsvari['datanone']['killexpo'] = True
     
-    dictargsvari['oneh']['fittminmnumbelempop0reg0'] = 1
-    dictargsvari['oneh']['fittmaxmnumbelempop0reg0'] = 1
+    dictargsvari['subhsing']['fittminmnumbelempop0reg0'] = 1
+    dictargsvari['subhsing']['fittmaxmnumbelempop0reg0'] = 1
 
-    dictargsvari['verylowrtrue']['truenumbelempop0reg0'] = 30
+    dictargsvari['truevlow']['truenumbelempop0reg0'] = 30
     
-    dictargsvari['lowrtrue']['fittminmdefs'] = 0.01 / anglfact
+    dictargsvari['truelowr']['fittminmdefs'] = 0.01 / anglfact
     
-    dictargsvari['verylowrtrue']['truenumbelempop0reg0'] = int(25. * 10.**0.9)
-    dictargsvari['verylowrtrue']['trueminmdefs'] = 3e-4 / anglfact
-    dictargsvari['verylowrtrue']['fittminmdefs'] = 0.01 / anglfact
+    dictargsvari['truevlow']['truenumbelempop0reg0'] = int(25. * 10.**0.9)
+    dictargsvari['truevlow']['trueminmdefs'] = 3e-4 / anglfact
+    dictargsvari['truevlow']['fittminmdefs'] = 0.01 / anglfact
     
     dictargsvari['pars']['priofactdoff'] = 0.
     
-    dictargsvari['signhigh']['minmdefs'] = 1e-1 / anglfact
-        
-    dictargsvari['medihighs2nr']['strgexpo'] = 1e4 / 1.63050e-19
+    dictargsvari['s2nrhigh']['strgexpo'] = 1e4 / 1.63050e-19
     
-    dictargsvari['veryhighs2nr']['strgexpo'] = 1e5 / 1.63050e-19
+    dictargsvari['s2nrvhig']['strgexpo'] = 1e5 / 1.63050e-19
 
-    dictargsvari['init']['inittype'] = 'refr'
-
+    dictargsvari['amplhigh']['minmdefs'] = 1e-1 / anglfact
+        
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  nameconfexec=nameconfexec, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
                                  )
     
 
@@ -776,10 +706,10 @@ def pcat_lens_mock_many():
     dictargs['elemtype'] = ['lens']
     dictargs['numbregi'] = 3
     
-    listnameconf = ['nomi', 'regising', 'regimany']
+    listnamecnfgextn = ['nomi', 'regising', 'regimany']
     dictargsvari = {}
-    for nameconf in listnameconf:
-        dictargsvari[nameconf] = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
     
     dictargsvari['regising']['numbregi'] = 1 
     dictargsvari['regimany']['numbregi'] = 5
@@ -790,29 +720,18 @@ def pcat_lens_mock_many():
                                  )
 
 
-def pcat_lens_mock_spmr(nameconfexec=None):
+def pcat_lens_mock_spmr(strgcnfgextnexec=None):
   
     anglfact = 3600. * 180. / pi
     
-    datatype = 'home'
-    strgexpomaps = '4msc'
-    numbsidecart = 15
-    
-    maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
-
     dictargs = {}
     dictargs['exprtype'] = 'hubb'
     dictargs['inittype'] = 'refr'
-    dictargs['seedtype'] = 1
+    dictargs['numbelempop0reg0'] = 1
     dictargs['truelgalpop0reg00000'] = 1. / anglfact
     dictargs['truebgalpop0reg00000'] = 0.5 / anglfact
     dictargs['truedefspop0reg00000'] = 1e-2 / anglfact
-    dictargs['numbelempop0reg0'] = 1
-    dictargs['minmnumbelempop0reg0'] = 1
     dictargs['priofactdoff'] = 0.
-    #dictargs['strgexpo'] = 1e9
-    #dictargs['maxmgangdata'] = maxmgangdata
-    #dictargs['numbsidecart'] = numbsidecart
     dictargs['probtran'] = 1.
     dictargs['elemtype'] = ['lens']
     dictargs['probspmr'] = 1.
@@ -821,49 +740,33 @@ def pcat_lens_mock_spmr(nameconfexec=None):
     # temp
     #dictargs['makeplotinit'] = False
     #dictargs['shrtfram'] = True
-    #dictargs['evoltype'] = 'maxmllik'
-    dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 10000
     dictargs['numbburn'] = 0
     dictargs['numbsamp'] = 1000
     dictargs['numbswepplot'] = 2000
-    #dictargs['factthin'] = 100
-    dictargs['maxmnumbelempop0reg0'] = 5
     #dictargs['verbtype'] = 2
     
-    listnameconf = ['free', 'nomi', 'pars', 'genebrgt', 'genefain', 'psfn']
+    listnamecnfgextn = ['nomi', 'tranboth', 'parshigh', 'masshigh', 'massloww', 'trannone']
     dictargsvari = {}
-    for nameconf in listnameconf:
-        dictargsvari[nameconf] = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
     
-    #dictargsvari['free']['minmnumbelempop0reg0'] = 0.
-    #dictargsvari['free']['maxmnumbelempop0reg0'] = 0.
-    dictargsvari['free']['inittype'] = 'rand'
-    dictargsvari['free']['probtran'] = 0.4
-    dictargsvari['free']['probspmr'] = 0.3
+    dictargsvari['tranboth']['inittype'] = 'pert'
+    dictargsvari['tranboth']['probtran'] = 0.4
+    dictargsvari['tranboth']['probspmr'] = 0.3
     
-    dictargsvari['pars']['priofactdoff'] = 1.
+    dictargsvari['parshigh']['priofactdoff'] = 1.
     
-    dictargsvari['genebrgt']['truefluxpop0reg00000'] = 3e-7
+    dictargsvari['masshigh']['truedefspop0reg00000'] = 3e-2 / anglfact
     
-    dictargsvari['genefain']['truefluxpop0reg00000'] = 3e-8
+    dictargsvari['massloww']['truedefspop0reg00000'] = 3e-3 / anglfact
     
-    dictargsvari['psfn']['truefluxpop0reg00000'] = 3e-8
-    dictargsvari['psfn']['probtran'] = 0.
-    #dictargsvari['psfn']['proppsfp'] = False
-    #dictargsvari['psfn']['propbacp'] = False
-    dictargsvari['psfn']['indxenerincl'] = None
-    # temp
-    #dictargsvari['psfn']['propdist'] = False
-    #dictargsvari['psfn']['propbacp'] = False
-    dictargsvari['psfn']['propcomp'] = False
-    #dictargsvari['psfn']['proppsfn'] = False
-    dictargsvari['psfn']['inittype'] = 'refr'
-    dictargsvari['psfn']['elemspatevaltype'] = ['full']
+    dictargsvari['trannone']['probtran'] = 0.
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  nameconfexec=nameconfexec, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
 
@@ -871,17 +774,20 @@ def pcat_lens_mock():
    
     pcat.main.init( \
                    exprtype='hubb', \
-                   numbswep=10000, \
-                   numbsamp=10, \
-                   #numbburn=0, \
-                   #factthin=10, \
+                   numbswep=100, \
+                   #numbsamp=10, \
+                   numbburn=0, \
+                   factthin=100, \
                    inittype='refr', \
-                   numbelempop0reg0=3, \
-                   numbelempop1reg0=3, \
-                   numbelempop2reg0=3, \
-                   maxmnumbelempop0reg0=3, \
-                   maxmnumbelempop1reg0=3, \
-                   maxmnumbelempop2reg0=3, \
+                   elemtype=['lens'], \
+                   numbelempop0reg0=1, \
+                   maxmnumbelempop0reg0=1, \
+                   #numbelempop0reg0=0, \
+                   #numbelempop1reg0=1, \
+                   #numbelempop2reg0=0, \
+                   #maxmnumbelempop0reg0=0, \
+                   #maxmnumbelempop1reg0=3, \
+                   #maxmnumbelempop2reg0=0, \
                    makeplot=False, \
                    
                    #makeplotintr=True, \
@@ -897,7 +803,7 @@ def pcat_lens_mock():
                    #makeplotinit=False, \
                    #shrtfram=True, \
                    #explprop=True, \
-                   verbtype=2, \
+                   #verbtype=2, \
                    #mockonly=True, \
                   )
 
@@ -1090,7 +996,7 @@ def writ_data():
             
         
 
-def pcat_lens_inpt(nameconfexec=None):
+def pcat_lens_inpt(strgcnfgextnexec=None):
    
     anglfact = 3600. * 180. / pi
     sizepixl = 0.05 / anglfact
@@ -1154,10 +1060,10 @@ def pcat_lens_inpt(nameconfexec=None):
     dictargs['shrtfram'] = True
     dictargs['verbtype'] = 2
  
-    listnameconf = ['largrofi', 'largrofimask', 'nomi', 'mask']
+    listnamecnfgextn = ['largrofi', 'largrofimask', 'nomi', 'mask']
     dictargsvari = {}
-    for nameconf in listnameconf:
-        dictargsvari[nameconf] = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
     
     #dictargsvari['largrofi']['numbswep'] = 10000
     dictargsvari['largrofi']['numbswepplot'] = 1000
@@ -1195,7 +1101,7 @@ def pcat_lens_inpt(nameconfexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  nameconfexec=nameconfexec, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
 
