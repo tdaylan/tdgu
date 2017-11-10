@@ -269,14 +269,6 @@ def pcat_tgas_mock(strgcnfgextnexec=None):
     dictargs['strgexpo'] = 1.
     dictargs['elemtype'] = ['clusvari']
     dictargs['psfninfoprio'] = False
-   
-    # temp
-    dictargs['numbswep'] = 100000
-    dictargs['numbsamp'] = 1000
-    dictargs['maxmnumbelempop0reg0'] = 1
-    dictargs['numbelempop0reg0'] = 1
-    dictargs['optitype'] = 'none'
-    dictargs['verbtype'] = 2
     
     listnamecnfgextn = ['shapvari', 'shapconsinfo', 'shapcons', 'shapconsproptran', 'shapconspropspmr']
     dictargsvari = {}
@@ -287,8 +279,6 @@ def pcat_tgas_mock(strgcnfgextnexec=None):
     dictargsvari['shapconsproptran']['elemtype'] = ['clus']
     dictargsvari['shapconsproptran']['psfnevaltype'] = 'kern'
     dictargsvari['shapconsproptran']['probtran'] = 1.
-    # temp
-    dictargsvari['shapconsproptran']['probspmr'] = 0.
     
     dictargsvari['shapconspropspmr']['elemtype'] = ['clus']
     dictargsvari['shapconspropspmr']['psfnevaltype'] = 'kern'
@@ -318,7 +308,6 @@ def pcat_tgas_inpt(strgcnfgextnexec=None):
     dictargs['exprtype'] = 'sdyn'
     dictargs['backtype'] = ['tgasback.fits']
     dictargs['strgexprsbrt'] = 'tgas.fits'
-    dictargs['numbswep'] = 100000
     dictargs['strgexpo'] = 1.
     dictargs['elemtype'] = ['clusvari']
     

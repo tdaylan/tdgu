@@ -942,22 +942,9 @@ def pcat_ferm_bubb(strgcnfgextnexec=None):
     dictargs['psfnevaltype'] = 'init'
     dictargs['trueelemregitype'] = [True, True, True]
     
-    dictargs['numbswep'] = 10000
-    dictargs['numbburn'] = 0
-    dictargs['factthin'] = 100
-    dictargs['numbswepplot'] = 1000
-    
     dictargs['backtype'] = [1., 'sbrtfdfmrec8backsmthnorm.fits', 'sbrtdarkrec8backsmthnorm.fits']
     
-    # temp
-    #dictargs['makeplot'] = False
-    #dictargs['makeplotinit'] = False
-    #dictargs['shrtfram'] = True
-    #dictargs['verbtype'] = 2
-    dictargs['optitype'] = 'none'
-    #dictargs['inittype'] = 'refr'
- 
-    listnamecnfgextn = ['nomi', 'truedark', 'bfun', 'heal', 'penalpridiff', 'checprio', 'fixdpsfn', 'parsnone', 'popl', 'puls']
+    listnamecnfgextn = ['nomi', 'truedark', 'bfun', 'heal', 'penalpridiff', 'checprio', 'parsnone', 'popl', 'puls']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
@@ -1006,20 +993,7 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
     
-    # temp
-    dictargs['numbswep'] = 10000000
-    dictargs['numbswepplot'] = 50000
-    dictargs['numbsamp'] = 4000
-    #dictargs['numbswepplot'] = 4000
-    #dictargs['makeplot'] = False
-    #dictargs['makeplotinit'] = False
-    #dictargs['shrtfram'] = True
-    #dictargs['verbtype'] = 2
-    #dictargs['optitype'] = 'none'
-    #dictargs['inittype'] = 'refr'
-    #dictargs['fittmaxmnumbelempop0reg0'] = 5
- 
-    listnamecnfgextn = ['nomi', 'truedark', 'bfun', 'heal', 'penalpridiff', 'checprio', 'fixdpsfn', 'parsnone', 'popl', 'puls']
+    listnamecnfgextn = ['nomi', 'truedark', 'bfun', 'heal', 'penalpridiff', 'checprio', 'psfnfixd', 'parsnone', 'popl', 'puls']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
@@ -1031,8 +1005,8 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     
     dictargsvari['checprio']['checprio'] = True
     
-    dictargsvari['fixdpsfn']['proppsfp'] = False
-    dictargsvari['fixdpsfn']['inittype'] = 'refr'
+    dictargsvari['psfnfixd']['proppsfp'] = False
+    dictargsvari['psfnfixd']['inittype'] = 'refr'
     
     dictargsvari['parsnone']['scalmeanpnts'] = 'self'
     dictargsvari['parsnone']['priofactdoff'] = 0.
@@ -1094,24 +1068,6 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['spectype'] = ['colr']
     dictargs['savestat'] = True
     dictargs['inittype'] = 'reco'
-    
-    # temp
-    dictargs['numbswep'] = 1000
-    dictargs['numbburn'] = 0
-    #dictargs['propbacp'] = False
-    dictargs['probtran'] = 0.
-    dictargs['propmeanelem'] = False
-    dictargs['propdist'] = False
-    dictargs['propcomp'] = False
-    dictargs['proppsfp'] = False
-    dictargs['numbsamp'] = 1000
-    #dictargs['factthin'] = 250
-    dictargs['optitype'] = 'none'
-    dictargs['sqzeprop'] = True
-    #dictargs['verbtype'] = 2
-    dictargs['makeplot'] = False
-    dictargs['maxmnumbelempop0reg0'] = 0
-    #dictargs['numbswepplot'] = 10000
     
     dictargs['refrplothistfluxpop2'] = refrplothistflux
     

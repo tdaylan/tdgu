@@ -210,12 +210,6 @@ def pcat_chan_mock_spmr(strgcnfgextnexec=None):
 
     dictargs = {}
     dictargs['numbswep'] = 100000
-    dictargs['numbburn'] = 0
-    dictargs['numbsamp'] = 1000
-    dictargs['numbswepplot'] = 2000
-    #dictargs['numbburn'] = 0
-    dictargs['makeplotinit'] = False
-    #dictargs['factthin'] = 100
     dictargs['exprtype'] = 'chan'
     dictargs['inittype'] = 'refr'
     dictargs['truelgalpop0reg00000'] = 0.
@@ -231,10 +225,6 @@ def pcat_chan_mock_spmr(strgcnfgextnexec=None):
     dictargs['probtran'] = 1.
     dictargs['probspmr'] = 1.
     dictargs['indxenerincl'] = array([0])
-    
-    # temp
-    #dictargs['evoltype'] = 'maxmllik'
-    dictargs['maxmnumbelempop0reg0'] = 5
     
     listnamecnfgextn = ['free', 'nomi', 'pars', 'genebrgt', 'genefain', 'psfn']
     dictargsvari = {}
@@ -301,7 +291,6 @@ def pcat_chan_mock_spec(strgcnfgextnexec=None):
     # temp
     #dictargs['numbelempop0reg0'] = 1
     #dictargs['maxmnumbelempop0reg0'] = 2
-    dictargs['numbswep'] = 100000
     dictargs['numbsamp'] = 2000
     dictargs['sqzeprop'] = True
     
@@ -331,7 +320,6 @@ def pcat_chan_mock(strgcnfgextnexec=None):
    
     dictargs = {}
     dictargs['exprtype'] = 'chan'
-    dictargs['numbswep'] = 100000
     dictargs['numbelempop0reg0'] = 100
     # temp
     #dictargs['strgexpo'] = 'expochanhome4msc0300.fits'
@@ -359,7 +347,6 @@ def pcat_chan_mock_maxmllik(strgcnfgextnexec=None):
     strgexpomaps = '4msc'
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbswep=100, \
                               numbburn=0, \
                               evoltype='maxmllik', \
                               factthin=1, \
@@ -371,7 +358,6 @@ def pcat_chan_mock_maxmllik(strgcnfgextnexec=None):
                               makeplot=False, \
                               numbelempop0reg0=2, \
                               maxmnumbelempop0reg0=3, \
-                              numbswepplot=20000, \
                               strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               exprtype='chan', \
                               numbsidecart=numbsidecart, \
@@ -388,7 +374,6 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['inittype'] = 'reco'
     dictargs['makeplotinit'] = False
     dictargs['makeplotpost'] = False
-    dictargs['numbswep'] = 1000
     dictargs['initnumbelempop0reg0'] = 1
     dictargs['maxmnumbelempop0reg0'] = 1
     
