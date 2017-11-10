@@ -1,6 +1,6 @@
 from __init__ import *
 
-def make_maps():
+def writ_ferm_ngal():
 
     gdat = tdpy.util.gdatstrt()
     gdat.recotype = ['rec7']
@@ -8,10 +8,6 @@ def make_maps():
     gdat.timefrac = [0.1]
     tdpy.util.make_maps_main(gdat, os.environ["FERM_NGAL_DATA_PATH"])
     tdpy.util.prep_maps('rec7', 'pnts', 'ngal', os.environ["FERM_NGAL_DATA_PATH"], 256, 'tim0')
-
-
-def prep_maps():
-    
     tdpy.util.prep_maps('rec7', 'pnts', 'ngal', os.environ["FERM_NGAL_DATA_PATH"], 256, 'tim0')
 
 
@@ -38,75 +34,41 @@ def plot_spec():
                     axis.plot(gdat.meanener, fluxtemp, marker=listmrkr[k], color=listcolr[k], label=listlabl[k])
 
     
-def pcat_ferm_inpt_ngal_intr( \
-                        strgexprflux='fermflux_cmp0_ngal.fits', \
-                        strgexpo='fermexpo_cmp0_ngal.fits', \
-                       ): 
+def pcat_ferm_ngal_inpt(strgcnfgextnexec=None):
 
     dictargs = {}
-    dictargs['numbswep'] = 100000
-    dictargs['numbburn'] = 10000
-    dictargs['factthin'] = 9000
-    dictargs['makeplot'] = False
-    dictargs['numbswepplot'] = 4000
-    dictargs['indxevttincl'] = array([2])
-    dictargs['priofactdoff'] = 2.2
-    dictargs['proppsfp'] = False
     dictargs['lgalcntr'] = 0.
     dictargs['bgalcntr'] = pi / 2.
-    dictargs['back'] = ['fermisotflux.fits', 'fermfdfmflux_ngal.fits']
-    dictargs['strgexpo'] = strgexpo
-    dictargs['maxmnumbpnts'] = array([350])
-    dictargs['strgexprflux'] = strgexprflux
+    dictargs['backtype'] = ['fermisotflux.fits', 'fermfdfmflux_ngal.fits']
+    dictargs['strgexpo'] = 'expoferm.fits'
+    dictargs['strgexprsbrt'] = 'sbrtferm.fits'
     
-    return dictargs
-
-
-def pcat_ferm_inpt_ngal():
-    dictargs = pcat_ferm_inpt_ngal_intr()
-    pcat.main.init(**dictargs)
-
-
-def pcat_ferm_inpt_ngal_cmp1():
-    dictargs = pcat_ferm_inpt_ngal_intr(strgexprflux='fermflux_cmp1_ngal.fits', strgexpo='fermexpo_cmp1_ngal.fits')
-    pcat.main.init(**dictargs)
-
-
-def pcat_ferm_inpt_ngal_cmp2():
-    dictargs = pcat_ferm_inpt_ngal_intr(strgexprflux='fermflux_cmp2_ngal.fits', strgexpo='fermexpo_cmp2_ngal.fits')
-    pcat.main.init(**dictargs)
-
-
-def pcat_ferm_inpt_ngal_cmp3():
-    dictargs = pcat_ferm_inpt_ngal_intr(strgexprflux='fermflux_cmp3_ngal.fits', strgexpo='fermexpo_cmp3_ngal.fits')
-    pcat.main.init(**dictargs)
-
-
-def pcat_ferm_inpt_ngal_tim4():
-    dictargs = pcat_ferm_inpt_ngal_intr(strgexprflux='fermflux_rec7_pnts_ngal_0256_tim4.fits', strgexpo='fermexpo_rec7_pnts_ngal_0256_tim4.fits')
-    pcat.main.init(**dictargs)
+    listnamecnfgextn = ['nomi', 'tim1', 'tim2']
+    dictargsvari = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
+    
+    dictargsvari['tim1']['strgexprsbrt'] = 'sbrtferm.fits'
+    dictargsvari['tim2']['strgexprsbrt'] = 'sbrtferm.fits'
+    
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
+                                 )
 
 
 def pcat_ferm_ngal_mock():
      
     pcat.main.init( \
-                   numbswep=1000, \
-                   factthin=100, \
-                   numbburn=0, \
-                   numbswepplot=1000, \
                    lgalcntr=0., \
-                   forccart=True, \
-                   pixltype='cart', \
-                   numbsidecart=100, \
-                   #verbtype=2, \
-                   numbelempop0reg0=5, \
-                   maxmnumbelempop0reg0=5, \
-                   makeplot=False, \
-                   #indxenerincl=arange(5), \
-                   #indxevttincl=arange(4), \
                    bgalcntr=pi / 2., \
-                   back=['fermisotflux.fits', 'fermfdfmflux_ngal.fits'], \
-                   strgexpo='fermexpo_cmp0_ngal.fits', \
+                   #forccart=True, \
+                   #pixltype='cart', \
+                   #numbsidecart=100, \
+                   numbelempop0reg0=100, \
+                   back=['fermisotflux.fits', 'sbrtfermfdfmngal.fits'], \
+                   strgexpo='expofermtim0ngal.fits', \
                    numbsideheal=256, \
                   )
 

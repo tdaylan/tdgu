@@ -235,7 +235,6 @@ def pcat_chan_mock_spmr(strgcnfgextnexec=None):
     # temp
     #dictargs['evoltype'] = 'maxmllik'
     dictargs['maxmnumbelempop0reg0'] = 5
-    #dictargs['verbtype'] = 2
     
     listnamecnfgextn = ['free', 'nomi', 'pars', 'genebrgt', 'genefain', 'psfn']
     dictargsvari = {}
@@ -250,21 +249,14 @@ def pcat_chan_mock_spmr(strgcnfgextnexec=None):
     
     dictargsvari['pars']['priofactdoff'] = 1.
     
-    dictargsvari['genebrgt']['truefluxpop0reg00000'] = 3e-7
+    dictargsvari['brgt']['truefluxpop0reg00000'] = 3e-7
     
-    dictargsvari['genefain']['truefluxpop0reg00000'] = 3e-8
+    dictargsvari['fain']['truefluxpop0reg00000'] = 3e-8
     
     dictargsvari['psfn']['truefluxpop0reg00000'] = 3e-8
     dictargsvari['psfn']['probtran'] = 0.
-    #dictargsvari['psfn']['proppsfp'] = False
-    #dictargsvari['psfn']['propbacp'] = False
-    dictargsvari['psfn']['indxenerincl'] = None
-    # temp
-    #dictargsvari['psfn']['propdist'] = False
-    #dictargsvari['psfn']['propbacp'] = False
+    dictargsvari['psfn']['propbacp'] = False
     dictargsvari['psfn']['propcomp'] = False
-    #dictargsvari['psfn']['proppsfn'] = False
-    dictargsvari['psfn']['inittype'] = 'refr'
     dictargsvari['psfn']['elemspatevaltype'] = ['full']
     
     dictglob = pcat.main.initarry( \
@@ -307,7 +299,6 @@ def pcat_chan_mock_spec(strgcnfgextnexec=None):
     dictargs['numbsidecart'] = 1
     
     # temp
-    #dictargs['verbtype'] = 2
     #dictargs['numbelempop0reg0'] = 1
     #dictargs['maxmnumbelempop0reg0'] = 2
     dictargs['numbswep'] = 100000
@@ -341,25 +332,10 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictargs = {}
     dictargs['exprtype'] = 'chan'
     dictargs['numbswep'] = 100000
+    dictargs['numbelempop0reg0'] = 100
+    # temp
     #dictargs['strgexpo'] = 'expochanhome4msc0300.fits'
     dictargs['strgexpo'] = 1e9
-    
-    # temp
-    #dictargs['optitype'] = 'none'
-    #dictargs['verbtype'] = 2
-    #dictargs['propdist'] = False
-    #dictargs['propcomp'] = False
-    dictargs['numbswep'] = 10000
-    dictargs['numbsamp'] = 100
-    #dictargs['numbburn'] = 0
-    #dictargs['factthin'] = 1
-    #dictargs['probtran'] = 0.
-    #dictargs['elemspatevaltype'] = ['full']
-    #dictargs['propmeanelem'] = False
-    #dictargs['propbacp'] = False
-    #dictargs['proppsfp'] = False
-    #dictargs['numbelempop0reg0'] = 1
-    #dictargs['maxmnumbelempop0reg0'] = 1
     
     listnamecnfgextn = ['nomi', 'truevlow', 'trueloww', 'truehigh', 'truenone']
     dictargsvari = {}
@@ -387,13 +363,11 @@ def pcat_chan_mock_maxmllik(strgcnfgextnexec=None):
                               numbburn=0, \
                               evoltype='maxmllik', \
                               factthin=1, \
-                              #verbtype=2, \
                               #makeplot=False, \
                               #makeplotinit=False, \
                               #makeplotfram=False, \
                               inittype='refr', \
                               #killexpo=True, \
-                              verbtype=2, \
                               makeplot=False, \
                               numbelempop0reg0=2, \
                               maxmnumbelempop0reg0=3, \
@@ -414,15 +388,10 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['inittype'] = 'reco'
     dictargs['makeplotinit'] = False
     dictargs['makeplotpost'] = False
-    dictargs['proppsfp'] = False
-    dictargs['propbacp'] = False
-    dictargs['propdist'] = False
-    #dictargs['propmeanelem'] = False
     dictargs['numbswep'] = 1000
     dictargs['initnumbelempop0reg0'] = 1
     dictargs['maxmnumbelempop0reg0'] = 1
     
-    dictargs['verbtype'] = 2
     #dictargs['numbsamp'] = 1
     
     listnamecnfgextn = ['extr2msc0300', 'extr4msc0300', 'home2msc0300', 'home4msc0300', 'home7msc0300']

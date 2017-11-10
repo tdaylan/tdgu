@@ -1,7 +1,6 @@
 pcat_ferm_bubb successfull.
 pcat_ferm_igal_mock successfull.
 pcat_ferm_mock_igal_brok successfull.
-pcat_ferm_mock_igal_popl successfull.
 pcat_ferm_igal_inpt successfull.
 pcat_ferm_inpt_ptch successfull.
 pcat_ferm_inpt_ptch successfull.
@@ -21,9 +20,9 @@ pcat_ferm_quas_mock successfull.
 pcat_tgas_mock successfull.
 pcat_tgas_inpt successfull.
 pcat_lens_mock_grid successfull.
-pcat_lens_intrevalmodlcnts successfull.
+pcat_lens_intrevalcntpresi successfull.
+pcat_lens_intrevalcntpmodl successfull.
 pcat_lens_mock_sing successfull.
-pcat_lens_mock_spmr successfull.
 pcat_lens_mock_next successfull.
 pcat_lens_mock_syst successfull.
 pcat_lens_mock_sour successfull.
@@ -42,7 +41,7 @@ pcat_lens_intrevalresicntp successfull.
 pcat_lens_mockonly successfull.
 pcat_chan_mock_spmr successfull.
 pcat_chan_mock_popl successfull.
-pcat_chan_mock_spec_syst successfull.
-pcat_chan_mock_syst successfull.
+pcat_chan_mock_spec successfull.
+pcat_chan_mock successfull.
 pcat_chan_mock_maxmllik successfull.
-pcat_chan_inpt_grid successfull.
+pcat_chan_inpt successfull.
