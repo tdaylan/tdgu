@@ -308,12 +308,21 @@ def pcat_chan_mock(strgcnfgextnexec=None):
    
     dictargs = {}
     dictargs['exprtype'] = 'chan'
-    dictargs['numbelempop0reg0'] = 100
+    dictargs['truemaxmnumbelempop0reg0'] = 200
+    dictargs['truenumbelempop0reg0'] = 100
+    dictargs['fittmaxmnumbelempop0reg0'] = 2
+    dictargs['fittnumbelempop0reg0'] = 1
     # temp
     #dictargs['strgexpo'] = 'expochanhome4msc0300.fits'
+    dictargs['propbacp'] = False
+    dictargs['proppsfp'] = False
+    dictargs['propdist'] = False
+    dictargs['propcomp'] = False
+    dictargs['probspmr'] = 0.
     dictargs['strgexpo'] = 1e9
     dictargs['numbswep'] = 10000
-    dictargs['numbsamp'] = 100
+    dictargs['numbsamp'] = 1
+    dictargs['verbtype'] = 2
     dictargs['priofactdoff'] = 0.
     
     listnamecnfgextn = ['nomi', 'truevlow', 'trueloww', 'truehigh', 'truenone']
