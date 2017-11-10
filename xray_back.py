@@ -215,7 +215,6 @@ def pcat_chan_mock_spmr(strgcnfgextnexec=None):
     dictargs['numbswepplot'] = 2000
     #dictargs['numbburn'] = 0
     dictargs['makeplotinit'] = False
-    dictargs['shrtfram'] = True
     #dictargs['factthin'] = 100
     dictargs['exprtype'] = 'chan'
     dictargs['inittype'] = 'refr'
@@ -323,11 +322,11 @@ def pcat_chan_mock_spec(strgcnfgextnexec=None):
     
     # thrs < modl < true -- trad
     # modl < thrs < true -- pcat
-    listnamecnfgextn = ['nomi', 'lowrmodl']
+    listnamecnfgextn = ['nomi', 'truevlow']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
-    dictargsvari['lowrmodl']['fittminmflux'] = 3e-7
+    dictargsvari['truevlow']['fittminmflux'] = 3e-7
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -342,18 +341,34 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictargs = {}
     dictargs['exprtype'] = 'chan'
     dictargs['numbswep'] = 100000
-    dictargs['shrtfram'] = True
-    dictargs['strgexpo'] = 'expochanhome4msc0300.fits'
-    #dictargs['numbelempop0reg0'] = 100
+    #dictargs['strgexpo'] = 'expochanhome4msc0300.fits'
+    dictargs['strgexpo'] = 1e9
     
-    listnamecnfgextn = ['nomi', 'lowrmodl', 'unrsbadd', 'unrsfine', 'zerosgnl']
+    # temp
+    #dictargs['optitype'] = 'none'
+    #dictargs['verbtype'] = 2
+    #dictargs['propdist'] = False
+    #dictargs['propcomp'] = False
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 100
+    #dictargs['numbburn'] = 0
+    #dictargs['factthin'] = 1
+    #dictargs['probtran'] = 0.
+    #dictargs['elemspatevaltype'] = ['full']
+    #dictargs['propmeanelem'] = False
+    #dictargs['propbacp'] = False
+    #dictargs['proppsfp'] = False
+    #dictargs['numbelempop0reg0'] = 1
+    #dictargs['maxmnumbelempop0reg0'] = 1
+    
+    listnamecnfgextn = ['nomi', 'truevlow', 'trueloww', 'truehigh', 'truenone']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
-    dictargsvari['lowrmodl']['fittminmflux'] = 1e-9
-    dictargsvari['unrsbadd']['fittminmflux'] = 3e-8
-    dictargsvari['unrsfine']['fittminmflux'] = 1e-8
-    dictargsvari['zerosgnl']['truenumbelempop0reg0'] = 0
+    dictargsvari['truevlow']['trueminmflux'] = 3e-10
+    dictargsvari['trueloww']['trueminmflux'] = 1e-9
+    dictargsvari['truehigh']['trueminmflux'] = 1e-8
+    dictargsvari['truenone']['truenumbelempop0reg0'] = 0
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -375,7 +390,6 @@ def pcat_chan_mock_maxmllik(strgcnfgextnexec=None):
                               #verbtype=2, \
                               #makeplot=False, \
                               #makeplotinit=False, \
-                              #shrtfram=True, \
                               #makeplotfram=False, \
                               inittype='refr', \
                               #killexpo=True, \
@@ -390,7 +404,7 @@ def pcat_chan_mock_maxmllik(strgcnfgextnexec=None):
                              )
 
 
-def pcat_chan_inpt_grid(strgcnfgextnexec=None):
+def pcat_chan_inpt(strgcnfgextnexec=None):
    
     dictargs = {}
     dictargs['exprtype'] = 'chan'
@@ -399,7 +413,6 @@ def pcat_chan_inpt_grid(strgcnfgextnexec=None):
     # temp
     #dictargs['inittype'] = 'reco'
     dictargs['makeplotinit'] = False
-    dictargs['shrtfram'] = True
     dictargs['makeplotpost'] = False
     dictargs['proppsfp'] = False
     dictargs['propbacp'] = False
