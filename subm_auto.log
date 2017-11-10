@@ -9,12 +9,7 @@ pcat_ferm_mock_igal_brok successfull.
 pcat_ferm_mock_igal_syst successfull.
 pcat_ferm_inpt_igal successfull.
 pcat_ferm_mock_igal successfull.
-pcat_ferm_inpt_ngal_intr successfull.
-pcat_ferm_inpt_ngal successfull.
-pcat_ferm_inpt_ngal_cmp1 successfull.
-pcat_ferm_inpt_ngal_cmp2 successfull.
-pcat_ferm_inpt_ngal_cmp3 successfull.
-pcat_ferm_inpt_ngal_tim4 successfull.
+pcat_ferm_ngal_inpt successfull.
 pcat_ferm_ngal_mock successfull.
 pcat_ferm_quas_mock successfull.
 pcat_tgas_mock successfull.

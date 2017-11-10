@@ -138,23 +138,11 @@ def writ_chan():
                     strgvarbmine = ['expo', 'sbrt']
                     for i in indxener:
                         for a in range(2):
-                            #path = '/n/fink1/rfeder/xray_pcat/obsids/full/merged_%dMs/rest_fov/%d/%s-%s_%s' % (expomaps[k], i, strgener[i], strgener[i+1], strgvarb[a])
-                            path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[i], strgener[i+1])
-                            
-                            print 'a'
-                            print a
-                            print 'Reading %s - %s...' % (strgener[i], strgener[i+1])
-                            print 'minmindx'
-                            print minmindx
-                            print 'maxmindx'
-                            print maxmindx
-                            print 'pf.getdata(path, 0)'
-                            summgene(pf.getdata(path, 0))
-                            print
-
                             if a == 0:
+                                path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[i], strgener[i+1])
                                 expo[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
                             if a == 1:
+                                path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_exposure.img' % (expomaps[k], strgener[i], strgener[i+1])
                                 cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
                 numbsideyaxi = pf.getdata(path, 0).shape[0]
                 numbsidexaxi = pf.getdata(path, 0).shape[1]
@@ -289,8 +277,8 @@ def pcat_chan_mock_spec(strgcnfgextnexec=None):
     dictargs['numbsidecart'] = 1
     
     # temp
-    #dictargs['numbelempop0reg0'] = 1
-    #dictargs['maxmnumbelempop0reg0'] = 2
+    dictargs['numbelempop0reg0'] = 1
+    dictargs['maxmnumbelempop0reg0'] = 2
     dictargs['numbsamp'] = 2000
     dictargs['sqzeprop'] = True
     
@@ -324,6 +312,9 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     # temp
     #dictargs['strgexpo'] = 'expochanhome4msc0300.fits'
     dictargs['strgexpo'] = 1e9
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 100
+    dictargs['priofactdoff'] = 0.
     
     listnamecnfgextn = ['nomi', 'truevlow', 'trueloww', 'truehigh', 'truenone']
     dictargsvari = {}
@@ -366,27 +357,50 @@ def pcat_chan_mock_maxmllik(strgcnfgextnexec=None):
 
 def pcat_chan_inpt(strgcnfgextnexec=None):
    
+    anglfact = 3600. * 180. / pi
+    
     dictargs = {}
     dictargs['exprtype'] = 'chan'
-    dictargs['namerecostat'] = 'extr7msc0300'
+    dictargs['namerecostat'] = 'extr7msc0600'
     
     # temp
+    dictargs['diagmode'] = False
     #dictargs['inittype'] = 'reco'
-    dictargs['makeplotinit'] = False
-    dictargs['makeplotpost'] = False
-    dictargs['initnumbelempop0reg0'] = 1
-    dictargs['maxmnumbelempop0reg0'] = 1
+    #dictargs['anlytypedata'] = maxmgangdata 
+    #dictargs['numbsidecart'] = numbsidecart 
+    #dictargs['initnumbelempop0reg0'] = 1
+    #dictargs['maxmnumbelempop0reg0'] = 1
+    #dictargs['shrtfram'] = False
+    dictargs['numbswep'] = 1
+    dictargs['numbsamp'] = 1
+    #dictargs['verbtype'] = 2
+    dictargs['optitype'] = 'none'
+    dictargs['elemspatevaltype'] = ['full']
+    # temp
+    dictargs['priofactdoff'] = 0.
     
     #dictargs['numbsamp'] = 1
     
-    listnamecnfgextn = ['extr2msc0300', 'extr4msc0300', 'home2msc0300', 'home4msc0300', 'home7msc0300']
+    #listnamecnfgextn = ['home2msc0600', 'home4msc0600', 'home7msc0600']
+    #listnamecnfgextn = ['extr2msc0300', 'extr4msc0300', 'home2msc0300', 'home4msc0300', 'home7msc0300']
+    listnamecnfgextn = ['home2msc0300', 'home4msc0300', 'home7msc0300', 'home2msc0600', 'home4msc0600', 'home7msc0600']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
    
     for namecnfgextn in listnamecnfgextn:
         numbsidecart, strgexpo, strgexprsbrt, namestat, anlytype = retr_argschan(namecnfgextn[:4], namecnfgextn[4:8], int(namecnfgextn[8:]))
+        
+        # temp
+        if '2msc' in anlytype:
+            strgexpo = 500. * 2e6
+        if '4msc' in anlytype:
+            strgexpo = 500. * 4e6
+        if '7msc' in anlytype:
+            strgexpo = 500. * 7e6
+        maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
         dictargsvari[anlytype]['anlytype'] = anlytype
+        dictargsvari[anlytype]['maxmgangdata'] = maxmgangdata 
         dictargsvari[anlytype]['numbsidecart'] = numbsidecart
         dictargsvari[anlytype]['strgexpo'] = strgexpo
         dictargsvari[anlytype]['strgexprsbrt'] = strgexprsbrt
