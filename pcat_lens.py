@@ -359,7 +359,7 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
     numbelem = int(25. * 10.**0.9)
     anglfact = 3600. * 180. / pi
 
-    listnamecnfgextn = ['nomi', 'truelowr', 'truelowrparsnone', 'subhsing', 'truevlow', 's2nrhigh', 's2nrvhig', 'datanone']
+    listnamecnfgextn = ['nomi', 'truelowr', 'truelowrparsnone', 'truenoneparsnone' 'subhsing', 'truevlow', 's2nrhigh', 's2nrvhig', 'datanone']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
@@ -369,6 +369,11 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
     dictargsvari['truelowrparsnone']['fittminmdefs'] = 0.01 / anglfact
     dictargsvari['truelowrparsnone']['priofactdoff'] = 0.
 
+    dictargsvari['truenone']['truenumbelempop0reg0'] = 0
+    
+    dictargsvari['truenoneparsnone']['truenumbelempop0reg0'] = 0
+    dictargsvari['truenoneparsnone']['priofactdoff'] = 0.
+    
     dictargsvari['subhsing']['probtran'] = 0.
     dictargsvari['subhsing']['initnumbelempop0reg0'] = 1
     dictargsvari['subhsing']['fittminmnumbelempop0reg0'] = 0

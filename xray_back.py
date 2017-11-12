@@ -139,10 +139,10 @@ def writ_chan():
                     for i in indxener:
                         for a in range(2):
                             if a == 0:
-                                path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[i], strgener[i+1])
+                                path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux_thresh.img' % (expomaps[k], strgener[i], strgener[i+1])
                                 expo[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
                             if a == 1:
-                                path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_exposure.img' % (expomaps[k], strgener[i], strgener[i+1])
+                                path = '/n/fink1/rfeder/xray_pcat/cdfs/merged_2Ms/rest_fov/%s-%s_1.65723_thresh.expmap' % (expomaps[k], strgener[i], strgener[i+1])
                                 cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
                 numbsideyaxi = pf.getdata(path, 0).shape[0]
                 numbsidexaxi = pf.getdata(path, 0).shape[1]
@@ -275,8 +275,11 @@ def pcat_chan_mock_spec(strgcnfgextnexec=None):
     # assume a pixel with side 100 arcsec
     dictargs['maxmgangdata'] = 100. / anglfact
     dictargs['numbsidecart'] = 1
+    dictargs['anlytype'] = 'spec'
     
     # temp
+    dictargs['verbtype'] = 2
+    dictargs['optitype'] = 'none'
     dictargs['numbelempop0reg0'] = 1
     dictargs['maxmnumbelempop0reg0'] = 2
     dictargs['numbsamp'] = 2000
@@ -310,7 +313,7 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictargs['exprtype'] = 'chan'
     dictargs['truemaxmnumbelempop0reg0'] = 200
     dictargs['truenumbelempop0reg0'] = 100
-    dictargs['fittmaxmnumbelempop0reg0'] = 2
+    dictargs['fittmaxmnumbelempop0reg0'] = 5
     dictargs['fittnumbelempop0reg0'] = 1
     # temp
     #dictargs['strgexpo'] = 'expochanhome4msc0300.fits'
@@ -379,12 +382,12 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['numbsidecart'] = numbsidecart 
     #dictargs['initnumbelempop0reg0'] = 1
     #dictargs['maxmnumbelempop0reg0'] = 1
-    #dictargs['shrtfram'] = False
-    dictargs['numbswep'] = 1
+    dictargs['shrtfram'] = False
+    dictargs['numbswep'] = 1000
     dictargs['numbsamp'] = 1
     #dictargs['verbtype'] = 2
     dictargs['optitype'] = 'none'
-    dictargs['elemspatevaltype'] = ['full']
+    #dictargs['elemspatevaltype'] = ['full']
     # temp
     dictargs['priofactdoff'] = 0.
     
