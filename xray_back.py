@@ -139,10 +139,10 @@ def writ_chan():
                     for i in indxener:
                         for a in range(2):
                             if a == 0:
-                                path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux_thresh.img' % (expomaps[k], strgener[i], strgener[i+1])
+                                path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[i], strgener[i+1])
                                 expo[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
                             if a == 1:
-                                path = '/n/fink1/rfeder/xray_pcat/cdfs/merged_2Ms/rest_fov/%s-%s_1.65723_thresh.expmap' % (expomaps[k], strgener[i], strgener[i+1])
+                                path = '/n/fink1/rfeder/xray_pcat/cdfs/merged_%sMs/rest_fov/%d/%s-%s_thresh.expmap' % (expomaps[k], i, strgener[i], strgener[i+1])
                                 cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
                 numbsideyaxi = pf.getdata(path, 0).shape[0]
                 numbsidexaxi = pf.getdata(path, 0).shape[1]
@@ -313,19 +313,19 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictargs['exprtype'] = 'chan'
     dictargs['truemaxmnumbelempop0reg0'] = 200
     dictargs['truenumbelempop0reg0'] = 100
-    dictargs['fittmaxmnumbelempop0reg0'] = 5
-    dictargs['fittnumbelempop0reg0'] = 1
+    #dictargs['fittmaxmnumbelempop0reg0'] = 1
+    #dictargs['fittnumbelempop0reg0'] = 1
     # temp
     #dictargs['strgexpo'] = 'expochanhome4msc0300.fits'
-    dictargs['propbacp'] = False
-    dictargs['proppsfp'] = False
-    dictargs['propdist'] = False
-    dictargs['propcomp'] = False
-    dictargs['probspmr'] = 0.
-    dictargs['strgexpo'] = 1e9
+    #dictargs['propbacp'] = False
+    #dictargs['proppsfp'] = False
+    #dictargs['propdist'] = False
+    #dictargs['propcomp'] = False
+    #dictargs['probspmr'] = 0.
+    #dictargs['strgexpo'] = 1e9
     dictargs['numbswep'] = 10000
-    dictargs['numbsamp'] = 1
-    dictargs['verbtype'] = 2
+    dictargs['numbsamp'] = 100
+    #dictargs['verbtype'] = 2
     dictargs['priofactdoff'] = 0.
     
     listnamecnfgextn = ['nomi', 'truevlow', 'trueloww', 'truehigh', 'truenone']
@@ -376,17 +376,15 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     dictargs['namerecostat'] = 'extr7msc0600'
     
     # temp
-    dictargs['diagmode'] = False
     #dictargs['inittype'] = 'reco'
     #dictargs['anlytypedata'] = maxmgangdata 
     #dictargs['numbsidecart'] = numbsidecart 
     #dictargs['initnumbelempop0reg0'] = 1
     #dictargs['maxmnumbelempop0reg0'] = 1
-    dictargs['shrtfram'] = False
-    dictargs['numbswep'] = 1000
-    dictargs['numbsamp'] = 1
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 100
     #dictargs['verbtype'] = 2
-    dictargs['optitype'] = 'none'
+    #dictargs['optitype'] = 'none'
     #dictargs['elemspatevaltype'] = ['full']
     # temp
     dictargs['priofactdoff'] = 0.
