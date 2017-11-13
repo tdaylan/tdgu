@@ -139,10 +139,10 @@ def writ_chan():
                     for i in indxener:
                         for a in range(2):
                             if a == 0:
-                                path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[i], strgener[i+1])
+                                path = '/n/fink1/rfeder/xray_pcat/cdfs/merged_%sMs/rest_fov/%d/%s-%s_thresh.expmap' % (expomaps[k], i, strgener[i], strgener[i+1])
                                 expo[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
                             if a == 1:
-                                path = '/n/fink1/rfeder/xray_pcat/cdfs/merged_%sMs/rest_fov/%d/%s-%s_thresh.expmap' % (expomaps[k], i, strgener[i], strgener[i+1])
+                                path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[i], strgener[i+1])
                                 cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
                 numbsideyaxi = pf.getdata(path, 0).shape[0]
                 numbsidexaxi = pf.getdata(path, 0).shape[1]
@@ -383,7 +383,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['maxmnumbelempop0reg0'] = 1
     dictargs['numbswep'] = 10000
     dictargs['numbsamp'] = 100
-    #dictargs['verbtype'] = 2
+    dictargs['verbtype'] = 2
     #dictargs['optitype'] = 'none'
     #dictargs['elemspatevaltype'] = ['full']
     # temp
