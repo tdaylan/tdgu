@@ -316,7 +316,7 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     #dictargs['fittmaxmnumbelempop0reg0'] = 1
     #dictargs['fittnumbelempop0reg0'] = 1
     # temp
-    #dictargs['strgexpo'] = 'expochanhome4msc0300.fits'
+    dictargs['strgexpo'] = 'expochanhome4msc0300.fits'
     #dictargs['propbacp'] = False
     #dictargs['proppsfp'] = False
     #dictargs['propdist'] = False
