@@ -263,7 +263,9 @@ def pcat_tgas_mock(strgcnfgextnexec=None):
     dictargs = {}
     dictargs['exprtype'] = 'sdyn'
     dictargs['backtype'] = ['tgasback.fits']
+    
     dictargs['numbsidecart'] = 200
+    
     dictargs['minmdatacnts'] = 0.
     dictargs['psfnevaltype'] = 'none'
     dictargs['strgexpo'] = 1.
@@ -309,19 +311,25 @@ def pcat_tgas_inpt(strgcnfgextnexec=None):
     dictargs = {}
     dictargs['exprtype'] = 'sdyn'
     dictargs['backtype'] = ['tgasback.fits']
+    
     dictargs['strgexprsbrt'] = 'tgas.fits'
+    
+    dictargs['minmdatacnts'] = 0.
+    dictargs['psfnevaltype'] = 'none'
     dictargs['strgexpo'] = 1.
     dictargs['elemtype'] = ['clusvari']
+    dictargs['psfninfoprio'] = False
     
-    listnamecnfgextn = ['nomi', 'consinfo', 'cons']
+    listnamecnfgextn = ['shapcons', 'shapvari']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
-    dictargsvari['consinfo']['elemtype'] = ['clus']
+    dictargsvari['shapcons']['elemtype'] = ['clus']
+    dictargsvari['shapcons']['psfnevaltype'] = 'kern'
     
-    dictargsvari['cons']['psfninfoprio'] = False
-    dictargsvari['cons']['elemtype'] = ['clus']
+    dictargsvari['shapvari']['elemtype'] = ['clusvari']
+    dictargsvari['shapvari']['psfnevaltype'] = 'none'
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
