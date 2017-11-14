@@ -263,8 +263,6 @@ def pcat_chan_mock_popl(strgcnfgextnexec=None):
 
 def pcat_chan_mock_spec(strgcnfgextnexec=None):
     
-    anglfact = 3600. * 180. / pi
-    
     dictargs = {}
     dictargs['exprtype'] = 'chan'
     dictargs['spatdisttype'] = ['line']
@@ -272,25 +270,15 @@ def pcat_chan_mock_spec(strgcnfgextnexec=None):
     dictargs['strgexpo'] = 1e3
     dictargs['elemtype'] = ['lghtline']
     dictargs['inittype'] = 'refr'
-    #dictargs['anlytype'] = 'spec'
     # assume a pixel with side 100 arcsec
+    anglfact = 3600. * 180. / pi
     dictargs['maxmgangdata'] = 100. / anglfact
     dictargs['numbsidecart'] = 1
     dictargs['anlytype'] = 'spec'
     
     # temp
-    #dictargs['verbtype'] = 2
-    #dictargs['optitype'] = 'none'
-    dictargs['maxmnumbelempop0reg0'] = 6
-    dictargs['numbelempop0reg0'] = 3
-    #dictargs['maxmnumbelempop0reg0'] = 200
+    dictargs['numbelempop0reg0'] = 20
     dictargs['probspmr'] = 0.
-    dictargs['numbswep'] = 10000
-    dictargs['numbburn'] = 0
-    #dictargs['numbswepplot'] = 300
-    #dictargs['numbburn'] = 0
-    dictargs['numbsamp'] = 100
-    #dictargs['sqzeprop'] = True
     
     # true < thrs < modl -- trad 
     # true < modl < thrs -- pcat
@@ -300,11 +288,11 @@ def pcat_chan_mock_spec(strgcnfgextnexec=None):
     
     # thrs < modl < true -- trad
     # modl < thrs < true -- pcat
-    listnamecnfgextn = ['nomi', 'truevlow']
+    listnamecnfgextn = ['nomi', 's2nrhigh']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
-    dictargsvari['truevlow']['fittminmflux'] = 3e-7
+    dictargsvari['s2nrhigh']['strgexpo'] = 1e5
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -312,6 +300,48 @@ def pcat_chan_mock_spec(strgcnfgextnexec=None):
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
     
+
+def pcat_chan_spec_spmr(strgcnfgextnexec=None):
+  
+    dictargs = {}
+    dictargs['exprtype'] = 'chan'
+    dictargs['spatdisttype'] = ['line']
+    dictargs['spectype'] = ['gaus']
+    dictargs['strgexpo'] = 1e3
+    dictargs['elemtype'] = ['lghtline']
+    dictargs['inittype'] = 'refr'
+    # assume a pixel with side 100 arcsec
+    anglfact = 3600. * 180. / pi
+    dictargs['maxmgangdata'] = 100. / anglfact
+    dictargs['numbsidecart'] = 1
+    dictargs['anlytype'] = 'spec'
+    
+    dictargs['inittype'] = 'refr'
+    dictargs['trueelinpop0reg00000'] = 1.
+    dictargs['truefluxpop0reg00000'] = 1e4
+    dictargs['numbelempop0reg0'] = 1
+    dictargs['priofactdoff'] = 0.
+    dictargs['probtran'] = 1.
+    dictargs['probspmr'] = 1.
+    dictargs['numbswep'] = 100000
+    
+    listnamecnfgextn = ['nomi', 'fluxhigh', 'fluxloww', 'parsnomi']
+    dictargsvari = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
+    
+    dictargsvari['fluxhigh']['truefluxpop0reg00000'] = 3e4
+    
+    dictargsvari['fluxloww']['truefluxpop0reg00000'] = 3e3
+    
+    dictargsvari['parsnomi']['priofactdoff'] = 1.
+    
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
+                                 )
+
 
 # science suites
 def pcat_chan_mock(strgcnfgextnexec=None):

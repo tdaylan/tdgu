@@ -336,6 +336,8 @@ def pcat_tgas_mock_spmr(strgcnfgextnexec=None):
     
     dictargsvari['nobjloww']['truenobjpop0reg00000'] = 1e1
     
+    dictargsvari['psfn']['elemtype'] = ['clus']
+    dictargsvari['psfn']['psfnevaltype'] = 'kern'
     dictargsvari['psfn']['probtran'] = 0.
     dictargsvari['psfn']['propmeanelem'] = False
     dictargsvari['psfn']['propdist'] = False
