@@ -668,7 +668,8 @@ def writ_ferm_back():
     
     maxmgangdata = 20.
     
-    listnameback = ['fdfm', 'dustsfdd', 'cmon', 'hydr', 'hasl', 'haslwise', 'wise', 'dark', 'pnlkdust', 'wisestar']
+    #listnameback = ['fdfm', 'dustsfdd', 'cmon', 'hydr', 'hasl', 'haslwise', 'wise', 'dark', 'pnlkdust', 'wisestar']
+    listnameback = ['fdfm', 'dustsfdd', 'cmon', 'hydr', 'wise', 'dark', 'dustplnk', 'wisestar']
     #listnameback = ['fdfm', 'dark']
     gdat.numbback = len(listnameback)
     gdat.indxback = arange(gdat.numbback)
@@ -738,6 +739,11 @@ def writ_ferm_back():
                 print 'Reading %s...' % path
                 gdat.sbrtback[c, :, :, :] = pf.getdata(path)
             else:
+                
+                print 'listnameback[c]'
+                print listnameback[c]
+                print
+                
                 if strg.startswith('fdfm'):
                     sbrtbacktemp = tdpy.util.retr_sbrtfdfm(gdat.binsener) 
                 elif strg == 'dustsfdd':
@@ -764,6 +770,8 @@ def writ_ferm_back():
                     pathtemp = gdat.pathdata + 'haslam408_dsds_Remazeilles2014.fits'
                     tdpy.util.read_fits(pathtemp, verbtype=2) 
                     sbrtbacktemp = pf.getdata(pathtemp)['TEMPERATURE']
+                    print 'sbrtbacktemp'
+                    summgene(sbrtbacktemp)
                     sbrtbacktemp = hp.ud_grade(sbrtbacktemp, gdat.numbside, order_in='NESTED', order_out='RING')
                 elif strg == 'haslwise':
                     pathtemp = gdat.pathdata + 'lambda_sfd_ebv.fits'
@@ -780,10 +788,6 @@ def writ_ferm_back():
                     raise Exception('')
                 # temp
                 #gdat.sbrtback[where(gdat.sbrtback < 0.)] = 0.
-                
-                print 'listnameback[c]'
-                print listnameback[c]
-                print
                 
                 # make copies
                 for m in gdat.indxevtt:
