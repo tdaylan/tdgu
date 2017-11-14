@@ -970,7 +970,7 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     
     dictargs['truenumbpopl'] = 3
     dictargs['refrlegdpopl'] = ['AGN', 'Disk MSP', 'GC MSP']
-    dictargs['trueelemtype'] = ['lghtpnts', 'lghtpnts', 'lghtpnts']
+    dictargs['trueelemtype'] = ['lghtpnts', 'lghtpnts', 'lghtpntspuls']
     dictargs['truefluxdistsloppop0'] = 2.6
     dictargs['truefluxdistsloppop1'] = 2.6
     dictargs['truefluxdistsloppop2'] = 3.5
@@ -999,30 +999,15 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
     
-    listnamecnfgextn = ['nomi', 'truedark', 'bfun', 'heal', 'penalpridiff', 'checprio', 'psfnfixd', 'parsnone', 'popl', 'puls']
+    listnamecnfgextn = ['nomi', 'truedark', 'backbfun', 'popl', 'parsnone', 'heal', 'psfnfixd', 'penalpridiff', 'checprio']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
-    dictargsvari['heal']['pixltype'] = 'heal'
-    dictargsvari['heal']['forccart'] = False
-    dictargsvari['heal']['anlytype'] = 'rec8pntsbfun'
-    
-    dictargsvari['penalpridiff']['penalpridiff'] = True
-    
-    dictargsvari['checprio']['checprio'] = True
-    
-    dictargsvari['psfnfixd']['proppsfp'] = False
-    dictargsvari['psfnfixd']['inittype'] = 'refr'
-    
-    dictargsvari['parsnone']['scalmeanpnts'] = 'self'
-    dictargsvari['parsnone']['priofactdoff'] = 0.
-    
-    # prim
     dictargsvari['truedark']['listnameback'] = ['isot', 'fdfm', 'dark']
     dictargsvari['truedark']['backtype'] = [1., 'sbrtfdfmrec8pntssmthnorm.fits', 'sbrtdarkrec8pntssmthnorm.fits']
-
-    dictargsvari['puls']['trueelemtype'] = ['lghtpnts', 'lghtpnts', 'lghtpntspuls']
+    
+    dictargsvari['backbfun']['fittbacktype'] = 'fun'
     
     dictargsvari['popl']['fittnumbpopl'] = 3
     dictargsvari['popl']['fittspatdisttype'] = ['self', 'disc', 'los3']
@@ -1031,6 +1016,19 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargsvari['popl']['fittmaxmnumbelempop0reg0'] = 300
     dictargsvari['popl']['fittmaxmnumbelempop1reg0'] = 300
     dictargsvari['popl']['fittmaxmnumbelempop2reg0'] = 300
+    
+    dictargsvari['parsnone']['scalmeanpnts'] = 'self'
+    dictargsvari['parsnone']['priofactdoff'] = 0.
+
+    dictargsvari['heal']['pixltype'] = 'heal'
+    dictargsvari['heal']['forccart'] = False
+    
+    dictargsvari['psfnfixd']['proppsfp'] = False
+    dictargsvari['psfnfixd']['inittype'] = 'refr'
+    
+    dictargsvari['penalpridiff']['penalpridiff'] = True
+    
+    dictargsvari['checprio']['checprio'] = True
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \

@@ -308,8 +308,6 @@ def pcat_tgas_mock(strgcnfgextnexec=None):
 
 def pcat_tgas_mock_spmr(strgcnfgextnexec=None):
    
-    maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
-
     dictargs = {}
     dictargs['exprtype'] = 'sdyn'
     dictargs['backtype'] = ['tgasback.fits']
@@ -321,8 +319,7 @@ def pcat_tgas_mock_spmr(strgcnfgextnexec=None):
     dictargs['truenobjpop0reg00000'] = 3e1
     dictargs['numbelempop0reg0'] = 1
     dictargs['priofactdoff'] = 0.
-    dictargs['maxmgangdata'] = maxmgangdata
-    dictargs['numbsidecart'] = numbsidecart
+    dictargs['numbsidecart'] = 200
     dictargs['probtran'] = 1.
     dictargs['probspmr'] = 1.
     dictargs['numbswep'] = 100000
