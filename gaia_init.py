@@ -276,10 +276,12 @@ def pcat_tgas_mock(strgcnfgextnexec=None):
         dictargsvari[namecnfgextn] = {}
    
     # to test splits and merges
+    dictargsvari['shapconsproptran']['numbswep'] = 100000
     dictargsvari['shapconsproptran']['elemtype'] = ['clus']
     dictargsvari['shapconsproptran']['psfnevaltype'] = 'kern'
     dictargsvari['shapconsproptran']['probtran'] = 1.
     
+    dictargsvari['shapconspropspmr']['numbswep'] = 100000
     dictargsvari['shapconspropspmr']['elemtype'] = ['clus']
     dictargsvari['shapconspropspmr']['psfnevaltype'] = 'kern'
     dictargsvari['shapconspropspmr']['probtran'] = 1.

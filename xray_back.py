@@ -144,6 +144,7 @@ def writ_chan():
                             if a == 1:
                                 path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[i], strgener[i+1])
                                 cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                                cntp[i, :, :, 0] *= expo[i, :, :, 0]
                 numbsideyaxi = pf.getdata(path, 0).shape[0]
                 numbsidexaxi = pf.getdata(path, 0).shape[1]
 
@@ -214,7 +215,7 @@ def pcat_chan_mock_spmr(strgcnfgextnexec=None):
     dictargs['probspmr'] = 1.
     dictargs['indxenerincl'] = array([0])
     
-    listnamecnfgextn = ['free', 'nomi', 'pars', 'genebrgt', 'genefain', 'psfn']
+    listnamecnfgextn = ['free', 'nomi', 'parsnomi', 'brgt', 'fain', 'psfn']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
@@ -225,7 +226,7 @@ def pcat_chan_mock_spmr(strgcnfgextnexec=None):
     dictargsvari['free']['probtran'] = 0.4
     dictargsvari['free']['probspmr'] = 0.3
     
-    dictargsvari['pars']['priofactdoff'] = 1.
+    dictargsvari['parsnomi']['priofactdoff'] = 1.
     
     dictargsvari['brgt']['truefluxpop0reg00000'] = 3e-7
     
@@ -268,7 +269,7 @@ def pcat_chan_mock_spec(strgcnfgextnexec=None):
     dictargs['exprtype'] = 'chan'
     dictargs['spatdisttype'] = ['line']
     dictargs['spectype'] = ['gaus']
-    dictargs['strgexpo'] = 1e8
+    dictargs['strgexpo'] = 3e4
     dictargs['elemtype'] = ['lghtline']
     dictargs['inittype'] = 'refr'
     #dictargs['anlytype'] = 'spec'
@@ -278,12 +279,18 @@ def pcat_chan_mock_spec(strgcnfgextnexec=None):
     dictargs['anlytype'] = 'spec'
     
     # temp
-    dictargs['verbtype'] = 2
-    dictargs['optitype'] = 'none'
-    dictargs['numbelempop0reg0'] = 1
-    dictargs['maxmnumbelempop0reg0'] = 2
-    dictargs['numbsamp'] = 2000
-    dictargs['sqzeprop'] = True
+    #dictargs['verbtype'] = 2
+    #dictargs['optitype'] = 'none'
+    dictargs['maxmnumbelempop0reg0'] = 6
+    dictargs['numbelempop0reg0'] = 3
+    #dictargs['maxmnumbelempop0reg0'] = 200
+    dictargs['probspmr'] = 0.
+    dictargs['numbswep'] = 10000
+    dictargs['numbburn'] = 0
+    #dictargs['numbswepplot'] = 300
+    #dictargs['numbburn'] = 0
+    dictargs['numbsamp'] = 100
+    #dictargs['sqzeprop'] = True
     
     # true < thrs < modl -- trad 
     # true < modl < thrs -- pcat
@@ -323,8 +330,8 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     #dictargs['propcomp'] = False
     #dictargs['probspmr'] = 0.
     #dictargs['strgexpo'] = 1e9
-    dictargs['numbswep'] = 10000
-    dictargs['numbsamp'] = 100
+    dictargs['numbswep'] = 100
+    dictargs['numbsamp'] = 10
     #dictargs['verbtype'] = 2
     dictargs['priofactdoff'] = 0.
     
@@ -373,21 +380,23 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     
     dictargs = {}
     dictargs['exprtype'] = 'chan'
-    dictargs['namerecostat'] = 'extr7msc0600'
     
     # temp
-    #dictargs['inittype'] = 'reco'
+    dictargs['inittype'] = 'reco'
     #dictargs['anlytypedata'] = maxmgangdata 
     #dictargs['numbsidecart'] = numbsidecart 
     #dictargs['initnumbelempop0reg0'] = 1
     #dictargs['maxmnumbelempop0reg0'] = 1
-    dictargs['numbswep'] = 10000
+    #dictargs['propcomp'] = False
+    #dictargs['probtran'] = 0.
+    #dictargs['spectype'] = ['colr']
+    dictargs['numbswep'] = 100000
     dictargs['numbsamp'] = 100
-    dictargs['verbtype'] = 2
+    dictargs['probspmr'] = 0.
+    #dictargs['verbtype'] = 2
     #dictargs['optitype'] = 'none'
-    #dictargs['elemspatevaltype'] = ['full']
     # temp
-    dictargs['priofactdoff'] = 0.
+    dictargs['priofactdoff'] = 0.2
     
     #dictargs['numbsamp'] = 1
     
@@ -400,14 +409,18 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
    
     for namecnfgextn in listnamecnfgextn:
         numbsidecart, strgexpo, strgexprsbrt, namestat, anlytype = retr_argschan(namecnfgextn[:4], namecnfgextn[4:8], int(namecnfgextn[8:]))
+   
+        if namecnfgextn[:4] == 'home':
+            dictargs['namerecostat'] = 'pcat_chan_inpt_home7msc0300'
+        if namecnfgextn[:4] == 'extr':
+            dictargs['namerecostat'] = 'extr4msc0300'
         
         # temp
-        if '2msc' in anlytype:
-            strgexpo = 500. * 2e6
-        if '4msc' in anlytype:
-            strgexpo = 500. * 4e6
-        if '7msc' in anlytype:
-            strgexpo = 500. * 7e6
+        if namecnfgextn[8:12] == '0600':
+            dictargsvari[anlytype]['numbsamp'] = 1
+            dictargsvari[anlytype]['optitype'] = 'none'
+            dictargsvari[anlytype]['elemspatevaltype'] = ['full']
+            
         maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
         dictargsvari[anlytype]['anlytype'] = anlytype
         dictargsvari[anlytype]['maxmgangdata'] = maxmgangdata 

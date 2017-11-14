@@ -988,7 +988,13 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargs['fittnumbpopl'] = 1
     dictargs['fittspatdisttype'] = ['self']
     dictargs['fittspectype'] = ['colr']
+    dictargs['fittmaxmnumbelempop0reg0'] = 500
     
+    # temp
+    dictargs['numbswep'] = 100
+    dictargs['numbburn'] = 0
+    dictargs['numbsamp'] = 10
+
     dictargs['forccart'] = True
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
@@ -999,7 +1005,7 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
         dictargsvari[namecnfgextn] = {}
     
     dictargsvari['heal']['forccart'] = False
-    dictargsvari['heal']['anlytype'] = 'rec8bfun'
+    dictargsvari['heal']['anlytype'] = 'rec8pntsbfun'
     
     dictargsvari['penalpridiff']['penalpridiff'] = True
     
@@ -1021,6 +1027,9 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargsvari['popl']['fittspatdisttype'] = ['self', 'disc', 'los3']
     dictargsvari['popl']['fittspectype'] = ['powr', 'expc', 'expc']
     dictargsvari['popl']['fittelemregitype'] = [True, True, True]
+    dictargsvari['popl']['fittmaxmnumbelempop0reg0'] = 300
+    dictargsvari['popl']['fittmaxmnumbelempop1reg0'] = 300
+    dictargsvari['popl']['fittmaxmnumbelempop2reg0'] = 300
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -1067,10 +1076,23 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['strgexprsbrt'] = 'sbrtfermrec8pntsigal0256.fits'
     dictargs['spectype'] = ['colr']
     dictargs['savestat'] = True
-    dictargs['inittype'] = 'reco'
     
     dictargs['refrplothistfluxpop2'] = refrplothistflux
-    
+   
+    # temp
+    #dictargs['inittype'] = 'reco'
+    dictargs['verbtype'] = 2
+    dictargs['numbswep'] = 100
+    dictargs['numbburn'] = 0
+    dictargs['optitype'] = 'none'
+    dictargs['numbsamp'] = 10
+    dictargs['propdist'] = False
+    dictargs['propbacp'] = False
+    dictargs['propcomp'] = False
+    dictargs['probtran'] = 0.
+    dictargs['propcomp'] = False
+    dictargs['maxmnumbelempop0reg0'] = 2
+
     dictargs['forccart'] = True
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
