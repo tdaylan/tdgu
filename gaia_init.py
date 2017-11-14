@@ -306,6 +306,54 @@ def pcat_tgas_mock(strgcnfgextnexec=None):
                                  )
 
 
+def pcat_tgas_mock_spmr(strgcnfgextnexec=None):
+   
+    maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
+
+    dictargs = {}
+    dictargs['exprtype'] = 'sdyn'
+    dictargs['backtype'] = ['tgasback.fits']
+    dictargs['backtype'] = ['tgasback.fits']
+    
+    dictargs['inittype'] = 'refr'
+    dictargs['truelgalpop0reg00000'] = 0.
+    dictargs['truebgalpop0reg00000'] = 0.
+    dictargs['truenobjpop0reg00000'] = 3e1
+    dictargs['numbelempop0reg0'] = 1
+    dictargs['priofactdoff'] = 0.
+    dictargs['maxmgangdata'] = maxmgangdata
+    dictargs['numbsidecart'] = numbsidecart
+    dictargs['probtran'] = 1.
+    dictargs['probspmr'] = 1.
+    dictargs['numbswep'] = 100000
+    dictargs['psfnevaltype'] = 'none'
+    dictargs['strgexpo'] = 1.
+    dictargs['elemtype'] = ['clusvari']
+    
+    listnamecnfgextn = ['nomi', 'nobjhigh', 'nobjloww', 'psfn', 'parsnomi']
+    dictargsvari = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
+    
+    dictargsvari['nobjhigh']['truenobjpop0reg00000'] = 1e2
+    
+    dictargsvari['nobjloww']['truenobjpop0reg00000'] = 1e1
+    
+    dictargsvari['psfn']['probtran'] = 0.
+    dictargsvari['psfn']['propmeanelem'] = False
+    dictargsvari['psfn']['propdist'] = False
+    dictargsvari['psfn']['propbacp'] = False
+    dictargsvari['psfn']['propcomp'] = False
+    
+    dictargsvari['parsnomi']['priofactdoff'] = 1.
+    
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
+                                 )
+
+
 def pcat_tgas_inpt(strgcnfgextnexec=None):
     
     dictargs = {}

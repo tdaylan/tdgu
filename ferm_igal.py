@@ -1004,6 +1004,7 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
+    dictargsvari['heal']['pixltype'] = 'heal'
     dictargsvari['heal']['forccart'] = False
     dictargsvari['heal']['anlytype'] = 'rec8pntsbfun'
     
