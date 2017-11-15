@@ -941,7 +941,7 @@ def pcat_ferm_bubb(strgcnfgextnexec=None):
     
     dictargs['backtype'] = [1., 'sbrtfdfmbacksmthrec8.fits', 'sbrtdarkbacksmthrec8.fits']
     
-    listnamecnfgextn = ['nomi', 'truedark', 'bfun', 'heal', 'penalpridiff', 'checprio', 'parsnone', 'popl', 'puls']
+    listnamecnfgextn = ['nomi', 'truedark', 'backbfun', 'heal', 'penalpridiff', 'checprio', 'parsnone', 'popl', 'puls']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
@@ -1093,7 +1093,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
     
-    listnamecnfgextn = ['nomi', 'rec7', 'mask', 'popl', 'bfunwfou', 'bfuntemp', 'dark']
+    listnamecnfgextn = ['nomi', 'rec7', 'mask', 'popl', 'backwfou', 'backtemp', 'dark']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
@@ -1110,14 +1110,13 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     
     dictargsvari['popl']['numbpopl'] = 3
                    
-    dictargsvari['bfunwfou']['maxmnumbelempop0reg0'] = 0
-    dictargsvari['bfunwfou']['anlytype'] = 'rec8pnts'
-    dictargsvari['bfunwfou']['listnameback'] = ['sbrtisot', 'sbrtfdfm', 'sbrtdark', 'bfunwfou']
-    dictargsvari['bfunwfou']['backtype'] = [1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits', 'bfunfour0004']
-                   
-    dictargsvari['bfuntemp']['anlytype'] = 'rec8pnts'
-    dictargsvari['bfuntemp']['listnameback'] = ['sbrtisot', 'sbrthydr', 'sbrtcmon', 'sbrtdustsfdd', 'sbrtdark', 'sbrtwise']
-    dictargsvari['bfuntemp']['backtype'] = [1., 'sbrtfdfmpntssmthrec8.fits', 'hydrpntssmthrec8.fits', 'cmonpntssmthrec8.fits', \
+    dictargsvari['backwfou']['anlytype'] = 'rec8pnts'
+    dictargsvari['backwfou']['listnameback'] = ['sbrtisot', 'sbrtfdfm', 'bfunwfou0004']
+    dictargsvari['backwfou']['backtype'] = [1., 'sbrtfdfmpntssmthrec8.fits', 'bfunfour0004']
+    
+    dictargsvari['backtemp']['anlytype'] = 'rec8pnts'
+    dictargsvari['backtemp']['listnameback'] = ['sbrtisot', 'sbrthydr', 'sbrtcmon', 'sbrtdustsfdd', 'sbrtdark', 'sbrtwise']
+    dictargsvari['backtemp']['backtype'] = [1., 'sbrtfdfmpntssmthrec8.fits', 'hydrpntssmthrec8.fits', 'cmonpntssmthrec8.fits', \
                                                                                     'dustsfddpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits', 'wisepntssmthrec8.fits']
     
     dictglob = pcat.main.initarry( \
