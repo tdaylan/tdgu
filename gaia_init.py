@@ -262,7 +262,7 @@ def pcat_tgas_mock(strgcnfgextnexec=None):
     
     dictargs = {}
     dictargs['exprtype'] = 'sdyn'
-    dictargs['backtype'] = ['tgasback.fits']
+    dictargs['backtype'] = [['tgasback.fits']]
     
     dictargs['numbsidecart'] = 200
     
@@ -310,8 +310,8 @@ def pcat_tgas_mock_spmr(strgcnfgextnexec=None):
    
     dictargs = {}
     dictargs['exprtype'] = 'sdyn'
-    dictargs['backtype'] = ['tgasback.fits']
-    dictargs['backtype'] = ['tgasback.fits']
+    dictargs['backtype'] = [['tgasback.fits']]
+    dictargs['backtype'] = [['tgasback.fits']]
     
     dictargs['inittype'] = 'refr'
     dictargs['truelgalpop0reg00000'] = 0.
@@ -357,7 +357,7 @@ def pcat_tgas_inpt(strgcnfgextnexec=None):
     
     dictargs = {}
     dictargs['exprtype'] = 'sdyn'
-    dictargs['backtype'] = ['tgasback.fits']
+    dictargs['backtype'] = [['tgasback.fits']]
     
     dictargs['strgexprsbrt'] = 'tgas.fits'
     

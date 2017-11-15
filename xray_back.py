@@ -428,7 +428,8 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     # temp
     dictargs['priofactdoff'] = 0.2
     
-    #dictargs['numbsamp'] = 1
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 100
     
     #listnamecnfgextn = ['home2msc0600', 'home4msc0600', 'home7msc0600']
     #listnamecnfgextn = ['extr2msc0300', 'extr4msc0300', 'home2msc0300', 'home4msc0300', 'home7msc0300']
