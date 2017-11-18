@@ -17,6 +17,7 @@ from numpy.random import choice
 #seterr(divide='raise', over='raise', invalid='raise')
 #seterr(divide='raise', invalid='raise')
 
+
 # scipy
 import scipy as sp
 from scipy.interpolate import *
@@ -32,7 +33,7 @@ from healpy.rotator import angdist
 from healpy import ang2pix
 
 # pyfits
-import pyfits as pf
+import pyfits as pf, h5py
 
 from copy import deepcopy
 

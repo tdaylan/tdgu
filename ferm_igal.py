@@ -680,7 +680,8 @@ def writ_ferm_back():
     minmbgal = -maxmgangdata
     maxmbgal = maxmgangdata
     
-    enertype = 'pnts'
+    enertype = 'back'
+
     # axes
     if enertype == 'back':
         gdat.numbener = 30
@@ -1116,7 +1117,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargsvari['backwfou']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'bfunwfou0004']]
     
     dictargsvari['backfour']['listnameback'] = ['sbrtisot', 'sbrtfdfm', 'bfunfour0004']
-    dictargsvari['backfour']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'bfunfour0004']]
+    dictargsvari['backfour']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'bfunfour0002']]
     
     dictargsvari['backtemp']['listnameback'] = ['sbrtisot', 'sbrthydr', 'sbrtcmon', 'sbrtdustsfdd', 'sbrtdark', 'sbrtwise']
     dictargsvari['backtemp']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'hydrpntssmthrec8.fits', 'cmonpntssmthrec8.fits', \

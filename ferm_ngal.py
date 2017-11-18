@@ -33,7 +33,7 @@ def pcat_ferm_quas_mock():
                        bgalprio=bgalprio, \
                        lgalcntr=0., \
                        bgalcntr=pi / 2., \
-                       strgexpo='fermexpo_cmp0_ngal.fits', \
+                       strgexpo='expofermcmp0ngal.fits', \
                       )
 
 
