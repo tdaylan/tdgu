@@ -110,29 +110,29 @@ def writ_data():
     filearry.close()
 
 
-def conv_layer(input, size_in, size_out, name="conv"):
+def conv_layer(inpt, size_in, size_out, name="conv"):
   import tensorflow as tf
   with tf.name_scope(name):
-      w = tf.Variable(tf.truncated_normal([5, 5, size_in, size_out], stddev=0.1), name="W")
-      b = tf.Variable(tf.constant(0.1, shape=[size_out]), name="B")
-      conv = tf.nn.conv2d(input, w, strides=[1, 1, 1, 1], padding="SAME")
-      act = tf.nn.relu(conv + b)
-      tf.summary.histogram("weights", w)
-      tf.summary.histogram("biases", b)
-      tf.summary.histogram("activations", act)
-      return tf.nn.max_pool(act, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding="SAME")
+      wght = tf.Variable(tf.truncated_normal([5, 5, size_in, size_out], stddev=0.1), name="wght" + name)
+      bias = tf.Variable(tf.constant(0.1, shape=[size_out]), name="bias" + name)
+      conv = tf.nn.conv2d(inpt, wght, strides=[1, 1, 1, 1], padding="SAME")
+      acti = tf.nn.relu(conv + bias)
+      tf.summary.histogram("wght" + name, wght)
+      tf.summary.histogram("bias" + name, bias)
+      tf.summary.histogram("acti" + name, acti)
+      return tf.nn.max_pool(acti, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding="SAME")
 
 
-def fc_layer(input, size_in, size_out, name="fulc"):
+def fc_layer(inpt, size_in, size_out, name="fulc"):
   import tensorflow as tf
   with tf.name_scope(name):
-      w = tf.Variable(tf.truncated_normal([size_in, size_out], stddev=0.1), name="W")
-      b = tf.Variable(tf.constant(0.1, shape=[size_out]), name="B")
-      act = tf.nn.relu(tf.matmul(input, w) + b)
-      tf.summary.histogram("weights", w)
-      tf.summary.histogram("biases", b)
-      tf.summary.histogram("activations", act)
-      return act
+      wght = tf.Variable(tf.truncated_normal([size_in, size_out], stddev=0.1), name="wght" + name)
+      bias = tf.Variable(tf.constant(0.1, shape=[size_out]), name="bias" + name)
+      acti = tf.nn.relu(tf.matmul(inpt, wght) + bias)
+      tf.summary.histogram("wght" + name, wght)
+      tf.summary.histogram("bias" + name, bias)
+      tf.summary.histogram("acti" + name, acti)
+      return acti
 
 
 def clas_lens_wrap(ratelern, boolconvdoub, boolfulcdoub, strghypr):
@@ -140,29 +140,40 @@ def clas_lens_wrap(ratelern, boolconvdoub, boolfulcdoub, strghypr):
     print 'Classifer initialized.'
 
     import tensorflow as tf
-    pathclaslens = os.environ["TDGU_DATA_PATH"] + '/clas_lens/data/'
-    path = pathclaslens + 'claslens.h5'
-    print 'Reading %s...' % path
-    filearry = h5py.File(path, 'r')
-    cntpdata = filearry['cntpdata'][()]
-    boollens = filearry['boollens'][()]
-    filearry.close()
+
+    boolexeclens = False
+
+    if boolexeclens:
+        pathclaslens = os.environ["TDGU_DATA_PATH"] + '/clas_lens/data/'
+        path = pathclaslens + 'claslens.h5'
+        print 'Reading %s...' % path
+        filearry = h5py.File(path, 'r')
+        cntpdata = filearry['cntpdata'][()]
+        boollens = filearry['boollens'][()]
+        filearry.close()
    
-    numbdata = cntpdata.shape[0]
+        numbdata = cntpdata.shape[0]
+    else:
+        from tensorflow.examples.tutorials.mnist import input_data
+        mnist = input_data.read_data_sets('MNIST_data', one_hot=True)
+        cntpdata = mnist[0]
+        boollens = mnist[1]
+    
+    print 'Found %s images.' % numbdata
     indxdata = arange(numbdata)
 
-    print 'Found %s images.' % numbdata
-    
-    print 'Randomizing the order of the dataset...'
-    indxrndm = choice(indxdata, size=numbdata, replace=False)
-    cntpdata = cntpdata[indxrndm, :]
-    boollens = boollens[indxrndm]
+    if boolexeclens:
+        print 'Randomizing the order of the dataset...'
+        indxrndm = choice(indxdata, size=numbdata, replace=False)
+        cntpdata = cntpdata[indxrndm, :]
+        boollens = boollens[indxrndm]
 
-    # make labels one-hot encoded
-    boollenstemp = copy(boollens)
-    boollens = zeros((numbdata, 2))
-    boollens[where(logical_not(boollenstemp))[0], 0] = 1.
-    boollens[where(boollenstemp)[0], 1] = 1.
+        # make labels one-hot encoded
+        boollenstemp = copy(boollens)
+        boollens = zeros((numbdata, 2))
+        boollens[where(logical_not(boollenstemp))[0], 0] = 1.
+        boollens[where(boollenstemp)[0], 1] = 1.
+
 
     numbdatatran = int(0.5 * numbdata) - int(0.5 * numbdata) % 10
     sizebtch = numbdatatran / 10
@@ -225,15 +236,15 @@ def clas_lens_wrap(ratelern, boolconvdoub, boolfulcdoub, strghypr):
         logits = fc_layer(tens, 25*25*64, 2, "fulc")
 
     tens = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=tenstruelabl), name="cent")
-    tf.summary.scalar("cent", tens)
+    tf.summary.scalar("tenscent", tens)
 
     funcopti = tf.train.AdamOptimizer(ratelern).minimize(tens)
 
     correct_prediction = tf.equal(tf.argmax(logits, 1), tf.argmax(tenstruelabl, 1))
-    accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-    tf.summary.scalar("accu", accuracy)
+    accu = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+    tf.summary.scalar("tensaccu", accu)
 
-    summ = tf.summary.merge_all()
+    smry = tf.summary.merge_all()
 
     embedding = tf.Variable(tf.zeros([sizebtch, sizeembd]), name="embd")
     assignment = embedding.assign(inptembd)
@@ -253,17 +264,23 @@ def clas_lens_wrap(ratelern, boolconvdoub, boolfulcdoub, strghypr):
 
     numbiter = numbdatatran / sizebtch
     indxiter = arange(numbiter)
-    for i in indxiter:
-        indxcnfgbtch = arange(i*sizebtch, (i+1)*sizebtch) + numbdatatest
-        batch = [cntpdata[indxcnfgbtch, :], boollens[indxcnfgbtch, :]]
-        if i % 1 == 0:
-            [temp, s] = sess.run([accuracy, summ], feed_dict={tenscntpdata: batch[0], tenstruelabl: batch[1]})
-            objtwrit.add_summary(s, i)
-        if i % 1 == 0:
-            sess.run(assignment, feed_dict={tenscntpdata: cntpdata[:sizebtch, :], tenstruelabl: boollens[:sizebtch, :]})
-            objtsave.save(sess, os.path.join(pathclaslens, "model.ckpt"), i)
-        print 'i: ', i
-        sess.run(funcopti, feed_dict={tenscntpdata: batch[0], tenstruelabl: batch[1]})
+    numbepoc = 5
+    indxepoc = arange(numbepoc)
+    cntr = 0
+    for k in indxepoc:
+        for i in indxiter:
+            
+            indxcnfgbtch = arange(i*sizebtch, (i+1)*sizebtch) + numbdatatest
+            batch = [cntpdata[indxcnfgbtch, :], boollens[indxcnfgbtch, :]]
+            if cntr % 1 == 0:
+                temp, meta = sess.run([accu, smry], feed_dict={tenscntpdata: batch[0], tenstruelabl: batch[1]})
+                objtwrit.add_summary(meta, cntr)
+            if False and cntr % 1 == 0:
+                sess.run(assignment, feed_dict={tenscntpdata: cntpdata[:sizebtch, :], tenstruelabl: boollens[:sizebtch, :]})
+                objtsave.save(sess, os.path.join(pathclaslens, "model.ckpt"), cntr)
+            print 'cntr: ', cntr
+            sess.run(funcopti, feed_dict={tenscntpdata: batch[0], tenstruelabl: batch[1]})
+            cntr += 1
 
 
 def clas_lens():

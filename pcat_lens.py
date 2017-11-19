@@ -353,7 +353,8 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
     # temp
     #dictargs['makeplotinit'] = True
     #dictargs['shrtfram'] = False
-    dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 1000
+    dictargs['numbsamp'] = 10
     #dictargs['verbtype'] = 2
     
     numbelem = int(25. * 10.**0.9)

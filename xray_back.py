@@ -279,6 +279,8 @@ def pcat_chan_mock_spec(strgcnfgextnexec=None):
     # temp
     dictargs['numbelempop0reg0'] = 20
     dictargs['probspmr'] = 0.
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 100
     
     # true < thrs < modl -- trad 
     # true < modl < thrs -- pcat
@@ -323,7 +325,7 @@ def pcat_chan_spec_spmr(strgcnfgextnexec=None):
     dictargs['priofactdoff'] = 0.
     dictargs['probtran'] = 1.
     dictargs['probspmr'] = 1.
-    dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 10000
     
     listnamecnfgextn = ['nomi', 'fluxhigh', 'fluxloww', 'parsnomi']
     dictargsvari = {}
@@ -420,16 +422,13 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['propcomp'] = False
     #dictargs['probtran'] = 0.
     #dictargs['spectype'] = ['colr']
-    dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 10000
     dictargs['numbsamp'] = 100
     dictargs['probspmr'] = 0.
     #dictargs['verbtype'] = 2
     #dictargs['optitype'] = 'none'
     # temp
     dictargs['priofactdoff'] = 0.2
-    
-    dictargs['numbswep'] = 10000
-    dictargs['numbsamp'] = 100
     
     #listnamecnfgextn = ['home2msc0600', 'home4msc0600', 'home7msc0600']
     #listnamecnfgextn = ['extr2msc0300', 'extr4msc0300', 'home2msc0300', 'home4msc0300', 'home7msc0300']

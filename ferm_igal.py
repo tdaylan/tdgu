@@ -1002,7 +1002,7 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
-    dictargsvari['truedark']['listnameback'] = ['sbrtisot', 'sbrtfdfm', 'sbrtdark']
+    dictargsvari['truedark']['listnameback'] = ['isot', 'fdfm', 'dark']
     dictargsvari['truedark']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']]
     
     dictargsvari['backwfou']['fittbacktype'] = [['bfunwfou0004']]
@@ -1079,18 +1079,20 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['refrplothistfluxpop2'] = refrplothistflux
    
     # temp
-    #dictargs['inittype'] = 'reco'
+    dictargs['inittype'] = 'reco'
     #dictargs['verbtype'] = 2
-    dictargs['numbswep'] = 100
-    dictargs['numbburn'] = 0
+    dictargs['numbswep'] = 100000
+    #dictargs['numbburn'] = 0
     dictargs['optitype'] = 'none'
-    dictargs['numbsamp'] = 10
-    dictargs['propdist'] = False
-    dictargs['propbacp'] = False
-    dictargs['propcomp'] = False
-    dictargs['probtran'] = 0.
-    dictargs['propcomp'] = False
-    dictargs['maxmnumbelempop0reg0'] = 2
+    dictargs['numbsamp'] = 100
+    dictargs['proppsfp'] = False
+    dictargs['psfnevaltype'] = 'kern'
+    #dictargs['propdist'] = False
+    #dictargs['propbacp'] = False
+    #dictargs['propcomp'] = False
+    #dictargs['probtran'] = 0.
+    #dictargs['propcomp'] = False
+    #dictargs['maxmnumbelempop0reg0'] = 2
 
     dictargs['forccart'] = True
     dictargs['pixltype'] = 'cart'
@@ -1101,10 +1103,10 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
-    dictargsvari['dark']['listnameback'] = ['sbrtisot', 'sbrtfdfm', 'sbrtdark']
+    dictargsvari['dark']['listnameback'] = ['isot', 'fdfm', 'dark']
     dictargsvari['dark']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']]
     
-    dictargsvari['nomi']['listnameback'] = ['sbrtisot', 'sbrtfdfm']
+    dictargsvari['nomi']['listnameback'] = ['isot', 'fdfm']
     dictargsvari['nomi']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
     
     dictargsvari['rec7']['strgexpo'] = 'expofermrec7pntsigal0256.fits'
@@ -1113,13 +1115,13 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     
     dictargsvari['popl']['numbpopl'] = 3
                    
-    dictargsvari['backwfou']['listnameback'] = ['sbrtisot', 'sbrtfdfm', 'bfunwfou0004']
+    dictargsvari['backwfou']['listnameback'] = ['isot', 'fdfm', 'bfunwfou0004']
     dictargsvari['backwfou']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'bfunwfou0004']]
     
-    dictargsvari['backfour']['listnameback'] = ['sbrtisot', 'sbrtfdfm', 'bfunfour0004']
+    dictargsvari['backfour']['listnameback'] = ['isot', 'fdfm', 'bfunfour0004']
     dictargsvari['backfour']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'bfunfour0002']]
     
-    dictargsvari['backtemp']['listnameback'] = ['sbrtisot', 'sbrthydr', 'sbrtcmon', 'sbrtdustsfdd', 'sbrtdark', 'sbrtwise']
+    dictargsvari['backtemp']['listnameback'] = ['isot', 'hydr', 'cmon', 'dustsfdd', 'dark', 'wise']
     dictargsvari['backtemp']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'hydrpntssmthrec8.fits', 'cmonpntssmthrec8.fits', \
                                                                                     'dustsfddpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits', 'wisepntssmthrec8.fits']]
     
