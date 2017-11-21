@@ -353,17 +353,19 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
     # temp
     #dictargs['makeplotinit'] = True
     #dictargs['shrtfram'] = False
-    dictargs['numbswep'] = 1000
-    dictargs['numbsamp'] = 10
+    dictargs['numbswep'] = 300000
+    dictargs['numbsamp'] = 1000
     #dictargs['verbtype'] = 2
     
     numbelem = int(25. * 10.**0.9)
     anglfact = 3600. * 180. / pi
 
-    listnamecnfgextn = ['nomi', 'truelowr', 'truelowrparsnone', 'truenone', 'truenoneparsnone', 'subhsing', 'truevlow', 's2nrhigh', 's2nrvhig', 'datanone']
+    listnamecnfgextn = ['nomi', 'parsnone', 'truelowr', 'truelowrparsnone', 'truenone', 'truenoneparsnone', 'subhsing', 'truevlow', 's2nrhigh', 's2nrvhig', 'datanone']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
+    
+    dictargsvari['parsnone']['priofactdoff'] = 0.
     
     dictargsvari['truelowr']['fittminmdefs'] = 0.01 / anglfact
     

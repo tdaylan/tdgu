@@ -1081,18 +1081,19 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     # temp
     dictargs['inittype'] = 'reco'
     #dictargs['verbtype'] = 2
-    dictargs['numbswep'] = 100000
-    #dictargs['numbburn'] = 0
+    dictargs['numbswep'] = 100
+    dictargs['numbswepplot'] = 1
+    dictargs['numbburn'] = 0
     dictargs['optitype'] = 'none'
     dictargs['numbsamp'] = 100
-    dictargs['proppsfp'] = False
     dictargs['psfnevaltype'] = 'kern'
-    #dictargs['propdist'] = False
-    #dictargs['propbacp'] = False
-    #dictargs['propcomp'] = False
+    
+    dictargs['proppsfp'] = False
+    dictargs['propdist'] = False
+    dictargs['propbacp'] = False
+    dictargs['probspmr'] = 1.
     #dictargs['probtran'] = 0.
-    #dictargs['propcomp'] = False
-    #dictargs['maxmnumbelempop0reg0'] = 2
+    dictargs['propcomp'] = False
 
     dictargs['forccart'] = True
     dictargs['pixltype'] = 'cart'
