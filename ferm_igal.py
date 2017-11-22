@@ -1088,12 +1088,12 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['numbsamp'] = 100
     dictargs['psfnevaltype'] = 'kern'
     
-    dictargs['proppsfp'] = False
-    dictargs['propdist'] = False
-    dictargs['propbacp'] = False
-    dictargs['probspmr'] = 1.
-    #dictargs['probtran'] = 0.
-    dictargs['propcomp'] = False
+    #dictargs['proppsfp'] = False
+    #dictargs['propdist'] = False
+    #dictargs['propbacp'] = False
+    #dictargs['probspmr'] = 1.
+    ##dictargs['probtran'] = 0.
+    #dictargs['propcomp'] = False
 
     dictargs['forccart'] = True
     dictargs['pixltype'] = 'cart'
