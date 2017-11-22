@@ -279,8 +279,8 @@ def pcat_chan_mock_spec(strgcnfgextnexec=None):
     # temp
     dictargs['numbelempop0reg0'] = 20
     dictargs['probspmr'] = 0.
-    dictargs['numbswep'] = 10000
-    dictargs['numbsamp'] = 100
+    dictargs['numbswep'] = 100000
+    dictargs['numbsamp'] = 1000
     
     # true < thrs < modl -- trad 
     # true < modl < thrs -- pcat
@@ -422,7 +422,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['propcomp'] = False
     #dictargs['probtran'] = 0.
     #dictargs['spectype'] = ['colr']
-    dictargs['numbswep'] = 1000000
+    dictargs['numbswep'] = 100000
     dictargs['numbsamp'] = 1000
     dictargs['probspmr'] = 0.
     #dictargs['verbtype'] = 2
@@ -432,7 +432,8 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     
     #listnamecnfgextn = ['home2msc0600', 'home4msc0600', 'home7msc0600']
     #listnamecnfgextn = ['extr2msc0300', 'extr4msc0300', 'home2msc0300', 'home4msc0300', 'home7msc0300']
-    listnamecnfgextn = ['home2msc0300', 'home4msc0300', 'home7msc0300', 'home2msc0600', 'home4msc0600', 'home7msc0600']
+    #listnamecnfgextn = ['home2msc0300', 'home4msc0300', 'home7msc0300', 'home2msc0600', 'home4msc0600', 'home7msc0600']
+    listnamecnfgextn = ['home2msc0300', 'home4msc0300', 'home7msc0300']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}

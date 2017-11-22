@@ -366,6 +366,7 @@ def pcat_tgas_inpt(strgcnfgextnexec=None):
     dictargs['strgexpo'] = 1.
     dictargs['elemtype'] = ['clusvari']
     dictargs['psfninfoprio'] = False
+    dictargs['priofactdoff'] = 0.2
     
     listnamecnfgextn = ['shapcons', 'shapvari']
     dictargsvari = {}

@@ -1080,9 +1080,9 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
    
     # temp
     dictargs['inittype'] = 'reco'
-    #dictargs['verbtype'] = 2
-    dictargs['numbswep'] = 100
-    dictargs['numbswepplot'] = 1
+    dictargs['verbtype'] = 2
+    dictargs['numbswep'] = 100000
+    #dictargs['numbswepplot'] = 1
     dictargs['numbburn'] = 0
     dictargs['optitype'] = 'none'
     dictargs['numbsamp'] = 100
