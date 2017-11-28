@@ -272,6 +272,9 @@ def pcat_tgas_mock(strgcnfgextnexec=None):
     dictargs['elemtype'] = ['clusvari']
     dictargs['psfninfoprio'] = False
     
+    # temp
+    dictargs['numbswep'] = 100000
+    
     listnamecnfgextn = ['shapvari', 'shapconsinfo', 'shapcons', 'shapconsproptran', 'shapconspropspmr']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
@@ -367,6 +370,9 @@ def pcat_tgas_inpt(strgcnfgextnexec=None):
     dictargs['elemtype'] = ['clusvari']
     dictargs['psfninfoprio'] = False
     dictargs['priofactdoff'] = 0.2
+    
+    # temp
+    dictargs['numbswep'] = 100000
     
     listnamecnfgextn = ['shapcons', 'shapvari']
     dictargsvari = {}

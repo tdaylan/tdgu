@@ -350,8 +350,8 @@ def pcat_chan_mock(strgcnfgextnexec=None):
    
     dictargs = {}
     dictargs['exprtype'] = 'chan'
-    dictargs['truemaxmnumbelempop0reg0'] = 200
-    dictargs['truenumbelempop0reg0'] = 100
+    #dictargs['truemaxmnumbelempop0reg0'] = 200
+    dictargs['truenumbelempop0reg0'] = 400
     #dictargs['fittmaxmnumbelempop0reg0'] = 1
     #dictargs['fittnumbelempop0reg0'] = 1
     # temp
@@ -362,10 +362,13 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     #dictargs['propcomp'] = False
     #dictargs['probspmr'] = 0.
     #dictargs['strgexpo'] = 1e9
-    dictargs['numbswep'] = 100
-    dictargs['numbsamp'] = 10
+    dictargs['trueelemtype'] = ['lghtpntsagnntrue']
+    dictargs['fittelemtype'] = ['lghtpntsagnnassc']
+    dictargs['makeplotinit'] = True
+    dictargs['numbswep'] = 100000
+    dictargs['numbsamp'] = 100
     #dictargs['verbtype'] = 2
-    dictargs['priofactdoff'] = 0.
+    dictargs['priofactdoff'] = 0.2
     
     listnamecnfgextn = ['nomi', 'truevlow', 'trueloww', 'truehigh', 'truenone']
     dictargsvari = {}
@@ -375,6 +378,7 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictargsvari['trueloww']['trueminmflux'] = 1e-9
     dictargsvari['truehigh']['trueminmflux'] = 1e-8
     dictargsvari['truenone']['truenumbelempop0reg0'] = 0
+    dictargsvari['truenone']['truemaxmnumbelempop0reg0'] = 0
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -422,9 +426,11 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['propcomp'] = False
     #dictargs['probtran'] = 0.
     #dictargs['spectype'] = ['colr']
-    dictargs['numbswep'] = 100000
-    dictargs['numbsamp'] = 100
-    dictargs['probspmr'] = 0.
+    dictargs['numbswep'] = 200000
+    dictargs['checprio'] = True
+    dictargs['numbsamp'] = 1000
+    #dictargs['optitype'] = 'none'
+    #dictargs['makeplot'] = False
     #dictargs['verbtype'] = 2
     #dictargs['optitype'] = 'none'
     # temp

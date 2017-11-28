@@ -154,7 +154,7 @@ def writ_ferm_raww_work(gdat, indxprocwork):
 def writ_ferm():
 
     recotype = 'rec8'
-    regitype = 'igal'
+    regitype = 'ngal'
     numbside = 256
     enertype = 'pnts'
     
@@ -929,12 +929,14 @@ def pcat_ferm_bubb(strgcnfgextnexec=None):
     anglfact = 180. / pi
 
     dictargs = {}
+    dictargs['truenumbelempop0reg0'] = 0
     dictargs['maxmnumbelempop0reg0'] = 0
     
     dictargs['anlytype'] = 'rec8back'
     dictargs['minmlgalrofi'] = -25. / anglfact
     dictargs['maxmlgalrofi'] = 25. / anglfact
     dictargs['minmbgalrofi'] = -25. / anglfact
+    dictargs['strgexpo'] = 'expofermrec8backigal0256.fits'
     dictargs['maxmbgalrofi'] = 25. / anglfact
     
     dictargs['psfnevaltype'] = 'init'
@@ -989,9 +991,12 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargs['fittmaxmnumbelempop0reg0'] = 500
     
     # temp
-    dictargs['numbswep'] = 100
-    dictargs['numbburn'] = 0
-    dictargs['numbsamp'] = 10
+    #dictargs['verbtype'] = 2
+    dictargs['optitype'] = 'none'
+    dictargs['diagmode'] = False
+    dictargs['numbswep'] = 200000
+    #dictargs['numbburn'] = 0
+    dictargs['numbsamp'] = 1000
 
     dictargs['forccart'] = True
     dictargs['pixltype'] = 'cart'
@@ -1086,14 +1091,16 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['numbburn'] = 0
     dictargs['optitype'] = 'none'
     dictargs['numbsamp'] = 100
+    #dictargs['forcsavestat'] = True
     dictargs['psfnevaltype'] = 'kern'
+    dictargs['priofactdoff'] = 0.5
     
-    dictargs['proppsfp'] = False
-    dictargs['propdist'] = False
-    dictargs['propbacp'] = False
-    dictargs['probspmr'] = 1.
+    #dictargs['proppsfp'] = False
+    #dictargs['propdist'] = False
+    #dictargs['propbacp'] = False
+    #dictargs['probspmr'] = 1.
     #dictargs['probtran'] = 0.
-    dictargs['propcomp'] = False
+    #dictargs['propcomp'] = False
 
     dictargs['forccart'] = True
     dictargs['pixltype'] = 'cart'

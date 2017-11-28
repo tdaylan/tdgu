@@ -33,7 +33,7 @@ def pcat_ferm_quas_mock():
                        bgalprio=bgalprio, \
                        lgalcntr=0., \
                        bgalcntr=pi / 2., \
-                       strgexpo='expofermcmp0ngal.fits', \
+                       strgexpo='expofermrec8pntsngal0256.fits', \
                       )
 
 
@@ -66,7 +66,7 @@ def pcat_ferm_ngal_inpt(strgcnfgextnexec=None):
     dictargs['lgalcntr'] = 0.
     dictargs['bgalcntr'] = pi / 2.
     dictargs['backtype'] = ['fermisotflux.fits', 'fermfdfmflux_ngal.fits']
-    dictargs['strgexpo'] = 'expoferm.fits'
+    dictargs['strgexpo'] = 'expofermrec8pntsngal0256.fits'
     dictargs['strgexprsbrt'] = 'sbrtferm.fits'
     
     listnamecnfgextn = ['nomi', 'tim1', 'tim2']
@@ -94,7 +94,7 @@ def pcat_ferm_ngal_mock():
                    #numbsidecart=100, \
                    numbelempop0reg0=100, \
                    back=['fermisotflux.fits', 'sbrtfermfdfmngal.fits'], \
-                   strgexpo='expofermtim0ngal.fits', \
+                   strgexpo='expofermrec8pntsngal0256.fits', \
                    numbsideheal=256, \
                   )
 
