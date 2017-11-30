@@ -1106,7 +1106,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
     
-    listnamecnfgextn = ['nomi', 'rec7', 'mask', 'popl', 'backwfou', 'backfour', 'backtemp', 'dark']
+    listnamecnfgextn = ['nomi', 'rec7', 'mask', 'popl', 'backwfou', 'backfour', 'backtemp', 'dark', 'lprirefe']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
@@ -1120,6 +1120,8 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargsvari['rec7']['strgexpo'] = 'expofermrec7pntsigal0256.fits'
                  
     dictargsvari['mask']['mask'] = array([-30., 30., -2., 2.]) / 180. * pi
+    
+    dictargsvari['lprirefe']['boolrefeforc'] = True
     
     dictargsvari['popl']['numbpopl'] = 3
                    
