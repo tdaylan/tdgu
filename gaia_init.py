@@ -241,15 +241,15 @@ def writ_tgas():
     datacntstemp = histogram2d(ekin, amom, bins=(binsekin, binsamom))[0]
     
     numbside = int(sqrt(datacntstemp.size))
-    datacnts = zeros((1, 1, numbside, numbside, 1))
-    datacnts[0, 0, :, :, 0] = datacntstemp.T
+    datacnts = zeros((1, numbside, numbside, 1))
+    datacnts[0, :, :, 0] = datacntstemp.T
     datacnts *= (numbbins - 1.)**2 / 4.
     
     path = os.environ["PCAT_DATA_PATH"] + '/data/inpt/tgas.fits'
     pf.writeto(path, datacnts, clobber=True)
     
     backcnts = copy(datacnts)
-    backcnts[0, 0, :, :, 0] = sp.ndimage.filters.gaussian_filter(backcnts[0, 0, :, :, 0], sigma=15)
+    backcnts[0, :, :, 0] = sp.ndimage.filters.gaussian_filter(backcnts[0, :, :, 0], sigma=15)
     backcnts[where(backcnts <= 0.)] = 1e-5
    
     set_printoptions(precision=1)
@@ -263,8 +263,6 @@ def pcat_tgas_mock(strgcnfgextnexec=None):
     dictargs = {}
     dictargs['exprtype'] = 'sdyn'
     dictargs['backtype'] = [['tgasback.fits']]
-    
-    dictargs['numbsidecart'] = 200
     
     dictargs['minmdatacnts'] = 0.
     dictargs['psfnevaltype'] = 'none'
@@ -322,7 +320,6 @@ def pcat_tgas_mock_spmr(strgcnfgextnexec=None):
     dictargs['truenobjpop0reg00000'] = 3e1
     dictargs['numbelempop0reg0'] = 1
     dictargs['priofactdoff'] = 0.
-    dictargs['numbsidecart'] = 200
     dictargs['probtran'] = 1.
     dictargs['probspmr'] = 1.
     dictargs['numbswep'] = 100000

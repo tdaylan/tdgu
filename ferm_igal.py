@@ -1072,28 +1072,31 @@ def pcat_ferm_mock_igal_brok(strgcnfgextnexec=None):
 def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
    
     # overplot NPTF results
-    refrplothistflux = zeros((2, 4))
-    refrplothistflux[0, :] = [1e-11, 1e-10, 3e-10, 5e-10]
-    refrplothistflux[1, :] = [1e6, 1e7, 1e4, 1e6]
 
     dictargs = {}
     dictargs['strgexprsbrt'] = 'sbrtfermrec8pntsigal0256.fits'
     dictargs['spectype'] = ['colr']
     dictargs['savestat'] = True
+    dictargs['listnameback'] = ['isot', 'fdfm', 'dark']
+    dictargs['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']]
     
-    dictargs['refrplothistfluxpop2'] = refrplothistflux
+    dictargs['listprefhistfluxlabl'] = ['NPTF']
+    dictargs['listprefhistfluxflux'] = [[1e-11, 1e-10, 3e-10, 5e-10]]
+    dictargs['listprefhistfluxhist'] = [[1e6, 1e7, 1e4, 1e6]]
    
     # temp
     dictargs['inittype'] = 'reco'
     #dictargs['verbtype'] = 2
-    dictargs['numbswep'] = 1000000
+    dictargs['numbswep'] = 2000000
     #dictargs['numbswepplot'] = 1
     dictargs['numbburn'] = 0
     dictargs['optitype'] = 'none'
-    dictargs['numbsamp'] = 100
+    dictargs['numbsamp'] = 1000
     #dictargs['forcsavestat'] = True
     dictargs['psfnevaltype'] = 'kern'
     dictargs['priofactdoff'] = 0.5
+    
+    dictargs['makeplotinit'] = True
     
     #dictargs['proppsfp'] = False
     #dictargs['propdist'] = False
@@ -1106,25 +1109,32 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
     
-    listnamecnfgextn = ['nomi', 'rec7', 'mask', 'popl', 'backwfou', 'backfour', 'backtemp', 'dark', 'lprirefe']
+    listnamecnfgextn = ['nomi', 'rec7', 'mask', 'popl', 'backwfou', 'backfour', 'backtemp', 'dark', 'lprirefe', 'backsmth', 'test']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
-    dictargsvari['dark']['listnameback'] = ['isot', 'fdfm', 'dark']
-    dictargsvari['dark']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']]
-    
-    dictargsvari['nomi']['listnameback'] = ['isot', 'fdfm']
-    dictargsvari['nomi']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
-    
-    dictargsvari['rec7']['strgexpo'] = 'expofermrec7pntsigal0256.fits'
-                 
     dictargsvari['mask']['mask'] = array([-30., 30., -2., 2.]) / 180. * pi
-    
-    dictargsvari['lprirefe']['boolrefeforc'] = True
     
     dictargsvari['popl']['numbpopl'] = 3
                    
+    dictargsvari['lprirefe']['boolrefeforc'] = True
+    #dictargsvari['lprirefe']['inittype'] = 'rand'
+    dictargsvari['lprirefe']['anglassc'] = 1e6
+    dictargsvari['lprirefe']['minmnumbelempop0reg0'] = 135
+    dictargsvari['lprirefe']['maxmnumbelempop0reg0'] = 135
+    dictargsvari['lprirefe']['indxrefrforc'] = [0]
+    
+    #dictargsvari['backsmth']['initnumbelempop0reg0'] = 0
+    dictargsvari['backsmth']['numbswep'] = 1000
+    dictargsvari['backsmth']['numbsamp'] = 10
+    dictargsvari['backsmth']['propcomp'] = False
+    dictargsvari['backsmth']['probtran'] = 0.
+    dictargsvari['backsmth']['psfnevaltype'] = 'full'
+    dictargsvari['backsmth']['backtype'] = [[1., 'sbrtfdfmpnts.fits', 'sbrtdarkpnts.fits']]
+    
+    dictargsvari['rec7']['strgexpo'] = 'expofermrec7pntsigal0256.fits'
+                 
     dictargsvari['backwfou']['listnameback'] = ['isot', 'fdfm', 'bfunwfou0004']
     dictargsvari['backwfou']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'bfunwfou0004']]
     
@@ -1135,6 +1145,8 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargsvari['backtemp']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'hydrpntssmthrec8.fits', 'cmonpntssmthrec8.fits', \
                                                                                     'dustsfddpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits', 'wisepntssmthrec8.fits']]
     
+    dictargsvari['test']['shrtfram'] = False
+                 
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \

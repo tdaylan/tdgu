@@ -350,8 +350,8 @@ def pcat_chan_mock(strgcnfgextnexec=None):
    
     dictargs = {}
     dictargs['exprtype'] = 'chan'
-    #dictargs['truemaxmnumbelempop0reg0'] = 200
-    dictargs['truenumbelempop0reg0'] = 400
+    dictargs['truemaxmnumbelempop0reg0'] = 400
+    dictargs['truenumbelempop0reg0'] = 100
     #dictargs['fittmaxmnumbelempop0reg0'] = 1
     #dictargs['fittnumbelempop0reg0'] = 1
     # temp
@@ -364,9 +364,10 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     #dictargs['strgexpo'] = 1e9
     dictargs['trueelemtype'] = ['lghtpntsagnntrue']
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
-    dictargs['makeplotinit'] = True
-    dictargs['numbswep'] = 100000
-    dictargs['numbsamp'] = 100
+    dictargs['makeplot'] = False
+    #dictargs['makeplotinit'] = True
+    dictargs['numbswep'] = 1000
+    dictargs['numbsamp'] = 10
     #dictargs['verbtype'] = 2
     dictargs['priofactdoff'] = 0.2
     
@@ -426,11 +427,12 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['propcomp'] = False
     #dictargs['probtran'] = 0.
     #dictargs['spectype'] = ['colr']
-    dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 1000
+    dictargs['rtagmock'] = '20171204_081643_pcat_chan_mock_nomi_1000'
     dictargs['checprio'] = True
-    dictargs['numbsamp'] = 100
-    #dictargs['optitype'] = 'none'
-    #dictargs['makeplot'] = False
+    dictargs['numbsamp'] = 10
+    dictargs['optitype'] = 'none'
+    dictargs['makeplot'] = False
     #dictargs['verbtype'] = 2
     #dictargs['optitype'] = 'none'
     # temp
@@ -461,7 +463,6 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
         maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
         dictargsvari[anlytype]['anlytype'] = anlytype
         dictargsvari[anlytype]['maxmgangdata'] = maxmgangdata 
-        dictargsvari[anlytype]['numbsidecart'] = numbsidecart
         dictargsvari[anlytype]['strgexpo'] = strgexpo
         dictargsvari[anlytype]['strgexprsbrt'] = strgexprsbrt
         if namecnfgextn[:8] == 'extr4msc' or namecnfgextn[:8] == 'home7msc':
