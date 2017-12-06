@@ -261,13 +261,13 @@ def pcat_chan_mock_popl(strgcnfgextnexec=None):
                              )
 
 
-def pcat_chan_mock_spec(strgcnfgextnexec=None):
+def pcat_chan_spec_mock(strgcnfgextnexec=None):
     
     dictargs = {}
     dictargs['exprtype'] = 'chan'
     dictargs['spatdisttype'] = ['line']
-    dictargs['spectype'] = ['gaus']
-    dictargs['strgexpo'] = 1e3
+    dictargs['spectype'] = ['edis']
+    dictargs['strgexpo'] = 1e4
     dictargs['elemtype'] = ['lghtline']
     dictargs['inittype'] = 'refr'
     # assume a pixel with side 100 arcsec
@@ -277,7 +277,7 @@ def pcat_chan_mock_spec(strgcnfgextnexec=None):
     dictargs['anlytype'] = 'spec'
     
     # temp
-    dictargs['numbelempop0reg0'] = 20
+    dictargs['numbelempop0reg0'] = 10
     dictargs['probspmr'] = 0.
     dictargs['numbswep'] = 100000
     dictargs['numbsamp'] = 1000
@@ -308,7 +308,7 @@ def pcat_chan_spec_spmr(strgcnfgextnexec=None):
     dictargs = {}
     dictargs['exprtype'] = 'chan'
     dictargs['spatdisttype'] = ['line']
-    dictargs['spectype'] = ['gaus']
+    dictargs['spectype'] = ['edis']
     dictargs['strgexpo'] = 1e3
     dictargs['elemtype'] = ['lghtline']
     dictargs['inittype'] = 'refr'
@@ -428,7 +428,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['probtran'] = 0.
     #dictargs['spectype'] = ['colr']
     dictargs['numbswep'] = 1000
-    dictargs['rtagmock'] = '20171204_081643_pcat_chan_mock_nomi_1000'
+    dictargs['rtagmock'] = '20171206_154430_pcat_chan_mock_nomi_1000'
     dictargs['checprio'] = True
     dictargs['numbsamp'] = 10
     dictargs['optitype'] = 'none'

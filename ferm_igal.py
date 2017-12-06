@@ -1002,7 +1002,7 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
     
-    listnamecnfgextn = ['nomi', 'truedark', 'backwfou', 'backfour', 'popl', 'parsnone', 'heal', 'psfnfixd', 'penalpridiff', 'checprio']
+    listnamecnfgextn = ['nomi', 'truedark', 'backwfou', 'backfour', 'popl', 'parsnone', 'heal', 'psfnfixd', 'penalpridiff', 'checprio', 'test']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
@@ -1035,6 +1035,14 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     
     dictargsvari['checprio']['checprio'] = True
     
+    dictargsvari['test']['verbtype'] = 2
+    dictargsvari['test']['maxmnumbelempop0reg0'] = 0
+    dictargsvari['test']['numbelempop0reg0'] = 0
+    dictargsvari['test']['maxmnumbelempop1reg0'] = 0
+    dictargsvari['test']['numbelempop1reg0'] = 0
+    dictargsvari['test']['maxmnumbelempop2reg0'] = 0
+    dictargsvari['test']['numbelempop2reg0'] = 0
+    dictargsvari['test']['proppsfp'] = True
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
