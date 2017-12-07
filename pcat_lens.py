@@ -398,7 +398,7 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
                                  )
     
 
-def pcat_lens_mock_sour(strgcnfgextnexec=None):
+def pcat_lens_sour_mock(strgcnfgextnexec=None):
    
     anglfact = 3600. * 180. / pi
     
@@ -410,8 +410,8 @@ def pcat_lens_mock_sour(strgcnfgextnexec=None):
     dictargs['numbelempop1reg0'] = 50
     dictargs['maxmnumbelempop1reg0'] = 100
     
-    dictargs['numbelempop2reg0'] = 0
-    dictargs['maxmnumbelempop2reg0'] = 0
+    #dictargs['numbelempop2reg0'] = 0
+    #dictargs['maxmnumbelempop2reg0'] = 0
     
     dictargs['truelgalsourreg0'] = 0.
     dictargs['truebgalsourreg0'] = 0.

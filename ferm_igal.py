@@ -993,7 +993,7 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     # temp
     #dictargs['verbtype'] = 2
     dictargs['optitype'] = 'none'
-    dictargs['diagmode'] = False
+    #dictargs['diagmode'] = False
     dictargs['numbswep'] = 200000
     #dictargs['numbburn'] = 0
     dictargs['numbsamp'] = 1000
@@ -1038,11 +1038,13 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargsvari['test']['verbtype'] = 2
     dictargsvari['test']['maxmnumbelempop0reg0'] = 0
     dictargsvari['test']['numbelempop0reg0'] = 0
+    dictargsvari['test']['psfnevaltype'] = 'conv'
     dictargsvari['test']['maxmnumbelempop1reg0'] = 0
     dictargsvari['test']['numbelempop1reg0'] = 0
     dictargsvari['test']['maxmnumbelempop2reg0'] = 0
     dictargsvari['test']['numbelempop2reg0'] = 0
     dictargsvari['test']['proppsfp'] = True
+    dictargsvari['test']['sqzeprop'] = True
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
