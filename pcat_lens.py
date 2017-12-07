@@ -405,13 +405,12 @@ def pcat_lens_sour_mock(strgcnfgextnexec=None):
     dictargs = {}
     dictargs['exprtype'] = 'hubb'
     
-    dictargs['numbelempop0reg0'] = 2
-    dictargs['maxmnumbelempop0reg0'] = 20
-    dictargs['numbelempop1reg0'] = 50
-    dictargs['maxmnumbelempop1reg0'] = 100
-    
-    #dictargs['numbelempop2reg0'] = 0
-    #dictargs['maxmnumbelempop2reg0'] = 0
+    dictargs['numbelempop0reg0'] = 5
+    dictargs['maxmnumbelempop0reg0'] = 10
+    dictargs['numbelempop1reg0'] = 5
+    dictargs['maxmnumbelempop1reg0'] = 10
+    dictargs['numbelempop2reg0'] = 5
+    dictargs['maxmnumbelempop2reg0'] = 10
     
     dictargs['truelgalsourreg0'] = 0.
     dictargs['truebgalsourreg0'] = 0.
