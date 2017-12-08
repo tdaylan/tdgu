@@ -1057,6 +1057,10 @@ def pcat_ferm_mock_igal_brok(strgcnfgextnexec=None):
     dictargs = {}
     dictargs['truemaxmnumbelempop0reg0'] = 100
     
+    dictargs['forccart'] = True
+    dictargs['pixltype'] = 'cart'
+    dictargs['numbsidecart'] = 100
+    
     listnamecnfgextn = ['breklowr', 'brekuppr']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:

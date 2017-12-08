@@ -310,25 +310,12 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictargs['exprtype'] = 'chan'
     dictargs['truemaxmnumbelempop0reg0'] = 400
     dictargs['truenumbelempop0reg0'] = 100
-    #dictargs['fittmaxmnumbelempop0reg0'] = 1
-    #dictargs['fittnumbelempop0reg0'] = 1
-    # temp
     dictargs['strgexpo'] = 'expochanhome4msc0300.fits'
-    #dictargs['propbacp'] = False
-    #dictargs['proppsfp'] = False
-    #dictargs['propdist'] = False
-    #dictargs['propcomp'] = False
-    #dictargs['probspmr'] = 0.
-    #dictargs['strgexpo'] = 1e9
     dictargs['trueelemtype'] = ['lghtpntsagnntrue']
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
-    #dictargs['makeplot'] = False
-    #dictargs['makeplotinit'] = True
-    dictargs['numbswep'] = 1000
-    dictargs['numbsamp'] = 10
-    dictargs['shrtfram'] = False
-    #dictargs['verbtype'] = 2
     dictargs['priofactdoff'] = 0.2
+    
+    dictargs['numbswep'] = 100000
     
     listnamecnfgextn = ['nomi', 'truevlow', 'trueloww', 'truehigh', 'truenone']
     dictargsvari = {}
@@ -387,7 +374,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['probtran'] = 0.
     #dictargs['spectype'] = ['colr']
     dictargs['numbswep'] = 1000
-    dictargs['rtagmock'] = '20171206_172307_pcat_chan_mock_nomi_1000'
+    dictargs['rtagmock'] = '20171208_123859_pcat_chan_mock_nomi_1000'
     dictargs['checprio'] = True
     dictargs['numbsamp'] = 10
     dictargs['optitype'] = 'none'
