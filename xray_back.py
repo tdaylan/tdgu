@@ -261,48 +261,6 @@ def pcat_chan_mock_popl(strgcnfgextnexec=None):
                              )
 
 
-def pcat_chan_spec_mock(strgcnfgextnexec=None):
-    
-    dictargs = {}
-    dictargs['exprtype'] = 'chan'
-    dictargs['spatdisttype'] = ['line']
-    dictargs['spectype'] = ['edis']
-    dictargs['strgexpo'] = 1e4
-    dictargs['elemtype'] = ['lghtline']
-    dictargs['inittype'] = 'refr'
-    # assume a pixel with side 100 arcsec
-    anglfact = 3600. * 180. / pi
-    dictargs['maxmgangdata'] = 100. / anglfact
-    dictargs['numbsidecart'] = 1
-    dictargs['anlytype'] = 'spec'
-    
-    # temp
-    dictargs['numbelempop0reg0'] = 10
-    dictargs['probspmr'] = 0.
-    dictargs['numbswep'] = 100000
-    dictargs['numbsamp'] = 1000
-    
-    # true < thrs < modl -- trad 
-    # true < modl < thrs -- pcat
-    
-    # thrs < true < modl -- trad
-    # modl < true < thrs -- pcat
-    
-    # thrs < modl < true -- trad
-    # modl < thrs < true -- pcat
-    listnamecnfgextn = ['nomi', 's2nrhigh']
-    dictargsvari = {}
-    for namecnfgextn in listnamecnfgextn:
-        dictargsvari[namecnfgextn] = {}
-    dictargsvari['s2nrhigh']['strgexpo'] = 1e5
-    
-    dictglob = pcat.main.initarry( \
-                                  dictargsvari, \
-                                  dictargs, \
-                                  strgcnfgextnexec=strgcnfgextnexec, \
-                                 )
-    
-
 def pcat_chan_spec_spmr(strgcnfgextnexec=None):
   
     dictargs = {}
@@ -366,8 +324,8 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
     #dictargs['makeplot'] = False
     #dictargs['makeplotinit'] = True
-    dictargs['numbswep'] = 10000
-    dictargs['numbsamp'] = 100
+    dictargs['numbswep'] = 1000
+    dictargs['numbsamp'] = 10
     dictargs['shrtfram'] = False
     #dictargs['verbtype'] = 2
     dictargs['priofactdoff'] = 0.2

@@ -405,36 +405,36 @@ def pcat_lens_sour_mock(strgcnfgextnexec=None):
     dictargs = {}
     dictargs['exprtype'] = 'hubb'
     
-    dictargs['numbelempop0reg0'] = 5
-    dictargs['maxmnumbelempop0reg0'] = 10
-    dictargs['numbelempop1reg0'] = 5
-    dictargs['maxmnumbelempop1reg0'] = 10
-    dictargs['numbelempop2reg0'] = 5
-    dictargs['maxmnumbelempop2reg0'] = 10
+    dictargs['numbelempop0reg0'] = 20
+    dictargs['maxmnumbelempop0reg0'] = 100
+    dictargs['numbelempop1reg0'] = 20
+    dictargs['maxmnumbelempop1reg0'] = 100
+    dictargs['numbelempop2reg0'] = 20
+    dictargs['maxmnumbelempop2reg0'] = 100
     
-    dictargs['truelgalsourreg0'] = 0.
-    dictargs['truebgalsourreg0'] = 0.
-    dictargs['truefluxsourreg0'] = 3e-18
-    dictargs['truefluxpop0reg00000'] = 1e-18
-    dictargs['truefluxpop0reg00001'] = 3e-18
-    dictargs['truelgalpop2reg00000'] = -0.2 / anglfact
-    dictargs['truebgalpop2reg00000'] = 0.
-    dictargs['truefluxpop2reg00000'] = 1e-19
-    dictargs['truelgalpop2reg00001'] = -0.1 / anglfact
-    dictargs['truebgalpop2reg00001'] = 0.
-    dictargs['truefluxpop2reg00001'] = 3e-19
-    dictargs['truelgalpop2reg00002'] = 0.1 / anglfact
-    dictargs['truebgalpop2reg00002'] = 0.
-    dictargs['truefluxpop2reg00002'] = 3e-19
-    dictargs['truelgalpop2reg00003'] = 0.2 / anglfact
-    dictargs['truebgalpop2reg00003'] = 0.
-    dictargs['truefluxpop2reg00003'] = 1e-19
+    #dictargs['truelgalsourreg0'] = 0.
+    #dictargs['truebgalsourreg0'] = 0.
+    #dictargs['truefluxsourreg0'] = 3e-18
+    #dictargs['truefluxpop0reg00000'] = 1e-18
+    #dictargs['truefluxpop0reg00001'] = 3e-18
+    #dictargs['truelgalpop2reg00000'] = -0.2 / anglfact
+    #dictargs['truebgalpop2reg00000'] = 0.
+    #dictargs['truefluxpop2reg00000'] = 1e-19
+    #dictargs['truelgalpop2reg00001'] = -0.1 / anglfact
+    #dictargs['truebgalpop2reg00001'] = 0.
+    #dictargs['truefluxpop2reg00001'] = 3e-19
+    #dictargs['truelgalpop2reg00002'] = 0.1 / anglfact
+    #dictargs['truebgalpop2reg00002'] = 0.
+    #dictargs['truefluxpop2reg00002'] = 3e-19
+    #dictargs['truelgalpop2reg00003'] = 0.2 / anglfact
+    #dictargs['truebgalpop2reg00003'] = 0.
+    #dictargs['truefluxpop2reg00003'] = 1e-19
     #dictargs['refrlegdpopl'] = ['PS', 'Subhalo', 'Blob']
    
     # temp
-    #dictargs['makeplotinit'] = True
+    dictargs['makeplotinit'] = True
     #dictargs['shrtfram'] = False
-    dictargs['numbswep'] = 40000
+    dictargs['numbswep'] = 10000
     dictargs['numbswepplot'] = 4000
     dictargs['numbsamp'] = 100
     dictargs['probspmr'] = 0.
@@ -1057,16 +1057,10 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     dictargs['maxmnumbelempop0reg0'] = 5
     dictargs['maxmnumbelempop1reg0'] = 5
     dictargs['maxmnumbelempop2reg0'] = 5
-    # temp
-    dictargs['sqzeprop'] = True
-    dictargs['numbswep'] = 1000
+    dictargs['numbswep'] = 10000
     dictargs['numbsamp'] = 100
-    dictargs['makeplotinit'] = False
-    dictargs['numbswepplot'] = 1000
-    dictargs['shrtfram'] = True
-    dictargs['verbtype'] = 2
  
-    listnamecnfgextn = ['largrofi', 'largrofimask', 'nomi', 'mask']
+    listnamecnfgextn = ['largrofi', 'largrofimask', 'nomi', 'mask', 'sour']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
@@ -1079,10 +1073,10 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     dictargsvari['largrofi']['strgexprsbrt'] = strgexprsbrtlarg
     dictargsvari['largrofi']['maxmgangdata'] = maxmgangdatalarg
     #dictargsvari['largrofi']['thindata'] = True
-    #dictargsvari['largrofi']['initlgalhostreg0'] = 0.
+    #dictargsvari['largrofi']['initlgalhostreg0'] = -0.1 / anglfact
     #dictargsvari['largrofi']['initbgalhostreg0'] = 0.
-    #dictargsvari['largrofi']['initlgalsourreg0'] = 0.
-    #dictargsvari['largrofi']['initbgalsourreg0'] = 0.
+    #dictargsvari['largrofi']['initlgalsourreg0'] = -0.2 / anglfact
+    #dictargsvari['largrofi']['initbgalsourreg0'] = 0.2 / anglfact
     
     #dictargsvari['largrofimask']['numbswep'] = 10000
     dictargsvari['largrofimask']['numbswepplot'] = 1000
@@ -1093,8 +1087,22 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     dictargsvari['largrofimask']['strgexprsbrt'] = strgexprsbrtlarg
     dictargsvari['largrofimask']['maxmgangdata'] = maxmgangdatalarg
     
+    dictargsvari['sour']['strgexprsbrt'] = strgexprsbrt
+    dictargsvari['sour']['elemtype'] = ['lens', 'lghtgausbgrd']
+    dictargsvari['sour']['maxmnumbelempop0reg0'] = 0
+    dictargsvari['sour']['maxmnumbelempop1reg0'] = 0
+    dictargsvari['sour']['initlgalhostreg0'] = -0.1 / anglfact
+    dictargsvari['sour']['initbgalhostreg0'] = 0.
+    dictargsvari['sour']['initlgalsourreg0'] = -0.2 / anglfact
+    dictargsvari['sour']['initbgalsourreg0'] = 0.2 / anglfact
+    
     dictargsvari['nomi']['strgexprsbrt'] = strgexprsbrt
     dictargsvari['nomi']['maxmgangdata'] = maxmgangdata
+    #dictargsvari['nomi']['initlgalhostreg0'] = -0.1 / anglfact
+    #dictargsvari['nomi']['initbgalhostreg0'] = 0.
+    #dictargsvari['nomi']['initlgalsourreg0'] = -0.2 / anglfact
+    #dictargsvari['nomi']['initbgalsourreg0'] = 0.2 / anglfact
+    dictargsvari['nomi']['maxmnumbelempop0reg0'] = 0
     
     dictargsvari['mask']['listmask'] = listmask
     dictargsvari['mask']['strgexprsbrt'] = strgexprsbrt
