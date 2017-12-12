@@ -448,12 +448,14 @@ def pcat_lens_sour_mock(strgcnfgextnexec=None):
     numbelem = int(25. * 10.**0.9)
     anglfact = 3600. * 180. / pi
 
-    listnamecnfgextn = ['nomi', 'datanone', 'subhsing', 'truelowr', 'pars', 'truevlow', 's2nrhigh', 's2nrvhig', 'amplhigh']
+    listnamecnfgextn = ['nomi', 'datanone', 'subhsing', 'truelowr', 'pars', 'truevlow', 's2nrhigh', 's2nrvhig', 'amplhigh', 'bgrdgexp']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
     dictargsvari['datanone']['killexpo'] = True
+    
+    dictargsvari['bgrdgexp']['spatdisttype'] = ['unif', 'unif', 'gexp']
     
     dictargsvari['subhsing']['fittminmnumbelempop0reg0'] = 1
     dictargsvari['subhsing']['fittmaxmnumbelempop0reg0'] = 1
@@ -1053,19 +1055,13 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     dictargs['savestat'] = True
     dictargs['serstype'] = 'intp'
     dictargs['inittype'] = 'reco'
-    #dictargs['namerecostat'] = 'pcat_lens_inpt'
-    dictargs['maxmnumbelempop0reg0'] = 5
-    dictargs['maxmnumbelempop1reg0'] = 5
-    dictargs['maxmnumbelempop2reg0'] = 5
-    dictargs['numbswep'] = 10000
-    dictargs['numbsamp'] = 100
+    dictargs['numbswep'] = 100000
  
     listnamecnfgextn = ['largrofi', 'largrofimask', 'nomi', 'mask', 'sour']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
-    #dictargsvari['largrofi']['numbswep'] = 10000
     dictargsvari['largrofi']['numbswepplot'] = 1000
     dictargsvari['largrofi']['maxmnumbelempop0reg0'] = 0
     dictargsvari['largrofi']['maxmnumbelempop1reg0'] = 0
@@ -1073,12 +1069,12 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     dictargsvari['largrofi']['strgexprsbrt'] = strgexprsbrtlarg
     dictargsvari['largrofi']['maxmgangdata'] = maxmgangdatalarg
     #dictargsvari['largrofi']['thindata'] = True
+    
     #dictargsvari['largrofi']['initlgalhostreg0'] = -0.1 / anglfact
     #dictargsvari['largrofi']['initbgalhostreg0'] = 0.
     #dictargsvari['largrofi']['initlgalsourreg0'] = -0.2 / anglfact
     #dictargsvari['largrofi']['initbgalsourreg0'] = 0.2 / anglfact
     
-    #dictargsvari['largrofimask']['numbswep'] = 10000
     dictargsvari['largrofimask']['numbswepplot'] = 1000
     dictargsvari['largrofimask']['maxmnumbelempop0reg0'] = 0
     dictargsvari['largrofimask']['maxmnumbelempop1reg0'] = 0
@@ -1088,30 +1084,24 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     dictargsvari['largrofimask']['maxmgangdata'] = maxmgangdatalarg
     
     dictargsvari['sour']['strgexprsbrt'] = strgexprsbrt
-    dictargsvari['sour']['elemtype'] = ['lens', 'lghtgausbgrd']
+    dictargsvari['sour']['forcsavestat'] = True
     dictargsvari['sour']['maxmnumbelempop0reg0'] = 0
     dictargsvari['sour']['maxmnumbelempop1reg0'] = 0
-    dictargsvari['sour']['initlgalhostreg0'] = -0.1 / anglfact
-    dictargsvari['sour']['initbgalhostreg0'] = 0.
-    dictargsvari['sour']['initlgalsourreg0'] = -0.2 / anglfact
-    dictargsvari['sour']['initbgalsourreg0'] = 0.2 / anglfact
+    dictargsvari['sour']['elemtype'] = ['lens', 'lghtgausbgrd']
+    #dictargsvari['sour']['initlgalhostreg0'] = -0.1 / anglfact
+    #dictargsvari['sour']['initbgalhostreg0'] = 0.
+    #dictargsvari['sour']['initlgalsourreg0'] = -0.2 / anglfact
+    #dictargsvari['sour']['initbgalsourreg0'] = 0.2 / anglfact
+    #dictargsvari['sour']['inittype'] = 'rand'
     
     dictargsvari['nomi']['strgexprsbrt'] = strgexprsbrt
     dictargsvari['nomi']['maxmgangdata'] = maxmgangdata
-    #dictargsvari['nomi']['initlgalhostreg0'] = -0.1 / anglfact
-    #dictargsvari['nomi']['initbgalhostreg0'] = 0.
-    #dictargsvari['nomi']['initlgalsourreg0'] = -0.2 / anglfact
-    #dictargsvari['nomi']['initbgalsourreg0'] = 0.2 / anglfact
     dictargsvari['nomi']['maxmnumbelempop0reg0'] = 0
     
     dictargsvari['mask']['listmask'] = listmask
     dictargsvari['mask']['strgexprsbrt'] = strgexprsbrt
     dictargsvari['mask']['maxmgangdata'] = maxmgangdata
     
-    #fittmeanbacpbac0ene0=fittmeanbacpbac0ene0, \
-    #fittstdvbacpbac0ene0=fittstdvbacpbac0ene0, \
-    #fittscalbacpbac0ene0=fittscalbacpbac0ene0, \
-   
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \

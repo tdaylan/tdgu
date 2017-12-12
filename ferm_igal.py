@@ -1052,29 +1052,40 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
                                  )
 
 
-def pcat_ferm_mock_igal_brok(strgcnfgextnexec=None):
+def pcat_ferm_brek_mock(strgcnfgextnexec=None):
      
     dictargs = {}
     dictargs['truemaxmnumbelempop0reg0'] = 100
     
     dictargs['forccart'] = True
     dictargs['pixltype'] = 'cart'
+    dictargs['fluxdisttype'] = ['dpowslopbrek']
+    dictargs['elemtype'] = ['lghtpnts']
     dictargs['numbsidecart'] = 100
+    dictargs['truefluxdistsloppop0'] = 2.
+    dictargs['truefluxdistbrekpop0'] = 1e-8
+    dictargs['backtype'] = [[1.]]
     
-    listnamecnfgextn = ['breklowr', 'brekuppr']
+    # temp
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 100
+    dictargs['optitype'] = 'none'
+    #dictargs['makeplot'] = False
+    
+    listnamecnfgextn = ['brekloww', 'brekhigh', 'nomi', 'brekstep', 'brekshal', 'brekuppr']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
-    dictargsvari['breklowr']['truefluxdistslop0000pop0'] = 2.
-    dictargsvari['breklowr']['truefluxdistbrek0000pop0'] = 1e-10
-    dictargsvari['breklowr']['truefluxdistbrek0000pop0'] = 1e-10
-    dictargsvari['breklowr']['fittfluxdisttype'] = 'powrtran'
-    dictargsvari['breklowr']['truenumbelempop3'] = 2
+    dictargsvari['brekloww']['truefluxdistbrekpop0'] = 1e-9
     
-    dictargsvari['brekuppr']['truefluxdistslop0000pop0'] = 2.
-    dictargsvari['brekuppr']['truefluxdistbrek0000pop0'] = 1e-8
-    dictargsvari['brekuppr']['fittfluxdisttype'] = 'powr'
+    dictargsvari['brekhigh']['truefluxdistbrekpop0'] = 1e-7
+    
+    dictargsvari['brekstep']['truefluxdistsloplowrpop0'] = 1.
+    
+    dictargsvari['brekshal']['truefluxdistsloplowrpop0'] = 1.5
+    
+    dictargsvari['brekuppr']['truefluxdistsloplowrpop0'] = 2.5
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
