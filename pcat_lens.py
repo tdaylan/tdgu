@@ -434,6 +434,7 @@ def pcat_lens_sour_mock(strgcnfgextnexec=None):
     # temp
     dictargs['makeplotinit'] = True
     #dictargs['shrtfram'] = False
+    dictargs['spatdisttype'] = ['unif', 'unif', 'gangexpo']
     dictargs['numbswep'] = 10000
     dictargs['numbswepplot'] = 4000
     dictargs['numbsamp'] = 100
@@ -442,7 +443,7 @@ def pcat_lens_sour_mock(strgcnfgextnexec=None):
     #dictargs['makeplot'] = False
     
     #dictargs['inittype'] = 'refr'
-    #dictargs['optitype'] = 'none'
+    dictargs['optitype'] = 'none'
     #dictargs['verbtype'] = 2
     
     numbelem = int(25. * 10.**0.9)
@@ -1056,8 +1057,11 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     dictargs['serstype'] = 'intp'
     dictargs['inittype'] = 'reco'
     dictargs['numbswep'] = 100000
+    #dictargs['inittype'] = 'rand'
+    
+    #dictargs['optitype'] = 'none'
  
-    listnamecnfgextn = ['largrofi', 'largrofimask', 'nomi', 'mask', 'sour']
+    listnamecnfgextn = ['largrofi', 'largrofimask', 'nomi', 'mask', 'sour', 'sourgangexpo', 'sourmask']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
@@ -1070,11 +1074,6 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     dictargsvari['largrofi']['maxmgangdata'] = maxmgangdatalarg
     #dictargsvari['largrofi']['thindata'] = True
     
-    #dictargsvari['largrofi']['initlgalhostreg0'] = -0.1 / anglfact
-    #dictargsvari['largrofi']['initbgalhostreg0'] = 0.
-    #dictargsvari['largrofi']['initlgalsourreg0'] = -0.2 / anglfact
-    #dictargsvari['largrofi']['initbgalsourreg0'] = 0.2 / anglfact
-    
     dictargsvari['largrofimask']['numbswepplot'] = 1000
     dictargsvari['largrofimask']['maxmnumbelempop0reg0'] = 0
     dictargsvari['largrofimask']['maxmnumbelempop1reg0'] = 0
@@ -1083,16 +1082,33 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     dictargsvari['largrofimask']['strgexprsbrt'] = strgexprsbrtlarg
     dictargsvari['largrofimask']['maxmgangdata'] = maxmgangdatalarg
     
+    dictargsvari['sourgangexpo']['strgexprsbrt'] = strgexprsbrt
+    dictargsvari['sourgangexpo']['maxmnumbelempop0reg0'] = 0
+    dictargsvari['sourgangexpo']['maxmnumbelempop1reg0'] = 0
+    dictargsvari['sourgangexpo']['elemtype'] = ['lens', 'lghtgausbgrd']
+    dictargsvari['sourgangexpo']['spatdisttype'] = ['unif', 'gangexpo']
+    dictargsvari['sourgangexpo']['initlgalhostreg0'] = -0.1 / anglfact
+    dictargsvari['sourgangexpo']['initbgalhostreg0'] = 0.
+    dictargsvari['sourgangexpo']['initlgalsourreg0'] = -0.2 / anglfact
+    dictargsvari['sourgangexpo']['initbgalsourreg0'] = 0.2 / anglfact
+    dictargsvari['sourgangexpo']['inittype'] = 'rand'
+    
     dictargsvari['sour']['strgexprsbrt'] = strgexprsbrt
-    dictargsvari['sour']['forcsavestat'] = True
-    dictargsvari['sour']['maxmnumbelempop0reg0'] = 0
-    dictargsvari['sour']['maxmnumbelempop1reg0'] = 0
-    dictargsvari['sour']['elemtype'] = ['lens', 'lghtgausbgrd']
+    dictargsvari['sour']['maxmnumbelempop0reg0'] = 1
+    dictargsvari['sour']['elemtype'] = ['lghtgausbgrd']
+    dictargsvari['sour']['numbswep'] = 100000
     #dictargsvari['sour']['initlgalhostreg0'] = -0.1 / anglfact
     #dictargsvari['sour']['initbgalhostreg0'] = 0.
     #dictargsvari['sour']['initlgalsourreg0'] = -0.2 / anglfact
     #dictargsvari['sour']['initbgalsourreg0'] = 0.2 / anglfact
-    #dictargsvari['sour']['inittype'] = 'rand'
+    #dictargsvari['sour']['forcsavestat'] = True
+    
+    dictargsvari['sourmask']['strgexprsbrt'] = strgexprsbrt
+    dictargsvari['sourmask']['maxmnumbelempop0reg0'] = 0
+    dictargsvari['sourmask']['maxmnumbelempop1reg0'] = 0
+    dictargsvari['sourmask']['elemtype'] = ['lens', 'lghtgausbgrd']
+    dictargsvari['sourmask']['listmask'] = listmask
+    dictargsvari['sourmask']['shrtfram'] = False
     
     dictargsvari['nomi']['strgexprsbrt'] = strgexprsbrt
     dictargsvari['nomi']['maxmgangdata'] = maxmgangdata

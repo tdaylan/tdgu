@@ -1070,6 +1070,7 @@ def pcat_ferm_brek_mock(strgcnfgextnexec=None):
     dictargs['numbswep'] = 10000
     dictargs['numbsamp'] = 100
     dictargs['optitype'] = 'none'
+    dictargs['verbtype'] = 0
     #dictargs['makeplot'] = False
     
     listnamecnfgextn = ['brekloww', 'brekhigh', 'nomi', 'brekstep', 'brekshal', 'brekuppr']
