@@ -1066,7 +1066,7 @@ def pcat_ferm_brek_mock(strgcnfgextnexec=None):
     dictargs['truefluxdistsloplowrpop0'] = 2.
     dictargs['truefluxdistbrekpop0'] = 3e-8
     #dictargs['listnameback'] = ['isot']
-    dictargs['backtype'] = [[5e-6]]
+    dictargs['backtype'] = [[1e1]]
     
     # temp
     dictargs['numbswep'] = 1000
