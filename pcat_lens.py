@@ -1057,17 +1057,18 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     
     dictargsvari['sourgangexpo']['probspmr'] = 0.
     dictargsvari['sourgangexpo']['strgexprsbrt'] = strgexprsbrt
-    dictargsvari['sourgangexpo']['maxmnumbelempop0reg0'] = 3
+    dictargsvari['sourgangexpo']['maxmnumbelempop0reg0'] = 1
     dictargsvari['sourgangexpo']['elemtype'] = ['lghtgausbgrd']
     #dictargsvari['sourgangexpo']['spatdisttype'] = ['unif', 'gangexpo']
     dictargsvari['sourgangexpo']['spatdisttype'] = ['gangexpo']
     dictargsvari['sourgangexpo']['gangdisttype'] = ['expo']
-    dictargsvari['sourgangexpo']['gangdistsexppop0'] = 1e-3 / anglfact
-    dictargsvari['sourgangexpo']['inittype'] = 'rand'
-    dictargsvari['sourgangexpo']['initlgalhostreg0'] = -0.1 / anglfact
-    dictargsvari['sourgangexpo']['initbgalhostreg0'] = 0.
-    dictargsvari['sourgangexpo']['initlgalsourreg0'] = -0.2 / anglfact
-    dictargsvari['sourgangexpo']['initbgalsourreg0'] = 0.2 / anglfact
+    dictargsvari['sourgangexpo']['gangdistsexppop0'] = 1e-8 / anglfact
+    dictargsvari['sourgangexpo']['forcsavestat'] = True
+    #dictargsvari['sourgangexpo']['inittype'] = 'rand'
+    #dictargsvari['sourgangexpo']['initlgalhostreg0'] = -0.1 / anglfact
+    #dictargsvari['sourgangexpo']['initbgalhostreg0'] = 0.
+    #dictargsvari['sourgangexpo']['initlgalsourreg0'] = -0.2 / anglfact
+    #dictargsvari['sourgangexpo']['initbgalsourreg0'] = 0.2 / anglfact
     #dictargsvari['sourgangexpo']['namerecostat'] = 'pcat_lens_inpt_nomi'
     
     dictargsvari['sour']['strgexprsbrt'] = strgexprsbrt

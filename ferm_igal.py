@@ -1069,11 +1069,11 @@ def pcat_ferm_brek_mock(strgcnfgextnexec=None):
     dictargs['backtype'] = [[1e1]]
     
     # temp
-    dictargs['numbswep'] = 1000
+    dictargs['numbswep'] = 100000
     dictargs['numbsamp'] = 100
     dictargs['optitype'] = 'none'
-    dictargs['mockonly'] = True
-    dictargs['makeplotinit'] = True
+    #dictargs['mockonly'] = True
+    #dictargs['makeplotinit'] = True
     #dictargs['verbtype'] = 0
     #dictargs['makeplot'] = False
     
