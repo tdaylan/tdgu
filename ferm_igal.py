@@ -1062,31 +1062,35 @@ def pcat_ferm_brek_mock(strgcnfgextnexec=None):
     dictargs['fluxdisttype'] = ['dpowslopbrek']
     dictargs['elemtype'] = ['lghtpnts']
     dictargs['numbsidecart'] = 100
-    dictargs['truefluxdistsloppop0'] = 2.
-    dictargs['truefluxdistbrekpop0'] = 1e-8
-    dictargs['backtype'] = [[1.]]
+    dictargs['truefluxdistslopupprpop0'] = 1.5
+    dictargs['truefluxdistsloplowrpop0'] = 2.
+    dictargs['truefluxdistbrekpop0'] = 3e-8
+    #dictargs['listnameback'] = ['isot']
+    dictargs['backtype'] = [[5e-6]]
     
     # temp
-    dictargs['numbswep'] = 10000
+    dictargs['numbswep'] = 1000
     dictargs['numbsamp'] = 100
     dictargs['optitype'] = 'none'
-    dictargs['verbtype'] = 0
+    dictargs['mockonly'] = True
+    dictargs['makeplotinit'] = True
+    #dictargs['verbtype'] = 0
     #dictargs['makeplot'] = False
     
-    listnamecnfgextn = ['brekloww', 'brekhigh', 'nomi', 'brekstep', 'brekshal', 'brekuppr']
+    listnamecnfgextn = ['brekloww', 'brekhigh', 'nomi', 'brekstep', 'brekflat', 'brekdown']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
-    dictargsvari['brekloww']['truefluxdistbrekpop0'] = 1e-9
+    dictargsvari['brekloww']['truefluxdistbrekpop0'] = 1e-8
     
     dictargsvari['brekhigh']['truefluxdistbrekpop0'] = 1e-7
     
-    dictargsvari['brekstep']['truefluxdistsloplowrpop0'] = 1.
+    dictargsvari['brekstep']['truefluxdistsloplowrpop0'] = 2.5
     
-    dictargsvari['brekshal']['truefluxdistsloplowrpop0'] = 1.5
+    dictargsvari['brekflat']['truefluxdistsloplowrpop0'] = 1.5
     
-    dictargsvari['brekuppr']['truefluxdistsloplowrpop0'] = 2.5
+    dictargsvari['brekdown']['truefluxdistsloplowrpop0'] = 1.1
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -1112,24 +1116,11 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
    
     # temp
     dictargs['inittype'] = 'reco'
-    #dictargs['verbtype'] = 2
-    dictargs['numbswep'] = 2000000
-    #dictargs['numbswepplot'] = 1
-    dictargs['numbburn'] = 0
+    dictargs['numbswep'] = 100000
+    dictargs['numbsamp'] = 100
     dictargs['optitype'] = 'none'
-    dictargs['numbsamp'] = 1000
-    #dictargs['forcsavestat'] = True
     dictargs['psfnevaltype'] = 'kern'
     dictargs['priofactdoff'] = 0.5
-    
-    dictargs['makeplotinit'] = True
-    
-    #dictargs['proppsfp'] = False
-    #dictargs['propdist'] = False
-    #dictargs['propbacp'] = False
-    #dictargs['probspmr'] = 1.
-    #dictargs['probtran'] = 0.
-    #dictargs['propcomp'] = False
 
     dictargs['forccart'] = True
     dictargs['pixltype'] = 'cart'
