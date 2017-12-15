@@ -1007,6 +1007,8 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
+    dictargsvari['nomi']['checprio'] = True
+    
     dictargsvari['truedark']['listnameback'] = ['isot', 'fdfm', 'dark']
     dictargsvari['truedark']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']]
     
@@ -1131,9 +1133,15 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
+    anglfact = 180. / pi
+
+    listmask = [['hstr', -2. / anglfact, 2. / anglfact]]
     dictargsvari['mask']['mask'] = array([-30., 30., -2., 2.]) / 180. * pi
+    dictargsvari['mask']['listmask'] = listmask
     
     dictargsvari['popl']['numbpopl'] = 3
+    
+    dictargsvari['nomi']['checprio'] = True
                    
     dictargsvari['lprirefe']['boolrefeforc'] = True
     #dictargsvari['lprirefe']['inittype'] = 'rand'

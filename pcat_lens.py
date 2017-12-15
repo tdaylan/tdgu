@@ -410,7 +410,7 @@ def pcat_lens_sour_mock(strgcnfgextnexec=None):
     dictargs['maxmnumbelempop0reg0'] = 100
     dictargs['numbelempop1reg0'] = 10
     dictargs['maxmnumbelempop1reg0'] = 100
-    dictargs['spatdisttype'] = ['unif', 'gangexpo']
+    dictargs['spatdisttype'] = ['unif', 'dsrcexpo']
     
     # temp
     dictargs['numbswep'] = 100000
@@ -687,6 +687,7 @@ def pcat_lens_mock_many():
     dictargs['numbsamp'] = 100
     dictargs['elemtype'] = ['lens']
     dictargs['numbregi'] = 3
+    dictargs['backtype'] = [[1.], [1.], [1.]]
     
     listnamecnfgextn = ['nomi', 'regising', 'regimany']
     dictargsvari = {}
@@ -694,7 +695,10 @@ def pcat_lens_mock_many():
         dictargsvari[namecnfgextn] = {}
     
     dictargsvari['regising']['numbregi'] = 1 
+    dictargsvari['regising']['backtype'] = [[1.]]
+    
     dictargsvari['regimany']['numbregi'] = 5
+    dictargsvari['regimany']['backtype'] = [[1.]] * 5
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -1032,9 +1036,9 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     dictargs['numbswep'] = 100000
     #dictargs['inittype'] = 'rand'
     
-    #dictargs['optitype'] = 'none'
+    dictargs['optitype'] = 'none'
  
-    listnamecnfgextn = ['largrofi', 'largrofimask', 'nomi', 'mask', 'sour', 'sourgangexpo', 'sourmask']
+    listnamecnfgextn = ['largrofi', 'largrofimask', 'nomi', 'mask', 'sour', 'dsrcexpo', 'sourmask', 'hostmult']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
@@ -1055,21 +1059,21 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     dictargsvari['largrofimask']['strgexprsbrt'] = strgexprsbrtlarg
     dictargsvari['largrofimask']['maxmgangdata'] = maxmgangdatalarg
     
-    dictargsvari['sourgangexpo']['probspmr'] = 0.
-    dictargsvari['sourgangexpo']['strgexprsbrt'] = strgexprsbrt
-    dictargsvari['sourgangexpo']['maxmnumbelempop0reg0'] = 1
-    dictargsvari['sourgangexpo']['elemtype'] = ['lghtgausbgrd']
-    #dictargsvari['sourgangexpo']['spatdisttype'] = ['unif', 'gangexpo']
-    dictargsvari['sourgangexpo']['spatdisttype'] = ['gangexpo']
-    dictargsvari['sourgangexpo']['gangdisttype'] = ['expo']
-    dictargsvari['sourgangexpo']['gangdistsexppop0'] = 1e-8 / anglfact
-    dictargsvari['sourgangexpo']['forcsavestat'] = True
-    #dictargsvari['sourgangexpo']['inittype'] = 'rand'
-    #dictargsvari['sourgangexpo']['initlgalhostreg0'] = -0.1 / anglfact
-    #dictargsvari['sourgangexpo']['initbgalhostreg0'] = 0.
-    #dictargsvari['sourgangexpo']['initlgalsourreg0'] = -0.2 / anglfact
-    #dictargsvari['sourgangexpo']['initbgalsourreg0'] = 0.2 / anglfact
-    #dictargsvari['sourgangexpo']['namerecostat'] = 'pcat_lens_inpt_nomi'
+    dictargsvari['dsrcexpo']['probspmr'] = 0.
+    dictargsvari['dsrcexpo']['strgexprsbrt'] = strgexprsbrt
+    dictargsvari['dsrcexpo']['maxmnumbelempop0reg0'] = 2
+    dictargsvari['dsrcexpo']['elemtype'] = ['lghtgausbgrd']
+    #dictargsvari['dsrcexpo']['spatdisttype'] = ['unif', 'dsrcexpo']
+    dictargsvari['dsrcexpo']['spatdisttype'] = ['dsrcexpo']
+    dictargsvari['dsrcexpo']['dsrcdisttype'] = ['expo']
+    dictargsvari['dsrcexpo']['dsrcdistsexppop0'] = 1e-2 / anglfact
+    #dictargsvari['dsrcexpo']['numbburn'] = 0
+    #dictargsvari['dsrcexpo']['forcsavestat'] = True
+    #dictargsvari['dsrcexpo']['inittype'] = 'rand'
+    #dictargsvari['dsrcexpo']['initlgalhostreg0'] = -0.1 / anglfact
+    #dictargsvari['dsrcexpo']['initbgalhostreg0'] = 0.
+    #dictargsvari['dsrcexpo']['initlgalsourreg0'] = -0.2 / anglfact
+    #dictargsvari['dsrcexpo']['initbgalsourreg0'] = 0.2 / anglfact
     
     dictargsvari['sour']['strgexprsbrt'] = strgexprsbrt
     dictargsvari['sour']['maxmnumbelempop0reg0'] = 1
@@ -1080,6 +1084,13 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     #dictargsvari['sour']['initlgalsourreg0'] = -0.2 / anglfact
     #dictargsvari['sour']['initbgalsourreg0'] = 0.2 / anglfact
     #dictargsvari['sour']['forcsavestat'] = True
+    
+    dictargsvari['hostmult']['strgexprsbrt'] = strgexprsbrt
+    dictargsvari['hostmult']['numbsersfgrd'] = 2
+    dictargsvari['hostmult']['maxmnumbelempop0reg0'] = 0
+    dictargsvari['hostmult']['maxmnumbelempop1reg0'] = 0
+    dictargsvari['hostmult']['elemtype'] = ['lens', 'lghtgausbgrd']
+    #dictargsvari['hostmult']['listmask'] = listmask
     
     dictargsvari['sourmask']['strgexprsbrt'] = strgexprsbrt
     dictargsvari['sourmask']['maxmnumbelempop0reg0'] = 0
