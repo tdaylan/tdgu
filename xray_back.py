@@ -315,8 +315,10 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
     dictargs['priofactdoff'] = 0.2
     
+    dictargs['optitype'] = 'none'
     dictargs['numbswep'] = 100000
-    dictargs['numbsamp'] = 1000
+    dictargs['numbburn'] = 20000
+    dictargs['numbsamp'] = 800
     
     listnamecnfgextn = ['nomi', 'truevlow', 'trueloww', 'truehigh', 'truenone']
     dictargsvari = {}
@@ -376,7 +378,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['probtran'] = 0.
     #dictargs['spectype'] = ['colr']
     dictargs['numbswep'] = 1000
-    dictargs['rtagmock'] = '20171219_102627_pcat_chan_mock_nomi_1000'
+    dictargs['rtagmock'] = '20171219_111928_pcat_chan_mock_nomi_10000'
     dictargs['checprio'] = True
     #dictargs['shrtfram'] = False
     dictargs['numbsamp'] = 10
