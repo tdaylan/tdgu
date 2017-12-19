@@ -986,6 +986,7 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargs['trueelemregitype'] = [True, True, True]
     
     dictargs['fittnumbpopl'] = 1
+    dictargs['fittelemtype'] = ['lghtpnts']
     dictargs['fittspatdisttype'] = ['self']
     dictargs['fittspectype'] = ['colr']
     dictargs['fittmaxmnumbelempop0reg0'] = 500
@@ -1117,6 +1118,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['listprefhistfluxhist'] = [[1e6, 1e7, 1e4, 1e6]]
    
     # temp
+    #dictargs['verbtype'] = 2
     dictargs['inittype'] = 'reco'
     dictargs['numbswep'] = 100000
     dictargs['numbsamp'] = 100

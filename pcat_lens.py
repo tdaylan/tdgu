@@ -675,12 +675,13 @@ def pcat_lens_mock_many():
     dictargs = {}
     dictargs['exprtype'] = 'hubb'
     dictargs['burntmpr'] = True
-    dictargs['maxmnumbelempop0reg0'] = 0
-    dictargs['numbelempop0reg0'] = 0
+    for k in range(5):
+        dictargs['maxmnumbelempop0reg%d' % k] = 0
+        dictargs['numbelempop0reg%d' % k] = 0
     
     #dictargs['makeplotinit'] = False
     #dictargs['shrtfram'] = False
-    #dictargs['verbtype'] = 2
+    dictargs['verbtype'] = 2
     dictargs['inittype'] = 'pert'
     dictargs['numbswep'] = 100000
     dictargs['numbswepplot'] = 10000
@@ -1085,11 +1086,21 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     #dictargsvari['sour']['initbgalsourreg0'] = 0.2 / anglfact
     #dictargsvari['sour']['forcsavestat'] = True
     
+    #dictargsvari['hostmult']['verbtype'] = 2
     dictargsvari['hostmult']['strgexprsbrt'] = strgexprsbrt
-    dictargsvari['hostmult']['numbsersfgrd'] = 2
+    dictargsvari['hostmult']['numbsersfgrd'] = array([2])
+    #dictargsvari['hostmult']['proppsfp'] = False
+    dictargsvari['hostmult']['shrtfram'] = False
     dictargsvari['hostmult']['maxmnumbelempop0reg0'] = 0
     dictargsvari['hostmult']['maxmnumbelempop1reg0'] = 0
     dictargsvari['hostmult']['elemtype'] = ['lens', 'lghtgausbgrd']
+    #dictargsvari['hostmult']['forcsavestat'] = True
+    #dictargsvari['hostmult']['initlgalhostreg0isf0'] = -0.1 / anglfact
+    #dictargsvari['hostmult']['initbgalhostreg0isf0'] = 0.
+    #dictargsvari['hostmult']['initlgalhostreg0isf1'] = -0.1 / anglfact
+    #dictargsvari['hostmult']['initbgalhostreg0isf1'] = 0.
+    #dictargsvari['hostmult']['initlgalsourreg0'] = -0.2 / anglfact
+    #dictargsvari['hostmult']['initbgalsourreg0'] = 0.2 / anglfact
     #dictargsvari['hostmult']['listmask'] = listmask
     
     dictargsvari['sourmask']['strgexprsbrt'] = strgexprsbrt
