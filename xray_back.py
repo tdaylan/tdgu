@@ -11,7 +11,7 @@ def writ_chan():
             
     numbevtt = 1
   
-    numbsidetile = [100, 300]
+    listnumbsidetile = [100, 300]
     listnumbsidecntr = [600, 300]
     listdatatype = ['home', 'extr']
     for datatype in listdatatype:
@@ -41,6 +41,7 @@ def writ_chan():
             print expomaps[k]
                 
             if k == 0:
+                #mapstemp = empty((600, 600))
                 if datatype == 'extr':
                     # count map
                     if expomaps[k] == 2:
@@ -69,18 +70,24 @@ def writ_chan():
                 print 'numbsidecntr'
                 print numbsidecntr
                 
-                facttile = numbside / numbsidetile
+                facttile = numbsidecntr / numbsidetile
                 numbtile = facttile**2
                 
+                print 'facttile'
+                print 'numbtile'
+                print numbtile
+                print facttile
+                print
+
                 for t in range(numbtile):
                     
-                    strgmaps = '%s%dmsc%04d%04d' % (datatype, expomaps[k], numbside, t)
+                    strgmaps = '%s%dmsc%04d%04d' % (datatype, expomaps[k], numbsidecntr, t)
 
                     # determine map shape
                     minmindxxaxi = (t // facttile) * numbsidetile
                     maxmindxxaxi = (t // facttile + 1) * numbsidetile
-                    minmindxxaxi = (t % facttile) * numbsidetile
-                    maxmindxxaxi = (t % facttile + 1) * numbsidetile
+                    minmindxyaxi = (t % facttile) * numbsidetile
+                    maxmindxyaxi = (t % facttile + 1) * numbsidetile
                      
                     print 'minmindxxaxi'
                     print minmindxxaxi
@@ -92,9 +99,9 @@ def writ_chan():
                     print maxmindxyaxi
                     print
 
-                    cntp = zeros((numbener, numbside, numbside, numbevtt))
-                    expo = zeros((numbener, numbside, numbside, numbevtt))
-                    cntpback = empty((numbener, numbside, numbside, numbevtt))
+                    cntp = zeros((numbener, numbsidetile, numbsidetile, numbevtt))
+                    expo = zeros((numbener, numbsidetile, numbsidetile, numbevtt))
+                    cntpback = empty((numbener, numbsidetile, numbsidetile, numbevtt))
                     sbrt = zeros_like(cntp)
                     sbrtback = zeros_like(cntp)
                     
@@ -151,19 +158,20 @@ def writ_chan():
                             for a in range(2):
                                 if a == 0:
                                     path = '/n/fink1/rfeder/xray_pcat/cdfs/merged_%sMs/rest_fov/%d/%s-%s_thresh.expmap' % (expomaps[k], i, strgener[i], strgener[i+1])
+                                    
+                                    #expo[i, :, :, 0] = zeros((600, 600))[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
                                     expo[i, :, :, 0] = pf.getdata(path, 0)[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
                                 if a == 1:
                                     path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[i], strgener[i+1])
                                     cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
+                                    #cntp[i, :, :, 0] = zeros((600, 600))[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
                                     cntp[i, :, :, 0] *= expo[i, :, :, 0]
-                    numbsideyaxi = pf.getdata(path, 0).shape[0]
-                    numbsidexaxi = pf.getdata(path, 0).shape[1]
 
                     for i in indxener:
                         indxtemp = where(expo[i, :, :, 0] > 0.)
                         sbrt[i, indxtemp[0], indxtemp[1], 0] = cntp[i, indxtemp[0], indxtemp[1], 0] / expo[i, indxtemp[0], indxtemp[1], 0] / diffener[i] / apix
                     
-                    if True:
+                    if False:
                         for i in indxener:
                             print 'i'
                             print i
@@ -189,10 +197,6 @@ def writ_chan():
                         print 'Writing to %s...' % path
                         pf.writeto(path, sbrtback, clobber=True)
                     
-                    print
-                    print
-                    print
-                    print
                     print
 
 
