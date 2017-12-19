@@ -2,6 +2,9 @@ from __init__ import *
 from astropy.coordinates import SkyCoord
 from pcat.util import retr_refrchaninit
 
+def writ_chan_tile():
+
+    
 def writ_chan():
 
     print 'Writing CDF-S dataset for PCAT...'
@@ -11,7 +14,8 @@ def writ_chan():
             
     numbevtt = 1
   
-    listnumbside = [300, 600]
+    numbsidetile = 100
+    listnumbside = [100, 300, 600]
     listdatatype = ['home', 'extr']
     for datatype in listdatatype:
         print 'datatype'
@@ -38,151 +42,151 @@ def writ_chan():
 
             print 'numbside'
             print numbside
-
             for k in range(numbmaps):
-                
-                strgmaps = '%s%dmsc%04d' % (datatype, expomaps[k], numbside)
-
-                print 'expomaps[k]'
-                print expomaps[k]
-                
-                # determine map shape
-                if k == 0:
-                    if datatype == 'extr':
-                        # count map
-                        ## soft band
-                        if expomaps[k] == 2:
-                            path = pathdata + 'CDFS-2Ms-0p5to2-asca-im-bin1-astwk.fits'
-                        elif expomaps[k] == 4:
-                            path = pathdata + 'CDFS-4Ms-0p5to2-asca-im-bin1.fits'
-                        temp = pf.getdata(path, 0)
-                    if datatype == 'home':
-                        for i in indxener:
-                            # count map
-                            #path = '/n/fink1/rfeder/xray_pcat/obsids/full/merged_%dMs/rest_fov/%d/%s-%s_flux.img' % (expomaps[k], i, strgener[i], strgener[i+1])
-                            path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[i], strgener[i+1])
-                            temp = pf.getdata(path, 0)
-                    
-                    numbsideyaxi = temp.shape[0]
-                    numbsidexaxi = temp.shape[1]
-                    cntrindx = array([numbsideyaxi, numbsidexaxi]) / 2
-                    numbsideshft = 0
-                    #cntrindx[0] += numbsideshft
-                    #cntrindx[1] -= numbsideshft
-                    minmindx = cntrindx - numbside / 2
-                    maxmindx = cntrindx + numbside / 2
-                    
-                    print 'numbsideyaxi'
-                    print numbsideyaxi
-                    print 'numbsidexaxi'
-                    print numbsidexaxi
-                    print 'minmindx[0]'
-                    print minmindx[0]
-                    print 'minmindx[1]'
-                    print minmindx[1]
-                
-                cntp = zeros((numbener, numbside, numbside, numbevtt))
-                expo = zeros((numbener, numbside, numbside, numbevtt))
-                cntpback = empty((numbener, numbside, numbside, numbevtt))
-                sbrt = zeros_like(cntp)
-                sbrtback = zeros_like(cntp)
-                
+            
                 if datatype == 'extr':
+                    # count map
+                    ## soft band
                     if expomaps[k] == 2:
                         path = pathdata + 'CDFS-2Ms-0p5to2-asca-im-bin1-astwk.fits'
                     elif expomaps[k] == 4:
                         path = pathdata + 'CDFS-4Ms-0p5to2-asca-im-bin1.fits'
-                    cntp[0, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
-
-                    ## hard band
-                    if expomaps[k] == 2:
-                        path = pathdata + 'CDFS-2Ms-2to8-asca-im-bin1-astwk.fits'
-                    elif expomaps[k] == 4:
-                        path = pathdata + 'CDFS-4Ms-2to8-asca-im-bin1.fits'
-                    cntp[1, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
-
-                    # exposure
-                    ## soft band
-                    if expomaps[k] == 2:
-                        path = pathdata + 'CDFS-2Ms-0p5to2-bin1-astwk.emap'
-                    elif expomaps[k] == 4:
-                        path = pathdata + 'CDFS-4Ms-0p5to2-bin1.emap'
-                    expo[0, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
-                    ## hard band
-                    if expomaps[k] == 2:
-                        path = pathdata + 'CDFS-2Ms-2to8-bin1-astwk.emap'
-                    elif expomaps[k] == 4:
-                        path = pathdata + 'CDFS-4Ms-2to8-bin1.emap'
-                    expo[1, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                    temp = pf.getdata(path, 0)
+                if datatype == 'home':
+                    for i in indxener:
+                        # count map
+                        #path = '/n/fink1/rfeder/xray_pcat/obsids/full/merged_%dMs/rest_fov/%d/%s-%s_flux.img' % (expomaps[k], i, strgener[i], strgener[i+1])
+                        path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[i], strgener[i+1])
+                        temp = pf.getdata(path, 0)
                 
-                    # background
-                    ## soft band
-                    if expomaps[k] == 2:
-                        path = pathdata + 'CDFS-4Ms-0p5to2-bin1.back'
-                    elif expomaps[k] == 4:
-                        path = pathdata + 'CDFS-2Ms-0p5to2-asca-bkg-bin1.fits'
-                    cntpback[0, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
-                    ## hard band
-                    if expomaps[k] == 2:
-                        path = pathdata + 'CDFS-4Ms-2to8-bin1.back'
-                    elif expomaps[k] == 4:
-                        path = pathdata + 'CDFS-2Ms-2to8-asca-bkg-bin1.fits'
-                    cntpback[1, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
-                
+                for p in range(numbtile):
+                    strgmaps = '%s%dmsc%04d%04d' % (datatype, expomaps[k], numbside, p)
+
+                    print 'expomaps[k]'
+                    print expomaps[k]
+                    
+                    # determine map shape
+                    if k == 0:
+                        numbsideyaxi = temp.shape[0]
+                        numbsidexaxi = temp.shape[1]
+                        cntrindx = array([numbsideyaxi, numbsidexaxi]) / 2
+                        numbsideshft = 0
+                        #cntrindx[0] += numbsideshft
+                        #cntrindx[1] -= numbsideshft
+                        minmindx = cntrindx - numbside / 2
+                        maxmindx = cntrindx + numbside / 2
+                        
+                        print 'numbsideyaxi'
+                        print numbsideyaxi
+                        print 'numbsidexaxi'
+                        print numbsidexaxi
+                        print 'minmindx[0]'
+                        print minmindx[0]
+                        print 'minmindx[1]'
+                        print minmindx[1]
+                    
+                    cntp = zeros((numbener, numbside, numbside, numbevtt))
+                    expo = zeros((numbener, numbside, numbside, numbevtt))
+                    cntpback = empty((numbener, numbside, numbside, numbevtt))
+                    sbrt = zeros_like(cntp)
+                    sbrtback = zeros_like(cntp)
+                    
+                    if datatype == 'extr':
+                        if expomaps[k] == 2:
+                            path = pathdata + 'CDFS-2Ms-0p5to2-asca-im-bin1-astwk.fits'
+                        elif expomaps[k] == 4:
+                            path = pathdata + 'CDFS-4Ms-0p5to2-asca-im-bin1.fits'
+                        cntp[0, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+
+                        ## hard band
+                        if expomaps[k] == 2:
+                            path = pathdata + 'CDFS-2Ms-2to8-asca-im-bin1-astwk.fits'
+                        elif expomaps[k] == 4:
+                            path = pathdata + 'CDFS-4Ms-2to8-asca-im-bin1.fits'
+                        cntp[1, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+
+                        # exposure
+                        ## soft band
+                        if expomaps[k] == 2:
+                            path = pathdata + 'CDFS-2Ms-0p5to2-bin1-astwk.emap'
+                        elif expomaps[k] == 4:
+                            path = pathdata + 'CDFS-4Ms-0p5to2-bin1.emap'
+                        expo[0, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                        ## hard band
+                        if expomaps[k] == 2:
+                            path = pathdata + 'CDFS-2Ms-2to8-bin1-astwk.emap'
+                        elif expomaps[k] == 4:
+                            path = pathdata + 'CDFS-4Ms-2to8-bin1.emap'
+                        expo[1, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                    
+                        # background
+                        ## soft band
+                        if expomaps[k] == 2:
+                            path = pathdata + 'CDFS-4Ms-0p5to2-bin1.back'
+                        elif expomaps[k] == 4:
+                            path = pathdata + 'CDFS-2Ms-0p5to2-asca-bkg-bin1.fits'
+                        cntpback[0, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                        ## hard band
+                        if expomaps[k] == 2:
+                            path = pathdata + 'CDFS-4Ms-2to8-bin1.back'
+                        elif expomaps[k] == 4:
+                            path = pathdata + 'CDFS-2Ms-2to8-asca-bkg-bin1.fits'
+                        cntpback[1, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                    
+                        for i in indxener:
+                            indxtemp = where(expo[i, :, :, 0] > 0.)
+                            sbrtback[i, indxtemp[0], indxtemp[1], 0] = cntpback[i, indxtemp[0], indxtemp[1], 0] / expo[i, indxtemp[0], indxtemp[1], 0] / diffener[i] / apix
+                    
+                    if datatype == 'home':
+                        strgvarb = ['thresh.expmap', 'thresh.img']
+                        strgvarbmine = ['expo', 'sbrt']
+                        for i in indxener:
+                            for a in range(2):
+                                if a == 0:
+                                    path = '/n/fink1/rfeder/xray_pcat/cdfs/merged_%sMs/rest_fov/%d/%s-%s_thresh.expmap' % (expomaps[k], i, strgener[i], strgener[i+1])
+                                    expo[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                                if a == 1:
+                                    path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[i], strgener[i+1])
+                                    cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                                    cntp[i, :, :, 0] *= expo[i, :, :, 0]
+                    numbsideyaxi = pf.getdata(path, 0).shape[0]
+                    numbsidexaxi = pf.getdata(path, 0).shape[1]
+
                     for i in indxener:
                         indxtemp = where(expo[i, :, :, 0] > 0.)
-                        sbrtback[i, indxtemp[0], indxtemp[1], 0] = cntpback[i, indxtemp[0], indxtemp[1], 0] / expo[i, indxtemp[0], indxtemp[1], 0] / diffener[i] / apix
-                
-                if datatype == 'home':
-                    strgvarb = ['thresh.expmap', 'thresh.img']
-                    strgvarbmine = ['expo', 'sbrt']
-                    for i in indxener:
-                        for a in range(2):
-                            if a == 0:
-                                path = '/n/fink1/rfeder/xray_pcat/cdfs/merged_%sMs/rest_fov/%d/%s-%s_thresh.expmap' % (expomaps[k], i, strgener[i], strgener[i+1])
-                                expo[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
-                            if a == 1:
-                                path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[i], strgener[i+1])
-                                cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
-                                cntp[i, :, :, 0] *= expo[i, :, :, 0]
-                numbsideyaxi = pf.getdata(path, 0).shape[0]
-                numbsidexaxi = pf.getdata(path, 0).shape[1]
+                        sbrt[i, indxtemp[0], indxtemp[1], 0] = cntp[i, indxtemp[0], indxtemp[1], 0] / expo[i, indxtemp[0], indxtemp[1], 0] / diffener[i] / apix
+                    
+                    if True:
+                        for i in indxener:
+                            print 'i'
+                            print i
+                            print 'expo[i, :, :, 0]'
+                            summgene(expo[i, :, :, 0])
+                            print 'cntp[i, :, :, 0]'
+                            summgene(cntp[i, :, :, 0])
+                            print 'sbrt[i, :, :, 0]'
+                            summgene(sbrt[i, :, :, 0])
 
-                for i in indxener:
-                    indxtemp = where(expo[i, :, :, 0] > 0.)
-                    sbrt[i, indxtemp[0], indxtemp[1], 0] = cntp[i, indxtemp[0], indxtemp[1], 0] / expo[i, indxtemp[0], indxtemp[1], 0] / diffener[i] / apix
-                
-                if True:
-                    for i in indxener:
-                        print 'i'
-                        print i
-                        print 'expo[i, :, :, 0]'
-                        summgene(expo[i, :, :, 0])
-                        print 'cntp[i, :, :, 0]'
-                        summgene(cntp[i, :, :, 0])
-                        print 'sbrt[i, :, :, 0]'
-                        summgene(sbrt[i, :, :, 0])
-
-                pathdatapcat = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
-                
-                path = pathdatapcat + 'expochan%s.fits' % strgmaps
-                print 'Writing to %s...' % path
-                pf.writeto(path, expo, clobber=True)
-
-                path = pathdatapcat + 'sbrtchan%s.fits' % strgmaps
-                print 'Writing to %s...' % path
-                pf.writeto(path, sbrt, clobber=True)
-                
-                if datatype == 'extr':
-                    path = pathdatapcat + 'sbrtchanback%s.fits' % strgmaps
+                    pathdatapcat = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
+                    
+                    path = pathdatapcat + 'expochan%s.fits' % strgmaps
                     print 'Writing to %s...' % path
-                    pf.writeto(path, sbrtback, clobber=True)
-                
-                print
-                print
-                print
-                print
-                print
+                    pf.writeto(path, expo, clobber=True)
+
+                    path = pathdatapcat + 'sbrtchan%s.fits' % strgmaps
+                    print 'Writing to %s...' % path
+                    pf.writeto(path, sbrt, clobber=True)
+                    
+                    if datatype == 'extr':
+                        path = pathdatapcat + 'sbrtchanback%s.fits' % strgmaps
+                        print 'Writing to %s...' % path
+                        pf.writeto(path, sbrtback, clobber=True)
+                    
+                    print
+                    print
+                    print
+                    print
+                    print
 
 
 # test suites
@@ -249,12 +253,10 @@ def pcat_chan_mock_popl(strgcnfgextnexec=None):
     
     datatype = 'home'
     strgexpomaps = '4msc'
-    numbsidecart = 300
     
     gridchan = pcat.main.init( \
                               exprtype='chan', \
                               strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
-                              numbsidecart=300, \
                               numbpopl=2, \
                               numbelempop0reg0=50, \
                               numbelempop1reg0=50, \
@@ -310,7 +312,7 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictargs['exprtype'] = 'chan'
     dictargs['truemaxmnumbelempop0reg0'] = 400
     dictargs['truenumbelempop0reg0'] = 100
-    dictargs['strgexpo'] = 'expochanhome4msc0300.fits'
+    dictargs['strgexpo'] = 'expochanhome4msc0100.fits'
     dictargs['trueelemtype'] = ['lghtpntsagnntrue']
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
     dictargs['priofactdoff'] = 0.2
@@ -379,7 +381,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['spectype'] = ['colr']
     dictargs['numbswep'] = 1000
     dictargs['rtagmock'] = '20171219_111928_pcat_chan_mock_nomi_10000'
-    dictargs['checprio'] = True
+    #dictargs['checprio'] = True
     #dictargs['shrtfram'] = False
     dictargs['numbsamp'] = 10
     #dictargs['verbtype'] = 2
@@ -399,7 +401,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #listnamecnfgextn = ['home2msc0600', 'home4msc0600', 'home7msc0600']
     #listnamecnfgextn = ['extr2msc0300', 'extr4msc0300', 'home2msc0300', 'home4msc0300', 'home7msc0300']
     #listnamecnfgextn = ['home2msc0300', 'home4msc0300', 'home7msc0300', 'home2msc0600', 'home4msc0600', 'home7msc0600']
-    listnamecnfgextn = ['home2msc0300', 'home4msc0300', 'home7msc0300']
+    listnamecnfgextn = ['home2msc0100', 'home4msc0100', 'home7msc0100']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
@@ -408,9 +410,9 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
         numbsidecart, strgexpo, strgexprsbrt, namestat, anlytype = retr_argschan(namecnfgextn[:4], namecnfgextn[4:8], int(namecnfgextn[8:]))
    
         if namecnfgextn[:4] == 'home':
-            dictargs['namerecostat'] = 'pcat_chan_inpt_home7msc0300'
+            dictargs['namerecostat'] = 'pcat_chan_inpt_home7msc0100'
         if namecnfgextn[:4] == 'extr':
-            dictargs['namerecostat'] = 'extr4msc0300'
+            dictargs['namerecostat'] = 'extr4msc0100'
         
         # temp
         if namecnfgextn[8:12] == '0600':
