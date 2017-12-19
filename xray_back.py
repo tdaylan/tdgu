@@ -2,9 +2,6 @@ from __init__ import *
 from astropy.coordinates import SkyCoord
 from pcat.util import retr_refrchaninit
 
-def writ_chan_tile():
-
-    
 def writ_chan():
 
     print 'Writing CDF-S dataset for PCAT...'
@@ -14,8 +11,8 @@ def writ_chan():
             
     numbevtt = 1
   
-    numbsidetile = 100
-    listnumbside = [100, 300, 600]
+    numbsidetile = [100, 300]
+    listnumbsidecntr = [600, 300]
     listdatatype = ['home', 'extr']
     for datatype in listdatatype:
         print 'datatype'
@@ -38,53 +35,63 @@ def writ_chan():
 
         numbmaps = len(expomaps)
 
-        for numbside in listnumbside:
-
-            print 'numbside'
-            print numbside
-            for k in range(numbmaps):
+        for k in range(numbmaps):
             
+            print 'expomaps[k]'
+            print expomaps[k]
+                
+            if k == 0:
                 if datatype == 'extr':
                     # count map
-                    ## soft band
                     if expomaps[k] == 2:
                         path = pathdata + 'CDFS-2Ms-0p5to2-asca-im-bin1-astwk.fits'
                     elif expomaps[k] == 4:
                         path = pathdata + 'CDFS-4Ms-0p5to2-asca-im-bin1.fits'
-                    temp = pf.getdata(path, 0)
+                    mapstemp = pf.getdata(path, 0)
                 if datatype == 'home':
-                    for i in indxener:
-                        # count map
-                        #path = '/n/fink1/rfeder/xray_pcat/obsids/full/merged_%dMs/rest_fov/%d/%s-%s_flux.img' % (expomaps[k], i, strgener[i], strgener[i+1])
-                        path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[i], strgener[i+1])
-                        temp = pf.getdata(path, 0)
-                
-                for p in range(numbtile):
-                    strgmaps = '%s%dmsc%04d%04d' % (datatype, expomaps[k], numbside, p)
+                    # count map
+                    path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[0], strgener[1])
+                    mapstemp = pf.getdata(path, 0)
+            
+                numbsideyaxi = mapstemp.shape[0]
+                numbsidexaxi = mapstemp.shape[1]
+                indxcntrxaxi = numbsidexaxi / 2
+                indxcntryaxi = numbsideyaxi / 2
+                print 'numbsideyaxi'
+                print numbsideyaxi
+                print 'numbsidexaxi'
+                print numbsidexaxi
+            
+            for p, (numbsidetile, numbsidecntr) in enumerate(zip(listnumbsidetile, listnumbsidecntr)):
 
-                    print 'expomaps[k]'
-                    print expomaps[k]
+                print 'numbsidetile'
+                print numbsidetile
+                print 'numbsidecntr'
+                print numbsidecntr
+                
+                facttile = numbside / numbsidetile
+                numbtile = facttile**2
+                
+                for t in range(numbtile)
                     
+                    strgmaps = '%s%dmsc%04d%04d' % (datatype, expomaps[k], numbside, t)
+
                     # determine map shape
-                    if k == 0:
-                        numbsideyaxi = temp.shape[0]
-                        numbsidexaxi = temp.shape[1]
-                        cntrindx = array([numbsideyaxi, numbsidexaxi]) / 2
-                        numbsideshft = 0
-                        #cntrindx[0] += numbsideshft
-                        #cntrindx[1] -= numbsideshft
-                        minmindx = cntrindx - numbside / 2
-                        maxmindx = cntrindx + numbside / 2
-                        
-                        print 'numbsideyaxi'
-                        print numbsideyaxi
-                        print 'numbsidexaxi'
-                        print numbsidexaxi
-                        print 'minmindx[0]'
-                        print minmindx[0]
-                        print 'minmindx[1]'
-                        print minmindx[1]
-                    
+                    minmindxxaxi = (t // facttile) * numbsidetile
+                    maxmindxxaxi = (t // facttile + 1) * numbsidetile
+                    minmindxxaxi = (t % facttile) * numbsidetile
+                    maxmindxxaxi = (t % facttile + 1) * numbsidetile
+                     
+                    print 'minmindxxaxi'
+                    print minmindxxaxi
+                    print 'maxmindxxaxi'
+                    print maxmindxxaxi
+                    print 'minmindxyaxi'
+                    print minmindxyaxi
+                    print 'maxmindxyaxi'
+                    print maxmindxyaxi
+                    print
+
                     cntp = zeros((numbener, numbside, numbside, numbevtt))
                     expo = zeros((numbener, numbside, numbside, numbevtt))
                     cntpback = empty((numbener, numbside, numbside, numbevtt))
@@ -96,14 +103,14 @@ def writ_chan():
                             path = pathdata + 'CDFS-2Ms-0p5to2-asca-im-bin1-astwk.fits'
                         elif expomaps[k] == 4:
                             path = pathdata + 'CDFS-4Ms-0p5to2-asca-im-bin1.fits'
-                        cntp[0, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                        cntp[0, :, :, 0] = pf.getdata(path, 0)[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
 
                         ## hard band
                         if expomaps[k] == 2:
                             path = pathdata + 'CDFS-2Ms-2to8-asca-im-bin1-astwk.fits'
                         elif expomaps[k] == 4:
                             path = pathdata + 'CDFS-4Ms-2to8-asca-im-bin1.fits'
-                        cntp[1, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                        cntp[1, :, :, 0] = pf.getdata(path, 0)[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
 
                         # exposure
                         ## soft band
@@ -111,13 +118,13 @@ def writ_chan():
                             path = pathdata + 'CDFS-2Ms-0p5to2-bin1-astwk.emap'
                         elif expomaps[k] == 4:
                             path = pathdata + 'CDFS-4Ms-0p5to2-bin1.emap'
-                        expo[0, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                        expo[0, :, :, 0] = pf.getdata(path, 0)[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
                         ## hard band
                         if expomaps[k] == 2:
                             path = pathdata + 'CDFS-2Ms-2to8-bin1-astwk.emap'
                         elif expomaps[k] == 4:
                             path = pathdata + 'CDFS-4Ms-2to8-bin1.emap'
-                        expo[1, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                        expo[1, :, :, 0] = pf.getdata(path, 0)[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
                     
                         # background
                         ## soft band
@@ -125,13 +132,13 @@ def writ_chan():
                             path = pathdata + 'CDFS-4Ms-0p5to2-bin1.back'
                         elif expomaps[k] == 4:
                             path = pathdata + 'CDFS-2Ms-0p5to2-asca-bkg-bin1.fits'
-                        cntpback[0, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                        cntpback[0, :, :, 0] = pf.getdata(path, 0)[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
                         ## hard band
                         if expomaps[k] == 2:
                             path = pathdata + 'CDFS-4Ms-2to8-bin1.back'
                         elif expomaps[k] == 4:
                             path = pathdata + 'CDFS-2Ms-2to8-asca-bkg-bin1.fits'
-                        cntpback[1, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                        cntpback[1, :, :, 0] = pf.getdata(path, 0)[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
                     
                         for i in indxener:
                             indxtemp = where(expo[i, :, :, 0] > 0.)
@@ -144,10 +151,10 @@ def writ_chan():
                             for a in range(2):
                                 if a == 0:
                                     path = '/n/fink1/rfeder/xray_pcat/cdfs/merged_%sMs/rest_fov/%d/%s-%s_thresh.expmap' % (expomaps[k], i, strgener[i], strgener[i+1])
-                                    expo[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                                    expo[i, :, :, 0] = pf.getdata(path, 0)[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
                                 if a == 1:
                                     path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[i], strgener[i+1])
-                                    cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindx[0]:maxmindx[0], minmindx[1]:maxmindx[1]]
+                                    cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
                                     cntp[i, :, :, 0] *= expo[i, :, :, 0]
                     numbsideyaxi = pf.getdata(path, 0).shape[0]
                     numbsidexaxi = pf.getdata(path, 0).shape[1]
