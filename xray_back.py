@@ -72,7 +72,7 @@ def writ_chan():
                 facttile = numbside / numbsidetile
                 numbtile = facttile**2
                 
-                for t in range(numbtile)
+                for t in range(numbtile):
                     
                     strgmaps = '%s%dmsc%04d%04d' % (datatype, expomaps[k], numbside, t)
 
