@@ -42,18 +42,18 @@ def writ_chan():
             print expomaps[k]
                 
             if k == 0:
-                mapstemp = rand(600**2).reshape((600, 600))
-                #if datatype == 'extr':
-                #    # count map
-                #    if expomaps[k] == 2:
-                #        path = pathdata + 'CDFS-2Ms-0p5to2-asca-im-bin1-astwk.fits'
-                #    elif expomaps[k] == 4:
-                #        path = pathdata + 'CDFS-4Ms-0p5to2-asca-im-bin1.fits'
-                #    mapstemp = pf.getdata(path, 0)
-                #if datatype == 'home':
-                #    # count map
-                #    path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[0], strgener[1])
-                #    mapstemp = pf.getdata(path, 0)
+                #mapstemp = rand(600**2).reshape((600, 600))
+                if datatype == 'extr':
+                    # count map
+                    if expomaps[k] == 2:
+                        path = pathdata + 'CDFS-2Ms-0p5to2-asca-im-bin1-astwk.fits'
+                    elif expomaps[k] == 4:
+                        path = pathdata + 'CDFS-4Ms-0p5to2-asca-im-bin1.fits'
+                    mapstemp = pf.getdata(path, 0)
+                if datatype == 'home':
+                    # count map
+                    path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[0], strgener[1])
+                    mapstemp = pf.getdata(path, 0)
             
                 numbsideyaxi = mapstemp.shape[0]
                 numbsidexaxi = mapstemp.shape[1]
@@ -162,12 +162,12 @@ def writ_chan():
                                 if a == 0:
                                     path = '/n/fink1/rfeder/xray_pcat/cdfs/merged_%sMs/rest_fov/%d/%s-%s_thresh.expmap' % (expomaps[k], i, strgener[i], strgener[i+1])
                                     
-                                    expo[i, :, :, 0] = zeros((600, 600))[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
-                                    #expo[i, :, :, 0] = pf.getdata(path, 0)[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
+                                    #expo[i, :, :, 0] = zeros((600, 600))[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
+                                    expo[i, :, :, 0] = pf.getdata(path, 0)[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
                                 if a == 1:
                                     path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[i], strgener[i+1])
-                                    #cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
-                                    cntp[i, :, :, 0] = zeros((600, 600))[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
+                                    cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
+                                    #cntp[i, :, :, 0] = zeros((600, 600))[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
                                     cntp[i, :, :, 0] *= expo[i, :, :, 0]
 
                     cntpfull[:, minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi, :] = cntp
