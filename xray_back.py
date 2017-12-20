@@ -79,6 +79,7 @@ def writ_chan():
                 print facttile
                 print
 
+                cntpfull = zeros((numbener, numbsidecntr, numbsidecntr, numbevtt))
                 for t in range(numbtile):
                     
                     strgmaps = '%s%dmsc%04d%04d' % (datatype, expomaps[k], numbsidecntr, t)
@@ -198,7 +199,20 @@ def writ_chan():
                         pf.writeto(path, sbrtback, clobber=True)
                     
                     print
-
+                
+                figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
+                extt = array(4 * [numbsidecart]) * pixlsize / 2.
+                imag = axis.imshow(cntpfull[0, :, :, 0], extent=extt, cmap='Greys', origin='lower')
+                for t in range(numbtile):
+                    axis.axvline(pixlsize * minmindxxaxi)
+                    axis.axhline(pixlsize * minmindxyaxi)
+                    axis.axvline(pixlsize * maxmindxxaxi)
+                    axis.axhline(pixlsize * maxmindxyaxi)
+                axis.set_xlabel('Information gain')
+                axis.set_ylabel('Goodness of fit')
+                plt.colorbar(imag, ax=axis, fraction=0.03)
+                plt.tight_layout()
+                figr.savefig(gdat.pathplotrtag + 'evidtest.pdf')
 
 # test suites
 
