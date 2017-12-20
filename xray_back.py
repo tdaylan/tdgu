@@ -172,10 +172,10 @@ def writ_chan():
 
                     cntpfull[:, minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi, :] = cntp
                     
-                    axis.axvline(pixlsize * (minmindxxaxi - numbsidecntr / 2) * anglfact, lw=2)
-                    axis.axhline(pixlsize * (minmindxyaxi - numbsidecntr / 2) * anglfact, lw=2)
-                    axis.axvline(pixlsize * (maxmindxxaxi - numbsidecntr / 2) * anglfact, lw=2)
-                    axis.axhline(pixlsize * (maxmindxyaxi - numbsidecntr / 2) * anglfact, lw=2)
+                    axis.axvline(pixlsize * (minmindxxaxi - numbsidecntr / 2) * anglfact, lw=1)
+                    axis.axhline(pixlsize * (minmindxyaxi - numbsidecntr / 2) * anglfact, lw=1)
+                    axis.axvline(pixlsize * (maxmindxxaxi - numbsidecntr / 2) * anglfact, lw=1)
+                    axis.axhline(pixlsize * (maxmindxyaxi - numbsidecntr / 2) * anglfact, lw=1)
                     
                     for i in indxener:
                         indxtemp = where(expo[i, :, :, 0] > 0.)
@@ -210,7 +210,7 @@ def writ_chan():
                     print
                 
                 extt = anglfact * numbsidecntr * array([-1, 1, -1, 1]) * pixlsize / 2.
-                imag = axis.imshow(cntpfull[0, :, :, 0], extent=extt, cmap='Greys', origin='lower')
+                imag = axis.imshow(cntpfull[0, :, :, 0], extent=extt, cmap='Greys', origin='lower', interpolation='none')
                 axis.set_xlabel(r'$\theta_1$ [$^\circ$]')
                 axis.set_ylabel(r'$\theta_2$ [$^\circ$]')
                 plt.colorbar(imag, ax=axis, fraction=0.03)
