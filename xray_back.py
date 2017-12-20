@@ -8,6 +8,7 @@ def writ_chan():
     
     pixlsize = deg2rad(0.492 / 3600.)
     apix = pixlsize**2
+    anglfact = 3600. * 180. / pi
             
     numbevtt = 1
   
@@ -41,18 +42,18 @@ def writ_chan():
             print expomaps[k]
                 
             if k == 0:
-                #mapstemp = empty((600, 600))
-                if datatype == 'extr':
-                    # count map
-                    if expomaps[k] == 2:
-                        path = pathdata + 'CDFS-2Ms-0p5to2-asca-im-bin1-astwk.fits'
-                    elif expomaps[k] == 4:
-                        path = pathdata + 'CDFS-4Ms-0p5to2-asca-im-bin1.fits'
-                    mapstemp = pf.getdata(path, 0)
-                if datatype == 'home':
-                    # count map
-                    path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[0], strgener[1])
-                    mapstemp = pf.getdata(path, 0)
+                mapstemp = rand(600**2).reshape((600, 600))
+                #if datatype == 'extr':
+                #    # count map
+                #    if expomaps[k] == 2:
+                #        path = pathdata + 'CDFS-2Ms-0p5to2-asca-im-bin1-astwk.fits'
+                #    elif expomaps[k] == 4:
+                #        path = pathdata + 'CDFS-4Ms-0p5to2-asca-im-bin1.fits'
+                #    mapstemp = pf.getdata(path, 0)
+                #if datatype == 'home':
+                #    # count map
+                #    path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[0], strgener[1])
+                #    mapstemp = pf.getdata(path, 0)
             
                 numbsideyaxi = mapstemp.shape[0]
                 numbsidexaxi = mapstemp.shape[1]
@@ -79,6 +80,7 @@ def writ_chan():
                 print facttile
                 print
 
+                figr, axis = plt.subplots(figsize=(12, 12))
                 cntpfull = zeros((numbener, numbsidecntr, numbsidecntr, numbevtt))
                 for t in range(numbtile):
                     
@@ -160,14 +162,21 @@ def writ_chan():
                                 if a == 0:
                                     path = '/n/fink1/rfeder/xray_pcat/cdfs/merged_%sMs/rest_fov/%d/%s-%s_thresh.expmap' % (expomaps[k], i, strgener[i], strgener[i+1])
                                     
-                                    #expo[i, :, :, 0] = zeros((600, 600))[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
-                                    expo[i, :, :, 0] = pf.getdata(path, 0)[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
+                                    expo[i, :, :, 0] = zeros((600, 600))[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
+                                    #expo[i, :, :, 0] = pf.getdata(path, 0)[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
                                 if a == 1:
                                     path = '/n/fink1/rfeder/xray_pcat/merged_flux_10_02/%dMs/%s-%s_flux.img' % (expomaps[k], strgener[i], strgener[i+1])
-                                    cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
-                                    #cntp[i, :, :, 0] = zeros((600, 600))[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
+                                    #cntp[i, :, :, 0] = pf.getdata(path, 0)[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
+                                    cntp[i, :, :, 0] = zeros((600, 600))[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
                                     cntp[i, :, :, 0] *= expo[i, :, :, 0]
 
+                    cntpfull[:, minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi, :] = cntp
+                    
+                    axis.axvline(pixlsize * (minmindxxaxi - numbsidecntr / 2) * anglfact, lw=2)
+                    axis.axhline(pixlsize * (minmindxyaxi - numbsidecntr / 2) * anglfact, lw=2)
+                    axis.axvline(pixlsize * (maxmindxxaxi - numbsidecntr / 2) * anglfact, lw=2)
+                    axis.axhline(pixlsize * (maxmindxyaxi - numbsidecntr / 2) * anglfact, lw=2)
+                    
                     for i in indxener:
                         indxtemp = where(expo[i, :, :, 0] > 0.)
                         sbrt[i, indxtemp[0], indxtemp[1], 0] = cntp[i, indxtemp[0], indxtemp[1], 0] / expo[i, indxtemp[0], indxtemp[1], 0] / diffener[i] / apix
@@ -200,19 +209,15 @@ def writ_chan():
                     
                     print
                 
-                figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
-                extt = array(4 * [numbsidecart]) * pixlsize / 2.
+                extt = anglfact * numbsidecntr * array([-1, 1, -1, 1]) * pixlsize / 2.
                 imag = axis.imshow(cntpfull[0, :, :, 0], extent=extt, cmap='Greys', origin='lower')
-                for t in range(numbtile):
-                    axis.axvline(pixlsize * minmindxxaxi)
-                    axis.axhline(pixlsize * minmindxyaxi)
-                    axis.axvline(pixlsize * maxmindxxaxi)
-                    axis.axhline(pixlsize * maxmindxyaxi)
-                axis.set_xlabel('Information gain')
-                axis.set_ylabel('Goodness of fit')
+                axis.set_xlabel(r'$\theta_1$ [$^\circ$]')
+                axis.set_ylabel(r'$\theta_2$ [$^\circ$]')
                 plt.colorbar(imag, ax=axis, fraction=0.03)
                 plt.tight_layout()
-                figr.savefig(gdat.pathplotrtag + 'evidtest.pdf')
+                path = os.environ["TDGU_DATA_PATH"] + '/xray_back/imag/'
+                strgmaps = '%s%dmsc%04d' % (datatype, expomaps[k], p)
+                figr.savefig(path + 'cntpfull' + strgmaps + '.pdf')
 
 # test suites
 
