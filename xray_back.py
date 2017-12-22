@@ -428,22 +428,25 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     # temp
     dictargs['priofactdoff'] = 0.2
     
-    #listnamecnfgextn = ['home2msc0600', 'home4msc0600', 'home7msc0600']
-    #listnamecnfgextn = ['extr2msc0300', 'extr4msc0300', 'home2msc0300', 'home4msc0300', 'home7msc0300']
-    #listnamecnfgextn = ['home2msc0300', 'home4msc0300', 'home7msc0300', 'home2msc0600', 'home4msc0600', 'home7msc0600']
-    listnamecnfgextn = ['home2msc0100', 'home4msc0100', 'home7msc0100']
+    listnamecnfgextn = ['home2msc03000000', 'home4msc03000000', 'home7msc03000000']
+    for k in range(36):
+        listnamecnfgextn.append('home7msc0600%04d' % k)
+
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
    
     for namecnfgextn in listnamecnfgextn:
-        numbsidecart, strgexpo, strgexprsbrt, namestat, anlytype = retr_argschan(namecnfgextn[:4], namecnfgextn[4:8], int(namecnfgextn[8:]))
+        numbsidecart, strgexpo, strgexprsbrt, namestat, anlytype = retr_argschan(namecnfgextn[:4], namecnfgextn[4:8], int(namecnfgextn[8:12]), int(namecnfgextn[12:16]))
    
-        if namecnfgextn[:4] == 'home':
-            dictargs['namerecostat'] = 'pcat_chan_inpt_home7msc0100'
-        if namecnfgextn[:4] == 'extr':
-            dictargs['namerecostat'] = 'extr4msc0100'
-        
+        if len(namecnfgextn) == 12:
+            if namecnfgextn[:4] == 'home':
+                dictargs['namerecostat'] = 'pcat_chan_inpt_home7msc03000000'
+            if namecnfgextn[:4] == 'extr':
+                dictargs['namerecostat'] = 'extr4msc03000000'
+        else:
+            dictargs['namerecostat'] = namecnfgextn
+
         # temp
         if namecnfgextn[8:12] == '0600':
             dictargsvari[anlytype]['numbsamp'] = 1
@@ -465,9 +468,9 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
                                  )
    
 
-def retr_argschan(datatype, strgexpomaps, numbsidecart):
+def retr_argschan(datatype, strgexpomaps, numbsidecart, indxtile):
     
-    anlytype = datatype + strgexpomaps + '%04d' % numbsidecart
+    anlytype = datatype + strgexpomaps + '%04d' % numbsidecart + '%04d' % indxtile
     namestat = 'pcat_chan_inpt_' + anlytype
     strgexpo = 'expochan%s.fits' % anlytype
     strgexprsbrt = 'sbrtchan%s.fits' % anlytype
