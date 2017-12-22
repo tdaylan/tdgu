@@ -181,7 +181,8 @@ def writ_chan():
                         indxtemp = where(expo[i, :, :, 0] > 0.)
                         sbrt[i, indxtemp[0], indxtemp[1], 0] = cntp[i, indxtemp[0], indxtemp[1], 0] / expo[i, indxtemp[0], indxtemp[1], 0] / diffener[i] / apix
                     
-                    if True:
+                    #if True:
+                    if datatype == 'home':
                         for i in indxener:
                             print 'i'
                             print i
