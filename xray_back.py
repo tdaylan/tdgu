@@ -181,11 +181,6 @@ def writ_chan():
                         indxtemp = where(expo[i, :, :, 0] > 0.)
                         sbrt[i, indxtemp[0], indxtemp[1], 0] = cntp[i, indxtemp[0], indxtemp[1], 0] / expo[i, indxtemp[0], indxtemp[1], 0] / diffener[i] / apix
                     
-                    print 'heeey'
-                    print 'indxener'
-                    print indxener
-                    print
-
                     if True:
                         for i in indxener:
                             print 'i'
@@ -196,13 +191,13 @@ def writ_chan():
                             summgene(cntp[i, :, :, 0])
                             print 'sbrt[i, :, :, 0]'
                             summgene(sbrt[i, :, :, 0])
-                            print
-                            if amax(cntp[i, :, :, 0]) == 0:
+                            if amax(cntp[i, :, :, 0]) == 0 and datatype == 'home':
                                 print 'datatype'
                                 print datatype
                                 print 'indxener'
                                 print indxener
                                 raise Exception('')
+                            print
 
                     pathdatapcat = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
                     
