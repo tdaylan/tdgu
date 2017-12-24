@@ -84,7 +84,11 @@ def writ_chan():
                 cntpfull = zeros((numbener, numbsidecntr, numbsidecntr, numbevtt))
                 for t in range(numbtile):
                     
-                    strgmaps = '%s%dmsc%04d%04d' % (datatype, expomaps[k], numbsidecntr, t)
+                    if numbtile == 1:
+                        strgtile = 'none'
+                    else:
+                        strgtile = '%04d' % t
+                    strgmaps = '%s%dmsc%04d%04d' % (datatype, expomaps[k], numbsidecntr, strgtile)
 
                     # determine map shape
                     minmindxxaxi = (t // facttile) * numbsidetile
@@ -436,7 +440,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     # temp
     dictargs['priofactdoff'] = 0.2
     
-    listnamecnfgextn = ['home2msc03000000', 'home4msc03000000', 'home7msc03000000']
+    listnamecnfgextn = ['home7msc0600none', 'home2msc0300none', 'home4msc0300none', 'home7msc0300none']
     for k in range(36):
         listnamecnfgextn.append('home7msc0600%04d' % k)
 
@@ -445,7 +449,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
         dictargsvari[namecnfgextn] = {}
    
     for namecnfgextn in listnamecnfgextn:
-        numbsidecart, strgexpo, strgexprsbrt, namestat, anlytype = retr_argschan(namecnfgextn[:4], namecnfgextn[4:8], int(namecnfgextn[8:12]), int(namecnfgextn[12:16]))
+        numbsidecart, strgexpo, strgexprsbrt, namestat, anlytype = retr_argschan(namecnfgextn[:4], namecnfgextn[4:8], int(namecnfgextn[8:12]), namecnfgextn[12:16])
    
         if len(namecnfgextn) == 12:
             if namecnfgextn[:4] == 'home':
@@ -476,9 +480,9 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
                                  )
    
 
-def retr_argschan(datatype, strgexpomaps, numbsidecart, indxtile):
+def retr_argschan(datatype, strgexpomaps, numbsidecart, strgtile):
     
-    anlytype = datatype + strgexpomaps + '%04d' % numbsidecart + '%04d' % indxtile
+    anlytype = datatype + strgexpomaps + '%04d' % numbsidecart + strgtile
     namestat = 'pcat_chan_inpt_' + anlytype
     strgexpo = 'expochan%s.fits' % anlytype
     strgexprsbrt = 'sbrtchan%s.fits' % anlytype
