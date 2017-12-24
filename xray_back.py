@@ -88,7 +88,7 @@ def writ_chan():
                         strgtile = 'none'
                     else:
                         strgtile = '%04d' % t
-                    strgmaps = '%s%dmsc%04d%04d' % (datatype, expomaps[k], numbsidecntr, strgtile)
+                    strgmaps = '%s%dmsc%04d%s' % (datatype, expomaps[k], numbsidecntr, strgtile)
 
                     # determine map shape
                     minmindxxaxi = (t // facttile) * numbsidetile
