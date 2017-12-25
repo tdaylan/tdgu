@@ -12,8 +12,10 @@ def writ_chan():
             
     numbevtt = 1
   
-    listnumbsidetile = [100, 300]
-    listnumbsidecntr = [600, 300]
+    #listnumbsidetile = [100, 300]
+    #listnumbsidecntr = [600, 300]
+    listnumbsidetile = [300, 600]
+    listnumbsidecntr = [300, 600]
     listdatatype = ['home', 'extr']
     for datatype in listdatatype:
         print 'datatype'
@@ -73,7 +75,13 @@ def writ_chan():
                 
                 facttile = numbsidecntr / numbsidetile
                 numbtile = facttile**2
-                
+
+                if numbtile == 1:
+                    numbpixloffsyaxi = (numbsideyaxi - numbsidecntr) / 2
+                    numbpixloffsxaxi = (numbsidexaxi - numbsidecntr) / 2
+                else:
+                    numbpixloffsyaxi = 0
+                    numbpixloffsxaxi = 0
                 print 'facttile'
                 print 'numbtile'
                 print numbtile
@@ -91,10 +99,10 @@ def writ_chan():
                     strgmaps = '%s%dmsc%04d%s' % (datatype, expomaps[k], numbsidecntr, strgtile)
 
                     # determine map shape
-                    minmindxxaxi = (t // facttile) * numbsidetile
-                    maxmindxxaxi = (t // facttile + 1) * numbsidetile
-                    minmindxyaxi = (t % facttile) * numbsidetile
-                    maxmindxyaxi = (t % facttile + 1) * numbsidetile
+                    minmindxxaxi = (t // facttile) * numbsidetile + numbpixloffsxaxi
+                    maxmindxxaxi = (t // facttile + 1) * numbsidetile + numbpixloffsxaxi
+                    minmindxyaxi = (t % facttile) * numbsidetile + numbpixloffsyaxi
+                    maxmindxyaxi = (t % facttile + 1) * numbsidetile + numbpixloffsyaxi
                      
                     print 'minmindxxaxi'
                     print minmindxxaxi
@@ -465,7 +473,11 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
             dictargsvari[anlytype]['optitype'] = 'none'
             dictargsvari[anlytype]['elemspatevaltype'] = ['full']
             
-        maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
+        if namecnfgextn[12:16] == 'none':
+            maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
+        else:
+            maxmgangdata = 0.492 / anglfact * 100. / 2.
+        
         dictargsvari[anlytype]['anlytype'] = anlytype
         dictargsvari[anlytype]['maxmgangdata'] = maxmgangdata 
         dictargsvari[anlytype]['strgexpo'] = strgexpo
