@@ -186,7 +186,7 @@ def writ_chan():
                                     #cntp[i, :, :, 0] = zeros((600, 600))[minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi]
                                     cntp[i, :, :, 0] *= expo[i, :, :, 0]
 
-                    cntpfull[:, minmindxyaxi:maxmindxyaxi, minmindxxaxi:maxmindxxaxi, :] = cntp
+                    cntpfull[:, minmindxyaxi-numbpixloffsyaxi:maxmindxyaxi-numbpixloffsyaxi, minmindxxaxi-numbpixloffsxaxi:maxmindxxaxi-numbpixloffsxaxi, :] = cntp
                     
                     axis.axvline(pixlsize * (minmindxxaxi - numbsidecntr / 2) * anglfact, lw=1)
                     axis.axhline(pixlsize * (minmindxyaxi - numbsidecntr / 2) * anglfact, lw=1)
