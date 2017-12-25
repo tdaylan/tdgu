@@ -14,8 +14,8 @@ def writ_chan():
   
     #listnumbsidetile = [100, 300]
     #listnumbsidecntr = [600, 300]
-    listnumbsidetile = [300, 600]
-    listnumbsidecntr = [300, 600]
+    listnumbsidetile = [600, 300, 100]
+    listnumbsidecntr = [600, 300, 600]
     listdatatype = ['home', 'extr']
     for datatype in listdatatype:
         print 'datatype'
