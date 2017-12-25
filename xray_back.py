@@ -99,6 +99,10 @@ def writ_chan():
                     strgmaps = '%s%dmsc%04d%s' % (datatype, expomaps[k], numbsidecntr, strgtile)
 
                     # determine map shape
+                    print 'numbpixloffsxaxi'
+                    print numbpixloffsxaxi
+                    print 'numbpixloffsyaxi'
+                    print numbpixloffsyaxi
                     minmindxxaxi = (t // facttile) * numbsidetile + numbpixloffsxaxi
                     maxmindxxaxi = (t // facttile + 1) * numbsidetile + numbpixloffsxaxi
                     minmindxyaxi = (t % facttile) * numbsidetile + numbpixloffsyaxi
