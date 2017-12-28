@@ -1120,7 +1120,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     # temp
     #dictargs['verbtype'] = 2
     dictargs['inittype'] = 'reco'
-    dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 1000
     dictargs['numbsamp'] = 100
     dictargs['optitype'] = 'none'
     dictargs['psfnevaltype'] = 'kern'
@@ -1143,7 +1143,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     
     dictargsvari['popl']['numbpopl'] = 3
     
-    dictargsvari['nomi']['checprio'] = True
+    #dictargsvari['nomi']['checprio'] = True
                    
     dictargsvari['lprirefe']['boolrefeforc'] = True
     #dictargsvari['lprirefe']['inittype'] = 'rand'
