@@ -234,10 +234,10 @@ def writ_chan():
                     print
                 
                 extt = anglfact * numbsidecntr * array([-1, 1, -1, 1]) * pixlsize / 2.
-                imag = axis.imshow(cntpfull[0, :, :, 0], extent=extt, cmap='Greys', origin='lower', interpolation='none')
+                imag = axis.imshow(arcsinh(cntpfull[0, :, :, 0]), extent=extt, cmap='Greys', origin='lower', interpolation='none')
                 axis.set_xlabel(r'$\theta_1$ [$^\circ$]')
                 axis.set_ylabel(r'$\theta_2$ [$^\circ$]')
-                plt.colorbar(arcsinh(imag), ax=axis, fraction=0.03)
+                plt.colorbar(imag, ax=axis, fraction=0.03)
                 plt.tight_layout()
                 path = os.environ["TDGU_DATA_PATH"] + '/xray_back/imag/'
                 strgmaps = '%s%dmsc%04d' % (datatype, expomaps[k], p)
