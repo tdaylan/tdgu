@@ -237,7 +237,7 @@ def writ_chan():
                 imag = axis.imshow(cntpfull[0, :, :, 0], extent=extt, cmap='Greys', origin='lower', interpolation='none')
                 axis.set_xlabel(r'$\theta_1$ [$^\circ$]')
                 axis.set_ylabel(r'$\theta_2$ [$^\circ$]')
-                plt.colorbar(imag, ax=axis, fraction=0.03)
+                plt.colorbar(arcsinh(imag), ax=axis, fraction=0.03)
                 plt.tight_layout()
                 path = os.environ["TDGU_DATA_PATH"] + '/xray_back/imag/'
                 strgmaps = '%s%dmsc%04d' % (datatype, expomaps[k], p)
@@ -366,7 +366,7 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictargs['exprtype'] = 'chan'
     dictargs['truemaxmnumbelempop0reg0'] = 400
     dictargs['truenumbelempop0reg0'] = 100
-    dictargs['strgexpo'] = 'expochanhome4msc0100.fits'
+    dictargs['strgexpo'] = 'expochanhome7msc06000000.fits'
     dictargs['trueelemtype'] = ['lghtpntsagnntrue']
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
     dictargs['priofactdoff'] = 0.2
@@ -433,11 +433,13 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['propcomp'] = False
     #dictargs['probtran'] = 0.
     #dictargs['spectype'] = ['colr']
-    dictargs['numbswep'] = 1000
+    dictargs['numbswep'] = 100000
     dictargs['rtagmock'] = '20171219_111928_pcat_chan_mock_nomi_10000'
     #dictargs['checprio'] = True
     #dictargs['shrtfram'] = False
-    dictargs['numbsamp'] = 10
+    dictargs['numbsamp'] = 1000
+    dictargs['savestat'] = True
+    #dictargs['forcsavestat'] = True
     #dictargs['verbtype'] = 2
     #dictargs['showmoreaccp'] = False
     #dictargs['propcomp'] = False
@@ -463,16 +465,10 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     for namecnfgextn in listnamecnfgextn:
         numbsidecart, strgexpo, strgexprsbrt, namestat, anlytype = retr_argschan(namecnfgextn[:4], namecnfgextn[4:8], int(namecnfgextn[8:12]), namecnfgextn[12:16])
    
-        if len(namecnfgextn) == 12:
-            if namecnfgextn[:4] == 'home':
-                dictargs['namerecostat'] = 'pcat_chan_inpt_home7msc03000000'
-            if namecnfgextn[:4] == 'extr':
-                dictargs['namerecostat'] = 'extr4msc03000000'
-        else:
-            dictargs['namerecostat'] = namecnfgextn
-
+        dictargsvari[anlytype]['namerecostat'] = 'pcat_chan_inpt_' + namecnfgextn
+        
         # temp
-        if namecnfgextn[8:12] == '0600':
+        if namecnfgextn[8:] == '0600none':
             dictargsvari[anlytype]['numbsamp'] = 1
             dictargsvari[anlytype]['optitype'] = 'none'
             dictargsvari[anlytype]['elemspatevaltype'] = ['full']
@@ -486,8 +482,6 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
         dictargsvari[anlytype]['maxmgangdata'] = maxmgangdata 
         dictargsvari[anlytype]['strgexpo'] = strgexpo
         dictargsvari[anlytype]['strgexprsbrt'] = strgexprsbrt
-        if namecnfgextn[:8] == 'extr4msc' or namecnfgextn[:8] == 'home7msc':
-            dictargsvari[anlytype]['savestat'] = True
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
