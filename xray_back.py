@@ -433,11 +433,11 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['propcomp'] = False
     #dictargs['probtran'] = 0.
     #dictargs['spectype'] = ['colr']
-    dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 10000
     dictargs['rtagmock'] = '20171219_111928_pcat_chan_mock_nomi_10000'
     #dictargs['checprio'] = True
     #dictargs['shrtfram'] = False
-    dictargs['numbsamp'] = 1000
+    dictargs['numbsamp'] = 100
     dictargs['savestat'] = True
     #dictargs['forcsavestat'] = True
     #dictargs['verbtype'] = 2
@@ -454,7 +454,8 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     # temp
     dictargs['priofactdoff'] = 0.2
     
-    listnamecnfgextn = ['home7msc0600none', 'home2msc0300none', 'home4msc0300none', 'home7msc0300none']
+    listnamecnfgextn = []
+    #listnamecnfgextn += ['home7msc0600none', 'home2msc0300none', 'home4msc0300none', 'home7msc0300none']
     for k in range(36):
         listnamecnfgextn.append('home7msc0600%04d' % k)
 
