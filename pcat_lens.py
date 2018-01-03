@@ -198,6 +198,10 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
     dictargs = {}
     dictargs['exprtype'] = 'hubb'
     dictargs['elemtype'] = ['lens']
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 100
+    dictargs['makeplotinit'] = False
+    dictargs['makeplotfram'] = False
     dictargs['seedtype'] = 4
     
     dictargs['initnumbelempop0reg0'] = 25

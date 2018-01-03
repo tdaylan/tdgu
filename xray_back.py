@@ -372,9 +372,10 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictargs['priofactdoff'] = 0.2
     
     dictargs['optitype'] = 'none'
-    dictargs['numbswep'] = 100000
-    dictargs['numbburn'] = 20000
-    dictargs['numbsamp'] = 800
+    dictargs['numbswep'] = 1000
+    dictargs['makeplot'] = False
+    dictargs['numbburn'] = 200
+    dictargs['numbsamp'] = 8
     
     listnamecnfgextn = ['nomi', 'truevlow', 'trueloww', 'truehigh', 'truenone']
     dictargsvari = {}
