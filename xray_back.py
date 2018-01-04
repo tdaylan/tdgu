@@ -371,7 +371,7 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
     dictargs['priofactdoff'] = 0.2
     
-    dictargs['optitype'] = 'none'
+    #dictargs['optitype'] = 'none'
     dictargs['numbswep'] = 100000
     dictargs['numbsamp'] = 100
     
@@ -432,7 +432,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['propcomp'] = False
     #dictargs['probtran'] = 0.
     #dictargs['spectype'] = ['colr']
-    dictargs['numbswep'] = 10000
+    dictargs['numbswep'] = 100000
     #dictargs['numbproc'] = 2
     dictargs['rtagmock'] = '20180103_142305_pcat_chan_mock_nomi_1000'
     #dictargs['checprio'] = True
