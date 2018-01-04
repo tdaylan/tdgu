@@ -1120,6 +1120,8 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     # temp
     #dictargs['verbtype'] = 2
     dictargs['inittype'] = 'reco'
+    anglfact = 180. / pi
+    dictargs['maxmgangdata'] = 0.7 / anglfact
     dictargs['numbswep'] = 1000
     dictargs['numbsamp'] = 100
     dictargs['optitype'] = 'none'
