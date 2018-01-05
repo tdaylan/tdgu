@@ -371,8 +371,7 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
     dictargs['priofactdoff'] = 0.2
     
-    #dictargs['optitype'] = 'none'
-    dictargs['numbswep'] = 1000
+    dictargs['numbswep'] = 100000
     dictargs['numbsamp'] = 100
     
     listnamecnfgextn = ['nomi', 'truevlow', 'trueloww', 'truehigh', 'truenone']
