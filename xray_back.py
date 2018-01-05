@@ -432,10 +432,10 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['propcomp'] = False
     #dictargs['probtran'] = 0.
     #dictargs['spectype'] = ['colr']
-    dictargs['numbswep'] = 1000
+    dictargs['numbswep'] = 10000
     dictargs['numbsamp'] = 100
     dictargs['rtagmock'] = '20180104_084600_pcat_chan_mock_nomi_1000'
-    dictargs['checprio'] = True
+    #dictargs['checprio'] = True
     #dictargs['shrtfram'] = False
     dictargs['savestat'] = True
     #dictargs['forcsavestat'] = True
@@ -486,6 +486,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  omitprev=True, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
    
