@@ -995,9 +995,9 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     #dictargs['verbtype'] = 2
     dictargs['optitype'] = 'none'
     #dictargs['diagmode'] = False
-    dictargs['numbswep'] = 200000
+    dictargs['numbswep'] = 10000
     #dictargs['numbburn'] = 0
-    dictargs['numbsamp'] = 1000
+    dictargs['numbsamp'] = 100
 
     dictargs['forccart'] = True
     dictargs['pixltype'] = 'cart'
@@ -1121,10 +1121,13 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     #dictargs['verbtype'] = 2
     dictargs['inittype'] = 'reco'
     #anglfact = 180. / pi
-    #dictargs['maxmgangdata'] = 0.7 / anglfact
-    dictargs['numbswep'] = 100
-    dictargs['numbsamp'] = 10
+    dictargs['numbswep'] = 100000
+    dictargs['numbsamp'] = 100
     dictargs['optitype'] = 'none'
+    #dictargs['proppsfp'] = False
+    #dictargs['diagmode'] = False
+    #dictargs['makeplot'] = False
+    #dictargs['optitype'] = 'none'
     dictargs['psfnevaltype'] = 'kern'
     dictargs['priofactdoff'] = 0.5
 
@@ -1132,7 +1135,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
     
-    listnamecnfgextn = ['nomi', 'rec7', 'mask', 'popl', 'backwfou', 'backfour', 'backtemp', 'dark', 'lprirefe', 'backsmth', 'test']
+    listnamecnfgextn = ['nomi', 'rofismal', 'rec7', 'mask', 'popl', 'backwfou', 'backfour', 'backtemp', 'dark', 'lprirefe', 'backsmth', 'test']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
@@ -1142,6 +1145,8 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     listmask = [['hstr', -2. / anglfact, 2. / anglfact]]
     dictargsvari['mask']['mask'] = array([-30., 30., -2., 2.]) / 180. * pi
     dictargsvari['mask']['listmask'] = listmask
+    
+    dictargsvari['rofismal']['maxmgangdata'] = 10. / anglfact
     
     dictargsvari['popl']['numbpopl'] = 3
     
