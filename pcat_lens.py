@@ -201,8 +201,8 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
     dictargs['seedtype'] = 4
    
     # temp
-    dictargs['numbswep'] = 100000
-    dictargs['numbsamp'] = 100
+    dictargs['numbswep'] = 1000000
+    dictargs['numbsamp'] = 1000
     
     dictargs['initnumbelempop0reg0'] = 25
     dictargs['truenumbelempop0reg0'] = 25
