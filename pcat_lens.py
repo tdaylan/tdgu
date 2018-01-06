@@ -201,13 +201,10 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
     dictargs['seedtype'] = 4
    
     # temp
-    dictargs['numbswep'] = 1000
+    dictargs['numbswep'] = 100000
     dictargs['numbsamp'] = 100
-    dictargs['makeplotinit'] = False
-    dictargs['makeplotfram'] = False
     
     dictargs['initnumbelempop0reg0'] = 25
-    
     dictargs['truenumbelempop0reg0'] = 25
     dictargs['truemeanpntspop0'] = 25
     dictargs['truedefsdistsloppop0'] = 1.9
@@ -364,19 +361,23 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
     numbelem = int(25. * 10.**0.9)
     anglfact = 3600. * 180. / pi
 
-    listnamecnfgextn = ['nomi', 'parsnone', 'truelowr', 'truelowrparsnone', 'truenone', 'truenoneparsnone', 'subhsing', 'truevlow', 's2nrhigh', 's2nrvhig', 'datanone']
+    listnamecnfgextn = ['nomi', 'fittlowr', 'fitthigh', 'parsnone', 'truelowr', 'truelowrparsnone', 'truenone', 'truenoneparsnone', \
+                                                                                'subhsing', 'truevlow', 's2nrhigh', 's2nrvhig', 'datanone']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
-    dictargsvari['parsnone']['priofactdoff'] = 0.
+    dictargsvari['fittlowr']['fittminmdefs'] = 0.005 / anglfact
     
-    dictargsvari['truelowr']['fittminmdefs'] = 0.01 / anglfact
-    
-    dictargsvari['truelowrparsnone']['fittminmdefs'] = 0.01 / anglfact
-    dictargsvari['truelowrparsnone']['priofactdoff'] = 0.
+    dictargsvari['fitthigh']['fittminmdefs'] = 0.02 / anglfact
 
     dictargsvari['truenone']['truenumbelempop0reg0'] = 0
+    
+    dictargsvari['truelowr']['trueminmdefs'] = 0.01 / anglfact
+    
+    dictargsvari['parsnone']['priofactdoff'] = 0.
+    
+    dictargsvari['truelowrparsnone']['priofactdoff'] = 0.
     
     dictargsvari['truenoneparsnone']['truenumbelempop0reg0'] = 0
     dictargsvari['truenoneparsnone']['priofactdoff'] = 0.
@@ -388,7 +389,6 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
     
     dictargsvari['truevlow']['truenumbelempop0reg0'] = int(25. * 10.**0.9)
     dictargsvari['truevlow']['trueminmdefs'] = 3e-4 / anglfact
-    dictargsvari['truevlow']['fittminmdefs'] = 0.01 / anglfact
     
     dictargsvari['s2nrhigh']['strgexpo'] = 1e4 / 1.63050e-19
     
