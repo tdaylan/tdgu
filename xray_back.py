@@ -435,7 +435,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     dictargs['numbsamp'] = 100
     dictargs['rtagmock'] = '20180105_202051_pcat_chan_mock_nomi_100000'
     #dictargs['shrtfram'] = False
-    dictargs['savestat'] = False
+    dictargs['savestat'] = True
     dictargs['diagmode'] = False
     #dictargs['forcsavestat'] = True
     #dictargs['verbtype'] = 2
@@ -473,12 +473,12 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
             dictargsvari[anlytype]['numbswep'] = 1000
             dictargsvari[anlytype]['numbsamp'] = 10
         if namecnfgextn[8:] == '0300none':
-            dictargsvari[anlytype]['numbswep'] = 10000
+            dictargsvari[anlytype]['numbswep'] = 100000
             dictargsvari[anlytype]['numbsamp'] = 100
         
         if namecnfgextn == 'home7msc0300none':
-            dictargsvari[anlytype]['savestat'] = False
-            dictargsvari[anlytype]['checprio'] = True
+            pass
+            #dictargsvari[anlytype]['checprio'] = True
         
         # temp
         if namecnfgextn[8:] == '0600none':
