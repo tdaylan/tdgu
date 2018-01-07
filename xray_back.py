@@ -435,7 +435,8 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     dictargs['numbsamp'] = 100
     dictargs['rtagmock'] = '20180105_202051_pcat_chan_mock_nomi_100000'
     #dictargs['shrtfram'] = False
-    dictargs['savestat'] = True
+    dictargs['savestat'] = False
+    dictargs['diagmode'] = False
     #dictargs['forcsavestat'] = True
     #dictargs['verbtype'] = 2
     #dictargs['showmoreaccp'] = False
@@ -443,6 +444,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['propbacp'] = False
     #dictargs['propdist'] = False
     #dictargs['probtran'] = 0.
+    dictargs['explprop'] = True
     #dictargs['optitype'] = 'none'
     #dictargs['emptsamp'] = 'none'
     #dictargs['makeplot'] = False
@@ -452,7 +454,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     dictargs['priofactdoff'] = 0.2
     
     listnamecnfgextn = []
-    #listnamecnfgextn += ['home2msc0300none', 'home4msc0300none', 'home7msc0300none']
+    listnamecnfgextn += ['home2msc0300none', 'home4msc0300none', 'home7msc0300none']
     #listnamecnfgextn += ['home7msc0600none']
     for k in range(36):
         listnamecnfgextn.append('home7msc0600%04d' % k)
@@ -464,16 +466,18 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     for namecnfgextn in listnamecnfgextn:
         numbsidecart, strgexpo, strgexprsbrt, namestat, anlytype = retr_argschan(namecnfgextn[:4], namecnfgextn[4:8], int(namecnfgextn[8:12]), namecnfgextn[12:16])
    
-        dictargsvari[anlytype]['namerecostat'] = 'pcat_chan_inpt_' + namecnfgextn
+        #dictargsvari[anlytype]['namerecostat'] = 'pcat_chan_inpt_' + namecnfgextn
+        dictargsvari[anlytype]['namerecostat'] = 'pcat_chan_inpt_home7msc0300none'
     
         if namecnfgextn[8:] == '06000000':
             dictargsvari[anlytype]['numbswep'] = 1000
             dictargsvari[anlytype]['numbsamp'] = 10
         if namecnfgextn[8:] == '0300none':
-            dictargsvari[anlytype]['numbswep'] = 100000
+            dictargsvari[anlytype]['numbswep'] = 10000
             dictargsvari[anlytype]['numbsamp'] = 100
         
         if namecnfgextn == 'home7msc0300none':
+            dictargsvari[anlytype]['savestat'] = False
             dictargsvari[anlytype]['checprio'] = True
         
         # temp
