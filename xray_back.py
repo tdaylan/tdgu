@@ -431,7 +431,8 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['propcomp'] = False
     #dictargs['probtran'] = 0.
     #dictargs['spectype'] = ['colr']
-    dictargs['numbswep'] = 100000
+    dictargs['shrtfram'] = False
+    dictargs['numbswep'] = 1000
     dictargs['numbsamp'] = 100
     dictargs['rtagmock'] = '20180105_202051_pcat_chan_mock_nomi_100000'
     #dictargs['shrtfram'] = False
@@ -466,14 +467,14 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     for namecnfgextn in listnamecnfgextn:
         numbsidecart, strgexpo, strgexprsbrt, namestat, anlytype = retr_argschan(namecnfgextn[:4], namecnfgextn[4:8], int(namecnfgextn[8:12]), namecnfgextn[12:16])
    
-        #dictargsvari[anlytype]['namerecostat'] = 'pcat_chan_inpt_' + namecnfgextn
-        dictargsvari[anlytype]['namerecostat'] = 'pcat_chan_inpt_home7msc0300none'
+        dictargsvari[anlytype]['namerecostat'] = 'pcat_chan_inpt_' + namecnfgextn
+        #dictargsvari[anlytype]['namerecostat'] = 'pcat_chan_inpt_home7msc0300none'
     
         if namecnfgextn[8:] == '06000000':
             dictargsvari[anlytype]['numbswep'] = 1000
             dictargsvari[anlytype]['numbsamp'] = 10
         if namecnfgextn[8:] == '0300none':
-            dictargsvari[anlytype]['numbswep'] = 100000
+            dictargsvari[anlytype]['numbswep'] = 10000
             dictargsvari[anlytype]['numbsamp'] = 100
         
         if namecnfgextn == 'home7msc0300none':
