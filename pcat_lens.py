@@ -204,6 +204,9 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
     dictargs['numbswep'] = 10000
     dictargs['numbsamp'] = 100
     dictargs['proppsfp'] = False
+    dictargs['propcomp'] = False
+    dictargs['propbacp'] = False
+    dictargs['propdist'] = False
     #dictargs['proptran'] = 100
     
     dictargs['initnumbelempop0reg0'] = 25
