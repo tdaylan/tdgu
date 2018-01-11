@@ -433,6 +433,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['spectype'] = ['colr']
     #dictargs['shrtfram'] = False
     dictargs['numbswep'] = 1000
+    dictargs['probspmr'] = 0.
     dictargs['numbsamp'] = 100
     dictargs['rtagmock'] = '20180105_202051_pcat_chan_mock_nomi_100000'
     #dictargs['shrtfram'] = False
