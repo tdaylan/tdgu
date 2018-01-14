@@ -199,20 +199,25 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
     dictargs['exprtype'] = 'hubb'
     dictargs['elemtype'] = ['lens']
     dictargs['seedtype'] = 4
+    dictargs['priofactdoff'] = 0.
    
     # temp
     dictargs['numbswep'] = 10000
     dictargs['numbsamp'] = 100
-    dictargs['proppsfp'] = False
-    dictargs['propcomp'] = False
-    dictargs['propbacp'] = False
-    dictargs['propdist'] = False
-    #dictargs['proptran'] = 100
+    #dictargs['proplenp'] = False
+    #dictargs['proppsfp'] = False
+    #dictargs['propcomp'] = False
+    #dictargs['propbacp'] = False
+    #dictargs['propdist'] = False
     
-    dictargs['initnumbelempop0reg0'] = 25
     dictargs['truemaxmnumbelempop0reg0'] = 25
     dictargs['truenumbelempop0reg0'] = 25
+    #dictargs['maxmnumbelempop0reg0'] = 0
+    #dictargs['numbelempop0reg0'] = 0
+    #dictargs['verbtype'] = 2
+    
     dictargs['truemeanpntspop0'] = 25
+    dictargs['initnumbelempop0reg0'] = 25
     dictargs['truedefsdistsloppop0'] = 1.9
     dictargs['truesigcene0evt0'] = 4.21788e-07
     dictargs['truebacp0000reg0ene0'] = 2e-07
@@ -365,12 +370,12 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
     # temp
     #dictargs['makeplotinit'] = True
     #dictargs['shrtfram'] = False
-    #dictargs['verbtype'] = 2
     
     numbelem = int(25. * 10.**0.9)
 
-    listnamecnfgextn = ['nomi', 'fittlhig', 'fitthigh', 'fittvhig', 'truenone', 'truenoneparsnone', 'parsnone', \
-                                                                                'subhsing', 'trueloww', 's2nrhigh', 's2nrvhig', 'checprio']
+    listnamecnfgextn = ['fittlhig', 'fitthigh', 'fittvhig', 'truenone']
+    #listnamecnfgextn = ['nomi', 'fittlhig', 'fitthigh', 'fittvhig', 'truenone', 'truenoneparsnomi', 'parsnomi', \
+    #                                                                            'subhsing', 'trueloww', 's2nrhigh', 's2nrvhig', 'checprio']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
@@ -384,31 +389,31 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
     dictargsvari['truenone']['fittminmdefs'] = 0.01 / anglfact
     dictargsvari['truenone']['truenumbelempop0reg0'] = 0
     
-    dictargsvari['truenoneparsnone']['fittminmdefs'] = 0.01 / anglfact
-    dictargsvari['truenoneparsnone']['truenumbelempop0reg0'] = 0
-    dictargsvari['truenoneparsnone']['priofactdoff'] = 0.
+    #dictargsvari['parsnomi']['fittminmdefs'] = 0.01 / anglfact
+    #dictargsvari['parsnomi']['priofactdoff'] = 1.
     
-    dictargsvari['parsnone']['fittminmdefs'] = 0.01 / anglfact
-    dictargsvari['parsnone']['priofactdoff'] = 0.
-    
-    dictargsvari['subhsing']['fittminmdefs'] = 0.01 / anglfact
-    dictargsvari['subhsing']['probtran'] = 0.
-    dictargsvari['subhsing']['initnumbelempop0reg0'] = 1
-    dictargsvari['subhsing']['fittminmnumbelempop0reg0'] = 0
-    dictargsvari['subhsing']['fittmaxmnumbelempop0reg0'] = 1
-    
-    dictargsvari['trueloww']['fittminmdefs'] = 0.01 / anglfact
-    dictargsvari['trueloww']['truenumbelempop0reg0'] = int(25. * 10.**0.9)
-    dictargsvari['trueloww']['trueminmdefs'] = 3e-4 / anglfact
-    
-    dictargsvari['s2nrhigh']['fittminmdefs'] = 0.01 / anglfact
-    dictargsvari['s2nrhigh']['strgexpo'] = 1e4 / 1.63050e-19
-    
-    dictargsvari['s2nrvhig']['fittminmdefs'] = 0.01 / anglfact
-    dictargsvari['s2nrvhig']['strgexpo'] = 1e5 / 1.63050e-19
+    #dictargsvari['subhsing']['fittminmdefs'] = 0.01 / anglfact
+    #dictargsvari['subhsing']['probtran'] = 0.
+    #dictargsvari['subhsing']['initnumbelempop0reg0'] = 1
+    #dictargsvari['subhsing']['fittminmnumbelempop0reg0'] = 0
+    #dictargsvari['subhsing']['fittmaxmnumbelempop0reg0'] = 1
+    #
+    #dictargsvari['truenoneparsnomi']['fittminmdefs'] = 0.01 / anglfact
+    #dictargsvari['truenoneparsnomi']['truenumbelempop0reg0'] = 0
+    #dictargsvari['truenoneparsnomi']['priofactdoff'] = 1.
+    #
+    #dictargsvari['trueloww']['fittminmdefs'] = 0.01 / anglfact
+    #dictargsvari['trueloww']['truenumbelempop0reg0'] = int(25. * 10.**0.9)
+    #dictargsvari['trueloww']['trueminmdefs'] = 3e-4 / anglfact
+    #
+    #dictargsvari['s2nrhigh']['fittminmdefs'] = 0.01 / anglfact
+    #dictargsvari['s2nrhigh']['strgexpo'] = 1e4 / 1.63050e-19
+    #
+    #dictargsvari['s2nrvhig']['fittminmdefs'] = 0.01 / anglfact
+    #dictargsvari['s2nrvhig']['strgexpo'] = 1e5 / 1.63050e-19
 
-    dictargsvari['checprio']['fittminmdefs'] = 0.01 / anglfact
-    dictargsvari['checprio']['checprio'] = True
+    #dictargsvari['checprio']['fittminmdefs'] = 0.01 / anglfact
+    #dictargsvari['checprio']['checprio'] = True
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
