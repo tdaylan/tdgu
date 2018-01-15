@@ -500,7 +500,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  omitprev=True, \
+                                  forcprev=True, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
    

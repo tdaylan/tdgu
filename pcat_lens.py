@@ -202,8 +202,8 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
     dictargs['priofactdoff'] = 0.
    
     # temp
-    dictargs['numbswep'] = 10000
-    dictargs['numbsamp'] = 100
+    dictargs['numbswep'] = 1000
+    dictargs['numbsamp'] = 10
     #dictargs['proplenp'] = False
     #dictargs['proppsfp'] = False
     #dictargs['propcomp'] = False
@@ -418,6 +418,7 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  #forcprev=True, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
     
