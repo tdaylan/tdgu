@@ -303,6 +303,7 @@ def pcat_tgas_mock(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
@@ -349,6 +350,7 @@ def pcat_tgas_mock_spmr(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
@@ -385,6 +387,7 @@ def pcat_tgas_inpt(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 

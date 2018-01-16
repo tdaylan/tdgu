@@ -189,6 +189,7 @@ def pcat_lens_mock_next(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
@@ -418,6 +419,7 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                   #forcprev=True, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
@@ -478,6 +480,7 @@ def pcat_lens_sour_mock(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
     
@@ -496,6 +499,7 @@ def pcat_lens_mock_perf():
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                  )
     
 
@@ -512,6 +516,7 @@ def pcat_lens_mock_reln():
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                  )
 
 
@@ -553,6 +558,7 @@ def pcat_lens_mock_sele():
         listgdat, dictglob = pcat.main.initarry( \
                                       dictargsvari, \
                                       dictargs, \
+                                      listnamecnfgextn, \
                                       seedelemtype='rand', \
                                       liststrgvarboutp=liststrgvarboutp, \
                                      )
@@ -664,6 +670,7 @@ def pcat_lens_mock_tmpr():
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                  )
 
 
@@ -690,6 +697,7 @@ def pcat_lens_mock_test():
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                  )
 
 
@@ -729,6 +737,7 @@ def pcat_lens_mock_many():
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                  )
 
 
@@ -778,6 +787,7 @@ def pcat_lens_mock_spmr(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
@@ -1145,6 +1155,7 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 

@@ -954,6 +954,7 @@ def pcat_ferm_bubb(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
@@ -1051,6 +1052,7 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
@@ -1098,6 +1100,7 @@ def pcat_ferm_brek_mock(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
@@ -1184,6 +1187,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
     

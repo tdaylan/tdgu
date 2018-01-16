@@ -299,6 +299,7 @@ def pcat_chan_mock_spmr(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
@@ -355,6 +356,7 @@ def pcat_chan_spec_spmr(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
@@ -388,6 +390,7 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
     
@@ -432,7 +435,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['probtran'] = 0.
     #dictargs['spectype'] = ['colr']
     #dictargs['shrtfram'] = False
-    dictargs['numbswep'] = 10000
+    dictargs['numbswep'] = 100000
     dictargs['probspmr'] = 0.
     dictargs['numbsamp'] = 100
     dictargs['rtagmock'] = '20180105_202051_pcat_chan_mock_nomi_100000'
@@ -500,6 +503,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                   forcprev=True, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
