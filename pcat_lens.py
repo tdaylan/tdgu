@@ -421,7 +421,7 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
-                                  #forcprev=True, \
+                                  #takeprev=True, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
     
