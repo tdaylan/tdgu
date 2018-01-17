@@ -210,6 +210,7 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
     #dictargs['propcomp'] = False
     #dictargs['propbacp'] = False
     #dictargs['propdist'] = False
+    dictargs['limtydathistfeat'] = 10.
     
     dictargs['truemaxmnumbelempop0reg0'] = 25
     dictargs['truenumbelempop0reg0'] = 25
