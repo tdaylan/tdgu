@@ -203,14 +203,14 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
     dictargs['priofactdoff'] = 0.
    
     # temp
-    dictargs['numbswep'] = 1000
-    dictargs['numbsamp'] = 10
+    dictargs['numbswep'] = 20000
+    dictargs['numbsamp'] = 100
     #dictargs['proplenp'] = False
     #dictargs['proppsfp'] = False
     #dictargs['propcomp'] = False
     #dictargs['propbacp'] = False
     #dictargs['propdist'] = False
-    dictargs['limtydathistfeat'] = 10.
+    dictargs['limtydathistfeat'] = [0.5, 10.]
     
     dictargs['truemaxmnumbelempop0reg0'] = 25
     dictargs['truenumbelempop0reg0'] = 25
