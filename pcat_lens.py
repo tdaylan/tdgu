@@ -203,8 +203,8 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
     dictargs['priofactdoff'] = 0.
    
     # temp
-    dictargs['numbswep'] = 300000
-    dictargs['numbsamp'] = 1000
+    dictargs['numbswep'] = 200000
+    dictargs['numbsamp'] = 200
     #dictargs['proplenp'] = False
     #dictargs['proppsfp'] = False
     #dictargs['propcomp'] = False
@@ -421,6 +421,7 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
+                                  forcprev=True, \
                                   #takeprev=True, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
