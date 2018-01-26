@@ -1107,6 +1107,8 @@ def pcat_ferm_brek_mock(strgcnfgextnexec=None):
 
 def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
    
+    anglfact = 180. / pi
+
     # overplot NPTF results
 
     dictargs = {}
@@ -1118,38 +1120,52 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     
     dictargs['listprefhistfluxlabl'] = ['NPTF']
     dictargs['listprefhistfluxflux'] = [[1e-11, 1e-10, 3e-10, 5e-10]]
-    dictargs['listprefhistfluxhist'] = [[1e6, 1e7, 1e4, 1e6]]
+    dictargs['listprefhistfluxhist'] = [array([1e6, 1e7, 1e4, 1e6])]
+    dictargs['listprefhistfluxtype'] = ['line']
    
-    # temp
-    #dictargs['verbtype'] = 2
     dictargs['inittype'] = 'reco'
-    #anglfact = 180. / pi
-    dictargs['numbswep'] = 10000
-    dictargs['numbsamp'] = 100
+    dictargs['numbswep'] = 200000
+    dictargs['numbburn'] = 0
+    dictargs['numbswepplot'] = 20000
+    dictargs['numbsamp'] = 500
+    
+    dictargs['proppsfp'] = False
+    dictargs['initpsfprefr'] = True
     dictargs['optitype'] = 'none'
-    #dictargs['proppsfp'] = False
-    #dictargs['diagmode'] = False
-    #dictargs['makeplot'] = False
-    #dictargs['optitype'] = 'none'
+    dictargs['maxmgangdata'] = 10. / anglfact
     dictargs['psfnevaltype'] = 'kern'
-    dictargs['priofactdoff'] = 0.5
-
     dictargs['forccart'] = True
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
     
-    listnamecnfgextn = ['nomi', 'rofismal', 'rec7', 'mask', 'popl', 'backwfou', 'backfour', 'backtemp', 'dark', 'lprirefe', 'backsmth', 'test']
+    dictargs['probspmr'] = 0.3
+    
+    #dictargs['probtran'] = 0.
+    #dictargs['propcomp'] = False
+    
+    #dictargs['forcsavestat'] = True
+    
+    listnamecnfgextn = ['nomi', 'psfnvari', 'parshigh', 'mask', 'rofilarg', 'darknone', \
+                                'isotfixd', 'rec7', 'popl', 'backwfou', 'backfour', 'backtemp', 'dark', 'lprirefe', 'backsmth', 'test']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
-    anglfact = 180. / pi
-
     listmask = [['hstr', -2. / anglfact, 2. / anglfact]]
     dictargsvari['mask']['mask'] = array([-30., 30., -2., 2.]) / 180. * pi
     dictargsvari['mask']['listmask'] = listmask
     
-    dictargsvari['rofismal']['maxmgangdata'] = 10. / anglfact
+    dictargsvari['parshigh']['priofactdoff'] = 5.
+    
+    dictargsvari['psfnvari']['proppsfp'] = True
+    
+    dictargsvari['darknone']['listnameback'] = ['isot', 'fdfm']
+    dictargsvari['darknone']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
+    
+    dictargsvari['rofilarg']['maxmgangdata'] = 15. / anglfact
+    
+    dictargsvari['isotfixd']['initbacpbac0ene0'] = 4e-6
+    dictargsvari['isotfixd']['propbacpbac0ene0'] = False
     
     dictargsvari['popl']['numbpopl'] = 3
     
@@ -1182,8 +1198,6 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargsvari['backtemp']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'hydrpntssmthrec8.fits', 'cmonpntssmthrec8.fits', \
                                                                                     'dustsfddpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits', 'wisepntssmthrec8.fits']]
     
-    dictargsvari['test']['shrtfram'] = False
-                 
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
