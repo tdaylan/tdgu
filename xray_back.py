@@ -373,7 +373,7 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
     dictargs['priofactdoff'] = 0.2
     
-    dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 1000
     dictargs['numbsamp'] = 100
     
     listnamecnfgextn = ['nomi', 'truevlow', 'trueloww', 'truehigh', 'truenone']
@@ -435,10 +435,10 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['probtran'] = 0.
     #dictargs['spectype'] = ['colr']
     #dictargs['shrtfram'] = False
-    dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 10000
     dictargs['probspmr'] = 0.
     dictargs['numbsamp'] = 100
-    dictargs['rtagmock'] = '20180105_202051_pcat_chan_mock_nomi_100000'
+    dictargs['rtagmock'] = '20180125_222106_pcat_chan_mock_nomi_1000'
     #dictargs['shrtfram'] = False
     dictargs['savestat'] = True
     #dictargs['diagmode'] = False
@@ -456,7 +456,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['verbtype'] = 2
     #dictargs['optitype'] = 'none'
     # temp
-    #dictargs['priofactdoff'] = 0.2
+    dictargs['priofactdoff'] = 0.
     
     listnamecnfgextn = []
     #listnamecnfgextn += ['home2msc0300none', 'home4msc0300none', 'home7msc0300none']
@@ -473,12 +473,12 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
    
         dictargsvari[anlytype]['namerecostat'] = 'pcat_chan_inpt_' + namecnfgextn
     
-        if namecnfgextn[8:] == '06000000':
-            dictargsvari[anlytype]['numbswep'] = 1000
-            dictargsvari[anlytype]['numbsamp'] = 10
-        if namecnfgextn[8:] == '0300none':
-            dictargsvari[anlytype]['numbswep'] = 10000
-            dictargsvari[anlytype]['numbsamp'] = 100
+        #if namecnfgextn[8:] == '06000000':
+        #    dictargsvari[anlytype]['numbswep'] = 1000
+        #    dictargsvari[anlytype]['numbsamp'] = 10
+        #if namecnfgextn[8:] == '0300none':
+        #    dictargsvari[anlytype]['numbswep'] = 10000
+        #    dictargsvari[anlytype]['numbsamp'] = 100
         
         if namecnfgextn == 'home7msc0300none':
             pass
