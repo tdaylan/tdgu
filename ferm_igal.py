@@ -944,7 +944,7 @@ def pcat_ferm_bubb(strgcnfgextnexec=None):
     
     dictargs['backtype'] = [[1., 'sbrtfdfmbacksmthrec8.fits', 'sbrtdarkbacksmthrec8.fits']]
     
-    listnamecnfgextn = ['nomi', 'truedark', 'backbfun', 'heal', 'penalpridiff', 'checprio', 'parsnone', 'popl', 'puls']
+    listnamecnfgextn = ['nomi']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
