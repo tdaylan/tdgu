@@ -996,9 +996,9 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     #dictargs['verbtype'] = 2
     dictargs['optitype'] = 'none'
     #dictargs['diagmode'] = False
-    dictargs['numbswep'] = 10000
+    dictargs['numbswep'] = 200000
     #dictargs['numbburn'] = 0
-    dictargs['numbsamp'] = 100
+    dictargs['numbsamp'] = 1000
 
     dictargs['forccart'] = True
     dictargs['pixltype'] = 'cart'
