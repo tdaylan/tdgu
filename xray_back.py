@@ -435,10 +435,13 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['probtran'] = 0.
     #dictargs['spectype'] = ['colr']
     #dictargs['shrtfram'] = False
-    dictargs['numbswep'] = 10000
-    dictargs['probspmr'] = 0.
-    dictargs['numbsamp'] = 100
-    dictargs['rtagmock'] = '20180129_091715_pcat_chan_mock_nomi_1000'
+    dictargs['numbswep'] = 150000
+    dictargs['numbburn'] = 50000
+    dictargs['numbsamp'] = 1000
+    if os.uname()[1] == 'fink1.rc.fas.harvard.edu' or os.uname()[1] == 'fink2.rc.fas.harvard.edu':
+        dictargs['rtagmock'] = '20180129_091715_pcat_chan_mock_nomi_1000'
+    else:
+        dictargs['rtagmock'] = '20180125_222106_pcat_chan_mock_nomi_1000'
     #dictargs['shrtfram'] = False
     dictargs['savestat'] = True
     #dictargs['diagmode'] = False
