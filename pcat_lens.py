@@ -155,7 +155,6 @@ def pcat_lens_mock_next(strgcnfgextnexec=None):
     dictargs['numbswep'] = 50000
     dictargs['numbburn'] = 20000
     dictargs['factthin'] = 300
-    dictargs['probspmr'] = 0.
     dictargs['priofactdoff'] = 0.
  
     #dictargsvari['numbelempop0reg0']     = [None,        0,  0,  25,   int(25. * 0.1**0.9), int(25. * 10.**0.9)]
@@ -444,7 +443,6 @@ def pcat_lens_sour_mock(strgcnfgextnexec=None):
     # temp
     dictargs['numbswep'] = 100000
     dictargs['numbsamp'] = 100
-    dictargs['probspmr'] = 0.
     #dictargs['makeplot'] = False
     dictargs['optitype'] = 'none'
     
@@ -1097,7 +1095,6 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     dictargsvari['largrofimask']['strgexprsbrt'] = strgexprsbrtlarg
     dictargsvari['largrofimask']['maxmgangdata'] = maxmgangdatalarg
     
-    dictargsvari['dsrcexpo']['probspmr'] = 0.
     dictargsvari['dsrcexpo']['strgexprsbrt'] = strgexprsbrt
     dictargsvari['dsrcexpo']['maxmnumbelempop0reg0'] = 2
     dictargsvari['dsrcexpo']['elemtype'] = ['lghtgausbgrd']
