@@ -366,21 +366,33 @@ def pcat_chan_mock(strgcnfgextnexec=None):
    
     dictargs = {}
     dictargs['exprtype'] = 'chan'
-    dictargs['truemaxmnumbelempop0reg0'] = 400
-    dictargs['truenumbelempop0reg0'] = 100
+    #dictargs['truemaxmnumbelempop0reg0'] = 400
+    #dictargs['truenumbelempop0reg0'] = 100
     dictargs['strgexpo'] = 'expochanhome7msc06000000.fits'
     dictargs['trueelemtype'] = ['lghtpntsagnntrue']
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
     dictargs['priofactdoff'] = 0.2
     
-    dictargs['numbswep'] = 1000
-    dictargs['numbsamp'] = 100
+    #dictargs['makeplotinit'] = False
+    #dictargs['makeplotfram'] = False
+    #dictargs['verbtype'] = 2
+    #dictargs['probspmr'] = 0.
+    #dictargs['propcomp'] = False
+    #dictargs['propmeanelem'] = False
+    #dictargs['propdist'] = False
+    #dictargs['propbacp'] = False
+    #dictargs['proppsfp'] = False
+    dictargs['inittype'] = 'refr'
+    dictargs['numbswep'] = 100000
+    dictargs['numbsamp'] = 1000
+    dictargs['truenumbelempop0reg0'] = 100
+    dictargs['maxmnumbelempop0reg0'] = 400
     
     listnamecnfgextn = ['nomi', 'truevlow', 'trueloww', 'truehigh', 'truenone']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
-    dictargsvari['nomi']['checprio'] = True
+    #dictargsvari['nomi']['checprio'] = True
     dictargsvari['truevlow']['trueminmflux'] = 3e-10
     dictargsvari['trueloww']['trueminmflux'] = 1e-9
     dictargsvari['truehigh']['trueminmflux'] = 1e-8
@@ -437,7 +449,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['shrtfram'] = False
     dictargs['numbswep'] = 150000
     dictargs['numbburn'] = 50000
-    dictargs['numbsamp'] = 1000
+    dictargs['numbsamp'] = 100
     if os.uname()[1] == 'fink1.rc.fas.harvard.edu' or os.uname()[1] == 'fink2.rc.fas.harvard.edu':
         dictargs['rtagmock'] = '20180129_091715_pcat_chan_mock_nomi_1000'
     else:
