@@ -504,6 +504,9 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
             dictargsvari[anlytype]['numbsamp'] = 1
             dictargsvari[anlytype]['optitype'] = 'none'
             dictargsvari[anlytype]['elemspatevaltype'] = ['full']
+    
+        if namecnfgextn[8:12] == '0600' and namecnfgextn[12:16].isdigit():
+            dictargsvari[anlytype]['maxmnumbelempop0reg0'] = 30
             
         if namecnfgextn[12:16] == 'none':
             maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
@@ -519,7 +522,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
-                                  forcprev=True, \
+                                  #forcprev=True, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
    
