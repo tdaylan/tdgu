@@ -5,7 +5,6 @@ pathbase = os.environ["TDGU_DATA_PATH"] + '/plot_thes/'
 figr, axis = plt.subplots(figsize=(6, 6))
 
 # data
-
 path = pathbase + 'vdisdark_mean.csv'
 xdatdata = loadtxt(path, delimiter=',')[:, 0]
 
@@ -47,4 +46,97 @@ path = pathbase + 'vdisdark.pdf'
 plt.tight_layout()
 figr.savefig(path)
 plt.close(figr)
-        
+
+
+
+
+# Bhupal-Dev (2013)
+figr, axis = plt.subplots(figsize=(6, 6))
+
+# data
+path = pathbase + 'Bhupal-Dev2013_fo_lowr.csv'
+xdatdata = loadtxt(path, delimiter=',')[:, 0]
+ydatdata = loadtxt(path, delimiter=',')[:, 1]
+axis.loglog(xdatdata, ydatdata, lw=1)
+
+path = pathbase + 'Bhupal-Dev2013_fo_medi.csv'
+xdatdata = loadtxt(path, delimiter=',')[:, 0]
+ydatdata = loadtxt(path, delimiter=',')[:, 1]
+axis.loglog(xdatdata, ydatdata, lw=1)
+
+path = pathbase + 'Bhupal-Dev2013_fo_uppr.csv'
+xdatdata = loadtxt(path, delimiter=',')[:, 0]
+ydatdata = loadtxt(path, delimiter=',')[:, 1]
+axis.loglog(xdatdata, ydatdata, lw=1)
+
+path = pathbase + 'Bhupal-Dev2013_fo_equi.csv'
+xdatdata = loadtxt(path, delimiter=',')[:, 0]
+ydatdata = loadtxt(path, delimiter=',')[:, 1]
+axis.loglog(xdatdata, ydatdata, lw=1, color='black')
+            
+axis.set_xlabel('$m_{\chi}/T$')
+axis.set_ylabel('$\Omega_{\chi} h^2$')
+path = pathbase + 'csecdark.pdf'
+plt.tight_layout()
+figr.savefig(path)
+plt.close(figr)
+
+
+# Markovic (2014)
+figr, axis = plt.subplots(figsize=(6, 6))
+
+path = pathbase + 'Markovic2014_lcdm.csv'
+xdatdata = loadtxt(path, delimiter=',')[:, 0]
+ydatdata = loadtxt(path, delimiter=',')[:, 1]
+axis.loglog(xdatdata, ydatdata, lw=1, color='black')
+
+path = pathbase + 'Markovic2014_lowr.csv'
+xdatdata = loadtxt(path, delimiter=',')[:, 0]
+ydatdata = loadtxt(path, delimiter=',')[:, 1]
+axis.loglog(xdatdata, ydatdata, lw=1)
+
+path = pathbase + 'Markovic2014_medi.csv'
+xdatdata = loadtxt(path, delimiter=',')[:, 0]
+ydatdata = loadtxt(path, delimiter=',')[:, 1]
+axis.loglog(xdatdata, ydatdata, lw=1)
+
+path = pathbase + 'Markovic2014_uppr.csv'
+xdatdata = loadtxt(path, delimiter=',')[:, 0]
+ydatdata = loadtxt(path, delimiter=',')[:, 1]
+axis.loglog(xdatdata, ydatdata, lw=1)
+            
+axis.set_xlabel('$k$ [$h$/Mpc]')
+axis.set_ylabel('$P(k)$ [(Mpc/$h$)$^3$]')
+path = pathbase + 'psecwarm.pdf'
+plt.tight_layout()
+figr.savefig(path)
+plt.close(figr)
+
+
+# Abazajian (2013)
+figr, axis = plt.subplots(figsize=(6, 6))
+
+path = pathbase + 'Abazajian2013_lowr.csv'
+xdatdata = loadtxt(path, delimiter=',')[:, 0]
+ydatdata = loadtxt(path, delimiter=',')[:, 1]
+axis.plot(xdatdata, ydatdata, lw=1)
+
+path = pathbase + 'Abazajian2013_medi.csv'
+xdatdata = loadtxt(path, delimiter=',')[:, 0]
+ydatdata = loadtxt(path, delimiter=',')[:, 1]
+axis.plot(xdatdata, ydatdata, lw=1)
+
+path = pathbase + 'Abazajian2013_uppr.csv'
+xdatdata = loadtxt(path, delimiter=',')[:, 0]
+ydatdata = loadtxt(path, delimiter=',')[:, 1]
+axis.plot(xdatdata, ydatdata, lw=1)
+            
+axis.set_xscale('log')
+axis.set_xlabel('$k$ [$h$/Mpc]')
+axis.set_ylabel('$T(k)$')
+path = pathbase + 'psecneut.pdf'
+plt.tight_layout()
+figr.savefig(path)
+plt.close(figr)
+
+

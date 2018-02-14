@@ -447,6 +447,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['probtran'] = 0.
     #dictargs['spectype'] = ['colr']
     #dictargs['shrtfram'] = False
+    dictargs['probspmr'] = 0.
     dictargs['numbswep'] = 150000
     dictargs['numbburn'] = 50000
     dictargs['numbsamp'] = 100
@@ -474,10 +475,10 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     dictargs['priofactdoff'] = 0.
     
     listnamecnfgextn = []
-    #listnamecnfgextn += ['home2msc0300none', 'home4msc0300none', 'home7msc0300none']
+    listnamecnfgextn += ['home2msc0300none', 'home4msc0300none', 'home7msc0300none']
     #listnamecnfgextn += ['home7msc0600none']
-    for k in range(36):
-        listnamecnfgextn.append('home7msc0600%04d' % k)
+    #for k in range(36):
+    #    listnamecnfgextn.append('home7msc0600%04d' % k)
 
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
@@ -522,7 +523,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
-                                  #forcprev=True, \
+                                  forcprev=True, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
    
