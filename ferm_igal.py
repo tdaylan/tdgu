@@ -1004,7 +1004,7 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
     
-    listnamecnfgextn = ['nomi', 'truedark', 'backwfou', 'backfour', 'popl', 'parsnone', 'heal', 'psfnfixd', 'penalpridiff', 'checprio', 'test']
+    listnamecnfgextn = ['nomi', 'truedark', 'backwfou', 'backfour', 'popl', 'parsnone', 'parsloww', 'heal', 'psfnfixd', 'penalpridiff', 'checprio', 'test']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
@@ -1026,8 +1026,9 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargsvari['popl']['fittmaxmnumbelempop1reg0'] = 300
     dictargsvari['popl']['fittmaxmnumbelempop2reg0'] = 300
     
-    dictargsvari['parsnone']['scalmeanpnts'] = 'self'
     dictargsvari['parsnone']['priofactdoff'] = 0.
+    
+    dictargsvari['parsloww']['priofactdoff'] = 0.5
 
     dictargsvari['heal']['pixltype'] = 'heal'
     dictargsvari['heal']['forccart'] = False
@@ -1142,7 +1143,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     
     #dictargs['forcsavestat'] = True
     
-    listnamecnfgextn = ['nomi', 'psfnvari', 'parshigh', 'mask', 'rofilarg', 'darknone', 'parsloww', \
+    listnamecnfgextn = ['nomi', 'psfnvari', 'mask', 'rofilarg', 'darknone', 'parsnone', 'parsloww', \
                                 'isotfixd', 'rec7', 'popl', 'backwfou', 'backfour', 'backtemp', 'dark', 'lprirefe', 'backsmth', 'test']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
@@ -1151,6 +1152,8 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     listmask = [['hstr', -2. / anglfact, 2. / anglfact]]
     dictargsvari['mask']['mask'] = array([-30., 30., -2., 2.]) / 180. * pi
     dictargsvari['mask']['listmask'] = listmask
+    
+    dictargsvari['parsnone']['priofactdoff'] = 0.
     
     dictargsvari['parsloww']['priofactdoff'] = 0.5
     
