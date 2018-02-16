@@ -990,7 +990,7 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargs['fittelemtype'] = ['lghtpnts']
     dictargs['fittspatdisttype'] = ['self']
     dictargs['fittspectype'] = ['colr']
-    dictargs['fittmaxmnumbelempop0reg0'] = 500
+    dictargs['fittmaxmnumbelempop0reg0'] = 1000
     
     # temp
     #dictargs['verbtype'] = 2
@@ -1022,9 +1022,8 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargsvari['popl']['fittspatdisttype'] = ['self', 'disc', 'los3']
     dictargsvari['popl']['fittspectype'] = ['powr', 'expc', 'expc']
     dictargsvari['popl']['fittelemregitype'] = [True, True, True]
-    dictargsvari['popl']['fittmaxmnumbelempop0reg0'] = 300
-    dictargsvari['popl']['fittmaxmnumbelempop1reg0'] = 300
-    dictargsvari['popl']['fittmaxmnumbelempop2reg0'] = 300
+    dictargsvari['popl']['fittmaxmnumbelempop1reg0'] = 1000
+    dictargsvari['popl']['fittmaxmnumbelempop2reg0'] = 1000
     
     dictargsvari['parsnone']['priofactdoff'] = 0.
     
@@ -1129,6 +1128,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['numbswepplot'] = 20000
     dictargs['numbsamp'] = 2000
     
+    dictargs['fittmaxmnumbelempop0reg0'] = 1000
     dictargs['proppsfp'] = False
     dictargs['initpsfprefr'] = True
     dictargs['optitype'] = 'none'
