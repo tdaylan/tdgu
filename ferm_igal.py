@@ -1014,11 +1014,11 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargsvari['truedark']['listnameback'] = ['isot', 'fdfm', 'dark']
     dictargsvari['truedark']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']]
     dictargsvari['truedark']['truemaxmnumbelempop0reg0'] = 0
-    dictargsvari['truedark']['truemaxmnumbelempop0reg1'] = 0
-    dictargsvari['truedark']['truemaxmnumbelempop0reg2'] = 0
+    dictargsvari['truedark']['truemaxmnumbelempop1reg0'] = 0
+    dictargsvari['truedark']['truemaxmnumbelempop2reg0'] = 0
     dictargsvari['truedark']['truenumbelempop0reg0'] = 0
-    dictargsvari['truedark']['truenumbelempop0reg1'] = 0
-    dictargsvari['truedark']['truenumbelempop0reg2'] = 0
+    dictargsvari['truedark']['truenumbelempop1reg0'] = 0
+    dictargsvari['truedark']['truenumbelempop2reg0'] = 0
     
     dictargsvari['backwfou']['fittbacktype'] = [['bfunwfou0004']]
     
