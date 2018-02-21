@@ -996,9 +996,9 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     #dictargs['verbtype'] = 2
     dictargs['optitype'] = 'none'
     #dictargs['diagmode'] = False
-    dictargs['numbswep'] = 200000
+    dictargs['numbswep'] = 1000
     #dictargs['numbburn'] = 0
-    dictargs['numbsamp'] = 1000
+    dictargs['numbsamp'] = 10
 
     dictargs['forccart'] = True
     dictargs['pixltype'] = 'cart'
@@ -1013,6 +1013,12 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     
     dictargsvari['truedark']['listnameback'] = ['isot', 'fdfm', 'dark']
     dictargsvari['truedark']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']]
+    dictargsvari['truedark']['truemaxmnumbelempop0reg0'] = 0
+    dictargsvari['truedark']['truemaxmnumbelempop0reg1'] = 0
+    dictargsvari['truedark']['truemaxmnumbelempop0reg2'] = 0
+    dictargsvari['truedark']['truenumbelempop0reg0'] = 0
+    dictargsvari['truedark']['truenumbelempop0reg1'] = 0
+    dictargsvari['truedark']['truenumbelempop0reg2'] = 0
     
     dictargsvari['backwfou']['fittbacktype'] = [['bfunwfou0004']]
     
@@ -1143,7 +1149,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     
     #dictargs['forcsavestat'] = True
     
-    listnamecnfgextn = ['nomi', 'psfnvari', 'mask', 'rofilarg', 'darknone', 'parsnone', 'parsloww', \
+    listnamecnfgextn = ['nomi', 'psfnvari', 'mask', 'rofilarg', 'darknone', 'parsnone', 'parsloww', 'exce', \
                                 'isotfixd', 'rec7', 'popl', 'backwfou', 'backfour', 'backtemp', 'dark', 'lprirefe', 'backsmth', 'test']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
@@ -1161,6 +1167,13 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     
     dictargsvari['darknone']['listnameback'] = ['isot', 'fdfm']
     dictargsvari['darknone']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
+    
+    dictargsvari['exce']['numbswep'] = 10000
+    dictargsvari['exce']['probtran'] = 0.
+    dictargsvari['exce']['probcomp'] = 0.
+    dictargsvari['exce']['inittype'] = 'refr'
+    dictargsvari['exce']['listnameback'] = ['isot', 'fdfm']
+    dictargsvari['exce']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
     
     dictargsvari['rofilarg']['maxmgangdata'] = 15. / anglfact
     
