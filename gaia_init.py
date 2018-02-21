@@ -271,7 +271,8 @@ def pcat_tgas_mock(strgcnfgextnexec=None):
     dictargs['psfninfoprio'] = False
     
     # temp
-    dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 1000
+    dictargs['numbsamp'] = 100
     
     listnamecnfgextn = ['shapvari', 'shapconsinfo', 'shapcons', 'shapconsproptran', 'shapconspropspmr']
     dictargsvari = {}
@@ -323,7 +324,8 @@ def pcat_tgas_mock_spmr(strgcnfgextnexec=None):
     dictargs['priofactdoff'] = 0.
     dictargs['probtran'] = 1.
     dictargs['probspmr'] = 1.
-    dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 1000
+    dictargs['numbsamp'] = 100
     dictargs['psfnevaltype'] = 'none'
     dictargs['strgexpo'] = 1.
     dictargs['elemtype'] = ['clusvari']
@@ -371,7 +373,8 @@ def pcat_tgas_inpt(strgcnfgextnexec=None):
     dictargs['priofactdoff'] = 0.2
     
     # temp
-    dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 1000000
+    dictargs['numbsamp'] = 2000
     
     listnamecnfgextn = ['shapcons', 'shapvari']
     dictargsvari = {}
