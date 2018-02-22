@@ -1009,12 +1009,12 @@ def pcat_ferm_brek_mock(strgcnfgextnexec=None):
 def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     
     dictargs = {}
-    dictargs['truemaxmnumbelempop0reg0'] = 2#100
-    dictargs['truemaxmnumbelempop1reg0'] = 2#100
-    dictargs['truemaxmnumbelempop2reg0'] = 2#100
-    dictargs['truenumbelempop0reg0'] = 2#100
-    dictargs['truenumbelempop1reg0'] = 2#100
-    dictargs['truenumbelempop2reg0'] = 2#100
+    dictargs['truemaxmnumbelempop0reg0'] = 10#100
+    dictargs['truemaxmnumbelempop1reg0'] = 10#100
+    dictargs['truemaxmnumbelempop2reg0'] = 10#100
+    dictargs['truenumbelempop0reg0'] = 10#100
+    dictargs['truenumbelempop1reg0'] = 10#100
+    dictargs['truenumbelempop2reg0'] = 10#100
     
     dictargs['truenumbpopl'] = 3
     dictargs['refrlegdpopl'] = ['AGN', 'Disk MSP', 'GC MSP']
