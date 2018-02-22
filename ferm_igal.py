@@ -1149,7 +1149,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     
     #dictargs['forcsavestat'] = True
     
-    listnamecnfgextn = ['nomi', 'psfnvari', 'mask', 'rofilarg', 'darknone', 'parsnone', 'parsloww', 'exce', 'pntsnone', \
+    listnamecnfgextn = ['nomi', 'psfnvari', 'mask', 'rofilarg', 'darknone', 'parsnone', 'parsloww', 'exce', \
                                 'isotfixd', 'rec7', 'popl', 'backwfou', 'backfour', 'backtemp', 'dark', 'lprirefe', 'backsmth', 'test']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
@@ -1160,8 +1160,6 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargsvari['mask']['listmask'] = listmask
     
     dictargsvari['parsnone']['priofactdoff'] = 0.
-    
-    dictargsvari['pntsnone']['fittmaxmnumbelempop0reg0'] = 0.
     
     dictargsvari['parsloww']['priofactdoff'] = 0.5
     
