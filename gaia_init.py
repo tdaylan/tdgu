@@ -241,15 +241,15 @@ def writ_tgas():
     cntpdatatemp = histogram2d(ekin, amom, bins=(binsekin, binsamom))[0]
     
     numbside = int(sqrt(cntpdatatemp.size))
-    cntpdata = zeros((numbside, numbside, 1))
-    cntpdata[:, :, 0] = cntpdatatemp.T
+    cntpdata = zeros((1, numbside, numbside, 1))
+    cntpdata[0, :, :, 0] = cntpdatatemp.T
     cntpdata *= (numbbins - 1.)**2 / 4.
     
     path = os.environ["PCAT_DATA_PATH"] + '/data/inpt/tgas.fits'
     pf.writeto(path, cntpdata, clobber=True)
     
     cntpback = copy(cntpdata)
-    cntpback[:, :, 0] = sp.ndimage.filters.gaussian_filter(cntpback[:, :, 0], sigma=15)
+    cntpback[0, :, :, 0] = sp.ndimage.filters.gaussian_filter(cntpback[0, :, :, 0], sigma=15)
     cntpback[where(cntpback <= 0.)] = 1e-5
    
     set_printoptions(precision=1)
@@ -266,12 +266,13 @@ def pcat_tgas_mock(strgcnfgextnexec=None):
     
     dictargs['psfnevaltype'] = 'none'
     dictargs['strgexpo'] = 1.
+    dictargs['numbsidecart'] = 200
     dictargs['elemtype'] = ['clusvari']
     dictargs['psfninfoprio'] = False
     
     # temp
-    dictargs['numbswep'] = 1000
-    dictargs['numbsamp'] = 100
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 10
     
     listnamecnfgextn = ['shapvari', 'shapconsinfo', 'shapcons', 'shapconsproptran', 'shapconspropspmr']
     dictargsvari = {}
