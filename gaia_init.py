@@ -274,22 +274,12 @@ def pcat_tgas_mock(strgcnfgextnexec=None):
     dictargs['numbswep'] = 10000
     dictargs['numbsamp'] = 10
     
-    listnamecnfgextn = ['shapvari', 'shapconsinfo', 'shapcons', 'shapconsproptran', 'shapconspropspmr']
+    listnamecnfgextn = ['shapvari', 'shapconsinfo', 'shapcons']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
    
     # to test splits and merges
-    dictargsvari['shapconsproptran']['numbswep'] = 100000
-    dictargsvari['shapconsproptran']['elemtype'] = ['clus']
-    dictargsvari['shapconsproptran']['psfnevaltype'] = 'kern'
-    dictargsvari['shapconsproptran']['probtran'] = 1.
-    
-    dictargsvari['shapconspropspmr']['numbswep'] = 100000
-    dictargsvari['shapconspropspmr']['elemtype'] = ['clus']
-    dictargsvari['shapconspropspmr']['psfnevaltype'] = 'kern'
-    dictargsvari['shapconspropspmr']['probtran'] = 1.
-    dictargsvari['shapconspropspmr']['probspmr'] = 1.
     
     dictargsvari['shapconsinfo']['elemtype'] = ['clus']
     dictargsvari['shapconsinfo']['psfnevaltype'] = 'kern'
@@ -305,6 +295,7 @@ def pcat_tgas_mock(strgcnfgextnexec=None):
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
+                                  #forcprev=True, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 

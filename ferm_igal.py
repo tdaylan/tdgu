@@ -1009,12 +1009,12 @@ def pcat_ferm_brek_mock(strgcnfgextnexec=None):
 def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     
     dictargs = {}
-    dictargs['truemaxmnumbelempop0reg0'] = 100
-    dictargs['truemaxmnumbelempop1reg0'] = 100
-    dictargs['truemaxmnumbelempop2reg0'] = 100
-    dictargs['truenumbelempop0reg0'] = 100
-    dictargs['truenumbelempop1reg0'] = 100
-    dictargs['truenumbelempop2reg0'] = 100
+    dictargs['truemaxmnumbelempop0reg0'] = 2#100
+    dictargs['truemaxmnumbelempop1reg0'] = 2#100
+    dictargs['truemaxmnumbelempop2reg0'] = 2#100
+    dictargs['truenumbelempop0reg0'] = 2#100
+    dictargs['truenumbelempop1reg0'] = 2#100
+    dictargs['truenumbelempop2reg0'] = 2#100
     
     dictargs['truenumbpopl'] = 3
     dictargs['refrlegdpopl'] = ['AGN', 'Disk MSP', 'GC MSP']
@@ -1044,6 +1044,7 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     # temp
     dictargs['numbswep'] = 1000
     dictargs['numbsamp'] = 10
+    dictargs['verbtype'] = 2
 
     dictargs['forccart'] = True
     dictargs['pixltype'] = 'cart'
@@ -1059,10 +1060,10 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     
     dictargsvari['nomi']['checprio'] = True
     
-    dictargsvari['parsnone']['priofactdoff'] = 0.
-    
     dictargsvari['parsloww']['priofactdoff'] = 0.5
 
+    dictargsvari['parsnone']['priofactdoff'] = 0.
+    
     dictargsvari['truedark']['listnameback'] = ['isot', 'fdfm', 'dark']
     dictargsvari['truedark']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']]
     dictargsvari['truedark']['truemaxmnumbelempop0reg0'] = 0
@@ -1132,10 +1133,10 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['listprefhistfluxtype'] = ['line']
    
     dictargs['inittype'] = 'reco'
-    dictargs['numbswep'] = 2000000
+    dictargs['numbswep'] = 1000
     dictargs['numbburn'] = 0
     dictargs['numbswepplot'] = 20000
-    dictargs['numbsamp'] = 2000
+    dictargs['numbsamp'] = 10
     
     dictargs['fittmaxmnumbelempop0reg0'] = 1000
     dictargs['proppsfp'] = False
@@ -1151,7 +1152,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     
     #dictargs['forcsavestat'] = True
     
-    listnamecnfgextn = ['nomi', 'parsloww', 'parsnone'
+    listnamecnfgextn = ['nomi', 'parsloww', 'parsnone', \
                         'psfnvari', 'mask', 'rofilarg', 'darknone', 'backtemp', 'backsmth', 'isotfixd', 'rec7', 'exce', 'heal', \
                         #'backwfou', 'backfour', 'popl', \
                         ]
