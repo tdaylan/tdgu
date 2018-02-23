@@ -1044,7 +1044,7 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     # temp
     dictargs['numbswep'] = 1000
     dictargs['numbsamp'] = 10
-    dictargs['verbtype'] = 2
+    #dictargs['verbtype'] = 2
 
     dictargs['forccart'] = True
     dictargs['pixltype'] = 'cart'
@@ -1110,6 +1110,7 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
+                                  forcprev=True, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
@@ -1153,7 +1154,8 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     #dictargs['forcsavestat'] = True
     
     listnamecnfgextn = ['nomi', 'parsloww', 'parsnone', \
-                        'psfnvari', 'mask', 'rofilarg', 'darknone', 'backtemp', 'backsmth', 'isotfixd', 'rec7', 'exce', 'heal', \
+                        'darknone', 'exce', 'rofilarg', 'mask', 'isotfixd', 'heal', 'rec7', \
+                        #'backtemp', 'psfnvari', 'backsmth', \
                         #'backwfou', 'backfour', 'popl', \
                         ]
     dictargsvari = {}
@@ -1166,33 +1168,9 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     
     dictargsvari['parsloww']['priofactdoff'] = 0.5
     
-    dictargsvari['psfnvari']['proppsfp'] = True
-    
-    listmask = [['hstr', -2. / anglfact, 2. / anglfact]]
-    dictargsvari['mask']['mask'] = array([-30., 30., -2., 2.]) / 180. * pi
-    dictargsvari['mask']['listmask'] = listmask
-    
-    dictargsvari['rofilarg']['maxmgangdata'] = 15. / anglfact
-    
     dictargsvari['darknone']['listnameback'] = ['isot', 'fdfm']
     dictargsvari['darknone']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
     
-    dictargsvari['backtemp']['listnameback'] = ['isot', 'hydr', 'cmon', 'dustsfdd', 'dark', 'wise']
-    dictargsvari['backtemp']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'hydrpntssmthrec8.fits', 'cmonpntssmthrec8.fits', \
-                                                                                    'dustsfddpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits', 'wisepntssmthrec8.fits']]
-    
-    dictargsvari['backsmth']['numbswep'] = 1000
-    dictargsvari['backsmth']['numbsamp'] = 10
-    dictargsvari['backsmth']['propcomp'] = False
-    dictargsvari['backsmth']['probtran'] = 0.
-    dictargsvari['backsmth']['psfnevaltype'] = 'full'
-    dictargsvari['backsmth']['backtype'] = [[1., 'sbrtfdfmpnts.fits', 'sbrtdarkpnts.fits']]
-    
-    dictargsvari['isotfixd']['initbacpbac0ene0'] = 4e-6
-    dictargsvari['isotfixd']['propbacpbac0ene0'] = False
-    
-    dictargsvari['rec7']['strgexpo'] = 'expofermrec7pntsigal0256.fits'
-                 
     dictargsvari['exce']['numbswep'] = 10000
     dictargsvari['exce']['probtran'] = 0.
     dictargsvari['exce']['probcomp'] = 0.
@@ -1200,8 +1178,28 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargsvari['exce']['listnameback'] = ['isot', 'fdfm']
     dictargsvari['exce']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
     
+    dictargsvari['rofilarg']['maxmgangdata'] = 15. / anglfact
+    
+    dictargsvari['mask']['mask'] = array([-30., 30., -2., 2.]) / 180. * pi
+    dictargsvari['mask']['listmask'] = [['hstr', -2. / anglfact, 2. / anglfact]]
+    
+    dictargsvari['isotfixd']['initbacpbac0ene0'] = 4e-6
+    dictargsvari['isotfixd']['propbacpbac0ene0'] = False
+    
     dictargsvari['heal']['pixltype'] = 'heal'
     dictargsvari['heal']['forccart'] = False
+    
+    dictargsvari['rec7']['strgexpo'] = 'expofermrec7pntsigal0256.fits'
+                 
+    #dictargsvari['backtemp']['listnameback'] = ['isot', 'hydr', 'cmon', 'dustsfdd', 'dark', 'wise']
+    #dictargsvari['backtemp']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'hydrpntssmthrec8.fits', 'cmonpntssmthrec8.fits', \
+    #                                                                                'dustsfddpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits', 'wisepntssmthrec8.fits']]
+    #
+    #dictargsvari['psfnvari']['proppsfp'] = True
+    #
+    #dictargsvari['backsmth']['proppsfp'] = True
+    #dictargsvari['backsmth']['psfnevaltype'] = 'full'
+    #dictargsvari['backsmth']['backtype'] = [[1., 'sbrtfdfmpnts.fits', 'sbrtdarkpnts.fits']]
     
     #dictargsvari['popl']['numbpopl'] = 3
     
