@@ -406,21 +406,34 @@ def pcat_chan_mock_trueminmdlos(strgcnfgextnexec=None):
     dictargs['truenumbelempop0reg0'] = 100
     dictargs['maxmnumbelempop0reg0'] = 400
     
-    listnamecnfgextn = ['trueminmdlosloww', 'nomi', 'trueminmdloshigh']
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 100
+    
+    listnamecnfgextn = ['loww', 'nomi', 'high']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
-    dictargsvari['trueminmdlosloww']['trueminmdlos'] = 3e6
-    dictargsvari['trueminmdloshigh']['trueminmdlos'] = 3e7
+    dictargsvari['loww']['trueminmdlos'] = 3e6
+    dictargsvari['nomi']['trueminmdlos'] = 1e7
+    dictargsvari['high']['trueminmdlos'] = 3e7
                 
+    lablxaxi = r'$d_{los,min}$ [Mpc]'
+    scalxaxi = 'logt'
+    listtickxaxi = [tdpy.util.mexp(1e-6 * dictargsvari[namecnfgextn]['trueminmdlos']) for namecnfgextn in listnamecnfgextn] 
+    
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
                                   
-                                  forcprev=True, \
-                                  execpara=True, \
+                                  #forcprev=True, \
+                                  #execpara=True, \
                                   
+                                  namexaxi='trueminmdlos', \
+                                  lablxaxi=lablxaxi, \
+                                  scalxaxi=scalxaxi, \
+                                  listtickxaxi=listtickxaxi, \
+                        
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
     
@@ -437,12 +450,13 @@ def pcat_chan_mock_truemaxmdlos(strgcnfgextnexec=None):
     dictargs['truenumbelempop0reg0'] = 100
     dictargs['maxmnumbelempop0reg0'] = 400
     
-    listnamecnfgextn = ['truemaxmdlosloww', 'nomi', 'truemaxmdloshigh']
+    listnamecnfgextn = ['loww', 'nomi', 'high']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
-    dictargsvari['truemaxmdlosloww']['truemaxmdlos'] = 3e8
-    dictargsvari['truemaxmdloshigh']['truemaxmdlos'] = 3e9
+    dictargsvari['loww']['truemaxmdlos'] = 3e8
+    dictargsvari['nomi']['truemaxmdlos'] = 1e9
+    dictargsvari['high']['truemaxmdlos'] = 3e9
                 
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -468,12 +482,13 @@ def pcat_chan_mock_trueminmlum0(strgcnfgextnexec=None):
     dictargs['truenumbelempop0reg0'] = 100
     dictargs['maxmnumbelempop0reg0'] = 400
     
-    listnamecnfgextn = ['trueminmlum0loww', 'nomi', 'trueminmlum0high']
+    listnamecnfgextn = ['loww', 'nomi', 'high']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
-    dictargsvari['trueminmlum0loww']['trueminmlum0'] = 3e42
-    dictargsvari['trueminmlum0high']['trueminmlum0'] = 3e43
+    dictargsvari['loww']['trueminmlum0'] = 3e42
+    dictargsvari['nomi']['trueminmlum0'] = 1e43
+    dictargsvari['high']['trueminmlum0'] = 3e43
                 
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -499,12 +514,13 @@ def pcat_chan_mock_truemaxmlum0(strgcnfgextnexec=None):
     dictargs['truenumbelempop0reg0'] = 100
     dictargs['maxmnumbelempop0reg0'] = 400
     
-    listnamecnfgextn = ['truemaxmlum0loww', 'nomi', 'truemaxmlum0high']
+    listnamecnfgextn = ['loww', 'nomi', 'high']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
-    dictargsvari['truemaxmlum0loww']['truemaxmlum0'] = 3e45
-    dictargsvari['truemaxmlum0high']['truemaxmlum0'] = 3e46
+    dictargsvari['loww']['truemaxmlum0'] = 3e45
+    dictargsvari['nomi']['truemaxmlum0'] = 1e46
+    dictargsvari['high']['truemaxmlum0'] = 3e46
                 
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \

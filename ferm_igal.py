@@ -1154,7 +1154,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     #dictargs['forcsavestat'] = True
     
     listnamecnfgextn = ['nomi', 'parsloww', 'parsnone', \
-                        'darknone', 'exce', 'rofilarg', 'mask', 'isotfixd', 'heal', 'rec7', \
+                        'darknone', 'exce', 'excefixd', 'rofilarg', 'mask', 'isotfixd', 'heal', 'rec7', \
                         #'backtemp', 'psfnvari', 'backsmth', \
                         #'backwfou', 'backfour', 'popl', \
                         ]
@@ -1171,12 +1171,19 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargsvari['darknone']['listnameback'] = ['isot', 'fdfm']
     dictargsvari['darknone']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
     
-    dictargsvari['exce']['numbswep'] = 10000
-    dictargsvari['exce']['probtran'] = 0.
-    dictargsvari['exce']['probcomp'] = 0.
+    dictargsvari['exce']['numbswep'] = 100000
+    dictargsvari['exce']['numbsamp'] = 100
     dictargsvari['exce']['inittype'] = 'refr'
     dictargsvari['exce']['listnameback'] = ['isot', 'fdfm']
     dictargsvari['exce']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
+    
+    dictargsvari['excefixd']['numbswep'] = 100000
+    dictargsvari['excefixd']['numbsamp'] = 100
+    dictargsvari['excefixd']['probtran'] = 0.
+    dictargsvari['excefixd']['propcomp'] = False
+    dictargsvari['excefixd']['inittype'] = 'refr'
+    dictargsvari['excefixd']['listnameback'] = ['isot', 'fdfm']
+    dictargsvari['excefixd']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
     
     dictargsvari['rofilarg']['maxmgangdata'] = 15. / anglfact
     
