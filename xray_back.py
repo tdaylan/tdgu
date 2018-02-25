@@ -366,43 +366,154 @@ def pcat_chan_mock(strgcnfgextnexec=None):
    
     dictargs = {}
     dictargs['exprtype'] = 'chan'
-    #dictargs['truemaxmnumbelempop0reg0'] = 400
-    #dictargs['truenumbelempop0reg0'] = 100
     dictargs['strgexpo'] = 'expochanhome7msc06000000.fits'
     dictargs['trueelemtype'] = ['lghtpntsagnntrue']
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
-    dictargs['priofactdoff'] = 0.2
+    dictargs['priofactdoff'] = 0.
     
-    #dictargs['makeplotinit'] = False
-    #dictargs['makeplotfram'] = False
-    #dictargs['verbtype'] = 2
-    #dictargs['probspmr'] = 0.
-    #dictargs['propcomp'] = False
-    #dictargs['propmeanelem'] = False
-    #dictargs['propdist'] = False
-    #dictargs['propbacp'] = False
-    #dictargs['proppsfp'] = False
-    dictargs['inittype'] = 'refr'
-    dictargs['numbswep'] = 100000
-    dictargs['numbsamp'] = 1000
+    dictargs['numbswep'] = 10000000
+    dictargs['numbsamp'] = 10000
     dictargs['truenumbelempop0reg0'] = 100
     dictargs['maxmnumbelempop0reg0'] = 400
     
-    listnamecnfgextn = ['nomi', 'truevlow', 'trueloww', 'truehigh', 'truenone']
+    listnamecnfgextn = ['nomi']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
-    #dictargsvari['nomi']['checprio'] = True
-    dictargsvari['truevlow']['trueminmflux'] = 3e-10
-    dictargsvari['trueloww']['trueminmflux'] = 1e-9
-    dictargsvari['truehigh']['trueminmflux'] = 1e-8
-    dictargsvari['truenone']['truenumbelempop0reg0'] = 0
-    dictargsvari['truenone']['truemaxmnumbelempop0reg0'] = 0
-    
+    dictargsvari['nomi']['checprio'] = True
+                
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
+                                  
+                                  forcprev=True, \
+                                  execpara=True, \
+                                  
+                                  strgcnfgextnexec=strgcnfgextnexec, \
+                                 )
+    
+
+def pcat_chan_mock_trueminmdlos(strgcnfgextnexec=None):
+   
+    dictargs = {}
+    dictargs['exprtype'] = 'chan'
+    dictargs['strgexpo'] = 'expochanhome7msc06000000.fits'
+    dictargs['trueelemtype'] = ['lghtpntsagnntrue']
+    dictargs['fittelemtype'] = ['lghtpntsagnnassc']
+    dictargs['priofactdoff'] = 0.
+    
+    dictargs['truenumbelempop0reg0'] = 100
+    dictargs['maxmnumbelempop0reg0'] = 400
+    
+    listnamecnfgextn = ['trueminmdlosloww', 'nomi', 'trueminmdloshigh']
+    dictargsvari = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
+    dictargsvari['trueminmdlosloww']['trueminmdlos'] = 3e6
+    dictargsvari['trueminmdloshigh']['trueminmdlos'] = 3e7
+                
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  listnamecnfgextn, \
+                                  
+                                  forcprev=True, \
+                                  execpara=True, \
+                                  
+                                  strgcnfgextnexec=strgcnfgextnexec, \
+                                 )
+    
+
+def pcat_chan_mock_truemaxmdlos(strgcnfgextnexec=None):
+   
+    dictargs = {}
+    dictargs['exprtype'] = 'chan'
+    dictargs['strgexpo'] = 'expochanhome7msc06000000.fits'
+    dictargs['trueelemtype'] = ['lghtpntsagnntrue']
+    dictargs['fittelemtype'] = ['lghtpntsagnnassc']
+    dictargs['priofactdoff'] = 0.
+    
+    dictargs['truenumbelempop0reg0'] = 100
+    dictargs['maxmnumbelempop0reg0'] = 400
+    
+    listnamecnfgextn = ['truemaxmdlosloww', 'nomi', 'truemaxmdloshigh']
+    dictargsvari = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
+    dictargsvari['truemaxmdlosloww']['truemaxmdlos'] = 3e8
+    dictargsvari['truemaxmdloshigh']['truemaxmdlos'] = 3e9
+                
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  listnamecnfgextn, \
+                                  
+                                  forcprev=True, \
+                                  execpara=True, \
+                                  
+                                  strgcnfgextnexec=strgcnfgextnexec, \
+                                 )
+    
+
+def pcat_chan_mock_trueminmlum0(strgcnfgextnexec=None):
+   
+    dictargs = {}
+    dictargs['exprtype'] = 'chan'
+    dictargs['strgexpo'] = 'expochanhome7msc06000000.fits'
+    dictargs['trueelemtype'] = ['lghtpntsagnntrue']
+    dictargs['fittelemtype'] = ['lghtpntsagnnassc']
+    dictargs['priofactdoff'] = 0.
+    
+    dictargs['truenumbelempop0reg0'] = 100
+    dictargs['maxmnumbelempop0reg0'] = 400
+    
+    listnamecnfgextn = ['trueminmlum0loww', 'nomi', 'trueminmlum0high']
+    dictargsvari = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
+    dictargsvari['trueminmlum0loww']['trueminmlum0'] = 3e42
+    dictargsvari['trueminmlum0high']['trueminmlum0'] = 3e43
+                
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  listnamecnfgextn, \
+                                  
+                                  forcprev=True, \
+                                  execpara=True, \
+                                  
+                                  strgcnfgextnexec=strgcnfgextnexec, \
+                                 )
+    
+
+def pcat_chan_mock_truemaxmlum0(strgcnfgextnexec=None):
+   
+    dictargs = {}
+    dictargs['exprtype'] = 'chan'
+    dictargs['strgexpo'] = 'expochanhome7msc06000000.fits'
+    dictargs['trueelemtype'] = ['lghtpntsagnntrue']
+    dictargs['fittelemtype'] = ['lghtpntsagnnassc']
+    dictargs['priofactdoff'] = 0.
+    
+    dictargs['truenumbelempop0reg0'] = 100
+    dictargs['maxmnumbelempop0reg0'] = 400
+    
+    listnamecnfgextn = ['truemaxmlum0loww', 'nomi', 'truemaxmlum0high']
+    dictargsvari = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
+    dictargsvari['truemaxmlum0loww']['truemaxmlum0'] = 3e45
+    dictargsvari['truemaxmlum0high']['truemaxmlum0'] = 3e46
+                
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  listnamecnfgextn, \
+                                  
+                                  forcprev=True, \
+                                  execpara=True, \
+                                  
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
     
