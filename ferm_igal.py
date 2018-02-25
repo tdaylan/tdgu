@@ -1134,10 +1134,10 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['listprefhistfluxtype'] = ['line']
    
     dictargs['inittype'] = 'reco'
-    dictargs['numbswep'] = 1000
+    dictargs['numbswep'] = 10000000
     dictargs['numbburn'] = 0
-    dictargs['numbswepplot'] = 20000
-    dictargs['numbsamp'] = 10
+    dictargs['numbswepplot'] = 50000
+    dictargs['numbsamp'] = 5000
     
     dictargs['fittmaxmnumbelempop0reg0'] = 1000
     dictargs['proppsfp'] = False
