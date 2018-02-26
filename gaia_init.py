@@ -271,7 +271,7 @@ def pcat_tgas_mock(strgcnfgextnexec=None):
     dictargs['psfninfoprio'] = False
     
     # temp
-    dictargs['numbswep'] = 10000
+    dictargs['numbswep'] = 1000
     dictargs['numbsamp'] = 10
     
     listnamecnfgextn = ['shapvari', 'shapconsinfo', 'shapcons']
