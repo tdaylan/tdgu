@@ -420,10 +420,13 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
-                                  forcprev=True, \
+                                  
+                                  #forcprev=True, \
                                   #takeprev=True, \
+                                  
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
+
     
 
 def pcat_lens_sour_mock(strgcnfgextnexec=None):
@@ -1069,7 +1072,10 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     dictargs['savestat'] = True
     dictargs['serstype'] = 'intp'
     dictargs['inittype'] = 'reco'
-    dictargs['numbswep'] = 100000
+    
+    #dictargs['numbswep'] = 1000
+    #dictargs['numbsamp'] = 10
+    
     #dictargs['inittype'] = 'rand'
     
     dictargs['optitype'] = 'none'
@@ -1155,6 +1161,10 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
+                                  
+                                  #forcprev=True, \
+                                  execpara=True, \
+
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 

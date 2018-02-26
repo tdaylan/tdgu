@@ -1110,7 +1110,7 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
-                                  forcprev=True, \
+                                  #forcprev=True, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
