@@ -363,8 +363,8 @@ def pcat_tgas_inpt(strgcnfgextnexec=None):
     dictargs['priofactdoff'] = 0.2
     
     # temp
-    dictargs['numbswep'] = 1000000
-    dictargs['numbsamp'] = 2000
+    #dictargs['numbswep'] = 1000000
+    #dictargs['numbsamp'] = 2000
     
     listnamecnfgextn = ['shapcons', 'shapvari']
     dictargsvari = {}
