@@ -573,32 +573,15 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['propcomp'] = False
     #dictargs['probtran'] = 0.
     #dictargs['spectype'] = ['colr']
-    #dictargs['shrtfram'] = False
-    dictargs['probspmr'] = 0.
-    dictargs['numbswep'] = 250000
-    dictargs['numbburn'] = 50000
-    dictargs['numbsamp'] = 1000
+    
+    #dictargs['numbswep'] = 250000
+    #dictargs['numbsamp'] = 1000
+    
     if os.uname()[1] == 'fink1.rc.fas.harvard.edu' or os.uname()[1] == 'fink2.rc.fas.harvard.edu':
-        dictargs['rtagmock'] = '20180129_091715_pcat_chan_mock_nomi_1000'
+        dictargs['rtagmock'] = '20180225_210303_pcat_chan_mock_nomi_1000000/'
     else:
         dictargs['rtagmock'] = '20180205_184023_pcat_chan_mock_nomi_100000'
-    #dictargs['shrtfram'] = False
     dictargs['savestat'] = True
-    #dictargs['diagmode'] = False
-    #dictargs['forcsavestat'] = True
-    #dictargs['verbtype'] = 2
-    #dictargs['showmoreaccp'] = False
-    #dictargs['propcomp'] = False
-    #dictargs['propbacp'] = False
-    #dictargs['propdist'] = False
-    #dictargs['probtran'] = 0.
-    #dictargs['explprop'] = True
-    #dictargs['optitype'] = 'none'
-    #dictargs['emptsamp'] = 'none'
-    #dictargs['makeplot'] = False
-    #dictargs['verbtype'] = 2
-    #dictargs['optitype'] = 'none'
-    # temp
     dictargs['priofactdoff'] = 0.
     
     listnamecnfgextn = []
@@ -650,7 +633,10 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
-                                  #forcprev=True, \
+                                  
+                                  forcprev=True, \
+                                  execpara=True, \
+                                  
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
    
