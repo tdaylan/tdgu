@@ -1176,7 +1176,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargsvari['exce']['listnameback'] = ['isot', 'fdfm']
     dictargsvari['exce']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
     
-    dictargsvari['excefixd']['numbswep'] = 100000
+    dictargsvari['excefixd']['numbswep'] = 1000000
     dictargsvari['excefixd']['numbsamp'] = 100
     dictargsvari['excefixd']['probtran'] = 0.
     dictargsvari['excefixd']['inittype'] = 'refr'

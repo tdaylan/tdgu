@@ -291,11 +291,22 @@ def pcat_tgas_mock(strgcnfgextnexec=None):
     dictargsvari['shapvari']['elemtype'] = ['clusvari']
     dictargsvari['shapvari']['psfnevaltype'] = 'none'
     
+    lablxaxi = r''
+    scalxaxi = ''
+    listtickxaxi = ['Info. Kern', 'Cons Kern.', 'Vari Kern.']
+    
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
+                                  
                                   #forcprev=True, \
+                                  
+                                  namexaxi='kern', \
+                                  lablxaxi=lablxaxi, \
+                                  scalxaxi=scalxaxi, \
+                                  listtickxaxi=listtickxaxi, \
+                        
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
