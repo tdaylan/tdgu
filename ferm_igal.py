@@ -1176,10 +1176,12 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargsvari['exce']['listnameback'] = ['isot', 'fdfm']
     dictargsvari['exce']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
     
+    dictargsvari['excefixd']['maxmgangdata'] = 5. / anglfact
     dictargsvari['excefixd']['numbswep'] = 1000000
     dictargsvari['excefixd']['numbsamp'] = 100
     dictargsvari['excefixd']['probtran'] = 0.
-    #dictargsvari['excefixd']['inittype'] = 'refr'
+    dictargsvari['excefixd']['probcomp'] = False
+    dictargsvari['excefixd']['inittype'] = 'refr'
     dictargsvari['excefixd']['listnameback'] = ['isot', 'fdfm']
     dictargsvari['excefixd']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
     
