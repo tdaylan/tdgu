@@ -1134,10 +1134,9 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['listprefhistfluxtype'] = ['line']
    
     dictargs['inittype'] = 'reco'
-    dictargs['numbswep'] = 10000000
-    dictargs['numbburn'] = 0
-    dictargs['numbswepplot'] = 50000
-    dictargs['numbsamp'] = 5000
+    dictargs['numbswep'] = 5000000
+    #dictargs['numbburn'] = 0
+    #dictargs['numbsamp'] = 5000
     
     dictargs['fittmaxmnumbelempop0reg0'] = 1000
     dictargs['proppsfp'] = False
@@ -1180,7 +1179,6 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargsvari['excefixd']['numbswep'] = 100000
     dictargsvari['excefixd']['numbsamp'] = 100
     dictargsvari['excefixd']['probtran'] = 0.
-    dictargsvari['excefixd']['propcomp'] = False
     dictargsvari['excefixd']['inittype'] = 'refr'
     dictargsvari['excefixd']['listnameback'] = ['isot', 'fdfm']
     dictargsvari['excefixd']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
