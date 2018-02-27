@@ -1182,6 +1182,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargsvari['excefixd']['probtran'] = 0.
     dictargsvari['excefixd']['probcomp'] = False
     dictargsvari['excefixd']['inittype'] = 'refr'
+    dictargsvari['excefixd']['forcsavestat'] = True
     dictargsvari['excefixd']['listnameback'] = ['isot', 'fdfm']
     dictargsvari['excefixd']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
     
