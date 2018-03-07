@@ -445,8 +445,8 @@ def pcat_lens_mock_sour(strgcnfgextnexec=None):
     dictargs['priofactdoff'] = 0.5
     
     # temp
-    dictargs['numbswep'] = 10000
-    dictargs['numbsamp'] = 100
+    #dictargs['numbswep'] = 10000
+    #dictargs['numbsamp'] = 100
     
     numbelem = int(25. * 10.**0.9)
 
