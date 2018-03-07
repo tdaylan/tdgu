@@ -50,15 +50,25 @@ def pcat_lens_mock_truesgnl(strgcnfgextnexec=None):
     
     dictargsvari['truenone']['truenumbelempop0reg0'] = 0
     
+    lablxaxi = ''
+    scalxaxi = 'self'
+    listtickxaxi = ['Nominal signal', 'No signal']
+    
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
+                                  
+                                  namexaxi='truesgnl', \
+                                  lablxaxi=lablxaxi, \
+                                  scalxaxi=scalxaxi, \
+                                  listtickxaxi=listtickxaxi, \
+                        
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
 
-def pcat_lens_mock_truedefs(strgcnfgextnexec=None):
+def pcat_lens_mock_trueminmdefs(strgcnfgextnexec=None):
    
     numbelem = int(25. * 10.**0.9)
     anglfact = 3600. * 180. / pi
@@ -84,10 +94,20 @@ def pcat_lens_mock_truedefs(strgcnfgextnexec=None):
     dictargsvari['truehigh']['trueminmdefs'] = 1e-2 / anglfact
     dictargsvari['truevhig']['trueminmdefs'] = 3e-2 / anglfact
 
+    lablxaxi = r'$\alpha_{min}$ [^{\prime\prime}]'
+    scalxaxi = 'logt'
+    listtickxaxi = [tdpy.util.mexp(anglfact * dictargsvari[namecnfgextn]['trueminmdefs']) for namecnfgextn in listnamecnfgextn] 
+    
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
+                                  
+                                  namexaxi='trueminmdefs', \
+                                  lablxaxi=lablxaxi, \
+                                  scalxaxi=scalxaxi, \
+                                  listtickxaxi=listtickxaxi, \
+                        
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
@@ -115,10 +135,20 @@ def pcat_lens_mock_pars(strgcnfgextnexec=None):
     dictargsvari['parsnone']['priofactdoff'] = 0.
     dictargsvari['parshigh']['priofactdoff'] = 1.
     
+    lablxaxi = r'$\alpha_{p}$'
+    scalxaxi = 'self'
+    listtickxaxi = [tdpy.util.mexp(dictargsvari[namecnfgextn]['priofactdoff']) for namecnfgextn in listnamecnfgextn] 
+    
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
+                                  
+                                  namexaxi='priofactdoff', \
+                                  lablxaxi=lablxaxi, \
+                                  scalxaxi=scalxaxi, \
+                                  listtickxaxi=listtickxaxi, \
+                        
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
@@ -156,10 +186,20 @@ def pcat_lens_mock_fittnumb(strgcnfgextnexec=None):
     dictargsvari['fittdoub']['fittminmnumbelempop0reg0'] = 2
     dictargsvari['fittdoub']['fittmaxmnumbelempop0reg0'] = 2
 
+    lablxaxi = r'$\alpha_{p}$'
+    scalxaxi = 'self'
+    listtickxaxi = [tdpy.util.mexp(dictargsvari[namecnfgextn]['priofactdoff']) for namecnfgextn in listnamecnfgextn] 
+    
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
+                                  
+                                  namexaxi='priofactdoff', \
+                                  lablxaxi=lablxaxi, \
+                                  scalxaxi=scalxaxi, \
+                                  listtickxaxi=listtickxaxi, \
+                        
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
