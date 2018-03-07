@@ -442,6 +442,7 @@ def pcat_lens_mock_sour(strgcnfgextnexec=None):
     dictargs['numbelempop1reg0'] = 10
     dictargs['maxmnumbelempop1reg0'] = 100
     dictargs['spatdisttype'] = ['unif', 'dsrcexpo']
+    dictargs['priofactdoff'] = 0.5
     
     # temp
     dictargs['numbswep'] = 10000
