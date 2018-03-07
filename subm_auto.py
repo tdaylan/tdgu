@@ -24,8 +24,6 @@ for namefunc in array(listnamefunc)[choice(arange(len(listnamefunc)), size=len(l
     print cmnd
     try:
         os.system(cmnd)
-        if namefunc == 'pcat_lens_mock_trueminmdefs':
-            raise Exception('')
     except Exception as excp:
         strg = str(excp)
         fileoutp.write('%s failed.\n' % namefunc)
