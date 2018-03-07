@@ -394,6 +394,8 @@ def pcat_lens_mock_sour(strgcnfgextnexec=None):
     dictargs = {}
     dictargs['exprtype'] = 'hubb'
     
+    #dictargs['verbtype'] = 2
+    dictargs['proppsfp'] = False
     dictargs['elemtype'] = ['lens', 'lghtgausbgrd']
     dictargs['numbelempop0reg0'] = 20
     dictargs['maxmnumbelempop0reg0'] = 100
