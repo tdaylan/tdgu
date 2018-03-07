@@ -976,12 +976,7 @@ def pcat_ferm_brek_mock(strgcnfgextnexec=None):
     dictargs['backtype'] = [[1e1]]
     
     # temp
-    dictargs['numbswep'] = 200000
-    dictargs['numbsamp'] = 1000
     #dictargs['mockonly'] = True
-    #dictargs['makeplotinit'] = True
-    #dictargs['verbtype'] = 0
-    #dictargs['makeplot'] = False
     
     listnamecnfgextn = ['brekloww', 'brekhigh', 'nomi', 'brekstep', 'brekflat', 'brekdown']
     dictargsvari = {}
@@ -1041,11 +1036,6 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargs['fittspectype'] = ['colr']
     dictargs['fittmaxmnumbelempop0reg0'] = 1000
     
-    # temp
-    dictargs['numbswep'] = 1000
-    dictargs['numbsamp'] = 10
-    #dictargs['verbtype'] = 2
-
     dictargs['forccart'] = True
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
@@ -1110,7 +1100,6 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
-                                  #forcprev=True, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
@@ -1135,8 +1124,6 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
    
     dictargs['inittype'] = 'reco'
     dictargs['numbswep'] = 5000000
-    #dictargs['numbburn'] = 0
-    #dictargs['numbsamp'] = 5000
     
     dictargs['fittmaxmnumbelempop0reg0'] = 1000
     dictargs['proppsfp'] = False

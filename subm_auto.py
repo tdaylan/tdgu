@@ -1,7 +1,7 @@
 from __init__ import *
 
 path = os.environ["TDGU_PATH"] + '/'
-pathfileoutp = path + 'subm_auto.log'
+pathfileoutp = path + 'subm_auto_%s.log' % tdpy.util.retr_strgtimestmp()
 os.system('rm %s' % pathfileoutp)
 fileoutp = open(pathfileoutp, 'w')
                
@@ -17,26 +17,16 @@ for name in os.listdir(path):
                 
                 print 'Processing confugiration %s...' % namefunc
                     
-                # check the available run outputs
-                booltemp = pcat.util.chec_runsprev(namefunc)
-
-                if booltemp:
-                    print 'Found a previously completed run.'
-                    print
-                    continue
-
                 cmnd = 'python $TDGU_PATH/%s %s' % (name, namefunc)
                 print cmnd
-                os.system(cmnd)
                 try:
-                    os.system(cmnd)
-                    fileoutp.write('%s successfull.\n' % namefunc)
-                except:
-                #Exception as excp:
-                    #strg = str(excp)
-                    #fileoutp.write('%s failed.\n' % namefunc)
-                    #fileoutp.write(strg)
-                    raise excp
+                    #os.system(cmnd)
+                    if namefunc == 'pcat_lens_mock_trueminmdefs':
+                        raise Exception('')
+                except Exception as excp:
+                    strg = str(excp)
+                    fileoutp.write('%s failed.\n' % namefunc)
+                    fileoutp.write(strg)
                 print
 
 fileoutp.close()

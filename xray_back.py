@@ -256,7 +256,6 @@ def pcat_chan_mock_spmr(strgcnfgextnexec=None):
     maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
 
     dictargs = {}
-    dictargs['numbswep'] = 100000
     dictargs['exprtype'] = 'chan'
     dictargs['inittype'] = 'refr'
     dictargs['truelgalpop0reg00000'] = 0.
@@ -340,7 +339,6 @@ def pcat_chan_spec_spmr(strgcnfgextnexec=None):
     dictargs['priofactdoff'] = 0.
     dictargs['probtran'] = 1.
     dictargs['probspmr'] = 1.
-    dictargs['numbswep'] = 10000
     
     listnamecnfgextn = ['nomi', 'fluxhigh', 'fluxloww', 'parsnomi']
     dictargsvari = {}
@@ -371,8 +369,6 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
     dictargs['priofactdoff'] = 0.
     
-    #dictargs['numbswep'] = 1000000
-    #dictargs['numbsamp'] = 1000
     dictargs['truenumbelempop0reg0'] = 100
     dictargs['maxmnumbelempop0reg0'] = 400
     
@@ -387,7 +383,6 @@ def pcat_chan_mock(strgcnfgextnexec=None):
                                   dictargs, \
                                   listnamecnfgextn, \
                                   
-                                  #forcprev=True, \
                                   #execpara=True, \
                                   
                                   strgcnfgextnexec=strgcnfgextnexec, \
@@ -406,9 +401,6 @@ def pcat_chan_mock_trueminmdlos(strgcnfgextnexec=None):
     dictargs['truenumbelempop0reg0'] = 100
     dictargs['maxmnumbelempop0reg0'] = 400
     
-    #dictargs['numbswep'] = 10000
-    #dictargs['numbsamp'] = 100
-    
     listnamecnfgextn = ['loww', 'nomi', 'high']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
@@ -426,7 +418,6 @@ def pcat_chan_mock_trueminmdlos(strgcnfgextnexec=None):
                                   dictargs, \
                                   listnamecnfgextn, \
                                   
-                                  #forcprev=True, \
                                   #execpara=True, \
                                   
                                   namexaxi='trueminmdlos', \
@@ -463,7 +454,6 @@ def pcat_chan_mock_truemaxmdlos(strgcnfgextnexec=None):
                                   dictargs, \
                                   listnamecnfgextn, \
                                   
-                                  #forcprev=True, \
                                   #execpara=True, \
                                   
                                   strgcnfgextnexec=strgcnfgextnexec, \
@@ -495,7 +485,6 @@ def pcat_chan_mock_trueminmlum0(strgcnfgextnexec=None):
                                   dictargs, \
                                   listnamecnfgextn, \
                                   
-                                  #forcprev=True, \
                                   #execpara=True, \
                                   
                                   strgcnfgextnexec=strgcnfgextnexec, \
@@ -527,7 +516,6 @@ def pcat_chan_mock_truemaxmlum0(strgcnfgextnexec=None):
                                   dictargs, \
                                   listnamecnfgextn, \
                                   
-                                  #forcprev=True, \
                                   #execpara=True, \
                                   
                                   strgcnfgextnexec=strgcnfgextnexec, \
@@ -542,13 +530,8 @@ def pcat_chan_mock_maxmllik(strgcnfgextnexec=None):
     gridchan = pcat.main.init( \
                               numbburn=0, \
                               evoltype='maxmllik', \
-                              factthin=1, \
-                              #makeplot=False, \
-                              #makeplotinit=False, \
-                              #makeplotfram=False, \
                               inittype='refr', \
                               #killexpo=True, \
-                              makeplot=False, \
                               numbelempop0reg0=2, \
                               maxmnumbelempop0reg0=3, \
                               strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
@@ -574,9 +557,6 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['probtran'] = 0.
     #dictargs['spectype'] = ['colr']
     
-    #dictargs['numbswep'] = 250000
-    #dictargs['numbsamp'] = 1000
-    
     if os.uname()[1] == 'fink1.rc.fas.harvard.edu' or os.uname()[1] == 'fink2.rc.fas.harvard.edu':
         dictargs['rtagmock'] = '20180301_131911_pcat_chan_mock_nomi_1000000'
     else:
@@ -600,16 +580,8 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
    
         dictargsvari[anlytype]['namerecostat'] = 'pcat_chan_inpt_' + namecnfgextn
     
-        #if namecnfgextn[8:] == '06000000':
-        #    dictargsvari[anlytype]['numbswep'] = 1000
-        #    dictargsvari[anlytype]['numbsamp'] = 10
-        #if namecnfgextn[8:] == '0300none':
-        #    dictargsvari[anlytype]['numbswep'] = 10000
-        #    dictargsvari[anlytype]['numbsamp'] = 100
-        
         if namecnfgextn == 'home7msc0300none':
-            pass
-            #dictargsvari[anlytype]['checprio'] = True
+            dictargsvari[anlytype]['checprio'] = True
         
         # temp
         if namecnfgextn[8:] == '0600none':
@@ -635,7 +607,6 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
                                   dictargs, \
                                   listnamecnfgextn, \
                                   
-                                  forcprev=True, \
                                   execpara=True, \
                                   
                                   strgcnfgextnexec=strgcnfgextnexec, \
