@@ -1,4 +1,5 @@
 from __init__ import *
+import subprocess as subp
 
 path = os.environ["TDGU_PATH"] + '/'
 pathfileoutp = path + 'subm_auto_%s.log' % tdpy.util.retr_strgtimestmp()
@@ -23,7 +24,8 @@ for namefunc in array(listnamefunc)[choice(arange(len(listnamefunc)), size=len(l
     cmnd = 'python $TDGU_PATH/%s %s' % (name, namefunc)
     print cmnd
     try:
-        os.system(cmnd)
+        subp.check_call(cmnd, shell=True)
+        #os.system(cmnd)
     except Exception as excp:
         strg = str(excp)
         fileoutp.write('%s failed.\n' % namefunc)
