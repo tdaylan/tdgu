@@ -1,100 +1,5 @@
 from __init__ import *
 
-def pcat_lens_mock_grid():
-
-    listnameoutpvarb = ['maxmllik', 'medilliktotl', 'stdvlliktotl', 'levi', 'info']
-
-    gdat = pcat.main.init(exprtype='hubb', defa=True, verbtype=0)
-
-    numbcnfg = 3
-    numbiter = 1
-   
-    varbinpt = tdpy.util.varb(numbcnfg)
-    #varbinpt.defn_para('expo', 1.1e3 / gdat.hubbexpofact, 4.4e3 / gdat.hubbexpofact, scal='logt')
-    varbinpt.defn_para('bacpbac0ene0', 3e-8, 3e-7, scal='logt')
-    varbinpt.defn_para('specsour', 3e-20, 3e-19, scal='logt')
-
-    listnameoutpvarb = ['defsdistsloppop0', 'meanpntspop0', 'dotsassc', 'spechost', 'beinhost']
-    numboutpvarb = len(listnameoutpvarb)
-    liststrgoutpvarb = []
-    listscaloutpvarb = []
-
-    grid = empty((4, numboutpvarb, varbinpt.size, numbcnfg))
-    
-    dictvarb = dict()
-    dictvarb['exprtype'] = 'hubb'
-    dictvarb['numbswep'] = 100
-    dictvarb['makeplot'] = False
-    
-    cntrcnfg = 0
-    for k in range(numbiter):
-        for m in range(varbinpt.size):
-            for l in range(varbinpt.numb):
-                
-                if m > 0 and l == varbinpt.numb / 2:
-                    grid[:, :, m, l] = grid[:, :, 0, numbcnfg / 2]
-                    continue
-    
-                for p in range(varbinpt.size):
-                    if p == m:
-                        dictvarb[varbinpt.name[p]] = varbinpt.para[p][l]
-                    else:
-                        dictvarb[varbinpt.name[p]] = varbinpt.para[p][numbcnfg / 2]
-                    
-                    if varbinpt.name[p] == 'bacpbac0ene0':
-                        dictvarb[varbinpt.name[p]] = array([dictvarb[varbinpt.name[p]]])
-                
-                dictvarb['strgcnfg'] = 'pcat_lens_mock_grid_%04d' % cntrcnfg
-                
-                gdat = pcat.main.init(**dictvarb)
-                cntrcnfg += 1
-
-                #for n in range(numboutpvarb):
-                #    if listnameoutpvarb[n] == 'dotsassc':
-                #        grid[0, n, m, l] = gdat.anglfact * gdat.medidotsassc[0][0]
-                #        grid[1:3, n, m, l] = gdat.anglfact * gdat.errrdotsassc[0][:, 0]
-                #        grid[3, n, m, l] = gdat.anglfact * gdat.truedots[0][0, 0]
-
-                #        if k == 0 and m == 0 and l == 0:
-                #            liststrgoutpvarb.append(r'$\theta_{E,0}$')
-                #            listscaloutpvarb.append('logt')
-                #    else:
-                #        indx = where(gdat.fittnamefixp == listnameoutpvarb[n])[0]
-                #        print 'indx'
-                #        print indx
-                #        print 'gdat.fittfactfixpplot[indx]'
-                #        print gdat.fittfactfixpplot[indx]
-                #        print 'getattr(gdat, medifixp)[indx]'
-                #        print getattr(gdat, 'medifixp')[indx]
-                #        print
-                #        grid[0, n, m, l] = gdat.fittfactfixpplot[indx] * getattr(gdat, 'medifixp')[indx]
-                #        grid[1:3, n, m, l] = gdat.fittfactfixpplot[indx] * getattr(gdat, 'errrfixp')[:, indx].flatten()
-                #        grid[3, n, m, l] = gdat.fittfactfixpplot[indx] * getattr(gdat, 'truefixp')[indx]
-                #        if k == 0 and m == 0 and l == 0:
-                #            liststrgoutpvarb.append(gdat.fittlablfixp[indx][0])
-                #            listscaloutpvarb.append(gdat.fittscalfixp[indx])
-                            
-        path = os.environ["PCAT_DATA_PATH"] + '/imag/%s_lensgrid/' % gdat.strgtimestmp
-        os.system('mkdir -p %s' % path)
-        for n in range(numboutpvarb):
-            for m in range(varbinpt.size):
-                figr, axis = plt.subplots(figsize=(gdat.plotsize, gdat.plotsize))
-                axis.errorbar(varbinpt.para[m], grid[0, n, m, :], yerr=grid[1:3, n, m, :], ls='', marker='o')
-                axis.plot(varbinpt.para[m], grid[3, n, m, :], marker='x', color='g')
-                axis.set_xlabel(liststrgvarbinpt[m])
-                axis.set_ylabel(liststrgoutpvarb[n])
-                maxm = amax(varbinpt.para[m])
-                minm = amin(varbinpt.para[m])
-                if varbinpt.scal[m] == 'logt':
-                    axis.set_xscale('log')
-                    axis.set_xlim([minm / 2., maxm * 2.])
-                else:
-                    axis.set_xlim([minm - 1., maxm + 1.])
-                plt.tight_layout()
-                plt.savefig('%s/%s%d.pdf' % (path, listnameoutpvarb[n], m))
-                plt.close(figr)
-    
-
 def pcat_lens_intrevalcntpresi():
    
     pcat.main.init( \
@@ -125,65 +30,59 @@ def pcat_lens_intrevalcntpmodl():
                   )
     
 
-def pcat_lens_mock_sing():
+def pcat_lens_mock_truesgnl(strgcnfgextnexec=None):
    
-    numbiter = 10
-    for k in range(numbiter):
-        pcat.main.init( \
-                       exprtype='hubb', \
-                       numbelempop0reg0=1, \
-                       minmdefs=1e-2/3600./180.*pi, \
-                       maxmdefs=1e-1/3600./180.*pi, \
-                      )
+    dictargs = {}
     
+    dictargs['exprtype'] = 'hubb'
+    dictargs['truenumbelempop0reg0'] = 25
+    dictargs['elemtype'] = ['lens']
+    dictargs['priofactdoff'] = 0.5
+   
+    # temp
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 100
+ 
+    listnamecnfgextn = ['nomi', 'truenone']
+    dictargsvari = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
+    
+    dictargsvari['truenone']['truenumbelempop0reg0'] = 0
+    
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  listnamecnfgextn, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
+                                 )
 
-def pcat_lens_mock_next(strgcnfgextnexec=None):
+
+def pcat_lens_mock_truedefs(strgcnfgextnexec=None):
    
     numbelem = int(25. * 10.**0.9)
     anglfact = 3600. * 180. / pi
     
     dictargs = {}
-    #dictargs['numbswep'] = 1000
     
     dictargs['exprtype'] = 'hubb'
     dictargs['truenumbelempop0reg0'] = 25
     dictargs['elemtype'] = ['lens']
+    dictargs['priofactdoff'] = 0.5
    
     # temp
-    #dictargs['makeplotinit'] = True
-    #dictargs['shrtfram'] = False
-    dictargs['numbswep'] = 50000
-    dictargs['numbburn'] = 20000
-    dictargs['factthin'] = 300
-    dictargs['priofactdoff'] = 0.
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 100
  
-    #dictargsvari['numbelempop0reg0']     = [None,        0,  0,  25,   int(25. * 0.1**0.9), int(25. * 10.**0.9)]
-    #dictargsvari['trueminmdefs']     = [None,        None,        None,        3e-3/anglfact, 3e-2/anglfact,                      3e-4/anglfact]
-    #dictargsvari['fittminmdefs']     = [None,        None,        None,        3e-4/anglfact, 3e-4/anglfact,                      3e-4/anglfact]
-    #dictargsvari['priofactdoff']     = [0.,          0.,          1.,          1.,            1.,                                 1.]
-    #dictargsvari['scalmeanpnts'] = ['logt',      'logt',      'logt',      'logt',        'logt',                            'logt']
-   
-    listnamecnfgextn = ['nomi', 'parsnone', 'parsloww', 'parsmore', 'parshigh', 'zerosgnl']
+    listnamecnfgextn = ['truevlow', 'trueloww', 'nomi', 'truehigh', 'truevhig']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
-    dictargsvari['zerosgnl']['truenumbelempop0reg0'] = 0
-    dictargsvari['zerosgnl']['truemaxmnumbelempop0reg0'] = 0
-    dictargsvari['zerosgnl']['fittmaxmnumbelempop0reg0'] = 100
-    
-    dictargsvari['parsnone']['priofactdoff'] = 0.
-    dictargsvari['parsloww']['priofactdoff'] = 0.5
-    dictargsvari['parsmore']['priofactdoff'] = 1.5
-    dictargsvari['parshigh']['priofactdoff'] = 2.
-    
-    #dictargsvari['subhsing']['fittminmnumbelempop0reg0'] = 1
-    #dictargsvari['subhsing']['fittmaxmnumbelempop0reg0'] = 1
-
-    #dictargsvari['truelowr']['truenumbelempop0reg0'] = int(25. * 10.**0.9)
-    #dictargsvari['truelowr']['trueminmdefs'] = 3e-3 / anglfact
-    #dictargsvari['truelowr']['fittminmdefs'] = 3e-3 / anglfact
-    #
+    dictargsvari['truevlow']['trueminmdefs'] = 3e-4 / anglfact
+    dictargsvari['trueloww']['trueminmdefs'] = 1e-3 / anglfact
+    dictargsvari['truehigh']['trueminmdefs'] = 1e-2 / anglfact
+    dictargsvari['truevhig']['trueminmdefs'] = 3e-2 / anglfact
 
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -193,7 +92,79 @@ def pcat_lens_mock_next(strgcnfgextnexec=None):
                                  )
 
 
-def pcat_lens_mock_syst(strgcnfgextnexec=None):
+def pcat_lens_mock_pars(strgcnfgextnexec=None):
+   
+    numbelem = int(25. * 10.**0.9)
+    
+    dictargs = {}
+    
+    dictargs['exprtype'] = 'hubb'
+    dictargs['truenumbelempop0reg0'] = 25
+    dictargs['elemtype'] = ['lens']
+    dictargs['priofactdoff'] = 0.5
+   
+    # temp
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 100
+ 
+    listnamecnfgextn = ['parsnone', 'nomi', 'parshigh']
+    dictargsvari = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
+    
+    dictargsvari['parsnone']['priofactdoff'] = 0.
+    dictargsvari['parshigh']['priofactdoff'] = 1.
+    
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  listnamecnfgextn, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
+                                 )
+
+
+def pcat_lens_mock_fittnumb(strgcnfgextnexec=None):
+   
+    numbelem = int(25. * 10.**0.9)
+    anglfact = 3600. * 180. / pi
+    
+    dictargs = {}
+    
+    dictargs['exprtype'] = 'hubb'
+    dictargs['truenumbelempop0reg0'] = 25
+    dictargs['elemtype'] = ['lens']
+    dictargs['priofactdoff'] = 0.5
+   
+    # temp
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 100
+ 
+    listnamecnfgextn = ['nomi', 'fittmany', 'fittnone', 'fittsing', 'fittdoub']
+    dictargsvari = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
+    
+    dictargsvari['fittmany']['fittminmnumbelempop0reg0'] = 10
+    dictargsvari['fittmany']['fittmaxmnumbelempop0reg0'] = 10
+
+    dictargsvari['fittnone']['fittminmnumbelempop0reg0'] = 0
+    dictargsvari['fittnone']['fittmaxmnumbelempop0reg0'] = 0
+
+    dictargsvari['fittsing']['fittminmnumbelempop0reg0'] = 1
+    dictargsvari['fittsing']['fittmaxmnumbelempop0reg0'] = 1
+
+    dictargsvari['fittdoub']['fittminmnumbelempop0reg0'] = 2
+    dictargsvari['fittdoub']['fittmaxmnumbelempop0reg0'] = 2
+
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  listnamecnfgextn, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
+                                 )
+
+
+def pcat_lens_mock_papr(strgcnfgextnexec=None):
    
     dictargs = {}
     dictargs['exprtype'] = 'hubb'
@@ -202,20 +173,12 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
     dictargs['priofactdoff'] = 0.
    
     # temp
-    dictargs['numbswep'] = 200000
-    dictargs['numbsamp'] = 200
-    #dictargs['proplenp'] = False
-    #dictargs['proppsfp'] = False
-    #dictargs['propcomp'] = False
-    #dictargs['propbacp'] = False
-    #dictargs['propdist'] = False
     dictargs['limtydathistfeat'] = [0.5, 10.]
     
     dictargs['truemaxmnumbelempop0reg0'] = 25
     dictargs['truenumbelempop0reg0'] = 25
     #dictargs['maxmnumbelempop0reg0'] = 0
     #dictargs['numbelempop0reg0'] = 0
-    #dictargs['verbtype'] = 2
     
     dictargs['truemeanpntspop0'] = 25
     dictargs['initnumbelempop0reg0'] = 25
@@ -367,11 +330,6 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
     
     anglfact = 3600. * 180. / pi
     
-   
-    # temp
-    #dictargs['makeplotinit'] = True
-    #dictargs['shrtfram'] = False
-    
     numbelem = int(25. * 10.**0.9)
 
     listnamecnfgextn = ['fittlhig', 'fitthigh', 'fittvhig', 'truenone']
@@ -429,7 +387,7 @@ def pcat_lens_mock_syst(strgcnfgextnexec=None):
 
     
 
-def pcat_lens_sour_mock(strgcnfgextnexec=None):
+def pcat_lens_mock_sour(strgcnfgextnexec=None):
    
     anglfact = 3600. * 180. / pi
     
@@ -444,13 +402,10 @@ def pcat_lens_sour_mock(strgcnfgextnexec=None):
     dictargs['spatdisttype'] = ['unif', 'dsrcexpo']
     
     # temp
-    dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 10000
     dictargs['numbsamp'] = 100
-    #dictargs['makeplot'] = False
-    dictargs['optitype'] = 'none'
     
     numbelem = int(25. * 10.**0.9)
-    anglfact = 3600. * 180. / pi
 
     listnamecnfgextn = ['nomi', 'datanone', 'subhsing', 'truelowr', 'pars', 'truevlow', 's2nrhigh', 's2nrvhig', 'amplhigh', 'bgrdunif']
     dictargsvari = {}
@@ -537,8 +492,6 @@ def pcat_lens_mock_sele():
     dictargs['variasca'] = False
     dictargs['variacut'] = False
     dictargs['allwfixdtrue'] = False
-    dictargs['verbtype'] = 0
-    dictargs['makeplot'] = False
     dictargs['maxmnumbelempop0reg0'] = 1000
     
     listnamesele = ['pars', 'nrel']
@@ -715,9 +668,6 @@ def pcat_lens_mock_many():
         dictargs['maxmnumbelempop0reg%d' % k] = 0
         dictargs['numbelempop0reg%d' % k] = 0
     
-    #dictargs['makeplotinit'] = False
-    #dictargs['shrtfram'] = False
-    dictargs['verbtype'] = 2
     dictargs['inittype'] = 'pert'
     dictargs['numbswep'] = 100000
     dictargs['numbswepplot'] = 10000
@@ -762,13 +712,8 @@ def pcat_lens_mock_spmr(strgcnfgextnexec=None):
     dictargs['indxenerincl'] = array([0])
     
     # temp
-    #dictargs['makeplotinit'] = False
-    #dictargs['shrtfram'] = True
     dictargs['numbswep'] = 10000
-    dictargs['numbburn'] = 0
     dictargs['numbsamp'] = 1000
-    dictargs['numbswepplot'] = 2000
-    #dictargs['verbtype'] = 2
     
     listnamecnfgextn = ['nomi', 'tranboth', 'parshigh', 'masshigh', 'massloww', 'trannone']
     dictargsvari = {}
@@ -793,44 +738,6 @@ def pcat_lens_mock_spmr(strgcnfgextnexec=None):
                                   listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
-
-
-def pcat_lens_mock():
-   
-    pcat.main.init( \
-                   exprtype='hubb', \
-                   numbswep=100, \
-                   #numbsamp=10, \
-                   numbburn=0, \
-                   factthin=100, \
-                   inittype='refr', \
-                   elemtype=['lens'], \
-                   numbelempop0reg0=1, \
-                   maxmnumbelempop0reg0=1, \
-                   #numbelempop0reg0=0, \
-                   #numbelempop1reg0=1, \
-                   #numbelempop2reg0=0, \
-                   #maxmnumbelempop0reg0=0, \
-                   #maxmnumbelempop1reg0=3, \
-                   #maxmnumbelempop2reg0=0, \
-                   makeplot=False, \
-                   
-                   #makeplotintr=True, \
-                   #makeplotinit=True, \
-
-                   # temp
-                   #probtran=0., \
-                   #sqzeprop=True, \
-                   #maxmnumbelempop0reg0=1, \
-                   #maxmnumbelempop1reg0=1, \
-                   #maxmnumbelempop2reg0=1, \
-                   #makeplot=False, \
-                   #makeplotinit=False, \
-                   #shrtfram=True, \
-                   #explprop=True, \
-                   #verbtype=2, \
-                   #mockonly=True, \
-                  )
 
 
 def writ_data():
@@ -1078,8 +985,6 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     
     #dictargs['inittype'] = 'rand'
     
-    dictargs['optitype'] = 'none'
- 
     listnamecnfgextn = ['largrofi', 'largrofimask', 'nomi', 'mask', 'sour', 'dsrcexpo', 'sourmask', 'hostmult']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
@@ -1126,7 +1031,6 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     #dictargsvari['sour']['initbgalsourreg0'] = 0.2 / anglfact
     #dictargsvari['sour']['forcsavestat'] = True
     
-    #dictargsvari['hostmult']['verbtype'] = 2
     dictargsvari['hostmult']['strgexprsbrt'] = strgexprsbrt
     dictargsvari['hostmult']['numbsersfgrd'] = array([2])
     #dictargsvari['hostmult']['proppsfp'] = False
@@ -1184,12 +1088,9 @@ def pcat_lens_psfn():
                        numbswepplot=10000, \
                        shrtfram=True, \
                        #mockonly=True, \
-                       #makeplotintr=True, \
                        #burntmpr=True, \
                        #savestat=True, \
                        #inittype='reco', \
-                       #makeplotinit=False, \
-                       makeplotlpri=False, \
                        strgexpo=strgexpo, \
                        fittmaxmnumbelem=array([0]), \
                        maxmgangdata=maxmgangdata, \
