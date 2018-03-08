@@ -18,7 +18,7 @@ for namefile in os.listdir(path):
                 
                 namefunc = line[4:-1].split('(')[0]
                 
-                listrtag = fnmatch.filter(os.listdir(pathimag), namefunc)
+                listrtag = fnmatch.filter(os.listdir(pathimag), '*%s*' % namefunc)
         
                 if len(listrtag) == 0:
                     listnamefile.append(namefile)
