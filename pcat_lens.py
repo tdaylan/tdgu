@@ -1,6 +1,52 @@
 from __init__ import *
 
-def pcat_lens_intrevalcntpresi():
+def intr_lens_evalresicntp():
+
+    anglfact = 3600. * 180. / pi
+    sizepixl = 0.05 / anglfact
+    
+    # name of the dataset
+    namedatasets = 'lens29075550'
+    
+    # exposure
+    strgexpo = 7.37487548893e21
+
+    # half-size of the image
+    numbside = 400
+    maxmgangdata = numbside * 0.5 * sizepixl
+    
+    # name of the data file
+    strgexprsbrt = namedatasets + '_%04d.fits' % numbside
+    
+    if namedatasets == 'lens29075550':
+        initbacpbac0en00 = 1.1e-7
+        fittmeanbacpbac0en00 = 1.1e-7
+        fittstdvbacpbac0en00 = fittmeanbacpbac0en00 * 1e-3
+        fittscalbacpbac0en00 = 'gaus'
+    else:
+        initbacpbac0en00 = None
+        fittmeanbacpbac0en00 = None
+        fittstdvbacpbac0en00 = None
+        fittscalbacpbac0en00 = None
+
+    pcat.main.init( \
+                   exprtype='hubb', \
+                   makeplotinit=False, \
+                   intrevalresicntp=True, \
+                   strgexpo=strgexpo, \
+                   initbacpbac0en00=initbacpbac0en00, \
+                   fittmeanbacpbac0en00=fittmeanbacpbac0en00, \
+                   fittstdvbacpbac0en00=fittstdvbacpbac0en00, \
+                   fittscalbacpbac0en00=fittscalbacpbac0en00, \
+                   inittype='reco', \
+                   namerecostat='pcat_lens_inpt', \
+                   fittmaxmnumbelem=array([0]), \
+                   maxmgangdata=maxmgangdata, \
+                   strgexprsbrt=strgexprsbrt, \
+                  )
+    
+
+def intr_lens_evalcntpresi():
    
     pcat.main.init( \
                    exprtype='hubb', \
@@ -14,7 +60,7 @@ def pcat_lens_intrevalcntpresi():
                   )
     
 
-def pcat_lens_intrevalcntpmodl():
+def intr_lens_evalcntpmodl():
    
     pcat.main.init( \
                    exprtype='hubb', \
@@ -889,52 +935,6 @@ def pcat_lens_psfn():
                        strgexprsbrt='lens29065407.fits', \
                       )
    
-
-def pcat_lens_intrevalresicntp():
-
-    anglfact = 3600. * 180. / pi
-    sizepixl = 0.05 / anglfact
-    
-    # name of the dataset
-    namedatasets = 'lens29075550'
-    
-    # exposure
-    strgexpo = 7.37487548893e21
-
-    # half-size of the image
-    numbside = 400
-    maxmgangdata = numbside * 0.5 * sizepixl
-    
-    # name of the data file
-    strgexprsbrt = namedatasets + '_%04d.fits' % numbside
-    
-    if namedatasets == 'lens29075550':
-        initbacpbac0en00 = 1.1e-7
-        fittmeanbacpbac0en00 = 1.1e-7
-        fittstdvbacpbac0en00 = fittmeanbacpbac0en00 * 1e-3
-        fittscalbacpbac0en00 = 'gaus'
-    else:
-        initbacpbac0en00 = None
-        fittmeanbacpbac0en00 = None
-        fittstdvbacpbac0en00 = None
-        fittscalbacpbac0en00 = None
-
-    pcat.main.init( \
-                   exprtype='hubb', \
-                   makeplotinit=False, \
-                   intrevalresicntp=True, \
-                   strgexpo=strgexpo, \
-                   initbacpbac0en00=initbacpbac0en00, \
-                   fittmeanbacpbac0en00=fittmeanbacpbac0en00, \
-                   fittstdvbacpbac0en00=fittstdvbacpbac0en00, \
-                   fittscalbacpbac0en00=fittscalbacpbac0en00, \
-                   inittype='reco', \
-                   namerecostat='pcat_lens_inpt', \
-                   fittmaxmnumbelem=array([0]), \
-                   maxmgangdata=maxmgangdata, \
-                   strgexprsbrt=strgexprsbrt, \
-                  )
-    
 
 def pcat_lens_mockonly():
    
