@@ -24,7 +24,8 @@ for namefunc in array(listnamefunc)[choice(arange(len(listnamefunc)), size=len(l
     cmnd = 'python $TDGU_PATH/%s %s' % (name, namefunc)
     print cmnd
     try:
-        subp.check_call(cmnd, shell=True)
+        pass
+        #subp.check_call(cmnd, shell=True)
         #os.system(cmnd)
     except Exception as excp:
         strg = str(excp)
