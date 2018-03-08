@@ -18,14 +18,15 @@ for name in os.listdir(path):
                 
                 listnamefunc.append(namefunc)
 
-for namefunc in array(listnamefunc)[choice(arange(len(listnamefunc)), size=len(listnamefunc), replace=False)]:
+listnamfunc = array(listnamefunc)[choice(arange(len(listnamefunc)), size=len(listnamefunc), replace=False)]
+for namefunc in listnamfunc:
     print 'Processing confugiration %s...' % namefunc
         
     cmnd = 'python $TDGU_PATH/%s %s' % (name, namefunc)
     print cmnd
     try:
         pass
-        #subp.check_call(cmnd, shell=True)
+        subp.check_call(cmnd, shell=True)
         #os.system(cmnd)
     except Exception as excp:
         strg = str(excp)
