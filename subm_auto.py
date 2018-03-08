@@ -39,7 +39,7 @@ for namefile, namefunc in zip(listnamefile, listnamefunc):
     print cmnd
     try:
         pass
-        #subp.check_call(cmnd, shell=True)
+        subp.check_call(cmnd, shell=True)
     except Exception as excp:
         pass
     print
