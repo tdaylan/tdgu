@@ -200,14 +200,11 @@ def pcat_lens_mock_fittnumb(strgcnfgextnexec=None):
     dictargs['elemtype'] = ['lens']
     dictargs['priofactdoff'] = 0.5
    
-    listnamecnfgextn = ['nomi', 'fittmany', 'fittnone', 'fittsing', 'fittdoub']
+    listnamecnfgextn = ['fittnone', 'fittsing', 'fittdoub', 'fittmany', 'nomi']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
-    dictargsvari['fittmany']['fittminmnumbelempop0reg0'] = 10
-    dictargsvari['fittmany']['fittmaxmnumbelempop0reg0'] = 10
-
     dictargsvari['fittnone']['fittminmnumbelempop0reg0'] = 0
     dictargsvari['fittnone']['fittmaxmnumbelempop0reg0'] = 0
 
@@ -217,14 +214,17 @@ def pcat_lens_mock_fittnumb(strgcnfgextnexec=None):
     dictargsvari['fittdoub']['fittminmnumbelempop0reg0'] = 2
     dictargsvari['fittdoub']['fittmaxmnumbelempop0reg0'] = 2
 
-    listtickxaxi = [tdpy.util.mexp(dictargsvari[namecnfgextn]['priofactdoff']) for namecnfgextn in listnamecnfgextn] 
+    dictargsvari['fittmany']['fittminmnumbelempop0reg0'] = 10
+    dictargsvari['fittmany']['fittmaxmnumbelempop0reg0'] = 10
+
+    listtickxaxi = ['0', '1', '2', '10', 'Tran.']
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
                                   
-                                  namexaxi='priofactdoff', \
+                                  namexaxi='fittnumbelempop0reg0', \
                                   listtickxaxi=listtickxaxi, \
                         
                                   strgcnfgextnexec=strgcnfgextnexec, \

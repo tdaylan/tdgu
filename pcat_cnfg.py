@@ -1,8 +1,13 @@
 # common imports
-from __init__ import *
+#from __init__ import *
 
 # internal functions
-from main import init, initarry
+#from main import init, initarry
+
+from __init__ import *
+#from astropy.coordinates import SkyCoord
+#from pcat.util import retr_refrchaninit
+
 
 def pcat_fittminmflux_fittparsnone(strgcnfgextnexec=None):
     

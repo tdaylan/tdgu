@@ -307,7 +307,7 @@ def pcat_chan_mock_popl(strgcnfgextnexec=None):
     
     datatype = 'home'
     strgexpomaps = '4msc'
-    
+    numbsidecart = 300
     gridchan = pcat.main.init( \
                               exprtype='chan', \
                               strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
@@ -369,6 +369,9 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
     dictargs['priofactdoff'] = 0.
     
+    #dictargs['numbswep'] = 1000
+    #dictargs['numbsamp'] = 10
+
     dictargs['truenumbelempop0reg0'] = 100
     dictargs['maxmnumbelempop0reg0'] = 400
     
