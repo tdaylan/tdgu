@@ -5,6 +5,8 @@ path = os.environ["TDGU_PATH"] + '/'
 pathfileoutp = path + 'subm_auto_%s.log' % tdpy.util.retr_strgtimestmp()
 os.system('rm %s' % pathfileoutp)
 fileoutp = open(pathfileoutp, 'w')
+
+pathimag = os.environ["PCAT_DATA_PATH"] + '/imag/'
                
 listnamefile = []
 listnamefunc = []
@@ -16,9 +18,12 @@ for namefile in os.listdir(path):
                 
                 namefunc = line[4:-1].split('(')[0]
                 
-                listnamefile.append(namefile)
-                listnamefunc.append(namefunc)
-
+                listrtag = fnmatch.filter(os.listdir(pathimag), namefunc)
+        
+                if len(listrtag) == 0:
+                    listnamefile.append(namefile)
+                    listnamefunc.append(namefunc)
+    
 listnamefile = array(listnamefile)
 listnamefunc = array(listnamefunc)
 numb = len(listnamefunc)
@@ -27,18 +32,19 @@ listnamefile = listnamefile[indx]
 listnamefunc = listnamefunc[indx]
 
 for namefile, namefunc in zip(listnamefile, listnamefunc):
-    print 'Processing confugiration %s, file %s...' % (namefunc, namefile)
-        
+    print 'Running configuration %s, file %s...' % (namefunc, namefile)
     cmnd = 'python $TDGU_PATH/%s %s' % (namefile, namefunc)
     print cmnd
     try:
         pass
-        subp.check_call(cmnd, shell=True)
-        #os.system(cmnd)
+        #subp.check_call(cmnd, shell=True)
     except Exception as excp:
-        strg = str(excp)
-        fileoutp.write('%s failed.\n' % namefunc)
-        fileoutp.write(strg)
+        pass
+    print
+    print
+    print
+    print
+    print
     print
 
 fileoutp.close()
