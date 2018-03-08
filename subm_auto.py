@@ -18,11 +18,8 @@ for namefile in os.listdir(path):
                 
                 namefunc = line[4:-1].split('(')[0]
                 
-                listrtag = fnmatch.filter(os.listdir(pathimag), '*%s*' % namefunc)
-        
-                if len(listrtag) == 0:
-                    listnamefile.append(namefile)
-                    listnamefunc.append(namefunc)
+                listnamefile.append(namefile)
+                listnamefunc.append(namefunc)
     
 listnamefile = array(listnamefile)
 listnamefunc = array(listnamefunc)
@@ -32,6 +29,11 @@ listnamefile = listnamefile[indx]
 listnamefunc = listnamefunc[indx]
 
 for namefile, namefunc in zip(listnamefile, listnamefunc):
+    
+    listrtag = fnmatch.filter(os.listdir(pathimag), '*%s*' % namefunc)
+    if len(listrtag) > 0:
+        continue
+        
     print 'Running configuration %s, file %s...' % (namefunc, namefile)
     cmnd = 'python $TDGU_PATH/%s %s' % (namefile, namefunc)
     print cmnd
