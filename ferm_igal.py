@@ -1221,10 +1221,10 @@ def pcat_ferm_inpt_ptch(strgcnfgextnexec=None):
     bgalcntr = 5. / anglfact
     
     # rotate the input map
-    if gdat.pixltype == 'heal' and (gdat.lgalcntr != 0. or gdat.bgalcntr != 0.):
+    if gdat.pixltype == 'heal' and (lgalcntr != 0. or bgalcntr != 0.):
         strgcntr = 'cntr%04d%04d' % (rad2deg(lgalcntr), rad2deg(bgalcntr))
         
-        listcubertttr = [gdat.sbrtdata, gdat.expo]
+        listcubertttr = [sbrtdata, expo]
         for strgbacktemp in strgback:
             if isinstance(strgbacktemp, str):
                 listvarb.append(strgbacktemp)

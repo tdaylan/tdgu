@@ -31,8 +31,8 @@ def pcat_clas_lens(strgcnfgextnexec=None):
     print 'indxtotl'
     summgene(indxtotl)
     indxprev = array(indxprev)
-    print 'indxprev'
-    summgene(indxprev)
+    #print 'indxprev'
+    #summgene(indxprev)
     indxiter = setdiff1d(indxtotl, indxprev)
     print 'indxiter'
     summgene(indxiter)

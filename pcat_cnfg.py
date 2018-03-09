@@ -45,28 +45,28 @@ def pcat_fittminmflux_fittparsnone(strgcnfgextnexec=None):
     listtypevarbcomp = ['']
     listpdfnvarbcomp = ['']
     
-    dictglob = initarry( \
-                        dictargsvari, \
-                        dictargs, \
-                        listnamecnfgextn, \
-                        strgcnfgextnexec=strgcnfgextnexec, \
-                        
-                        strgpara='$PCAT_PATH/cnfg.py', \
-                        
-                        #forcprev=True, \
-                        #execpara=True, \
-                        
-                        namexaxi='fittminmflux', \
-                        lablxaxi=lablxaxi, \
-                        scalxaxi=scalxaxi, \
-                        listtickxaxi=listtickxaxi, \
-                        
-                        listnamevarbcomp=listnamevarbcomp, \
-                        listscalvarbcomp=listscalvarbcomp, \
-                        listlablvarbcomp=listlablvarbcomp, \
-                        listtypevarbcomp=listtypevarbcomp, \
-                        listpdfnvarbcomp=listpdfnvarbcomp, \
-                       )
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  listnamecnfgextn, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
+                                  
+                                  strgpara='$PCAT_PATH/cnfg.py', \
+                                  
+                                  #forcprev=True, \
+                                  #execpara=True, \
+                                  
+                                  namexaxi='fittminmflux', \
+                                  lablxaxi=lablxaxi, \
+                                  scalxaxi=scalxaxi, \
+                                  listtickxaxi=listtickxaxi, \
+                                  
+                                  listnamevarbcomp=listnamevarbcomp, \
+                                  listscalvarbcomp=listscalvarbcomp, \
+                                  listlablvarbcomp=listlablvarbcomp, \
+                                  listtypevarbcomp=listtypevarbcomp, \
+                                  listpdfnvarbcomp=listpdfnvarbcomp, \
+                                 )
 
 
 def pcat_fittminmflux_fittparsnomi(strgcnfgextnexec=None):
@@ -97,7 +97,7 @@ def pcat_fittminmflux_fittparsnomi(strgcnfgextnexec=None):
     scalxaxi = 'logt'
     listtickxaxi = [tdpy.util.mexp(dictargsvari[namecnfgextn]['fittminmflux']) for namecnfgextn in listnamecnfgextn] 
     
-    dictglob = initarry( \
+    dictglob = pcat.main.initarry( \
                         dictargsvari, \
                         dictargs, \
                         listnamecnfgextn, \
@@ -145,7 +145,7 @@ def pcat_fittpars_trueback(strgcnfgextnexec=None):
     lablxaxi = r'$\alpha_p$'
     listtickxaxi = [tdpy.util.mexp(dictargsvari[namecnfgextn]['priofactdoff']) for namecnfgextn in listnamecnfgextn] 
     
-    dictglob = initarry( \
+    dictglob = pcat.main.initarry( \
                         dictargsvari, \
                         dictargs, \
                         listnamecnfgextn, \
@@ -193,7 +193,7 @@ def pcat_fittpars_truepnts(strgcnfgextnexec=None):
     lablxaxi = r'$\alpha_p$'
     listtickxaxi = [tdpy.util.mexp(dictargsvari[namecnfgextn]['priofactdoff']) for namecnfgextn in listnamecnfgextn] 
     
-    dictglob = initarry( \
+    dictglob = pcat.main.initarry( \
                         dictargsvari, \
                         dictargs, \
                         listnamecnfgextn, \
@@ -241,7 +241,7 @@ def pcat_fittpars_truepntsfittminmfluxloww(strgcnfgextnexec=None):
     lablxaxi = r'$\alpha_p$'
     listtickxaxi = [tdpy.util.mexp(dictargsvari[namecnfgextn]['priofactdoff']) for namecnfgextn in listnamecnfgextn] 
     
-    dictglob = initarry( \
+    dictglob = pcat.main.initarry( \
                         dictargsvari, \
                         dictargs, \
                         listnamecnfgextn, \
@@ -289,7 +289,7 @@ def pcat_fittpars_truepntsfittminmfluxhigh(strgcnfgextnexec=None):
     lablxaxi = r'$\alpha_p$'
     listtickxaxi = [tdpy.util.mexp(dictargsvari[namecnfgextn]['priofactdoff']) for namecnfgextn in listnamecnfgextn] 
     
-    dictglob = initarry( \
+    dictglob = pcat.main.initarry( \
                         dictargsvari, \
                         dictargs, \
                         listnamecnfgextn, \
@@ -336,7 +336,7 @@ def pcat_truenumbelem(strgcnfgextnexec=None):
     scalxaxi = 'logt'
     listtickxaxi = [tdpy.util.mexp(dictargsvari[namecnfgextn]['truenumbelempop0reg0']) for namecnfgextn in listnamecnfgextn] 
     
-    dictglob = initarry( \
+    dictglob = pcat.main.initarry( \
                         dictargsvari, \
                         dictargs, \
                         listnamecnfgextn, \
@@ -383,7 +383,7 @@ def pcat_trueminmflux(strgcnfgextnexec=None):
     scalxaxi = 'logt'
     listtickxaxi = [tdpy.util.mexp(dictargsvari[namecnfgextn]['trueminmflux']) for namecnfgextn in listnamecnfgextn] 
     
-    dictglob = initarry( \
+    dictglob = pcat.main.initarry( \
                         dictargsvari, \
                         dictargs, \
                         listnamecnfgextn, \
@@ -442,7 +442,7 @@ def pcat_perf(strgcnfgextnexec=None):
     listtypevarbcomp = ['' for namevarbcomp in listnamevarbcomp]
     listpdfnvarbcomp = ['' for namevarbcomp in listnamevarbcomp]
     
-    dictglob = initarry( \
+    dictglob = pcat.main.initarry( \
                         dictargsvari, \
                         dictargs, \
                         listnamecnfgextn, \
@@ -495,7 +495,7 @@ def pcat_psfn(strgcnfgextnexec=None):
     scalxaxi = 'self'
     listtickxaxi = ['Float', 'Fixed/Wrong', 'Fixed/True'] 
     
-    dictglob = initarry( \
+    dictglob = pcat.main.initarry( \
                         dictargsvari, \
                         dictargs, \
                         listnamecnfgextn, \
@@ -546,7 +546,7 @@ def pcat_anglassc(strgcnfgextnexec=None):
     scalxaxi = 'self'
     listtickxaxi = [tdpy.util.mexp(dictargsvari[namecnfgextn]['anglassc']) for namecnfgextn in listnamecnfgextn] 
     
-    dictglob = initarry( \
+    dictglob = pcat.main.initarry( \
                         dictargsvari, \
                         dictargs, \
                         listnamecnfgextn, \
@@ -592,7 +592,7 @@ def pcat_errr(strgcnfgextnexec=None):
     listnamevarbcomp = ['cntperrrreg0pop0maxm', 'cntperrrreg0pop0mean']
     #listlablvarbcomp = [r'$\epsilon_m$ [%]', r'$\epsilon_d$ [%]']
     
-    dictglob = initarry( \
+    dictglob = pcat.main.initarry( \
                         dictargsvari, \
                         dictargs, \
                         listnamecnfgextn, \
@@ -651,7 +651,7 @@ def pcat_elemspatevaltype(strgcnfgextnexec=None):
     listtypevarbcomp = ['']
     listpdfnvarbcomp = ['']
    
-    dictglob = initarry( \
+    dictglob = pcat.main.initarry( \
                         dictargsvari, \
                         dictargs, \
                         listnamecnfgextn, \
@@ -704,7 +704,7 @@ def pcat_spmr(strgcnfgextnexec=None):
 
     listtickxaxi = [tdpy.util.mexp(dictargsvari[namecnfgextn]['radispmr']) for namecnfgextn in listnamecnfgextn] 
     
-    dictglob = initarry( \
+    dictglob = pcat.main.initarry( \
                         dictargsvari, \
                         dictargs, \
                         listnamecnfgextn, \

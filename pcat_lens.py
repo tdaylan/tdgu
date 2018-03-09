@@ -157,16 +157,16 @@ def pcat_lens_mock_pars(strgcnfgextnexec=None):
     dictargs['exprtype'] = 'hubb'
     dictargs['truenumbelempop0reg0'] = 25
     dictargs['elemtype'] = ['lens']
-    dictargs['priofactdoff'] = 0.5
    
-    listnamecnfgextn = ['parsnone', 'nomi', 'parshigh']
+    listnamecnfgextn = ['parsnone', 'parsnomi', 'parshigh']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
     dictargsvari['parsnone']['priofactdoff'] = 0.
     
-    dictargsvari['nomi']['checprio'] = 0.
+    dictargsvari['parsnomi']['priofactdoff'] = 0.5
+    dictargsvari['parsnomi']['checprio'] = True
     
     dictargsvari['parshigh']['priofactdoff'] = 1.
     
@@ -318,23 +318,6 @@ def pcat_lens_mock_sour(strgcnfgextnexec=None):
                                  )
     
 
-def pcat_lens_mock_reln():
-  
-    dictargs = {}
-    dictargs['exprtype'] = 'hubb'
-    dictargs['relnindx'] = 1.
-    dictargs['liststrgfeatmodu'] = ['lgalbgal']
-    dictargs['liststrgpdfnmodu'] = ['tmplreln']
-    dictargsvari = {}
-    dictargsvari['relnpowr'] = [2., 1., 0.]
-
-    dictglob = pcat.main.initarry( \
-                                  dictargsvari, \
-                                  dictargs, \
-                                  listnamecnfgextn, \
-                                 )
-
-
 def pcat_lens_mock_sele():
     
     numbitermacr = 30
@@ -477,36 +460,12 @@ def pcat_lens_mock_tmpr():
     dictargs['burntmpr'] = True
     dictargs['maxmnumbelempop0reg0'] = 0
     dictargs['numbelempop0reg0'] = 0
+
+    listnamecnfgextn = ['nomi', 'refr', 'pert']
     dictargsvari = {}
-    dictargsvari['inittype'] = ['refr', 'rand']
-
-    dictglob = pcat.main.initarry( \
-                                  dictargsvari, \
-                                  dictargs, \
-                                  listnamecnfgextn, \
-                                 )
-
-
-def pcat_lens_mock_macr():
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
     
-    pcat.main.init( \
-                   exprtype='hubb', \
-                   maxmnumbelempop0reg0=0, \
-                   numbelempop0reg0=0, \
-                  )
-
-
-def pcat_lens_mock_test():
-   
-    dictargs = {}
-    dictargs['exprtype'] = 'hubb'
-    dictargsvari = {}
-    dictargsvari['inittype'] =         ['refr', 'pert', 'pert', None,  ]
-    dictargsvari['variasca'] =         [False,  False,  True,   None,  ]
-    dictargsvari['variacut'] =         [False,  False,  True,   None,  ]
-    dictargsvari['ampldisttype'] = [False,  False,  True,  'igam', ]
-    dictargsvari['priofactdoff'] =     [   1.,     1.,    1.,      0., ]
-
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \

@@ -317,7 +317,7 @@ def pcat_chan_mock_popl(strgcnfgextnexec=None):
                              )
 
 
-def pcat_chan_spec_spmr(strgcnfgextnexec=None):
+def pcat_spec_chan_mock_pars(strgcnfgextnexec=None):
   
     dictargs = {}
     dictargs['exprtype'] = 'chan'
@@ -332,24 +332,46 @@ def pcat_chan_spec_spmr(strgcnfgextnexec=None):
     dictargs['numbsidecart'] = 1
     dictargs['anlytype'] = 'spec'
     
-    dictargs['inittype'] = 'refr'
-    dictargs['trueelinpop0reg00000'] = 1.
-    dictargs['truefluxpop0reg00000'] = 1e4
-    dictargs['numbelempop0reg0'] = 1
-    dictargs['priofactdoff'] = 0.
-    dictargs['probtran'] = 1.
-    dictargs['probspmr'] = 1.
-    
-    listnamecnfgextn = ['nomi', 'fluxhigh', 'fluxloww', 'parsnomi']
+    listnamecnfgextn = ['parsnone', 'parsloww', 'parsnomi', 'parshigh']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
-    dictargsvari['fluxhigh']['truefluxpop0reg00000'] = 3e4
-    
-    dictargsvari['fluxloww']['truefluxpop0reg00000'] = 3e3
-    
+    dictargsvari['parsnone']['priofactdoff'] = 0.
+    dictargsvari['parsloww']['priofactdoff'] = 0.5
     dictargsvari['parsnomi']['priofactdoff'] = 1.
+    dictargsvari['parshigh']['priofactdoff'] = 1.5
+    
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  listnamecnfgextn, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
+                                 )
+
+
+def pcat_spec_chan_mock_minmflux(strgcnfgextnexec=None):
+  
+    dictargs = {}
+    dictargs['exprtype'] = 'chan'
+    dictargs['spatdisttype'] = ['line']
+    dictargs['spectype'] = ['edis']
+    dictargs['strgexpo'] = 1e3
+    dictargs['elemtype'] = ['lghtline']
+    dictargs['inittype'] = 'refr'
+    # assume a pixel with side 100 arcsec
+    anglfact = 3600. * 180. / pi
+    dictargs['maxmgangdata'] = 100. / anglfact
+    dictargs['numbsidecart'] = 1
+    dictargs['anlytype'] = 'spec'
+    
+    listnamecnfgextn = ['trueloww', 'nomi', 'truehigh']
+    dictargsvari = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
+    
+    dictargsvari['trueloww']['trueminmfluxpop0reg0'] = 3e3
+    dictargsvari['truehigh']['trueminmfluxpop0reg0'] = 3e4
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
