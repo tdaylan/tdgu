@@ -21,9 +21,6 @@ def pcat_fittminmflux_fittparsnone(strgcnfgextnexec=None):
     dictargs['proppsfp'] = True
     dictargs['checprio'] = True
     
-    dictargs['numbswep'] = 10000
-    dictargs['numbsamp'] = 100
-    
     listnamecnfgextn = ['fittvlow', 'fittloww', 'fittnomi', 'fitthigh', 'fittvhig']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
