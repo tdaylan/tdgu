@@ -1,7 +1,7 @@
 from __init__ import *
   
 
-def pcat_clas_lens(strgcnfgextnexec=None):
+def test_clas_lens(strgcnfgextnexec=None):
    
     pathimag = os.environ["PCAT_DATA_PATH"] + '/imag/'
     
@@ -28,18 +28,9 @@ def pcat_clas_lens(strgcnfgextnexec=None):
             pcat.util.dele_rtag(rtag)
         else:
             indxprev.append(int(rtag.split('pcat_clas_lens_')[1][4:12]))
-    print 'indxtotl'
-    summgene(indxtotl)
     indxprev = array(indxprev)
-    #print 'indxprev'
-    #summgene(indxprev)
     indxiter = setdiff1d(indxtotl, indxprev)
-    print 'indxiter'
-    summgene(indxiter)
     indxiter = choice(indxiter, size=numbiter, replace=False)
-    print 'indxiter'
-    summgene(indxiter)
-            
     
     for k in indxiter:
         if rand() > 0.5:
@@ -55,6 +46,7 @@ def pcat_clas_lens(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 

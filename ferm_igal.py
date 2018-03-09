@@ -924,7 +924,7 @@ def writ_ferm_back():
     #plot_backspec(gdat, indxpixlmean)
 
 
-def pcat_ferm_bubb(strgcnfgextnexec=None):
+def test_ferm_bubb(strgcnfgextnexec=None):
     
     anglfact = 180. / pi
 
@@ -959,7 +959,7 @@ def pcat_ferm_bubb(strgcnfgextnexec=None):
                                  )
 
 
-def pcat_ferm_brek_mock(strgcnfgextnexec=None):
+def pcat_ferm_mock_brek(strgcnfgextnexec=None):
      
     dictargs = {}
     dictargs['truemaxmnumbelempop0reg0'] = 100
@@ -1212,7 +1212,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
                                  )
     
 
-def pcat_ferm_inpt_ptch(strgcnfgextnexec=None):
+def test_ferm_inpt_ptch(strgcnfgextnexec=None):
 
     anglfact = 180. / pi
     pathdata = os.environ["PCAT_DATA_PATH"] + '/data/inpt/'
@@ -1221,7 +1221,7 @@ def pcat_ferm_inpt_ptch(strgcnfgextnexec=None):
     bgalcntr = 5. / anglfact
     
     # rotate the input map
-    if gdat.pixltype == 'heal' and (lgalcntr != 0. or bgalcntr != 0.):
+    if pixltype == 'heal' and (lgalcntr != 0. or bgalcntr != 0.):
         strgcntr = 'cntr%04d%04d' % (rad2deg(lgalcntr), rad2deg(bgalcntr))
         
         listcubertttr = [sbrtdata, expo]

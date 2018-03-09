@@ -310,7 +310,7 @@ def pcat_tgas_mock_spmr(strgcnfgextnexec=None):
     dictargs = {}
     dictargs['exprtype'] = 'sdyn'
     dictargs['backtype'] = [['tgasback.fits']]
-    dictargs['backtype'] = [['tgasback.fits']]
+    dictargs['numbsidecart'] = 200
     
     dictargs['inittype'] = 'refr'
     dictargs['truelgalpop0reg00000'] = 0.

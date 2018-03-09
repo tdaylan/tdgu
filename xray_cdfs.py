@@ -317,70 +317,6 @@ def pcat_chan_mock_popl(strgcnfgextnexec=None):
                              )
 
 
-def pcat_spec_chan_mock_pars(strgcnfgextnexec=None):
-  
-    dictargs = {}
-    dictargs['exprtype'] = 'chan'
-    dictargs['spatdisttype'] = ['line']
-    dictargs['spectype'] = ['edis']
-    dictargs['strgexpo'] = 1e3
-    dictargs['elemtype'] = ['lghtline']
-    dictargs['inittype'] = 'refr'
-    # assume a pixel with side 100 arcsec
-    anglfact = 3600. * 180. / pi
-    dictargs['maxmgangdata'] = 100. / anglfact
-    dictargs['numbsidecart'] = 1
-    dictargs['anlytype'] = 'spec'
-    
-    listnamecnfgextn = ['parsnone', 'parsloww', 'parsnomi', 'parshigh']
-    dictargsvari = {}
-    for namecnfgextn in listnamecnfgextn:
-        dictargsvari[namecnfgextn] = {}
-    
-    dictargsvari['parsnone']['priofactdoff'] = 0.
-    dictargsvari['parsloww']['priofactdoff'] = 0.5
-    dictargsvari['parsnomi']['priofactdoff'] = 1.
-    dictargsvari['parshigh']['priofactdoff'] = 1.5
-    
-    dictglob = pcat.main.initarry( \
-                                  dictargsvari, \
-                                  dictargs, \
-                                  listnamecnfgextn, \
-                                  strgcnfgextnexec=strgcnfgextnexec, \
-                                 )
-
-
-def pcat_spec_chan_mock_minmflux(strgcnfgextnexec=None):
-  
-    dictargs = {}
-    dictargs['exprtype'] = 'chan'
-    dictargs['spatdisttype'] = ['line']
-    dictargs['spectype'] = ['edis']
-    dictargs['strgexpo'] = 1e3
-    dictargs['elemtype'] = ['lghtline']
-    dictargs['inittype'] = 'refr'
-    # assume a pixel with side 100 arcsec
-    anglfact = 3600. * 180. / pi
-    dictargs['maxmgangdata'] = 100. / anglfact
-    dictargs['numbsidecart'] = 1
-    dictargs['anlytype'] = 'spec'
-    
-    listnamecnfgextn = ['trueloww', 'nomi', 'truehigh']
-    dictargsvari = {}
-    for namecnfgextn in listnamecnfgextn:
-        dictargsvari[namecnfgextn] = {}
-    
-    dictargsvari['trueloww']['trueminmfluxpop0reg0'] = 3e3
-    dictargsvari['truehigh']['trueminmfluxpop0reg0'] = 3e4
-    
-    dictglob = pcat.main.initarry( \
-                                  dictargsvari, \
-                                  dictargs, \
-                                  listnamecnfgextn, \
-                                  strgcnfgextnexec=strgcnfgextnexec, \
-                                 )
-
-
 # science suites
 def pcat_chan_mock(strgcnfgextnexec=None):
    
@@ -547,21 +483,15 @@ def pcat_chan_mock_truemaxmlum0(strgcnfgextnexec=None):
                                  )
     
 
-def pcat_chan_mock_maxmllik(strgcnfgextnexec=None):
+def pcat_chan_mock_mapo(strgcnfgextnexec=None):
     
     datatype = 'home'
     strgexpomaps = '4msc'
     numbsidecart = 300
     gridchan = pcat.main.init( \
-                              numbburn=0, \
                               evoltype='maxmllik', \
-                              inittype='refr', \
-                              #killexpo=True, \
-                              numbelempop0reg0=2, \
-                              maxmnumbelempop0reg0=3, \
                               strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               exprtype='chan', \
-                              numbsidecart=numbsidecart, \
                              )
 
 

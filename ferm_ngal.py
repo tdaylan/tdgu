@@ -11,7 +11,7 @@ def writ_ferm_ngal():
     tdpy.util.prep_maps('rec7', 'pnts', 'ngal', os.environ["FERM_NGAL_DATA_PATH"], 256, 'tim0')
 
 
-def pcat_ferm_quas_mock():
+def test_ferm_quas_mock():
     
     numbiter = 3
     for k in range(numbiter):
@@ -80,6 +80,7 @@ def pcat_ferm_ngal_inpt(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 

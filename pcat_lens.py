@@ -127,6 +127,7 @@ def pcat_lens_mock_trueminmdefs(strgcnfgextnexec=None):
     
     dictargsvari['truevlow']['trueminmdefs'] = 3e-4 / anglfact
     dictargsvari['trueloww']['trueminmdefs'] = 1e-3 / anglfact
+    dictargsvari['truenomi']['trueminmdefs'] = 3e-3 / anglfact
     dictargsvari['truehigh']['trueminmdefs'] = 1e-2 / anglfact
     dictargsvari['truevhig']['trueminmdefs'] = 3e-2 / anglfact
 
@@ -247,6 +248,7 @@ def pcat_lens_mock_trueback():
         dictargsvari[namecnfgextn] = {}
     
     dictargsvari['loww']['truebacpbac0en00'] = 1e-7
+    dictargsvari['nomi']['truebacpbac0en00'] = 2e-7
     dictargsvari['high']['truebacpbac0en00'] = 4e-7
 
     listtickxaxi = [tdpy.util.mexp(dictargsvari[namecnfgextn]['truebacpbac0en00']) for namecnfgextn in listnamecnfgextn] 
@@ -318,7 +320,7 @@ def pcat_lens_mock_sour(strgcnfgextnexec=None):
                                  )
     
 
-def pcat_lens_mock_sele():
+def test_lens_mock_sele():
     
     numbitermacr = 30
     numbiterelem = 10
@@ -452,7 +454,7 @@ def pcat_lens_mock_sele():
             plt.close(figr)
     
 
-def pcat_lens_mock_tmpr():
+def test_lens_mock_tmpr():
     
     anglfact = 3600. * 180. / pi
     dictargs = {}
@@ -874,40 +876,45 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
                                  )
 
 
-def pcat_lens_psfn():
+def test_lens_mock_psfn():
+   
+    dictargs = {}
+    dictargs['exprtype'] = 'hubb'
+    dictargs['truenumbelempop0reg0'] = 25
+    dictargs['elemtype'] = ['lens']
+    dictargs['priofactdoff'] = 0.5
+    dictargs['truesigcen00evt0'] = 4e-7
     
-    strgexpo = 7.37487548893e21
     anglfact = 3600. * 180. / pi
-    maxmgangdata = 50. * 0.05 / anglfact
-    numbiter = 1
     
-    for k in range(numbiter):
-        pcat.main.init( \
-                       exprtype='hubb', \
-                       #mockonly=True, \
-                       #burntmpr=True, \
-                       #savestat=True, \
-                       #inittype='reco', \
-                       strgexpo=strgexpo, \
-                       fittmaxmnumbelem=array([0]), \
-                       maxmgangdata=maxmgangdata, \
-                       strgexprsbrt='lens29065407.fits', \
-                      )
-   
+    listnamecnfgextn = ['loww', 'nomi', 'high']
+    dictargsvari = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
+    
+    dictargsvari['psfnfrwr']['truesigcen00evt0'] = 1e-7
+    dictargsvari['psfnfrwr']['fittsigcen00evt0'] = 2e-7
+    
+    dictargsvari['psfnfxwr']['proppsfp'] = False
+    dictargsvari['psfnfxwr']['initsigcen00evt0'] = 2e-7
+    
+    dictargsvari['psfnfrtr']['truesigcen00evt0'] = 4e-7
 
-def pcat_lens_mockonly():
-   
-    pcat.main.init( \
-                   exprtype='hubb', \
-                   maxmnumbelempop0reg0=0, \
-                   numbelempop0reg0=0, \
-                   maxmnumbelempop1reg0=1000, \
-                   numbelempop1reg0=1000, \
-                   maxmnumbelempop2reg0=0, \
-                   numbelempop2reg0=0, \
-                   makeplotinit=True, \
-                   mockonly=True, \
-                  )
+    dictargsvari['psfnfxtr']['proppsfp'] = False
+    dictargsvari['psfnfxtr']['initsigcen00evt0'] = 4e-7
+
+    listtickxaxi = ['Free, Wrong PSF', 'Fixed, Wrong PSF', 'Free, True PSF', 'Fixed, True PSF']
+    
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  listnamecnfgextn, \
+                                  
+                                  namexaxi='psfnvari', \
+                                  listtickxaxi=listtickxaxi, \
+
+                                  strgcnfgextnexec=strgcnfgextnexec, \
+                                 )
 
 
 def pcat_lens_mock_papr(strgcnfgextnexec=None):
