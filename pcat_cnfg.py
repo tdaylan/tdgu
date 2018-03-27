@@ -611,8 +611,27 @@ def pcat_errr(strgcnfgextnexec=None):
     #binsangltype=binsangltype, \
 
 
-def pcat_elemspatevaltype(strgcnfgextnexec=None):
+def pcat_plot(strgcnfgextnexec=None):
+  
+    dictargs = {}
+    dictargs['mockonly'] = True
+    dictargs['makeplotintr'] = True
     
+    listnamecnfgextn = ['nomi']
+    dictargsvari = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
+    
+    dictglob = pcat.main.initarry( \
+                        dictargsvari, \
+                        dictargs, \
+                        listnamecnfgextn, \
+                        strgcnfgextnexec=strgcnfgextnexec, \
+                       )
+
+
+def pcat_elemspatevaltype(strgcnfgextnexec=None):
+  
     anglfact = 3600. * 180. / pi
     dictargs = {}
     dictargs['exprtype'] = 'chan'

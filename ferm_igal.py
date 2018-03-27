@@ -1001,6 +1001,60 @@ def pcat_ferm_mock_brek(strgcnfgextnexec=None):
                                  )
 
 
+def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
+    
+    dictargs = {}
+    dictargs['truemaxmnumbelempop0reg0'] = 100
+    dictargs['truemaxmnumbelempop1reg0'] = 100
+    dictargs['truemaxmnumbelempop2reg0'] = 100
+    dictargs['truenumbelempop0reg0'] = 100
+    dictargs['truenumbelempop1reg0'] = 100
+    dictargs['truenumbelempop2reg0'] = 100
+    
+    dictargs['listnameback'] = ['isot']
+    dictargs['backtype'] = [[1.]]
+    dictargs['truenumbpopl'] = 1
+    dictargs['refrlegdpopl'] = ['PS']
+    dictargs['trueelemtype'] = ['lghtpnts']
+    dictargs['truespatdisttype'] = ['self']
+    dictargs['truespectype'] = ['powr']
+    dictargs['psfnevaltype'] = 'kern'
+    dictargs['trueelemregitype'] = [True]
+    dictargs['proppsfp'] = False
+    
+    dictargs['fittnumbpopl'] = 1
+    dictargs['fittelemtype'] = ['lghtpnts']
+    dictargs['fittspatdisttype'] = ['self']
+    #dictargs['fittspectype'] = ['colr']
+    dictargs['fittmaxmnumbelempop0reg0'] = 1000
+    
+    dictargs['forccart'] = True
+    dictargs['pixltype'] = 'cart'
+    dictargs['numbsidecart'] = 100
+    
+    dictargs['numbswep'] = 1000000
+    dictargs['numbsamp'] = 1000
+    
+    listnamecnfgextn = ['nomi', 'parsloww', 'parsnone', \
+                       ]
+    dictargsvari = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
+    
+    dictargsvari['nomi']['checprio'] = True
+    
+    dictargsvari['parsloww']['priofactdoff'] = 0.5
+
+    dictargsvari['parsnone']['priofactdoff'] = 0.
+    
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  listnamecnfgextn, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
+                                 )
+
+
 def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     
     dictargs = {}
@@ -1039,6 +1093,9 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargs['forccart'] = True
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
+    
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 100
     
     listnamecnfgextn = ['nomi', 'parsloww', 'parsnone', \
                         'truedark', 'truedarkparsloww', 'truedarkparsnone', \
