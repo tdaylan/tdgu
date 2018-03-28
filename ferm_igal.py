@@ -1028,9 +1028,9 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     #dictargs['fittspectype'] = ['colr']
     dictargs['fittmaxmnumbelempop0reg0'] = 1000
     
-    dictargs['forccart'] = True
-    dictargs['pixltype'] = 'cart'
-    dictargs['numbsidecart'] = 100
+    #dictargs['forccart'] = True
+    #dictargs['pixltype'] = 'cart'
+    #dictargs['numbsidecart'] = 100
     
     dictargs['numbswep'] = 1000000
     dictargs['numbsamp'] = 1000
@@ -1180,7 +1180,8 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['listprefhistfluxtype'] = ['line']
    
     dictargs['inittype'] = 'reco'
-    dictargs['numbswep'] = 5000000
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 100
     
     dictargs['fittmaxmnumbelempop0reg0'] = 1000
     dictargs['proppsfp'] = False

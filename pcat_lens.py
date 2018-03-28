@@ -157,19 +157,21 @@ def pcat_lens_mock_pars(strgcnfgextnexec=None):
     
     dictargs['exprtype'] = 'hubb'
     dictargs['truenumbelempop0reg0'] = 25
+    dictargs['fittmaxmnumbelempop0reg0'] = 2
     dictargs['elemtype'] = ['lens']
+    dictargs['verbtype'] = 2
    
-    listnamecnfgextn = ['parsnone', 'parsnomi', 'parshigh']
+    listnamecnfgextn = ['none', 'nomi', 'high']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
-    dictargsvari['parsnone']['priofactdoff'] = 0.
+    dictargsvari['none']['priofactdoff'] = 0.
     
-    dictargsvari['parsnomi']['priofactdoff'] = 0.5
-    dictargsvari['parsnomi']['checprio'] = True
+    dictargsvari['nomi']['priofactdoff'] = 0.5
+    dictargsvari['nomi']['checprio'] = True
     
-    dictargsvari['parshigh']['priofactdoff'] = 1.
+    dictargsvari['high']['priofactdoff'] = 1.
     
     lablxaxi = r'$\alpha_{p}$'
     scalxaxi = 'self'
@@ -179,7 +181,8 @@ def pcat_lens_mock_pars(strgcnfgextnexec=None):
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
-                                  
+                                 
+                                  forcprev=True, \
                                   namexaxi='priofactdoff', \
                                   lablxaxi=lablxaxi, \
                                   scalxaxi=scalxaxi, \
