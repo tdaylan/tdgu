@@ -1098,8 +1098,7 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     #dictargs['inittype'] = 'refr'
     dictargs['numbsamp'] = 1000
     
-    listnamecnfgextn = ['nomi', 'parsloww', 'parsnone', \
-                        'truedark', 'truedarkparsloww', 'truedarkparsnone', \
+    listnamecnfgextn = ['nomi', 'parsloww', 'parsnone', 'truedark', \
                         #'backwfou', 'backfour', 'popl', 'penalpridiff', \
                         ]
     dictargsvari = {}
