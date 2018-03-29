@@ -1121,26 +1121,6 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargsvari['truedark']['truenumbelempop1reg0'] = 0
     dictargsvari['truedark']['truenumbelempop2reg0'] = 0
    
-    dictargsvari['truedarkparsloww']['listnameback'] = ['isot', 'fdfm', 'dark']
-    dictargsvari['truedarkparsloww']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']]
-    dictargsvari['truedarkparsloww']['truemaxmnumbelempop0reg0'] = 0
-    dictargsvari['truedarkparsloww']['truemaxmnumbelempop1reg0'] = 0
-    dictargsvari['truedarkparsloww']['truemaxmnumbelempop2reg0'] = 0
-    dictargsvari['truedarkparsloww']['truenumbelempop0reg0'] = 0
-    dictargsvari['truedarkparsloww']['truenumbelempop1reg0'] = 0
-    dictargsvari['truedarkparsloww']['truenumbelempop2reg0'] = 0
-    dictargsvari['truedarkparsloww']['priofactdoff'] = 0.5
-
-    dictargsvari['truedarkparsnone']['listnameback'] = ['isot', 'fdfm', 'dark']
-    dictargsvari['truedarkparsnone']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']]
-    dictargsvari['truedarkparsnone']['truemaxmnumbelempop0reg0'] = 0
-    dictargsvari['truedarkparsnone']['truemaxmnumbelempop1reg0'] = 0
-    dictargsvari['truedarkparsnone']['truemaxmnumbelempop2reg0'] = 0
-    dictargsvari['truedarkparsnone']['truenumbelempop0reg0'] = 0
-    dictargsvari['truedarkparsnone']['truenumbelempop1reg0'] = 0
-    dictargsvari['truedarkparsnone']['truenumbelempop2reg0'] = 0
-    dictargsvari['truedarkparsnone']['priofactdoff'] = 0.
-    
     #dictargsvari['backwfou']['fittbacktype'] = [['bfunwfou0004']]
     
     #dictargsvari['backfour']['fittbacktype'] = [['bfunfour0004']]
