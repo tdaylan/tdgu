@@ -1058,12 +1058,12 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
 def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     
     dictargs = {}
-    dictargs['truemaxmnumbelempop0reg0'] = 10#100
-    dictargs['truemaxmnumbelempop1reg0'] = 10#100
-    dictargs['truemaxmnumbelempop2reg0'] = 10#100
-    dictargs['truenumbelempop0reg0'] = 10#100
-    dictargs['truenumbelempop1reg0'] = 10#100
-    dictargs['truenumbelempop2reg0'] = 10#100
+    dictargs['truemaxmnumbelempop0reg0'] = 100
+    dictargs['truemaxmnumbelempop1reg0'] = 100
+    dictargs['truemaxmnumbelempop2reg0'] = 100
+    dictargs['truenumbelempop0reg0'] = 100
+    dictargs['truenumbelempop1reg0'] = 100
+    dictargs['truenumbelempop2reg0'] = 100
     
     dictargs['truenumbpopl'] = 3
     dictargs['refrlegdpopl'] = ['AGN', 'Disk MSP', 'GC MSP']
@@ -1095,6 +1095,7 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargs['numbsidecart'] = 100
     
     dictargs['numbswep'] = 10000
+    dictargs['inittype'] = 'refr'
     dictargs['numbsamp'] = 100
     
     listnamecnfgextn = ['nomi', 'parsloww', 'parsnone', \
@@ -1180,8 +1181,8 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['listprefhistfluxtype'] = ['line']
    
     dictargs['inittype'] = 'reco'
-    dictargs['numbswep'] = 10000
-    dictargs['numbsamp'] = 100
+    dictargs['numbswep'] = 1000
+    dictargs['numbsamp'] = 10
     
     dictargs['fittmaxmnumbelempop0reg0'] = 1000
     dictargs['proppsfp'] = False

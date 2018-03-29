@@ -614,7 +614,14 @@ def pcat_errr(strgcnfgextnexec=None):
 def pcat_plot(strgcnfgextnexec=None):
   
     dictargs = {}
+    
+    dictargs['exprtype'] = 'chan'
+    dictargs['strgexpo'] = 'expochanhome7msc06000000.fits'
+    dictargs['elemtype'] = ['lghtpnts']
+    dictargs['truenumbelempop0reg0'] = 100
+    
     dictargs['mockonly'] = True
+    dictargs['makeplotinit'] = True
     dictargs['makeplotintr'] = True
     
     listnamecnfgextn = ['nomi']

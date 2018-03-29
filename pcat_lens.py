@@ -127,7 +127,7 @@ def pcat_lens_mock_trueminmdefs(strgcnfgextnexec=None):
     
     dictargsvari['truevlow']['trueminmdefs'] = 3e-4 / anglfact
     dictargsvari['trueloww']['trueminmdefs'] = 1e-3 / anglfact
-    dictargsvari['truenomi']['trueminmdefs'] = 3e-3 / anglfact
+    dictargsvari['nomi']['trueminmdefs'] = 3e-3 / anglfact
     dictargsvari['truehigh']['trueminmdefs'] = 1e-2 / anglfact
     dictargsvari['truevhig']['trueminmdefs'] = 3e-2 / anglfact
 

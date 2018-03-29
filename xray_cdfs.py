@@ -347,7 +347,8 @@ def pcat_chan_mock(strgcnfgextnexec=None):
                                   dictargs, \
                                   listnamecnfgextn, \
                                     
-                                  forcprev=True, \
+                                  namexaxi='prio', \
+                                  #forcprev=True, \
                                   #execpara=True, \
                                   
                                   strgcnfgextnexec=strgcnfgextnexec, \
@@ -361,7 +362,11 @@ def pcat_chan_mock_trueminmdlos(strgcnfgextnexec=None):
     dictargs['strgexpo'] = 'expochanhome7msc06000000.fits'
     dictargs['trueelemtype'] = ['lghtpntsagnntrue']
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
-    dictargs['priofactdoff'] = 0.
+    dictargs['priofactdoff'] = 0.5
+    
+    dictargs['numbswep'] = 10000
+    dictargs['inittype'] = 'refr'
+    dictargs['numbsamp'] = 100
     
     dictargs['truenumbelempop0reg0'] = 100
     dictargs['maxmnumbelempop0reg0'] = 400
@@ -371,7 +376,10 @@ def pcat_chan_mock_trueminmdlos(strgcnfgextnexec=None):
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     dictargsvari['loww']['trueminmdlos'] = 3e6
+    
     dictargsvari['nomi']['trueminmdlos'] = 1e7
+    dictargsvari['nomi']['checprio'] = True
+    
     dictargsvari['high']['trueminmdlos'] = 3e7
                 
     lablxaxi = r'$d_{los,min}$ [Mpc]'
