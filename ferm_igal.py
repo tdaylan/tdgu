@@ -1094,9 +1094,9 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
     
-    dictargs['numbswep'] = 10000
-    dictargs['inittype'] = 'refr'
-    dictargs['numbsamp'] = 100
+    dictargs['numbswep'] = 1000000
+    #dictargs['inittype'] = 'refr'
+    dictargs['numbsamp'] = 1000
     
     listnamecnfgextn = ['nomi', 'parsloww', 'parsnone', \
                         'truedark', 'truedarkparsloww', 'truedarkparsnone', \
@@ -1157,6 +1157,9 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
+                                  
+                                  forcprev=True, \
+
                                   listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
