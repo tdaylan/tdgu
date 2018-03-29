@@ -364,9 +364,8 @@ def pcat_chan_mock_trueminmdlos(strgcnfgextnexec=None):
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
     dictargs['priofactdoff'] = 0.5
     
-    dictargs['numbswep'] = 10000
-    dictargs['inittype'] = 'refr'
-    dictargs['numbsamp'] = 100
+    dictargs['numbswep'] = 1000
+    dictargs['numbsamp'] = 10
     
     dictargs['truenumbelempop0reg0'] = 100
     dictargs['maxmnumbelempop0reg0'] = 400
@@ -378,6 +377,7 @@ def pcat_chan_mock_trueminmdlos(strgcnfgextnexec=None):
     dictargsvari['loww']['trueminmdlos'] = 3e6
     
     dictargsvari['nomi']['trueminmdlos'] = 1e7
+    dictargsvari['nomi']['numbproc'] = 3
     dictargsvari['nomi']['checprio'] = True
     
     dictargsvari['high']['trueminmdlos'] = 3e7
