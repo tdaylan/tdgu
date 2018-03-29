@@ -1157,11 +1157,9 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
-                                  
-                                  forcprev=True, \
-
                                   listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
+                                  forcprev=True, \
                                  )
 
 
