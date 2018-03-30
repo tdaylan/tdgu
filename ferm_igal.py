@@ -1090,9 +1090,9 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
     
-    dictargs['numbswep'] = 1000000
+    dictargs['numbswep'] = 10000
     #dictargs['inittype'] = 'refr'
-    dictargs['numbsamp'] = 1000
+    dictargs['numbsamp'] = 100
     
     listnamecnfgextn = ['nomi', 'parsloww', 'parsnone', 'truedark', \
                         #'backwfou', 'backfour', 'popl', 'penalpridiff', \
@@ -1157,11 +1157,18 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['listprefhistfluxtype'] = ['line']
    
     dictargs['inittype'] = 'reco'
-    dictargs['numbswep'] = 2000000
-    dictargs['numbsamp'] = 2000
+    dictargs['numbswep'] = 100000
+    dictargs['numbswepplot'] = 10000
+    dictargs['numbsamp'] = 10
     
     dictargs['fittmaxmnumbelempop0reg0'] = 1000
-    dictargs['proppsfp'] = False
+    
+    dictargs['forcsavestat'] = True
+    dictargs['propbacp'] = False
+    dictargs['propcomp'] = False
+    dictargs['probtran'] = 0.
+    #dictargs['proppsfp'] = False
+    
     dictargs['initpsfprefr'] = True
     dictargs['maxmgangdata'] = 10. / anglfact
     dictargs['psfnevaltype'] = 'kern'
@@ -1183,7 +1190,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
-    dictargsvari['nomi']['checprio'] = True
+    #dictargsvari['nomi']['checprio'] = True
                    
     dictargsvari['parsnone']['priofactdoff'] = 0.
     

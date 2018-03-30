@@ -327,8 +327,9 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
     dictargs['priofactdoff'] = 0.
     
-    dictargs['numbswep'] = 1000000
-    dictargs['numbsamp'] = 1000
+    dictargs['numbswep'] = 10000
+    dictargs['inittype'] = 'refr'
+    dictargs['numbsamp'] = 10
     
     #dictargs['numbswep'] = 1000
     #dictargs['numbsamp'] = 10
@@ -524,6 +525,10 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['propcomp'] = False
     #dictargs['probtran'] = 0.
     #dictargs['spectype'] = ['colr']
+    
+    dictargs['numbswep'] = 100000
+    dictargs['numbswepplot'] = 10000
+    dictargs['numbsamp'] = 100
     
     if os.uname()[1] == 'fink1.rc.fas.harvard.edu' or os.uname()[1] == 'fink2.rc.fas.harvard.edu':
         dictargs['rtagmock'] = '20180308_082401_pcat_chan_mock_nomi_1000000'
