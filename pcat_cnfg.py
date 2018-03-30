@@ -18,11 +18,6 @@ def pcat_fittminmflux_fittparsnone(strgcnfgextnexec=None):
     dictargs['priofactdoff'] = 0.
     dictargs['truenumbelempop0reg0'] = 100
     dictargs['indxenerincl'] = array([2])
-    dictargs['proppsfp'] = True
-    dictargs['checprio'] = True
-    
-    dictargs['numbswep'] = 100000
-    dictargs['numbsamp'] = 100
     
     listnamecnfgextn = ['fittvlow', 'fittloww', 'fittnomi', 'fitthigh', 'fittvhig']
     dictargsvari = {}
@@ -77,10 +72,6 @@ def pcat_fittminmflux_fittparsnomi(strgcnfgextnexec=None):
     dictargs['elemtype'] = ['lghtpnts']
     dictargs['truenumbelempop0reg0'] = 100
     dictargs['indxenerincl'] = array([2])
-    dictargs['proppsfp'] = True
-    
-    #dictargs['numbswep'] = 1000000
-    #dictargs['numbsamp'] = 1000
     
     listnamecnfgextn = ['fittvlow', 'fittloww', 'fittnomi', 'fitthigh', 'fittvhig']
     dictargsvari = {}
@@ -123,10 +114,6 @@ def pcat_fittpars_trueback(strgcnfgextnexec=None):
     dictargs['truemaxmnumbelempop0reg0'] = 0
     dictargs['truenumbelempop0reg0'] = 0
     dictargs['indxenerincl'] = array([2])
-    dictargs['proppsfp'] = True
-    
-    #dictargs['numbswep'] = 1000000
-    #dictargs['numbsamp'] = 1000
     
     listnamecnfgextn = [ \
                         'parsnega', 'parsnone', 'parsloww', 'parsnomi', 'parshigh', \
@@ -171,10 +158,6 @@ def pcat_fittpars_truepnts(strgcnfgextnexec=None):
     dictargs['truenumbelempop0reg0'] = 100
     dictargs['minmflux'] = 1e-8
     dictargs['indxenerincl'] = array([2])
-    dictargs['proppsfp'] = True
-    
-    #dictargs['numbswep'] = 1000000
-    #dictargs['numbsamp'] = 1000
     
     listnamecnfgextn = [ \
                         'parsnega', 'parsnone', 'parsloww', 'parsnomi', 'parshigh', \
@@ -219,10 +202,6 @@ def pcat_fittpars_truepntsfittminmfluxloww(strgcnfgextnexec=None):
     dictargs['truenumbelempop0reg0'] = 100
     dictargs['fittminmflux'] = 1e-9
     dictargs['indxenerincl'] = array([2])
-    dictargs['proppsfp'] = True
-    
-    #dictargs['numbswep'] = 1000000
-    #dictargs['numbsamp'] = 1000
     
     listnamecnfgextn = [ \
                         'parsnega', 'parsnone', 'parsloww', 'parsnomi', 'parshigh', \
@@ -267,10 +246,6 @@ def pcat_fittpars_truepntsfittminmfluxhigh(strgcnfgextnexec=None):
     dictargs['truenumbelempop0reg0'] = 100
     dictargs['fittminmflux'] = 1e-8
     dictargs['indxenerincl'] = array([2])
-    dictargs['proppsfp'] = True
-    
-    #dictargs['numbswep'] = 1000000
-    #dictargs['numbsamp'] = 1000
     
     listnamecnfgextn = [ \
                         'parsnega', 'parsnone', 'parsloww', 'parsnomi', 'parshigh', \
@@ -316,10 +291,6 @@ def pcat_truenumbelem(strgcnfgextnexec=None):
     dictargs['fittmaxmnumbelempop0reg0'] = 1000
     dictargs['truemaxmnumbelempop0reg0'] = 1000
     dictargs['indxenerincl'] = array([2])
-    dictargs['proppsfp'] = True
-    
-    #dictargs['numbswep'] = 1000000
-    #dictargs['numbsamp'] = 1000
     
     listnamecnfgextn = ['numbvlow', 'numbloww', 'numbnomi', 'numbhigh', 'numbvhig']
     dictargsvari = {}
@@ -361,10 +332,6 @@ def pcat_trueminmflux(strgcnfgextnexec=None):
     dictargs['elemtype'] = ['lghtpnts']
     dictargs['truenumbelempop0reg0'] = 100
     dictargs['indxenerincl'] = array([2])
-    dictargs['proppsfp'] = True
-    
-    #dictargs['numbswep'] = 1000000
-    #dictargs['numbsamp'] = 1000
     
     listnamecnfgextn = [ \
                         'truevlow', 'trueloww', 'truenomi', 'truehigh', 'truevhig', \
@@ -476,11 +443,6 @@ def pcat_psfn(strgcnfgextnexec=None):
     dictargs['priofactdoff'] = 0.2
     dictargs['truenumbelempop0reg0'] = 10
     
-    dictargs['numbswep'] = 1000000
-    dictargs['numbsamp'] = 1000
-    dictargs['makeplot'] = False
-    
-    #oaxifree
     listnamecnfgextn = ['nomi', 'psfntfix', 'psfnwfix']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
