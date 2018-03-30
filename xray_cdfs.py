@@ -357,6 +357,49 @@ def pcat_chan_mock(strgcnfgextnexec=None):
                                  )
     
 
+def test_pcat_chan_mock(strgcnfgextnexec=None):
+   
+    dictargs = {}
+    dictargs['exprtype'] = 'chan'
+    dictargs['strgexpo'] = 'expochanhome7msc06000000.fits'
+    dictargs['trueelemtype'] = ['lghtpntsagnntrue']
+    dictargs['fittelemtype'] = ['lghtpntsagnnassc']
+    dictargs['priofactdoff'] = 0.
+    
+    dictargs['numbswep'] = 10000
+    dictargs['inittype'] = 'refr'
+    dictargs['numbsamp'] = 10
+    dictargs['numbproc'] = 5
+    
+    dictargs['makeplotfinlprio'] = False
+    dictargs['makeplotfinlpost'] = False
+    
+    #dictargs['numbswep'] = 1000
+    #dictargs['numbsamp'] = 10
+
+    dictargs['truenumbelempop0reg0'] = 100
+    dictargs['maxmnumbelempop0reg0'] = 400
+    
+    listnamecnfgextn = ['nomi']
+    dictargsvari = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
+    dictargsvari['nomi']['checprio'] = True
+                
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  listnamecnfgextn, \
+                                    
+                                  namexaxi='prio', \
+                                  forcprev=True, \
+                                  #forcprev=True, \
+                                  #execpara=True, \
+                                  
+                                  strgcnfgextnexec=strgcnfgextnexec, \
+                                 )
+    
+
 def pcat_chan_mock_trueminmdlos(strgcnfgextnexec=None):
    
     dictargs = {}
@@ -379,7 +422,6 @@ def pcat_chan_mock_trueminmdlos(strgcnfgextnexec=None):
     dictargsvari['loww']['trueminmdlos'] = 3e6
     
     dictargsvari['nomi']['trueminmdlos'] = 1e7
-    dictargsvari['nomi']['numbproc'] = 3
     dictargsvari['nomi']['checprio'] = True
     
     dictargsvari['high']['trueminmdlos'] = 3e7
