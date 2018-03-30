@@ -327,8 +327,8 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
     dictargs['priofactdoff'] = 0.
     
-    dictargs['numbswep'] = 1000
-    dictargs['numbsamp'] = 100
+    dictargs['numbswep'] = 1000000
+    dictargs['numbsamp'] = 1000
     
     #dictargs['numbswep'] = 1000
     #dictargs['numbsamp'] = 10
