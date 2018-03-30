@@ -264,7 +264,6 @@ def pcat_chan_mock_spmr(strgcnfgextnexec=None):
     dictargs['truesbrt'] = array([5e-7])
     dictargs['numbelempop0reg0'] = 1
     dictargs['minmnumbelempop0reg0'] = 1
-    dictargs['priofactdoff'] = 0.
     dictargs['strgexpo'] = 1e9
     dictargs['maxmgangdata'] = maxmgangdata
     dictargs['numbsidecart'] = numbsidecart
@@ -272,7 +271,7 @@ def pcat_chan_mock_spmr(strgcnfgextnexec=None):
     dictargs['probspmr'] = 1.
     dictargs['indxenerincl'] = array([0])
     
-    listnamecnfgextn = ['free', 'nomi', 'parsnomi', 'brgt', 'fain', 'psfn']
+    listnamecnfgextn = ['free', 'nomi', 'parsnone', 'parshigh', 'brgt', 'fain', 'psfn']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
@@ -283,7 +282,9 @@ def pcat_chan_mock_spmr(strgcnfgextnexec=None):
     dictargsvari['free']['probtran'] = 0.4
     dictargsvari['free']['probspmr'] = 0.3
     
-    dictargsvari['parsnomi']['priofactdoff'] = 1.
+    dictargsvari['parsnone']['priofactdoff'] = 0.5
+    
+    dictargsvari['parshigh']['priofactdoff'] = 1.
     
     dictargsvari['brgt']['truefluxpop0reg00000'] = 3e-7
     
@@ -325,7 +326,6 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictargs['strgexpo'] = 'expochanhome7msc06000000.fits'
     dictargs['trueelemtype'] = ['lghtpntsagnntrue']
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
-    dictargs['priofactdoff'] = 0.
     
     dictargs['numbswep'] = 10000
     dictargs['inittype'] = 'refr'
@@ -364,7 +364,6 @@ def test_pcat_chan_mock(strgcnfgextnexec=None):
     dictargs['strgexpo'] = 'expochanhome7msc06000000.fits'
     dictargs['trueelemtype'] = ['lghtpntsagnntrue']
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
-    dictargs['priofactdoff'] = 0.
     
     dictargs['numbswep'] = 10000
     dictargs['inittype'] = 'refr'
@@ -407,7 +406,6 @@ def pcat_chan_mock_trueminmdlos(strgcnfgextnexec=None):
     dictargs['strgexpo'] = 'expochanhome7msc06000000.fits'
     dictargs['trueelemtype'] = ['lghtpntsagnntrue']
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
-    dictargs['priofactdoff'] = 0.5
     
     dictargs['numbswep'] = 1000
     dictargs['numbsamp'] = 10
@@ -453,7 +451,6 @@ def pcat_chan_mock_truemaxmdlos(strgcnfgextnexec=None):
     dictargs['strgexpo'] = 'expochanhome7msc06000000.fits'
     dictargs['trueelemtype'] = ['lghtpntsagnntrue']
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
-    dictargs['priofactdoff'] = 0.
     
     dictargs['truenumbelempop0reg0'] = 100
     dictargs['maxmnumbelempop0reg0'] = 400
@@ -484,7 +481,6 @@ def pcat_chan_mock_trueminmlum0(strgcnfgextnexec=None):
     dictargs['strgexpo'] = 'expochanhome7msc06000000.fits'
     dictargs['trueelemtype'] = ['lghtpntsagnntrue']
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
-    dictargs['priofactdoff'] = 0.
     
     dictargs['truenumbelempop0reg0'] = 100
     dictargs['maxmnumbelempop0reg0'] = 400
@@ -515,7 +511,6 @@ def pcat_chan_mock_truemaxmlum0(strgcnfgextnexec=None):
     dictargs['strgexpo'] = 'expochanhome7msc06000000.fits'
     dictargs['trueelemtype'] = ['lghtpntsagnntrue']
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
-    dictargs['priofactdoff'] = 0.
     
     dictargs['truenumbelempop0reg0'] = 100
     dictargs['maxmnumbelempop0reg0'] = 400
@@ -577,7 +572,6 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     else:
         dictargs['rtagmock'] = '20180205_184023_pcat_chan_mock_nomi_100000'
     dictargs['savestat'] = True
-    dictargs['priofactdoff'] = 0.
     
     listnamecnfgextn = []
     listnamecnfgextn += ['home2msc0300none', 'home4msc0300none', 'home7msc0300none']
