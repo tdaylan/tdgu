@@ -525,7 +525,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['spectype'] = ['colr']
     
     if os.uname()[1] == 'fink1.rc.fas.harvard.edu' or os.uname()[1] == 'fink2.rc.fas.harvard.edu':
-        dictargs['rtagmock'] = '20180301_131911_pcat_chan_mock_nomi_1000000'
+        dictargs['rtagmock'] = '20180308_082401_pcat_chan_mock_nomi_1000000'
     else:
         dictargs['rtagmock'] = '20180205_184023_pcat_chan_mock_nomi_100000'
     dictargs['savestat'] = True
