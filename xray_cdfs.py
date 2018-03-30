@@ -327,9 +327,9 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictargs['trueelemtype'] = ['lghtpntsagnntrue']
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
     
-    dictargs['numbswep'] = 10000
-    dictargs['inittype'] = 'refr'
-    dictargs['numbsamp'] = 10
+    dictargs['numbswep'] = 1000000
+    #dictargs['inittype'] = 'refr'
+    dictargs['numbsamp'] = 1000
     
     #dictargs['numbswep'] = 1000
     #dictargs['numbsamp'] = 10
