@@ -1005,11 +1005,7 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     
     dictargs = {}
     dictargs['truemaxmnumbelempop0reg0'] = 100
-    dictargs['truemaxmnumbelempop1reg0'] = 100
-    dictargs['truemaxmnumbelempop2reg0'] = 100
     dictargs['truenumbelempop0reg0'] = 100
-    dictargs['truenumbelempop1reg0'] = 100
-    dictargs['truenumbelempop2reg0'] = 100
     
     dictargs['listnameback'] = ['isot']
     dictargs['backtype'] = [[1.]]
