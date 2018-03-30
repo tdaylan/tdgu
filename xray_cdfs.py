@@ -568,7 +568,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     dictargs['numbsamp'] = 100
     
     if os.uname()[1] == 'fink1.rc.fas.harvard.edu' or os.uname()[1] == 'fink2.rc.fas.harvard.edu':
-        dictargs['rtagmock'] = '20180330_153506_pcat_chan_mock_nomi_10000'
+        dictargs['rtagmock'] = '20180330_163711_pcat_chan_mock_nomi_10000'
     else:
         dictargs['rtagmock'] = '20180205_184023_pcat_chan_mock_nomi_100000'
     dictargs['savestat'] = True
