@@ -1157,8 +1157,8 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['listprefhistfluxtype'] = ['line']
    
     dictargs['inittype'] = 'reco'
-    dictargs['numbswep'] = 100000
-    dictargs['numbswepplot'] = 10000
+    dictargs['numbswep'] = 10000
+    dictargs['numbswepplot'] = 1000
     dictargs['numbsamp'] = 10
     
     dictargs['fittmaxmnumbelempop0reg0'] = 1000
@@ -1169,7 +1169,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['probtran'] = 0.
     #dictargs['proppsfp'] = False
     
-    dictargs['initpsfprefr'] = True
+    #dictargs['initpsfprefr'] = True
     dictargs['maxmgangdata'] = 10. / anglfact
     dictargs['psfnevaltype'] = 'kern'
     dictargs['forccart'] = True
