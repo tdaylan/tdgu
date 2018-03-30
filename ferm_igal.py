@@ -1244,6 +1244,8 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
                                   dictargs, \
                                   listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
+                                  
+                                  forcprev=True, \
                                  )
     
 
