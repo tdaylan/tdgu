@@ -1013,7 +1013,7 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     dictargs['refrlegdpopl'] = ['PS']
     dictargs['trueelemtype'] = ['lghtpnts']
     dictargs['truespatdisttype'] = ['self']
-    dictargs['truespectype'] = ['powr']
+    dictargs['spectype'] = ['powr']
     dictargs['psfnevaltype'] = 'kern'
     dictargs['trueelemregitype'] = [True]
     dictargs['proppsfp'] = False
@@ -1023,6 +1023,16 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     dictargs['fittspatdisttype'] = ['self']
     #dictargs['fittspectype'] = ['colr']
     dictargs['fittmaxmnumbelempop0reg0'] = 1000
+    
+    #dictargs['strgexprsbrt'] = 'sbrtfermrec8pntsigal0256.fits'
+    #dictargs['spectype'] = ['colr']
+    #dictargs['listnameback'] = ['isot', 'fdfm', 'dark']
+    #dictargs['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']]
+    #dictargs['psfnevaltype'] = 'kern'
+    
+    dictargs['forccart'] = True
+    dictargs['pixltype'] = 'cart'
+    dictargs['numbsidecart'] = 100
     
     #dictargs['forccart'] = True
     #dictargs['pixltype'] = 'cart'
