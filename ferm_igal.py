@@ -1090,9 +1090,9 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
     
-    dictargs['numbswep'] = 10000
+    #dictargs['numbswep'] = 1000000
     #dictargs['inittype'] = 'refr'
-    dictargs['numbsamp'] = 100
+    #dictargs['numbsamp'] = 100
     
     listnamecnfgextn = ['nomi', 'parsloww', 'parsnone', 'truedark', \
                         #'backwfou', 'backfour', 'popl', 'penalpridiff', \
