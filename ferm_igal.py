@@ -1193,7 +1193,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['numbsidecart'] = 100
     
     dictargs['numbswep'] = 5000000
-    dictargs['numbsamp'] = 1000
+    dictargs['numbsamp'] = 5000
     
     #dictargs['probtran'] = 0.
     #dictargs['propcomp'] = False
