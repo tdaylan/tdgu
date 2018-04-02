@@ -1047,7 +1047,7 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
-    dictargsvari['nomi']['checprio'] = True
+    #dictargsvari['nomi']['checprio'] = True
     
     dictargsvari['parsloww']['priofactdoff'] = 0.5
 
