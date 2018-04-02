@@ -1182,7 +1182,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     #dictargs['propbacp'] = False
     #dictargs['propcomp'] = False
     #dictargs['probtran'] = 0.
-    #dictargs['proppsfp'] = False
+    dictargs['proppsfp'] = False
     
     #dictargs['initpsfprefr'] = True
     dictargs['maxmgangdata'] = 10. / anglfact
@@ -1191,13 +1191,16 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
     
+    dictargs['numbswep'] = 5000000
+    dictargs['numbsamp'] = 1000
+    
     #dictargs['probtran'] = 0.
     #dictargs['propcomp'] = False
     
     #dictargs['forcsavestat'] = True
     
-    listnamecnfgextn = ['nomi', 'parsloww', 'parsnone', \
-                        'darknone', 'exce', 'excefixd', 'rofilarg', 'mask', 'isotfixd', 'heal', 'rec7', \
+    listnamecnfgextn = ['chec', 'nomi', 'parsloww', 'parslowr', 'parsvlow', 'parsnone', 'darknone', 'darknoneparsnone', 'mask', 'maskparsnone', \
+                        #'darknone', 'exce', 'excefixd', 'rofilarg', 'mask', 'isotfixd', 'heal', 'rec7', \
                         #'backtemp', 'psfnvari', 'backsmth', \
                         #'backwfou', 'backfour', 'popl', \
                         ]
@@ -1205,43 +1208,55 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
-    #dictargsvari['nomi']['checprio'] = True
+    dictargsvari['chec']['checprio'] = True
                    
-    dictargsvari['parsnone']['priofactdoff'] = 0.
+    dictargsvari['parsloww']['priofactdoff'] = 0.75
     
-    dictargsvari['parsloww']['priofactdoff'] = 0.5
+    dictargsvari['parslowr']['priofactdoff'] = 0.5
+    
+    dictargsvari['parsvlow']['priofactdoff'] = 0.25
+    
+    dictargsvari['parsnone']['priofactdoff'] = 0.
     
     dictargsvari['darknone']['listnameback'] = ['isot', 'fdfm']
     dictargsvari['darknone']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
     
-    dictargsvari['exce']['numbswep'] = 100000
-    dictargsvari['exce']['numbsamp'] = 100
-    dictargsvari['exce']['inittype'] = 'refr'
-    dictargsvari['exce']['listnameback'] = ['isot', 'fdfm']
-    dictargsvari['exce']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
-    
-    dictargsvari['excefixd']['maxmgangdata'] = 5. / anglfact
-    dictargsvari['excefixd']['numbswep'] = 1000000
-    dictargsvari['excefixd']['numbsamp'] = 100
-    dictargsvari['excefixd']['probtran'] = 0.
-    dictargsvari['excefixd']['probcomp'] = False
-    dictargsvari['excefixd']['inittype'] = 'reco'
-    dictargsvari['excefixd']['forcsavestat'] = True
-    dictargsvari['excefixd']['listnameback'] = ['isot', 'fdfm']
-    dictargsvari['excefixd']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
-    
-    dictargsvari['rofilarg']['maxmgangdata'] = 15. / anglfact
+    dictargsvari['darknoneparsnone']['listnameback'] = ['isot', 'fdfm']
+    dictargsvari['darknoneparsnone']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
+    dictargsvari['darknoneparsnone']['priofactdoff'] = 0.
     
     dictargsvari['mask']['mask'] = array([-30., 30., -2., 2.]) / 180. * pi
     dictargsvari['mask']['listmask'] = [['hstr', -2. / anglfact, 2. / anglfact]]
     
-    dictargsvari['isotfixd']['initbacpbac0ene0'] = 4e-6
-    dictargsvari['isotfixd']['propbacpbac0ene0'] = False
+    dictargsvari['maskparsnone']['mask'] = array([-30., 30., -2., 2.]) / 180. * pi
+    dictargsvari['maskparsnone']['listmask'] = [['hstr', -2. / anglfact, 2. / anglfact]]
+    dictargsvari['maskparsnone']['priofactdoff'] = 0.
     
-    dictargsvari['heal']['pixltype'] = 'heal'
-    dictargsvari['heal']['forccart'] = False
+    #dictargsvari['exce']['numbswep'] = 10000
+    #dictargsvari['exce']['numbsamp'] = 100
+    #dictargsvari['exce']['inittype'] = 'refr'
+    #dictargsvari['exce']['listnameback'] = ['isot', 'fdfm']
+    #dictargsvari['exce']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
+    #
+    #dictargsvari['excefixd']['maxmgangdata'] = 5. / anglfact
+    #dictargsvari['excefixd']['numbswep'] = 10000
+    #dictargsvari['excefixd']['numbsamp'] = 100
+    #dictargsvari['excefixd']['probtran'] = 0.
+    #dictargsvari['excefixd']['probcomp'] = False
+    #dictargsvari['excefixd']['inittype'] = 'reco'
+    #dictargsvari['excefixd']['forcsavestat'] = True
+    #dictargsvari['excefixd']['listnameback'] = ['isot', 'fdfm']
+    #dictargsvari['excefixd']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
     
-    dictargsvari['rec7']['strgexpo'] = 'expofermrec7pntsigal0256.fits'
+    #dictargsvari['rofilarg']['maxmgangdata'] = 15. / anglfact
+    
+    #dictargsvari['isotfixd']['initbacpbac0ene0'] = 4e-6
+    #dictargsvari['isotfixd']['propbacpbac0ene0'] = False
+    
+    #dictargsvari['heal']['pixltype'] = 'heal'
+    #dictargsvari['heal']['forccart'] = False
+    
+    #dictargsvari['rec7']['strgexpo'] = 'expofermrec7pntsigal0256.fits'
                  
     #dictargsvari['backtemp']['listnameback'] = ['isot', 'hydr', 'cmon', 'dustsfdd', 'dark', 'wise']
     #dictargsvari['backtemp']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'hydrpntssmthrec8.fits', 'cmonpntssmthrec8.fits', \
