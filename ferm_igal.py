@@ -1188,9 +1188,9 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     #dictargs['initpsfprefr'] = True
     dictargs['maxmgangdata'] = 10. / anglfact
     dictargs['psfnevaltype'] = 'kern'
-    dictargs['forccart'] = True
-    dictargs['pixltype'] = 'cart'
-    dictargs['numbsidecart'] = 100
+    #dictargs['forccart'] = True
+    #dictargs['pixltype'] = 'cart'
+    #dictargs['numbsidecart'] = 100
     
     dictargs['numbswep'] = 5000000
     dictargs['numbsamp'] = 5000
