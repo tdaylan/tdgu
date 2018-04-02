@@ -1003,6 +1003,8 @@ def pcat_ferm_mock_brek(strgcnfgextnexec=None):
 
 def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     
+    anglfact = 180. / pi
+    
     dictargs = {}
     dictargs['truemaxmnumbelempop0reg0'] = 400
     dictargs['truenumbelempop0reg0'] = 400
@@ -1012,6 +1014,7 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     dictargs['truenumbpopl'] = 1
     dictargs['refrlegdpopl'] = ['PS']
     dictargs['trueelemtype'] = ['lghtpnts']
+    dictargs['maxmgangdata'] = 10. / anglfact
     dictargs['truespatdisttype'] = ['self']
     dictargs['spectype'] = ['powr']
     dictargs['psfnevaltype'] = 'kern'
@@ -1038,9 +1041,10 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     #dictargs['pixltype'] = 'cart'
     #dictargs['numbsidecart'] = 100
     
-    dictargs['numbswep'] = 1000000
-    dictargs['numbsamp'] = 500000
-    dictargs['numbsamp'] = 1000
+    dictargs['numbswep'] = 1000
+    dictargs['inittype'] = 'refr'
+    #dictargs['numbsamp'] = 500000
+    dictargs['numbsamp'] = 10
     
     listnamecnfgextn = ['nomi', 'parsloww', 'parsnone', \
                        ]
@@ -1188,12 +1192,13 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     #dictargs['initpsfprefr'] = True
     dictargs['maxmgangdata'] = 10. / anglfact
     dictargs['psfnevaltype'] = 'kern'
-    #dictargs['forccart'] = True
-    #dictargs['pixltype'] = 'cart'
-    #dictargs['numbsidecart'] = 100
     
-    dictargs['numbswep'] = 5000000
-    dictargs['numbsamp'] = 5000
+    dictargs['forccart'] = True
+    dictargs['pixltype'] = 'cart'
+    dictargs['numbsidecart'] = 100
+    
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 10
     
     #dictargs['probtran'] = 0.
     #dictargs['propcomp'] = False
