@@ -1004,11 +1004,11 @@ def pcat_ferm_mock_brek(strgcnfgextnexec=None):
 def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     
     dictargs = {}
-    dictargs['truemaxmnumbelempop0reg0'] = 100
-    dictargs['truenumbelempop0reg0'] = 100
+    dictargs['truemaxmnumbelempop0reg0'] = 400
+    dictargs['truenumbelempop0reg0'] = 400
     
     dictargs['listnameback'] = ['isot']
-    dictargs['backtype'] = [[1.]]
+    dictargs['backtype'] = [[10.]]
     dictargs['truenumbpopl'] = 1
     dictargs['refrlegdpopl'] = ['PS']
     dictargs['trueelemtype'] = ['lghtpnts']
@@ -1039,6 +1039,7 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     #dictargs['numbsidecart'] = 100
     
     dictargs['numbswep'] = 1000000
+    dictargs['numbsamp'] = 500000
     dictargs['numbsamp'] = 1000
     
     listnamecnfgextn = ['nomi', 'parsloww', 'parsnone', \
