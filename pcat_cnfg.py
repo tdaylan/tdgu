@@ -475,53 +475,75 @@ def pcat_psfn(strgcnfgextnexec=None):
     
 def pcat_anglassc(strgcnfgextnexec=None):
     
+    anglfact = 180. / pi
+    
     dictargs = {}
-    dictargs['exprtype'] = 'sdyn'
-    dictargs['backtype'] = [['tgasback.fits']]
-    dictargs['numbsidecart'] = 200
-    dictargs['strgexpo'] = 1.
-    dictargs['elemtype'] = ['clus']
+    dictargs['truemaxmnumbelempop0reg0'] = 400
+    dictargs['truenumbelempop0reg0'] = 400
+    
+    dictargs['listnameback'] = ['isot']
+    dictargs['backtype'] = [[10.]]
+    dictargs['truenumbpopl'] = 1
+    dictargs['refrlegdpopl'] = ['PS']
+    dictargs['trueelemtype'] = ['lghtpnts']
+    dictargs['maxmgangdata'] = 10. / anglfact
+    dictargs['truespatdisttype'] = ['self']
+    dictargs['spectype'] = ['powr']
     dictargs['psfnevaltype'] = 'kern'
+    dictargs['trueelemregitype'] = [True]
+    dictargs['proppsfp'] = False
     
-    # temp
-    dictargs['numbswep'] = 1000000
+    dictargs['fittnumbpopl'] = 1
+    dictargs['fittelemtype'] = ['lghtpnts']
+    dictargs['fittspatdisttype'] = ['self']
+    #dictargs['fittspectype'] = ['colr']
+    dictargs['fittmaxmnumbelempop0reg0'] = 1000
+    
+    #dictargs['strgexprsbrt'] = 'sbrtfermrec8pntsigal0256.fits'
+    #dictargs['spectype'] = ['colr']
+    #dictargs['listnameback'] = ['isot', 'fdfm', 'dark']
+    #dictargs['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']]
+    #dictargs['psfnevaltype'] = 'kern'
+    
+    dictargs['forccart'] = True
+    dictargs['pixltype'] = 'cart'
+    dictargs['numbsidecart'] = 100
+    
+    #dictargs['forccart'] = True
+    #dictargs['pixltype'] = 'cart'
+    #dictargs['numbsidecart'] = 100
+    
+    dictargs['numbswep'] = 100000
+    dictargs['inittype'] = 'refr'
+    #dictargs['makeplotfinlpost'] = False
     dictargs['numbsamp'] = 1000
-    #dictargs['makeplot'] = False
     
-    #listnamecnfgextn = ['loww', 'nomi', 'high']
     listnamecnfgextn = ['vlow', 'loww', 'nomi', 'high', 'vhig']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
-   
-    dictargsvari['vlow']['anglassc'] = 0.001
     
-    dictargsvari['loww']['anglassc'] = 0.01
-   
-    dictargsvari['nomi']['anglassc'] = 0.1
-    
-    dictargsvari['high']['anglassc'] = 0.5
-    
-    dictargsvari['vhig']['anglassc'] = 1.
+    dictargsvari['vlow']['anglassc'] = 4. / anglfact
+    dictargsvari['loww']['anglassc'] = 2. / anglfact
+    dictargsvari['nomi']['anglassc'] = 1. / anglfact
+    dictargsvari['high']['anglassc'] = 0.5 / anglfact
+    dictargsvari['vhig']['anglassc'] = 0.2 / anglfact
     
     lablxaxi = r'$\theta_{asc}$ [deg]'
     scalxaxi = 'self'
     listtickxaxi = [tdpy.util.mexp(dictargsvari[namecnfgextn]['anglassc']) for namecnfgextn in listnamecnfgextn] 
     
     dictglob = pcat.main.initarry( \
-                        dictargsvari, \
-                        dictargs, \
-                        listnamecnfgextn, \
-                        strgcnfgextnexec=strgcnfgextnexec, \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  listnamecnfgextn, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
                         
-                        #forcprev=True, \
-                        
-                        namexaxi='anglassc', \
-                        lablxaxi=lablxaxi, \
-                        scalxaxi=scalxaxi, \
-                        listtickxaxi=listtickxaxi, \
-                        
-                       )
+                                  namexaxi='anglassc', \
+                                  lablxaxi=lablxaxi, \
+                                  scalxaxi=scalxaxi, \
+                                  listtickxaxi=listtickxaxi, \
+                                 )
 
 
 def pcat_errr(strgcnfgextnexec=None):
