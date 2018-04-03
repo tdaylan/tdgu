@@ -1058,11 +1058,22 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
 
     dictargsvari['parsnone']['priofactdoff'] = 0.
     
+    lablxaxi = r'$\alpha_p$'
+    scalxaxi = 'self'
+    listtickxaxi = [tdpy.util.mexp(dictargsvari[namecnfgextn]['priofactdoff']) for namecnfgextn in listnamecnfgextn] 
+    
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
+                                  
+                                  forcprev=True, \
+                                  
+                                  namexaxi='anglassc', \
+                                  lablxaxi=lablxaxi, \
+                                  scalxaxi=scalxaxi, \
+                                  listtickxaxi=listtickxaxi, \
                                  )
 
 
