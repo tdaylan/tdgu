@@ -1208,8 +1208,8 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
     
-    dictargs['numbswep'] = 10000
-    dictargs['numbsamp'] = 10
+    #dictargs['numbswep'] = 10000
+    #dictargs['numbsamp'] = 10
     
     #dictargs['probtran'] = 0.
     #dictargs['propcomp'] = False
