@@ -1209,15 +1209,15 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
     
-    #dictargs['numbswep'] = 10000
-    #dictargs['numbsamp'] = 10
+    dictargs['numbswep'] = 2000000
+    dictargs['numbsamp'] = 2000
     
     #dictargs['probtran'] = 0.
     #dictargs['propcomp'] = False
     
     #dictargs['forcsavestat'] = True
     
-    listnamecnfgextn = ['chec', 'nomi', 'parsloww', 'parslowr', 'parsvlow', 'parsnone', 'darknone', 'darknoneparsnone', 'mask', 'maskparsnone', \
+    listnamecnfgextn = ['chec', 'nomi', 'parsvhig', 'parsloww', 'parslowr', 'parsvlow', 'parsnone', 'darknone', 'darknoneparsnone', 'mask', 'maskparsnone', \
                         #'darknone', 'exce', 'excefixd', 'rofilarg', 'mask', 'isotfixd', 'heal', 'rec7', \
                         #'backtemp', 'psfnvari', 'backsmth', \
                         #'backwfou', 'backfour', 'popl', \
@@ -1228,6 +1228,8 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     
     dictargsvari['chec']['checprio'] = True
                    
+    dictargsvari['parsvhig']['priofactdoff'] = 10.
+    
     dictargsvari['parsloww']['priofactdoff'] = 0.75
     
     dictargsvari['parslowr']['priofactdoff'] = 0.5
