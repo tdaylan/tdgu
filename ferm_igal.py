@@ -1053,6 +1053,7 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
         dictargsvari[namecnfgextn] = {}
     
     #dictargsvari['nomi']['checprio'] = True
+    dictargsvari['nomi']['priofactdoff'] = 1.
     
     dictargsvari['parsloww']['priofactdoff'] = 0.5
 
@@ -1070,7 +1071,7 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
                                   
                                   forcprev=True, \
                                   
-                                  namexaxi='anglassc', \
+                                  namexaxi='priofactdoff', \
                                   lablxaxi=lablxaxi, \
                                   scalxaxi=scalxaxi, \
                                   listtickxaxi=listtickxaxi, \
