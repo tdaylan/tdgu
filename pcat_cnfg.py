@@ -531,7 +531,7 @@ def pcat_anglassc(strgcnfgextnexec=None):
     
     lablxaxi = r'$\theta_{asc}$ [deg]'
     scalxaxi = 'self'
-    listtickxaxi = [tdpy.util.mexp(dictargsvari[namecnfgextn]['anglassc']) for namecnfgextn in listnamecnfgextn] 
+    listtickxaxi = [tdpy.util.mexp(anglfact * dictargsvari[namecnfgextn]['anglassc']) for namecnfgextn in listnamecnfgextn] 
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
