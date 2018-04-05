@@ -1043,10 +1043,10 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     #dictargs['pixltype'] = 'cart'
     #dictargs['numbsidecart'] = 100
     
-    dictargs['numbswep'] = 1000000
+    dictargs['numbswep'] = 2000000
     dictargs['inittype'] = 'refr'
     #dictargs['numbsamp'] = 500000
-    dictargs['numbsamp'] = 2000
+    dictargs['numbsamp'] = 5000
     
     listnamecnfgextn = ['nomi', 'parsloww', 'parsnone', \
                        ]
