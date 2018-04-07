@@ -960,38 +960,93 @@ def test_ferm_bubb(strgcnfgextnexec=None):
 
 
 def pcat_ferm_mock_brek(strgcnfgextnexec=None):
-     
+    
+    anglfact = 180. / pi
+    
     dictargs = {}
-    dictargs['truemaxmnumbelempop0reg0'] = 100
+    dictargs['truemaxmnumbelempop0reg0'] = 400
+    dictargs['truenumbelempop0reg0'] = 100
+    
+    dictargs['listnameback'] = ['isot']
+    dictargs['backtype'] = [[10.]]
+    dictargs['truenumbpopl'] = 1
+    dictargs['refrlegdpopl'] = ['PS']
+    dictargs['trueelemtype'] = ['lghtpnts']
+    dictargs['maxmgangdata'] = 10. / anglfact
+    dictargs['minmflux'] = 3e-10
+    dictargs['anglassc'] = 1. / anglfact
+    dictargs['truespatdisttype'] = ['self']
+    dictargs['spectype'] = ['powr']
+    dictargs['psfnevaltype'] = 'kern'
+    dictargs['trueelemregitype'] = [True]
+    dictargs['proppsfp'] = False
+    
+    dictargs['fittnumbpopl'] = 1
+    dictargs['fittelemtype'] = ['lghtpnts']
+    dictargs['fittspatdisttype'] = ['self']
+    #dictargs['fittspectype'] = ['colr']
+    dictargs['fittmaxmnumbelempop0reg0'] = 1000
+    
+    #dictargs['strgexprsbrt'] = 'sbrtfermrec8pntsigal0256.fits'
+    #dictargs['spectype'] = ['colr']
+    #dictargs['listnameback'] = ['isot', 'fdfm', 'dark']
+    #dictargs['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']]
+    #dictargs['psfnevaltype'] = 'kern'
     
     dictargs['forccart'] = True
     dictargs['pixltype'] = 'cart'
-    dictargs['fluxdisttype'] = ['dpowslopbrek']
-    dictargs['elemtype'] = ['lghtpnts']
     dictargs['numbsidecart'] = 100
+    
+    #dictargs['forccart'] = True
+    #dictargs['pixltype'] = 'cart'
+    #dictargs['numbsidecart'] = 100
+    
+    dictargs['fluxdisttype'] = ['dpowslopbrek']
     dictargs['truefluxdistslopupprpop0'] = 1.5
     dictargs['truefluxdistsloplowrpop0'] = 2.
     dictargs['truefluxdistbrekpop0'] = 3e-8
-    #dictargs['listnameback'] = ['isot']
     dictargs['backtype'] = [[1e1]]
+    
+    dictargs['numbswep'] = 1000000
+    dictargs['inittype'] = 'refr'
+    #dictargs['numbswepplot'] = 5000
+    dictargs['numbsamp'] = 5000
     
     # temp
     #dictargs['mockonly'] = True
     
-    listnamecnfgextn = ['brekloww', 'brekhigh', 'nomi', 'brekstep', 'brekflat', 'brekdown']
+    listnamecnfgextn = [ \
+                        'brekloww', 'breklowwparsnone', \
+                        'brekhigh', 'brekhighparsnone', \
+                        'nomi', 'parsnone', \
+                        'brekstep', 'brekstepparsnone', \
+                        'brekflat', 'brekflatparsnone', \
+                        'brekdown', 'brekdownparsnone', \
+                       ]
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
+    dictargsvari['parsnone']['priofactdoff'] = 0.
     
     dictargsvari['brekloww']['truefluxdistbrekpop0'] = 1e-8
+    dictargsvari['breklowwparsnone']['truefluxdistbrekpop0'] = 1e-8
+    dictargsvari['breklowwparsnone']['priofactdoff'] = 0.
     
     dictargsvari['brekhigh']['truefluxdistbrekpop0'] = 1e-7
+    dictargsvari['brekhighparsnone']['truefluxdistbrekpop0'] = 1e-7
+    dictargsvari['brekhighparsnone']['priofactdoff'] = 0.
     
     dictargsvari['brekstep']['truefluxdistsloplowrpop0'] = 2.5
+    dictargsvari['brekstepparsnone']['truefluxdistsloplowrpop0'] = 2.5
+    dictargsvari['brekstepparsnone']['priofactdoff'] = 0.
     
     dictargsvari['brekflat']['truefluxdistsloplowrpop0'] = 1.5
+    dictargsvari['brekflatparsnone']['truefluxdistsloplowrpop0'] = 1.5
+    dictargsvari['brekflatparsnone']['priofactdoff'] = 0.
     
     dictargsvari['brekdown']['truefluxdistsloplowrpop0'] = 1.1
+    dictargsvari['brekdownparsnone']['truefluxdistsloplowrpop0'] = 1.1
+    dictargsvari['brekdownparsnone']['priofactdoff'] = 0.
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -1007,7 +1062,7 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     
     dictargs = {}
     dictargs['truemaxmnumbelempop0reg0'] = 400
-    dictargs['truenumbelempop0reg0'] = 400
+    dictargs['truenumbelempop0reg0'] = 100
     
     dictargs['listnameback'] = ['isot']
     dictargs['backtype'] = [[10.]]
@@ -1045,10 +1100,11 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     
     dictargs['numbswep'] = 1000000
     dictargs['inittype'] = 'refr'
-    #dictargs['numbsamp'] = 500000
+    #dictargs['numbswepplot'] = 5000
     dictargs['numbsamp'] = 5000
     
-    listnamecnfgextn = ['nomi', 'parsloww', 'parsnone', \
+    listnamecnfgextn = [ \
+                        'nomi', 'parsloww', 'parsnone', 'trueback', 'truebackparsnone', \
                        ]
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
@@ -1060,7 +1116,13 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     dictargsvari['parsloww']['priofactdoff'] = 0.5
 
     dictargsvari['parsnone']['priofactdoff'] = 0.
-    
+   
+    dictargsvari['trueback']['truenumbelempop0reg0'] = 0
+    dictargsvari['trueback']['priofactdoff'] = 1.
+
+    dictargsvari['truebackparsnone']['truenumbelempop0reg0'] = 0
+    dictargsvari['truebackparsnone']['priofactdoff'] = 0.
+
     lablxaxi = r'$\alpha_p$'
     scalxaxi = 'self'
     listtickxaxi = [tdpy.util.mexp(dictargsvari[namecnfgextn]['priofactdoff']) for namecnfgextn in listnamecnfgextn] 
