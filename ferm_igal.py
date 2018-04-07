@@ -1353,7 +1353,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     #dictargs['propbacp'] = False
     #dictargs['propcomp'] = False
     #dictargs['probtran'] = 0.
-    dictargs['proppsfp'] = False
+    #dictargs['proppsfp'] = False
     
     #dictargs['initpsfprefr'] = True
     dictargs['maxmgangdata'] = 10. / anglfact
@@ -1364,7 +1364,9 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['numbsidecart'] = 100
     
     dictargs['numbswep'] = 1000000
-    dictargs['numbsamp'] = 1000
+    dictargs['numbburn'] = 0
+    dictargs['numbswepplot'] = 5000
+    dictargs['numbsamp'] = 100
     
     #dictargs['probtran'] = 0.
     #dictargs['propcomp'] = False
