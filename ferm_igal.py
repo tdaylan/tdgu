@@ -959,6 +959,94 @@ def test_ferm_bubb(strgcnfgextnexec=None):
                                  )
 
 
+def pcat_ferm_mock_crow(strgcnfgextnexec=None):
+    
+    anglfact = 180. / pi
+    
+    dictargs = {}
+    dictargs['truemaxmnumbelempop0reg0'] = 400
+    dictargs['truenumbelempop0reg0'] = 100
+    
+    dictargs['listnameback'] = ['isot']
+    dictargs['backtype'] = [[10.]]
+    dictargs['truenumbpopl'] = 1
+    dictargs['refrlegdpopl'] = ['PS']
+    dictargs['trueelemtype'] = ['lghtpnts']
+    dictargs['minmflux'] = 3e-10
+    dictargs['anglassc'] = 1. / anglfact
+    dictargs['truespatdisttype'] = ['self']
+    dictargs['spectype'] = ['powr']
+    dictargs['psfnevaltype'] = 'kern'
+    dictargs['trueelemregitype'] = [True]
+    dictargs['proppsfp'] = False
+    
+    dictargs['fittnumbpopl'] = 1
+    dictargs['fittelemtype'] = ['lghtpnts']
+    dictargs['fittspatdisttype'] = ['self']
+    #dictargs['fittspectype'] = ['colr']
+    dictargs['fittmaxmnumbelempop0reg0'] = 1000
+    
+    #dictargs['strgexprsbrt'] = 'sbrtfermrec8pntsigal0256.fits'
+    #dictargs['spectype'] = ['colr']
+    #dictargs['listnameback'] = ['isot', 'fdfm', 'dark']
+    #dictargs['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']]
+    #dictargs['psfnevaltype'] = 'kern'
+    
+    dictargs['forccart'] = True
+    dictargs['pixltype'] = 'cart'
+    dictargs['numbsidecart'] = 100
+    
+    #dictargs['forccart'] = True
+    #dictargs['pixltype'] = 'cart'
+    #dictargs['numbsidecart'] = 100
+    
+    dictargs['numbswep'] = 1000000
+    dictargs['inittype'] = 'refr'
+    #dictargs['numbswepplot'] = 5000
+    dictargs['numbsamp'] = 5000
+    
+    # temp
+    #dictargs['mockonly'] = True
+    
+    listnamecnfgextn = [ \
+                        'vlow', 'vlowparsnone', \
+                        'loww', 'lowwparsnone', \
+                        'nomi', 'nomiparsnone', \
+                        'high', 'highparsnone', \
+                        'vhig', 'vhigparsnone', \
+                       ]
+    dictargsvari = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
+    
+    dictargsvari['vlow']['maxmgangdata'] = 20. / anglfact
+    dictargsvari['vlowparsnone']['maxmgangdata'] = 20. / anglfact
+    dictargsvari['vlowparsnone']['priofactdoff'] = 0.
+    
+    dictargsvari['loww']['maxmgangdata'] = 14. / anglfact
+    dictargsvari['lowwparsnone']['maxmgangdata'] = 14. / anglfact
+    dictargsvari['lowwparsnone']['priofactdoff'] = 0.
+    
+    dictargsvari['nomi']['maxmgangdata'] = 10. / anglfact
+    dictargsvari['nomiparsnone']['maxmgangdata'] = 10. / anglfact
+    dictargsvari['nomiparsnone']['priofactdoff'] = 0.
+    
+    dictargsvari['high']['maxmgangdata'] = 7. / anglfact
+    dictargsvari['highparsnone']['maxmgangdata'] = 7. / anglfact
+    dictargsvari['highparsnone']['priofactdoff'] = 0.
+    
+    dictargsvari['vhig']['maxmgangdata'] = 5. / anglfact
+    dictargsvari['vhigparsnone']['maxmgangdata'] = 5. / anglfact
+    dictargsvari['vhigparsnone']['priofactdoff'] = 0.
+    
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  listnamecnfgextn, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
+                                 )
+
+
 def pcat_ferm_mock_brek(strgcnfgextnexec=None):
     
     anglfact = 180. / pi
