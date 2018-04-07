@@ -1098,7 +1098,7 @@ def pcat_ferm_mock_brek(strgcnfgextnexec=None):
     dictargs['numbswep'] = 1000000
     dictargs['inittype'] = 'refr'
     #dictargs['numbswepplot'] = 5000
-    dictargs['numbsamp'] = 5000
+    dictargs['numbsamp'] = 1000
     
     # temp
     #dictargs['mockonly'] = True
@@ -1362,7 +1362,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['numbsidecart'] = 100
     
     dictargs['numbswep'] = 1000000
-    dictargs['numbsamp'] = 5000
+    dictargs['numbsamp'] = 1000
     
     #dictargs['probtran'] = 0.
     #dictargs['propcomp'] = False
