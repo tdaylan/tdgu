@@ -1003,7 +1003,7 @@ def pcat_ferm_mock_crow(strgcnfgextnexec=None):
     dictargs['numbswep'] = 1000000
     dictargs['inittype'] = 'refr'
     #dictargs['numbswepplot'] = 5000
-    dictargs['numbsamp'] = 5000
+    dictargs['numbsamp'] = 1000
     
     # temp
     #dictargs['mockonly'] = True
