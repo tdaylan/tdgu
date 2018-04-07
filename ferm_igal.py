@@ -1189,7 +1189,7 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     dictargs['numbswep'] = 1000000
     dictargs['inittype'] = 'refr'
     #dictargs['numbswepplot'] = 5000
-    dictargs['numbsamp'] = 5000
+    dictargs['numbsamp'] = 1000
     
     listnamecnfgextn = [ \
                         'nomi', 'parsloww', 'parsnone', 'trueback', 'truebackparsnone', \
@@ -1200,10 +1200,12 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     
     #dictargsvari['nomi']['checprio'] = True
     dictargsvari['nomi']['priofactdoff'] = 1.
+    dictargsvari['nomi']['numbswep'] = 5000
     
     dictargsvari['parsloww']['priofactdoff'] = 0.5
 
     dictargsvari['parsnone']['priofactdoff'] = 0.
+    dictargsvari['parsnone']['numbswep'] = 5000
    
     dictargsvari['trueback']['truenumbelempop0reg0'] = 0
     dictargsvari['trueback']['priofactdoff'] = 1.
