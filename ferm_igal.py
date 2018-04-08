@@ -1363,7 +1363,8 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
     
-    dictargs['numbswep'] = 1000000
+    
+    dictargs['numbswep'] = 100000
     dictargs['numbburn'] = 0
     dictargs['numbswepplot'] = 5000
     dictargs['numbsamp'] = 100
@@ -1373,7 +1374,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     
     #dictargs['forcsavestat'] = True
     
-    listnamecnfgextn = ['chec', 'nomi', 'parsvhig', 'parsloww', 'parslowr', 'parsvlow', 'parsnone', 'darknone', 'darknoneparsnone', 'mask', 'maskparsnone', \
+    listnamecnfgextn = ['chec', 'refr', 'nomi', 'parsvhig', 'parsloww', 'parslowr', 'parsvlow', 'parsnone', 'darknone', 'darknoneparsnone', 'mask', 'maskparsnone', \
                         #'darknone', 'exce', 'excefixd', 'rofilarg', 'mask', 'isotfixd', 'heal', 'rec7', \
                         #'backtemp', 'psfnvari', 'backsmth', \
                         #'backwfou', 'backfour', 'popl', \
@@ -1383,6 +1384,13 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
         dictargsvari[namecnfgextn] = {}
     
     dictargsvari['chec']['checprio'] = True
+                   
+    dictargsvari['refr']['inittype'] = 'refr'
+    dictargsvari['refr']['propcomp'] = False
+    dictargsvari['refr']['probtran'] = 0.
+    dictargsvari['refr']['psfnevaltype'] = 'full'
+    dictargsvari['refr']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']]
+    dictargsvari['refr']['initpsfp'] = None
                    
     dictargsvari['parsvhig']['priofactdoff'] = 10.
     
