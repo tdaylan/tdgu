@@ -63,8 +63,7 @@ def writ_ferm_raww():
         pool = mp.Pool(numbproc)
 
         # spawn the processes
-        writ_ferm_part = functools.partial(writ_ferm_raww_work, gdat)
-        pool.map(writ_ferm_part, indxproc)
+        pool.map(functools.partial(writ_ferm_raww_work, gdat), indxproc)
         pool.close()
         pool.join()
 

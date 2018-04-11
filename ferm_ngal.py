@@ -6,9 +6,9 @@ def writ_ferm_ngal():
     gdat.recotype = ['rec7']
     gdat.enertype = ['pnts']
     gdat.timefrac = [0.1]
-    tdpy.util.make_maps_main(gdat, os.environ["FERM_NGAL_DATA_PATH"])
-    tdpy.util.prep_maps('rec7', 'pnts', 'ngal', os.environ["FERM_NGAL_DATA_PATH"], 256, 'tim0')
-    tdpy.util.prep_maps('rec7', 'pnts', 'ngal', os.environ["FERM_NGAL_DATA_PATH"], 256, 'tim0')
+    tdpy.util.writ_ferm_main(gdat, os.environ["FERM_NGAL_DATA_PATH"])
+    tdpy.util.writ_ferm('rec7', 'pnts', 'ngal', os.environ["FERM_NGAL_DATA_PATH"], 256, 'tim0')
+    tdpy.util.writ_ferm('rec7', 'pnts', 'ngal', os.environ["FERM_NGAL_DATA_PATH"], 256, 'tim0')
 
 
 def test_ferm_quas_mock():
