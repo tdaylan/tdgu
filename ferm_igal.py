@@ -151,9 +151,9 @@ def writ_ferm_raww_work(gdat, indxprocwork):
     #os.system(cmnd)
 
 
-def writ_ferm():
+def writ_ferm_finl():
 
-    recotype = 'rec8'
+    recotype = 'rec7'
     regitype = 'ngal'
     numbside = 256
     enertype = 'pnts'
