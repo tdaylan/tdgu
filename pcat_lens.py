@@ -182,7 +182,6 @@ def pcat_lens_mock_pars(strgcnfgextnexec=None):
                                   dictargs, \
                                   listnamecnfgextn, \
                                  
-                                  forcprev=True, \
                                   namexaxi='priofactdoff', \
                                   lablxaxi=lablxaxi, \
                                   scalxaxi=scalxaxi, \
@@ -317,6 +316,7 @@ def pcat_lens_mock_sour(strgcnfgextnexec=None):
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
+                                  
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
     
@@ -360,6 +360,8 @@ def test_lens_mock_sele():
                                       listnamecnfgextn, \
                                       seedelemtype='rand', \
                                       liststrgvarboutp=liststrgvarboutp, \
+                                    
+                                      strgcnfgextnexec=strgcnfgextnexec, \
                                      )
         
         gdat = listgdat[0]
@@ -473,10 +475,12 @@ def test_lens_mock_tmpr():
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
+                                  
+                                  strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
 
-def pcat_lens_mock_many():
+def pcat_lens_mock_many(strgcnfgextnexec=None):
     
     anglfact = 3600. * 180. / pi
     
@@ -492,6 +496,9 @@ def pcat_lens_mock_many():
     dictargs['numbregi'] = 3
     dictargs['backtype'] = [[1.], [1.], [1.]]
     
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 100
+    
     listnamecnfgextn = ['nomi', 'regising', 'regimany']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
@@ -503,10 +510,21 @@ def pcat_lens_mock_many():
     dictargsvari['regimany']['numbregi'] = 5
     dictargsvari['regimany']['backtype'] = [[1.]] * 5
     
+    for k in indxregi:
+        dictglob = pcat.main.initarry( \
+                                      dictargsvari, \
+                                      dictargs, \
+                                      listnamecnfgextn, \
+                                      
+                                      strgcnfgextnexec=strgcnfgextnexec, \
+                                     )
+    
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
+                                  
+                                  strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
 
@@ -548,6 +566,7 @@ def pcat_lens_mock_spmr(strgcnfgextnexec=None):
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
+                                  
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
@@ -871,8 +890,6 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
                                   dictargs, \
                                   listnamecnfgextn, \
                                   
-                                  execpara=True, \
-
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 
@@ -1132,6 +1149,7 @@ def pcat_lens_mock_papr(strgcnfgextnexec=None):
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
+                                  
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
 

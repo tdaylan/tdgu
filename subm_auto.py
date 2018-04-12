@@ -18,36 +18,43 @@ for namefile in os.listdir(path):
                 
                 namefunc = line[4:-1].split('(')[0]
                 
+                if len(sys.argv) > 1 and not sys.argv[1] in namefunc:
+                    continue
+                
                 listnamefile.append(namefile)
                 listnamefunc.append(namefunc)
-    
-listnamefile = array(listnamefile)
-listnamefunc = array(listnamefunc)
-numb = len(listnamefunc)
-indx = choice(arange(numb), size=numb, replace=False)
-listnamefile = listnamefile[indx]
-listnamefunc = listnamefunc[indx]
 
-for namefile, namefunc in zip(listnamefile, listnamefunc):
+if len(listnamefile) == 0:
+    print 'No function found.'
+else:
     
-    listrtag = fnmatch.filter(os.listdir(pathimag), '*%s*' % namefunc)
-    if len(listrtag) > 0:
-        continue
+    listnamefile = array(listnamefile)
+    listnamefunc = array(listnamefunc)
+    numb = len(listnamefunc)
+    indx = choice(arange(numb), size=numb, replace=False)
+    listnamefile = listnamefile[indx]
+    listnamefunc = listnamefunc[indx]
+    
+    for namefile, namefunc in zip(listnamefile, listnamefunc):
         
-    print 'Running configuration %s, file %s...' % (namefunc, namefile)
-    cmnd = 'python $TDGU_PATH/%s %s' % (namefile, namefunc)
-    print cmnd
-    try:
-        pass
-        subp.check_call(cmnd, shell=True)
-    except Exception as excp:
-        pass
-    print
-    print
-    print
-    print
-    print
-    print
-
-fileoutp.close()
+        listrtag = fnmatch.filter(os.listdir(pathimag), '*%s*' % namefunc)
+        if len(listrtag) > 0:
+            continue
+            
+        print 'Running configuration %s, file %s...' % (namefunc, namefile)
+        cmnd = 'python $TDGU_PATH/%s %s' % (namefile, namefunc)
+        print cmnd
+        try:
+            pass
+            subp.check_call(cmnd, shell=True)
+        except Exception as excp:
+            pass
+        print
+        print
+        print
+        print
+        print
+        print
+    
+    fileoutp.close()
 
