@@ -562,7 +562,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['numbsamp'] = 100
     
     if os.uname()[1] == 'fink1.rc.fas.harvard.edu' or os.uname()[1] == 'fink2.rc.fas.harvard.edu':
-        dictargs['rtagmock'] = '20180330_163711_pcat_chan_mock_nomi_10000'
+        dictargs['rtagmock'] = '20180412_230005_pcat_chan_mock_nomi_1000000'
     else:
         dictargs['rtagmock'] = '20180205_184023_pcat_chan_mock_nomi_100000'
     dictargs['savestat'] = True
@@ -588,7 +588,6 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
         # temp
         if namecnfgextn[8:] == '0600none':
             dictargsvari[anlytype]['numbsamp'] = 1
-            dictargsvari[anlytype]['optitype'] = 'none'
             dictargsvari[anlytype]['elemspatevaltype'] = ['full']
     
         if namecnfgextn[8:12] == '0600' and namecnfgextn[12:16].isdigit():
@@ -603,6 +602,23 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
         dictargsvari[anlytype]['maxmgangdata'] = maxmgangdata 
         dictargsvari[anlytype]['strgexpo'] = strgexpo
         dictargsvari[anlytype]['strgexprsbrt'] = strgexprsbrt
+   
+    namecnfgextn = 'home7msc0300none'
+    maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
+    numbsidecart, strgexpo, strgexprsbrt, namestat, anlytype = retr_argschan(namecnfgextn[:4], namecnfgextn[4:8], int(namecnfgextn[8:12]), namecnfgextn[12:16])
+    for strgassctype in ['vlow', 'loww', 'nomi', 'high', 'vhig']:
+        strgextn = anlytype + '_' + strgassctype
+        dictargsvari[strgextn]['namerecostat'] = 'pcat_chan_inpt_' + namecnfgextn
+        dictargsvari[strgextn]['seedchan'] = False
+        dictargsvari[strgextn]['anlytype'] = anlytype
+        dictargsvari[strgextn]['maxmgangdata'] = maxmgangdata
+        dictargsvari[strgextn]['strgexpo'] = strgexpo
+        dictargsvari[strgextn]['strgexprsbrt'] = strgexprsbrt
+    dictargsvari[strgextn + '_vlow']['anglassc'] = 0.2 / anglfact
+    dictargsvari[strgextn + '_loww']['anglassc'] = 0.5 / anglfact
+    dictargsvari[strgextn + '_nomi']['anglassc'] = 1. / anglfact
+    dictargsvari[strgextn + '_high']['anglassc'] = 2. / anglfact
+    dictargsvari[strgextn + '_vhig']['anglassc'] = 4. / anglfact
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
