@@ -569,6 +569,9 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     
     listnamecnfgextn = []
     listnamecnfgextn += ['home2msc0300none', 'home4msc0300none', 'home7msc0300none']
+    for strgassctype in ['vlow', 'loww', 'nomi', 'high', 'vhig']:
+        listnamecnfgextn += ['home7msc0300none_' + strgassctype]
+    
     #listnamecnfgextn += ['home7msc0600none']
     for k in range(36):
         listnamecnfgextn.append('home7msc0600%04d' % k)
