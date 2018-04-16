@@ -614,11 +614,11 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
         dictargsvari[strgextn]['maxmgangdata'] = maxmgangdata
         dictargsvari[strgextn]['strgexpo'] = strgexpo
         dictargsvari[strgextn]['strgexprsbrt'] = strgexprsbrt
-    dictargsvari[strgextn + '_vlow']['anglassc'] = 0.2 / anglfact
-    dictargsvari[strgextn + '_loww']['anglassc'] = 0.5 / anglfact
-    dictargsvari[strgextn + '_nomi']['anglassc'] = 1. / anglfact
-    dictargsvari[strgextn + '_high']['anglassc'] = 2. / anglfact
-    dictargsvari[strgextn + '_vhig']['anglassc'] = 4. / anglfact
+    dictargsvari[anlytype + '_vlow']['anglassc'] = 0.2 / anglfact
+    dictargsvari[anlytype + '_loww']['anglassc'] = 0.5 / anglfact
+    dictargsvari[anlytype + '_nomi']['anglassc'] = 1. / anglfact
+    dictargsvari[anlytype + '_high']['anglassc'] = 2. / anglfact
+    dictargsvari[anlytype + '_vhig']['anglassc'] = 4. / anglfact
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
