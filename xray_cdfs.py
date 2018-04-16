@@ -573,8 +573,8 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
         listnamecnfgextn += ['home7msc0300none_' + strgassctype]
     
     #listnamecnfgextn += ['home7msc0600none']
-    for k in range(36):
-        listnamecnfgextn.append('home7msc0600%04d' % k)
+    #for k in range(36):
+    #    listnamecnfgextn.append('home7msc0600%04d' % k)
 
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:

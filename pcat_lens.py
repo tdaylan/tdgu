@@ -81,7 +81,6 @@ def pcat_lens_mock_truesgnl(strgcnfgextnexec=None):
     dictargs['exprtype'] = 'hubb'
     dictargs['truenumbelempop0reg0'] = 25
     dictargs['elemtype'] = ['lens']
-    dictargs['priofactdoff'] = 0.5
    
     listnamecnfgextn = ['nomi', 'truenone']
     dictargsvari = {}
@@ -118,7 +117,6 @@ def pcat_lens_mock_trueminmdefs(strgcnfgextnexec=None):
     dictargs['exprtype'] = 'hubb'
     dictargs['truenumbelempop0reg0'] = 25
     dictargs['elemtype'] = ['lens']
-    dictargs['priofactdoff'] = 0.5
    
     listnamecnfgextn = ['truevlow', 'trueloww', 'nomi', 'truehigh', 'truevhig']
     dictargsvari = {}
@@ -168,7 +166,6 @@ def pcat_lens_mock_pars(strgcnfgextnexec=None):
     
     dictargsvari['none']['priofactdoff'] = 0.
     
-    dictargsvari['nomi']['priofactdoff'] = 0.5
     dictargsvari['nomi']['checprio'] = True
     
     dictargsvari['high']['priofactdoff'] = 1.
@@ -201,7 +198,6 @@ def pcat_lens_mock_fittnumb(strgcnfgextnexec=None):
     dictargs['exprtype'] = 'hubb'
     dictargs['truenumbelempop0reg0'] = 25
     dictargs['elemtype'] = ['lens']
-    dictargs['priofactdoff'] = 0.5
    
     listnamecnfgextn = ['fittnone', 'fittsing', 'fittdoub', 'fittmany', 'nomi']
     dictargsvari = {}
@@ -240,7 +236,6 @@ def pcat_lens_mock_trueback():
     dictargs['exprtype'] = 'hubb'
     dictargs['truenumbelempop0reg0'] = 25
     dictargs['elemtype'] = ['lens']
-    dictargs['priofactdoff'] = 0.5
     
     anglfact = 3600. * 180. / pi
     
@@ -280,11 +275,10 @@ def pcat_lens_mock_sour(strgcnfgextnexec=None):
     dictargs['numbelempop1reg0'] = 10
     dictargs['maxmnumbelempop1reg0'] = 100
     dictargs['spatdisttype'] = ['unif', 'dsrcexpo']
-    dictargs['priofactdoff'] = 0.5
     
     numbelem = int(25. * 10.**0.9)
 
-    listnamecnfgextn = ['nomi', 'datanone', 'subhsing', 'truelowr', 'pars', 'truevlow', 's2nrhigh', 's2nrvhig', 'amplhigh', 'bgrdunif']
+    listnamecnfgextn = ['nomi', 'datanone', 'subhsing', 'truelowr', 'parsnone', 'truevlow', 's2nrhigh', 's2nrvhig', 'amplhigh', 'bgrdunif']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
@@ -304,7 +298,7 @@ def pcat_lens_mock_sour(strgcnfgextnexec=None):
     dictargsvari['truevlow']['trueminmdefs'] = 3e-4 / anglfact
     dictargsvari['truevlow']['fittminmdefs'] = 0.01 / anglfact
     
-    dictargsvari['pars']['priofactdoff'] = 0.
+    dictargsvari['parsnone']['priofactdoff'] = 0.
     
     dictargsvari['s2nrhigh']['strgexpo'] = 1e4 / 1.63050e-19
     
@@ -539,7 +533,6 @@ def pcat_lens_mock_spmr(strgcnfgextnexec=None):
     dictargs['truelgalpop0reg00000'] = 1. / anglfact
     dictargs['truebgalpop0reg00000'] = 0.5 / anglfact
     dictargs['truedefspop0reg00000'] = 1e-2 / anglfact
-    dictargs['priofactdoff'] = 0.
     dictargs['probtran'] = 1.
     dictargs['elemtype'] = ['lens']
     dictargs['probspmr'] = 1.
@@ -900,7 +893,6 @@ def test_lens_mock_psfn():
     dictargs['exprtype'] = 'hubb'
     dictargs['truenumbelempop0reg0'] = 25
     dictargs['elemtype'] = ['lens']
-    dictargs['priofactdoff'] = 0.5
     dictargs['truesigcen00evt0'] = 4e-7
     
     anglfact = 3600. * 180. / pi
