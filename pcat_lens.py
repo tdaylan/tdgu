@@ -155,20 +155,18 @@ def pcat_lens_mock_pars(strgcnfgextnexec=None):
     
     dictargs['exprtype'] = 'hubb'
     dictargs['truenumbelempop0reg0'] = 25
-    dictargs['fittmaxmnumbelempop0reg0'] = 2
     dictargs['elemtype'] = ['lens']
-    dictargs['verbtype'] = 2
    
-    listnamecnfgextn = ['none', 'nomi', 'high']
+    listnamecnfgextn = ['none', 'loww', 'nomi', 'high', 'vhig']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
     dictargsvari['none']['priofactdoff'] = 0.
-    
+    dictargsvari['loww']['priofactdoff'] = 0.25
     dictargsvari['nomi']['checprio'] = True
-    
-    dictargsvari['high']['priofactdoff'] = 1.
+    dictargsvari['high']['priofactdoff'] = 0.75
+    dictargsvari['vhig']['priofactdoff'] = 1.
     
     lablxaxi = r'$\alpha_{p}$'
     scalxaxi = 'self'
