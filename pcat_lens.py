@@ -165,6 +165,7 @@ def pcat_lens_mock_pars(strgcnfgextnexec=None):
     dictargsvari['none']['priofactdoff'] = 0.
     dictargsvari['loww']['priofactdoff'] = 0.25
     dictargsvari['nomi']['checprio'] = True
+    dictargsvari['nomi']['priofactdoff'] = 0.5
     dictargsvari['high']['priofactdoff'] = 0.75
     dictargsvari['vhig']['priofactdoff'] = 1.
     
