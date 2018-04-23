@@ -569,7 +569,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     
     listnamecnfgextn = []
     listnamecnfgextn += ['home2msc0300none', 'home4msc0300none', 'home7msc0300none']
-    for strgassctype in ['vlow', 'loww', 'nomi', 'high', 'vhig']:
+    for strgassctype in ['anglasscvlow', 'anglasscloww', 'anglasscnomi', 'anglasschigh', 'anglasscvhig']:
         listnamecnfgextn += ['home7msc0300none' + strgassctype]
     
     #listnamecnfgextn += ['home7msc0600none']
@@ -609,7 +609,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     namecnfgextn = 'home7msc0300none'
     maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
     numbsidecart, strgexpo, strgexprsbrt, namestat, anlytype = retr_argschan(namecnfgextn[:4], namecnfgextn[4:8], int(namecnfgextn[8:12]), namecnfgextn[12:16])
-    for strgassctype in ['vlow', 'loww', 'nomi', 'high', 'vhig']:
+    for strgassctype in ['anglasscvlow', 'anglasscloww', 'anglasscnomi', 'anglasschigh', 'anglasscvhig']:
         strgextn = anlytype + strgassctype
         dictargsvari[strgextn]['namerecostat'] = 'pcat_chan_inpt_' + namecnfgextn
         dictargsvari[strgextn]['seedchan'] = False
@@ -617,11 +617,11 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
         dictargsvari[strgextn]['maxmgangdata'] = maxmgangdata
         dictargsvari[strgextn]['strgexpo'] = strgexpo
         dictargsvari[strgextn]['strgexprsbrt'] = strgexprsbrt
-    dictargsvari[anlytype + 'vlow']['anglassc'] = 0.2 / anglfact
-    dictargsvari[anlytype + 'loww']['anglassc'] = 0.5 / anglfact
-    dictargsvari[anlytype + 'nomi']['anglassc'] = 1. / anglfact
-    dictargsvari[anlytype + 'high']['anglassc'] = 2. / anglfact
-    dictargsvari[anlytype + 'vhig']['anglassc'] = 4. / anglfact
+    dictargsvari[anlytype + 'anglasscvlow']['anglassc'] = 0.2 / anglfact
+    dictargsvari[anlytype + 'anglasscloww']['anglassc'] = 0.5 / anglfact
+    dictargsvari[anlytype + 'anglasscnomi']['anglassc'] = 1. / anglfact
+    dictargsvari[anlytype + 'anglasschigh']['anglassc'] = 2. / anglfact
+    dictargsvari[anlytype + 'anglasscvhig']['anglassc'] = 4. / anglfact
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
