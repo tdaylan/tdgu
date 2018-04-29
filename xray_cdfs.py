@@ -566,13 +566,13 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     dictargs['savestat'] = True
     
     listnamecnfgextn = []
-    listnamecnfgextn += ['home2msc0300none', 'home4msc0300none', 'home7msc0300none']
-    for strgassctype in ['anglasscvlow', 'anglasscloww', 'anglasscnomi', 'anglasschigh', 'anglasscvhig']:
-        listnamecnfgextn += ['home7msc0300none' + strgassctype]
+    #listnamecnfgextn += ['home2msc0300none', 'home4msc0300none', 'home7msc0300none']
+    #for strgassctype in ['anglasscvlow', 'anglasscloww', 'anglasscnomi', 'anglasschigh', 'anglasscvhig']:
+    #    listnamecnfgextn += ['home7msc0300none' + strgassctype]
     
     #listnamecnfgextn += ['home7msc0600none']
-    #for k in range(36):
-    #    listnamecnfgextn.append('home7msc0600%04d' % k)
+    for k in range(36):
+        listnamecnfgextn.append('home7msc0600%04d' % k)
 
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
@@ -604,22 +604,22 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
         dictargsvari[anlytype]['strgexpo'] = strgexpo
         dictargsvari[anlytype]['strgexprsbrt'] = strgexprsbrt
    
-    namecnfgextn = 'home7msc0300none'
-    maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
-    numbsidecart, strgexpo, strgexprsbrt, namestat, anlytype = retr_argschan(namecnfgextn[:4], namecnfgextn[4:8], int(namecnfgextn[8:12]), namecnfgextn[12:16])
-    for strgassctype in ['anglasscvlow', 'anglasscloww', 'anglasscnomi', 'anglasschigh', 'anglasscvhig']:
-        strgextn = anlytype + strgassctype
-        dictargsvari[strgextn]['namerecostat'] = 'pcat_chan_inpt_' + namecnfgextn
-        dictargsvari[strgextn]['seedchan'] = False
-        dictargsvari[strgextn]['anlytype'] = anlytype
-        dictargsvari[strgextn]['maxmgangdata'] = maxmgangdata
-        dictargsvari[strgextn]['strgexpo'] = strgexpo
-        dictargsvari[strgextn]['strgexprsbrt'] = strgexprsbrt
-    dictargsvari[anlytype + 'anglasscvlow']['anglassc'] = 0.2 / anglfact
-    dictargsvari[anlytype + 'anglasscloww']['anglassc'] = 0.5 / anglfact
-    dictargsvari[anlytype + 'anglasscnomi']['anglassc'] = 1. / anglfact
-    dictargsvari[anlytype + 'anglasschigh']['anglassc'] = 2. / anglfact
-    dictargsvari[anlytype + 'anglasscvhig']['anglassc'] = 4. / anglfact
+    #namecnfgextn = 'home7msc0300none'
+    #maxmgangdata = 0.492 / anglfact * numbsidecart / 2.
+    #numbsidecart, strgexpo, strgexprsbrt, namestat, anlytype = retr_argschan(namecnfgextn[:4], namecnfgextn[4:8], int(namecnfgextn[8:12]), namecnfgextn[12:16])
+    #for strgassctype in ['anglasscvlow', 'anglasscloww', 'anglasscnomi', 'anglasschigh', 'anglasscvhig']:
+    #    strgextn = anlytype + strgassctype
+    #    dictargsvari[strgextn]['namerecostat'] = 'pcat_chan_inpt_' + namecnfgextn
+    #    dictargsvari[strgextn]['seedchan'] = False
+    #    dictargsvari[strgextn]['anlytype'] = anlytype
+    #    dictargsvari[strgextn]['maxmgangdata'] = maxmgangdata
+    #    dictargsvari[strgextn]['strgexpo'] = strgexpo
+    #    dictargsvari[strgextn]['strgexprsbrt'] = strgexprsbrt
+    #dictargsvari[anlytype + 'anglasscvlow']['anglassc'] = 0.2 / anglfact
+    #dictargsvari[anlytype + 'anglasscloww']['anglassc'] = 0.5 / anglfact
+    #dictargsvari[anlytype + 'anglasscnomi']['anglassc'] = 1. / anglfact
+    #dictargsvari[anlytype + 'anglasschigh']['anglassc'] = 2. / anglfact
+    #dictargsvari[anlytype + 'anglasscvhig']['anglassc'] = 4. / anglfact
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
