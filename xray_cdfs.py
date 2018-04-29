@@ -346,8 +346,7 @@ def pcat_chan_mock(strgcnfgextnexec=None):
                                   listnamecnfgextn, \
                                     
                                   namexaxi='prio', \
-                                  #forcprev=True, \
-                                  #execpara=True, \
+                                  #forcneww=True, \
                                   
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
@@ -384,8 +383,7 @@ def test_pcat_chan_mock(strgcnfgextnexec=None):
                                   listnamecnfgextn, \
                                     
                                   namexaxi='prio', \
-                                  #forcprev=True, \
-                                  #execpara=True, \
+                                  #forcneww=True, \
                                   
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
@@ -425,8 +423,6 @@ def pcat_chan_mock_trueminmdlos(strgcnfgextnexec=None):
                                   dictargs, \
                                   listnamecnfgextn, \
                                   
-                                  #execpara=True, \
-                                  
                                   namexaxi='trueminmdlos', \
                                   lablxaxi=lablxaxi, \
                                   scalxaxi=scalxaxi, \
@@ -459,9 +455,6 @@ def pcat_chan_mock_truemaxmdlos(strgcnfgextnexec=None):
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
-                                  
-                                  #execpara=True, \
-                                  
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
     
@@ -489,9 +482,6 @@ def pcat_chan_mock_trueminmlum0(strgcnfgextnexec=None):
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
-                                  
-                                  #execpara=True, \
-                                  
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
     
@@ -519,9 +509,6 @@ def pcat_chan_mock_truemaxmlum0(strgcnfgextnexec=None):
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
-                                  
-                                  #execpara=True, \
-                                  
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
     
@@ -626,8 +613,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
                                   dictargs, \
                                   listnamecnfgextn, \
                                   
-                                  #forcprev=True, \
-                                  execpara=True, \
+                                  #forcneww=True, \
                                   
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )

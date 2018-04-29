@@ -1222,7 +1222,7 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
                                   listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                   
-                                  forcprev=True, \
+                                  forcneww=True, \
                                   
                                   namexaxi='priofactdoff', \
                                   lablxaxi=lablxaxi, \
@@ -1314,7 +1314,7 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
                                   dictargs, \
                                   listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
-                                  forcprev=True, \
+                                  forcneww=True, \
                                  )
 
 
@@ -1465,7 +1465,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
                                   listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                   
-                                  forcprev=True, \
+                                  forcneww=True, \
                                  )
     
 
