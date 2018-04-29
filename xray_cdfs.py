@@ -346,7 +346,6 @@ def pcat_chan_mock(strgcnfgextnexec=None):
                                   listnamecnfgextn, \
                                     
                                   namexaxi='prio', \
-                                  forcprev=True, \
                                   #forcprev=True, \
                                   #execpara=True, \
                                   
@@ -385,7 +384,6 @@ def test_pcat_chan_mock(strgcnfgextnexec=None):
                                   listnamecnfgextn, \
                                     
                                   namexaxi='prio', \
-                                  forcprev=True, \
                                   #forcprev=True, \
                                   #execpara=True, \
                                   
@@ -628,7 +626,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
                                   dictargs, \
                                   listnamecnfgextn, \
                                   
-                                  forcprev=True, \
+                                  #forcprev=True, \
                                   execpara=True, \
                                   
                                   strgcnfgextnexec=strgcnfgextnexec, \
