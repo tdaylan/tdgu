@@ -314,6 +314,7 @@ def writ_gaia_drd2():
     path = '/n/fink2/lsd_db/gaia_dr2_source/snapshots/20180426005444.347313/catalog.pkl'
     path = '/n/fink2/lsd_db/gaia_dr2_source/snapshots/20180426005444.347313/schema.cfg'
 
+
 def pcat_tgas_mock_spmr(strgcnfgextnexec=None):
    
     dictargs = {}
