@@ -307,8 +307,8 @@ def pcat_tgas_mock(strgcnfgextnexec=None):
 
 def writ_gaia_drd2():
     
-    pathdata = os.environ["TDGU_DATA_PATH"] + '/data/GaiaDR2_vrad_vel.fits'
-    pathimag = os.environ["TDGU_DATA_PATH"] + '/imag/'
+    pathdata = os.environ["TDGU_DATA_PATH"] + '/gaia_init/data/GaiaDR2_vrad_vel.fits'
+    pathimag = os.environ["TDGU_DATA_PATH"] + '/gaia_init/imag/'
     tdpy.util.read_fits(pathdata, pathimag=pathimag)
     path = '/n/fink2/gaia/Gaia_DR2/gaia_source/fits'
     path = '/n/fink2/lsd_db/gaia_dr2_source/snapshots/20180426005444.347313/catalog.pkl'
