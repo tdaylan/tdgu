@@ -810,6 +810,13 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
+    dictargs['initlgalhostreg0isf0'] = -0.1 / anglfact
+    dictargs['initbgalhostreg0isf0'] = 0.
+    dictargs['initlgalhostreg0isf1'] = -0.1 / anglfact
+    dictargs['initbgalhostreg0isf1'] = 0.
+    dictargs['initlgalsourreg0'] = -0.2 / anglfact
+    dictargs['initbgalsourreg0'] = 0.2 / anglfact
+    
     dictargsvari['largrofi']['maxmnumbelempop0reg0'] = 0
     dictargsvari['largrofi']['maxmnumbelempop1reg0'] = 0
     dictargsvari['largrofi']['maxmnumbelempop2reg0'] = 0
@@ -833,19 +840,10 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     dictargsvari['dsrcexpo']['dsrcdistsexppop0'] = 1e-2 / anglfact
     #dictargsvari['dsrcexpo']['numbburn'] = 0
     #dictargsvari['dsrcexpo']['forcsavestat'] = True
-    #dictargsvari['dsrcexpo']['inittype'] = 'rand'
-    #dictargsvari['dsrcexpo']['initlgalhostreg0'] = -0.1 / anglfact
-    #dictargsvari['dsrcexpo']['initbgalhostreg0'] = 0.
-    #dictargsvari['dsrcexpo']['initlgalsourreg0'] = -0.2 / anglfact
-    #dictargsvari['dsrcexpo']['initbgalsourreg0'] = 0.2 / anglfact
     
     dictargsvari['sour']['strgexprsbrt'] = strgexprsbrt
     dictargsvari['sour']['maxmnumbelempop0reg0'] = 1
     dictargsvari['sour']['elemtype'] = ['lghtgausbgrd']
-    #dictargsvari['sour']['initlgalhostreg0'] = -0.1 / anglfact
-    #dictargsvari['sour']['initbgalhostreg0'] = 0.
-    #dictargsvari['sour']['initlgalsourreg0'] = -0.2 / anglfact
-    #dictargsvari['sour']['initbgalsourreg0'] = 0.2 / anglfact
     #dictargsvari['sour']['forcsavestat'] = True
     
     dictargsvari['hostmult']['strgexprsbrt'] = strgexprsbrt
@@ -855,12 +853,6 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     dictargsvari['hostmult']['maxmnumbelempop1reg0'] = 0
     dictargsvari['hostmult']['elemtype'] = ['lens', 'lghtgausbgrd']
     #dictargsvari['hostmult']['forcsavestat'] = True
-    #dictargsvari['hostmult']['initlgalhostreg0isf0'] = -0.1 / anglfact
-    #dictargsvari['hostmult']['initbgalhostreg0isf0'] = 0.
-    #dictargsvari['hostmult']['initlgalhostreg0isf1'] = -0.1 / anglfact
-    #dictargsvari['hostmult']['initbgalhostreg0isf1'] = 0.
-    #dictargsvari['hostmult']['initlgalsourreg0'] = -0.2 / anglfact
-    #dictargsvari['hostmult']['initbgalsourreg0'] = 0.2 / anglfact
     #dictargsvari['hostmult']['listmask'] = listmask
     
     dictargsvari['sourmask']['strgexprsbrt'] = strgexprsbrt
