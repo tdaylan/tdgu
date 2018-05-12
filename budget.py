@@ -29,7 +29,7 @@ for k in indxdays:
         if dateprim.day == panl[0]:
             budg[k] += panl[1]
 
-    print '%s -- %d' % (dateprim.strftime('%Y-%m-%d'), budg[k])
+    #print '%s -- %d' % (dateprim.strftime('%Y-%m-%d'), budg[k])
 
 
 figr, axis = plt.subplots(figsize=(16, 6))
