@@ -169,9 +169,9 @@ def pcat_lens_mock_pars(strgcnfgextnexec=None):
     dictargsvari['high']['priofactdoff'] = 0.75
     dictargsvari['vhig']['priofactdoff'] = 1.
     
-    dictargs['numbswep'] = 1000
-    dictargs['numbsamp'] = 10
-    dictargs['verbtype'] = 2
+    #dictargs['numbswep'] = 1000
+    #dictargs['numbsamp'] = 10
+    #dictargs['verbtype'] = 2
     
     lablxaxi = r'$\alpha_{p}$'
     scalxaxi = 'self'
