@@ -169,6 +169,10 @@ def pcat_lens_mock_pars(strgcnfgextnexec=None):
     dictargsvari['high']['priofactdoff'] = 0.75
     dictargsvari['vhig']['priofactdoff'] = 1.
     
+    dictargs['numbswep'] = 1000
+    dictargs['numbsamp'] = 10
+    dictargs['verbtype'] = 2
+    
     lablxaxi = r'$\alpha_{p}$'
     scalxaxi = 'self'
     listtickxaxi = [tdpy.util.mexp(dictargsvari[namecnfgextn]['priofactdoff']) for namecnfgextn in listnamecnfgextn] 
@@ -229,12 +233,15 @@ def pcat_lens_mock_fittnumb(strgcnfgextnexec=None):
                                  )
 
 
-def pcat_lens_mock_trueback():
+def pcat_lens_mock_trueback(strgcnfgextnexec=None):
    
     dictargs = {}
     dictargs['exprtype'] = 'hubb'
     dictargs['truenumbelempop0reg0'] = 25
     dictargs['elemtype'] = ['lens']
+    
+    dictargs['numbswep'] = 10000
+    dictargs['numbsamp'] = 100
     
     anglfact = 3600. * 180. / pi
     
@@ -801,6 +808,8 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     dictargs['indxenerincl'] = array([0])
     dictargs['savestat'] = True
     dictargs['serstype'] = 'intp'
+    dictargs['numbswep'] = 1000
+    dictargs['numbsamp'] = 10
     dictargs['inittype'] = 'reco'
     
     #dictargs['inittype'] = 'rand'

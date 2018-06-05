@@ -2,18 +2,30 @@ import datetime
 from __init__ import *
 
 # inputs
-dail = -60
+dail = -100
 numbdays = 90
 
 datenoww = datetime.datetime.now()
 budg = zeros(numbdays)
 indxdays = arange(numbdays)
 
+# BoA checking
+budg[0] += 400
+
+# BoA credit card
+budg[0] += -2250
+
+# Capital One checking
+budg[0] += 3337
+
+# Capital One credit card
+budg[0] += -500
+
 listpanl = [ \
-            [7,              2150], \
-            [21,             2150], \
-            [8,              1850], \
-            [22,             1850], \
+            [15,              2150], \
+            [30,             2150], \
+            [8,              1907], \
+            [22,             1907], \
             [2,             -2780], \
            ]
 
@@ -59,6 +71,8 @@ axis.set_xlabel('Days')
 axis.set_ylabel('PnL [\$]')
 axis.set_title('The Daylans Budget')
 axis.axhline(0, color='r')
+axis.axhline(6000, color='g', ls='--', alpha=0.5)
+axis.axhline(9000, color='black', ls='--', alpha=0.5)
 path = '/Users/tansu/Desktop/budget.pdf'
 plt.tight_layout()
 figr.savefig(path)

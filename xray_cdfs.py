@@ -542,9 +542,9 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #dictargs['probtran'] = 0.
     #dictargs['spectype'] = ['colr']
     
-    #dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 1000
     #dictargs['numbswepplot'] = 10000
-    #dictargs['numbsamp'] = 100
+    dictargs['numbsamp'] = 10
     
     if os.uname()[1] == 'fink1.rc.fas.harvard.edu' or os.uname()[1] == 'fink2.rc.fas.harvard.edu':
         dictargs['rtagmock'] = '20180412_230005_pcat_chan_mock_nomi_1000000'
@@ -558,7 +558,7 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     #    listnamecnfgextn += ['home7msc0300none' + strgassctype]
     
     #listnamecnfgextn += ['home7msc0600none']
-    for k in range(36):
+    for k in range(2):
         listnamecnfgextn.append('home7msc0600%04d' % k)
 
     dictargsvari = {}

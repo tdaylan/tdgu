@@ -68,7 +68,10 @@ def test_spec_chan_mock_minmflux(strgcnfgextnexec=None):
     dictargs['maxmgangdata'] = 100. / anglfact
     dictargs['numbsidecart'] = 1
     dictargs['anlytype'] = 'spec'
-    
+
+    dictargs['numbswep'] = 1000
+    dictargs['numbsamp'] = 10
+
     listnamecnfgextn = ['trueloww', 'nomi', 'truehigh']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
