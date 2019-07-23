@@ -9,6 +9,20 @@ from __init__ import *
 #from pcat.util import retr_refrchaninit
 
 
+def pcat_lionwrap():
+    
+    dictglob = pcat.main.init( \
+                             pixltype='cart', \
+                             listnameback='isot', \
+                             backtype=[[1.]], \
+                             datatype='inpt', \
+                             exprtype='tess', \
+                             strgexpo=1., \
+                             lionmode=True, \
+                             )
+    
+
+
 def pcat_fittminmflux_fittparsnone(strgcnfgextnexec=None):
     
     dictargs = {}

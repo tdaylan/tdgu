@@ -258,12 +258,12 @@ def pcat_chan_mock_spmr(strgcnfgextnexec=None):
     dictargs = {}
     dictargs['exprtype'] = 'chan'
     dictargs['inittype'] = 'refr'
-    dictargs['truelgalpop0reg00000'] = 0.
-    dictargs['truebgalpop0reg00000'] = 0.
-    dictargs['truefluxpop0reg00000'] = 1e-7
+    dictargs['truelgalpop00000'] = 0.
+    dictargs['truebgalpop00000'] = 0.
+    dictargs['truefluxpop00000'] = 1e-7
     dictargs['truesbrt'] = array([5e-7])
-    dictargs['numbelempop0reg0'] = 1
-    dictargs['minmnumbelempop0reg0'] = 1
+    dictargs['numbelempop0'] = 1
+    dictargs['minmnumbelempop0'] = 1
     dictargs['strgexpo'] = 1e9
     dictargs['maxmgangdata'] = maxmgangdata
     dictargs['numbsidecart'] = numbsidecart
@@ -276,8 +276,8 @@ def pcat_chan_mock_spmr(strgcnfgextnexec=None):
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
-    #dictargsvari['free']['minmnumbelempop0reg0'] = 0.
-    #dictargsvari['free']['maxmnumbelempop0reg0'] = 0.
+    #dictargsvari['free']['minmnumbelempop0'] = 0.
+    #dictargsvari['free']['maxmnumbelempop0'] = 0.
     dictargsvari['free']['inittype'] = 'rand'
     dictargsvari['free']['probtran'] = 0.4
     dictargsvari['free']['probspmr'] = 0.3
@@ -286,11 +286,11 @@ def pcat_chan_mock_spmr(strgcnfgextnexec=None):
     
     dictargsvari['parshigh']['priofactdoff'] = 1.
     
-    dictargsvari['brgt']['truefluxpop0reg00000'] = 3e-7
+    dictargsvari['brgt']['truefluxpop00000'] = 3e-7
     
-    dictargsvari['fain']['truefluxpop0reg00000'] = 3e-8
+    dictargsvari['fain']['truefluxpop00000'] = 3e-8
     
-    dictargsvari['psfn']['truefluxpop0reg00000'] = 3e-8
+    dictargsvari['psfn']['truefluxpop00000'] = 3e-8
     dictargsvari['psfn']['probtran'] = 0.
     dictargsvari['psfn']['propbacp'] = False
     dictargsvari['psfn']['propcomp'] = False
@@ -313,8 +313,8 @@ def pcat_chan_mock_popl(strgcnfgextnexec=None):
                               exprtype='chan', \
                               strgexpo='expochan%s%s%04d.fits' % (datatype, strgexpomaps, numbsidecart), \
                               numbpopl=2, \
-                              numbelempop0reg0=50, \
-                              numbelempop1reg0=50, \
+                              numbelempop0=50, \
+                              numbelempop1=50, \
                              )
 
 
@@ -327,25 +327,38 @@ def pcat_chan_mock(strgcnfgextnexec=None):
     dictargs['trueelemtype'] = ['lghtpntsagnntrue']
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
     
-    #dictargs['numbswep'] = 1000000
-    #dictargs['inittype'] = 'refr'
-    #dictargs['numbsamp'] = 1000
+    dictargs['inittype'] = 'refr'
+    dictargs['numbswep'] = 20000
+    dictargs['numbswepplot'] = 5000
+    dictargs['numbburn'] = 1000
+    dictargs['numbsamp'] = 1000
+
+    #dictargs['probspmr'] = 1.
+    #dictargs['elemtype'] = []
+    #dictargs['probspmr'] = 1
+    #dictargs['probtran'] = 1
+    #dictargs['verbtype'] = 2
+    #dictargs['liketype'] = 'gaus'
     
-    dictargs['truenumbelempop0reg0'] = 100
-    dictargs['maxmnumbelempop0reg0'] = 400
+    dictargs['truenumbelempop0'] = 20
+    dictargs['fittmaxmnumbelempop0'] = 100
+    #dictargs['truemaxmnumbelempop0'] = 100
     
-    listnamecnfgextn = ['nomi']
+    listnamecnfgextn = ['prio', 'nomi']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
-    dictargsvari['nomi']['checprio'] = True
+    dictargsvari['prio']['boolsampprio'] = True
                 
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
                                   dictargs, \
                                   listnamecnfgextn, \
                                     
-                                  namexaxi='prio', \
+                                  namexaxivari='boolsampprio', \
+                                  lablxaxivari='', \
+                                  tickxaxivari=['Posterior', 'Prior'], \
+                                  scalxaxivari='self', \
                                   #forcneww=True, \
                                   
                                   strgcnfgextnexec=strgcnfgextnexec, \
@@ -368,14 +381,13 @@ def test_pcat_chan_mock(strgcnfgextnexec=None):
     dictargs['makeplotfinlprio'] = False
     dictargs['makeplotfinlpost'] = False
     
-    dictargs['truenumbelempop0reg0'] = 100
-    dictargs['maxmnumbelempop0reg0'] = 400
+    dictargs['truenumbelempop0'] = 100
+    dictargs['maxmnumbelempop0'] = 400
     
     listnamecnfgextn = ['nomi']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
-    dictargsvari['nomi']['checprio'] = True
                 
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -400,8 +412,8 @@ def pcat_chan_mock_trueminmdlos(strgcnfgextnexec=None):
     #dictargs['numbswep'] = 1000
     #dictargs['numbsamp'] = 10
     
-    dictargs['truenumbelempop0reg0'] = 100
-    dictargs['maxmnumbelempop0reg0'] = 400
+    dictargs['truenumbelempop0'] = 100
+    dictargs['maxmnumbelempop0'] = 400
     
     listnamecnfgextn = ['loww', 'nomi', 'high']
     dictargsvari = {}
@@ -410,7 +422,6 @@ def pcat_chan_mock_trueminmdlos(strgcnfgextnexec=None):
     dictargsvari['loww']['trueminmdlos'] = 3e6
     
     dictargsvari['nomi']['trueminmdlos'] = 1e7
-    dictargsvari['nomi']['checprio'] = True
     
     dictargsvari['high']['trueminmdlos'] = 3e7
                 
@@ -440,8 +451,8 @@ def pcat_chan_mock_truemaxmdlos(strgcnfgextnexec=None):
     dictargs['trueelemtype'] = ['lghtpntsagnntrue']
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
     
-    dictargs['truenumbelempop0reg0'] = 100
-    dictargs['maxmnumbelempop0reg0'] = 400
+    dictargs['truenumbelempop0'] = 100
+    dictargs['maxmnumbelempop0'] = 400
     
     listnamecnfgextn = ['loww', 'nomi', 'high']
     dictargsvari = {}
@@ -467,8 +478,8 @@ def pcat_chan_mock_trueminmlum0(strgcnfgextnexec=None):
     dictargs['trueelemtype'] = ['lghtpntsagnntrue']
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
     
-    dictargs['truenumbelempop0reg0'] = 100
-    dictargs['maxmnumbelempop0reg0'] = 400
+    dictargs['truenumbelempop0'] = 100
+    dictargs['maxmnumbelempop0'] = 400
     
     listnamecnfgextn = ['loww', 'nomi', 'high']
     dictargsvari = {}
@@ -494,8 +505,8 @@ def pcat_chan_mock_truemaxmlum0(strgcnfgextnexec=None):
     dictargs['trueelemtype'] = ['lghtpntsagnntrue']
     dictargs['fittelemtype'] = ['lghtpntsagnnassc']
     
-    dictargs['truenumbelempop0reg0'] = 100
-    dictargs['maxmnumbelempop0reg0'] = 400
+    dictargs['truenumbelempop0'] = 100
+    dictargs['maxmnumbelempop0'] = 400
     
     listnamecnfgextn = ['loww', 'nomi', 'high']
     dictargsvari = {}
@@ -536,8 +547,8 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
     dictargs['inittype'] = 'reco'
     #dictargs['anlytypedata'] = maxmgangdata 
     #dictargs['numbsidecart'] = numbsidecart 
-    #dictargs['initnumbelempop0reg0'] = 1
-    #dictargs['maxmnumbelempop0reg0'] = 1
+    #dictargs['initnumbelempop0'] = 1
+    #dictargs['maxmnumbelempop0'] = 1
     #dictargs['propcomp'] = False
     #dictargs['probtran'] = 0.
     #dictargs['spectype'] = ['colr']
@@ -570,16 +581,13 @@ def pcat_chan_inpt(strgcnfgextnexec=None):
    
         dictargsvari[anlytype]['namerecostat'] = 'pcat_chan_inpt_' + namecnfgextn
     
-        if namecnfgextn == 'home7msc0300none':
-            dictargsvari[anlytype]['checprio'] = True
-        
         # temp
         if namecnfgextn[8:] == '0600none':
             dictargsvari[anlytype]['numbsamp'] = 1
             dictargsvari[anlytype]['elemspatevaltype'] = ['full']
     
         if namecnfgextn[8:12] == '0600' and namecnfgextn[12:16].isdigit():
-            dictargsvari[anlytype]['maxmnumbelempop0reg0'] = 30
+            dictargsvari[anlytype]['maxmnumbelempop0'] = 30
             
         if namecnfgextn[12:16] == 'none':
             maxmgangdata = 0.492 / anglfact * numbsidecart / 2.

@@ -928,8 +928,8 @@ def test_ferm_bubb(strgcnfgextnexec=None):
     anglfact = 180. / pi
 
     dictargs = {}
-    dictargs['truenumbelempop0reg0'] = 0
-    dictargs['maxmnumbelempop0reg0'] = 0
+    dictargs['truenumbelempop0'] = 0
+    dictargs['maxmnumbelempop0'] = 0
     
     dictargs['anlytype'] = 'rec8back'
     dictargs['minmlgalrofi'] = -25. / anglfact
@@ -941,7 +941,7 @@ def test_ferm_bubb(strgcnfgextnexec=None):
     dictargs['psfnevaltype'] = 'init'
     dictargs['trueelemregitype'] = [True, True, True]
     
-    dictargs['backtype'] = [[1., 'sbrtfdfmbacksmthrec8.fits', 'sbrtdarkbacksmthrec8.fits']]
+    dictargs['backtype'] = [1., 'sbrtfdfmbacksmthrec8.fits', 'sbrtdarkbacksmthrec8.fits']
     
     listnamecnfgextn = ['nomi']
     dictargsvari = {}
@@ -963,11 +963,11 @@ def pcat_ferm_mock_crow(strgcnfgextnexec=None):
     anglfact = 180. / pi
     
     dictargs = {}
-    dictargs['truemaxmnumbelempop0reg0'] = 400
-    dictargs['truenumbelempop0reg0'] = 100
+    dictargs['truemaxmnumbelempop0'] = 400
+    dictargs['truenumbelempop0'] = 100
     
     dictargs['listnameback'] = ['isot']
-    dictargs['backtype'] = [[10.]]
+    dictargs['backtype'] = [10.]
     dictargs['truenumbpopl'] = 1
     dictargs['refrlegdpopl'] = ['PS']
     dictargs['trueelemtype'] = ['lghtpnts']
@@ -983,12 +983,12 @@ def pcat_ferm_mock_crow(strgcnfgextnexec=None):
     dictargs['fittelemtype'] = ['lghtpnts']
     dictargs['fittspatdisttype'] = ['self']
     #dictargs['fittspectype'] = ['colr']
-    dictargs['fittmaxmnumbelempop0reg0'] = 1000
+    dictargs['fittmaxmnumbelempop0'] = 1000
     
     #dictargs['strgexprsbrt'] = 'sbrtfermrec8pntsigal0256.fits'
     #dictargs['spectype'] = ['colr']
     #dictargs['listnameback'] = ['isot', 'fdfm', 'dark']
-    #dictargs['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']]
+    #dictargs['backtype'] = [1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']
     #dictargs['psfnevaltype'] = 'kern'
     
     dictargs['forccart'] = True
@@ -1051,11 +1051,11 @@ def pcat_ferm_mock_brek(strgcnfgextnexec=None):
     anglfact = 180. / pi
     
     dictargs = {}
-    dictargs['truemaxmnumbelempop0reg0'] = 400
-    dictargs['truenumbelempop0reg0'] = 100
+    dictargs['truemaxmnumbelempop0'] = 400
+    dictargs['truenumbelempop0'] = 100
     
     dictargs['listnameback'] = ['isot']
-    dictargs['backtype'] = [[10.]]
+    dictargs['backtype'] = [10.]
     dictargs['truenumbpopl'] = 1
     dictargs['refrlegdpopl'] = ['PS']
     dictargs['trueelemtype'] = ['lghtpnts']
@@ -1072,12 +1072,12 @@ def pcat_ferm_mock_brek(strgcnfgextnexec=None):
     dictargs['fittelemtype'] = ['lghtpnts']
     dictargs['fittspatdisttype'] = ['self']
     #dictargs['fittspectype'] = ['colr']
-    dictargs['fittmaxmnumbelempop0reg0'] = 1000
+    dictargs['fittmaxmnumbelempop0'] = 1000
     
     #dictargs['strgexprsbrt'] = 'sbrtfermrec8pntsigal0256.fits'
     #dictargs['spectype'] = ['colr']
     #dictargs['listnameback'] = ['isot', 'fdfm', 'dark']
-    #dictargs['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']]
+    #dictargs['backtype'] = [1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']
     #dictargs['psfnevaltype'] = 'kern'
     
     dictargs['forccart'] = True
@@ -1092,7 +1092,7 @@ def pcat_ferm_mock_brek(strgcnfgextnexec=None):
     dictargs['truefluxdistslopupprpop0'] = 1.5
     dictargs['truefluxdistsloplowrpop0'] = 2.
     dictargs['truefluxdistbrekpop0'] = 3e-8
-    dictargs['backtype'] = [[1e1]]
+    dictargs['backtype'] = [1e1]
     
     dictargs['numbswep'] = 1000000
     dictargs['inittype'] = 'refr'
@@ -1148,11 +1148,11 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     anglfact = 180. / pi
     
     dictargs = {}
-    dictargs['truemaxmnumbelempop0reg0'] = 400
-    dictargs['truenumbelempop0reg0'] = 100
+    dictargs['truemaxmnumbelempop0'] = 400
+    dictargs['truenumbelempop0'] = 100
     
     dictargs['listnameback'] = ['isot']
-    dictargs['backtype'] = [[10.]]
+    dictargs['backtype'] = [10.]
     dictargs['truenumbpopl'] = 1
     dictargs['refrlegdpopl'] = ['PS']
     dictargs['trueelemtype'] = ['lghtpnts']
@@ -1169,12 +1169,12 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     dictargs['fittelemtype'] = ['lghtpnts']
     dictargs['fittspatdisttype'] = ['self']
     #dictargs['fittspectype'] = ['colr']
-    dictargs['fittmaxmnumbelempop0reg0'] = 1000
+    dictargs['fittmaxmnumbelempop0'] = 1000
     
     #dictargs['strgexprsbrt'] = 'sbrtfermrec8pntsigal0256.fits'
     #dictargs['spectype'] = ['colr']
     #dictargs['listnameback'] = ['isot', 'fdfm', 'dark']
-    #dictargs['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']]
+    #dictargs['backtype'] = [1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']
     #dictargs['psfnevaltype'] = 'kern'
     
     dictargs['forccart'] = True
@@ -1206,10 +1206,10 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     dictargsvari['parsnone']['priofactdoff'] = 0.
     #dictargsvari['parsnone']['numbswep'] = 5000
    
-    dictargsvari['trueback']['truenumbelempop0reg0'] = 0
+    dictargsvari['trueback']['truenumbelempop0'] = 0
     dictargsvari['trueback']['priofactdoff'] = 1.
 
-    dictargsvari['truebackparsnone']['truenumbelempop0reg0'] = 0
+    dictargsvari['truebackparsnone']['truenumbelempop0'] = 0
     dictargsvari['truebackparsnone']['priofactdoff'] = 0.
 
     lablxaxi = r'$\alpha_p$'
@@ -1234,12 +1234,47 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
 def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     
     dictargs = {}
-    dictargs['truemaxmnumbelempop0reg0'] = 100
-    dictargs['truemaxmnumbelempop1reg0'] = 100
-    dictargs['truemaxmnumbelempop2reg0'] = 100
-    dictargs['truenumbelempop0reg0'] = 100
-    dictargs['truenumbelempop1reg0'] = 100
-    dictargs['truenumbelempop2reg0'] = 100
+    dictargs['truemaxmnumbelempop0'] = 8
+    dictargs['truenumbelempop0'] = 4
+    dictargs['fittmaxmnumbelempop0'] = 8
+    dictargs['fittnumbelempop0'] = 4
+    dictargs['proppsfp'] = False
+    dictargs['fittmaxmnumbelempop0'] = 1000
+    #dictargs['verbtype'] = 3
+    
+    dictargs['inittype'] = 'refr'
+    dictargs['numbswep'] = 20000
+    dictargs['numbswepplot'] = 5000
+    dictargs['numbburn'] = 1000
+    dictargs['numbsamp'] = 1000
+
+    dictargs['forccart'] = True
+    dictargs['pixltype'] = 'cart'
+    dictargs['numbsidecart'] = 100
+    
+    listnamecnfgextn = ['nomi']
+    dictargsvari = {}
+    for namecnfgextn in listnamecnfgextn:
+        dictargsvari[namecnfgextn] = {}
+    
+    dictglob = pcat.main.initarry( \
+                                  dictargsvari, \
+                                  dictargs, \
+                                  listnamecnfgextn, \
+                                  strgcnfgextnexec=strgcnfgextnexec, \
+                                  forcneww=True, \
+                                 )
+
+
+def pcat_ferm_igal_mock_popl(strgcnfgextnexec=None):
+    
+    dictargs = {}
+    dictargs['truemaxmnumbelempop0'] = 100
+    dictargs['truemaxmnumbelempop1'] = 100
+    dictargs['truemaxmnumbelempop2'] = 100
+    dictargs['truenumbelempop0'] = 100
+    dictargs['truenumbelempop1'] = 100
+    dictargs['truenumbelempop2'] = 100
     
     dictargs['truenumbpopl'] = 3
     dictargs['refrlegdpopl'] = ['AGN', 'Disk MSP', 'GC MSP']
@@ -1264,7 +1299,7 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargs['fittelemtype'] = ['lghtpnts']
     dictargs['fittspatdisttype'] = ['self']
     dictargs['fittspectype'] = ['colr']
-    dictargs['fittmaxmnumbelempop0reg0'] = 1000
+    dictargs['fittmaxmnumbelempop0'] = 1000
     
     dictargs['forccart'] = True
     dictargs['pixltype'] = 'cart'
@@ -1288,24 +1323,24 @@ def pcat_ferm_igal_mock(strgcnfgextnexec=None):
     dictargsvari['parsnone']['priofactdoff'] = 0.
     
     dictargsvari['truedark']['listnameback'] = ['isot', 'fdfm', 'dark']
-    dictargsvari['truedark']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']]
-    dictargsvari['truedark']['truemaxmnumbelempop0reg0'] = 0
-    dictargsvari['truedark']['truemaxmnumbelempop1reg0'] = 0
-    dictargsvari['truedark']['truemaxmnumbelempop2reg0'] = 0
-    dictargsvari['truedark']['truenumbelempop0reg0'] = 0
-    dictargsvari['truedark']['truenumbelempop1reg0'] = 0
-    dictargsvari['truedark']['truenumbelempop2reg0'] = 0
+    dictargsvari['truedark']['backtype'] = [1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']
+    dictargsvari['truedark']['truemaxmnumbelempop0'] = 0
+    dictargsvari['truedark']['truemaxmnumbelempop1'] = 0
+    dictargsvari['truedark']['truemaxmnumbelempop2'] = 0
+    dictargsvari['truedark']['truenumbelempop0'] = 0
+    dictargsvari['truedark']['truenumbelempop1'] = 0
+    dictargsvari['truedark']['truenumbelempop2'] = 0
    
-    #dictargsvari['backwfou']['fittbacktype'] = [['bfunwfou0004']]
+    #dictargsvari['backwfou']['fittbacktype'] = ['bfunwfou0004']
     
-    #dictargsvari['backfour']['fittbacktype'] = [['bfunfour0004']]
+    #dictargsvari['backfour']['fittbacktype'] = ['bfunfour0004']
     
     #dictargsvari['popl']['fittnumbpopl'] = 3
     #dictargsvari['popl']['fittspatdisttype'] = ['self', 'disc', 'los3']
     #dictargsvari['popl']['fittspectype'] = ['powr', 'expc', 'expc']
     #dictargsvari['popl']['fittelemregitype'] = [True, True, True]
-    #dictargsvari['popl']['fittmaxmnumbelempop1reg0'] = 1000
-    #dictargsvari['popl']['fittmaxmnumbelempop2reg0'] = 1000
+    #dictargsvari['popl']['fittmaxmnumbelempop1'] = 1000
+    #dictargsvari['popl']['fittmaxmnumbelempop2'] = 1000
     
     #dictargsvari['penalpridiff']['penalpridiff'] = True
     
@@ -1337,7 +1372,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['spectype'] = ['colr']
     dictargs['savestat'] = True
     dictargs['listnameback'] = ['isot', 'fdfm', 'dark']
-    dictargs['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']]
+    dictargs['backtype'] = [1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']
     
     dictargs['listprefhistfluxlabl'] = ['NPTF']
     dictargs['listprefhistfluxflux'] = [[1e-11, 1e-10, 3e-10, 5e-10]]
@@ -1346,8 +1381,9 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
    
     dictargs['initpsfp'] = initpsfp
     dictargs['inittype'] = 'reco'
+    #dictargs['verbtype'] = 2
     
-    dictargs['fittmaxmnumbelempop0reg0'] = 1000
+    dictargs['fittmaxmnumbelempop0'] = 10
     
     #dictargs['propbacp'] = False
     #dictargs['propcomp'] = False
@@ -1363,9 +1399,9 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargs['numbsidecart'] = 100
     
     
-    dictargs['numbswep'] = 100000
+    dictargs['numbswep'] = 4000
     dictargs['numbburn'] = 0
-    dictargs['numbswepplot'] = 5000
+    dictargs['numbswepplot'] = 1000
     dictargs['numbsamp'] = 100
     
     #dictargs['probtran'] = 0.
@@ -1388,7 +1424,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargsvari['refr']['propcomp'] = False
     dictargsvari['refr']['probtran'] = 0.
     dictargsvari['refr']['psfnevaltype'] = 'full'
-    dictargsvari['refr']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']]
+    dictargsvari['refr']['backtype'] = [1., 'sbrtfdfmpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits']
     dictargsvari['refr']['initpsfp'] = None
                    
     dictargsvari['parsvhig']['priofactdoff'] = 10.
@@ -1402,10 +1438,10 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     dictargsvari['parsnone']['priofactdoff'] = 0.
     
     dictargsvari['darknone']['listnameback'] = ['isot', 'fdfm']
-    dictargsvari['darknone']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
+    dictargsvari['darknone']['backtype'] = [1., 'sbrtfdfmpntssmthrec8.fits']
     
     dictargsvari['darknoneparsnone']['listnameback'] = ['isot', 'fdfm']
-    dictargsvari['darknoneparsnone']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
+    dictargsvari['darknoneparsnone']['backtype'] = [1., 'sbrtfdfmpntssmthrec8.fits']
     dictargsvari['darknoneparsnone']['priofactdoff'] = 0.
     
     dictargsvari['mask']['mask'] = array([-30., 30., -2., 2.]) / 180. * pi
@@ -1419,7 +1455,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     #dictargsvari['exce']['numbsamp'] = 100
     #dictargsvari['exce']['inittype'] = 'refr'
     #dictargsvari['exce']['listnameback'] = ['isot', 'fdfm']
-    #dictargsvari['exce']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
+    #dictargsvari['exce']['backtype'] = [1., 'sbrtfdfmpntssmthrec8.fits']
     #
     #dictargsvari['excefixd']['maxmgangdata'] = 5. / anglfact
     #dictargsvari['excefixd']['numbswep'] = 10000
@@ -1429,7 +1465,7 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     #dictargsvari['excefixd']['inittype'] = 'reco'
     #dictargsvari['excefixd']['forcsavestat'] = True
     #dictargsvari['excefixd']['listnameback'] = ['isot', 'fdfm']
-    #dictargsvari['excefixd']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits']]
+    #dictargsvari['excefixd']['backtype'] = [1., 'sbrtfdfmpntssmthrec8.fits']
     
     #dictargsvari['rofilarg']['maxmgangdata'] = 15. / anglfact
     
@@ -1442,22 +1478,22 @@ def pcat_ferm_igal_inpt(strgcnfgextnexec=None):
     #dictargsvari['rec7']['strgexpo'] = 'expofermrec7pntsigal0256.fits'
                  
     #dictargsvari['backtemp']['listnameback'] = ['isot', 'hydr', 'cmon', 'dustsfdd', 'dark', 'wise']
-    #dictargsvari['backtemp']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'hydrpntssmthrec8.fits', 'cmonpntssmthrec8.fits', \
-    #                                                                                'dustsfddpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits', 'wisepntssmthrec8.fits']]
+    #dictargsvari['backtemp']['backtype'] = [1., 'sbrtfdfmpntssmthrec8.fits', 'hydrpntssmthrec8.fits', 'cmonpntssmthrec8.fits', \
+    #                                                                                'dustsfddpntssmthrec8.fits', 'sbrtdarkpntssmthrec8.fits', 'wisepntssmthrec8.fits']
     #
     #dictargsvari['psfnvari']['proppsfp'] = True
     #
     #dictargsvari['backsmth']['proppsfp'] = True
     #dictargsvari['backsmth']['psfnevaltype'] = 'full'
-    #dictargsvari['backsmth']['backtype'] = [[1., 'sbrtfdfmpnts.fits', 'sbrtdarkpnts.fits']]
+    #dictargsvari['backsmth']['backtype'] = [1., 'sbrtfdfmpnts.fits', 'sbrtdarkpnts.fits']
     
     #dictargsvari['popl']['numbpopl'] = 3
     
     #dictargsvari['backwfou']['listnameback'] = ['isot', 'fdfm', 'bfunwfou0004']
-    #dictargsvari['backwfou']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'bfunwfou0004']]
+    #dictargsvari['backwfou']['backtype'] = [1., 'sbrtfdfmpntssmthrec8.fits', 'bfunwfou0004']
     
     #dictargsvari['backfour']['listnameback'] = ['isot', 'fdfm', 'bfunfour0004']
-    #dictargsvari['backfour']['backtype'] = [[1., 'sbrtfdfmpntssmthrec8.fits', 'bfunfour0002']]
+    #dictargsvari['backfour']['backtype'] = [1., 'sbrtfdfmpntssmthrec8.fits', 'bfunfour0002']
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -1516,7 +1552,7 @@ def test_ferm_inpt_ptch(strgcnfgextnexec=None):
               bgalcntr=bgalcntr, \
               minmflux=3e-11, \
               maxmflux=3e-6, \
-              backtype=[[1., 'sbrtfdfmpntssmth%s%s.fits' % (recotype, strgcntr)]], \
+              backtype=[1., 'sbrtfdfmpntssmth%s%s.fits' % (recotype, strgcntr)], \
               strgexpo='expofermrec8pnts%s%s.fits' % (recotype, strgcntr), \
               strgexprsbrt='expofermrec8pntsigal0256%s%s.fits' % (recotype, strgcntr), \
              )

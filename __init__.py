@@ -33,7 +33,7 @@ from healpy.rotator import angdist
 from healpy import ang2pix
 
 # pyfits
-import pyfits as pf, h5py
+import h5py
 
 from copy import deepcopy
 

@@ -51,12 +51,12 @@ def intr_lens_evalcntpresi():
     pcat.main.init( \
                    exprtype='hubb', \
                    intrevalcntpresi=True, \
-                   numbelempop0reg0=1, \
-                   maxmnumbelempop0reg0=1, \
-                   numbelempop1reg0=1, \
-                   maxmnumbelempop1reg0=1, \
-                   numbelempop2reg0=1, \
-                   maxmnumbelempop2reg0=1, \
+                   numbelempop0=1, \
+                   maxmnumbelempop0=1, \
+                   numbelempop1=1, \
+                   maxmnumbelempop1=1, \
+                   numbelempop2=1, \
+                   maxmnumbelempop2=1, \
                   )
     
 
@@ -65,12 +65,12 @@ def intr_lens_evalcntpmodl():
     pcat.main.init( \
                    exprtype='hubb', \
                    intrevalcntpmodl=True, \
-                   numbelempop0reg0=1, \
-                   maxmnumbelempop0reg0=1, \
-                   numbelempop1reg0=1, \
-                   maxmnumbelempop1reg0=1, \
-                   numbelempop2reg0=1, \
-                   maxmnumbelempop2reg0=1, \
+                   numbelempop0=1, \
+                   maxmnumbelempop0=1, \
+                   numbelempop1=1, \
+                   maxmnumbelempop1=1, \
+                   numbelempop2=1, \
+                   maxmnumbelempop2=1, \
                   )
     
 
@@ -79,7 +79,8 @@ def pcat_lens_mock_truesgnl(strgcnfgextnexec=None):
     dictargs = {}
     
     dictargs['exprtype'] = 'hubb'
-    dictargs['truenumbelempop0reg0'] = 25
+    dictargs['truenumbelempop0'] = 25
+    dictargs['fittmaxmnumbelempop0'] = 25
     dictargs['elemtype'] = ['lens']
    
     listnamecnfgextn = ['nomi', 'truenone']
@@ -87,7 +88,7 @@ def pcat_lens_mock_truesgnl(strgcnfgextnexec=None):
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
-    dictargsvari['truenone']['truenumbelempop0reg0'] = 0
+    dictargsvari['truenone']['truenumbelempop0'] = 0
     
     lablxaxi = ''
     scalxaxi = 'self'
@@ -98,10 +99,10 @@ def pcat_lens_mock_truesgnl(strgcnfgextnexec=None):
                                   dictargs, \
                                   listnamecnfgextn, \
                                   
-                                  namexaxi='truesgnl', \
-                                  lablxaxi=lablxaxi, \
-                                  scalxaxi=scalxaxi, \
-                                  listtickxaxi=listtickxaxi, \
+                                  namexaxivari='truesgnl', \
+                                  lablxaxivari=lablxaxi, \
+                                  scalxaxivari=scalxaxi, \
+                                  tickxaxivari=listtickxaxi, \
                         
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
@@ -114,9 +115,26 @@ def pcat_lens_mock_trueminmdefs(strgcnfgextnexec=None):
     
     dictargs = {}
     
+    #dictargs['verbtype'] = 3
+    #dictargs['probtran'] = 0.
+    #dictargs['probspmr'] = 0.
+    #dictargs['probspmr'] = 0.
+    #dictargs['makeplot'] = False
     dictargs['exprtype'] = 'hubb'
-    dictargs['truenumbelempop0reg0'] = 25
+    
+    #dictargs['sqzeexpl'] = True
+    #dictargs['optitype'] = 'none'
+    
+    dictargs['inittype'] = 'refr'
+    dictargs['numbswep'] = 20000
+    dictargs['numbswepplot'] = 5000
+    dictargs['numbburn'] = 1000
+    dictargs['numbsamp'] = 1000
+
+    dictargs['truenumbelempop0'] = 4
+    dictargs['fittmaxmnumbelempop0'] = 8
     dictargs['elemtype'] = ['lens']
+    #dictargs['elemtype'] = []
    
     listnamecnfgextn = ['truevlow', 'trueloww', 'nomi', 'truehigh', 'truevhig']
     dictargsvari = {}
@@ -125,7 +143,11 @@ def pcat_lens_mock_trueminmdefs(strgcnfgextnexec=None):
     
     dictargsvari['truevlow']['trueminmdefs'] = 3e-4 / anglfact
     dictargsvari['trueloww']['trueminmdefs'] = 1e-3 / anglfact
-    dictargsvari['nomi']['trueminmdefs'] = 3e-3 / anglfact
+    
+    #dictargsvari['nomi']['fittminmdefs'] = 3e-20 / anglfact
+    #dictargsvari['nomi']['trueminmdefs'] = 3e-20 / anglfact
+    
+    dictargsvari['nomi']['trueminmdefs'] = 3e-2 / anglfact
     dictargsvari['truehigh']['trueminmdefs'] = 1e-2 / anglfact
     dictargsvari['truevhig']['trueminmdefs'] = 3e-2 / anglfact
 
@@ -138,10 +160,10 @@ def pcat_lens_mock_trueminmdefs(strgcnfgextnexec=None):
                                   dictargs, \
                                   listnamecnfgextn, \
                                   
-                                  namexaxi='trueminmdefs', \
-                                  lablxaxi=lablxaxi, \
-                                  scalxaxi=scalxaxi, \
-                                  listtickxaxi=listtickxaxi, \
+                                  namexaxivari='trueminmdefs', \
+                                  lablxaxivari=lablxaxi, \
+                                  scalxaxivari=scalxaxi, \
+                                  tickxaxivari=listtickxaxi, \
                         
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
@@ -154,7 +176,7 @@ def pcat_lens_mock_pars(strgcnfgextnexec=None):
     dictargs = {}
     
     dictargs['exprtype'] = 'hubb'
-    dictargs['truenumbelempop0reg0'] = 25
+    dictargs['truenumbelempop0'] = 25
     dictargs['elemtype'] = ['lens']
    
     listnamecnfgextn = ['none', 'loww', 'nomi', 'high', 'vhig']
@@ -164,7 +186,7 @@ def pcat_lens_mock_pars(strgcnfgextnexec=None):
     
     dictargsvari['none']['priofactdoff'] = 0.
     dictargsvari['loww']['priofactdoff'] = 0.25
-    dictargsvari['nomi']['checprio'] = True
+    dictargsvari['nomi']['boolsampprio'] = True
     dictargsvari['nomi']['priofactdoff'] = 0.5
     dictargsvari['high']['priofactdoff'] = 0.75
     dictargsvari['vhig']['priofactdoff'] = 1.
@@ -182,10 +204,10 @@ def pcat_lens_mock_pars(strgcnfgextnexec=None):
                                   dictargs, \
                                   listnamecnfgextn, \
                                  
-                                  namexaxi='priofactdoff', \
-                                  lablxaxi=lablxaxi, \
-                                  scalxaxi=scalxaxi, \
-                                  listtickxaxi=listtickxaxi, \
+                                  namexaxivari='priofactdoff', \
+                                  lablxaxivari=lablxaxi, \
+                                  scalxaxivari=scalxaxi, \
+                                  tickxaxivari=listtickxaxi, \
                         
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
@@ -199,7 +221,7 @@ def pcat_lens_mock_fittnumb(strgcnfgextnexec=None):
     dictargs = {}
     
     dictargs['exprtype'] = 'hubb'
-    dictargs['truenumbelempop0reg0'] = 25
+    dictargs['truenumbelempop0'] = 25
     dictargs['elemtype'] = ['lens']
    
     listnamecnfgextn = ['fittnone', 'fittsing', 'fittdoub', 'fittmany', 'nomi']
@@ -207,17 +229,17 @@ def pcat_lens_mock_fittnumb(strgcnfgextnexec=None):
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
-    dictargsvari['fittnone']['fittminmnumbelempop0reg0'] = 0
-    dictargsvari['fittnone']['fittmaxmnumbelempop0reg0'] = 0
+    dictargsvari['fittnone']['fittminmnumbelempop0'] = 0
+    dictargsvari['fittnone']['fittmaxmnumbelempop0'] = 0
 
-    dictargsvari['fittsing']['fittminmnumbelempop0reg0'] = 1
-    dictargsvari['fittsing']['fittmaxmnumbelempop0reg0'] = 1
+    dictargsvari['fittsing']['fittminmnumbelempop0'] = 1
+    dictargsvari['fittsing']['fittmaxmnumbelempop0'] = 1
 
-    dictargsvari['fittdoub']['fittminmnumbelempop0reg0'] = 2
-    dictargsvari['fittdoub']['fittmaxmnumbelempop0reg0'] = 2
+    dictargsvari['fittdoub']['fittminmnumbelempop0'] = 2
+    dictargsvari['fittdoub']['fittmaxmnumbelempop0'] = 2
 
-    dictargsvari['fittmany']['fittminmnumbelempop0reg0'] = 10
-    dictargsvari['fittmany']['fittmaxmnumbelempop0reg0'] = 10
+    dictargsvari['fittmany']['fittminmnumbelempop0'] = 10
+    dictargsvari['fittmany']['fittmaxmnumbelempop0'] = 10
 
     listtickxaxi = ['0', '1', '2', '10', 'Tran.']
     
@@ -226,7 +248,7 @@ def pcat_lens_mock_fittnumb(strgcnfgextnexec=None):
                                   dictargs, \
                                   listnamecnfgextn, \
                                   
-                                  namexaxi='fittnumbelempop0reg0', \
+                                  namexaxivari='fittnumbelempop0', \
                                   listtickxaxi=listtickxaxi, \
                         
                                   strgcnfgextnexec=strgcnfgextnexec, \
@@ -237,7 +259,7 @@ def pcat_lens_mock_trueback(strgcnfgextnexec=None):
    
     dictargs = {}
     dictargs['exprtype'] = 'hubb'
-    dictargs['truenumbelempop0reg0'] = 25
+    dictargs['truenumbelempop0'] = 25
     dictargs['elemtype'] = ['lens']
     
     dictargs['numbswep'] = 10000
@@ -261,8 +283,8 @@ def pcat_lens_mock_trueback(strgcnfgextnexec=None):
                                   dictargs, \
                                   listnamecnfgextn, \
                                   
-                                  namexaxi='truebacp', \
-                                  listtickxaxi=listtickxaxi, \
+                                  namexaxivari='truebacp', \
+                                  tickxaxivari=listtickxaxi, \
 
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
@@ -276,10 +298,10 @@ def pcat_lens_mock_sour(strgcnfgextnexec=None):
     dictargs['exprtype'] = 'hubb'
     
     dictargs['elemtype'] = ['lens', 'lghtgausbgrd']
-    dictargs['numbelempop0reg0'] = 20
-    dictargs['maxmnumbelempop0reg0'] = 100
-    dictargs['numbelempop1reg0'] = 10
-    dictargs['maxmnumbelempop1reg0'] = 100
+    dictargs['numbelempop0'] = 20
+    dictargs['maxmnumbelempop0'] = 100
+    dictargs['numbelempop1'] = 10
+    dictargs['maxmnumbelempop1'] = 100
     dictargs['spatdisttype'] = ['unif', 'dsrcexpo']
     
     numbelem = int(25. * 10.**0.9)
@@ -293,14 +315,14 @@ def pcat_lens_mock_sour(strgcnfgextnexec=None):
     
     dictargsvari['bgrdunif']['spatdisttype'] = ['unif', 'unif']
     
-    dictargsvari['subhsing']['fittminmnumbelempop0reg0'] = 1
-    dictargsvari['subhsing']['fittmaxmnumbelempop0reg0'] = 1
+    dictargsvari['subhsing']['fittminmnumbelempop0'] = 1
+    dictargsvari['subhsing']['fittmaxmnumbelempop0'] = 1
 
-    dictargsvari['truevlow']['truenumbelempop0reg0'] = 30
+    dictargsvari['truevlow']['truenumbelempop0'] = 30
     
     dictargsvari['truelowr']['fittminmdefs'] = 0.01 / anglfact
     
-    dictargsvari['truevlow']['truenumbelempop0reg0'] = int(25. * 10.**0.9)
+    dictargsvari['truevlow']['truenumbelempop0'] = int(25. * 10.**0.9)
     dictargsvari['truevlow']['trueminmdefs'] = 3e-4 / anglfact
     dictargsvari['truevlow']['fittminmdefs'] = 0.01 / anglfact
     
@@ -331,11 +353,11 @@ def test_lens_mock_sele():
     dictargs['mockonly'] = True
     dictargs['exprtype'] = 'hubb'
     dictargs['minmdefs'] = 5e-4 / anglfact
-    dictargs['numbelempop0reg0'] = 1000
+    dictargs['numbelempop0'] = 1000
     dictargs['variasca'] = False
     dictargs['variacut'] = False
     dictargs['allwfixdtrue'] = False
-    dictargs['maxmnumbelempop0reg0'] = 1000
+    dictargs['maxmnumbelempop0'] = 1000
     
     listnamesele = ['pars', 'nrel']
     numbsele = len(listnamesele)
@@ -463,8 +485,8 @@ def test_lens_mock_tmpr():
     dictargs = {}
     dictargs['exprtype'] = 'hubb'
     dictargs['burntmpr'] = True
-    dictargs['maxmnumbelempop0reg0'] = 0
-    dictargs['numbelempop0reg0'] = 0
+    dictargs['maxmnumbelempop0'] = 0
+    dictargs['numbelempop0'] = 0
 
     listnamecnfgextn = ['nomi', 'refr', 'pert']
     dictargsvari = {}
@@ -494,7 +516,7 @@ def pcat_lens_mock_many(strgcnfgextnexec=None):
     dictargs['inittype'] = 'pert'
     dictargs['elemtype'] = ['lens']
     dictargs['numbregi'] = 3
-    dictargs['backtype'] = [[1.], [1.], [1.]]
+    dictargs['backtype'] = [1., 1., 1.]
     
     dictargs['numbswep'] = 10000
     dictargs['numbsamp'] = 100
@@ -505,10 +527,10 @@ def pcat_lens_mock_many(strgcnfgextnexec=None):
         dictargsvari[namecnfgextn] = {}
     
     dictargsvari['regising']['numbregi'] = 1 
-    dictargsvari['regising']['backtype'] = [[1.]]
+    dictargsvari['regising']['backtype'] = [1.]
     
     dictargsvari['regimany']['numbregi'] = 5
-    dictargsvari['regimany']['backtype'] = [[1.]] * 5
+    dictargsvari['regimany']['backtype'] = [1.] * 5
     
     for k in indxregi:
         dictglob = pcat.main.initarry( \
@@ -535,10 +557,10 @@ def pcat_lens_mock_spmr(strgcnfgextnexec=None):
     dictargs = {}
     dictargs['exprtype'] = 'hubb'
     dictargs['inittype'] = 'refr'
-    dictargs['numbelempop0reg0'] = 1
-    dictargs['truelgalpop0reg00000'] = 1. / anglfact
-    dictargs['truebgalpop0reg00000'] = 0.5 / anglfact
-    dictargs['truedefspop0reg00000'] = 1e-2 / anglfact
+    dictargs['numbelempop0'] = 1
+    dictargs['truelgalpop00000'] = 1. / anglfact
+    dictargs['truebgalpop00000'] = 0.5 / anglfact
+    dictargs['truedefspop00000'] = 1e-2 / anglfact
     dictargs['probtran'] = 1.
     dictargs['elemtype'] = ['lens']
     dictargs['probspmr'] = 1.
@@ -555,9 +577,9 @@ def pcat_lens_mock_spmr(strgcnfgextnexec=None):
     
     dictargsvari['parshigh']['priofactdoff'] = 1.
     
-    dictargsvari['masshigh']['truedefspop0reg00000'] = 3e-2 / anglfact
+    dictargsvari['masshigh']['truedefspop00000'] = 3e-2 / anglfact
     
-    dictargsvari['massloww']['truedefspop0reg00000'] = 3e-3 / anglfact
+    dictargsvari['massloww']['truedefspop00000'] = 3e-3 / anglfact
     
     dictargsvari['trannone']['probtran'] = 0.
     
@@ -778,15 +800,15 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     strgexprsbrtlarg = namedatasets + '_0400.fits'
     
     if namedatasets == 'lens29075550':
-        initlgalsourreg0 = -0.1 / anglfact
-        initbgalsourreg0 = 0.1 / anglfact
+        initlgalsour = -0.1 / anglfact
+        initbgalsour = 0.1 / anglfact
         initbacpbac0en00 = 1e-7
         fittmeanbacpbac0en00 = 1.115e-7
         fittstdvbacpbac0en00 = fittmeanbacpbac0en00 * 1e-3
         fittscalbacpbac0en00 = 'gaus'
     else:
-        initlgalsourreg0 = None
-        initbgalsourreg0 = None
+        initlgalsour = None
+        initbgalsour = None
         initbacpbac0en00 = None
         fittmeanbacpbac0en00 = None
         fittstdvbacpbac0en00 = None
@@ -807,9 +829,15 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     dictargs['strgexpo'] = strgexpo
     dictargs['indxenerincl'] = array([0])
     dictargs['savestat'] = True
+    
+    # temp
+    dictargs['sqzeprop'] = True
+    dictargs['numbswep'] = 10000
+    dictargs['numbswepplot'] = 1000
+    
     dictargs['serstype'] = 'intp'
-    dictargs['numbswep'] = 1000
-    dictargs['numbsamp'] = 10
+    #dictargs['verbtype'] = 2
+    dictargs['numbsamp'] = 100
     dictargs['inittype'] = 'reco'
     
     #dictargs['inittype'] = 'rand'
@@ -819,29 +847,29 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
     
-    dictargs['initlgalhostreg0isf0'] = -0.1 / anglfact
-    dictargs['initbgalhostreg0isf0'] = 0.
-    dictargs['initlgalhostreg0isf1'] = -0.1 / anglfact
-    dictargs['initbgalhostreg0isf1'] = 0.
-    dictargs['initlgalsourreg0'] = -0.2 / anglfact
-    dictargs['initbgalsourreg0'] = 0.2 / anglfact
+    dictargs['initlgalhostisf0'] = -0.1 / anglfact
+    dictargs['initbgalhostisf0'] = 0.
+    dictargs['initlgalhostisf1'] = -0.1 / anglfact
+    dictargs['initbgalhostisf1'] = 0.
+    dictargs['initlgalsour'] = -0.2 / anglfact
+    dictargs['initbgalsour'] = 0.2 / anglfact
     
-    dictargsvari['largrofi']['maxmnumbelempop0reg0'] = 0
-    dictargsvari['largrofi']['maxmnumbelempop1reg0'] = 0
-    dictargsvari['largrofi']['maxmnumbelempop2reg0'] = 0
+    dictargsvari['largrofi']['maxmnumbelempop0'] = 0
+    dictargsvari['largrofi']['maxmnumbelempop1'] = 0
+    dictargsvari['largrofi']['maxmnumbelempop2'] = 0
     dictargsvari['largrofi']['strgexprsbrt'] = strgexprsbrtlarg
     dictargsvari['largrofi']['maxmgangdata'] = maxmgangdatalarg
     #dictargsvari['largrofi']['thindata'] = True
     
-    dictargsvari['largrofimask']['maxmnumbelempop0reg0'] = 0
-    dictargsvari['largrofimask']['maxmnumbelempop1reg0'] = 0
-    dictargsvari['largrofimask']['maxmnumbelempop2reg0'] = 0
+    dictargsvari['largrofimask']['maxmnumbelempop0'] = 0
+    dictargsvari['largrofimask']['maxmnumbelempop1'] = 0
+    dictargsvari['largrofimask']['maxmnumbelempop2'] = 0
     dictargsvari['largrofimask']['listmask'] = listmask
     dictargsvari['largrofimask']['strgexprsbrt'] = strgexprsbrtlarg
     dictargsvari['largrofimask']['maxmgangdata'] = maxmgangdatalarg
     
     dictargsvari['dsrcexpo']['strgexprsbrt'] = strgexprsbrt
-    dictargsvari['dsrcexpo']['maxmnumbelempop0reg0'] = 2
+    dictargsvari['dsrcexpo']['maxmnumbelempop0'] = 2
     dictargsvari['dsrcexpo']['elemtype'] = ['lghtgausbgrd']
     #dictargsvari['dsrcexpo']['spatdisttype'] = ['unif', 'dsrcexpo']
     dictargsvari['dsrcexpo']['spatdisttype'] = ['dsrcexpo']
@@ -851,28 +879,28 @@ def pcat_lens_inpt(strgcnfgextnexec=None):
     #dictargsvari['dsrcexpo']['forcsavestat'] = True
     
     dictargsvari['sour']['strgexprsbrt'] = strgexprsbrt
-    dictargsvari['sour']['maxmnumbelempop0reg0'] = 1
+    dictargsvari['sour']['maxmnumbelempop0'] = 1
     dictargsvari['sour']['elemtype'] = ['lghtgausbgrd']
     #dictargsvari['sour']['forcsavestat'] = True
     
     dictargsvari['hostmult']['strgexprsbrt'] = strgexprsbrt
     dictargsvari['hostmult']['numbsersfgrd'] = array([2])
     #dictargsvari['hostmult']['proppsfp'] = False
-    dictargsvari['hostmult']['maxmnumbelempop0reg0'] = 0
-    dictargsvari['hostmult']['maxmnumbelempop1reg0'] = 0
+    dictargsvari['hostmult']['maxmnumbelempop0'] = 0
+    dictargsvari['hostmult']['maxmnumbelempop1'] = 0
     dictargsvari['hostmult']['elemtype'] = ['lens', 'lghtgausbgrd']
     #dictargsvari['hostmult']['forcsavestat'] = True
     #dictargsvari['hostmult']['listmask'] = listmask
     
     dictargsvari['sourmask']['strgexprsbrt'] = strgexprsbrt
-    dictargsvari['sourmask']['maxmnumbelempop0reg0'] = 0
-    dictargsvari['sourmask']['maxmnumbelempop1reg0'] = 0
+    dictargsvari['sourmask']['maxmnumbelempop0'] = 0
+    dictargsvari['sourmask']['maxmnumbelempop1'] = 0
     dictargsvari['sourmask']['elemtype'] = ['lens', 'lghtgausbgrd']
     dictargsvari['sourmask']['listmask'] = listmask
     
     dictargsvari['nomi']['strgexprsbrt'] = strgexprsbrt
     dictargsvari['nomi']['maxmgangdata'] = maxmgangdata
-    dictargsvari['nomi']['maxmnumbelempop0reg0'] = 0
+    dictargsvari['nomi']['maxmnumbelempop0'] = 0
     
     dictargsvari['mask']['listmask'] = listmask
     dictargsvari['mask']['strgexprsbrt'] = strgexprsbrt
@@ -891,7 +919,7 @@ def test_lens_mock_psfn():
    
     dictargs = {}
     dictargs['exprtype'] = 'hubb'
-    dictargs['truenumbelempop0reg0'] = 25
+    dictargs['truenumbelempop0'] = 25
     dictargs['elemtype'] = ['lens']
     dictargs['truesigcen00evt0'] = 4e-7
     
@@ -920,8 +948,8 @@ def test_lens_mock_psfn():
                                   dictargs, \
                                   listnamecnfgextn, \
                                   
-                                  namexaxi='psfnvari', \
-                                  listtickxaxi=listtickxaxi, \
+                                  namexaxivari='psfnvari', \
+                                  tickxaxivari=listtickxaxi, \
 
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                  )
@@ -938,158 +966,158 @@ def pcat_lens_mock_papr(strgcnfgextnexec=None):
     # temp
     dictargs['limtydathistfeat'] = [0.5, 10.]
     
-    dictargs['truemaxmnumbelempop0reg0'] = 25
-    dictargs['truenumbelempop0reg0'] = 25
-    #dictargs['maxmnumbelempop0reg0'] = 0
-    #dictargs['numbelempop0reg0'] = 0
+    dictargs['truemaxmnumbelempop0'] = 25
+    dictargs['truenumbelempop0'] = 25
+    #dictargs['maxmnumbelempop0'] = 0
+    #dictargs['numbelempop0'] = 0
     
     dictargs['truemeanpntspop0'] = 25
-    dictargs['initnumbelempop0reg0'] = 25
+    dictargs['initnumbelempop0'] = 25
     dictargs['truedefsdistsloppop0'] = 1.9
     dictargs['truesigcen00evt0'] = 4.21788e-07
-    dictargs['truebacp0000reg0en00'] = 2e-07
-    dictargs['truelgalsourreg0'] = -2.41109e-07
-    dictargs['truebgalsourreg0'] = 1.26909e-07
-    dictargs['truefluxsourreg0'] = 1e-18
-    dictargs['truesizesourreg0'] = 1.45444e-06
-    dictargs['trueellpsourreg0'] = 0.2
-    dictargs['trueanglsourreg0'] = 2.4485
-    dictargs['truelgalhostreg0isf0'] = 1.10908e-07
-    dictargs['truebgalhostreg0isf0'] = 2.26346e-08
-    dictargs['truefluxhostreg0isf0'] = 1e-16
-    dictargs['truesizehostreg0isf0'] = 4.84814e-06
-    dictargs['truebeinhostreg0isf0'] = 7.27221e-06
-    dictargs['trueellphostreg0isf0'] = 0.2
-    dictargs['trueanglhostreg0isf0'] = 1.21445
-    dictargs['trueserihostreg0isf0'] = 4
-    dictargs['truesherextrreg0isf0'] = 0.0956653
-    dictargs['truesangextrreg0isf0'] = 1.5708
+    dictargs['truebacp0000en00'] = 2e-07
+    dictargs['truelgalsour'] = -2.41109e-07
+    dictargs['truebgalsour'] = 1.26909e-07
+    dictargs['truefluxsour'] = 1e-18
+    dictargs['truesizesour'] = 1.45444e-06
+    dictargs['trueellpsour'] = 0.2
+    dictargs['trueanglsour'] = 2.4485
+    dictargs['truelgalhostisf0'] = 1.10908e-07
+    dictargs['truebgalhostisf0'] = 2.26346e-08
+    dictargs['truefluxhostisf0'] = 1e-16
+    dictargs['truesizehostisf0'] = 4.84814e-06
+    dictargs['truebeinhostisf0'] = 7.27221e-06
+    dictargs['trueellphostisf0'] = 0.2
+    dictargs['trueanglhostisf0'] = 1.21445
+    dictargs['trueserihostisf0'] = 4
+    dictargs['truesherextrisf0'] = 0.0956653
+    dictargs['truesangextrisf0'] = 1.5708
 
-    #dictargs['truelgalpop0reg00000'] = 8.70681e-06
-    #dictargs['truebgalpop0reg00000'] = 5.5522e-06
-    #dictargs['truedefspop0reg00000'] = 4.46996e-07
-    #dictargs['trueascapop0reg00000'] = 8.3953e-08
-    #dictargs['trueacutpop0reg00000'] = 7.26722e-07
-    #dictargs['truelgalpop0reg00001'] = 1.95366e-06
-    #dictargs['truebgalpop0reg00001'] = -6.43887e-06
-    #dictargs['truedefspop0reg00001'] = 2.0933e-07
-    #dictargs['trueascapop0reg00001'] = 1.98019e-07
-    #dictargs['trueacutpop0reg00001'] = 5.11875e-06
-    #dictargs['truelgalpop0reg00002'] = 8.48563e-06
-    #dictargs['truebgalpop0reg00002'] = 4.20743e-07
-    #dictargs['truedefspop0reg00002'] = 5.50444e-08
-    #dictargs['trueascapop0reg00002'] = 7.67089e-08
-    #dictargs['trueacutpop0reg00002'] = 5.28643e-06
-    #dictargs['truelgalpop0reg00003'] = 4.73257e-07
-    #dictargs['truebgalpop0reg00003'] = 2.66861e-06
-    #dictargs['truedefspop0reg00003'] = 8.56312e-08
-    #dictargs['trueascapop0reg00003'] = 3.15034e-07
-    #dictargs['trueacutpop0reg00003'] = 3.84845e-06
-    #dictargs['truelgalpop0reg00004'] = 2.40305e-06
-    #dictargs['truebgalpop0reg00004'] = 5.18566e-06
-    #dictargs['truedefspop0reg00004'] = 6.03287e-08
-    #dictargs['trueascapop0reg00004'] = 1.82084e-07
-    #dictargs['trueacutpop0reg00004'] = 4.8727e-06
-    #dictargs['truelgalpop0reg00005'] = 3.61995e-06
-    #dictargs['truebgalpop0reg00005'] = -4.77678e-06
-    #dictargs['truedefspop0reg00005'] = 1.18797e-07
-    #dictargs['trueascapop0reg00005'] = 3.02975e-07
-    #dictargs['trueacutpop0reg00005'] = 8.68302e-06
-    #dictargs['truelgalpop0reg00006'] = -2.65962e-06
-    #dictargs['truebgalpop0reg00006'] = 2.66758e-06
-    #dictargs['truedefspop0reg00006'] = 6.1361e-08
-    #dictargs['trueascapop0reg00006'] = 2.41337e-07
-    #dictargs['trueacutpop0reg00006'] = 1.76904e-06
-    #dictargs['truelgalpop0reg00007'] = 8.11351e-06
-    #dictargs['truebgalpop0reg00007'] = -1.32214e-06
-    #dictargs['truedefspop0reg00007'] = 3.43939e-07
-    #dictargs['trueascapop0reg00007'] = 2.02059e-07
-    #dictargs['trueacutpop0reg00007'] = 8.7719e-06
-    #dictargs['truelgalpop0reg00008'] = -1.84568e-06
-    #dictargs['truebgalpop0reg00008'] = -3.27396e-06
-    #dictargs['truedefspop0reg00008'] = 1.24152e-07
-    #dictargs['trueascapop0reg00008'] = 4.09883e-07
-    #dictargs['trueacutpop0reg00008'] = 8.34863e-06
-    #dictargs['truelgalpop0reg00009'] = 1.85564e-06
-    #dictargs['truebgalpop0reg00009'] = -8.05447e-06
-    #dictargs['truedefspop0reg00009'] = 1.32745e-07
-    #dictargs['trueascapop0reg00009'] = 1.18999e-07
-    #dictargs['trueacutpop0reg00009'] = 7.10343e-06
-    #dictargs['truelgalpop0reg00010'] = 7.65329e-06
-    #dictargs['truebgalpop0reg00010'] = 2.85729e-07
-    #dictargs['truedefspop0reg00010'] = 1.35078e-07
-    #dictargs['trueascapop0reg00010'] = 3.15458e-08
-    #dictargs['trueacutpop0reg00010'] = 5.23671e-06
-    #dictargs['truelgalpop0reg00011'] = -7.19101e-06
-    #dictargs['truebgalpop0reg00011'] = 2.22167e-06
-    #dictargs['truedefspop0reg00011'] = 8.00093e-08
-    #dictargs['trueascapop0reg00011'] = 3.7222e-07
-    #dictargs['trueacutpop0reg00011'] =  4.706e-07
-    #dictargs['truelgalpop0reg00012'] = -7.56662e-06
-    #dictargs['truebgalpop0reg00012'] = 3.56868e-06
-    #dictargs['truedefspop0reg00012'] = 1.07991e-07
-    #dictargs['trueascapop0reg00012'] = 2.7714e-07
-    #dictargs['trueacutpop0reg00012'] = 8.18081e-06
-    #dictargs['truelgalpop0reg00013'] = -2.37798e-07
-    #dictargs['truebgalpop0reg00013'] = 6.01449e-06
-    #dictargs['truedefspop0reg00013'] = 1.06915e-07
-    #dictargs['trueascapop0reg00013'] = 4.49287e-07
-    #dictargs['trueacutpop0reg00013'] = 6.46671e-06
-    #dictargs['truelgalpop0reg00014'] = -6.81208e-06
-    #dictargs['truebgalpop0reg00014'] = -2.62666e-06
-    #dictargs['truedefspop0reg00014'] = 4.45121e-07
-    #dictargs['trueascapop0reg00014'] = 1.69823e-07
-    #dictargs['trueacutpop0reg00014'] = 1.83285e-06
-    #dictargs['truelgalpop0reg00015'] = -5.30943e-07
-    #dictargs['truebgalpop0reg00015'] = -2.07925e-06
-    #dictargs['truedefspop0reg00015'] = 1.41112e-07
-    #dictargs['trueascapop0reg00015'] = 2.1175e-07
-    #dictargs['trueacutpop0reg00015'] = 2.52997e-06
-    #dictargs['truelgalpop0reg00016'] = -1.69739e-06
-    #dictargs['truebgalpop0reg00016'] = -1.57014e-06
-    #dictargs['truedefspop0reg00016'] = 6.30512e-07
-    #dictargs['trueascapop0reg00016'] = 4.74931e-07
-    #dictargs['trueacutpop0reg00016'] = 6.04629e-06
-    #dictargs['truelgalpop0reg00017'] = -8.08312e-06
-    #dictargs['truebgalpop0reg00017'] = 4.51844e-06
-    #dictargs['truedefspop0reg00017'] = 1.70373e-07
-    #dictargs['trueascapop0reg00017'] = 4.00467e-07
-    #dictargs['trueacutpop0reg00017'] = 3.36898e-06
-    #dictargs['truelgalpop0reg00018'] = -8.55444e-06
-    #dictargs['truebgalpop0reg00018'] = 2.16851e-06
-    #dictargs['truedefspop0reg00018'] = 5.61476e-08
-    #dictargs['trueascapop0reg00018'] = 3.6823e-07
-    #dictargs['trueacutpop0reg00018'] = 7.70295e-06
-    #dictargs['truelgalpop0reg00019'] = -1.77196e-06
-    #dictargs['truebgalpop0reg00019'] = 8.60636e-06
-    #dictargs['truedefspop0reg00019'] = 5.99085e-08
-    #dictargs['trueascapop0reg00019'] = 4.56979e-07
-    #dictargs['trueacutpop0reg00019'] = 4.51352e-06
-    #dictargs['truelgalpop0reg00020'] = 5.10012e-06
-    #dictargs['truebgalpop0reg00020'] = 4.90283e-06
-    #dictargs['truedefspop0reg00020'] = 3.59422e-06
-    #dictargs['trueascapop0reg00020'] = 4.71858e-07
-    #dictargs['trueacutpop0reg00020'] = 3.88735e-07
-    #dictargs['truelgalpop0reg00021'] = -9.38655e-06
-    #dictargs['truebgalpop0reg00021'] = 8.39509e-07
-    #dictargs['truedefspop0reg00021'] =  5.037e-08
-    #dictargs['trueascapop0reg00021'] = 3.18758e-07
-    #dictargs['trueacutpop0reg00021'] = 5.18656e-06
-    #dictargs['truelgalpop0reg00022'] = 3.22999e-06
-    #dictargs['truebgalpop0reg00022'] = -1.13755e-06
-    #dictargs['truedefspop0reg00022'] = 6.89786e-08
-    #dictargs['trueascapop0reg00022'] = 4.60412e-07
-    #dictargs['trueacutpop0reg00022'] = 7.0615e-06
-    #dictargs['truelgalpop0reg00023'] = -9.57364e-06
-    #dictargs['truebgalpop0reg00023'] = -7.77006e-06
-    #dictargs['truedefspop0reg00023'] = 1.46526e-07
-    #dictargs['trueascapop0reg00023'] = 1.39644e-07
-    #dictargs['trueacutpop0reg00023'] = 3.95241e-06
-    #dictargs['truelgalpop0reg00024'] = 5.45961e-06
-    #dictargs['truebgalpop0reg00024'] = -2.82849e-06
-    #dictargs['truedefspop0reg00024'] = 8.48926e-07
-    #dictargs['trueascapop0reg00024'] = 3.49285e-07
-    #dictargs['trueacutpop0reg00024'] = 5.35163e-06
+    #dictargs['truelgalpop00000'] = 8.70681e-06
+    #dictargs['truebgalpop00000'] = 5.5522e-06
+    #dictargs['truedefspop00000'] = 4.46996e-07
+    #dictargs['trueascapop00000'] = 8.3953e-08
+    #dictargs['trueacutpop00000'] = 7.26722e-07
+    #dictargs['truelgalpop00001'] = 1.95366e-06
+    #dictargs['truebgalpop00001'] = -6.43887e-06
+    #dictargs['truedefspop00001'] = 2.0933e-07
+    #dictargs['trueascapop00001'] = 1.98019e-07
+    #dictargs['trueacutpop00001'] = 5.11875e-06
+    #dictargs['truelgalpop00002'] = 8.48563e-06
+    #dictargs['truebgalpop00002'] = 4.20743e-07
+    #dictargs['truedefspop00002'] = 5.50444e-08
+    #dictargs['trueascapop00002'] = 7.67089e-08
+    #dictargs['trueacutpop00002'] = 5.28643e-06
+    #dictargs['truelgalpop00003'] = 4.73257e-07
+    #dictargs['truebgalpop00003'] = 2.66861e-06
+    #dictargs['truedefspop00003'] = 8.56312e-08
+    #dictargs['trueascapop00003'] = 3.15034e-07
+    #dictargs['trueacutpop00003'] = 3.84845e-06
+    #dictargs['truelgalpop00004'] = 2.40305e-06
+    #dictargs['truebgalpop00004'] = 5.18566e-06
+    #dictargs['truedefspop00004'] = 6.03287e-08
+    #dictargs['trueascapop00004'] = 1.82084e-07
+    #dictargs['trueacutpop00004'] = 4.8727e-06
+    #dictargs['truelgalpop00005'] = 3.61995e-06
+    #dictargs['truebgalpop00005'] = -4.77678e-06
+    #dictargs['truedefspop00005'] = 1.18797e-07
+    #dictargs['trueascapop00005'] = 3.02975e-07
+    #dictargs['trueacutpop00005'] = 8.68302e-06
+    #dictargs['truelgalpop00006'] = -2.65962e-06
+    #dictargs['truebgalpop00006'] = 2.66758e-06
+    #dictargs['truedefspop00006'] = 6.1361e-08
+    #dictargs['trueascapop00006'] = 2.41337e-07
+    #dictargs['trueacutpop00006'] = 1.76904e-06
+    #dictargs['truelgalpop00007'] = 8.11351e-06
+    #dictargs['truebgalpop00007'] = -1.32214e-06
+    #dictargs['truedefspop00007'] = 3.43939e-07
+    #dictargs['trueascapop00007'] = 2.02059e-07
+    #dictargs['trueacutpop00007'] = 8.7719e-06
+    #dictargs['truelgalpop00008'] = -1.84568e-06
+    #dictargs['truebgalpop00008'] = -3.27396e-06
+    #dictargs['truedefspop00008'] = 1.24152e-07
+    #dictargs['trueascapop00008'] = 4.09883e-07
+    #dictargs['trueacutpop00008'] = 8.34863e-06
+    #dictargs['truelgalpop00009'] = 1.85564e-06
+    #dictargs['truebgalpop00009'] = -8.05447e-06
+    #dictargs['truedefspop00009'] = 1.32745e-07
+    #dictargs['trueascapop00009'] = 1.18999e-07
+    #dictargs['trueacutpop00009'] = 7.10343e-06
+    #dictargs['truelgalpop00010'] = 7.65329e-06
+    #dictargs['truebgalpop00010'] = 2.85729e-07
+    #dictargs['truedefspop00010'] = 1.35078e-07
+    #dictargs['trueascapop00010'] = 3.15458e-08
+    #dictargs['trueacutpop00010'] = 5.23671e-06
+    #dictargs['truelgalpop00011'] = -7.19101e-06
+    #dictargs['truebgalpop00011'] = 2.22167e-06
+    #dictargs['truedefspop00011'] = 8.00093e-08
+    #dictargs['trueascapop00011'] = 3.7222e-07
+    #dictargs['trueacutpop00011'] =  4.706e-07
+    #dictargs['truelgalpop00012'] = -7.56662e-06
+    #dictargs['truebgalpop00012'] = 3.56868e-06
+    #dictargs['truedefspop00012'] = 1.07991e-07
+    #dictargs['trueascapop00012'] = 2.7714e-07
+    #dictargs['trueacutpop00012'] = 8.18081e-06
+    #dictargs['truelgalpop00013'] = -2.37798e-07
+    #dictargs['truebgalpop00013'] = 6.01449e-06
+    #dictargs['truedefspop00013'] = 1.06915e-07
+    #dictargs['trueascapop00013'] = 4.49287e-07
+    #dictargs['trueacutpop00013'] = 6.46671e-06
+    #dictargs['truelgalpop00014'] = -6.81208e-06
+    #dictargs['truebgalpop00014'] = -2.62666e-06
+    #dictargs['truedefspop00014'] = 4.45121e-07
+    #dictargs['trueascapop00014'] = 1.69823e-07
+    #dictargs['trueacutpop00014'] = 1.83285e-06
+    #dictargs['truelgalpop00015'] = -5.30943e-07
+    #dictargs['truebgalpop00015'] = -2.07925e-06
+    #dictargs['truedefspop00015'] = 1.41112e-07
+    #dictargs['trueascapop00015'] = 2.1175e-07
+    #dictargs['trueacutpop00015'] = 2.52997e-06
+    #dictargs['truelgalpop00016'] = -1.69739e-06
+    #dictargs['truebgalpop00016'] = -1.57014e-06
+    #dictargs['truedefspop00016'] = 6.30512e-07
+    #dictargs['trueascapop00016'] = 4.74931e-07
+    #dictargs['trueacutpop00016'] = 6.04629e-06
+    #dictargs['truelgalpop00017'] = -8.08312e-06
+    #dictargs['truebgalpop00017'] = 4.51844e-06
+    #dictargs['truedefspop00017'] = 1.70373e-07
+    #dictargs['trueascapop00017'] = 4.00467e-07
+    #dictargs['trueacutpop00017'] = 3.36898e-06
+    #dictargs['truelgalpop00018'] = -8.55444e-06
+    #dictargs['truebgalpop00018'] = 2.16851e-06
+    #dictargs['truedefspop00018'] = 5.61476e-08
+    #dictargs['trueascapop00018'] = 3.6823e-07
+    #dictargs['trueacutpop00018'] = 7.70295e-06
+    #dictargs['truelgalpop00019'] = -1.77196e-06
+    #dictargs['truebgalpop00019'] = 8.60636e-06
+    #dictargs['truedefspop00019'] = 5.99085e-08
+    #dictargs['trueascapop00019'] = 4.56979e-07
+    #dictargs['trueacutpop00019'] = 4.51352e-06
+    #dictargs['truelgalpop00020'] = 5.10012e-06
+    #dictargs['truebgalpop00020'] = 4.90283e-06
+    #dictargs['truedefspop00020'] = 3.59422e-06
+    #dictargs['trueascapop00020'] = 4.71858e-07
+    #dictargs['trueacutpop00020'] = 3.88735e-07
+    #dictargs['truelgalpop00021'] = -9.38655e-06
+    #dictargs['truebgalpop00021'] = 8.39509e-07
+    #dictargs['truedefspop00021'] =  5.037e-08
+    #dictargs['trueascapop00021'] = 3.18758e-07
+    #dictargs['trueacutpop00021'] = 5.18656e-06
+    #dictargs['truelgalpop00022'] = 3.22999e-06
+    #dictargs['truebgalpop00022'] = -1.13755e-06
+    #dictargs['truedefspop00022'] = 6.89786e-08
+    #dictargs['trueascapop00022'] = 4.60412e-07
+    #dictargs['trueacutpop00022'] = 7.0615e-06
+    #dictargs['truelgalpop00023'] = -9.57364e-06
+    #dictargs['truebgalpop00023'] = -7.77006e-06
+    #dictargs['truedefspop00023'] = 1.46526e-07
+    #dictargs['trueascapop00023'] = 1.39644e-07
+    #dictargs['trueacutpop00023'] = 3.95241e-06
+    #dictargs['truelgalpop00024'] = 5.45961e-06
+    #dictargs['truebgalpop00024'] = -2.82849e-06
+    #dictargs['truedefspop00024'] = 8.48926e-07
+    #dictargs['trueascapop00024'] = 3.49285e-07
+    #dictargs['trueacutpop00024'] = 5.35163e-06
     
     anglfact = 3600. * 180. / pi
     
@@ -1097,7 +1125,7 @@ def pcat_lens_mock_papr(strgcnfgextnexec=None):
 
     listnamecnfgextn = ['fittlhig', 'fitthigh', 'fittvhig', 'truenone']
     #listnamecnfgextn = ['nomi', 'fittlhig', 'fitthigh', 'fittvhig', 'truenone', 'truenoneparsnomi', 'parsnomi', \
-    #                                                                            'subhsing', 'trueloww', 's2nrhigh', 's2nrvhig', 'checprio']
+    #                                                                            'subhsing', 'trueloww', 's2nrhigh', 's2nrvhig', 'boolsampprio']
     dictargsvari = {}
     for namecnfgextn in listnamecnfgextn:
         dictargsvari[namecnfgextn] = {}
@@ -1109,23 +1137,23 @@ def pcat_lens_mock_papr(strgcnfgextnexec=None):
     dictargsvari['fittvhig']['fittminmdefs'] = 0.02 / anglfact
     
     dictargsvari['truenone']['fittminmdefs'] = 0.01 / anglfact
-    dictargsvari['truenone']['truenumbelempop0reg0'] = 0
+    dictargsvari['truenone']['truenumbelempop0'] = 0
     
     #dictargsvari['parsnomi']['fittminmdefs'] = 0.01 / anglfact
     #dictargsvari['parsnomi']['priofactdoff'] = 1.
     
     #dictargsvari['subhsing']['fittminmdefs'] = 0.01 / anglfact
     #dictargsvari['subhsing']['probtran'] = 0.
-    #dictargsvari['subhsing']['initnumbelempop0reg0'] = 1
-    #dictargsvari['subhsing']['fittminmnumbelempop0reg0'] = 0
-    #dictargsvari['subhsing']['fittmaxmnumbelempop0reg0'] = 1
+    #dictargsvari['subhsing']['initnumbelempop0'] = 1
+    #dictargsvari['subhsing']['fittminmnumbelempop0'] = 0
+    #dictargsvari['subhsing']['fittmaxmnumbelempop0'] = 1
     #
     #dictargsvari['truenoneparsnomi']['fittminmdefs'] = 0.01 / anglfact
-    #dictargsvari['truenoneparsnomi']['truenumbelempop0reg0'] = 0
+    #dictargsvari['truenoneparsnomi']['truenumbelempop0'] = 0
     #dictargsvari['truenoneparsnomi']['priofactdoff'] = 1.
     #
     #dictargsvari['trueloww']['fittminmdefs'] = 0.01 / anglfact
-    #dictargsvari['trueloww']['truenumbelempop0reg0'] = int(25. * 10.**0.9)
+    #dictargsvari['trueloww']['truenumbelempop0'] = int(25. * 10.**0.9)
     #dictargsvari['trueloww']['trueminmdefs'] = 3e-4 / anglfact
     #
     #dictargsvari['s2nrhigh']['fittminmdefs'] = 0.01 / anglfact
@@ -1134,8 +1162,8 @@ def pcat_lens_mock_papr(strgcnfgextnexec=None):
     #dictargsvari['s2nrvhig']['fittminmdefs'] = 0.01 / anglfact
     #dictargsvari['s2nrvhig']['strgexpo'] = 1e5 / 1.63050e-19
 
-    #dictargsvari['checprio']['fittminmdefs'] = 0.01 / anglfact
-    #dictargsvari['checprio']['checprio'] = True
+    #dictargsvari['prio']['fittminmdefs'] = 0.01 / anglfact
+    #dictargsvari['prio']['boolsampprio'] = True
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
