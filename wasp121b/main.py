@@ -19,6 +19,7 @@ from allesfitter.exoworlds_rdx.lightcurves.lightcurve_tools import rebin_err, ph
 # own modules
 import tdpy.mcmc
 from tdpy.util import summgene
+import tesstarg.util
 
 # Max's modules
 #from exoworlds.lightcurves.lightcurve_tools import phase_fold
@@ -148,19 +149,24 @@ thptband = data[:, 1]
 time, lcurpdcc, stdvlcurpdcc = np.genfromtxt(pathdata + 'data_preparation/TESS_PDCSAP/TESS.csv', delimiter=',', unpack=True)
 time, lcursapp, stdvlcursapp = np.genfromtxt(pathdata + 'data_preparation/TESS_SAP/TESS.csv', delimiter=',', unpack=True)
 
+# make a plot of irradiation vs radius highlighting WASP-121b
+
+
+
+# plot light curves
 figr, axis = plt.subplots(2, 1, figsize=(12, 5))
 axis[0].plot(time - 2457000, lcurpdcc, 'k.')
-axis[1].plot(time - 2457000, lcursapp, '.', color='black')
+axis[1].plot(time - 2457000, lcursapp, '.', color='k')
+for a in range(2):
+    axis[a].set_ylabel('Relative Flux')
 axis[0].set_xticklabels([])
-axis[1].set_xlabel('Time [BJD - 2457000]')
-axis[0].set_ylabel('Relative Flux')
-axis[1].set_ylabel('Relative Flux')
 path = pathimag + 'lcur.pdf'
 plt.subplots_adjust(hspace=0.)
 plt.savefig(path)
 plt.close()
 
 # fit a spline to the SAP light curve
+figr, axis = plt.subplots(2, 1, figsize=(12, 5))
 timebrek = [0., 2458504., np.inf]
 numbbrek = len(timebrek)
 lcurdetr = []
@@ -178,7 +184,7 @@ for i in np.arange(numbbrek - 1):
     print '$\beta$:', spl.get_coeffs()
     print '$t_k$:', spl.get_knots()
     xx = np.linspace(time1[0], time1[-1], 1000)
-    axis[0].plot(time1 - 2457000, flux1, 'k.')
+    #axis[0].plot(time1 - 2457000, flux1, 'k.')
     axis[0].plot(time1[ind_out] - 2457000, flux1[ind_out], ls='', color='black')
     axis[0].plot(xx - 2457000, spl(xx)+1., 'm-' )
     axis[1].plot(time1 - 2457000, flux1-spl(time1), '.', color='black')
@@ -186,20 +192,18 @@ for i in np.arange(numbbrek - 1):
     lcurspln += list(spl(time1))
 lcurdetr = np.array(lcurdetr)
 lcurspln = np.array(lcurspln)
-
-figr, axis = plt.subplots(2, 1, figsize=(12, 8))
-axis[0].set_ylabel('Relative Flux')
-axis[1].set_ylabel('Relative Flux')
-axis[0].set_xticklabels([])
-axis[1].set(xlabel='Time [BJD - 2457000]')
-plt.subplots_adjust(hspace=0.)
-path = pathimag + 'lcur_spln.pdf'
-plt.savefig(path)
-plt.close()
-    
 ind_ecl1, ind_ecl2, ind_out = index_eclipses(time, epoc, peri, width_1=4./24., width_2=2./24.)
 offset = np.mean(lcurdetr[ind_ecl2])-1.
 lcurdetr -= offset
+
+# plot light curves
+for a in range(2):
+    axis[a].set_ylabel('Relative Flux')
+axis[0].set_xticklabels([])
+path = pathimag + 'lcur_spln.pdf'
+plt.subplots_adjust(hspace=0.)
+plt.savefig(path)
+plt.close()
 
 # plot the phase-folded splined light curve
 ## phase-fold the splined light curve
@@ -222,7 +226,7 @@ plt.savefig(path)
 plt.close()
 
 data = np.column_stack((time, lcurdetr, stdvlcursapp))
-np.savetxt(pathdata + 'data_preparation/.csv', data, delimiter=',', header='time,flux,flux_err')
+np.savetxt(pathdata + 'data_preparation/TESS.csv', data, delimiter=',', header='time,flux,flux_err')
 
 figr, axis = plt.subplots(figsize=(12, 5))
 axis.plot(phas, lcurdetr, '.', color='grey', alpha=0.3)
@@ -620,9 +624,10 @@ for k in indxcomp:
     print 'listdatacomp[k][:, 0]'
     summgene(listdatacomp[k][:, 0])
     #axis.plot(listdatacomp[k][:, 1], listdatacomp[k][:, 0])
-axis.set_xlabel(r'$\lambda$ [$\mu$m]$')
-axis.set_ylabel(r'$\sigma$ [cm$^2$]')
+axis.set_xlabel('$\lambda$ [$\mu$m]$')
+axis.set_ylabel('$\sigma$ [cm$^2$]')
 axis.set_yscale('log')
+plt.subplots_adjust()
 path = pathimag + 'csec.pdf'
 print 'Writing to %s...' % path
 plt.savefig(path)
@@ -654,392 +659,275 @@ liststrgruns = []
 listmodltyperuns = []
     
 # get data
-path = pathdata + 'TESS.csv'
+path = pathdata + 'data_preparation/TESS.csv'
 arryfrst = np.loadtxt(path, delimiter=',', skiprows=1)
     
-liststrgmask = ['umsk', 'ful1', 'ful2', 'full']
-
-for strgmask in liststrgmask:
-    print 'strgmask'
-    print strgmask
+arrythrd = tesstarg.util.fold(arryseco, epoc, peri)
     
-    # mask the data, if necessary
-    if strgmask == 'umsk':
-        indxgood = np.arange(arryfrst.shape[0])
+# parse the data
+meanphas = (arrythrd[:, 0] - epoc) / peri
+data = arrythrd[:, 1]
+datastdv = arrythrd[:, 2]
+
+meanphas = (meanphas) % 1.
+indxsort = np.argsort(meanphas)
+meanphas = meanphas[indxsort]
+data = data[indxsort]
+datastdv = datastdv[indxsort]
+
+# mask out the primary transit
+indx = np.where(abs(meanphas - 0.5) < (1. - timetole / peri) / 2.)[0]
+data = data[indx]
+datastdv = datastdv[indx]
+meanphas = meanphas[indx]
+
+numbphas = data.size
+indxphas = np.arange(numbphas)
+
+# list of models
+listmodltype = ['simp', 'shft']
+
+for modltype in listmodltype:
+    if modltype == 'simp':
+        numbpara = 10
+    if modltype == 'shft':
+        numbpara = 11
+    
+    listmodltyperuns.append('%s' % modltype)
+    if strgbins != 'ubnd':
+        strgruns = 'binned'
+    if modltype == 'umsk':
+        strgruns = 'no mask'
+    if modltype == 'ful1':
+        strgruns = 'first orbit'
+    if modltype == 'ful1':
+        strgruns = 'second orbit'
+    if modltype == 'shft':
+        strgruns = 'phase offset'
+    liststrgruns.append(strgruns)
+    if samptype == 'emce':
+        numbsamp = 10000
+        numbsampburn = 1000
+    
+    numbdoff = numbphas - numbpara
+    
+    listlablpara = ['Constant', 'A1 Amplitude [ppm]', 'A2 Amplitude [ppm]', 'A3 Amplitude [ppm]', \
+                    'Excess emission amplitude', 'Reflected B1 amplitude [ppm]', 'B2 Amplitude [ppm]', \
+                    'B3 Amplitude [ppm]', 'Dayside temperature [K]', 'Nightside temperature [K]']
+    liststrgpara = ['cons', 'ama1', 'ama2', 'ama3', 'exce', 'amb1', 'amb2', 'amb3', 'dayt', 'nigt']
+    if modltype == 'shft':
+        listlablpara += ['Phase offset [degree]']
+        liststrgpara += ['offs']
+    listlablparafull = listlablpara[:]
+    liststrgparafull = liststrgpara[:]
+    listlablparafull += ['Secondary transit depth [ppm]', 'Night side [ppm]', 'Atmospheric [ppm]', 'Geometric albedo']
+    liststrgparafull += ['seco', 'nigh', 'atmo', 'galb']
+    
+    numbparafull = len(liststrgparafull)
+    indxpara = np.arange(numbpara)
+    indxparafull = np.arange(numbparafull)
+    limtpara = np.empty((2, numbpara))
+    # offs
+    limtpara[0, 0] = 0.9
+    limtpara[1, 0] = 1.1
+    # amfo
+    limtpara[0, 1:8] = -1e3
+    limtpara[1, 1:8] = 1e3
+    # tempdayy
+    limtpara[0, 8] = 0.
+    limtpara[1, 8] = 5000.
+    # tempstar
+    limtpara[0, 9] = 0.
+    limtpara[1, 9] = 10000.
+    if modltype == 'shft':
+        # phas
+        limtpara[0, 10] = -10.
+        limtpara[1, 10] = 10.
+    
+    indxoccl = np.where(abs(meanphas - 0.5) < dura / peri)[0]
+    dictllik = [meanphas, data, datastdv, modltype, indxoccl]
+    dicticdf = []
+    
+    if samptype == 'emce':
+        numbwalk = 50
+        indxwalk = np.arange(numbwalk)
+        parainit = []
+        for k in indxwalk:
+            parainit.append(np.empty(numbpara))
+            meannorm = (limtpara[0, :] + limtpara[1, :]) / 2.
+            stdvnorm = (limtpara[0, :] - limtpara[1, :]) / 10.
+            parainit[k]  = (scipy.stats.truncnorm.rvs((limtpara[0, :] - meannorm) / stdvnorm, \
+                                                        (limtpara[1, :] - meannorm) / stdvnorm)) * stdvnorm + meannorm
+        numbsampwalk = numbsamp / numbwalk
+        numbsampwalkburn = numbsampburn / numbwalk
+        objtsamp = emcee.EnsembleSampler(numbwalk, numbpara, retr_lpos, args=dictllik)
+        parainitburn, prob, state = objtsamp.run_mcmc(parainit, numbsampwalkburn)
+        objtsamp.reset()
+        objtsamp.run_mcmc(parainitburn, numbsampwalk)
+        objtsave = objtsamp
     else:
-        indxgood = retr_mask(arryfrst[:, 0], indxgood, strgmask)
-    arryseco = arryfrst[indxgood, :]
-    if strgmask != 'umsk':
-        path = pathdata + 'TESS_%s.csv' % strgmask
+    
+        sampler = dynesty.NestedSampler(retr_llik, icdf, numbpara, logl_args=dictllik, ptform_args=dicticdf, bound='single', dlogz=1000.)
+        sampler.run_nested()
+        results = sampler.results
+        results.summary()
+        objtsave = results
+        
+    if samptype == 'emce':
+        numbsamp = objtsave.flatchain.shape[0]
+        indxsampwalk = np.arange(numbsampwalk)
+    else:
+        numbsamp = objtsave['samples'].shape[0]
+    
+    indxsamp = np.arange(numbsamp)
+    
+    # resample the nested posterior
+    if samptype == 'nest':
+        weights = np.exp(results['logwt'] - results['logz'][-1])
+        samppara = dynesty.utils.resample_equal(results.samples, weights)
+        assert samppara.size == results.samples.size
+    
+    if samptype == 'emce':
+        arrysamp = objtsave.flatchain
+    else:
+        arrysamp = samppara
+    
+    sampllik = objtsave.lnprobability.flatten()
+    aminchi2 = (-2. * np.amax(sampllik) / numbdoff)
+    listaminchi2runs.append(aminchi2)
+    
+    arrysamptemp = np.copy(arrysamp)
+    arrysamp = np.empty((numbsamp, numbparafull))
+    arrysamp[:, :-(numbparafull - numbpara)] = arrysamptemp
+    for k in indxsamp:
+        arrysamp[k, -4] = retr_occl(arrysamptemp[k, 8], tempstar)
+        arrysamp[k, -3] = retr_occl(arrysamptemp[k, 9], tempstar)
+        arrysamp[k, -2] = arrysamp[k, -4] - arrysamp[k, -3]
+        arrysamp[:, -1] = (smaj**2 / radiplan**2) * (1e-6 * arrysamp[:, 5])
+
+    listsamppararuns.append(arrysamp)
+    listlistlablpara.append(listlablpara)
+    listlistlablparafull.append(listlablparafull)
+
+    # plot the posterior
+    
+    ### histogram
+    for k in indxparafull:
+        figr, axis = plt.subplots()
+        if samptype == 'emce':
+            axis.hist(arrysamp[:, k]) 
+        else:
+            axis.hist(samppara[:, k]) 
+        axis.set_xlabel(listlablparafull[k])
+        path = pathimag + 'diag/hist_%s_%s_%s_%s.pdf' % (liststrgparafull[k], modltype, strgmask, strgbins)
+        plt.tight_layout()
         print 'Writing to %s...' % path
-        np.savetxt(path, arryseco, delimiter=',')
-            
-    if strgmask == 'full':
-        liststrgbins = ['0100', 'ubnd']
+        plt.savefig(path)
+        plt.close()
+    
+    if samptype == 'nest':
+        for keys in objtsave:
+            if isinstance(objtsave[keys], np.ndarray) and objtsave[keys].size == numbsamp:
+                figr, axis = plt.subplots()
+                axis.plot(indxsamp, objtsave[keys])
+                path = pathimag + '%s_%s.pdf' % (keys, modltype)
+                print 'Writing to %s...' % path
+                plt.savefig(path)
     else:
-        liststrgbins = ['ubnd']
-
-    ## plot the light curve
+        ## log-likelihood
+        figr, axis = plt.subplots()
+        if samptype == 'emce':
+            for i in indxwalk:
+                axis.plot(indxsampwalk[::10], objtsave.lnprobability[::10, i])
+        else:
+            axis.plot(indxsamp, objtsave['logl'])
+        path = pathimag + 'diag/llik_%s_%s_%s.pdf' % (modltype, strgmask, strgbins)
+        plt.tight_layout()
+        print 'Writing to %s...' % path
+        plt.savefig(path)
+        plt.close()
+    
+        chi2 = -2. * objtsave.lnprobability
+        print 'Posterior-mean chi2: '
+        print np.mean(chi2)
+        print 'Posterior-mean chi2 per dof: '
+        print np.mean(chi2) / numbdoff
+    
+    ### sample model phas
+    numbsampplot = 100
+    indxsampplot = np.random.choice(indxsamp, numbsampplot, replace=False)
+    yerr = datastdv
+    
+    numbphasfine = 1000
+    meanphasfine = np.linspace(0.1, 0.9, numbphasfine)
+    phasmodlfine = np.empty((numbsamp, numbphasfine))
+    indxphasfineoccl = np.where(abs(meanphasfine - 0.5) < dura / peri)[0]
+    for k, indxsampplottemp in enumerate(indxsampplot):
+        if samptype == 'emce':
+            objttemp = objtsave.flatchain
+        else:
+            objttemp = samppara
+        offs = objttemp[indxsampplottemp, 0]
+        amfo = objttemp[indxsampplottemp, 1:8]
+        tempdayy = objttemp[indxsampplottemp, 8]
+        tempstar = objttemp[indxsampplottemp, 9]
+        if modltype == 'shft':
+            shft = objttemp[indxsampplottemp, 10]
+        else:
+            shft = np.zeros_like(tempdayy)
+        phasmodlfine[k, :], deptatmofine = retr_modl(meanphasfine, offs, amfo, tempdayy, tempstar, shft, modltype, indxphasfineoccl)
+    
     figr, axis = plt.subplots(figsize=(12, 4))
+    axis.errorbar(meanphas, data, yerr=yerr, color='black', marker='o', ls='', alpha=0.2, markersize=1)
+    for k, indxsampplottemp in enumerate(indxsampplot):
+        axis.plot(meanphasfine, phasmodlfine[k, :], alpha=0.05, color='b')
+    axis.set_xlabel('Phase')
     axis.set_ylabel('Relative flux')
-    axis.set_xlabel('Time [day]')
-    axis.plot(arryseco[:, 0], arryseco[:, 1], ls='', marker='o', markersize=5, alpha=0.3)
-    temp, listcaps, temp = axis.errorbar(arryseco[:, 0],arryseco[:, 1], yerr=arryseco[:, 2], \
-                                                                    color='black', ls='', markersize=4, marker='o', lw=3, alpha=alph)
-    for caps in listcaps:
-        caps.set_markeredgewidth(3)
     plt.tight_layout()
-    path = pathimag + 'lcur_%s.pdf' % (strgmask)
+    path = pathimag + 'phas_modl_%s_%s_%s.pdf' % (modltype, strgmask, strgbins)
     print 'Writing to %s...' % path
     plt.savefig(path)
     plt.close()
-
-    ## plot Lomb Scargle periodogram
-    figr, axis = plt.subplots(figsize=(12, 4))
-    axis.set_ylabel('Power')
-    axis.set_xlabel('Frequency [1/day]')
-    arryfreq = np.linspace(0.1, 10., 2000)
-    for a in range(2):
-        indxtemp = np.arange(arryseco.shape[0])
-        if a == 0:
-            colr = 'g'
-        if a == 1:
-            colr = 'r'
-            for k in range(1400, 1500):
-                indxtemp = np.setdiff1d(indxtemp, np.where(abs(arryseco[:, 0] - k * peri - epoc) < dura * 2)[0])
-        ydat = scipy.signal.lombscargle(arryseco[indxtemp, 0], arryseco[indxtemp, 1], arryfreq)
-        axis.plot(arryfreq * 2. * np.pi, ydat, ls='', marker='o', markersize=5, alpha=0.3, color=colr)
-    for a in range(4):
-        axis.axvline(a / peri, ls='--', color='black')
-    plt.tight_layout()
-    path = pathimag + 'lspd_%s.pdf' % (strgmask)
-    print 'Writing to %s...' % path
-    plt.savefig(path)
-    plt.close()
-
-    for strgbins in liststrgbins:
-
-        print 'strgbins'
-        print strgbins
-        
-        if strgbins != 'ubnd':
-            numbbins = int(strgbins)
-        else:
-            numbbins = None
-
-        # bin the data, if necessary
-        if strgbins != 'ubnd':
-            arrythrd = tesstarg.util.flbn(arryseco, epoc, peri, numbbins)
-        else:
-            arrythrd = tesstarg.util.fold(arryseco, epoc, peri)
-            
-        # parse the data
-        meanphas = (arrythrd[:, 0] - epoc) / peri
-        data = arrythrd[:, 1]
-        datastdv = arrythrd[:, 2]
-        
-        meanphas = (meanphas) % 1.
-        indxsort = np.argsort(meanphas)
-        meanphas = meanphas[indxsort]
-        data = data[indxsort]
-        datastdv = datastdv[indxsort]
-        
-        # mask out the primary transit
-        indx = np.where(abs(meanphas - 0.5) < (1. - timetole / peri) / 2.)[0]
-        data = data[indx]
-        datastdv = datastdv[indx]
-        meanphas = meanphas[indx]
-        
-        numbphas = data.size
-        indxphas = np.arange(numbphas)
-        
-        # make plot
-        arrythrd
-
-        # list of models
-        if strgmask == 'full' and strgbins == 'ubnd':
-            listmodltype = ['simp', 'shft']
-        
-        for modltype in listmodltype:
-            if modltype == 'simp':
-                numbpara = 10
-            if modltype == 'shft':
-                numbpara = 11
-            
-            listmodltyperuns.append('%s' % modltype)
-            if strgbins != 'ubnd':
-                strgruns = 'binned'
-            if modltype == 'umsk':
-                strgruns = 'no mask'
-            if modltype == 'ful1':
-                strgruns = 'first orbit'
-            if modltype == 'ful1':
-                strgruns = 'second orbit'
-            if modltype == 'shft':
-                strgruns = 'phase offset'
-            liststrgruns.append(strgruns)
-            if samptype == 'emce':
-                numbsamp = 10000
-                numbsampburn = 1000
-            
-            numbdoff = numbphas - numbpara
-            
-            listlablpara = ['Constant', 'A1 Amplitude [ppm]', 'A2 Amplitude [ppm]', 'A3 Amplitude [ppm]', \
-                            'Excess emission amplitude', 'Reflected B1 amplitude [ppm]', 'B2 Amplitude [ppm]', \
-                            'B3 Amplitude [ppm]', 'Dayside temperature [K]', 'Nightside temperature [K]']
-            liststrgpara = ['cons', 'ama1', 'ama2', 'ama3', 'exce', 'amb1', 'amb2', 'amb3', 'dayt', 'nigt']
-            if modltype == 'shft':
-                listlablpara += ['Phase offset [degree]']
-                liststrgpara += ['offs']
-            listlablparafull = listlablpara[:]
-            liststrgparafull = liststrgpara[:]
-            listlablparafull += ['Secondary transit depth [ppm]', 'Night side [ppm]', 'Atmospheric [ppm]', 'Geometric albedo']
-            liststrgparafull += ['seco', 'nigh', 'atmo', 'galb']
-            
-            numbparafull = len(liststrgparafull)
-            indxpara = np.arange(numbpara)
-            indxparafull = np.arange(numbparafull)
-            limtpara = np.empty((2, numbpara))
-            # offs
-            limtpara[0, 0] = 0.9
-            limtpara[1, 0] = 1.1
-            # amfo
-            limtpara[0, 1:8] = -1e3
-            limtpara[1, 1:8] = 1e3
-            # tempdayy
-            limtpara[0, 8] = 0.
-            limtpara[1, 8] = 5000.
-            # tempstar
-            limtpara[0, 9] = 0.
-            limtpara[1, 9] = 10000.
-            if modltype == 'shft':
-                # phas
-                limtpara[0, 10] = -10.
-                limtpara[1, 10] = 10.
-            
-            indxoccl = np.where(abs(meanphas - 0.5) < dura / peri)[0]
-            dictllik = [meanphas, data, datastdv, modltype, indxoccl]
-            dicticdf = []
-            
-            if samptype == 'emce':
-                numbwalk = 50
-                indxwalk = np.arange(numbwalk)
-                parainit = []
-                for k in indxwalk:
-                    parainit.append(np.empty(numbpara))
-                    meannorm = (limtpara[0, :] + limtpara[1, :]) / 2.
-                    stdvnorm = (limtpara[0, :] - limtpara[1, :]) / 10.
-                    parainit[k]  = (scipy.stats.truncnorm.rvs((limtpara[0, :] - meannorm) / stdvnorm, \
-                                                                (limtpara[1, :] - meannorm) / stdvnorm)) * stdvnorm + meannorm
-                numbsampwalk = numbsamp / numbwalk
-                numbsampwalkburn = numbsampburn / numbwalk
-                objtsamp = emcee.EnsembleSampler(numbwalk, numbpara, retr_lpos, args=dictllik)
-                parainitburn, prob, state = objtsamp.run_mcmc(parainit, numbsampwalkburn)
-                objtsamp.reset()
-                objtsamp.run_mcmc(parainitburn, numbsampwalk)
-                objtsave = objtsamp
-            else:
-            
-                sampler = dynesty.NestedSampler(retr_llik, icdf, numbpara, logl_args=dictllik, ptform_args=dicticdf, bound='single', dlogz=1000.)
-                sampler.run_nested()
-                results = sampler.results
-                results.summary()
-                objtsave = results
-                
-            if samptype == 'emce':
-                numbsamp = objtsave.flatchain.shape[0]
-                indxsampwalk = np.arange(numbsampwalk)
-            else:
-                numbsamp = objtsave['samples'].shape[0]
-            
-            indxsamp = np.arange(numbsamp)
-            
-            # resample the nested posterior
-            if samptype == 'nest':
-                weights = np.exp(results['logwt'] - results['logz'][-1])
-                samppara = dynesty.utils.resample_equal(results.samples, weights)
-                assert samppara.size == results.samples.size
-            
-            if samptype == 'emce':
-                arrysamp = objtsave.flatchain
-            else:
-                arrysamp = samppara
-            
-            sampllik = objtsave.lnprobability.flatten()
-            aminchi2 = (-2. * np.amax(sampllik) / numbdoff)
-            listaminchi2runs.append(aminchi2)
-            
-            arrysamptemp = np.copy(arrysamp)
-            arrysamp = np.empty((numbsamp, numbparafull))
-            arrysamp[:, :-(numbparafull - numbpara)] = arrysamptemp
-            for k in indxsamp:
-                arrysamp[k, -4] = retr_occl(arrysamptemp[k, 8], tempstar)
-                arrysamp[k, -3] = retr_occl(arrysamptemp[k, 9], tempstar)
-                arrysamp[k, -2] = arrysamp[k, -4] - arrysamp[k, -3]
-                arrysamp[:, -1] = (smaj**2 / radiplan**2) * (1e-6 * arrysamp[:, 5])
-
-            listsamppararuns.append(arrysamp)
-            listlistlablpara.append(listlablpara)
-            listlistlablparafull.append(listlablparafull)
-
-            # plot the posterior
-            
-            ### histogram
-            for k in indxparafull:
-                figr, axis = plt.subplots()
-                if samptype == 'emce':
-                    axis.hist(arrysamp[:, k]) 
-                else:
-                    axis.hist(samppara[:, k]) 
-                axis.set_xlabel(listlablparafull[k])
-                path = pathimag + 'diag/hist_%s_%s_%s_%s.pdf' % (liststrgparafull[k], modltype, strgmask, strgbins)
-                plt.tight_layout()
-                print 'Writing to %s...' % path
-                plt.savefig(path)
-                plt.close()
-            
-            if samptype == 'nest':
-                for keys in objtsave:
-                    if isinstance(objtsave[keys], np.ndarray) and objtsave[keys].size == numbsamp:
-                        figr, axis = plt.subplots()
-                        axis.plot(indxsamp, objtsave[keys])
-                        path = pathimag + '%s_%s.pdf' % (keys, modltype)
-                        print 'Writing to %s...' % path
-                        plt.savefig(path)
-            else:
-                ## log-likelihood
-                figr, axis = plt.subplots()
-                if samptype == 'emce':
-                    for i in indxwalk:
-                        axis.plot(indxsampwalk[::10], objtsave.lnprobability[::10, i])
-                else:
-                    axis.plot(indxsamp, objtsave['logl'])
-                path = pathimag + 'diag/llik_%s_%s_%s.pdf' % (modltype, strgmask, strgbins)
-                plt.tight_layout()
-                print 'Writing to %s...' % path
-                plt.savefig(path)
-                plt.close()
-            
-                chi2 = -2. * objtsave.lnprobability
-                print 'Posterior-mean chi2: '
-                print np.mean(chi2)
-                print 'Posterior-mean chi2 per dof: '
-                print np.mean(chi2) / numbdoff
-            
-            ### sample model phas
-            numbsampplot = 100
-            indxsampplot = np.random.choice(indxsamp, numbsampplot, replace=False)
-            yerr = datastdv
-            
-            numbphasfine = 1000
-            meanphasfine = np.linspace(0.1, 0.9, numbphasfine)
-            phasmodlfine = np.empty((numbsamp, numbphasfine))
-            indxphasfineoccl = np.where(abs(meanphasfine - 0.5) < dura / peri)[0]
-            for k, indxsampplottemp in enumerate(indxsampplot):
-                if samptype == 'emce':
-                    objttemp = objtsave.flatchain
-                else:
-                    objttemp = samppara
-                offs = objttemp[indxsampplottemp, 0]
-                amfo = objttemp[indxsampplottemp, 1:8]
-                tempdayy = objttemp[indxsampplottemp, 8]
-                tempstar = objttemp[indxsampplottemp, 9]
-                if modltype == 'shft':
-                    shft = objttemp[indxsampplottemp, 10]
-                else:
-                    shft = np.zeros_like(tempdayy)
-                phasmodlfine[k, :], deptatmofine = retr_modl(meanphasfine, offs, amfo, tempdayy, tempstar, shft, modltype, indxphasfineoccl)
-            
-            figr, axis = plt.subplots(figsize=(12, 4))
-            axis.errorbar(meanphas, data, yerr=yerr, color='black', marker='o', ls='', alpha=0.2, markersize=1)
-            for k, indxsampplottemp in enumerate(indxsampplot):
-                axis.plot(meanphasfine, phasmodlfine[k, :], alpha=0.05, color='b')
-            axis.set_xlabel('Phase')
-            axis.set_ylabel('Relative flux')
-            plt.tight_layout()
-            path = pathimag + 'phas_modl_%s_%s_%s.pdf' % (modltype, strgmask, strgbins)
-            print 'Writing to %s...' % path
-            plt.savefig(path)
-            plt.close()
-            
-            ### nested sampling specific
-            if samptype == 'nest':
-                figr, axes = dynesty.plotting.runplot(results)
-                path = pathimag + 'dyne_runs_%s.pdf' % modltype
-                print 'Writing to %s...' % path
-                plt.savefig(path)
-                plt.close()
-                
-                figr, axes = dynesty.plotting.traceplot(results)
-                path = pathimag + 'dyne_trac_%s.pdf' % modltype
-                print 'Writing to %s...' % path
-                plt.savefig(path)
-                plt.close()
-                
-                figr, axes = dynesty.plotting.cornerplot(results)
-                path = pathimag + 'dyne_corn_%s.pdf' % modltype
-                print 'Writing to %s...' % path
-                plt.savefig(path)
-                plt.close()
-
-numbruns = len(liststrgruns)
+    
+indxruns = len(liststrgruns)
 indxruns = np.arange(numbruns)
 for b in indxruns:
     tdpy.mcmc.plot_grid(pathimag, '%d' % b, listsamppararuns[b], listlistlablparafull[b])
 
 fileoutp = open(pathdata + 'post.csv', 'w')
-
-numbrrunsdivi = 3
-numbdivi = numbruns / numbrrunsdivi + 1
-indxdivi = np.arange(numbdivi)
-for a in indxdivi:
-    numbleft = numbruns - numbrrunsdivi * a
-    if numbleft >= numbrrunsdivi:
-        numbrunsdivithis = numbrrunsdivi
-    else:
-        numbrunsdivithis = numbleft
-    indxrunsdivithis = np.arange(numbrunsdivithis)
-    fileoutp.write(' & ')
+fileoutp.write(' & ')
+for k in indxrunsdivithis:
+    b = a * numbrrunsdivi + k
+    fileoutp.write('%s' % liststrgruns[b])
+    if k != numbrunsdivithis - 1:
+        fileoutp.write(' & ')
+fileoutp.write('\\\\\n')
+fileoutp.write('\\hline\n')
+fileoutp.write('\\hline\n')
+fileoutp.write('\\hline\n')
+fileoutp.write('$\chi^2_{\\nu}$ & ')
+for k in indxrunsdivithis:  
+    b = a * numbrrunsdivi + k
+    fileoutp.write('$%.3g$' % listaminchi2runs[b])
+    if k != numbrunsdivithis - 1:
+        fileoutp.write(' & ')
+fileoutp.write('\\hline\n')
+fileoutp.write('\\hline\n')
+fileoutp.write('\\\\\n')
+for n in indxparafull:
+    fileoutp.write('%s & ' % listlablparafull[n])
     for k in indxrunsdivithis:
         b = a * numbrrunsdivi + k
-        fileoutp.write('%s' % liststrgruns[b])
+        if len(listlistlablparafull[b]) < numbparafull:
+            continue
+        ydat = np.median(listsamppararuns[b][:, n])
+        uerr = np.percentile(listsamppararuns[b][:, n], 84.) - ydat
+        lerr = ydat - np.percentile(listsamppararuns[b][:, n], 16.)
+        fileoutp.write('$%.3g \substack{+%.3g \\\\ -%.3g}$' % (ydat, uerr, lerr))
         if k != numbrunsdivithis - 1:
             fileoutp.write(' & ')
     fileoutp.write('\\\\\n')
-    fileoutp.write('\\hline\n')
-    fileoutp.write('\\hline\n')
-    fileoutp.write('\\hline\n')
-    fileoutp.write('$\chi^2_{\\nu}$ & ')
-    for k in indxrunsdivithis:  
-        b = a * numbrrunsdivi + k
-        fileoutp.write('$%.3g$' % listaminchi2runs[b])
-        if k != numbrunsdivithis - 1:
-            fileoutp.write(' & ')
-    fileoutp.write('\\hline\n')
-    fileoutp.write('\\hline\n')
-    fileoutp.write('\\\\\n')
-    for n in indxparafull:
-        fileoutp.write('%s & ' % listlablparafull[n])
-        for k in indxrunsdivithis:
-            b = a * numbrrunsdivi + k
-            if len(listlistlablparafull[b]) < numbparafull:
-                continue
-
-            ydat = np.median(listsamppararuns[b][:, n])
-            uerr = np.percentile(listsamppararuns[b][:, n], 84.) - ydat
-            lerr = ydat - np.percentile(listsamppararuns[b][:, n], 16.)
-            fileoutp.write('$%.3g \substack{+%.3g \\\\ -%.3g}$' % (ydat, uerr, lerr))
-            if k != numbrunsdivithis - 1:
-                fileoutp.write(' & ')
-        fileoutp.write('\\\\\n')
-    fileoutp.write('\\hline\n')
+fileoutp.write('\\hline\n')
 fileoutp.close()
-
-
-# make a plot of WASP-121b properties
-
-# irradiation vs. 
-
-
 
 
