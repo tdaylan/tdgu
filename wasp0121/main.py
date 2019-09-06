@@ -9,6 +9,7 @@ from scipy.signal import lombscargle
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import matplotlib
+import seaborn as sns
 
 from astropy import constants as c
 
@@ -21,9 +22,9 @@ from allesfitter.exoworlds_rdx.lightcurves.lightcurve_tools import rebin_err, ph
 import tdpy.mcmc
 from tdpy.util import summgene
 import tesstarg.util
+from tdpy.util import prnt_list
 
 # Max's modules
-#from exoworlds.lightcurves.lightcurve_tools import phase_fold
 from exoworlds.tess import extract_SPOC_data, extract_QLP_data
 
 import emcee
@@ -33,6 +34,20 @@ matplotlib.rc('text', usetex = True)
 matplotlib.rc('font', **{'family' : "sans-serif"})
 params= {'text.latex.preamble' : [r'\usepackage{amsmath}']}
 plt.rcParams.update(params)
+
+
+def retr_lpos_albb(para, gdat):
+    
+    albb = para[0]
+    epsi = para[1]
+   
+    if albb < 0 or albb > 1 or epsi > 1 or epsi < 0:
+        lpos = -np.inf
+    else:
+        psiimodl = (1 - albb)**.25 * (1. - 5. / 8. * epsi)**.25 / 1.5**.25
+        lpos = gdat.likeintp(psiimodl)
+
+    return lpos
 
 
 def retr_lpos_four(para, gdat, modltype):
@@ -58,22 +73,27 @@ def retr_lpos_four(para, gdat, modltype):
 
 def retr_specbbod(gdat, tmpt, wlen):
     
-    spec = 1.497e12 / wlen**5 / (np.exp(gdat.conswlentmpt / (wlen * tmpt)) - 1.)
+    spec = 3.742e11 / wlen**5 / (np.exp(gdat.conswlentmpt / (wlen * tmpt)) - 1.)
     
     return spec
 
 
-def retr_modl_spec(gdat, tmpt, booltess=False):
+def retr_modl_spec(gdat, tmpt, booltess=False, strgtype='intg'):
     
     if booltess:
         thpt = scipy.interpolate.interp1d(gdat.meanwlenband, gdat.thptband)(wlen)
     else:
         thpt = 1.
     
-    spec = retr_specbbod(gdat, tmpt, gdat.meanwlen)
-    specbolo = np.sum(gdat.diffwlen * spec)
+    if strgtype == 'intg':
+        spec = retr_specbbod(gdat, tmpt, gdat.meanwlen)
+        spec = np.sum(gdat.diffwlen * spec)
+    if strgtype == 'diff' or strgtype == 'logt':
+        spec = retr_specbbod(gdat, tmpt, gdat.cntrwlen)
+        if strgtype == 'logt':
+            spec *= gdat.cntrwlen
     
-    return specbolo
+    return spec
 
 
 def retr_lpos_spec(para, gdat):
@@ -82,28 +102,18 @@ def retr_lpos_spec(para, gdat):
         lpos = -np.inf
     else:
         tmpt = para[0]
-        specboloplan = retr_modl_spec(gdat, tmpt, booltess=False)
-        deptplan = specboloplan / gdat.specstarbolo * 1e6
+        specboloplan = retr_modl_spec(gdat, tmpt, booltess=False, strgtype='intg')
+        deptplan = gdat.radirati**2 * specboloplan / gdat.specstarintg * 1e6
         llik = -0.5 * np.sum((deptplan - gdat.deptobsd)**2 / gdat.varideptobsd)
-        print('tmpt')
-        print(tmpt)
-        print('specboloplan')
-        summgene(specboloplan)
-        print('gdat.specstarbolo')
-        print(gdat.specstarbolo)
-        #print('specstarplan')
-        #summgene(specstarplan)
-        print('gdat.diffwlen')
-        summgene(gdat.diffwlen)
-        print('gdat.deptobsd')
-        print(gdat.deptobsd)
-        print('gdat.varideptobsd')
-        print(gdat.varideptobsd)
-        print('deptplan')
-        summgene(deptplan)
-        print('llik')
-        print(llik)
-        print
+        #print('tmpt')
+        #print(tmpt)
+        #print('deptplan')
+        #print(deptplan)
+        #print('gdat.deptobsd')
+        #print(gdat.deptobsd)
+        #print('gdat.varideptobsd')
+        #print(gdat.varideptobsd)
+        #print
         lpos = llik
     
     return lpos
@@ -115,12 +125,6 @@ def retr_llik_four(gdat, cons, deptnigh, amfo, shft, modltype):
     
     llik = -0.5 * np.sum((modl - gdat.data)**2 / gdat.datastdv**2)
     
-    #print('gdat.data')
-    #summgene(gdat.data)
-    #print('llik') 
-    #summgene(llik)
-    #print
-
     return llik, deptpmod
 
 
@@ -136,23 +140,6 @@ def retr_modl_four(gdat, phas, indxphasseco, cons, deptnigh, amfo, shft, modltyp
     deptseco = -deptpmod + deptnigh
     modl[indxphasseco] -= deptseco * 1e-6
     
-    #print('indxphasseco')
-    #summgene(indxphasseco)
-    #print('phasshft')
-    #summgene(phasshft)
-    #print('deptnigh')
-    #summgene(deptnigh)
-    #print('deptseco')
-    #print(deptseco)
-    #print('shft')
-    #print(shft)
-    #print('amfo')
-    #summgene(amfo)
-    #print('deptpmod')
-    #summgene(deptpmod)
-    #print('modl')
-    #summgene(modl)
-
     return modl, deptpmod
 
 
@@ -182,6 +169,7 @@ def retr_mask(time, flag, strgmask):
     
     return indx
 
+
 def init():
 
     gdat = tdpy.util.gdatstrt()
@@ -191,219 +179,373 @@ def init():
     pathdata = pathbase + 'data/'
     pathimag = pathbase + 'imag/'
     
-    figrsize = np.empty((5, 2))
-    figrsize[0, :] = np.array([12., 4.])
-    figrsize[1, :] = np.array([12., 6.])
-    figrsize[2, :] = np.array([12., 10.])
-    figrsize[3, :] = np.array([12., 14.])
-    figrsize[4, :] = np.array([6., 6.])
-    boolpost = True
+    # plotting
+    gdat.figrsize = np.empty((5, 2))
+    gdat.figrsize[0, :] = np.array([12., 4.])
+    gdat.figrsize[1, :] = np.array([12., 6.])
+    gdat.figrsize[2, :] = np.array([12., 10.])
+    gdat.figrsize[3, :] = np.array([12., 14.])
+    gdat.figrsize[4, :] = np.array([6., 6.])
+    boolpost = False
     if boolpost:
-        figrsize /= 1.5
+        gdat.figrsize /= 1.5
     
-    ## get TESS throughput
+    ## TESS throughput 
     gdat.data = np.loadtxt(pathdata + 'band.csv', delimiter=',', skiprows=9)
     gdat.meanwlenband = gdat.data[:, 0] * 1e-3
     gdat.thptband = gdat.data[:, 1]
     
-    # get data from Tom
-    path = pathdata + 'ascii_output/EmissionModelArray.txt'
-    arrymodl = np.loadtxt(path)
-    path = pathdata + 'ascii_output/EmissionDataArray.txt'
-    arrydata = np.loadtxt(path)
-    arrydata = np.concatenate((arrydata, np.array([[arrydata[0, 0], arrydata[0, 1], 90., 40., 0, 0, 0, 0]])), axis=0)
-    
-    # get data
-    ## spectrum of the host star, WASP-121
-    gdat.meanwlenstar = arrymodl[:, 0]
-    gdat.specstar = arrymodl[:, 9]
-    
     ## other data
-    massplan = 1.
-    massstar = 1.
-    radistar = 1.
-    incl = 1.
-    smax = 1.
-    ## expected ellipsoidal variation
-    ### limb and gravity darkening coefficients from Claret2017
-    u = 0.5
-    g = 0.5
-    alphelli = 0.15 * (15 + u) * (1 + g) / (3 - u)
-    deptelli = alphelli * massplan * np.sin(incl)**2 / massstar * (radistar / smax)**3
-    
-    ## expected Doppler beaming 
-    deptbeam = 0.
+    massplan = 1.184 # [MJ]
+    massstar = 1417. # [MJ]
+    radistar = 14.51 # [RJ]
+    incl = 87.6 * np.pi / 180.
+    smax = 54.437 # [RJ]
+   
+    smajaxis = 0.02544 * 2092.51 # [RJ]
+    radiplan = 1.865 # [RJ]
+    radistar = 14.51 # [RJ]
+    gdat.radirati = radiplan / radistar
 
-    print('deptbeam')
-    print(deptbeam)
-    print('deptelli')
-    print(deptelli)
+    gdat.timetess = 2457000.
 
-    # parameters
+    ## parameters
     # WASP-121
     ## period
-    peri = 1.2749255 # [day]
+    gdat.peri = 1.2749255 # [day]
     ## epoch
-    epoc = 2456635.70832 # [BJD]
+    gdat.epoc = 2456635.70832 # [BJD]
     ## Half of the transit duration
     dura = 0.1203 / 2. # [day] Delrez2016
     
+    ## expected ellipsoidal variation (EV) and Doppler beaming (DB)
+    print('Predicting the ellipsoidal variation and Doppler beaming amplitudes...')
+    ### EV
+    #### limb and gravity darkening coefficients from Claret2017
+    u = 0.4
+    g = 0.2
+    alphelli = 0.15 * (15 + u) * (1 + g) / (3 - u)
+    deptelli = alphelli * massplan * np.sin(incl)**2 / massstar * (radistar / smax)**3
+    ### DB
+    kkrv = 181. # [m/s]
+    binswlenbeam = np.linspace(0.6, 1., 101)
+    meanwlenbeam = (binswlenbeam[1:] + binswlenbeam[:-1]) / 2.
+    diffwlenbeam = (binswlenbeam[1:] - binswlenbeam[:-1]) / 2.
+    x = 2.248 / meanwlenbeam
+    f = .25 * x * np.exp(x) / (np.exp(x) - 1.)
+    deptbeam = 4. * kkrv / 3e8 * np.sum(diffwlenbeam * f)
+
     # extract SPOC data
-    #extract_SPOC_data([pathdata + 'data_preparation/archival_data/tess2019006130736-s0007-0000000022529346-0131-s_lc.fits'], 
-    #                  outdir=pathdata+'data_preparation/TESS_SAP', PDC=False, auto_correct_dil=True, extract_centd=True, extract_dil=True)
-    #
-    #extract_SPOC_data([pathdata + 'data_preparation/archival_data/tess2019006130736-s0007-0000000022529346-0131-s_lc.fits'], 
-    #                  outdir=pathdata+'data_preparation/TESS_PDCSAP', PDC=True, auto_correct_dil=True, extract_centd=True, extract_dil=True)
+    extract_SPOC_data([pathdata + 'data_preparation/archival_data/tess2019006130736-s0007-0000000022529346-0131-s_lc.fits'], 
+                      outdir=pathdata+'data_preparation/TESS_SAP', PDC=False, auto_correct_dil=True, extract_centd=True, extract_dil=True)
+    
+    extract_SPOC_data([pathdata + 'data_preparation/archival_data/tess2019006130736-s0007-0000000022529346-0131-s_lc.fits'], 
+                      outdir=pathdata+'data_preparation/TESS_PDCSAP', PDC=True, auto_correct_dil=True, extract_centd=True, extract_dil=True)
     
     
     # plot PDCSAP and SAP light curves
-    #time, lcurpdcc, stdvlcurpdcc = np.genfromtxt(pathdata + 'data_preparation/TESS_PDCSAP/TESS.csv', delimiter=',', unpack=True)
-    #time, lcursapp, stdvlcursapp = np.genfromtxt(pathdata + 'data_preparation/TESS_SAP/TESS.csv', delimiter=',', unpack=True)
-    #
-    ## make a plot of irradiation vs radius highlighting WASP-121b
-    #
-    #
-    ## plot light curves
-    #figr, axis = plt.subplots(2, 1, figsize=figrsize[1, :])
-    #axis[0].plot(time - 2457000, lcurpdcc, 'k.')
-    #axis[1].plot(time - 2457000, lcursapp, '.', color='k')
-    #for a in range(2):
-    #    axis[a].set_ylabel('Relative Flux')
+    gdat.timepdcc, lcurpdcc, stdvlcurpdcc = np.genfromtxt(pathdata + 'data_preparation/TESS_PDCSAP/TESS.csv', delimiter=',', unpack=True)
+    gdat.timesapp, lcursapp, stdvlcursapp = np.genfromtxt(pathdata + 'data_preparation/TESS_SAP/TESS.csv', delimiter=',', unpack=True)
+    
+    figr, axis = plt.subplots(2, 1, figsize=gdat.figrsize[1, :])
+    axis[0].plot(gdat.timepdcc - gdat.timetess, lcurpdcc, 'k.')
+    axis[1].plot(gdat.timesapp - gdat.timetess, lcursapp, '.', color='k')
+    for a in range(2):
+        axis[a].set_ylabel('Relative Flux')
     #axis[0].set_xticklabels([])
-    #path = pathimag + 'lcur.pdf'
-    #plt.subplots_adjust(hspace=0.)
-    #plt.savefig(path)
-    #plt.close()
-    #
-    ## fit a spline to the SAP light curve
-    #figr, axis = plt.subplots(2, 1, figsize=figrsize[1, :])
-    #timebrek = [0., 2458504., np.inf]
-    #numbbrek = len(timebrek)
-    #lcurdetr = []
-    #lcurspln = []
-    #print 'Fitting the spline...'
-    #for i in np.arange(numbbrek - 1):
-    #    ind = np.where((time>=timebrek[i]) & (time<=timebrek[i+1]))[0]
-    #    time1 = time[ind]
-    #    flux1 = lcursapp[ind]
-    #    flux_err1 = stdvlcursapp[ind]
-    #    ind_ecl1, ind_ecl2, ind_out = index_eclipses(time1, epoc, peri, width_1=4./24., width_2=4./24.)
-    #    spl = UnivariateSpline(time1[ind_out], flux1[ind_out]-1.)
-    #    print 'i'
-    #    print i
-    #    print '$\beta$:', spl.get_coeffs()
-    #    print '$t_k$:', spl.get_knots()
-    #    xx = np.linspace(time1[0], time1[-1], 1000)
-    #    #axis[0].plot(time1 - 2457000, flux1, 'k.')
-    #    axis[0].plot(time1[ind_out] - 2457000, flux1[ind_out], 'k.', color='black')
-    #    axis[0].plot(xx - 2457000, spl(xx)+1., 'm-' )
-    #    axis[1].plot(time1 - 2457000, flux1-spl(time1), '.', color='black')
-    #    lcurdetr += list(flux1-spl(time1))
-    #    lcurspln += list(spl(time1))
-    #lcurdetr = np.array(lcurdetr)
-    #lcurspln = np.array(lcurspln)
-    #ind_ecl1, ind_ecl2, ind_out = index_eclipses(time, epoc, peri, width_1=4./24., width_2=2./24.)
-    #offset = np.mean(lcurdetr[ind_ecl2])-1.
-    #lcurdetr -= offset
-    #
-    ## plot light curves
-    #for a in range(2):
-    #    axis[a].set_ylabel('Relative Flux')
-    #axis[0].set_xticklabels([])
-    #path = pathimag + 'lcur_spln.pdf'
-    #plt.subplots_adjust(hspace=0.)
-    #plt.savefig(path)
-    #plt.close()
-    #
-    ## plot the phase-folded splined light curve
-    ### phase-fold the splined light curve
-    #phasfold, pcur, stdvpcur, N, phas = phase_fold(time, lcurdetr, peri, epoc, dt = 0.005, ferr_type='meansig', ferr_style='sem', sigmaclip=True)
-    ##phasfold, pcur, stdvpcur, N, phas = phase_fold(time, lcurdetr, peri, epoc, dt=0.001, ferr_type='meansig', ferr_style='sem', sigmaclip=True)
-    ##phasfold, pcur, stdvpcur, N, phas = phase_fold(time, lcurdetr, peri, epoc, dt=0.001/5., ferr_type='meansig', ferr_style='sem', sigmaclip=True)
-    #
-    #data = np.column_stack((time, lcurdetr, stdvlcursapp))
-    #np.savetxt(pathdata + 'data_preparation/TESS.csv', data, delimiter=',', header='time,flux,flux_err')
-    #
-    #figr, axis = plt.subplots(figsize=figrsize[0, :])
-    #axis.plot(phas, lcurdetr, '.', color='grey', alpha=0.3)
-    #axis.errorbar(phasfold, pcur, yerr=stdvpcur, ls='', marker='o', color='black', capsize=0, ms=8)
-    #axis.set(xlabel='Phase', ylabel='Flux')
-    #plt.tight_layout()
-    #path = pathimag + 'pcur.pdf'
-    #plt.savefig(path)
-    #plt.close()
-    #
-    ## read the allesfitter posterior
-    #companion = 'b'
-    #inst = 'TESS'
-    ##pathalle = pathdata + 'allesfits/allesfit_full_gp/'
-    #pathalle = pathdata + 'allesfits/allesfit_orbit/'
-    #alles = allesfitter.allesclass(pathalle)
-    #
-    #radirati = alles.posterior_params['b_rr']
-    smajaxis = 0.02544 * 2092.51 # [RJ]
-    radiplan = 1.865 # [RJ]
-    #radistar = 14.51 # [RJ]
-    #rsma = alles.posterior_params['b_rsuma']
-    #albe = alles.posterior_params['b_geom_albedo_TESS']
-    #
-    #fluxrati = albe * (radirati * rsma / (1. + radirati))**2
-    #sbrgrati = alles.posterior_params['b_sbratio_TESS'] * radirati**2
-    #numbsamp = radirati.size
-    #listsamp = np.empty((numbsamp, 3))
-    #listsamp[:, 0] = sbrgrati * 1e6
-    #listsamp[:, 1] = (sbrgrati + fluxrati) * 1e6
-    #listsamp[:, 2] = fluxrati * 1e6
-    #
-    #listlabl = ['Nightside [ppm]', 'Secondary [ppm]', 'Modulation [ppm]']
-    #tdpy.mcmc.plot_grid(pathimag, 'post', listsamp, listlabl, plotsize=figrsize[0, 1])
-    #
-    ## make a plot of reflected vs. thermal emission covariance
-    ##listsamp = np.empty((numbsamp, 2))
-    ##postdeptpmod = listsamp[:, 0]
-    ##postdeptnght = listsamp[:, 1]
-    ##postalbegeom = postdeptrefl / (radiplan / radistar)**2
-    ##postalbebond = postdeptterm
-    ##listsamp[0, :] = postalbegeom
-    ##listsamp[1, :] = postalbebond
-    ##tdpy.mcmc.plot_grid(pathimag, 'reflemis', listsamp, ['$A_{geo}$', '$A_{B}'])
-    #
+    axis[1].set_xlabel('Time [BJD - 2457000]')
+    path = pathimag + 'lcur.pdf'
+    plt.subplots_adjust(hspace=0.)
+    plt.savefig(path)
+    plt.close()
+    
+    # fit a spline to the SAP light curve
+    print('Fitting a spline to the SAP light curve...')
+    timesplnedge = [0., 2458504., np.inf]
+    numbsplnedge = len(timesplnedge)
+    numbsplnknot = numbsplnedge - 1
+    indxsplnknot = np.arange(numbsplnknot)
 
-    ## plot a lightcurve from the posteriors
-    ##time = np.concatenate((alles.data['TESS']['time'], alles.data['TESS']['time']+alles.posterior_params_median['b_period']))
-    ##flux = np.concatenate((alles.data['TESS']['flux'], alles.data['TESS']['flux']))
-    #time = np.concatenate((alles.data['TESS']['time'], alles.data['TESS']['time']+alles.posterior_params_median['b_period']))
-    #flux = np.concatenate((alles.data['TESS']['flux'], alles.data['TESS']['flux']))
-    #model_flux = alles.get_posterior_median_model(inst, 'flux', xx=time)
-    #baseline = alles.get_posterior_median_baseline(inst, 'flux', xx=time)
-    #bintime, binflux, binflux_err, N = rebin_err(time, flux-baseline, ferr=None, dt = 0.02, phasefolded=False, ferr_type='meansig', ferr_style='sem', sigmaclip=True)
-    #
-    #figr, axis = plt.subplots(3, 1, figsize=figrsize[3, :])
-    #for k in range(len(axis)):
-    #    if k == 0:
-    #        varbtemp = flux-baseline
-    #    else:
-    #        varbtemp = (flux-baseline - 1.) * 1e6
-    #    axis[k].plot(time, varbtemp, '.', color='grey', alpha=0.3, label='Raw data')
-    #    if k == 0:
-    #        varbtemp = binflux
-    #        varbtemperrr = binflux_err
-    #    else:
-    #        varbtemp = (binflux - 1.) * 1e6
-    #        varbtemperrr = binflux_err * 1e6
-    #    axis[k].errorbar(bintime, varbtemp, marker='o', yerr=varbtemperrr, linestyle='none', capsize=0, ls='', color='black', label='Binned data')
-    #    if k == 0:
-    #        varbtemp = model_flux
-    #    else:
-    #        varbtemp = (model_flux - 1.) * 1e6
-    #    axis[k].plot(time, varbtemp, color='b', lw=2, label='Total Model')
-    #    axis[k].set(xlabel='Time (BJD)')
-    #axis[0].set(ylabel='Relative Flux')
-    #axis[1].set(ylabel='Relative Flux - 1 [ppm]')
-    #axis[2].set(ylabel='Relative Flux - 1 [ppm]')
+    # produce a table for the spline coefficients
+    fileoutp = open(pathdata + 'coef.csv', 'w')
+    fileoutp.write(' & ')
+    
+    figr, axis = plt.subplots(2, 1, figsize=gdat.figrsize[1, :])
+    gdat.lcurspln = []
+    lcursplnbase = []
+    listobjtspln = []
+    wdth = 4. / 24. # [days]
+    for i in indxsplnknot:
+        indxtimesplnregi = np.where((gdat.timesapp >= timesplnedge[i]) & (gdat.timesapp <= timesplnedge[i+1]))[0]
+        timesplnregi = gdat.timesapp[indxtimesplnregi]
+        lcursplnbaseregi = lcursapp[indxtimesplnregi]
+        flux_err1 = stdvlcursapp[indxtimesplnregi]
+        temp, indxtimesplntran, indxtimesplnoutt = index_eclipses(timesplnregi, gdat.epoc, gdat.peri, width_1=wdth, width_2=wdth)
+        objtspln = UnivariateSpline(timesplnregi[indxtimesplnoutt], lcursplnbaseregi[indxtimesplnoutt]-1.)
+        timesplnregifine = np.linspace(timesplnregi[0], timesplnregi[-1], 1000)
+        gdat.lcurspln += list(lcursplnbaseregi-objtspln(timesplnregi))
+        lcursplnbase += list(objtspln(timesplnregi))
+        listobjtspln.append(objtspln)
+    
+        print('i')
+        print(i)
+        print('$\beta$:', listobjtspln[i].get_coeffs())
+        print('$t_k$:', listobjtspln[i].get_knots())
+        
+        # plot the masked and detrended light curves
+        axis[0].plot(timesplnregi[indxtimesplnoutt] - gdat.timetess, lcursplnbaseregi[indxtimesplnoutt], 'k.', color='k')
+        axis[0].plot(timesplnregifine - gdat.timetess, listobjtspln[i](timesplnregifine)+1., 'b-', lw=3)
+        axis[1].plot(timesplnregi - gdat.timetess, lcursplnbaseregi-listobjtspln[i](timesplnregi), '.', color='k')
+    for a in range(2):
+        axis[a].set_ylabel('Relative Flux')
+    axis[0].set_xticklabels([])
+    axis[1].set_xlabel('Time [BJD - 2457000]')
+    path = pathimag + 'lcur_spln.pdf'
+    plt.subplots_adjust(hspace=0.)
+    plt.savefig(path)
+    plt.close()
+   
+
+
+    figr, axis = plt.subplots(4, 1, figsize=gdat.figrsize[2, :])
+    axis[0].plot(gdat.timepdcc - gdat.timetess, lcurpdcc, 'k.')
+    axis[1].plot(gdat.timesapp - gdat.timetess, lcursapp, '.', color='k')
+    for a in range(4):
+        axis[a].set_ylabel('Relative Flux')
+    #axis[0].set_xticklabels([])
+    
+    # fit a spline to the SAP light curve
+    print('Fitting a spline to the SAP light curve...')
+    timesplnedge = [0., 2458504., np.inf]
+    numbsplnedge = len(timesplnedge)
+    numbsplnknot = numbsplnedge - 1
+    indxsplnknot = np.arange(numbsplnknot)
+
+    # produce a table for the spline coefficients
+    fileoutp = open(pathdata + 'coef.csv', 'w')
+    fileoutp.write(' & ')
+    
+    gdat.lcurspln = []
+    lcursplnbase = []
+    listobjtspln = []
+    wdth = 4. / 24. # [days]
+    for i in indxsplnknot:
+        indxtimesplnregi = np.where((gdat.timesapp >= timesplnedge[i]) & (gdat.timesapp <= timesplnedge[i+1]))[0]
+        timesplnregi = gdat.timesapp[indxtimesplnregi]
+        lcursplnbaseregi = lcursapp[indxtimesplnregi]
+        flux_err1 = stdvlcursapp[indxtimesplnregi]
+        temp, indxtimesplntran, indxtimesplnoutt = index_eclipses(timesplnregi, gdat.epoc, gdat.peri, width_1=wdth, width_2=wdth)
+        objtspln = UnivariateSpline(timesplnregi[indxtimesplnoutt], lcursplnbaseregi[indxtimesplnoutt]-1.)
+        timesplnregifine = np.linspace(timesplnregi[0], timesplnregi[-1], 1000)
+        gdat.lcurspln += list(lcursplnbaseregi-objtspln(timesplnregi))
+        lcursplnbase += list(objtspln(timesplnregi))
+        listobjtspln.append(objtspln)
+    
+        print('i')
+        print(i)
+        print('$\beta$:', listobjtspln[i].get_coeffs())
+        print('$t_k$:', listobjtspln[i].get_knots())
+        
+        # plot the masked and detrended light curves
+        axis[2].plot(timesplnregi[indxtimesplnoutt] - gdat.timetess, lcursplnbaseregi[indxtimesplnoutt], 'k.', color='k')
+        axis[2].plot(timesplnregifine - gdat.timetess, listobjtspln[i](timesplnregifine)+1., 'b-', lw=3)
+        axis[3].plot(timesplnregi - gdat.timetess, lcursplnbaseregi-listobjtspln[i](timesplnregi), '.', color='k')
+    for a in range(2):
+        axis[a].set_ylabel('Relative Flux')
+    axis[2].set_xticklabels([])
+    axis[3].set_xlabel('Time [BJD - 2457000]')
+    path = pathimag + 'lcur_totl.pdf'
+    plt.subplots_adjust(hspace=0.)
+    plt.savefig(path)
+    plt.close()
+   
+
+
+
+
+
+
+
+
+
+
+    gdat.lcurspln = np.array(gdat.lcurspln)
+    lcursplnbase = np.array(lcursplnbase)
+    temp, indxtimesplntran, indxtimesplnoutt = index_eclipses(gdat.timesapp, gdat.epoc, gdat.peri, width_1=4./24., width_2=2./24.)
+    offset = np.mean(gdat.lcurspln[indxtimesplntran]) - 1.
+    gdat.lcurspln -= offset
+    
+    fileoutp.write('\\hline\n')
+    fileoutp.close()
+    
+    gdat.time = gdat.timesapp
+
+    ## phase-fold and save the detrended light curve
+    dt = 0.01
+    ferr_type = 'medsig'
+    ferr_style = 'sem'
+    sigmaclip = False
+        
+    gdat.timebind, gdat.lcursplnbind, gdat.stdvlcursplnbind, N = rebin_err(gdat.time, gdat.lcurspln, \
+                                                                                ferr_type=ferr_type, ferr_style=ferr_style, dt=dt, sigmaclip=sigmaclip)
+    gdat.phasbind, gdat.pcursplnbind, gdat.stdvpcursplnbind, N, gdat.phas = phase_fold(gdat.time, gdat.lcurspln, gdat.peri, gdat.epoc, \
+                                                                                ferr_type=ferr_type, ferr_style=ferr_style, dt=dt, sigmaclip=sigmaclip)
+    
+    data = np.column_stack((gdat.time, gdat.lcurspln, stdvlcursapp))
+    path = pathdata + 'data_preparation/TESS.csv'
+    print('Writing to %s' % path)
+    np.savetxt(path, data, delimiter=',', header='time,flux,flux_err')
+    
+    strgalletype = 'offs'
+    
+    # read the allesfitter posterior
+    companion = 'b'
+    strginst = 'TESS'
+    pathalle = pathdata + 'allesfits/allesfit_%s/' % strgalletype
+    alles = allesfitter.allesclass(pathalle)
+    
+
+    listradirati = alles.posterior_params['b_rr']
+    listrsma = alles.posterior_params['b_rsuma']
+    if strgalletype == 'ther':
+        listphasshft = 360. * alles.posterior_params['b_thermal_emission_timeshift_TESS'] / alles.posterior_params['b_period']
+        
+        prnt_list(listphasshft, 'Phase shift')
+        return
+
+    else:
+        listalbgalle = alles.posterior_params['b_geom_albedo_TESS']
+        listdeptnigh = alles.posterior_params['b_sbratio_TESS'] * listradirati**2
+    
+    numbsamp = listrsma.size
+
+    listradirati = listradirati[int(numbsamp/4):]
+    listalbgalle = listalbgalle[int(numbsamp/4):]
+    listdeptnigh = listdeptnigh[int(numbsamp/4):]
+    listrsma = listrsma[int(numbsamp/4):]
+    numbsamp = listrsma.size
+    
+    # calculate nightside, secondary and planetary modulation from allesfitter output
+    ## what allesfitter calls 'geometric albedo' is not the actual geometric albedo
+    listdeptpmod = listalbgalle * (listradirati * listrsma / (1. + listradirati))**2
+    listsamp = np.empty((numbsamp, 6))
+    listsamp[:, 0] = listdeptnigh * 1e6
+    listsamp[:, 1] = (listdeptnigh + listdeptpmod) * 1e6
+    listsamp[:, 2] = listdeptpmod * 1e6
+    listsamp[:, 3] = listdeptpmod * np.random.rand(listdeptpmod.size) * 1e6
+    listsamp[:, 4] = listdeptpmod * 1e6 - listsamp[:, 3]
+    listsamp[:, 5] = listsamp[:, 4] * 1e-6 * (1. + listradirati)**2 / listrsma**2 / listradirati**2
+    listalbgtess = listsamp[:, 5]
+    listlabl = ['Nightside [ppm]', 'Secondary [ppm]', 'Modulation [ppm]', 'Thermal [ppm]', 'Reflected [ppm]', 'Geometric Albedo']
+    tdpy.mcmc.plot_grid(pathimag, 'post_alle', listsamp, listlabl, plotsize=2.5)
+    
+    listdeptseco = listsamp[:, 1]
+    medideptseco = np.median(listsamp[:, 1])
+    stdvdeptseco = np.std(listsamp[:, 1])
+    medideptnigh = np.median(listsamp[:, 0])
+    stdvdeptnigh = np.std(listsamp[:, 0])
+
+    path = pathdata + 'PC-Solar-NEW-OPA-TiO-LR.dat'
+    arryvivi = np.loadtxt(path, delimiter=',')
+    phasvivi = (arryvivi[:, 0] / 360. + 0.75) % 1. - 0.25
+    deptvivi = arryvivi[:, 4] * 1e6
+    indxphasvivisort = np.argsort(phasvivi)
+    phasvivi = phasvivi[indxphasvivisort]
+    deptvivi = deptvivi[indxphasvivisort] - medideptnigh
+    print('phasvivi')
+    summgene(phasvivi)
+    path = pathdata + 'PC-Solar-NEW-OPA-TiO-LR-AllK.dat'
+    arryvivi = np.loadtxt(path, delimiter=',')
+    wlenvivi = arryvivi[:, 1]
+    specvivi = arryvivi[:, 2]
+
+    # plot a lightcurve from the posteriors
+    gdat.lcurmodl = alles.get_posterior_median_model(strginst, 'flux', xx=gdat.time)
+    gdat.lcurgpro = alles.get_posterior_median_baseline(strginst, 'flux', xx=gdat.time)
+    
+    gdat.lcurdetr = gdat.lcurspln - gdat.lcurgpro
+
+    gdat.timebind, gdat.lcurmodlbind, gdat.stdvlcurmodlbind, N = rebin_err(gdat.time, gdat.lcurmodl, \
+                                                                            ferr_type=ferr_type, ferr_style=ferr_style, dt=dt, sigmaclip=sigmaclip)
+    gdat.phasbind, gdat.pcurmodlbind, gdat.stdvpcurmodlbind, N, gdat.phas = phase_fold(gdat.time, gdat.lcurmodl, gdat.peri, gdat.epoc, \
+                                                                            ferr_type=ferr_type, ferr_style=ferr_style, dt=dt, sigmaclip=sigmaclip)
+    
+    gdat.indxphassort = np.argsort(gdat.phas)
+
+    gdat.timebind, gdat.lcurdetrbind, gdat.stdvlcurdetrbind, N = rebin_err(gdat.time, gdat.lcurdetr, \
+                                                                            ferr_type=ferr_type, ferr_style=ferr_style, dt=dt, sigmaclip=sigmaclip)
+    gdat.phasbind, gdat.pcurdetrbind, gdat.stdvpcurdetrbind, N, gdat.phas = phase_fold(gdat.time, gdat.lcurdetr, gdat.peri, gdat.epoc, \
+                                                                            ferr_type=ferr_type, ferr_style=ferr_style, dt=dt, sigmaclip=sigmaclip)
+    
+    gdat.indxtimegapp = np.argmax(gdat.time[1:] - gdat.time[:-1]) + 1
+    figr = plt.figure(figsize=gdat.figrsize[3, :])
+    axis = [[] for k in range(3)]
+    axis[0] = figr.add_subplot(3, 1, 1)
+    axis[1] = figr.add_subplot(3, 1, 2)
+    axis[2] = figr.add_subplot(3, 1, 3, sharex=axis[1])
+    
+    for k in range(len(axis)):
+        
+        if k > 0:
+            xdat = gdat.phasbind
+        else:
+            xdat = gdat.time - gdat.timetess
+        
+        if k > 0:
+            ydat = gdat.pcurdetrbind
+        else:
+            ydat = gdat.lcurdetr
+        if k == 2:
+            ydat = (ydat - 1.) * 1e6
+        axis[k].plot(xdat, ydat, '.', color='grey', alpha=0.3, label='Raw data')
+        
+        if k > 0:
+            xdat = gdat.phasbind
+            ydat = gdat.pcurdetrbind
+            yerr = np.copy(gdat.stdvpcurdetrbind)
+        else:
+            xdat = gdat.timebind - gdat.timetess
+            ydat = gdat.lcurdetrbind
+            yerr = gdat.stdvlcurdetrbind
+        if k == 2:
+            ydat = (ydat - 1.) * 1e6
+            yerr *= 1e6
+        axis[k].errorbar(xdat, ydat, marker='o', yerr=yerr, capsize=0, ls='', color='k', label='Binned data')
+        
+        if k > 0:
+            xdat = gdat.phas[gdat.indxphassort]
+            ydat = gdat.lcurmodl[gdat.indxphassort]
+        else:
+            xdat = gdat.time - gdat.timetess
+            ydat = gdat.lcurmodl
+        if k == 2:
+            ydat = (ydat - 1.) * 1e6
+        
+        if k == 0:
+            axis[k].plot(xdat[:gdat.indxtimegapp], ydat[:gdat.indxtimegapp], color='b', lw=2, label='Total Model')
+            axis[k].plot(xdat[gdat.indxtimegapp:], ydat[gdat.indxtimegapp:], color='b', lw=2)
+        if k == 1:
+            axis[k].plot(xdat, ydat, color='b', lw=2, label='Total Model')
+        if k == 2:
+            axis[k].plot(xdat, ydat + medideptnigh, color='b', lw=2, label='Total Model')
+        
+        if k == 2:
+            axis[k].plot(phasvivi, deptvivi + medideptnigh, color='orange', lw=2, label='GCM (Parmentier+2018)')
+
+            axis[k].axhline(0., ls='-.', alpha=0.3, color='grey')
+
+        if k == 0:
+            axis[k].set(xlabel='Time (BJD)')
+        if k > 0:
+            axis[k].set(xlabel='Phase')
+    axis[0].set(ylabel='Relative Flux')
+    axis[1].set(ylabel='Relative Flux')
+    axis[2].set(ylabel='Relative Flux - 1 [ppm]')
     #axis[1].set(ylim=[-800,1000])
-    #axis[2].set(xlim=[0.2*peri,0.8*peri], ylim=[-800, 1000])
-    #
+    axis[2].set(ylim=[-400, 1000])
+    
+    ## plot components in the zoomed panel
+    #### nightside0w0
     #alles = allesfitter.allesclass(pathalle)
     ##alles.posterior_params_median['b_sbratio_TESS'] = 0
     #alles.settings['host_shape_TESS'] = 'sphere'
@@ -411,423 +553,485 @@ def init():
     #alles.posterior_params_median['b_geom_albedo_TESS'] = 0
     #alles.posterior_params_median['host_gdc_TESS'] = 0
     #alles.posterior_params_median['host_bfac_TESS'] = 0
-    #model_flux2 = alles.get_posterior_median_model(inst, 'flux', xx=time)
-    #for k in range(len(axis)):
-    #    if k == 0:
-    #        varbtemp = model_flux2
-    #    else:
-    #        varbtemp = (model_flux2 - 1.) * 1e6
-    #    axis[k].plot(time, varbtemp, lw=2, color='g', label='Nightside', ls='--', zorder=11)
-    #
-    #alles = allesfitter.allesclass(pathalle)
-    #alles.posterior_params_median['b_sbratio_TESS'] = 0
+    #gdat.lcurmodlcomp = alles.get_posterior_median_model(strginst, 'flux', xx=gdat.time)
+    ##gdat.phasbind, gdat.pcurmodlcompbind, gdat.stdvpcurmodlcompbind, N, gdat.phas = phase_fold(gdat.time, gdat.lcurmodlcomp, gdat.peri, gdat.epoc, \
+    ##                                                                        ferr_type=ferr_type, ferr_style=ferr_style, dt=dt, sigmaclip=sigmaclip)
+    #axis[2].plot(gdat.phas[gdat.indxphassort], (gdat.lcurmodlcomp[gdat.indxphassort] - 1.) * 1e6, lw=2, color='g', label='Nightside', ls='--', zorder=11)
+    
+    ### EV
+    alles = allesfitter.allesclass(pathalle)
+    alles.posterior_params_median['b_sbratio_TESS'] = 0
     #alles.settings['host_shape_TESS'] = 'sphere'
     #alles.settings['b_shape_TESS'] = 'sphere'
+    alles.posterior_params_median['b_geom_albedo_TESS'] = 0
+    alles.posterior_params_median['host_gdc_TESS'] = 0
+    alles.posterior_params_median['host_bfac_TESS'] = 0
+    gdat.lcurmodlcomp = alles.get_posterior_median_model(strginst, 'flux', xx=gdat.time)
+    #gdat.phasbind, gdat.pcurmodlcompbind, gdat.stdvpcurmodlcompbind, N, gdat.phas = phase_fold(gdat.time, gdat.lcurmodlcomp, gdat.peri, gdat.epoc, \
+    #                                                                        ferr_type=ferr_type, ferr_style=ferr_style, dt=dt, sigmaclip=sigmaclip)
+    axis[2].plot(gdat.phas[gdat.indxphassort], medideptnigh + (gdat.lcurmodlcomp[gdat.indxphassort] - 1.) * 1e6, \
+                                                                    lw=2, color='r', label='Ellipsoidal', ls='--', zorder=11)
+    
+    
+    objtalle = allesfitter.allesclass(pathalle)
+    alles.posterior_params_median['b_sbratio_TESS'] = 0
+    alles.posterior_params_median['b_geom_albedo_TESS'] = 0
+    alles.posterior_params_median['host_gdc_TESS'] = 0
+    alles.posterior_params_median['host_bfac_TESS'] = 0
+
+    ### planetary modulation
+    alles = allesfitter.allesclass(pathalle)
+    alles.posterior_params_median['b_sbratio_TESS'] = 0
+    alles.settings['host_shape_TESS'] = 'sphere'
+    alles.settings['b_shape_TESS'] = 'sphere'
     #alles.posterior_params_median['b_geom_albedo_TESS'] = 0
-    ##alles.posterior_params_median['host_gdc_TESS'] = 0
-    #alles.posterior_params_median['host_bfac_TESS'] = 0
-    #model_flux2 = alles.get_posterior_median_model(inst, 'flux', xx=time)
-    #for k in range(len(axis)):
-    #    if k == 0:
-    #        varbtemp = model_flux2
-    #    else:
-    #        varbtemp = (model_flux2 - 1.) * 1e6
-    #    #axis[k].plot(time, varbtemp, lw=2, color='orange', ls='--', label='SGD', zorder=11)
-    #
-    #alles = allesfitter.allesclass(pathalle)
-    #alles.posterior_params_median['b_sbratio_TESS'] = 0
-    ##alles.settings['host_shape_TESS'] = 'sphere'
-    ##alles.settings['b_shape_TESS'] = 'sphere'
-    #alles.posterior_params_median['b_geom_albedo_TESS'] = 0
-    #alles.posterior_params_median['host_gdc_TESS'] = 0
-    #alles.posterior_params_median['host_bfac_TESS'] = 0
-    #model_flux2 = alles.get_posterior_median_model(inst, 'flux', xx=time)
-    #for k in range(len(axis)):
-    #    if k == 0:
-    #        varbtemp = model_flux2
-    #    else:
-    #        varbtemp = (model_flux2 - 1.) * 1e6
-    #    axis[k].plot(time, varbtemp, lw=2, color='r', ls='--', label='Ellipsoidal', zorder=11)
-    #
-    #alles = allesfitter.allesclass(pathalle)
-    #alles.posterior_params_median['b_sbratio_TESS'] = 0
-    #alles.settings['host_shape_TESS'] = 'sphere'
-    #alles.settings['b_shape_TESS'] = 'sphere'
-    ##alles.posterior_params_median['b_geom_albedo_TESS'] = 0
-    #alles.posterior_params_median['host_gdc_TESS'] = 0
-    #alles.posterior_params_median['host_bfac_TESS'] = 0
-    #model_flux2 = alles.get_posterior_median_model(inst, 'flux', xx=time)
-    #for k in range(len(axis)):
-    #    if k == 0:
-    #        varbtemp = model_flux2
-    #    else:
-    #        varbtemp = (model_flux2 - 1.) * 1e6
-    #    axis[k].plot(time, varbtemp, lw=2, color='m', ls='--', label='PRL', zorder=11)
-    #
-    #axis[0].legend()
-    #plt.subplots_adjust(hspace=0.)
-    #
-    #path = pathimag + 'datamodl.pdf'
-    #plt.savefig(path)
-    #plt.close()
-    #
-    #
-    ## plot the spherical limits
-    #figr, axis = plt.subplots(2, 1, figsize=figrsize[2, :])
-    #
-    #alles.settings['host_shape_TESS'] = 'roche'
-    #alles.settings['b_shape_TESS'] = 'roche'
-    #model_fluxfull = alles.get_posterior_median_model(inst, 'flux', xx=time)
-    #axis[0].plot(time, model_fluxfull, 'r-', lw=2)
-    #axis[0].set_xticklabels([])
-    #axis[0].set_ylabel('Relative Flux')
-    #
-    #alles.settings['host_shape_TESS'] = 'sphere'
-    #alles.settings['b_shape_TESS'] = 'sphere'
-    #model_flux = alles.get_posterior_median_model(inst, 'flux', xx=time)
-    #axis[1].plot(time, (model_flux - model_fluxfull) * 1e6, lw=2, label='Spherical star and planet residual')
-    #
-    #alles.settings['host_shape_TESS'] = 'roche'
-    #alles.settings['b_shape_TESS'] = 'sphere'
-    #model_flux = alles.get_posterior_median_model(inst, 'flux', xx=time)
-    #axis[1].plot(time, (model_flux - model_fluxfull) * 1e6, lw=2, label='Spherical planet residual')
-    #axis[1].legend()
-    #axis[1].set(ylabel='Relative flux [ppm]')
-    #
-    #plt.subplots_adjust(hspace=0.)
-    #
-    #path = pathimag + 'pcurmodldiff.pdf'
-    #plt.savefig(path)
-    #plt.close()
-    #
-    ## calculate prior on the mass ratio (Stassun+2017)
-    #Mp = np.random.normal(loc=(375.99289 *c.M_earth/c.M_sun).value, scale=(20.34112*c.M_earth/c.M_sun).value, size=10000)
-    #Ms = np.random.normal(loc=1.52644, scale=0.361148, size=10000)
-    #q = Mp / Ms
-    #print( 'q', np.mean(q), np.std(q), np.percentile(q, [16,50,84] ) )
-    #print( 'q', np.percentile(q,50), np.percentile(q,50)-np.percentile(q,16), np.percentile(q,84)-np.percentile(q,50) )
-    #fig = plt.figure()
-    #plt.hist(Mp)
-    #fig = plt.figure()
-    #plt.hist(Ms)
-    #fig = plt.figure()
-    #plt.hist(q)
+    alles.posterior_params_median['host_gdc_TESS'] = 0
+    alles.posterior_params_median['host_bfac_TESS'] = 0
+    gdat.lcurmodlcomp = alles.get_posterior_median_model(strginst, 'flux', xx=gdat.time)
+    #gdat.phasbind, gdat.pcurmodlcompbind, gdat.stdvpcurmodlcompbind, N, gdat.phas = phase_fold(gdat.time, gdat.lcurmodlcomp, gdat.peri, gdat.epoc, \
+    #                                                                        ferr_type=ferr_type, ferr_style=ferr_style, dt=dt, sigmaclip=sigmaclip)
+    axis[2].plot(gdat.phas[gdat.indxphassort], medideptnigh + (gdat.lcurmodlcomp[gdat.indxphassort] - 1.) * 1e6, \
+                                                                lw=2, color='g', label='Planetary Modulation', ls='--', zorder=11)
+    
+    axis[2].legend(ncol=2)
+    
+    path = pathimag + 'pcur_alle.pdf'
+    plt.savefig(path)
+    plt.close()
+    
+    
+    # plot the spherical limits
+    figr, axis = plt.subplots(figsize=gdat.figrsize[0, :])
+    
+    alles.settings['host_shape_TESS'] = 'roche'
+    alles.settings['b_shape_TESS'] = 'roche'
+    lcurmodltempbase = alles.get_posterior_median_model(strginst, 'flux', xx=gdat.time)
+    
+    alles.settings['host_shape_TESS'] = 'sphere'
+    alles.settings['b_shape_TESS'] = 'roche'
+    lcurmodltemp = alles.get_posterior_median_model(strginst, 'flux', xx=gdat.time)
+    gdat.phasbind, gdat.pcursplnbind, gdat.stdvpcursplnbind, N, gdat.phas = phase_fold(gdat.time, lcurmodltemp, gdat.peri, gdat.epoc, \
+                                                                            ferr_type=ferr_type, ferr_style=ferr_style, dt=dt, sigmaclip=sigmaclip)
+    axis.plot(gdat.phas[gdat.indxphassort], (gdat.lcurmodl - lcurmodltemp)[gdat.indxphassort] * 1e6, lw=2, label='Spherical star')
+    
+    alles.settings['host_shape_TESS'] = 'roche'
+    alles.settings['b_shape_TESS'] = 'sphere'
+    lcurmodltemp = alles.get_posterior_median_model(strginst, 'flux', xx=gdat.time)
+    gdat.phasbind, gdat.pcursplnbind, gdat.stdvpcursplnbind, N, gdat.phas = phase_fold(gdat.time, lcurmodltemp, gdat.peri, gdat.epoc, \
+                                                                            ferr_type=ferr_type, ferr_style=ferr_style, dt=dt, sigmaclip=sigmaclip)
+    axis.plot(gdat.phas[gdat.indxphassort], (gdat.lcurmodl - lcurmodltemp)[gdat.indxphassort] * 1e6, lw=2, label='Spherical planet')
+    axis.legend()
+    axis.set(xlabel='Phase')
+    axis.set(ylabel='Relative flux [ppm]')
+    plt.subplots_adjust(hspace=0.)
+    path = pathimag + 'pcurmodldiff.pdf'
+    plt.savefig(path)
+    plt.close()
+
+    # calculate prior on the mass ratio (Stassun+2017)
+    Mp = np.random.normal(loc=(375.99289 *c.M_earth/c.M_sun).value, scale=(20.34112*c.M_earth/c.M_sun).value, size=10000)
+    Ms = np.random.normal(loc=1.52644, scale=0.361148, size=10000)
+    q = Mp / Ms
+    print( 'q', np.mean(q), np.std(q), np.percentile(q, [16,50,84] ) )
+    print( 'q', np.percentile(q,50), np.percentile(q,50)-np.percentile(q,16), np.percentile(q,84)-np.percentile(q,50) )
+    fig = plt.figure()
+    plt.hist(Mp)
+    fig = plt.figure()
+    plt.hist(Ms)
+    fig = plt.figure()
+    plt.hist(q)
   
-    ## use psi posterior to infer Bond albedo and heat circulation efficiency
+    # use psi posterior to infer Bond albedo and heat circulation efficiency
 
-    ## nightside and dayside temperature, heat circulation efficiency 
+    # get data
+    ## from Tom
+    path = pathdata + 'ascii_output/EmissionModelArray.txt'
+    arrymodl = np.loadtxt(path)
+    path = pathdata + 'ascii_output/EmissionDataArray.txt'
+    arrydata = np.loadtxt(path)
+    # update Tom's array with the new secondary depth
+    arrydata[0, 2] = medideptseco
+    arrydata[0, 3] = stdvdeptseco
+    ### add the nightsiide emission
+    arrydata = np.concatenate((arrydata, np.array([[arrydata[0, 0], arrydata[0, 1], medideptnigh, stdvdeptnigh, 0, 0, 0, 0]])), axis=0)
+    ### spectrum of the host star, WASP-121
+    gdat.meanwlenthomraww = arrymodl[:, 0]
+    gdat.specstarthomraww = arrymodl[:, 9]
+    
+    # make a contour plot of geometric albedo without and with thermal component prior
+    ## calculate the geometric albedo with the ATMO prior
+    wlenmodl = arrymodl[:, 0]
+    deptmodl = arrymodl[:, 1]
+    indxwlenmodltess = np.where((wlenmodl > 0.6) & (wlenmodl < 0.95))[0]
+    deptmodlther = np.mean(deptmodl[indxwlenmodltess])
+    deptmodl = medideptseco + np.random.randn(numbsamp) * stdvdeptseco
+    print('deptmodlther')
+    summgene(deptmodlther)
+    deptmodlrefl = np.random.randn(numbsamp) * 50 + 490 - deptmodlther
+    print('deptmodlrefl')
+    summgene(deptmodlrefl)
+    
+    print('HACKING')
+    listalbg = deptmodlrefl * 1e-6 * (smajaxis / radiplan)**2
+    listalbg = listalbg[listalbg > 0]
+    
+    prnt_list(listalbg, 'Albedo')
+    prnt_list(listalbgtess, 'Albedo TESS only')
+    prnt_list(listdeptseco, 'Secondary depth [ppm]')
+    
+    figr, axis = plt.subplots(figsize=gdat.figrsize[4, :])
 
-    #
-    ## wavelength axis
-    #gdat.conswlentmpt = 0.0143877735e6 # [um K]
-    #
-    ### read eclipse data
-    #liststrgfile = ['ContribFuncArr.txt', \
-    #                'EmissionDataArray.txt', \
-    #                #'RetrievalParamSamples.txt', \
-    #                'ContribFuncWav.txt', \
-    #                'EmissionModelArray.txt', \
-    #                'RetrievalPTSamples.txt', \
-    #                'pdependent_abundances/', \
-    #                ]
-    #
-    #
-    ## grid plot, along with C/O
-    ##path = pathdata + 'ascii_output/RetrievalParamSamples.txt'
-    ##listsamp = np.loadtxt(path)
-    ##print 'listsamp'
-    ##summgene(listsamp)
-    ##tdpy.mcmc.plot_grid(pathimag, 'post', listsamp, ['$\kappa_IR$', '$\gamma$', '$\psi$', '[M/H]', '[C/H]', '[O/H]'])
-    #
-    ## plot spectrum, depth, brightness temp
-    #path = pathdata + 'ascii_output/ContribFuncWav.txt'
-    #wlen = np.loadtxt(path)
-    ## emission
-    ## Columns are:
-    ##   1. Wavelength (micron)
-    ##   2. Best-fit retrieval eclipse depths (ppm)
-    ##   3. Best-fit blackbody eclipse depths (ppm)
-    ##   4. Blackbody envelope upper eclipse depths (ppm)
-    ##   5. Blackbody envelope lower eclipse depths (ppm)
-    ##   6. Best-fit retrieval planet surface flux (erg/s/cm^2)
-    ##   7. Best-fit blackbody planet surface flux (erg/s/cm^2)
-    ##   8. Blackbody envelope upper planet surface flux (erg/s/cm^2)
-    ##   9. Blackbody envelope lower planet surface flux (erg/s/cm^2)
-    ##  10. Stellar surface flux (erg/s/cm^2)
-    ## data
-    ## Columns are:
-    ##  1. Central wavelength (micron)
-    ##  2. Channel half-width (micron)
-    ##  3. Eclipse depth value (ppm)
-    ##  4. Eclipse depth uncertainty (ppm)
-    ##  5. Brightness temperature value (Kelvin)
-    ##  6. Brightness temperature uncertainty (Kelvin)
-    ##  7. Planet surface flux value (erg/s/cm^2)
-    ##  8. Planet surface flux uncertainty (erg/s/cm^2)
-    ## Rows are:
-    ##  1. TESS
-    ##  2. Zprime (ground photometry)
-    ##  3. Ks (ground photometry)
-    ##  4. IRAC 3.6 micron
-    ##  5. IRAC 4.5 micron
-    ##  6-22. WFC3 G102
-    ##  23-50. WFC3 G141
-    #listcolr = ['k', 'm', 'purple', 'olive', 'olive', 'r', 'g']
-    #for i in range(15):
-    #    listcolr.append('r')
-    #for i in range(28):
-    #    listcolr.append('g')
+    binsalbg = np.linspace(min(np.amin(listalbgtess), np.amin(listalbg)), max(np.amax(listalbgtess), np.amax(listalbg)), 100)
+    meanalbg = (binsalbg[1:] + binsalbg[:-1]) / 2.
+    pdfnalbgtess = scipy.stats.gaussian_kde(listalbgtess, bw_method=.2)(meanalbg)
+    pdfnalbg = scipy.stats.gaussian_kde(listalbg, bw_method=.2)(meanalbg)
+    #pdfnalbgtess = np.histogram(listalbgtess, bins=binsalbg)[0] / float(listalbgtess.size)
+    #pdfnalbg = np.histogram(listalbg, bins=binsalbg)[0] / float(listalbg.size)
+    axis.plot(meanalbg, pdfnalbgtess, label='TESS only', lw=2)
+    axis.plot(meanalbg, pdfnalbg, label='TESS + ATMO prior', lw=2)
+    axis.set_xlabel('$A_g$')
+    axis.set_ylabel('$P(A_g)$')
+    axis.legend()
+    plt.subplots_adjust()
+    path = pathimag + 'pdfn_albg.pdf'
+    print 'Writing to %s...' % path
+    plt.savefig(path)
+    plt.close()
+    
+    
+    # wavelength axis
+    gdat.conswlentmpt = 0.0143877735e6 # [um K]
+    
+    ## read eclipse data
+    liststrgfile = ['ContribFuncArr.txt', \
+                    'EmissionDataArray.txt', \
+                    #'RetrievalParamSamples.txt', \
+                    'ContribFuncWav.txt', \
+                    'EmissionModelArray.txt', \
+                    'RetrievalPTSamples.txt', \
+                    'pdependent_abundances/', \
+                    ]
+    
+    
+    ## get posterior on irradiation efficiency
+    path = pathdata + 'ascii_output/RetrievalParamSamples.txt'
+    listsampatmo = np.loadtxt(path)
+    gdat.listpsii = listsampatmo[:, 2]
+    histpsii, binspsii = np.histogram(gdat.listpsii)
+    meanpsii = (binspsii[1:] + binspsii[:-1]) / 2.
+    gdat.likeintp = scipy.interpolate.interp1d(meanpsii, np.log(histpsii), fill_value=-np.inf, bounds_error=False)
+    
+    ## sample from Bond albedo and circulation efficiency
+    numbwalk = 10
+    dictalbb = [gdat]
+    indxwalk = np.arange(numbwalk)
+    parainit = []
+    for i in indxwalk:
+        parainit.append(np.random.randn(2) * 0.001 + 0.02)
+    objtsamp = emcee.EnsembleSampler(numbwalk, 2, retr_lpos_albb, args=dictalbb)
+    objtsamp.run_mcmc(parainit, 10000)
+    listalbb = objtsamp.flatchain[:, 0]
+    listepsi = objtsamp.flatchain[:, 1]
+
+    listsamp = np.empty((listalbb.size, 2))
+    listsamp[:, 0] = listalbb
+    listsamp[:, 1] = listepsi
+    tdpy.mcmc.plot_grid(pathimag, 'post_albbespi', listsamp, ['$A_b$', r'$\epsilon$'], plotsize=2.5)
+
+    # plot ATMO posterior
+    tdpy.mcmc.plot_grid(pathimag, 'post_atmo', listsampatmo, ['$\kappa_{IR}$', '$\gamma$', '$\psi$', \
+                                                                        '[M/M$_{\odot}$]', '[C/C$_{\odot}$]', '[O/O$_{\odot}$]'], plotsize=2.5)
    
-    #
-    ### stellar spectrum and TESS throughput
-    # 
-    ## infer brightness temperatures
-    #numbpara = 1
-    #numbsampwalk = 1000
-    #numbsampburnwalk = 100
-    #numbwalk = 5 * numbpara
-    #indxwalk = np.arange(numbwalk)
-    #numbsamp = numbsampwalk * numbwalk
-    #numbsampburn = numbsampburnwalk * numbwalk
-    #indxsampwalk = np.arange(numbsampwalk)
-    #gdat.numbdatatmpt = arrydata.shape[0]
-    #gdat.indxdatatmpt = np.arange(gdat.numbdatatmpt)
-    #tmpt = np.empty((numbsamp, gdat.numbdatatmpt))
-    #for k in gdat.indxdatatmpt:
-    #    
-    #    gdat.minmwlen = arrydata[k, 0] - arrydata[k, 1]
-    #    gdat.maxmwlen = arrydata[k, 0] + arrydata[k, 1]
-    #    gdat.binswlen = np.linspace(gdat.minmwlen, gdat.maxmwlen, 100)
-    #    gdat.meanwlen = (gdat.binswlen[1:] + gdat.binswlen[:-1]) / 2.
-    #    gdat.diffwlen = (gdat.binswlen[1:] - gdat.binswlen[:-1]) / 2.
-    #   
-    #    print('k')
-    #    print(k)
-    #    #if k == 1:
-    #    #    raise Exception('')
-    #    gdat.indxenerdata = k
 
-    #    gdat.specstarintp = scipy.interpolate.interp1d(gdat.meanwlenstar, gdat.specstar)(gdat.meanwlen)
-    #    gdat.specstarbolo = np.sum(gdat.diffwlen * gdat.specstarintp / gdat.meanwlen)
+    # plot spectrum, depth, brightness temp
+    path = pathdata + 'ascii_output/ContribFuncWav.txt'
+    wlen = np.loadtxt(path)
+    listcolr = ['k', 'm', 'purple', 'olive', 'olive', 'r', 'g']
+    for i in range(15):
+        listcolr.append('r')
+    for i in range(28):
+        listcolr.append('g')
+   
+    # infer brightness temperatures
+    numbpara = 1
+    numbsampwalk = 1000
+    numbsampburnwalk = 100
+    numbwalk = 5 * numbpara
+    indxwalk = np.arange(numbwalk)
+    numbsamp = numbsampwalk * numbwalk
+    numbsampburn = numbsampburnwalk * numbwalk
+    indxsampwalk = np.arange(numbsampwalk)
+    gdat.numbdatatmpt = arrydata.shape[0]
+    gdat.indxdatatmpt = np.arange(gdat.numbdatatmpt)
+    tmpt = np.empty((numbsamp, gdat.numbdatatmpt))
+    specarry = np.empty((2, 3, gdat.numbdatatmpt))
+    for k in gdat.indxdatatmpt:
+        
+        gdat.minmwlen = arrydata[k, 0] - arrydata[k, 1]
+        gdat.maxmwlen = arrydata[k, 0] + arrydata[k, 1]
+        gdat.binswlen = np.linspace(gdat.minmwlen, gdat.maxmwlen, 100)
+        gdat.meanwlen = (gdat.binswlen[1:] + gdat.binswlen[:-1]) / 2.
+        gdat.diffwlen = (gdat.binswlen[1:] - gdat.binswlen[:-1]) / 2.
+        gdat.cntrwlen = np.mean(gdat.meanwlen)
+        if not (k == 0 or k == gdat.numbdatatmpt - 1):
+            continue
+        gdat.indxenerdata = k
 
-    #    gdat.deptobsd = arrydata[k, 2 ]
-    #    gdat.stdvdeptobsd = arrydata[k, 3]
-    #    gdat.varideptobsd = gdat.stdvdeptobsd**2
-    #
-    #    print('gdat.deptobsd')
-    #    print(gdat.deptobsd)
-    #    print('gdat.stdvdeptobsd')
-    #    print(gdat.stdvdeptobsd)
-    #    print
+        gdat.specstardiff = retr_modl_spec(gdat, 6396., strgtype='diff')
+        gdat.specplandiff = retr_modl_spec(gdat, 2700., strgtype='diff')
+        gdat.specstarlogt = retr_modl_spec(gdat, 6396., strgtype='logt')
+        gdat.specplanlogt = retr_modl_spec(gdat, 2700., strgtype='logt')
+        gdat.specstarintg = retr_modl_spec(gdat, 6396., strgtype='intg')
+        gdat.specplanintg = retr_modl_spec(gdat, 2700., strgtype='intg')
+        
+        gdat.specstarthomlogt = scipy.interpolate.interp1d(gdat.meanwlenthomraww, gdat.specstarthomraww)(gdat.cntrwlen)
+        gdat.specstarthomdiff = gdat.specstarthomlogt / gdat.cntrwlen
+        gdat.specstarthomintg = np.sum(gdat.diffwlen * \
+                                    scipy.interpolate.interp1d(gdat.meanwlenthomraww, gdat.specstarthomraww)(gdat.meanwlen) / gdat.meanwlen)
 
-    #    numbdoff = gdat.numbdatatmpt - numbpara
-    #    listlablpara = ['Temperature']
-    #    liststrgpara = ['tmpt']
-    #    indxpara = np.arange(numbpara)
-    #    gdat.limtpara = np.empty((2, numbpara))
-    #    # cons
-    #    gdat.limtpara[0, 0] = 1000.
-    #    gdat.limtpara[1, 0] = 4000.
-    #    dictspec = [gdat]
-    #    indxwalk = np.arange(numbwalk)
-    #    parainit = []
-    #    for i in indxwalk:
-    #        parainit.append(np.empty(numbpara))
-    #        meannorm = (gdat.limtpara[0, :] + gdat.limtpara[1, :]) / 2.
-    #        stdvnorm = (gdat.limtpara[0, :] - gdat.limtpara[1, :]) / 10.
-    #        parainit[i]  = (scipy.stats.truncnorm.rvs((gdat.limtpara[0, :] - meannorm) / stdvnorm, \
-    #                                                    (gdat.limtpara[1, :] - meannorm) / stdvnorm)) * stdvnorm + meannorm
-    #    if numbsampburnwalk == 0:
-    #        raise Exception('')
-    #    objtsamp = emcee.EnsembleSampler(numbwalk, numbpara, retr_lpos_spec, args=dictspec)
-    #    parainitburn, prob, state = objtsamp.run_mcmc(parainit, numbsampburnwalk)
-    #    objtsamp.reset()
-    #    objtsamp.run_mcmc(parainitburn, numbsampwalk)
-    #    
-    #    tmpt[:, k] = objtsamp.flatchain[:, 0]
+        gdat.deptobsd = arrydata[k, 2]
+        gdat.stdvdeptobsd = arrydata[k, 3]
+        gdat.varideptobsd = gdat.stdvdeptobsd**2
+    
+        numbdoff = gdat.numbdatatmpt - numbpara
+        listlablpara = ['Temperature']
+        liststrgpara = ['tmpt']
+        indxpara = np.arange(numbpara)
+        gdat.limtpara = np.empty((2, numbpara))
+        # cons
+        gdat.limtpara[0, 0] = 1000.
+        gdat.limtpara[1, 0] = 4000.
+        dictspec = [gdat]
+        indxwalk = np.arange(numbwalk)
+        parainit = []
+        for i in indxwalk:
+            parainit.append(np.empty(numbpara))
+            meannorm = (gdat.limtpara[0, :] + gdat.limtpara[1, :]) / 2.
+            stdvnorm = (gdat.limtpara[0, :] - gdat.limtpara[1, :]) / 10.
+            parainit[i]  = (scipy.stats.truncnorm.rvs((gdat.limtpara[0, :] - meannorm) / stdvnorm, \
+                                                        (gdat.limtpara[1, :] - meannorm) / stdvnorm)) * stdvnorm + meannorm
+        if numbsampburnwalk == 0:
+            raise Exception('')
+        objtsamp = emcee.EnsembleSampler(numbwalk, numbpara, retr_lpos_spec, args=dictspec)
+        parainitburn, prob, state = objtsamp.run_mcmc(parainit, numbsampburnwalk)
+        objtsamp.reset()
+        objtsamp.run_mcmc(parainitburn, numbsampwalk)
+        tmpt[:, k] = objtsamp.flatchain[:, 0]
 
-    #    # cross-section
-    #    #figr, axis = plt.subplots(figsize=figrsize[4, :])
-    #    #for n in indxwalk:
-    #    #    axis.plot(indxsampwalk, objtsamp.chain[n, :, 0])
-    #    #axis.set_xlabel('$i_s$')
-    #    #axis.set_ylabel('%d' % k)
-    #    #plt.subplots_adjust()
-    #    #path = pathimag + 'trac_%04d.pdf' % k
-    #    #print 'Writing to %s...' % path
-    #    #plt.savefig(path)
-    #    #plt.close()
-    #
-    #
+    posttmpttess = tmpt[:, np.array([0, gdat.numbdatatmpt - 1])]
+    
+    prnt_list(posttmpttess[:, 0], 'Dayside temperature')
+    prnt_list(posttmpttess[:, 1], 'Nightside temperature')
+    
+    listtmptcont = (posttmpttess[:, 0] - posttmpttess[:, 1]) / posttmpttess[:, 0]
+    prnt_list(listtmptcont, 'Temperature contrast')
+    
+    figr, axis = plt.subplots(4, 1, figsize=gdat.figrsize[3, :], sharex=True)
+    ## stellar spectrum and TESS throughput
+    axis[0].plot(arrymodl[:, 0], 1e-9 * arrymodl[:, 9], label='Host star, WASP-121', color='grey')
+    axis[0].plot(0., 0., ls='--', label='TESS Throughput', color='grey')
+    axis[0].set_ylabel(r'$\nu F_{\nu}$ [10$^9$ erg/s/cm$^2$]')
+    axis[0].legend(fancybox=True, bbox_to_anchor=[0.8, 0.17, 0.2, 0.2])
+    axistwin = axis[0].twinx()
+    axistwin.plot(gdat.meanwlenband, gdat.thptband, color='grey', ls='--', label='TESS')
+    axistwin.set_ylabel(r'Throughput')
+    
+    ## eclipse depths
+    ### model
+    axis[1].plot(arrymodl[:, 0], arrymodl[:,1], label='1D Retrieval')
+    axis[1].plot(arrymodl[:, 0], arrymodl[:,2], label='Blackbody', alpha=0.3, color='skyblue')
+    axis[1].fill_between(arrymodl[:, 0], arrymodl[:, 3], arrymodl[:, 4], alpha=0.3, color='skyblue')
+    objtplotvivi, = axis[1].plot(wlenvivi, specvivi * 1e6, color='orange', alpha=0.6, lw=2)
+    ### data
+    for k in range(5):
+        axis[1].errorbar(arrydata[k, 0], arrydata[k, 2], xerr=arrydata[k, 1], yerr=arrydata[k, 3], ls='', marker='o', color=listcolr[k])
+    axis[1].errorbar(arrydata[5:22, 0], arrydata[5:22, 2], xerr=arrydata[5:22, 1], yerr=arrydata[5:22, 3], ls='', marker='o', color='r')
+    axis[1].errorbar(arrydata[22:-1, 0], arrydata[22:-1, 2], xerr=arrydata[22:-1, 1], yerr=arrydata[22:-1, 3], ls='', marker='o', color='g')
+    axis[1].set_ylabel(r'Depth [ppm]')
+    axis[1].set_xticklabels([])
+    
+    ## spectra
+    ### model
+    objtplotretr, = axis[2].plot(arrymodl[:, 0], 1e-9 * arrymodl[:, 5], label='1D Retrieval', color='b')
+    objtplotmblc, = axis[2].plot(arrymodl[:, 0], 1e-9 * arrymodl[:, 6], label='Blackbody', color='skyblue', alpha=0.3)
+    objtploteblc = axis[2].fill_between(arrymodl[:, 0], 1e-9 * arrymodl[:, 7], 1e-9 * arrymodl[:, 8], color='skyblue', alpha=0.3)
+    axis[2].legend([objtplotretr, (objtplotmblc, objtploteblc), objtplotvivi], ['1D Retrieval', 'Blackbody', 'GCM (Parmentier+2018)'], \
+                                                                            bbox_to_anchor=[0.8, 1.3, 0.2, 0.2])
+    ### data
+    for k in range(5):
+        axis[2].errorbar(arrydata[k, 0],  1e-9 * arrydata[k, 6], xerr=arrydata[k, 1], yerr=1e-9*arrydata[k, 7], ls='', marker='o', color=listcolr[k])
+    axis[2].errorbar(arrydata[5:22, 0], 1e-9 * arrydata[5:22, 6], xerr=arrydata[5:22, 1], yerr=1e-9*arrydata[5:22, 7], ls='', marker='o', color='r')
+    axis[2].errorbar(arrydata[22:-1, 0], 1e-9 * arrydata[22:-1, 6], xerr=arrydata[22:-1, 1], yerr=1e-9*arrydata[22:-1, 7], ls='', marker='o', color='g')
+    
 
-
-
-
-
-    #figr, axis = plt.subplots(4, 1, figsize=figrsize[3, :], sharex=True)
-    ### stellar spectrum and TESS throughput
-    #axis[0].plot(arrymodl[:, 0], 1e-9 * arrymodl[:, 9], label='Host star, WASP-121', color='grey')
-    #axis[0].plot(0., 0., ls='--', label='TESS Throughput', color='grey')
-    #axis[0].set_ylabel(r'$F_{\nu}$ [10$^9$ erg/s/cm$^2$]')
-    ##axis[0].legend(fancybox=True, loc=1)
-    #axis[0].legend(fancybox=True, bbox_to_anchor=[0.6, 0.2, 0.2, 0.2])
-    #axistwin = axis[0].twinx()
-    #axistwin.plot(gdat.meanwlenband, gdat.thptband, color='grey', ls='--', label='TESS')
-    #axistwin.set_ylabel(r'Throughput')
-    #
-    ### eclipse depths
-    #### model
-    #axis[1].plot(arrymodl[:, 0], arrymodl[:,1], label='Retrieval')
-    #axis[1].plot(arrymodl[:, 0], arrymodl[:,2], label='Blackbody', alpha=0.3, color='skyblue')
-    #axis[1].fill_between(arrymodl[:, 0], arrymodl[:, 3], arrymodl[:, 4], alpha=0.3, color='skyblue')
-    #### data
-    #for k in range(5):
-    #    axis[1].errorbar(arrydata[k, 0], arrydata[k, 2], xerr=arrydata[k, 1], yerr=arrydata[k, 3], ls='', marker='o', color=listcolr[k])
-    #axis[1].errorbar(arrydata[5:22, 0], arrydata[5:22, 2], xerr=arrydata[5:22, 1], yerr=arrydata[5:22, 3], ls='', marker='o', color='r')
-    #axis[1].errorbar(arrydata[22:-1, 0], arrydata[22:-1, 2], xerr=arrydata[22:-1, 1], yerr=arrydata[22:-1, 3], ls='', marker='o', color='g')
-    #axis[1].set_ylabel(r'Depth [ppm]')
-    #axis[1].set_xticklabels([])
-    #
-    ### spectra
-    #### model
-    #objtplotretr, = axis[2].plot(arrymodl[:, 0], 1e-9 * arrymodl[:, 5], label='Retrieval', color='b')
-    #objtplotmblc, = axis[2].plot(arrymodl[:, 0], 1e-9 * arrymodl[:, 6], label='Blackbody', color='skyblue', alpha=0.3)
-    #objtploteblc = axis[2].fill_between(arrymodl[:, 0], 1e-9 * arrymodl[:, 7], 1e-9 * arrymodl[:, 8], color='skyblue', alpha=0.3)
-    #axis[2].legend([objtplotretr, (objtplotmblc, objtploteblc)], ['Retrieval', 'Blackbody'], loc=1)
-    #### data
-    #for k in range(5):
-    #    axis[2].errorbar(arrydata[k, 0],  1e-9 * arrydata[k, 6], xerr=arrydata[k, 1], yerr=1e-9*arrydata[k, 7], ls='', marker='o', color=listcolr[k])
-    #axis[2].errorbar(arrydata[5:22, 0], 1e-9 * arrydata[5:22, 6], xerr=arrydata[5:22, 1], yerr=1e-9*arrydata[5:22, 7], ls='', marker='o', color='r')
-    #axis[2].errorbar(arrydata[22:-1, 0], 1e-9 * arrydata[22:-1, 6], xerr=arrydata[22:-1, 1], yerr=1e-9*arrydata[22:-1, 7], ls='', marker='o', color='g')
-    #axis[2].set_ylabel(r'$F_{\nu}$ [10$^9$ erg/s/cm$^2$]')
-    #axis[2].set_xticklabels([])
-    #
-    ### brightness temperature
-    #### data
-    #for k in range(5):
-    #    if k == 0:
-    #        labl = 'TESS (This work)'
-    #    if k == 1:
-    #        labl = 'Z$^\prime$'
-    #    if k == 2:
-    #        labl = '$K_s$'
-    #    if k == 3:
-    #        labl = 'IRAC 3.6 $\mu$m'
-    #    if k == 4:
-    #        labl = 'IRAC 4.5 $\mu$m'
-    #    axis[3].errorbar(arrydata[k, 0], arrydata[k, 4], xerr=arrydata[k, 1], yerr=arrydata[k, 5], label=labl, ls='', marker='o', color=listcolr[k])
-    #axis[3].errorbar(arrydata[5:22, 0], arrydata[5:22, 4], xerr=arrydata[5:22, 1], yerr=arrydata[5:22, 5], label='HST G102', ls='', marker='o', color='r')
-    #axis[3].errorbar(arrydata[22:-1, 0], arrydata[22:-1, 4], xerr=arrydata[22:-1, 1], yerr=arrydata[22:-1, 5], label='HST G141', ls='', marker='o', color='g')
+    axis[2].set_ylabel(r'$\nu F_{\nu}$ [10$^9$ erg/s/cm$^2$]')
+    axis[2].set_xticklabels([])
+    
+    ## brightness temperature
+    ### data
+    for k in range(5):
+        if k == 0:
+            labl = 'TESS (This work)'
+        if k == 1:
+            labl = 'Z$^\prime$ (Delrez+2016)'
+        if k == 2:
+            labl = '$K_s$ (Kovacs\&Kovacs2019)'
+        if k == 3:
+            labl = 'IRAC $\mu$m (Garhart+2019)'
+        #if k == 4:
+        #    labl = 'IRAC 4.5 $\mu$m (Garhart+2019)'
+        axis[3].errorbar(arrydata[k, 0], arrydata[k, 4], xerr=arrydata[k, 1], yerr=arrydata[k, 5], label=labl, ls='', marker='o', color=listcolr[k])
+    axis[3].errorbar(arrydata[5:22, 0], arrydata[5:22, 4], xerr=arrydata[5:22, 1], yerr=arrydata[5:22, 5], label='HST G102', ls='', marker='o', color='r')
+    axis[3].errorbar(arrydata[22:-1, 0], arrydata[22:-1, 4], xerr=arrydata[22:-1, 1], yerr=arrydata[22:-1, 5], label='HST G141', ls='', marker='o', color='g')
     #axis[3].errorbar(arrydata[:, 0], np.median(tmpt, 0), xerr=arrydata[:, 1], yerr=np.std(tmpt, 0), label='My calc', ls='', marker='o', color='c')
-    #axis[3].set_ylabel(r'$T_B$ [K]')
-    #axis[3].set_xlabel(r'$\lambda$ [$\mu$m]')
-    #axis[3].legend(fancybox=True, bbox_to_anchor=[0.8, 2.47, 0.2, 0.2], ncol=2)
-    #
-    #axis[1].set_ylim([20, None])
-    #axis[1].set_yscale('log')
-    #for i in range(4):
-    #    axis[i].set_xscale('log')
-    #axis[3].set_xlim([0.5, 5])
-    #axis[3].xaxis.set_minor_formatter(matplotlib.ticker.ScalarFormatter())
-    #axis[3].xaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
-    #plt.subplots_adjust(hspace=0., wspace=0.)
-    #path = pathimag + 'spec.pdf'
-    #print 'Writing to %s...' % path
-    #plt.savefig(path)
-    #plt.close()
-    #
-    #
-    ## plot pressure-temperature, contribution
-    #path = pathdata + 'ascii_output/RetrievalPTSamples.txt'
-    #dataptem = np.loadtxt(path)
-    #
-    #path = pathdata + 'ascii_output/ContribFuncArr.txt'
-    #dataconf = np.loadtxt(path)
-    #
-    #path = pathdata + 'ascii_output/ContribFuncArr.txt'
-    #data = np.loadtxt(path)
+    axis[3].set_ylabel(r'$T_B$ [K]')
+    axis[3].set_xlabel(r'$\lambda$ [$\mu$m]')
+    axis[3].legend(fancybox=True, bbox_to_anchor=[0.8, 3.8, 0.2, 0.2], ncol=2)
+    
+    axis[1].set_ylim([20, None])
+    axis[1].set_yscale('log')
+    for i in range(4):
+        axis[i].set_xscale('log')
+    axis[3].set_xlim([0.5, 5])
+    axis[3].xaxis.set_minor_formatter(matplotlib.ticker.ScalarFormatter())
+    axis[3].xaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
+    plt.subplots_adjust(hspace=0., wspace=0.)
+    path = pathimag + 'spec.pdf'
+    print('Writing to %s...' % path)
+    plt.savefig(path)
+    plt.close()
+    
+    
+    # get contribution function
+    # interpolate the throughput
+    path = pathdata + 'ascii_output/ContribFuncArr.txt'
+    ctrb = np.loadtxt(path)
+    presctrb = ctrb[0, :]
+    path = pathdata + 'ascii_output/ContribFuncWav.txt'
+    wlenctrb = np.loadtxt(path, skiprows=1)
+    gdat.thptbandctrb = scipy.interpolate.interp1d(gdat.meanwlenband, gdat.thptband, fill_value=0, bounds_error=False)(wlenctrb)
+    numbwlenctrb = wlenctrb.size
+    indxwlenctrb = np.arange(numbwlenctrb)
+    numbpresctrb = presctrb.size
+    indxpresctrb = np.arange(numbpresctrb)
+    ctrbtess = np.empty(numbpresctrb)
+    for k in indxpresctrb:
+        ctrbtess[k] = np.sum(ctrb[1:, k] * gdat.thptbandctrb)
+    ctrbtess *= 1e-12 / np.amax(ctrbtess)
+
+    # plot pressure-temperature, contribution
+    path = pathdata + 'ascii_output/RetrievalPTSamples.txt'
+    dataptem = np.loadtxt(path)
+    
+    liststrgcomp = ['CH4.txt', 'CO.txt', 'FeH.txt', 'H+.txt', 'H.txt', 'H2.txt', 'H2O.txt', 'H_.txt', 'He.txt', 'K+.txt', \
+                                                        'K.txt', 'NH3.txt', 'Na+.txt', 'Na.txt', 'TiO.txt', 'VO.txt', 'e_.txt']
+    listlablcomp = ['CH$_4$', 'CO', 'FeH', 'H$^+$', 'H', 'H$_2$', 'H$_2$O', 'H$^-$', 'He', 'K$^+$', \
+                                                        'K', 'NH$_3$', 'Na$^+$', 'Na', 'TiO', 'VO', 'e$^-$']
+    listdatacomp = []
+    for strg in liststrgcomp:
+        path = pathdata + 'ascii_output/pdependent_abundances/' + strg
+        listdatacomp.append(np.loadtxt(path))
+    
+    ## contibution/PT/abun
+    figr, axis = plt.subplots(nrows=1, ncols=2, sharey=True, gridspec_kw={'width_ratios': [1, 2]}, figsize=gdat.figrsize[0, :])
+    ### pressure temperature
+    numbsamp = dataptem.shape[0] - 1
+    indxsamp = np.arange(numbsamp)
+    for i in indxsamp[::100]:
+        axis[0].plot(dataptem[i, :], dataptem[0, :], color='b', alpha=0.1)
+    axis[0].plot(np.percentile(dataptem, 10, axis=0), dataptem[0, :], color='g')
+    axis[0].plot(np.percentile(dataptem, 50, axis=0), dataptem[0, :], color='r')
+    axis[0].plot(np.percentile(dataptem, 90, axis=0), dataptem[0, :], color='g')
+    axis[0].set_xlim([1500, 3700])
+    axis[0].set_xlabel('$T$ [K]')
+    axis[0].set_yscale('log')
+    axis[0].set_ylabel('$P$ [bar]')
+    axis[0].invert_yaxis()
+    axis[0].set_ylim([10., 1e-5])
+    ### contribution function
+    axistwin = axis[0].twiny()
+    axistwin.fill(ctrbtess, presctrb, alpha=0.5, color='grey')
+    axistwin.set_xticklabels([])
+    ## abundance
+    numbcomp = len(listdatacomp)
+    indxcomp = np.arange(numbcomp)
+    listobjtcolr = sns.color_palette("hls", numbcomp)
+    axis[1].set_prop_cycle('color', listobjtcolr)
+    listcolr = []
+    for k in indxcomp:
+        objt, = axis[1].plot(listdatacomp[k][:, 1], listdatacomp[k][:, 0])
+        listcolr.append(objt.get_color())
+
+    axis[1].xaxis.tick_top()
+    
+    arry = np.logspace(-16., 0., 21) # x 0.8
+    for k in range(21):
+        axis[1].axvline(arry[k], ls='--', alpha=0.1, color='k')
+    arry = np.logspace(-5., 1., 11) # y 0.6
+    for k in range(11):
+        axis[1].axhline(arry[k], ls='--', alpha=0.1, color='k')
+    listobjtcolr = sns.color_palette("hls", numbcomp)
+    axis[1].set_prop_cycle('color', listobjtcolr)
+    for k in indxcomp:
+        if k == 0: # CH4
+            xpos, ypos = 10**-12.8, 10**-2.3
+        elif k == 1: # CO
+            xpos, ypos = 10**-2.8, 10**-3.5
+        elif k == 2: # FeH
+            xpos, ypos = 10**-10.8, 10**-3.5
+        elif k == 3: # H+
+            xpos, ypos = 10**-12.8, 10**-4.1
+        elif k == 4: # H
+            xpos, ypos = 10**-1.6, 10**-2
+        elif k == 5: # H2
+            xpos, ypos = 10**-1.6, 10**-2.6
+        elif k == 6: # H20
+            xpos, ypos = 10**-8.8, 10**-4.1
+        elif k == 7: # H_
+            xpos, ypos = 10**-10., 10**0.4
+        elif k == 8: # He
+            xpos, ypos = 10**-1.6, 10**-4.1
+        elif k == 9: # K+
+            xpos, ypos = 10**-4.4, 10**-4.8
+        elif k == 10: # K
+            xpos, ypos = 10**-8.4, 10**-4.8
+        elif k == 11: # Nh3
+            xpos, ypos = 10**-13.6, 10**-4.1
+        elif k == 12: # Na+
+            xpos, ypos = 10**-4.4, 10**-3.8
+        elif k == 13: # Na
+            xpos, ypos = 10**-6, 10**-3.8
+        elif k == 14: # TiO
+            xpos, ypos = 10**-7.6, 10**-2
+        elif k == 15: # VO
+            xpos, ypos = 10**-6, 10**-2
+        elif k == 16: # e-
+            xpos, ypos = 10**-5.6, 10**-0.8
+        else:
+            xpos = 10**(np.random.rand() * 16. - 16.)
+            ypos = 10**(np.random.rand() * 6. - 5.)
+        axis[1].text(xpos, ypos, '%s' % listlablcomp[k], color=listcolr[k], size=10, va='center', ha='center')
+        
     #liststrgcomp = ['CH4.txt', 'CO.txt', 'FeH.txt', 'H+.txt', 'H.txt', 'H2.txt', 'H2O.txt', 'H_.txt', 'He.txt', 'K+.txt', \
     #                                                    'K.txt', 'NH3.txt', 'Na+.txt', 'Na.txt', 'TiO.txt', 'VO.txt', 'e_.txt']
-    #listdatacomp = []
-    #for strg in liststrgcomp:
-    #    path = pathdata + 'ascii_output/pdependent_abundances/' + strg
-    #    listdatacomp.append(np.loadtxt(path))
-    #
-    ### contibution/PT/abun
-    #figr = plt.figure(figsize=figrsize[0, :])
-    #gs = gridspec.GridSpec(1, 2, width_ratios=[1, 2])
-    #axis = [[] for a in range(2)]
-    #for a in range(2):
-    #    axis[a] = plt.subplot(gs[0, a])
-    #### contribution function
-    #### pressure temperature
-    ##axis[1].plot(dataptem[1, :], dataptem[0, :])
-    ##axis[1].plot(dataptem[2, :], dataptem[0, :])
-    ##axis[1].plot(dataptem[3, :], dataptem[0, :])
-    #numbsamp = dataconf.shape[0] - 1
-    #indxsamp = np.arange(numbsamp)
-    #for i in indxsamp[::100]:
-    #    axis[0].plot(dataptem[i, :], dataptem[0, :], color='b', alpha=0.1)
-    #axis[0].set_xlabel('$T$ [K]')
-    #axis[0].set_yscale('log')
-    #axis[0].set_ylabel('$P$ [mbar]')
-    #axis[0].invert_yaxis()
-    #axistwin = axis[0].twinx()
-    #axistwin.plot(dataconf[100, :], dataconf[0, :])
-    #axistwin.set_yticklabels([])
-    ### abundance
-    #numbcomp = len(listdatacomp)
-    #indxcomp = np.arange(numbcomp)
-    #for k in indxcomp:
-    #    axis[1].plot(listdatacomp[k][:, 1], listdatacomp[k][:, 0])
     #axis[1].set_yticklabels([])
-    #axis[1].set_xscale('log')
-    #axis[1].set_xlabel('VMR')
-    #axis[1].set_yscale('log')
+    axis[1].set_xscale('log')
+    axis[1].set_xlabel('Volume Mixing Ratio')
+    axis[1].set_yscale('log')
+    axis[1].set_xlim([1e-16, 1])
     #axis[1].invert_yaxis()
-    #plt.subplots_adjust(hspace=0., wspace=0.)
-    #path = pathimag + 'ptem.pdf'
-    #print 'Writing to %s...' % path
-    #plt.savefig(path)
-    #plt.close()
-    #
-    #
-    ## cross-section
-    #figr, axis = plt.subplots(figsize=figrsize[4, :])
-    #for k in indxcomp:
-    #    print 'k'
-    #    print k
-    #    print 'listdatacomp[k][:, 1]'
-    #    summgene(listdatacomp[k][:, 1])
-    #    print 'listdatacomp[k][:, 0]'
-    #    summgene(listdatacomp[k][:, 0])
-    #    #axis.plot(listdatacomp[k][:, 1], listdatacomp[k][:, 0])
-    #axis.set_xlabel('$\lambda$ [$\mu$m]')
-    #axis.set_ylabel('$\sigma$ [cm$^2$]')
-    #axis.set_yscale('log')
-    #plt.subplots_adjust()
-    #path = pathimag + 'csec.pdf'
-    #print 'Writing to %s...' % path
-    #plt.savefig(path)
-    #plt.close()
-    #
-    #
-    ##specplan = thpt / meanwlen**5 / (np.exp(cons / meanwlen / tempplan) - 1.)
-    ##specstar = thpt / meanwlen**5 / (np.exp(cons / meanwlen / tempstar) - 1.)
-    ##fluxplan = np.sum(diffwlen * specplan)
-    ##fluxstar = np.sum(diffwlen * specstar)
-    ##fluxrati = fluxplan / fluxstar
-    ##
-    ### plotting
-    #### Half of the duration plotting window
-    ### temp
-    ##timetole = 3. * dura
-    
+    plt.subplots_adjust(hspace=0., wspace=0., bottom=0.15)
+    path = pathimag + 'ptem.pdf'
+    print('Writing to %s...' % path)
+    plt.savefig(path)
+    plt.close()
+  
+    return
+
+
     # type of sampling
     samptype = 'emce'
     
-    alph = 0.2
-            
     listaminchi2runs = []
     listsamppararuns = []
     listlistlablpara = []
@@ -839,7 +1043,7 @@ def init():
     
     # phase-fold the data
     arrythrd = np.copy(arryfrst)
-    arrythrd[:, 0] = ((arryfrst[:, 0] - epoc) % peri) / peri
+    arrythrd[:, 0] = ((arryfrst[:, 0] - gdat.epoc) % gdat.peri) / gdat.peri
     
     # parse the data
     gdat.meanphas = arrythrd[:, 0]
@@ -853,8 +1057,8 @@ def init():
     gdat.datastdv = gdat.datastdv[indxsort]
 
     # mask out the primary transit
-    timetole = 6. / 24.
-    indx = np.where(abs(gdat.meanphas - 0.5) < (1. - timetole / peri) / 2.)[0]
+    gdat.timetole = 6. / 24.
+    indx = np.where(abs(gdat.meanphas - 0.5) < (1. - gdat.timetole / gdat.peri) / 2.)[0]
     if indx.size == gdat.meanphas.size:
         raise Exception('')
     gdat.data = gdat.data[indx]
@@ -869,6 +1073,14 @@ def init():
     
     # list of models
     listmodltype = ['simp', 'shft']
+    
+    fileoutp.write('\\\\\n')
+    fileoutp.write('\\hline\n')
+    fileoutp.write('$\chi^2_{\\nu}$ & ')
+    fileoutp.write(' & ')
+    fileoutp.write('\\hline\n')
+    fileoutp.write('\\hline\n')
+    fileoutp.write('\\\\\n')
     
     strgbins = 'unbd'
     strgmask = 'defa'
@@ -902,7 +1114,7 @@ def init():
         listlablparafull = listlablpara[:]
         liststrgparafull = liststrgpara[:]
         listlablparafull += ['Secondary transit depth [ppm]', 'Geometric albedo']
-        liststrgparafull += ['deptseco', 'albegeom']
+        liststrgparafull += ['deptseco', 'albg']
         
         numbparafull = len(liststrgparafull)
         indxpara = np.arange(numbpara)
@@ -925,7 +1137,7 @@ def init():
             gdat.limtpara[0, 8] = -10.
             gdat.limtpara[1, 8] = 10.
         
-        gdat.indxphasseco = np.where(abs(gdat.meanphas - 0.5) < dura / peri)[0]
+        gdat.indxphasseco = np.where(abs(gdat.meanphas - 0.5) < dura / gdat.peri)[0]
         dictfour = [gdat, modltype]
         dicticdf = []
         
@@ -999,7 +1211,7 @@ def init():
             axis.set_xlabel(listlablparafull[k])
             path = pathimag + 'diag/hist_%s_%s_%s_%s.pdf' % (liststrgparafull[k], modltype, strgmask, strgbins)
             plt.tight_layout()
-            print 'Writing to %s...' % path
+            print('Writing to %s...' % path)
             plt.savefig(path)
             plt.close()
         
@@ -1009,7 +1221,7 @@ def init():
                     figr, axis = plt.subplots()
                     axis.plot(indxsamp, objtsave[keys])
                     path = pathimag + '%s_%s.pdf' % (keys, modltype)
-                    print 'Writing to %s...' % path
+                    print('Writing to %s...' % path)
                     plt.savefig(path)
         else:
             ## log-likelihood
@@ -1021,17 +1233,17 @@ def init():
                 axis.plot(indxsamp, objtsave['logl'])
             path = pathimag + 'diag/llik_%s_%s_%s.pdf' % (modltype, strgmask, strgbins)
             plt.tight_layout()
-            print 'Writing to %s...' % path
+            print('Writing to %s...' % path)
             plt.savefig(path)
             plt.close()
         
             chi2 = -2. * objtsave.lnprobability
-            print 'Posterior-mean chi2: '
-            print np.mean(chi2)
-            print 'Posterior-mean chi2 per dof: '
-            print np.mean(chi2) / numbdoff
+            print('Posterior-mean chi2: ')
+            print(np.mean(chi2))
+            print('Posterior-mean chi2 per dof: ')
+            print(np.mean(chi2) / numbdoff)
         
-        tdpy.mcmc.plot_grid(pathimag, 'post_%s_%s_%s.pdf' % (modltype, strgmask, strgbins), postpara, listlablparafull)
+        tdpy.mcmc.plot_grid(pathimag, 'post_sinu_%s_%s_%s' % (modltype, strgmask, strgbins), postpara, listlablparafull, plotsize=2.5)
     
         ### sample model phas
         numbsampplot = 100
@@ -1041,7 +1253,7 @@ def init():
         numbphasfine = 1000
         gdat.meanphasfine = np.linspace(0.1, 0.9, numbphasfine)
         phasmodlfine = np.empty((numbsampplot, numbphasfine))
-        indxphasfineseco = np.where(abs(gdat.meanphasfine - 0.5) < dura / peri)[0]
+        indxphasfineseco = np.where(abs(gdat.meanphasfine - 0.5) < dura / gdat.peri)[0]
         for k, indxsampplottemp in enumerate(indxsampplot):
             if samptype == 'emce':
                 objttemp = objtsave.flatchain
@@ -1050,49 +1262,36 @@ def init():
             cons = objttemp[indxsampplottemp, 0]
             deptnigh = objttemp[indxsampplottemp, 1]
             amfo = objttemp[indxsampplottemp, 2:8]
-            print('modltype')
-            print(modltype)
             if modltype == 'shft':
                 shft = objttemp[indxsampplottemp, 8]
-                print('objttemp')
-                summgene(objttemp)
-                print('shft')
-                print(shft)
             else:
                 shft = 0.
-            phasmodlfine[k, :], deptpmodfine = retr_modl_four(gdat, phasmodlfine[k, :], indxphasfineseco, cons, deptnigh, amfo, shft, modltype)
+            phasmodlfine[k, :], deptpmodfine = retr_modl_four(gdat, gdat.meanphasfine, indxphasfineseco, cons, deptnigh, amfo, shft, modltype)
         
-        figr, axis = plt.subplots(figsize=figrsize[0, :])
-        axis.errorbar(gdat.meanphas, gdat.data, yerr=yerr, color='black', marker='o', ls='', alpha=0.2, markersize=1)
+        strgextn = '%s_%s_%s' % (modltype, strgmask, strgbins)
+        ## log-likelihood
+        figr, axis = plt.subplots(figsize=(12, 6))
+        axis.errorbar(gdat.phasbind % 1., (gdat.pcurdetrbind - 1) * 1e6, yerr=1e6*gdat.stdvpcurdetrbind, color='k', marker='o', ls='', markersize=1)
         for k, indxsampplottemp in enumerate(indxsampplot):
-            axis.plot(gdat.meanphasfine, phasmodlfine[k, :], alpha=0.05, color='b')
+            axis.plot(gdat.meanphasfine, (phasmodlfine[k, :] - 1) * 1e6, alpha=0.5, color='b')
+        axis.set_xlim([0.1, 0.9])
+        axis.set_ylim([-400, 1000])
+        axis.set_ylabel('Relative Flux - 1 [ppm]')
         axis.set_xlabel('Phase')
-        axis.set_ylabel('Relative flux')
         plt.tight_layout()
-        path = pathimag + 'phas_modl_%s_%s_%s.pdf' % (modltype, strgmask, strgbins)
-        print 'Writing to %s...' % path
+        path = pathimag + 'pcur_sine_%s.pdf' % strgextn
+        print('Writing to %s...' % path)
         plt.savefig(path)
         plt.close()
-        
-    fileoutp.write('\\\\\n')
-    fileoutp.write('\\hline\n')
-    fileoutp.write('\\hline\n')
-    fileoutp.write('\\hline\n')
-    fileoutp.write('$\chi^2_{\\nu}$ & ')
-    fileoutp.write(' & ')
-    fileoutp.write('\\hline\n')
-    fileoutp.write('\\hline\n')
-    fileoutp.write('\\\\\n')
-    for n in indxparafull:
-        fileoutp.write('%s & ' % listlablparafull[n])
-        if len(listlistlablparafull[b]) < numbparafull:
-            continue
-        ydat = np.median(listsamppararuns[b][:, n])
-        uerr = np.percentile(listsamppararuns[b][:, n], 84.) - ydat
-        lerr = ydat - np.percentile(listsamppararuns[b][:, n], 16.)
-        fileoutp.write('$%.3g \substack{+%.3g \\\\ -%.3g}$' % (ydat, uerr, lerr))
-        fileoutp.write(' & ')
-        fileoutp.write('\\\\\n')
+
+        for n in indxparafull:
+            fileoutp.write('%s & ' % listlablparafull[n])
+            ydat = np.median(postpara[:, n])
+            uerr = np.percentile(postpara[:, n], 84.) - ydat
+            lerr = ydat - np.percentile(postpara[:, n], 16.)
+            fileoutp.write('$%.3g \substack{+%.3g \\\\ -%.3g}$' % (ydat, uerr, lerr))
+            fileoutp.write(' & ')
+            fileoutp.write('\\\\\n')
     fileoutp.write('\\hline\n')
     fileoutp.close()
 
