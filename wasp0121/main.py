@@ -308,8 +308,8 @@ def init():
 
 
     figr, axis = plt.subplots(4, 1, figsize=gdat.figrsize[2, :])
-    axis[0].plot(gdat.timepdcc - gdat.timetess, lcurpdcc, 'k.')
-    axis[1].plot(gdat.timesapp - gdat.timetess, lcursapp, '.', color='k')
+    axis[0].plot(gdat.timesapp - gdat.timetess, lcursapp, '.', color='k')
+    axis[1].plot(gdat.timepdcc - gdat.timetess, lcurpdcc, 'k.')
     for a in range(4):
         axis[a].set_ylabel('Relative Flux')
     #axis[0].set_xticklabels([])
@@ -451,7 +451,7 @@ def init():
     deptvivi = arryvivi[:, 4] * 1e6
     indxphasvivisort = np.argsort(phasvivi)
     phasvivi = phasvivi[indxphasvivisort]
-    deptvivi = deptvivi[indxphasvivisort] - medideptnigh
+    deptvivi = deptvivi[indxphasvivisort]
     print('phasvivi')
     summgene(phasvivi)
     path = pathdata + 'PC-Solar-NEW-OPA-TiO-LR-AllK.dat'
@@ -496,7 +496,7 @@ def init():
         else:
             ydat = gdat.lcurdetr
         if k == 2:
-            ydat = (ydat - 1.) * 1e6
+            ydat = (ydat - 1.) * 1e6 + medideptnigh
         axis[k].plot(xdat, ydat, '.', color='grey', alpha=0.3, label='Raw data')
         
         if k > 0:
@@ -508,7 +508,7 @@ def init():
             ydat = gdat.lcurdetrbind
             yerr = gdat.stdvlcurdetrbind
         if k == 2:
-            ydat = (ydat - 1.) * 1e6
+            ydat = (ydat - 1.) * 1e6 + medideptnigh
             yerr *= 1e6
         axis[k].errorbar(xdat, ydat, marker='o', yerr=yerr, capsize=0, ls='', color='k', label='Binned data')
         
@@ -519,18 +519,16 @@ def init():
             xdat = gdat.time - gdat.timetess
             ydat = gdat.lcurmodl
         if k == 2:
-            ydat = (ydat - 1.) * 1e6
+            ydat = (ydat - 1.) * 1e6 + medideptnigh
         
         if k == 0:
             axis[k].plot(xdat[:gdat.indxtimegapp], ydat[:gdat.indxtimegapp], color='b', lw=2, label='Total Model')
             axis[k].plot(xdat[gdat.indxtimegapp:], ydat[gdat.indxtimegapp:], color='b', lw=2)
-        if k == 1:
-            axis[k].plot(xdat, ydat, color='b', lw=2, label='Total Model')
-        if k == 2:
-            axis[k].plot(xdat, ydat + medideptnigh, color='b', lw=2, label='Total Model')
+        else:
+            axis[k].plot(xdat, ydat, color='b', lw=2, label='Model (This work)')
         
         if k == 2:
-            axis[k].plot(phasvivi, deptvivi + medideptnigh, color='orange', lw=2, label='GCM (Parmentier+2018)')
+            axis[k].plot(phasvivi, deptvivi, color='orange', lw=2, label='GCM (Parmentier+2018)')
 
             axis[k].axhline(0., ls='-.', alpha=0.3, color='grey')
 
@@ -545,19 +543,6 @@ def init():
     axis[2].set(ylim=[-400, 1000])
     
     ## plot components in the zoomed panel
-    #### nightside0w0
-    #alles = allesfitter.allesclass(pathalle)
-    ##alles.posterior_params_median['b_sbratio_TESS'] = 0
-    #alles.settings['host_shape_TESS'] = 'sphere'
-    #alles.settings['b_shape_TESS'] = 'sphere'
-    #alles.posterior_params_median['b_geom_albedo_TESS'] = 0
-    #alles.posterior_params_median['host_gdc_TESS'] = 0
-    #alles.posterior_params_median['host_bfac_TESS'] = 0
-    #gdat.lcurmodlcomp = alles.get_posterior_median_model(strginst, 'flux', xx=gdat.time)
-    ##gdat.phasbind, gdat.pcurmodlcompbind, gdat.stdvpcurmodlcompbind, N, gdat.phas = phase_fold(gdat.time, gdat.lcurmodlcomp, gdat.peri, gdat.epoc, \
-    ##                                                                        ferr_type=ferr_type, ferr_style=ferr_style, dt=dt, sigmaclip=sigmaclip)
-    #axis[2].plot(gdat.phas[gdat.indxphassort], (gdat.lcurmodlcomp[gdat.indxphassort] - 1.) * 1e6, lw=2, color='g', label='Nightside', ls='--', zorder=11)
-    
     ### EV
     alles = allesfitter.allesclass(pathalle)
     alles.posterior_params_median['b_sbratio_TESS'] = 0
@@ -567,11 +552,17 @@ def init():
     alles.posterior_params_median['host_gdc_TESS'] = 0
     alles.posterior_params_median['host_bfac_TESS'] = 0
     gdat.lcurmodlcomp = alles.get_posterior_median_model(strginst, 'flux', xx=gdat.time)
+    gdat.lcurmodlevvv = np.copy(gdat.lcurmodlcomp)
     #gdat.phasbind, gdat.pcurmodlcompbind, gdat.stdvpcurmodlcompbind, N, gdat.phas = phase_fold(gdat.time, gdat.lcurmodlcomp, gdat.peri, gdat.epoc, \
     #                                                                        ferr_type=ferr_type, ferr_style=ferr_style, dt=dt, sigmaclip=sigmaclip)
-    axis[2].plot(gdat.phas[gdat.indxphassort], medideptnigh + (gdat.lcurmodlcomp[gdat.indxphassort] - 1.) * 1e6, \
-                                                                    lw=2, color='r', label='Ellipsoidal', ls='--', zorder=11)
     
+
+    xdat = gdat.phas[gdat.indxphassort]
+    ydat = (gdat.lcurmodlcomp[gdat.indxphassort] - 1.) * 1e6
+    indxfrst = np.where(xdat < -0.07)[0]
+    indxseco = np.where(xdat > 0.07)[0]
+    axis[2].plot(xdat[indxfrst], ydat[indxfrst], lw=2, color='r', label='Ellipsoidal', ls='--')
+    axis[2].plot(xdat[indxseco], ydat[indxseco], lw=2, color='r', ls='--')
     
     objtalle = allesfitter.allesclass(pathalle)
     alles.posterior_params_median['b_sbratio_TESS'] = 0
@@ -590,8 +581,8 @@ def init():
     gdat.lcurmodlcomp = alles.get_posterior_median_model(strginst, 'flux', xx=gdat.time)
     #gdat.phasbind, gdat.pcurmodlcompbind, gdat.stdvpcurmodlcompbind, N, gdat.phas = phase_fold(gdat.time, gdat.lcurmodlcomp, gdat.peri, gdat.epoc, \
     #                                                                        ferr_type=ferr_type, ferr_style=ferr_style, dt=dt, sigmaclip=sigmaclip)
-    axis[2].plot(gdat.phas[gdat.indxphassort], medideptnigh + (gdat.lcurmodlcomp[gdat.indxphassort] - 1.) * 1e6, \
-                                                                lw=2, color='g', label='Planetary Modulation', ls='--', zorder=11)
+    #axis[2].plot(gdat.phas[gdat.indxphassort], medideptnigh + (gdat.lcurmodlcomp[gdat.indxphassort] - 1.) * 1e6, \
+    #                                                            lw=2, color='g', label='Planetary Modulation', ls='--', zorder=11)
     
     axis[2].legend(ncol=2)
     
@@ -603,24 +594,31 @@ def init():
     # plot the spherical limits
     figr, axis = plt.subplots(figsize=gdat.figrsize[0, :])
     
-    alles.settings['host_shape_TESS'] = 'roche'
-    alles.settings['b_shape_TESS'] = 'roche'
-    lcurmodltempbase = alles.get_posterior_median_model(strginst, 'flux', xx=gdat.time)
-    
+    alles = allesfitter.allesclass(pathalle)
+    alles.posterior_params_median['b_sbratio_TESS'] = 0
     alles.settings['host_shape_TESS'] = 'sphere'
     alles.settings['b_shape_TESS'] = 'roche'
+    alles.posterior_params_median['b_geom_albedo_TESS'] = 0
+    alles.posterior_params_median['host_gdc_TESS'] = 0
+    alles.posterior_params_median['host_bfac_TESS'] = 0
     lcurmodltemp = alles.get_posterior_median_model(strginst, 'flux', xx=gdat.time)
-    gdat.phasbind, gdat.pcursplnbind, gdat.stdvpcursplnbind, N, gdat.phas = phase_fold(gdat.time, lcurmodltemp, gdat.peri, gdat.epoc, \
-                                                                            ferr_type=ferr_type, ferr_style=ferr_style, dt=dt, sigmaclip=sigmaclip)
-    axis.plot(gdat.phas[gdat.indxphassort], (gdat.lcurmodl - lcurmodltemp)[gdat.indxphassort] * 1e6, lw=2, label='Spherical star')
+    print('(gdat.lcurmodlevvv - lcurmodltemp)[gdat.indxphassort] * 1e6')
+    summgene((gdat.lcurmodlevvv - lcurmodltemp)[gdat.indxphassort] * 1e6)
+    axis.plot(gdat.phas[gdat.indxphassort], (gdat.lcurmodlevvv - lcurmodltemp)[gdat.indxphassort] * 1e6, lw=2, label='Spherical star')
     
+    alles = allesfitter.allesclass(pathalle)
+    alles.posterior_params_median['b_sbratio_TESS'] = 0
     alles.settings['host_shape_TESS'] = 'roche'
     alles.settings['b_shape_TESS'] = 'sphere'
+    alles.posterior_params_median['b_geom_albedo_TESS'] = 0
+    alles.posterior_params_median['host_gdc_TESS'] = 0
+    alles.posterior_params_median['host_bfac_TESS'] = 0
     lcurmodltemp = alles.get_posterior_median_model(strginst, 'flux', xx=gdat.time)
-    gdat.phasbind, gdat.pcursplnbind, gdat.stdvpcursplnbind, N, gdat.phas = phase_fold(gdat.time, lcurmodltemp, gdat.peri, gdat.epoc, \
-                                                                            ferr_type=ferr_type, ferr_style=ferr_style, dt=dt, sigmaclip=sigmaclip)
-    axis.plot(gdat.phas[gdat.indxphassort], (gdat.lcurmodl - lcurmodltemp)[gdat.indxphassort] * 1e6, lw=2, label='Spherical planet')
+    print('(gdat.lcurmodlevvv - lcurmodltemp)[gdat.indxphassort] * 1e6')
+    summgene((gdat.lcurmodlevvv - lcurmodltemp)[gdat.indxphassort] * 1e6)
+    axis.plot(gdat.phas[gdat.indxphassort], (gdat.lcurmodlevvv - lcurmodltemp)[gdat.indxphassort] * 1e6, lw=2, label='Spherical planet')
     axis.legend()
+    axis.set_ylim([-100, 100])
     axis.set(xlabel='Phase')
     axis.set(ylabel='Relative flux [ppm]')
     plt.subplots_adjust(hspace=0.)
@@ -665,11 +663,7 @@ def init():
     indxwlenmodltess = np.where((wlenmodl > 0.6) & (wlenmodl < 0.95))[0]
     deptmodlther = np.mean(deptmodl[indxwlenmodltess])
     deptmodl = medideptseco + np.random.randn(numbsamp) * stdvdeptseco
-    print('deptmodlther')
-    summgene(deptmodlther)
     deptmodlrefl = np.random.randn(numbsamp) * 50 + 490 - deptmodlther
-    print('deptmodlrefl')
-    summgene(deptmodlrefl)
     
     print('HACKING')
     listalbg = deptmodlrefl * 1e-6 * (smajaxis / radiplan)**2
@@ -736,7 +730,7 @@ def init():
     listsamp = np.empty((listalbb.size, 2))
     listsamp[:, 0] = listalbb
     listsamp[:, 1] = listepsi
-    tdpy.mcmc.plot_grid(pathimag, 'post_albbespi', listsamp, ['$A_b$', r'$\epsilon$'], plotsize=2.5)
+    tdpy.mcmc.plot_grid(pathimag, 'post_albbespi', listsamp, ['$A_b$', r'$\varepsilon$'], plotsize=2.5)
 
     # plot ATMO posterior
     tdpy.mcmc.plot_grid(pathimag, 'post_atmo', listsampatmo, ['$\kappa_{IR}$', '$\gamma$', '$\psi$', \
@@ -838,8 +832,8 @@ def init():
     
     ## eclipse depths
     ### model
-    axis[1].plot(arrymodl[:, 0], arrymodl[:,1], label='1D Retrieval')
-    axis[1].plot(arrymodl[:, 0], arrymodl[:,2], label='Blackbody', alpha=0.3, color='skyblue')
+    axis[1].plot(arrymodl[:, 0], arrymodl[:,1], label='1D Retrieval (This work)')
+    axis[1].plot(arrymodl[:, 0], arrymodl[:,2], label='Blackbody (This work)', alpha=0.3, color='skyblue')
     axis[1].fill_between(arrymodl[:, 0], arrymodl[:, 3], arrymodl[:, 4], alpha=0.3, color='skyblue')
     objtplotvivi, = axis[1].plot(wlenvivi, specvivi * 1e6, color='orange', alpha=0.6, lw=2)
     ### data
@@ -852,10 +846,11 @@ def init():
     
     ## spectra
     ### model
-    objtplotretr, = axis[2].plot(arrymodl[:, 0], 1e-9 * arrymodl[:, 5], label='1D Retrieval', color='b')
-    objtplotmblc, = axis[2].plot(arrymodl[:, 0], 1e-9 * arrymodl[:, 6], label='Blackbody', color='skyblue', alpha=0.3)
+    objtplotretr, = axis[2].plot(arrymodl[:, 0], 1e-9 * arrymodl[:, 5], label='1D Retrieval (This work)', color='b')
+    objtplotmblc, = axis[2].plot(arrymodl[:, 0], 1e-9 * arrymodl[:, 6], label='Blackbody (This work)', color='skyblue', alpha=0.3)
     objtploteblc = axis[2].fill_between(arrymodl[:, 0], 1e-9 * arrymodl[:, 7], 1e-9 * arrymodl[:, 8], color='skyblue', alpha=0.3)
-    axis[2].legend([objtplotretr, (objtplotmblc, objtploteblc), objtplotvivi], ['1D Retrieval', 'Blackbody', 'GCM (Parmentier+2018)'], \
+    axis[2].legend([objtplotretr, (objtplotmblc, objtploteblc), objtplotvivi], \
+                                                                ['1D Retrieval (This work)', 'Blackbody (This work)', 'GCM (Parmentier+2018)'], \
                                                                             bbox_to_anchor=[0.8, 1.3, 0.2, 0.2])
     ### data
     for k in range(5):
@@ -881,8 +876,8 @@ def init():
         #if k == 4:
         #    labl = 'IRAC 4.5 $\mu$m (Garhart+2019)'
         axis[3].errorbar(arrydata[k, 0], arrydata[k, 4], xerr=arrydata[k, 1], yerr=arrydata[k, 5], label=labl, ls='', marker='o', color=listcolr[k])
-    axis[3].errorbar(arrydata[5:22, 0], arrydata[5:22, 4], xerr=arrydata[5:22, 1], yerr=arrydata[5:22, 5], label='HST G102', ls='', marker='o', color='r')
-    axis[3].errorbar(arrydata[22:-1, 0], arrydata[22:-1, 4], xerr=arrydata[22:-1, 1], yerr=arrydata[22:-1, 5], label='HST G141', ls='', marker='o', color='g')
+    axis[3].errorbar(arrydata[5:22, 0], arrydata[5:22, 4], xerr=arrydata[5:22, 1], yerr=arrydata[5:22, 5], label='HST G102 (Evans+2019)', ls='', marker='o', color='r')
+    axis[3].errorbar(arrydata[22:-1, 0], arrydata[22:-1, 4], xerr=arrydata[22:-1, 1], yerr=arrydata[22:-1, 5], label='HST G141 (Evans+2017)', ls='', marker='o', color='g')
     #axis[3].errorbar(arrydata[:, 0], np.median(tmpt, 0), xerr=arrydata[:, 1], yerr=np.std(tmpt, 0), label='My calc', ls='', marker='o', color='c')
     axis[3].set_ylabel(r'$T_B$ [K]')
     axis[3].set_xlabel(r'$\lambda$ [$\mu$m]')
