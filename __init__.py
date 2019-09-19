@@ -40,15 +40,13 @@ from copy import deepcopy
 import astropy as ap
 
 # utilities
-import os, time, sys, datetime, warnings, getpass, glob, fnmatch, cPickle, inspect
+import os, time, sys, datetime, warnings, getpass, glob, fnmatch, pickle, inspect
 import functools
 
 # tdpy
 import tdpy.util
-from tdpy.util import summ, summgene, show
+from tdpy.util import summgene
 import tdpy.mcmc
-
-from tdpy.util import show
 
 import pcat.main
 

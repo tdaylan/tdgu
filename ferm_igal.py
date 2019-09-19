@@ -115,34 +115,24 @@ def writ_ferm_raww_work(gdat, indxprocwork):
         if os.path.isfile(cntp) and os.path.isfile(expo) and not gdat.test:
             continue
      
-        print cmnd
-        print ''
         if not gdat.test and not os.path.isfile(sele):
             os.system(cmnd)
 
         cmnd = 'gtmktime evfile=' + sele + ' scfile=' + spac + ' filter="DATA_QUAL==1 && LAT_CONFIG==1 && ABS(ROCK_ANGLE)<52"' + ' outfile=' + filt + ' roicut=no'
-        print cmnd
-        print ''
         if not gdat.test and not os.path.isfile(filt):
             os.system(cmnd)
 
         cmnd = 'gtbin evfile=' + filt + ' scfile=NONE outfile=' + cntp + \
             ' %s ' % gdat.strgener[indxprocwork] + \
             'algorithm=HEALPIX hpx_ordering_scheme=RING coordsys=GAL hpx_order=%d hpx_ebin=yes' % log2(gdat.numbside[indxprocwork])
-        print cmnd
-        print ''
         if not gdat.test and not os.path.isfile(cntp):
             os.system(cmnd)
 
         cmnd = 'gtltcube evfile=' + filt + ' scfile=' + spac + ' outfile=' + live + ' dcostheta=0.025 binsz=1'
-        print cmnd
-        print ''
         if not gdat.test and not os.path.isfile(live):
             os.system(cmnd)
 
         cmnd = 'gtexpcube2 infile=' + live + ' cmap=' + cntp + ' outfile=' + expo + ' irfs=CALDB evtype=%03d bincalc=CENTER' % thisevtt
-        print cmnd
-        print ''
         if not gdat.test and not os.path.isfile(expo):
             os.system(cmnd)
 
@@ -239,26 +229,14 @@ def writ_ferm_finl():
     for i in indxener:
         for m in indxevtt:
             if (sbrt[i, :, m] == 0.).all():
-                print 'im'
-                print i, m
                 raise Exception('')
             if (expo[i, :, m] == 0.).all():
-                print 'im'
-                print i, m
                 raise Exception('')
 
     path = pathoutp + '/expoferm%s%s%s%04d.fits' % (recotype, enertype, regitype, numbside)
-    print 'Writing to %s...' % path
-    print 'expo'
-    summgene(expo)
-    print
     pf.writeto(path, expo, clobber=True)
 
     path = pathoutp + '/sbrtferm%s%s%s%04d.fits' % (recotype, enertype, regitype, numbside)
-    print 'Writing to %s...' % path
-    print 'sbrt'
-    summgene(sbrt)
-    print
     pf.writeto(path, sbrt, clobber=True)
 
 
@@ -275,7 +253,6 @@ def retr_plnkmapsorig(gdat, strgmapsplnk):
         tdpy.util.plot_maps(gdat.pathimag + 'mapsplnk%s.pdf' % strgmapsplnk, mapsplnk, satu=True)
 
         if gdat.subspnts:
-            print 'Subtracting point sources...'
 
             # subtract PSs from the Planck maps
             ## read PCCS
@@ -315,13 +292,10 @@ def retr_plnkmapsorig(gdat, strgmapsplnk):
             
             numbpntsplnk = fluxpntsplnk.size
             
-            print 'Using %d PS from the PCCS...' % numbpntsplnk
-
             ## calculate PS map using PCCS
             numbsidepnts = int(sqrt(mapsplnk.size / 12))
             pathmapspntsplnk = gdat.pathdata + 'mapspntsplnk%s%04d.fits' % (strgmapsplnk, numbsidepnts)
             if os.path.isfile(pathmapspntsplnk):
-                print 'Reading %s...' % pathmapspntsplnk
                 mapspntsplnk = pf.getdata(pathmapspntsplnk)
             else:
                 mapspntsplnk = tdpy.util.retr_mapspnts(lgalpntsplnk, bgalpntsplnk, stdvpntsplnk, fluxpntsplnk, verbtype=2, numbside=numbsidepnts)
@@ -358,7 +332,6 @@ def defn_gtbn():
         limtener = stack((lowrener, upprener), axis=1)
         pathinpt = os.environ["TDGU_DATA_PATH"] + '/ferm_igal/data/gtbndefn_%s.dat' % enertype
         pathoutp = os.environ["TDGU_DATA_PATH"] + '/ferm_igal/data/gtbndefn_%s.fits' % enertype
-        print 'Writing to %s...' % pathinpt
         savetxt(pathinpt, limtener, fmt='%10.5g')
         os.system('gtbindef E %s GeV' % (pathoutp))
 
@@ -467,13 +440,10 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
         plt.close(figr)
         strgmapsplnk = ['0030', '0044', '0070', '0100', '0143', '0217', '0353', '0545', '0857', 'radi']
         for k in range(numbmapsplnk):
-            print 'Map number ', k
-            print 'Maps string: ', strgmapsplnk[k]
             writ_plnk(strgmapsplnk[k])
     
     # get Planck PS mask
     if False:
-        print 'Reading the Planck mask...'
         path = gdat.pathdatatdgu + 'plnk/HFI_Mask_PointSrc_2048_R2.00.fits'
         mapsmask = pf.open(path)[1].data['F353']
         mapsmask = hp.reorder(mapsmask, n2r=True)
@@ -484,10 +454,8 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
     
     # get input maps
     ## Planck map
-    print 'Smoothing the Planck map...'
     path = gdat.pathdata + 'mapsplnk.fits'
     if os.path.isfile(path):
-        print 'Reading %s...' % path
         mapsplnk = pf.getdata(path)
     else:
         mapsplnkorig = retr_plnkmapsorig(gdat, strgmapsplnk)
@@ -520,7 +488,6 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
 
     ## Fermi Diffuse Model
     # temp
-    print 'Reading the Fermi diffuse model...'
     mapsfdfmorig = tdpy.util.retr_sbrtfdfm(binsener, numbside=numbside)
     mapsfdfmorig -= mean(mapsfdfmorig, 1)[:, None]
     mapsfdfmorig /= std(mapsfdfmorig, 1)[:, None]
@@ -560,7 +527,6 @@ def merg_maps(numbside=256, mpolmerg=180., mpolsmth=360., strgmaps='radi'):
    
 
     # compute power spectra
-    print 'Computing power spectra...'
     ## power spectrum prefactor
     factmpol = mpol * (2. * mpol + 1.) / 4. / pi
     
@@ -736,14 +702,8 @@ def writ_ferm_back():
             # temp -- ROI should be fixed at 40 X 40 degree^2
             path = gdat.pathdatapcat + strg + '.fits'
             if False and os.path.isfile(path) and not writ:
-                print 'Reading %s...' % path
                 gdat.sbrtback[c, :, :, :] = pf.getdata(path)
             else:
-                
-                print 'listnameback[c]'
-                print listnameback[c]
-                print
-                
                 if strg.startswith('fdfm'):
                     sbrtbacktemp = tdpy.util.retr_sbrtfdfm(gdat.binsener) 
                 elif strg == 'dustsfdd':
@@ -770,8 +730,6 @@ def writ_ferm_back():
                     pathtemp = gdat.pathdata + 'haslam408_dsds_Remazeilles2014.fits'
                     tdpy.util.read_fits(pathtemp, verbtype=2) 
                     sbrtbacktemp = pf.getdata(pathtemp)['TEMPERATURE']
-                    print 'sbrtbacktemp'
-                    summgene(sbrtbacktemp)
                     sbrtbacktemp = hp.ud_grade(sbrtbacktemp, gdat.numbside, order_in='NESTED', order_out='RING')
                 elif strg == 'haslwise':
                     pathtemp = gdat.pathdata + 'lambda_sfd_ebv.fits'
@@ -797,51 +755,30 @@ def writ_ferm_back():
                         for i in gdat.indxener:
                             gdat.sbrtback[c, i, :, m] = sbrtbacktemp
 
-                print 'gdat.sbrtback[c, :, :, :]'
-                summgene(gdat.sbrtback[c, :, :, :])
-                
                 # normalize
                 for i in gdat.indxener:
                     for m in gdat.indxevtt: 
                         gdat.sbrtbacknorm[c, i, :, m] = gdat.sbrtback[c, i, :, m] / mean(gdat.sbrtback[c, i, gdat.indxpixlnorm, m])
-                print 'gdat.sbrtbacknorm[c, :, :, :]'
-                summgene(gdat.sbrtbacknorm[c, :, :, :])
                 path = gdat.pathdatapcat + 'sbrt' + strg + enertype + '.fits'
-                print 'Writing to %s...' % path
                 pf.writeto(path, gdat.sbrtbacknorm[c, :, :, :], clobber=True)
                 
                 if smth:
-                    print 'gdat.sbrtback'
-                    summgene(gdat.sbrtback)
-                    print
                     gdat.sbrtbacksmth[c, :, :, :] = tdpy.util.smth_ferm(gdat.sbrtback[c, :, :, :], gdat.meanener, recotype, kerntype='gaus')
                     
                     indxbadd = where(gdat.sbrtbacksmth[c, :, :, :] < 0.)
                     if indxbadd[0].size > 0:
-                        print 'Smoothed template went negative. Cutting at 0.'
                         gdat.sbrtbacksmth[c, :, :, :][indxbadd] = 0.
 
-                    print 'gdat.sbrtbacksmth[c, :, :, :]'
-                    summgene(gdat.sbrtbacksmth[c, :, :, :])
                     path = gdat.pathdatapcat + 'sbrt' + strg + enertype + 'smth%s.fits' % recotype
-                    #print 'Writing to %s...' % path
-                    #pf.writeto(path, gdat.sbrtbacksmth[c, :, :, :], clobber=True)
                     
                     # normalize
                     for i in gdat.indxener:
                         for m in gdat.indxevtt: 
                             gdat.sbrtbacksmth[c, i, :, m] = gdat.sbrtbacksmth[c, i, :, m] / mean(gdat.sbrtbacksmth[c, i, gdat.indxpixlnorm, m])
                     
-                    print 'gdat.sbrtbacksmth[c, :, :, :]'
-                    summgene(gdat.sbrtbacksmth[c, :, :, :])
                     path = gdat.pathdatapcat + 'sbrt' + strg + enertype + 'smth%s.fits' % recotype
-                    print 'Writing to %s...' % path
                     pf.writeto(path, gdat.sbrtbacksmth[c, :, :, :], clobber=True)
             
-    #merg_maps(numbside=512)
-    #merg_maps(mpolmerg=360.)
-    #merg_maps(mpolmerg=90.)
-    
     # load the map to the array whose power spectrum will be calculated
     gdat.mapsplot[1:, :] = gdat.sbrtback[:, 0, :, 0]
     
@@ -1526,12 +1463,10 @@ def test_ferm_inpt_ptch(strgcnfgextnexec=None):
         for k in range(numbcuberttr):
             path = pathdata + strgback[k] + strgcntr + '.fits'
             if False and os.path.isfile(path):
-                print 'Reading %s...' % path
                 maps = pf.getdata(path)
             else:
                 pathorig = pathdata + strgback[k] + '.fits'
                 maps = pf.getdata(pathorig)
-                print 'Rotating the data cube in %s...' % pathorig
                 numbener = maps.shape[0]
                 numbevtt = maps.shape[2]
                 numbside = int(sqrt(maps.shape[1] / 12))
@@ -1540,11 +1475,8 @@ def test_ferm_inpt_ptch(strgcnfgextnexec=None):
                         almc = hp.map2alm(maps[i, :, m])
                         # temp
                         #hp.rotate_alm(almc, 0., bgalcntr, 0.)
-                        print 'i m'
-                        print i, m
                         maps[i, :, m] = hp.rotate_alm(almc, lgalcntr, bgalcntr, 0.)
                         #maps[i, :, m] = hp.alm2map(almc, numbside)
-                print 'Writing to %s...' % path
                 pf.writeto(path, maps, clobber=True)
     
     pcat.main.init( \
