@@ -27,7 +27,10 @@ listdata = np.array([\
             ['WASP-19 b'  , 101, 106, 131 , 5015,175  , 5343., 318 , 2174, 55 , 55 , 0.19, 0.08],\
             ['WASP-121 b' , 101, 43 , 42  , 3685, 114 , 4684, 121 , 2577, 59 , 63 , 0.24, 0.04],\
             ])
-arryresu = listdata[:, np.array([1, 4, 6, 8, 11])].astype(float)
+#arryresu = listdata[:, np.array([1, 4, 6, 8, 11])].astype(float)
+
+listnameresu = listnameresu[4:5]
+arryresu = listdata[:, np.array([11])].astype(float)
 
 # look into the Exoplanet Archive to get the mass and radii of planets
 path = pathdata + 'compositepars_2019.12.12_04.51.12.csv'
@@ -100,12 +103,14 @@ indxresusort = indxcompresumesh.flatten()[indxsort]
 
 # plot those correlations with the smallest p values
 for a in range(indxsort.size):
+    if a == 100:
+        break
     titl = 'p = %g, C = %g, %s %s' % (pval.flatten()[indxsort[a]], coef.flatten()[indxsort[a]], listnameinpt[indxinptsort[a]], listnameresu[indxresusort[a]])
     indxxpos = indxinptsort[a]
     indxypos = indxresusort[a]
     if pval.flatten()[indxsort[a]] != 2. and (np.std(arryinpt[:, indxinptsort[a]]) < 1e-6 or np.std(arryresu[:, indxresusort[a]]) < 1e-6):
         raise Exception('')
-    figr, axis = plt.subplots(figsize=(6, 6))
+    figr, axis = plt.subplots(figsize=(5, 5))
     if listnameresu[indxresusort[a]] == '$A_g$':
         yerr = listdata[:, 12].astype(float)
         xerr = None
@@ -117,7 +122,7 @@ for a in range(indxsort.size):
     axis.set_ylabel(listnameresu[indxresusort[a]])
     axis.set_title(titl)
     plt.tight_layout()
-    path = pathimag + 'scat_%02d.png' % (a)
+    path = pathimag + 'scat_%02d.pdf' % (a)
     print('Writing to %s...' % path)
     print
     plt.savefig(path)

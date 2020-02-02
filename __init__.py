@@ -1,12 +1,18 @@
+# tdpy
+import tdpy.util
+from tdpy.util import summgene
+import tdpy.mcmc
+import pcat.main
+
 # plotting
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-mpl.rc('image', interpolation='nearest', origin='lower')
-#mpl.rcParams['figure.figsize'] = (6., 5.)
-mpl.rc('figure', figsize=(6, 5))
+#mpl.rc('image', interpolation='nearest', origin='lower')
 
 import seaborn as sns
 sns.set(context='poster', style='ticks', color_codes=True)
+
+import warnings
 
 # numpy
 import random as randommod
@@ -28,9 +34,9 @@ from scipy.stats import poisson as pss
 import multiprocessing as mp
 
 # healpy
-import healpy as hp
-from healpy.rotator import angdist
-from healpy import ang2pix
+#import healpy as hp
+#from healpy.rotator import angdist
+#from healpy import ang2pix
 
 # pyfits
 import h5py
@@ -43,15 +49,6 @@ import astropy as ap
 import os, time, sys, datetime, warnings, getpass, glob, fnmatch, pickle, inspect
 import functools
 
-# tdpy
-import tdpy.util
-from tdpy.util import summgene
-import tdpy.mcmc
-
-import pcat.main
-
-import warnings
 warnings.simplefilter(action = "ignore", category = FutureWarning)
 
 np.set_printoptions(linewidth=180)
-

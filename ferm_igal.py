@@ -1085,8 +1085,8 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     anglfact = 180. / pi
     
     dictargs = {}
-    dictargs['truemaxmnumbelempop0'] = 400
-    dictargs['truenumbelempop0'] = 100
+    dictargs['truemaxmnumbelempop0'] = 10
+    dictargs['truenumbelempop0'] = 10
     
     dictargs['listnameback'] = ['isot']
     dictargs['backtype'] = [10.]
@@ -1101,12 +1101,17 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     dictargs['psfnevaltype'] = 'kern'
     dictargs['trueelemregitype'] = [True]
     dictargs['proppsfp'] = False
+    dictargs['boolcondcatl'] = False
+    
+    # diagnostics
+    dictargs['verbtype'] = 3
+    dictargs['boolsqzeprop'] = True
     
     dictargs['fittnumbpopl'] = 1
     dictargs['fittelemtype'] = ['lghtpnts']
     dictargs['fittspatdisttype'] = ['self']
     #dictargs['fittspectype'] = ['colr']
-    dictargs['fittmaxmnumbelempop0'] = 1000
+    dictargs['fittmaxmnumbelempop0'] = 10
     
     #dictargs['strgexprsbrt'] = 'sbrtfermrec8pntsigal0256.fits'
     #dictargs['spectype'] = ['colr']
@@ -1117,15 +1122,16 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     dictargs['forccart'] = True
     dictargs['pixltype'] = 'cart'
     dictargs['numbsidecart'] = 100
+    dictargs['optitype'] = 'none'
     
     #dictargs['forccart'] = True
     #dictargs['pixltype'] = 'cart'
     #dictargs['numbsidecart'] = 100
     
-    dictargs['numbswep'] = 1000000
+    dictargs['numbswep'] = 1000
     dictargs['inittype'] = 'refr'
     #dictargs['numbswepplot'] = 5000
-    dictargs['numbsamp'] = 1000
+    dictargs['numbsamp'] = 10
     
     listnamecnfgextn = [ \
                         'nomi', 'parsloww', 'parsnone', 'trueback', 'truebackparsnone', \
@@ -1148,10 +1154,11 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
 
     dictargsvari['truebackparsnone']['truenumbelempop0'] = 0
     dictargsvari['truebackparsnone']['priofactdoff'] = 0.
-
-    lablxaxi = r'$\alpha_p$'
-    scalxaxi = 'self'
-    listtickxaxi = [tdpy.util.mexp(dictargsvari[namecnfgextn]['priofactdoff']) for namecnfgextn in listnamecnfgextn] 
+    
+    namexaxivari = 'priofactdoff'
+    lablxaxivari = r'$\alpha_p$'
+    scalxaxivari = 'self'
+    tickxaxivari = [tdpy.util.mexp(dictargsvari[namecnfgextn]['priofactdoff']) for namecnfgextn in listnamecnfgextn] 
     
     dictglob = pcat.main.initarry( \
                                   dictargsvari, \
@@ -1159,12 +1166,14 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
                                   listnamecnfgextn, \
                                   strgcnfgextnexec=strgcnfgextnexec, \
                                   
+                                  boolexecpara=False, \
+
                                   forcneww=True, \
                                   
-                                  namexaxi='priofactdoff', \
-                                  lablxaxi=lablxaxi, \
-                                  scalxaxi=scalxaxi, \
-                                  listtickxaxi=listtickxaxi, \
+                                  namexaxivari=namexaxivari, \
+                                  lablxaxivari=lablxaxivari, \
+                                  scalxaxivari=scalxaxivari, \
+                                  tickxaxivari=tickxaxivari, \
                                  )
 
 
