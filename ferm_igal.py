@@ -1129,6 +1129,7 @@ def pcat_ferm_igal_mock_flat(strgcnfgextnexec=None):
     #dictargs['numbsidecart'] = 100
     
     dictargs['numbswep'] = 1000
+    #dictargs['numbswepplot'] = 400
     dictargs['inittype'] = 'refr'
     #dictargs['numbswepplot'] = 5000
     dictargs['numbsamp'] = 10

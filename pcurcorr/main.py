@@ -31,76 +31,99 @@ def retr_llik(gdat, para):
 
     return llik
 
-
+# paths
 pathbase = os.environ['TDGU_DATA_PATH'] + '/pcurcorr/'
 pathdata = pathbase + 'data/'
 pathimag = pathbase + 'imag/'
 
+# plotting
+strgplotextn = 'png'
+
 # construct global object
 gdat = tdpy.util.gdatstrt()
-    
+
+booltest = False
+
+strgtype = 'NoWASP-18b'
+#strgtype = 'all'
+
 listlablresu = [r'$D_{TESS}$ [ppm]', '$D_{3.6}$ [ppm]', '$D_{4.5}$ [ppm]', '$T_D$ [K]', '$A_g$']
 
-listdata = np.array([\
-            ['WASP-36 b'  , 120, 80 , 100 , 914 , 578 , 1953, 544 , 1420, 160, 180,   0.23, 0.19],\
-            ['WASP-43 b'  , 170, 70 , 80  , 3230, 60  , 3830, 80  , 1571, 44 , 43 , 0.14, 0.07],\
-            #['WASP-46 b'  , 110, 80 , 110 , 1360, 701 , 4446, 589 , 1870, 130, 130,   0., 0.43],\
-            ['WASP-64 b'  , 230, 110, 120 , 2859, 270 , 2071, 471 , 1960, 110, 110,   0.39, 0.24],\
-            ['WASP-77 A b', 55 , 18 , 20  , 2016, 94  , 2487, 127 , 1739, 30 , 31, 0.06, 0.04],\
-            #['WASP-78 b'  , 220, 85 , 84  , 2001, 218 , 2013, 351 , 2540, 150, 170,   0., 0.65],\
-            ['WASP-100 b' , 101, 13 , 13  , 1267, 98  , 1720, 119 , 2451, 89 , 83 , 0.26, 0.07],\
-            
-            #['WASP-18 b'  , 341, 18 , 17  , 3037, 62  , 4033, 97  , 3037, 36 , 36 , 0., 0.02],\
-            ['WASP-19 b'  , 101, 106, 131 , 5015,175  , 5343., 318 , 2174, 55 , 55 , 0.19, 0.08],\
-            ['WASP-121 b' , 101, 43 , 42  , 3685, 114 , 4684, 121 , 2577, 59 , 63 , 0.27, 0.04],\
-            ])
+if booltest:
+    listdata = np.array([\
+                ['WASP-X b'  , 120, 80 , 100 , 914 , 578 , 1953, 544 , 1420, 160, 180,   0.1, 0.01],\
+                ['WASP-Y b'  , 120, 80 , 100 , 914 , 578 , 1953, 544 , 1420, 160, 180,   0.2, 0.01],\
+                ['WASP-Z b'  , 120, 80 , 100 , 914 , 578 , 1953, 544 , 1420, 160, 180,   0.3, 0.01],\
+                ])
+else:                
+    listdata = np.array([\
+                ['WASP-36 b'  , 120, 80 , 100 , 914 , 578 , 1953, 544 , 1420, 160, 180,   0.23, 0.19],\
+                ['WASP-43 b'  , 170, 70 , 80  , 3230, 60  , 3830, 80  , 1571, 44 , 43 , 0.14, 0.07],\
+                #['WASP-46 b'  , 110, 80 , 110 , 1360, 701 , 4446, 589 , 1870, 130, 130,   0., 0.48],\
+                ['WASP-46 b'  , 110, 80 , 110 , 1360, 701 , 4446, 589 , 1870, 130, 130,   0.12, 0.16],\
+                ['WASP-64 b'  , 230, 110, 120 , 2859, 270 , 2071, 471 , 1960, 110, 110,   0.39, 0.24],\
+                ['WASP-77 A b', 55 , 18 , 20  , 2016, 94  , 2487, 127 , 1739, 30 , 31, 0.06, 0.04],\
+                #['WASP-78 b'  , 220, 85 , 84  , 2001, 218 , 2013, 351 , 2540, 150, 170,   0., 0.65],\
+                ['WASP-78 b'  , 220, 85 , 84  , 2001, 218 , 2013, 351 , 2540, 150, 170,   0.22, 0.22],\
+                ['WASP-100 b' , 101, 13 , 13  , 1267, 98  , 1720, 119 , 2451, 89 , 83 , 0.26, 0.07],\
+                
+                ['WASP-19 b'  , 101, 106, 131 , 5015,175  , 5343., 318 , 2174, 55 , 55 , 0.19, 0.08],\
+                ['WASP-121 b' , 101, 43 , 42  , 3685, 114 , 4684, 121 , 2577, 59 , 63 , 0.27, 0.04],\
+                ])
+    
+    if strgtype == 'all':
+        listdata = np.vstack([listdata, np.array(['WASP-18 b'  , 341, 18 , 17  , 3037, 62  , 4033, 97  , 3037, 36 , 36 , 0., 0.02])])
+    
 #arryresu = listdata[:, np.array([1, 4, 6, 8, 11])].astype(float)
 
 listlablresu = listlablresu[4:5]
 arryresustdv = listdata[:, np.array([12])].astype(float)
 arryresu = listdata[:, np.array([11])].astype(float)
-
-# look into the Exoplanet Archive to get the mass and radii of planets
-path = pathdata + 'compositepars_2019.12.12_04.51.12.csv'
-objtarch = pd.read_csv(path, skiprows=124)
-arryinpt = objtarch.to_numpy()
-
-# finding the indices of the known planets that match the planets of interest
-listindx = []
-for nameplan in listdata[:, 0]:
-    indx = np.where(objtarch['fpl_name'] == nameplan)[0]
-    if indx.size == 0:
-        print('nameplan')
-        print(nameplan)
-        raise Exception('')
-    listindx.append(indx[0])
-listindx = np.array(listindx)
-arryinpt = arryinpt[listindx, :]
-
 numbcompresu = arryresu.shape[1]
 indxcompresu = np.arange(numbcompresu)
 numbplan = arryresu.shape[0]
 
-# find the columns of the known planets that are floats
-indxcolsflot = []
-for k in range(arryinpt.shape[1]):
-    booltemp = False
-    for n in range(arryinpt.shape[0]):
-        if isinstance(arryinpt[n, k], str):
-            booltemp = True
-    if not booltemp:
-        indxcolsflot.append(k)
-indxcolsflot = np.array(indxcolsflot)
-arryinpt = arryinpt[:, indxcolsflot]
-listnameinpt = objtarch.columns[indxcolsflot]
+if not booltest:
+    # look into the Exoplanet Archive to get the mass and radii of planets
+    path = pathdata + 'compositepars_2019.12.12_04.51.12.csv'
+    objtarch = pd.read_csv(path, skiprows=124)
+    arryinpt = objtarch.to_numpy()
 
-indxinptmeta = np.where(listnameinpt == 'fst_met')[0]
-
-arryinpt = arryinpt[:, indxinptmeta]
-listnameinpt = listnameinpt[indxinptmeta]
-
-listlablinpt = ['Fe/H']
-
+    # finding the indices of the known planets that match the planets of interest
+    listindx = []
+    for nameplan in listdata[:, 0]:
+        indx = np.where(objtarch['fpl_name'] == nameplan)[0]
+        if indx.size == 0:
+            print('nameplan')
+            print(nameplan)
+            raise Exception('')
+        listindx.append(indx[0])
+    listindx = np.array(listindx)
+    arryinpt = arryinpt[listindx, :]
+    
+    # find the columns of the known planets that are floats
+    indxcolsflot = []
+    for k in range(arryinpt.shape[1]):
+        booltemp = False
+        for n in range(arryinpt.shape[0]):
+            if isinstance(arryinpt[n, k], str):
+                booltemp = True
+        if not booltemp:
+            indxcolsflot.append(k)
+    indxcolsflot = np.array(indxcolsflot)
+    arryinpt = arryinpt[:, indxcolsflot]
+    listnameinpt = objtarch.columns[indxcolsflot]
+    listlablinpt = listnameinpt
+    
+    #indxinptmeta = np.where(listnameinpt == 'fst_met')[0]
+    #arryinpt = arryinpt[:, indxinptmeta]
+    #listnameinpt = listnameinpt[indxinptmeta]
+    #listlablinpt = ['Fe/H']
+    arryinpt = arryinpt[:, :3]
+    listnameinpt = listnameinpt[:3]
+    
+if booltest:
+    arryinpt = np.array([[-0.1], [0.], [0.1]])
 
 numbcompinpt = arryinpt.shape[1]
 indxcompinpt = np.arange(numbcompinpt)
@@ -108,12 +131,14 @@ indxcompinpt = np.arange(numbcompinpt)
 coef = np.empty((numbcompinpt, numbcompresu))
 pval = np.empty((numbcompinpt, numbcompresu))
 
+print('numbcompinpt')
+print(numbcompinpt)
 print('numbcompresu')
 print(numbcompresu)
 
-numbsampwalk = 1000
-numbsampburnwalk = 200
-listlablpara = [['a', ''], ['b', '']]
+numbsampwalk = 10000
+numbsampburnwalk = 500
+listlablpara = [['m', ''], ['b', '']]
 listscalpara = ['self', 'self']
 listminmpara = [-100., -100.]
 listmaxmpara = [100., 100.]
@@ -122,12 +147,19 @@ liststdvgauspara = None
 
 boolstan = False
 
+inpteval = np.linspace(-0.4, 0.3, 100)
+
+numbsampfeww = 1000
 # find the p value
 numbtest = numbcompinpt * numbcompresu
 for n in indxcompinpt: 
     for k in indxcompresu:
         gdat.tempinptstdv = np.std(arryinpt[:, n])
         gdat.tempresustdv = np.std(arryresu[:, k])
+        print('gdat.tempinptstdv')
+        print(gdat.tempinptstdv)
+        print('gdat.tempresustdv')
+        print(gdat.tempresustdv)
         if gdat.tempinptstdv < 1e-6 or gdat.tempresustdv < 1e-6:
             coef[n, k] = 0.
             pval[n, k] = 2.
@@ -140,15 +172,15 @@ for n in indxcompinpt:
             coef[n, k], pval[n, k] = scipy.stats.pearsonr(gdat.tempinpt, gdat.tempresu)
            
             numbdata = 2 * gdat.tempinpt.size
+            strgextn = strgtype + listnameinpt[n]
             parapost = tdpy.mcmc.samp(gdat, pathimag, numbsampwalk, numbsampburnwalk, retr_llik, \
-                                listlablpara, listscalpara, listminmpara, listmaxmpara, listmeangauspara, liststdvgauspara, numbdata)
+                                            listlablpara, listscalpara, listminmpara, listmaxmpara, listmeangauspara, liststdvgauspara, \
+                                                numbdata, strgextn=strgextn, strgplotextn=strgplotextn)
             
-            numbsampfeww = 1000
             numbsamp = parapost.shape[0]
             indxsamp = np.arange(numbsamp)
             indxsampplot = np.random.choice(indxsamp, size=numbsampfeww)
             listmodl = np.empty((numbsampfeww, 100))
-            inpteval = np.linspace(-0.4, 0.3, 100)
             for i in np.arange(numbsampfeww):
                 listmodl[i, :], _ = retr_modl(gdat, parapost[i, :], inpteval)
             
@@ -171,7 +203,7 @@ for a in range(indxsort.size):
     indxypos = indxresusort[a]
     if pval.flatten()[indxsort[a]] != 2. and (np.std(arryinpt[:, indxinptsort[a]]) < 1e-6 or np.std(arryresu[:, indxresusort[a]]) < 1e-6):
         raise Exception('')
-    figr, axis = plt.subplots(figsize=(5, 5))
+    figr, axis = plt.subplots(figsize=(4, 4))
     if listlablresu[indxresusort[a]] == '$A_g$':
         yerr = listdata[:, 12].astype(float)
         xerr = None
@@ -188,13 +220,14 @@ for a in range(indxsort.size):
     arry[:, 2] = yerr
     print('Writing to %s...' % path)
     np.savetxt(path, arry, delimiter=',')
-
+    
     axis.errorbar(arryinpt[:, indxinptsort[a]], arryresu[:, indxresusort[a]], yerr=yerr, xerr=xerr, fmt='o', color='k')
+    axis.set_ylim([0., None])
     axis.set_xlabel(listlablinpt[indxinptsort[a]])
     axis.set_ylabel(listlablresu[indxresusort[a]])
-    axis.set_title(titl)
+    #axis.set_title(titl)
     plt.tight_layout()
-    path = pathimag + 'scat_%02d.pdf' % (a)
+    path = pathimag + 'scat_%02d_%s.%s' % (a, strgtype + listnameinpt[indxinptsort[a]], strgplotextn)
     print('Writing to %s...' % path)
     print
     plt.savefig(path)
