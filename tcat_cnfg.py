@@ -2,16 +2,64 @@ import tcat.main
 import sys
 import numpy as np
 
-def cnfg_brgt():
+def cnfg_WASP0121():
     
-    epoc = 2456635.70832
-    peri = 1.27492550
-    main( \
-         labltarg='WASP-121', \
-         strgtarg='WASP0121', \
-         ticitarg=22529346, \
-         epoc=epoc, \
-         peri=peri, \
+    strgmast = 'WASP-121b'
+    tcat.main.main( \
+               strgmast=strgmast, \
+              )
+        
+
+def cnfg_Luhman16():
+    
+    tcat.main.main( \
+         rasctarg=162.328812, \
+         decltarg=-53.319467, \
+         labltarg='Luhman 16', \
+         weigsplndetr=1e-6, \
+         evaltype='ontf', \
+         strgtarg='Luhman16', \
+        )
+        
+
+def cnfg_TOI1233():
+    
+    tcat.main.main( \
+         #boolfittoffs=True, \
+         labltarg='TOI 1233', \
+         strgtarg='TOI1233', \
+         ticitarg=260647166, \
+         cntpscaltype='asnh', \
+         strgdata='ffim', \
+        )
+        
+
+def cnfg_WD1856():
+
+    strgtarg = 'WD1856'
+    ticitarg = 267574918
+    strgmast = 'TIC 267574918'
+    labltarg = 'WD 1856'
+    
+    tcat.main.main( \
+         strgtarg=strgtarg, \
+         labltarg=labltarg, \
+         #strgmast=strgmast, \
+         ticitarg=ticitarg, \
+         boolmakeanim=True, \
+         #datatype='sapp', \
+        )
+
+
+def cnfg_GJ299():
+    
+    tcat.main.main( \
+         boolfittoffs=True, \
+         labltarg='GJ 299', \
+         maxmnumbstar=4, \
+         strgtarg='gj299', \
+         ticitarg=334415465, \
+         epocpmot=2019.3, \
         )
         
 
@@ -23,7 +71,7 @@ def cnfg_spec():
     indxtarg = np.arange(numbtarg)
     for k in indxtarg:
         ticitarg = int(data[k, 2])
-        main( \
+        tcat.main.main( \
              ticitarg=ticitarg, \
              labltarg='TIC %s' % ticitarg, \
              strgtarg='speculus_%s' % ticitarg, \
@@ -69,7 +117,7 @@ def cnfg_maxg122319():
         labltarg = 'TIC %s' % tici
         strgtarg = '%d' % int(tici)
         
-        listintgresu[k] = main( \
+        listintgresu[k] = tcat.main.main( \
                                rasctarg=listrasctarg[k], \
                                decltarg=listdecltarg[k], \
                                labltarg=labltarg, \
@@ -105,7 +153,7 @@ def cnfg_test347543557():
     labltarg = 'TIC 347543557'
     strgtarg = 'test347543557'
     listlimttimeplot = [[2458428, 2458430]]
-    main( \
+    tcat.main.main( \
          ticitarg=ticitarg, \
          labltarg=labltarg, \
          strgtarg=strgtarg, \
@@ -127,7 +175,7 @@ def cnfg_GRB191016A():
     listtimeplotline = [2458772.67291666667]
     boolfittoffs = True
     boolcuttqual = False
-    main( \
+    tcat.main.main( \
          rasctarg=rasctarg, \
          decltarg=decltarg, \
          labltarg=labltarg, \

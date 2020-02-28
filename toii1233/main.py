@@ -14,8 +14,10 @@ jmag = 8.046
 smaxprio = np.array([0.1107, 0.1374, 0.0638, 0.04599]) * 2093 # [R_J]
 liststrgplan = ['d', 'e', 'c', 'b']
 
-massstar = 0.97 # [M_S]
-radistar = 0.888 # [R_S]
+factmsmj = 1048.
+factrsrj = 9.95
+massstar = 0.97 * factmsmj # [M_J]
+radistar = 0.888 * factrsrj # [R_J]
 
 pexo.main.main( \
                    strgtarg=strgtarg, \
@@ -24,7 +26,8 @@ pexo.main.main( \
                    strgtoii=strgtoii, \
                    strgmast=strgmast, \
                    ticitarg=ticitarg, \
-                    
+                
+                   booltlss=False, \
                    smaxprio=smaxprio, \
                     
                    jmag=jmag, \

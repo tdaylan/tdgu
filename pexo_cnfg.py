@@ -7,20 +7,31 @@ def cnfg_WASP0121():
     strgtarg = 'WASP-121'
     strgmast = 'WASP-121'
     labltarg = 'WASP-121'
-    datatype = 'sapp'
     ticitarg = 22529346
     strgtoii = ['495.01']
     pexo.main.main( \
+         strgmast=strgmast, \
+         ticitarg=ticitarg, \
          strgtarg=strgtarg, \
          labltarg=labltarg, \
          strgtoii=strgtoii, \
-         ticitarg=ticitarg, \
-         strgmast=strgmast, \
-         booltlss=False, \
-         datatype=datatype, \
          boolphascurv=True, \
         )
 
+
+def cnfg_GJ299():
+    
+    radistar = 0.175016 * 9.95 # [R_J]
+    massstar = 0.14502 * 1048. # [M_J]
+    pexo.main.main( \
+         ticitarg=334415465, \
+         strgtarg='gj299', \
+         labltarg='GJ 299', \
+         weigsplndetr=1e-5, \
+         epocpmot=2019.3, \
+         radistar=radistar, \
+         massstar=massstar, \
+        )
 
 
 def cnfg_josh():
@@ -106,8 +117,10 @@ def cnfg_WD1856():
     ticitarg = 267574918
     strgmast = 'TIC 267574918'
     labltarg = 'WD-1856'
+    
     #strgtoii = '' 
     
+    print('HACKING! MAKING UP THE STAR RADIUS')
     pexo.main.main( \
          strgtarg=strgtarg, \
          labltarg=labltarg, \
@@ -115,10 +128,17 @@ def cnfg_WD1856():
          ticitarg=ticitarg, \
          boolmakeanim=True, \
          #maxmnumbstartcat=40, \
+         #makeprioplot=False, \
+
          infetype='trap', \
-         dilucorr=0.01, \
+         #dilucorr=0.01, \
+         jmag=15.677, \
          #contrati=10, \
+         # temp
+         tmptstar=5000., \
          datatype='sapp', \
+         radistar=10., \
+         massstar=1000., \
          booltlss=False, \
          epocprio=epocprio, \
          periprio=periprio, \
