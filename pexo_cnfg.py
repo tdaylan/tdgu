@@ -2,21 +2,27 @@ import pexo.main
 import sys
 import numpy as np
 
-def cnfg_WASP0121():
+def cnfg_WASP121():
 
-    strgtarg = 'WASP-121'
-    strgmast = 'WASP-121'
-    labltarg = 'WASP-121'
-    ticitarg = 22529346
-    strgtoii = ['495.01']
     pexo.main.main( \
-         strgmast=strgmast, \
-         ticitarg=ticitarg, \
-         strgtarg=strgtarg, \
-         labltarg=labltarg, \
-         strgtoii=strgtoii, \
-         boolphascurv=True, \
-        )
+                   toiitarg=495, \
+                  )
+
+
+
+def cnfg_TOI270():
+    
+    pexo.main.main( \
+                   toiitarg=270, \
+                  )
+
+
+def cnfg_TOI193():
+    
+    pexo.main.main( \
+                   pcurtype='sinu', \
+                   toiitarg=193, \
+                  )
 
 
 def cnfg_GJ299():
@@ -25,12 +31,30 @@ def cnfg_GJ299():
     massstar = 0.14502 * 1048. # [M_J]
     pexo.main.main( \
          ticitarg=334415465, \
-         strgtarg='gj299', \
+         strgtarg='GJ299', \
          labltarg='GJ 299', \
+         strgmast='GJ 299', \
          weigsplndetr=1e-5, \
          epocpmot=2019.3, \
          radistar=radistar, \
          massstar=massstar, \
+        )
+
+
+def cnfg_KOI1003():
+    
+    factmsmj = 1048.
+    factrsrj = 9.95
+    pexo.main.main( \
+         ticitarg=122374527, \
+         strgtarg='KOI1003', \
+         labltarg='KOI 1003', \
+         datatype='tcat', \
+         radistar=2.445*factmsmj, \
+         massstar=1.343*factrsrj, \
+         strgmast='KOI-1003', \
+         weigsplndetr=1e-5, \
+         epocpmot=2019.3, \
         )
 
 
@@ -61,7 +85,7 @@ def cnfg_josh():
         )
 
 
-def cnfg_toii1339():
+def cnfg_TOI1339():
     
     strgtarg = 'TOI1339'
     strgmast = '269701147'
@@ -88,23 +112,12 @@ def cnfg_HATP19():
     strgmast = 'HAT-P-19'
     labltarg = 'HAT-P-19'
     strgtarg = 'hatp0019'
-    #strgtoii = '495' 
     
     pexo.main.main( \
          strgtarg=strgtarg, \
          labltarg=labltarg, \
          strgmast=strgmast, \
          ticitarg=ticitarg, \
-        )
-
-
-def cnfg_toii0203():
-
-    strgtarg = 'TOI203'
-    strgmast = '259962054'
-    pexo.main.main( \
-         strgtarg=strgtarg, \
-         strgmast=strgmast, \
         )
 
 
@@ -117,8 +130,6 @@ def cnfg_WD1856():
     ticitarg = 267574918
     strgmast = 'TIC 267574918'
     labltarg = 'WD-1856'
-    
-    #strgtoii = '' 
     
     print('HACKING! MAKING UP THE STAR RADIUS')
     pexo.main.main( \
