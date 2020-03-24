@@ -10,6 +10,18 @@ def cnfg_WASP0121():
               )
         
 
+def cnfg_KOI1003():
+    
+    tcat.main.main( \
+         ticitarg=122374527, \
+         strgtarg='KOI1003', \
+         labltarg='KOI 1003', \
+         #strgmast='KOI-1003', \
+         weigsplndetr=1e-5, \
+         epocpmot=2019.3, \
+        )
+
+
 def cnfg_Luhman16():
     
     tcat.main.main( \
@@ -29,6 +41,7 @@ def cnfg_TOI1233():
          labltarg='TOI 1233', \
          strgtarg='TOI1233', \
          ticitarg=260647166, \
+         evaltype='ontf', \
          cntpscaltype='asnh', \
          strgdata='ffim', \
         )
@@ -56,8 +69,9 @@ def cnfg_GJ299():
     tcat.main.main( \
          boolfittoffs=True, \
          labltarg='GJ 299', \
-         maxmnumbstar=4, \
-         strgtarg='gj299', \
+         weigsplndetr=1e-12, \
+         evaltype='ontf', \
+         strgtarg='GJ299', \
          ticitarg=334415465, \
          epocpmot=2019.3, \
         )
