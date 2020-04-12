@@ -17,11 +17,20 @@ def cnfg_TOI270():
                   )
 
 
+def cnfg_WASP18():
+    
+    pexo.main.main( \
+                   pcurtype='sinu', \
+                   toiitarg=185, \
+                  )
+
+
 def cnfg_TOI193():
     
     pexo.main.main( \
                    pcurtype='sinu', \
                    toiitarg=193, \
+                   boolphascurv=True, \
                   )
 
 

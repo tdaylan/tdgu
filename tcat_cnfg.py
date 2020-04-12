@@ -1,5 +1,5 @@
 import tcat.main
-import sys
+import os, sys
 import numpy as np
 
 def cnfg_WASP0121():
@@ -103,44 +103,38 @@ def cnfg_saul():
              )
 
 
-def cnfg_maxg122319():
-    
-    pathdata = os.environ['TCAT_DATA_PATH'] + '/data/'
-    path = pathdata + 'Amaury_EBs.csv'
-    #path = pathdata + 'SPECULOOS_TIC_WTV.csv'
-    listticitarg = []
-    data = np.genfromtxt(path, delimiter=',', skip_header=1)
-    
-    listtici = data[:, 1]
-    #listgaia = data[:, 2]
-    
-    listrasctarg = data[:, 2]
-    listdecltarg = data[:, 3]
-    
-    strgbase = 'maxg122319'
-   
-    numbtarg = listrasctarg.size
-    indxtarg = np.arange(numbtarg)
-    listintgresu = np.empty(numbtarg)
-    for k in indxtarg:
-        
-        tici = listtici[k]
-        #labltarg = 'GID %s' % gaia
-        #strgtarg = 'spec1313_%d' % int(gaia)
-        
-        labltarg = 'TIC %s' % tici
-        strgtarg = '%d' % int(tici)
-        
-        listintgresu[k] = tcat.main.main( \
-                               rasctarg=listrasctarg[k], \
-                               decltarg=listdecltarg[k], \
-                               labltarg=labltarg, \
-                               strgbase=strgbase, \
-                               detrtype='mfil', \
-                               maxmnumbstar=4, \
-                               strgtarg=strgtarg, \
-                              )
 
+def cnfg_KeplerEBs():
+    
+    liststrgbase = ['KeplerEBs', 'SPECULOOS']
+    for strgbase in liststrgbase:
+        pathdata = os.environ['TCAT_DATA_PATH'] + '/data/'
+        if strgbase == 'KeplerEBs':
+            path = pathdata + 'Kepler_binaries_priority.csv'
+        else:
+            path = pathdata + 'SPECULOOS_TIC_WTV.csv'
+        
+        cntr = 0
+        listtici = []
+        for line in open(path, 'r'):
+            if cntr == 0:
+                cntr += 1
+                continue
+            linesplt = line.split(',')
+            if strgbase == 'KeplerEBs':
+                listtici.append(int(linesplt[1]))
+            else:
+                listtici.append(int(linesplt[23]))
+        
+        numbtarg = len(listtici)
+        indxtarg = np.arange(numbtarg)
+        listintgresu = np.empty(numbtarg)
+        for k in indxtarg:
+            temp = tcat.main.main( \
+                                  ticitarg=listtici[k], \
+                                  strgbase=strgbase, \
+                                 )
+        
 
 def chec_runs():
     
