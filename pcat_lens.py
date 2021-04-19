@@ -125,7 +125,7 @@ def pcat_lens_mock_trueminmdefs(strgcnfgextnexec=None):
     #dictargs['sqzeexpl'] = True
     #dictargs['optitype'] = 'none'
     
-    dictargs['inittype'] = 'refr'
+    #dictargs['inittype'] = 'refr'
     dictargs['numbswep'] = 20000
     dictargs['numbswepplot'] = 5000
     dictargs['numbburn'] = 1000
@@ -160,6 +160,8 @@ def pcat_lens_mock_trueminmdefs(strgcnfgextnexec=None):
                                   dictargs, \
                                   listnamecnfgextn, \
                                   
+                                  boolexecpara=False, \
+
                                   namexaxivari='trueminmdefs', \
                                   lablxaxivari=lablxaxi, \
                                   scalxaxivari=scalxaxi, \
@@ -461,9 +463,6 @@ def test_lens_mock_sele():
         for b, namefeat in enumerate(listnamefeatsele):
             for a, namefixp in enumerate(gdat.truenamefixp):
                 corrfixpcutf[a], pvalfixpcutf[a] = sp.stats.stats.pearsonr(truefixp[:, a], meanmatrcutf[:, b])
-                print gdat.truelablfixp[a]
-                print corrfixpcutf
-                print
             indx = where(isfinite(corrfixpcutf) & (pvalfixpcutf < 0.1))[0]
             numb = indx.size
             figr, axis = plt.subplots(figsize=(2 * gdat.plotsize, gdat.plotsize))
@@ -603,24 +602,22 @@ def writ_data():
     pathimag = pathbase + 'imag/'
     
     # read SLACS tables
-    print 'Reading SLACS tables...'
+    print('Reading SLACS tables...')
     pathslacpara = pathbase + 'data/slacpara.fits'
     pathslacfull = pathbase + 'data/slacfull.fits'
     hdun = pf.open(pathslacfull)
     numbhead = len(hdun)
-    print '%s extensions found.' % numbhead
+    print('%s extensions found.' % numbhead)
     for k in range(numbhead):
-        print 'Extension %d' % k
+        print('Extension %d' % k)
         head = hdun[k].header
         data = hdun[k].data
         
         if data == None:
-            print 'Data is None, skipping...'
+            print('Data is None, skipping...')
             continue
         else:
             pass
-            #print 'data object has keys'
-            #print data.names
     
         arry = array(stack((head.keys(), head.values()), 1))
         listtype = []
@@ -653,7 +650,7 @@ def writ_data():
         fileobjt.write(strgline)
     
     for k in range(len(indxgold)):
-        print '%20s %20s %20g %20g' % (data['SDSS'][indxgold[k]], data['Name'][indxgold][k], data['_RA'][indxgold][k], data['_DE'][indxgold][k])
+        print('%20s %20s %20g %20g' % (data['SDSS'][indxgold[k]], data['Name'][indxgold][k], data['_RA'][indxgold][k], data['_DE'][indxgold][k]))
     
     # cutout properties
     numbside = 400
@@ -671,16 +668,16 @@ def writ_data():
     listrade[1].append(coorstar.dec.degree)
     
     numbrade = len(listrade[0])
-    print '%d coordinates found.' % numbrade
+    print('%d coordinates found.' % numbrade)
     
     # list of files to be read
     listnamefile = ['hst_10886_02_acs_wfc_f814w_drz.fits']
     numbfile = len(listnamefile)
-    print '%d files found.' % numbfile
+    print('%d files found.' % numbfile)
     
     for k, namefile in enumerate(listnamefile):
         
-        print 'File number %d' % k
+        print('File number %d' % k)
             
         # read the data fields
         pathfile = pathdata + namefile
@@ -707,43 +704,9 @@ def writ_data():
     
             path = pathdatapcat + 'lens%s%s%s%s_%04d.fits' % (liststrgrade[n][3:5], liststrgrade[n][6:8], liststrgrade[n][16:18], liststrgrade[n][19:21], numbside)
            
-            if False:
-                print 'listdata[4]'
-                print listdata[4].names
-                print 'strgrade'
-                print strgrade
-                print 'listrade[0][n]'
-                print listrade[0][n]
-                print 'listrade[1][n]'
-                print listrade[1][n]
-                print 'indxxaxi'
-                print indxxaxi
-                print 'indxyaxi'
-                print indxyaxi
-            
             indxxaxi = int(indxxaxi)
             indxyaxi = int(indxyaxi)
            
-    
-            if False:
-                print 'MDRIZSKY'
-                print listdata[4]['MDRIZSKY']
-                print 'SKYSUB'
-                print listdata[4]['SKYSUB']
-                print 'indxxaxi'
-                print indxxaxi
-                print 'indxyaxi'
-                print indxyaxi
-                print 'listdata[1]'
-                summgene(listdata[1])
-                print 'EXPTIME'
-                print listdata[4]['EXPTIME'][0]
-                print 'PHOTFLAM'
-                print listdata[4]['PHOTFLAM'][0]
-                print 'CCDGAIN'
-                print listdata[4]['CCDGAIN'][0]
-                print
-            
             # cut out the image
             rate = listdata[1][indxxaxi-numbsidehalf:indxxaxi+numbsidehalf, indxyaxi-numbsidehalf:indxyaxi+numbsidehalf] # s^-1
     
@@ -758,24 +721,7 @@ def writ_data():
             sbrt = rate / effa / apix
             cntp = sbrt * expo * apix
             
-            if False:
-                print 'expo'
-                print expo
-                print 'rate'
-                summgene(rate)
-                print 'mean(cntp[:10, :10])'
-                print mean(cntp[:10, :10])
-                print 'cntp'
-                summgene(cntp)
-                print 'sbrt'
-                summgene(sbrt)
-            if True:
-                print 'sbrt'
-                summgene(sbrt)
-                print 'apix'
-                print apix
-            
-            print 'Writing to %s...' % path
+            print('Writing to %s...' % path)
             pf.writeto(path, sbrt, clobber=True)
             
         

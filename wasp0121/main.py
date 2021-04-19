@@ -21,7 +21,7 @@ from allesfitter.exoworlds_rdx.lightcurves.lightcurve_tools import rebin_err, ph
 # own modules
 import tdpy.mcmc
 from tdpy.util import summgene
-import tesstarg.util
+import ephesus.util
 from tdpy.util import prnt_list
 
 # Max's modules
