@@ -5,9 +5,10 @@ import tdpy.mcmc
 import pcat.main
 
 # plotting
-import matplotlib as mpl
+import matplotlib
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
-#mpl.rc('image', interpolation='nearest', origin='lower')
+#matplotlib.rc('image', interpolation='nearest', origin='lower')
 
 import seaborn as sns
 sns.set(context='poster', style='ticks', color_codes=True)
