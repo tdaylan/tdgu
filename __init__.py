@@ -1,7 +1,7 @@
 # tdpy
 import tdpy.util
 from tdpy.util import summgene
-import tdpy.mcmc
+import tdpy
 import pcat.main
 
 # plotting
