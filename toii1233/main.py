@@ -3,7 +3,7 @@ import numpy as np
 import os
 import matplotlib.pyplot as plt
 import astropy
-import ephesus.util
+import ephesos.util
 import tdpy.util
 from tdpy.util import summgene
 import scipy.signal
@@ -35,7 +35,7 @@ liststrgplan = ['d', 'e', 'c', 'b']
     
 gdat = tdpy.util.gdatstrt()
 
-gdat.factrsrj, gdat.factmsmj, gdat.factrjre, gdat.factmjme, gdat.factaurj = ephesus.util.retr_factconv()
+gdat.factrsrj, gdat.factmsmj, gdat.factrjre, gdat.factmjme, gdat.factaurj = ephesos.util.retr_factconv()
     
 # impose the priors from Keivan's SED fit
 gdat.radistar = 0.888 * gdat.factrsrj # [R_J]
@@ -196,7 +196,7 @@ if boolplotinit:
     arrylcur[:, 0] += offsdelt
     
     # convert differential mag to relative flux
-    rflx, stdvrflx = ephesus.util.retr_rflxfromdmag(arrylcur[:, 1], arrylcur[:, 2])
+    rflx, stdvrflx = ephesos.util.retr_rflxfromdmag(arrylcur[:, 1], arrylcur[:, 2])
     arrylcur[:, 1] = rflx
     arrylcur[:, 2] = stdvrflx
     
@@ -225,7 +225,7 @@ if boolplotinit:
     plt.savefig(path)
     plt.close()
     
-    dicttlsq = ephesus.util.exec_tlsq(arrylcur, pathimagtlsq)
+    dicttlsq = ephesos.util.exec_tlsq(arrylcur, pathimagtlsq)
     time = arrylcur[:, 0]
     flux = arrylcur[:, 1]
     stdvflux = arrylcur[:, 2]
@@ -263,7 +263,7 @@ if boolplotinit:
         peritemp = para[5]
         for k, strginst in enumerate(gdat.liststrginst):
             if strginst == 'PFS':
-                rvelmodl = ephesus.util.retr_rvel(gdat.listdata[k][:, 0], epoctemp, peritemp, massplan, gdat.massstar/gdat.factmsmj, 90., 0., 0.)
+                rvelmodl = ephesos.util.retr_rvel(gdat.listdata[k][:, 0], epoctemp, peritemp, massplan, gdat.massstar/gdat.factmsmj, 90., 0., 0.)
             else:
                 rvelmodl = 0.
             llik += -0.5 * np.sum((gdat.listdata[k][:, 1] - rvelmodl - para[k])**2 / gdat.listdata[k][:, 2]**2)
@@ -306,7 +306,7 @@ if boolplotinit:
     print('gdat.stdvsema')
     print(gdat.stdvsema)
     massplan = 1. / gdat.factmjme # [M_J]
-    sema = ephesus.util.retr_rvelsema(1000., massplan, gdat.massstar/gdat.factmsmj, 90., 0.)
+    sema = ephesos.util.retr_rvelsema(1000., massplan, gdat.massstar/gdat.factmsmj, 90., 0.)
     massplan1sig = gdat.stdvsema / sema
     print('massplan1sig')
     print(massplan1sig)
@@ -420,7 +420,7 @@ if boolplotinit:
         #    periplan = listpara[n, 5]
         #    
         #    rvelmodl = objtallervel.get_posterior_median_model('PFS', 'rv', xx=timefine)
-        #    #rvel = ephesus.util.retr_rvel(timefine, epocplan, periplan, massplan, gdat.massstar/gdat.factmsmj, 90., 0., 0.)
+        #    #rvel = ephesos.util.retr_rvel(timefine, epocplan, periplan, massplan, gdat.massstar/gdat.factmsmj, 90., 0., 0.)
         #    axistemp.plot(timefine - timeoffsfolw, rvelmodl, alpha=0.1, color='b')
     
     axis.legend(loc='upper center', bbox_to_anchor=(0.6, 0.95), ncol=3, fancybox=True, shadow=True)
@@ -593,7 +593,7 @@ if boolplotinit:
             dictarry[strgarrytele][:, 1] = data[:, 18]
             dictarry[strgarrytele][:, 2] = data[:, 2]
             
-            rflx, stdvrflx = ephesus.util.retr_rflxfromdmag(dictarry[strgarrytele][:, 1], dictarry[strgarrytele][:, 2])
+            rflx, stdvrflx = ephesos.util.retr_rflxfromdmag(dictarry[strgarrytele][:, 1], dictarry[strgarrytele][:, 2])
             dictarry[strgarrytele][:, 1] = rflx
             dictarry[strgarrytele][:, 2] = stdvrflx
     
@@ -694,7 +694,7 @@ if boolplotinit:
             timeoffs = timeoffsfolw
         
         strgarrybind = strgarry + 'bind'
-        dictarry[strgarrybind] = ephesus.util.rebn_lcur(dictarry[strgarry], numbbins)
+        dictarry[strgarrybind] = ephesos.util.rebn_lcur(dictarry[strgarry], numbbins)
         
         figr, axis = plt.subplots(figsize=(6, 4))
         axis.errorbar(dictarry[strgarry][:, 0] - timeoffs, dictarry[strgarry][:, 1], ls='', marker='o', color='grey', ms=1)
